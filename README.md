@@ -1,5 +1,9 @@
 # JagaJalan
 
+<p align="left">
+  <img src="public/logo/full-logo.png" alt="JagaJalan Official Logo" width="280" />
+</p>
+
 ### Know the Authority. Trace the Budget. Track the Action.
 
 Platform Transparansi Jalan Publik Terintegrasi: Menghubungkan Status Kewenangan Geospasial, Penelusuran Paket Anggaran APBD/LPSE, dan Akselerasi Kepatuhan Pelayanan Publik.
@@ -117,21 +121,31 @@ Menyajikan visualisasi data makro agregat 38 provinsi di Indonesia (bersumber da
 
 ---
 
-## 6. Desain Sistem dan Pemisahan Kodefikasi Warna
+## 6. Desain Sistem, Identitas Visual, dan Pemisahan Warna
 
+### A. Identitas Visual dan Filosofi Logo
+Logo resmi JagaJalan tersimpan dalam direktori `public/logo/` dan dirancang khusus dalam 3 format aset:
+1. **`logo.png` (Simbol Ikon Utama)**:
+   - **Siluet Jalan Beraspal ('J')**: Bentuk dasar huruf 'J' yang distilisasi menyerupai penampang lajur jalan raya beraspal, dilengkapi marka garis putih putus-putus (*road lane marking*) sebagai representasi fokus domain infrastruktur jalan.
+   - **Pin Koordinat Geospasial**: Ornamen penanda lokasi di ujung atas huruf 'J' menyimbolkan presisi data geospasial (*geotagged accuracy*) dan penentuan batas kewenangan administratif per ruas jalan.
+   - **Garis Luar Safety Orange**: Membingkai lambang dengan warna standar keselamatan kerja jalan raya untuk menegaskan proteksi, kewaspadaan, dan transparansi publik.
+2. **`logo-name.png` (Tipografi Logotype)**:
+   - Tipografi modern dan kokoh bertuliskan "JagaJalan" yang mengedepankan keterbacaan (*legibility*), kredibilitas institusional, dan ketegasan integritas publik.
+3. **`full-logo.png` (Kombinasi Penuh Simbol & Logotype)**:
+   - Komposisi lockup resmi yang memadukan simbol ikon 'J' dan nama JagaJalan secara seimbang untuk keperluan publikasi resmi, header dokumen, dan presentasi.
+
+### B. Sistem Warna Status Kewenangan Jalan
 Untuk menghindari bias interpretasi data, JagaJalan memisahkan secara tegas antara sistem warna status kewenangan jalan dengan sistem warna status laporan pengaduan:
-
-### A. Sistem Warna Status Kewenangan Jalan
 - **Biru (`#2563eb`)**: Jalan Nasional (Kementerian Pekerjaan Umum / BBPJN).
 - **Ungu (`#7c3aed`)**: Jalan Provinsi (Dinas Bina Marga Provinsi).
 - **Teal (`#0d9488`)**: Jalan Kota / Kabupaten (Dinas PUPR Daerah).
 
-### B. Sistem Warna Status Pengaduan & Tindak Lanjut
+### C. Sistem Warna Status Pengaduan & Tindak Lanjut
 - **Merah (`#dc2626`)**: Terlambat Menanggapi (>14 hari kerja tanpa tanggapan instansi).
 - **Amber (`#d97706`)**: Menunggu Verifikasi atau Sedang Dalam Penanganan.
 - **Hijau (`#16a34a`)**: Penanganan Fisik Selesai Diperbaiki.
 
-### C. Warna Brand Utama & Tombol Aksi
+### D. Warna Brand Utama & Tombol Aksi
 - **Safety Orange (`#ea580c` / `#f97316`)**: Standar keselamatan jalan raya internasional yang digunakan untuk logo, tombol aksi utama (*+ Lapor Kerusakan*), dan highlight interaktif.
 
 ---
@@ -295,7 +309,11 @@ jagajalan/
 │   └── lib/                     # Modul Utilitas & Standar Global
 │       ├── constants.js         # Kodefikasi warna (Biru/Ungu/Teal) & limit SLA
 │       └── utils.js             # Format mata uang Rupiah, kalkulasi SLA, & skor AI
-├── public/                      # Aset statis & favicon
+├── public/                      # Aset statis & identitas visual
+│   └── logo/                    # Varian logo resmi JagaJalan
+│       ├── logo.png             # Simbol ikon utama (siluet 'J' jalan raya & pin)
+│       ├── logo-name.png        # Tipografi resmi nama "JagaJalan"
+│       └── full-logo.png        # Kombinasi penuh simbol ikon & logotype
 ├── .gitignore                   # Proteksi dependensi, node_modules, cache, & env
 ├── LICENSE                      # Lisensi resmi MIT License
 ├── package.json                 # Konfigurasi dependensi Next.js 16 & Tailwind v4
