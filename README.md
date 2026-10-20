@@ -260,21 +260,30 @@ jagajalan/
 │   │   ├── layout.js            # Metadata root dan pembungkus HTML
 │   │   └── page.js              # Halaman utama orkestrator tab navigasi
 │   ├── components/
-│   │   ├── Navbar.jsx           # Header navigasi bersegmen dan tombol lapor
-│   │   ├── HeroSection.jsx      # Pita metrik KPI eksekutif dan 3 pilar solusi
-│   │   ├── MapExplorer.jsx      # Ruang kerja geospasial dan panel rincian aduan
-│   │   ├── MapInner.jsx         # Komponen peta Leaflet dan layer polyline jalan
-│   │   ├── NationalRankingSection.jsx # Papan skor makro 38 provinsi
-│   │   ├── ReportModal.jsx      # Dialog formulir lapor dan verifikasi AI
-│   │   ├── OmbudsmanModal.jsx   # Generator draf surat formal Ombudsman RI
-│   │   └── Footer.jsx           # Navigasi penutup dan atribusi data resmi
-│   └── data/
-│       ├── provincesData.js     # Data agregat 38 provinsi (BPS & SP4N-LAPOR!)
-│       ├── roadsData.js         # Data ruas jalan pilot, SK wewenang, dan APBD
-│       └── reportsData.js       # Data aduan warga geotagged dan status SLA
+│   │   ├── layout/              # Komponen navigasi dan kerangka tata letak
+│   │   │   ├── Navbar.jsx       # Header navigasi bersegmen dan tombol lapor
+│   │   │   └── Footer.jsx       # Navigasi penutup dan atribusi data resmi
+│   │   ├── dashboard/           # Komponen ringkasan analitik dan metrik
+│   │   │   ├── HeroSection.jsx  # Pita metrik KPI eksekutif dan 3 pilar solusi
+│   │   │   └── NationalRankingSection.jsx # Papan skor makro 38 provinsi
+│   │   ├── map/                 # Mesin pemetaan geospasial dan interaksi ruas
+│   │   │   ├── MapExplorer.jsx  # Ruang kerja geospasial dan panel rincian aduan
+│   │   │   └── MapInner.jsx     # Komponen peta Leaflet dan layer polyline jalan
+│   │   ├── modals/              # Dialog interaktif dan eskalasi kepatuhan
+│   │   │   ├── ReportModal.jsx  # Formulir lapor aduan dan verifikasi AI Vision
+│   │   │   └── OmbudsmanModal.jsx # Generator draf surat formal Ombudsman RI
+│   │   └── index.js             # Sentralisasi barrel export komponen
+│   ├── data/
+│   │   ├── provincesData.js     # Data agregat 38 provinsi (BPS & SP4N-LAPOR!)
+│   │   ├── roadsData.js         # Data ruas jalan pilot, SK wewenang, dan APBD
+│   │   └── reportsData.js       # Data aduan warga geotagged dan status SLA
+│   └── lib/
+│       ├── constants.js         # Standar kodefikasi warna wewenang dan limit SLA
+│       └── utils.js             # Pembantu kalkulasi SLA, format mata uang, dan skor
 ├── public/                      # Aset statis dan favicon
 ├── package.json                 # Konfigurasi dependensi dan skrip proyek
 ├── LICENSE                      # Berkas lisensi terbuka MIT License
+├── .gitignore                   # Konfigurasi proteksi berkas sensitif dan build
 └── README.md                    # Konsep dan arsitektur sistem JagaJalan
 ```
 
