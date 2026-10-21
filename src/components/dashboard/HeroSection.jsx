@@ -4,7 +4,6 @@ import React, { useState, useMemo } from "react";
 import {
   Search,
   Calendar,
-  Camera,
   ChevronRight,
   ExternalLink,
 } from "lucide-react";
@@ -67,8 +66,8 @@ export default function HeroSection({
             </div>
           </div>
 
-          {/* Quick Search Input */}
-          <div className="relative flex-1 max-w-md">
+          {/* Quick Search Input (Expanded & Clean) */}
+          <div className="relative flex-1 max-w-xl">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
@@ -77,23 +76,6 @@ export default function HeroSection({
               placeholder="Cari ruas jalan, nomor lelang LPSE, kode tiket, atau kontraktor..."
               className="w-full pl-9 pr-3 py-1.5 rounded-[5px] border border-slate-200 bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1.5 focus:ring-orange-600 focus:bg-white transition-all font-sans"
             />
-          </div>
-
-          {/* Quick Civic Action Button */}
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={onOpenReport}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-xs shadow-2xs transition-all cursor-pointer whitespace-nowrap active:scale-[0.98]"
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>Lapor Kerusakan</span>
-            </button>
-            <button
-              onClick={onOpenOfficerPortal}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[5px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-200 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              <span>Portal Dinas</span>
-            </button>
           </div>
         </div>
 
