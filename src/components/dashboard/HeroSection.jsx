@@ -14,10 +14,10 @@ export default function HeroSection({ onExploreMap, onOpenReport, onExploreNatio
               Portal Geospasial Kewenangan & Anggaran Jalan Publik
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Know the Authority. Trace the Budget. Track the Action.
+              Cari penanggung jawab. Telusuri anggaran. Pantau tindak lanjut.
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
-              Lapisan transparansi terpadu yang menghubungkan kewenangan lintas status jalan (Pusat, Provinsi, Kota/Kabupaten), menelusuri paket pengadaan proyek LPSE/APBD, serta mengawal batas waktu tanggapan aduan publik berbasis data terbuka.
+              JagaJalan menghubungkan informasi kewenangan ruas, data proyek terkait, dan perkembangan laporan agar mudah ditelusuri masyarakat.
             </p>
           </div>
 
