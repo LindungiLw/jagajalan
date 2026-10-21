@@ -1,16 +1,38 @@
-# JagaJalan
+<div align="center">
 
-<p align="left">
-  <img src="public/logo/full-logo.png" alt="JagaJalan Official Logo" width="280" />
-</p>
+  <img src="public/logo/full-logo.png" alt="JagaJalan Official Logo" width="340" />
 
-### Know the Authority. Trace the Budget. Track the Action.
+  <br />
+  <br />
 
-Platform Transparansi Jalan Publik Terintegrasi: Menghubungkan Status Kewenangan Geospasial, Penelusuran Paket Anggaran APBD/LPSE, dan Akselerasi Kepatuhan Pelayanan Publik.
+  # JagaJalan
 
-Karya Inovasi Teknologi oleh **COMEL Team** untuk cabang kompetisi **Web In Action (WIA) - Multimedia In Action (MIA) 2026**, diselenggarakan oleh **KSM Multimedia UPN Veteran Jakarta**.
+  ### Cari penanggung jawab. Telusuri anggaran. Pantau tindak lanjut.
+  *(Know the Authority. Trace the Budget. Track the Action.)*
 
-Tema Kompetisi: *Designing Digital Futures - Powering Public Transparency*
+  <p align="center">
+    <strong>Platform Transparansi Jalan Publik Terintegrasi:</strong> Menghubungkan Status Kewenangan Geospasial, Penelusuran Paket Anggaran APBD/LPSE, dan Akselerasi Kepatuhan Pelayanan Publik.
+  </p>
+
+  <p align="center">
+    Karya Inovasi Teknologi oleh <strong>COMEL Team</strong><br />
+    Cabang Kompetisi <strong>Web In Action (WIA) — Multimedia In Action (MIA) 2026</strong><br />
+    Diselenggarakan oleh <strong>KSM Multimedia UPN Veteran Jakarta</strong>
+  </p>
+
+  <p align="center">
+    Tema Kompetisi: <em>Designing Digital Futures – Powering Public Transparency</em>
+  </p>
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Next.js-16.4-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+    <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Gemini_Vision-AI-8b5cf6?style=for-the-badge&logo=google" alt="Gemini Vision" />
+    <img src="https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge" alt="MIT License" />
+  </p>
+
+</div>
 
 ---
 
@@ -285,6 +307,8 @@ Model data dirancang dengan normalisasi relasional yang memisahkan relasi paket 
 jagajalan/
 ├── src/
 │   ├── app/                     # Next.js App Router (Halaman & Desain Global)
+│   │   ├── api/
+│   │   │   └── analyze-road/    # API Route: Google Gemini Vision AI Damage Inspector
 │   │   ├── globals.css          # Desain sistem & token tema Clean Light Dashboard
 │   │   ├── layout.js            # Metadata root & pembungkus font interaktif
 │   │   └── page.js              # Halaman utama orkestrator tab navigasi
@@ -294,12 +318,13 @@ jagajalan/
 │   │   │   └── Footer.jsx       # Navigasi penutup & atribusi data resmi
 │   │   ├── dashboard/           # 2. Ringkasan Analitik & Metrik Eksekutif
 │   │   │   ├── HeroSection.jsx  # Metrik ringkasan & diferensiasi 3 pilar utama
-│   │   │   └── NationalRankingSection.jsx # Papan skor perbandingan makro 38 provinsi
+│   │   │   ├── NationalRankingSection.jsx # Papan skor perbandingan makro 38 provinsi
+│   │   │   └── OfficerDashboard.jsx # Portal kerja verifikasi & bukti fisik dinas
 │   │   ├── map/                 # 3. Mesin Pemetaan Geospasial
 │   │   │   ├── MapExplorer.jsx  # Workspace peta & panel rincian APBD/Wewenang
 │   │   │   └── MapInner.jsx     # Layer OpenStreetMap, polyline ruas & custom pins
 │   │   ├── modals/              # 4. Dialog Interaktif & Eskalasi Hukum
-│   │   │   ├── ReportModal.jsx  # Formulir geotag aduan & verifikasi AI Vision
+│   │   │   ├── ReportModal.jsx  # Formulir geotag aduan & verifikasi Gemini Vision
 │   │   │   └── OmbudsmanModal.jsx # Generator draf laporan formal ke Ombudsman RI
 │   │   └── index.js             # Sentralisasi barrel export komponen
 │   ├── data/                    # Sumber Basis Data & Agregasi Resmi
@@ -314,6 +339,7 @@ jagajalan/
 │       ├── logo.png             # Simbol ikon utama (siluet 'J' jalan raya & pin)
 │       ├── logo-name.png        # Tipografi resmi nama "JagaJalan"
 │       └── full-logo.png        # Kombinasi penuh simbol ikon & logotype
+├── .env.example                 # Konfigurasi contoh environment (GEMINI_API_KEY)
 ├── .gitignore                   # Proteksi dependensi, node_modules, cache, & env
 ├── LICENSE                      # Lisensi resmi MIT License
 ├── package.json                 # Konfigurasi dependensi Next.js 16 & Tailwind v4
