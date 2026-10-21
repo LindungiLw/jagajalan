@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/dashboard/HeroSection";
@@ -9,6 +9,7 @@ import MapExplorer from "@/components/map/MapExplorer";
 import ReportModal from "@/components/modals/ReportModal";
 import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
 import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
+import OfficerLogin from "@/components/dashboard/OfficerLogin";
 import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
 import MapShowcaseTeaser from "@/components/dashboard/MapShowcaseTeaser";
 import AnnualProgressChart from "@/components/dashboard/AnnualProgressChart";
@@ -17,6 +18,7 @@ import NationalStatsTeaser from "@/components/dashboard/NationalStatsTeaser";
 import LegalBasisSection from "@/components/dashboard/LegalBasisSection";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
+import { getActiveOfficerSession, clearOfficerSession } from "@/data/officersData";
 import { Shield, FileText, AlertTriangle, ArrowRight } from "lucide-react";
 
 export default function Home() {
@@ -27,6 +29,24 @@ export default function Home() {
   const [ombudsmanModalOpen, setOmbudsmanModalOpen] = useState(false);
   const [selectedOmbudsmanReport, setSelectedOmbudsmanReport] = useState(null);
   const [focusedRoadId, setFocusedRoadId] = useState(null);
+  const [officerSession, setOfficerSession] = useState(null);
+
+  // Restore existing officer session on mount
+  useEffect(() => {
+    const session = getActiveOfficerSession();
+    if (session) {
+      setOfficerSession(session);
+    }
+  }, []);
+
+  const handleOfficerLogin = (officer) => {
+    setOfficerSession(officer);
+  };
+
+  const handleOfficerLogout = () => {
+    clearOfficerSession();
+    setOfficerSession(null);
+  };
 
   const handleAddNewReport = (newReport) => {
     setReports((prev) => [newReport, ...prev]);
@@ -72,6 +92,8 @@ export default function Home() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenReportModal={() => setReportModalOpen(true)}
+        officerSession={officerSession}
+        onLogoutOfficer={handleOfficerLogout}
       />
 
       {/* Main Tab Content */}
@@ -221,14 +243,26 @@ export default function Home() {
 
         {activeTab === "dinas" && (
           <div className="py-2 animate-fade-in">
-            <OfficerDashboard
-              reports={reports}
-              onUpdateReport={handleUpdateReport}
-              onSwitchToMap={() => {
-                setActiveTab("peta");
-                window.scrollTo({ top: 100, behavior: "smooth" });
-              }}
-            />
+            {!officerSession ? (
+              <OfficerLogin
+                onLoginSuccess={handleOfficerLogin}
+                onBackToPublic={() => {
+                  setActiveTab("beranda");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              />
+            ) : (
+              <OfficerDashboard
+                reports={reports}
+                onUpdateReport={handleUpdateReport}
+                onSwitchToMap={() => {
+                  setActiveTab("peta");
+                  window.scrollTo({ top: 100, behavior: "smooth" });
+                }}
+                currentOfficer={officerSession}
+                onLogout={handleOfficerLogout}
+              />
+            )}
           </div>
         )}
       </main>

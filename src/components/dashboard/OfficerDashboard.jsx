@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
   ShieldAlert,
   HardHat,
@@ -20,6 +20,9 @@ import {
   X,
   Eye,
   Check,
+  LogOut,
+  UserCheck,
+  BadgeCheck,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -42,8 +45,16 @@ const PRESET_PROOF_PHOTOS = [
   },
 ];
 
-export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMap }) {
-  const [selectedAuthority, setSelectedAuthority] = useState("ALL");
+export default function OfficerDashboard({
+  reports,
+  onUpdateReport,
+  onSwitchToMap,
+  currentOfficer,
+  onLogout,
+}) {
+  const [selectedAuthority, setSelectedAuthority] = useState(
+    currentOfficer?.authorityLevel || "ALL"
+  );
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("HAZARD"); // HAZARD | SLA | UPVOTES | DATE
   const [activeReportToEdit, setActiveReportToEdit] = useState(null);
@@ -51,9 +62,19 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
   // Form states in action modal
   const [targetStatus, setTargetStatus] = useState("DALAM_PENGERJAAN");
   const [officerNote, setOfficerNote] = useState("");
-  const [officerName, setOfficerName] = useState("Satgas Bina Marga / UPTD Wilayah");
+  const [officerName, setOfficerName] = useState(
+    currentOfficer
+      ? `${currentOfficer.name} (NIP: ${currentOfficer.nip})`
+      : "Satgas Bina Marga / UPTD Wilayah"
+  );
   const [proofPhotoUrl, setProofPhotoUrl] = useState(PRESET_PROOF_PHOTOS[0].url);
   const [isSuccessToast, setIsSuccessToast] = useState(false);
+
+  useEffect(() => {
+    if (currentOfficer) {
+      setOfficerName(`${currentOfficer.name} (NIP: ${currentOfficer.nip})`);
+    }
+  }, [currentOfficer]);
 
   const fileInputRef = useRef(null);
 
@@ -93,6 +114,9 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
 
   const handleOpenActionModal = (report) => {
     setActiveReportToEdit(report);
+    if (currentOfficer) {
+      setOfficerName(`${currentOfficer.name} (NIP: ${currentOfficer.nip})`);
+    }
     // Suggest next logical status
     if (report.status === "MENUNGGU_VERIFIKASI") {
       setTargetStatus("DALAM_PENGERJAAN");
@@ -159,34 +183,85 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
 
   return (
     <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-fade-in">
-      {/* Top Banner: Institutional Verification Portal */}
-      <div className="bg-slate-900 text-white p-6 sm:p-7 rounded-2xl border border-slate-800 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="space-y-2 max-w-3xl">
+      {/* 1. Active Authenticated Session Bar (Clean White + Orange Theme, Strict 5px radius) */}
+      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-[5px] border border-orange-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-[5px] bg-orange-100 text-[#c2410c] border border-orange-200 font-mono font-bold text-sm flex items-center justify-center shrink-0">
+            {currentOfficer?.avatar || "ASN"}
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-900">{currentOfficer?.name || "Aparatur Dinas Terverifikasi"}</span>
+              <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Sesi Aktif Terotentikasi</span>
+              </span>
+              {currentOfficer?.authorityLevel && (
+                <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-mono font-bold uppercase tracking-wider ${
+                  currentOfficer.authorityLevel === "NASIONAL"
+                    ? "bg-orange-50 text-orange-900 border border-orange-200"
+                    : currentOfficer.authorityLevel === "PROVINSI"
+                    ? "bg-amber-50 text-amber-900 border border-amber-200"
+                    : "bg-stone-100 text-stone-800 border border-stone-200"
+                }`}>
+                  Tingkat {currentOfficer.authorityLevel}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-600 font-mono mt-0.5">
+              NIP: {currentOfficer?.nip || "-"} • {currentOfficer?.institution || "Penyelenggara Jalan Resmi"}
+            </p>
+          </div>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={onSwitchToMap}
+            className="px-3 py-1.5 rounded-[5px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Eye className="w-3.5 h-3.5 text-orange-700" />
+            <span>Pratinjau Peta Publik</span>
+          </button>
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="px-3 py-1.5 rounded-[5px] bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Keluar dari sesi verifikator dinas"
+            >
+              <LogOut className="w-3.5 h-3.5 text-rose-600" />
+              <span>Keluar (Logout)</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 2. Institutional Operation Notice */}
+      <div className="bg-white p-5 sm:p-6 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div className="space-y-1.5 max-w-3xl">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30 font-mono text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <HardHat className="w-3.5 h-3.5 text-orange-400" />
-              Portal Petugas Penyelenggara Jalan (Officer Portal)
+            <span className="px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200 font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <HardHat className="w-3.5 h-3.5 text-orange-700" />
+              <span>Panel Operasional Disposisi & Verifikasi Bukti Fisik</span>
             </span>
-            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-semibold">
-              Sistem Kepatuhan Pelayanan Publik
+            <span className="px-2 py-0.5 rounded-[5px] bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-semibold">
+              Kepatuhan UU No. 25/2009 (SLA 14 Hari)
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            Manajemen Penanganan Lapangan & Verifikasi Bukti Fisik
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
+            Daftar Antrean Tindak Lanjut Penyelenggara Jalan
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Kanal kerja aparatur dinas untuk memproses antrean aduan prioritas AI, memperbarui tahapan penanganan fisik sebelum batas SLA 14 hari kerja terlampaui, serta mengunggah dokumentasi foto bukti pengerjaan sebagai bentuk akuntabilitas publik.
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Perbarui tahapan pengerjaan fisik di lapangan sebelum batas tenggat SLA terlampaui. Setiap tiket yang diselesaikan wajib melampirkan dokumentasi foto bukti pengerjaan (*Before-After*) untuk membatalkan draf eskalasi Ombudsman RI.
           </p>
         </div>
 
-        {/* Quick Officer Stat Badge */}
-        <div className="flex items-center gap-3 shrink-0 bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/80 text-xs">
-          <div className="w-10 h-10 rounded-lg bg-orange-600 flex items-center justify-center text-white font-bold">
-            <Building2 className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="text-[11px] text-slate-400">Instansi Penyelenggara Terhubung</div>
-            <div className="text-sm font-bold text-white">BBPJN • Bina Marga • PUPR</div>
+        <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs shrink-0 font-mono space-y-1">
+          <div className="text-[10px] text-slate-400 uppercase">Instansi Aktif:</div>
+          <div className="font-bold text-slate-900">{currentOfficer?.institution || "BBPJN • DBMPR • PUPR"}</div>
+          <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+            <Check className="w-3 h-3" />
+            <span>Kewenangan Disposisi Sah</span>
           </div>
         </div>
       </div>
@@ -202,12 +277,12 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
         </div>
       )}
 
-      {/* 4 Status KPI Counters */}
+      {/* 4 Status KPI Counters (Strict 5px radius) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Counter 1: Butuh Verifikasi */}
         <div
           onClick={() => setSelectedStatusFilter("NEED_VERIFY")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
             selectedStatusFilter === "NEED_VERIFY"
               ? "bg-amber-50 border-amber-400 ring-2 ring-amber-400/20"
               : "bg-white border-slate-200 hover:border-slate-300"
@@ -227,15 +302,15 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
         {/* Counter 2: Dalam Penanganan */}
         <div
           onClick={() => setSelectedStatusFilter("IN_PROGRESS")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
             selectedStatusFilter === "IN_PROGRESS"
-              ? "bg-sky-50 border-sky-400 ring-2 ring-sky-400/20"
+              ? "bg-orange-50 border-orange-300 ring-2 ring-orange-300/30 text-orange-900"
               : "bg-white border-slate-200 hover:border-slate-300"
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-sky-700">Dalam Pengerjaan</span>
-            <HardHat className="w-4 h-4 text-sky-600" />
+            <span className="text-[11px] font-bold uppercase text-orange-800">Dalam Pengerjaan</span>
+            <HardHat className="w-4 h-4 text-orange-700" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-black text-slate-900">{stats.inProgress}</span>
@@ -247,7 +322,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
         {/* Counter 3: Selesai Diperbaiki */}
         <div
           onClick={() => setSelectedStatusFilter("COMPLETED")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
             selectedStatusFilter === "COMPLETED"
               ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20"
               : "bg-white border-slate-200 hover:border-slate-300"
@@ -267,7 +342,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
         {/* Counter 4: Overdue SLA */}
         <div
           onClick={() => setSelectedStatusFilter("OVERDUE")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
             selectedStatusFilter === "OVERDUE"
               ? "bg-rose-50 border-rose-400 ring-2 ring-rose-400/20"
               : "bg-white border-slate-200 hover:border-slate-300"
@@ -285,47 +360,47 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
         </div>
       </div>
 
-      {/* Filter Toolbar Card */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Filter Toolbar Card (Strict 5px radius) */}
+      <div className="bg-white p-4 sm:p-4.5 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Authority Selection */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
-          <span className="text-slate-400 mr-1 hidden sm:inline">Instansi Anda:</span>
+          <span className="text-slate-500 mr-1 hidden sm:inline">Instansi Anda:</span>
           <button
             onClick={() => setSelectedAuthority("ALL")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
               selectedAuthority === "ALL"
-                ? "bg-slate-900 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900"
+                ? "bg-[#c2410c] text-white font-bold shadow-xs"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
             Semua Dinas
           </button>
           <button
             onClick={() => setSelectedAuthority("NASIONAL")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
               selectedAuthority === "NASIONAL"
-                ? "bg-blue-600 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900"
+                ? "bg-[#c2410c] text-white font-bold shadow-xs"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
             BBPJN (Nasional)
           </button>
           <button
             onClick={() => setSelectedAuthority("PROVINSI")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
               selectedAuthority === "PROVINSI"
-                ? "bg-purple-600 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900"
+                ? "bg-amber-700 text-white font-bold shadow-xs"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
             Bina Marga (Provinsi)
           </button>
           <button
             onClick={() => setSelectedAuthority("KOTA_KAB")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
               selectedAuthority === "KOTA_KAB"
-                ? "bg-teal-600 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900"
+                ? "bg-stone-700 text-white font-bold shadow-xs"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
             PUPR (Kota/Kab)
@@ -338,7 +413,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-300 text-slate-800 text-xs focus:outline-none focus:border-orange-500"
+            className="px-3 py-1.5 rounded-[5px] bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-mono"
           >
             <option value="HAZARD">Prioritas Hazard Score AI (Tertinggi)</option>
             <option value="SLA">Kritis Batas Waktu SLA (Terancam Overdue)</option>
@@ -349,7 +424,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
           {selectedStatusFilter !== "ALL" && (
             <button
               onClick={() => setSelectedStatusFilter("ALL")}
-              className="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1"
+              className="px-2.5 py-1.5 rounded-[5px] bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
               <span>Reset Filter</span>
@@ -383,13 +458,13 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
               return (
                 <div
                   key={report.id}
-                  className={`bg-white p-5 rounded-2xl border transition-all ${
+                  className={`bg-white p-5 rounded-[5px] border transition-all ${
                     isOverdue
                       ? "border-rose-300 border-l-4 border-l-rose-600 shadow-xs"
                       : isDone
                       ? "border-emerald-300 border-l-4 border-l-emerald-600 shadow-xs"
                       : isInProgress
-                      ? "border-sky-300 border-l-4 border-l-sky-600 shadow-xs"
+                      ? "border-orange-300 border-l-4 border-l-orange-500 shadow-xs"
                       : "border-amber-300 border-l-4 border-l-amber-500 shadow-xs"
                   }`}
                 >
@@ -397,19 +472,19 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                     {/* Left: Info & Photos */}
                     <div className="flex flex-col sm:flex-row gap-4 flex-1">
                       {/* Photo Thumbnail */}
-                      <div className="relative w-full sm:w-40 h-28 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shrink-0">
+                      <div className="relative w-full sm:w-40 h-28 rounded-[5px] overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={report.photoUrl}
                           alt="Bukti Laporan"
                           className="w-full h-full object-cover"
                         />
-                        <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-900/80 text-white backdrop-blur-xs">
+                        <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-[3px] text-[9px] font-bold bg-slate-800/80 text-white backdrop-blur-xs">
                           Foto Warga (Before)
                         </span>
 
                         {report.proofPhotoUrl && (
-                          <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-600 text-white shadow-xs">
+                          <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded-[3px] text-[9px] font-bold bg-emerald-600 text-white shadow-xs">
                             ✓ Ada Bukti Selesai
                           </span>
                         )}
@@ -418,28 +493,28 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                       {/* Detail Text */}
                       <div className="space-y-1.5 flex-1 text-xs">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-mono font-bold text-slate-900 px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px]">
+                          <span className="font-mono font-bold text-slate-900 px-2 py-0.5 rounded-[5px] bg-slate-100 border border-slate-200 text-[11px]">
                             {report.ticketCode}
                           </span>
 
                           {/* Status Badge */}
                           {isOverdue && (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
                               OVERDUE +{report.daysOverdue} HARI KERJA
                             </span>
                           )}
                           {isDone && (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
                               PENANGANAN SELESAI
                             </span>
                           )}
                           {isInProgress && (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-700 border border-sky-200">
+                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
                               DALAM PENGERJAAN FISIK
                             </span>
                           )}
                           {report.status === "MENUNGGU_VERIFIKASI" && (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
+                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
                               MENUNGGU VERIFIKASI DISPOSISI
                             </span>
                           )}
@@ -461,11 +536,11 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
 
                         {/* AI & APBD Pills */}
                         <div className="pt-1 flex flex-wrap items-center gap-2 text-[11px]">
-                          <span className="px-2 py-0.5 rounded bg-slate-100 font-semibold text-slate-800 border border-slate-200">
+                          <span className="px-2 py-0.5 rounded-[5px] bg-slate-100 font-semibold text-slate-800 border border-slate-200">
                             {report.categoryLabel}
                           </span>
                           <span
-                            className={`px-2 py-0.5 rounded font-bold ${
+                            className={`px-2 py-0.5 rounded-[5px] font-bold ${
                               report.hazardScore >= 80
                                 ? "bg-rose-100 text-rose-700"
                                 : "bg-amber-100 text-amber-700"
@@ -478,7 +553,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                           </span>
                         </div>
 
-                        <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200">
+                        <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-[5px] border border-slate-200">
                           {report.aiAnalysis}
                         </p>
                       </div>
@@ -488,15 +563,15 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                     <div className="flex lg:flex-col items-center justify-end gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                       <button
                         onClick={() => handleOpenActionModal(report)}
-                        className="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs flex items-center justify-center gap-1.5 transition-colors"
+                        className="w-full sm:w-auto px-4 py-2 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
-                        <HardHat className="w-3.5 h-3.5 text-orange-400" />
+                        <HardHat className="w-3.5 h-3.5 text-white" />
                         <span>Proses Tindak Lanjut Dinas</span>
                       </button>
 
                       <button
                         onClick={onSwitchToMap}
-                        className="w-full sm:w-auto px-3 py-2 rounded-lg text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center gap-1 transition-colors"
+                        className="w-full sm:w-auto px-3 py-2 rounded-[5px] text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5 text-slate-500" />
                         <span>Buka Koordinat Peta</span>
@@ -517,7 +592,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
 
                       <div className="grid grid-cols-2 gap-3 max-w-md">
                         <div className="space-y-1">
-                          <div className="h-24 rounded-lg overflow-hidden border border-slate-300">
+                          <div className="h-24 rounded-[5px] overflow-hidden border border-slate-300 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={report.photoUrl}
@@ -530,7 +605,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                           </span>
                         </div>
                         <div className="space-y-1">
-                          <div className="h-24 rounded-lg overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20">
+                          <div className="h-24 rounded-[5px] overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={report.proofPhotoUrl}
@@ -560,29 +635,29 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
         )}
       </div>
 
-      {/* Action Modal / Drawer for Officer */}
+      {/* Action Modal / Drawer for Officer (Strict 5px radius) */}
       {activeReportToEdit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
-            {/* Modal Header */}
-            <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-900 text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+          <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-[5px] bg-white border border-slate-200 shadow-xl overflow-hidden">
+            {/* Modal Header (Clean White + Warm Orange Accent) */}
+            <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-white text-slate-900">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center text-white">
+                <div className="w-9 h-9 rounded-[5px] bg-orange-50 border border-orange-200 flex items-center justify-center text-[#c2410c]">
                   <HardHat className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-extrabold text-white text-base">Tindak Lanjut & Verifikasi Dinas</h3>
-                    <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-slate-800 text-orange-400 border border-slate-700">
+                    <h3 className="font-extrabold text-slate-900 text-base">Tindak Lanjut & Verifikasi Dinas</h3>
+                    <span className="px-2 py-0.5 rounded-[5px] font-mono text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
                       {activeReportToEdit.ticketCode}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400">{activeReportToEdit.roadName}</p>
+                  <p className="text-xs text-slate-500">{activeReportToEdit.roadName}</p>
                 </div>
               </div>
               <button
                 onClick={() => setActiveReportToEdit(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -599,14 +674,14 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                   <button
                     type="button"
                     onClick={() => setTargetStatus("DALAM_PENGERJAAN")}
-                    className={`p-3 rounded-xl border text-left transition-all ${
+                    className={`p-3 rounded-[5px] border text-left transition-all cursor-pointer ${
                       targetStatus === "DALAM_PENGERJAAN"
-                        ? "bg-sky-50 border-sky-400 ring-2 ring-sky-400/20 text-sky-900"
+                        ? "bg-orange-50 border-orange-300 ring-2 ring-orange-300/30 text-orange-950"
                         : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
                     }`}
                   >
                     <div className="font-bold flex items-center gap-1.5">
-                      <HardHat className="w-3.5 h-3.5 text-sky-600" />
+                      <HardHat className="w-3.5 h-3.5 text-orange-700" />
                       <span>Dalam Penanganan Fisik</span>
                     </div>
                     <p className="text-[11px] text-slate-500 mt-1">
@@ -617,7 +692,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                   <button
                     type="button"
                     onClick={() => setTargetStatus("SELESAI")}
-                    className={`p-3 rounded-xl border text-left transition-all ${
+                    className={`p-3 rounded-[5px] border text-left transition-all cursor-pointer ${
                       targetStatus === "SELESAI"
                         ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20 text-emerald-900"
                         : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
@@ -646,7 +721,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                     value={officerName}
                     onChange={(e) => setOfficerName(e.target.value)}
                     placeholder="Contoh: Ir. Hendra (Koordinator UPTD Barat)"
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
+                    className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
                   />
                 </div>
                 <div>
@@ -657,7 +732,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                     type="text"
                     disabled
                     value={activeReportToEdit.authorityLabel}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-100 border border-slate-200 text-xs text-slate-600 cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-[5px] bg-slate-100 border border-slate-200 text-xs text-slate-600 cursor-not-allowed font-medium"
                   />
                 </div>
               </div>
@@ -672,7 +747,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                   value={officerNote}
                   onChange={(e) => setOfficerNote(e.target.value)}
                   placeholder="Deskripsikan material yang digunakan, volume penambalan, dan hasil pengerjaan..."
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
+                  className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
                 />
               </div>
 
@@ -687,13 +762,13 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
 
                 {/* Preset Chips */}
                 <div className="mb-2 flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
-                  <span className="text-slate-400 shrink-0">Preset Bukti:</span>
+                  <span className="text-slate-500 shrink-0">Preset Bukti:</span>
                   {PRESET_PROOF_PHOTOS.map((proof, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => setProofPhotoUrl(proof.url)}
-                      className={`px-2.5 py-1 rounded-md shrink-0 border transition-all ${
+                      className={`px-2.5 py-1 rounded-[5px] shrink-0 border transition-all cursor-pointer ${
                         proofPhotoUrl === proof.url
                           ? "bg-emerald-100 border-emerald-400 text-emerald-900 font-bold"
                           : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100"
@@ -705,11 +780,11 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                 </div>
 
                 {/* Side-by-side Before vs After Preview */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-[5px] bg-slate-50 border border-slate-200">
                   {/* Before */}
                   <div className="space-y-1">
                     <span className="text-[11px] font-bold text-slate-600">Foto Laporan Warga (BEFORE)</span>
-                    <div className="h-32 rounded-lg overflow-hidden border border-slate-300 bg-slate-900">
+                    <div className="h-32 rounded-[5px] overflow-hidden border border-slate-200 bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={activeReportToEdit.photoUrl}
@@ -724,7 +799,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                     <span className="text-[11px] font-bold text-emerald-800">
                       Hasil Pengerjaan Dinas (AFTER)
                     </span>
-                    <div className="relative h-32 rounded-lg overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-900">
+                    <div className="relative h-32 rounded-[5px] overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={proofPhotoUrl}
@@ -734,7 +809,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="absolute inset-0 bg-slate-900/40 hover:bg-slate-900/60 text-white flex flex-col items-center justify-center gap-1 transition-all text-[11px] font-medium"
+                        className="absolute inset-0 bg-slate-900/40 hover:bg-slate-900/60 text-white flex flex-col items-center justify-center gap-1 transition-all text-[11px] font-medium cursor-pointer"
                       >
                         <Upload className="w-4 h-4" />
                         <span>Unggah Foto Asli Lapangan</span>
@@ -756,7 +831,7 @@ export default function OfficerDashboard({ reports, onUpdateReport, onSwitchToMa
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 rounded-lg font-semibold text-xs text-white bg-orange-600 hover:bg-orange-700 shadow-xs transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 rounded-[5px] font-bold text-xs text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <FileCheck className="w-4 h-4" />
                   <span>Simpan Perubahan & Terbitkan Bukti ke Publik</span>

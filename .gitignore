@@ -18,13 +18,14 @@
 # Testing & coverage
 /coverage
 
-# Environment variables & secrets (keep .env.example tracked)
+# Environment variables & secrets
 .env
+.env*
 .env*.local
 .env.development.local
 .env.test.local
 .env.production.local
-!.env.example
+.env.example
 
 # Debug and system logs
 *.log
