@@ -10,6 +10,7 @@ import ReportModal from "@/components/modals/ReportModal";
 import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
 import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
 import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
+import MapShowcaseTeaser from "@/components/dashboard/MapShowcaseTeaser";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
 import { Shield, FileText, AlertTriangle, ArrowRight } from "lucide-react";
@@ -89,13 +90,15 @@ export default function Home() {
               }}
             />
 
-            {/* Live Map Preview on Dashboard */}
-            <MapExplorer
+            {/* Deep-Dive Pilot GIS Showcase Teaser (Fast, No Duplicate Leaflet Engine) */}
+            <MapShowcaseTeaser
               roads={roads}
               reports={reports}
-              onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
-              onOpenReportModal={() => setReportModalOpen(true)}
-              focusedRoadId={focusedRoadId}
+              onExploreMap={() => {
+                setActiveTab("peta");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              onSelectRoad={handleSelectRoadOnMap}
             />
 
             {/* National 38 Provinces Section */}

@@ -12,6 +12,7 @@ export { default as HeroSection } from "./dashboard/HeroSection";
 export { default as NationalRankingSection } from "./dashboard/NationalRankingSection";
 export { default as OfficerDashboard } from "./dashboard/OfficerDashboard";
 export { default as BudgetDataExplorer } from "./dashboard/BudgetDataExplorer";
+export { default as MapShowcaseTeaser } from "./dashboard/MapShowcaseTeaser";
 
 // Geospatial & Map Components
 export { default as MapExplorer } from "./map/MapExplorer";

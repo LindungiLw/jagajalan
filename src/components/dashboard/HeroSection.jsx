@@ -7,8 +7,8 @@ export default function HeroSection({ onExploreMap, onOpenReport, onExploreNatio
   return (
     <section className="pt-6 pb-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Dashboard Title & Quick Action Bar */}
-        <div className="bg-white p-6 sm:p-7 rounded-xl border border-slate-200 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        {/* Dashboard Title & Quick Action Bar (Bening Glass Panel) */}
+        <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.03)] flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="max-w-3xl space-y-2">
             <div className="text-[11px] font-bold tracking-wider uppercase text-orange-600 font-mono">
               Portal Geospasial Kewenangan & Anggaran Jalan Publik
@@ -118,11 +118,11 @@ export default function HeroSection({ onExploreMap, onOpenReport, onExploreNatio
           </div>
         </div>
 
-        {/* 3 Core Identity Pillars in Clean Minimal Cards */}
+        {/* 3 Core Identity Pillars in Clean Frosted Glass Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-          <div className="bg-white p-5 rounded-xl border border-slate-200">
+          <div className="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-slate-200/80 shadow-2xs hover:bg-white hover:border-slate-300 hover:shadow-xs transition-all">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-7 h-7 rounded-md bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center border border-blue-200/80">
                 01
               </div>
               <h3 className="font-bold text-sm text-slate-900">Kewenangan Lintas Status Jalan</h3>
@@ -132,9 +132,9 @@ export default function HeroSection({ onExploreMap, onOpenReport, onExploreNatio
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200">
+          <div className="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-slate-200/80 shadow-2xs hover:bg-white hover:border-slate-300 hover:shadow-xs transition-all">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-7 h-7 rounded-md bg-purple-100 text-purple-700 font-bold text-xs flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-700 font-bold text-xs flex items-center justify-center border border-purple-200/80">
                 02
               </div>
               <h3 className="font-bold text-sm text-slate-900">Anggaran Proyek Tertelusur</h3>
@@ -144,9 +144,9 @@ export default function HeroSection({ onExploreMap, onOpenReport, onExploreNatio
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200">
+          <div className="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-slate-200/80 shadow-2xs hover:bg-white hover:border-slate-300 hover:shadow-xs transition-all">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-7 h-7 rounded-md bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-xs flex items-center justify-center border border-emerald-200/80">
                 03
               </div>
               <h3 className="font-bold text-sm text-slate-900">Jejak Tindak Lanjut & Ombudsman</h3>
