@@ -39,7 +39,12 @@ export default function Footer({ onSelectTab }) {
               </li>
               <li>
                 <button onClick={() => onSelectTab("peta")} className="hover:text-orange-600 transition-colors">
-                  Peta Transparansi & Anggaran
+                  Peta Transparansi Geospasial
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab("data-anggaran")} className="hover:text-orange-600 transition-colors">
+                  Keterbukaan Anggaran & LPSE
                 </button>
               </li>
               <li>

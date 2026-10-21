@@ -9,6 +9,7 @@ import MapExplorer from "@/components/map/MapExplorer";
 import ReportModal from "@/components/modals/ReportModal";
 import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
 import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
+import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
 import { Shield, FileText, AlertTriangle, ArrowRight } from "lucide-react";
@@ -20,6 +21,7 @@ export default function Home() {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [ombudsmanModalOpen, setOmbudsmanModalOpen] = useState(false);
   const [selectedOmbudsmanReport, setSelectedOmbudsmanReport] = useState(null);
+  const [focusedRoadId, setFocusedRoadId] = useState(null);
 
   const handleAddNewReport = (newReport) => {
     setReports((prev) => [newReport, ...prev]);
@@ -47,7 +49,13 @@ export default function Home() {
 
   const handleSelectPilot = () => {
     setActiveTab("peta");
-    window.scrollTo({ top: 100, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSelectRoadOnMap = (roadId) => {
+    setFocusedRoadId(roadId);
+    setActiveTab("peta");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const overdueReports = reports.filter((r) => r.status === "OVERDUE");
@@ -62,22 +70,22 @@ export default function Home() {
       />
 
       {/* Main Tab Content */}
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col">
         {activeTab === "beranda" && (
           <div className="space-y-6 animate-fade-in">
             <HeroSection
               onExploreMap={() => {
                 setActiveTab("peta");
-                window.scrollTo({ top: 100, behavior: "smooth" });
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               onOpenReport={() => setReportModalOpen(true)}
               onExploreNational={() => {
                 setActiveTab("nasional");
-                window.scrollTo({ top: 100, behavior: "smooth" });
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               onOpenOfficerPortal={() => {
                 setActiveTab("dinas");
-                window.scrollTo({ top: 100, behavior: "smooth" });
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             />
 
@@ -87,6 +95,7 @@ export default function Home() {
               reports={reports}
               onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
               onOpenReportModal={() => setReportModalOpen(true)}
+              focusedRoadId={focusedRoadId}
             />
 
             {/* National 38 Provinces Section */}
@@ -95,11 +104,23 @@ export default function Home() {
         )}
 
         {activeTab === "peta" && (
-          <div className="py-4 animate-fade-in">
+          <div className="w-full h-[calc(100vh-4rem)] overflow-hidden animate-fade-in flex-1">
             <MapExplorer
               roads={roads}
               reports={reports}
               onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
+              onOpenReportModal={() => setReportModalOpen(true)}
+              focusedRoadId={focusedRoadId}
+            />
+          </div>
+        )}
+
+        {activeTab === "data-anggaran" && (
+          <div className="py-2 animate-fade-in flex-1">
+            <BudgetDataExplorer
+              roads={roads}
+              reports={reports}
+              onSelectRoadOnMap={handleSelectRoadOnMap}
               onOpenReportModal={() => setReportModalOpen(true)}
             />
           </div>
@@ -216,8 +237,8 @@ export default function Home() {
         report={selectedOmbudsmanReport}
       />
 
-      {/* Global Footer */}
-      <Footer onSelectTab={setActiveTab} />
+      {/* Global Footer (shown on all pages except full-screen GIS map) */}
+      {activeTab !== "peta" && <Footer onSelectTab={setActiveTab} />}
     </div>
   );
 }

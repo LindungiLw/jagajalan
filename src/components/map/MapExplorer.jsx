@@ -1,29 +1,32 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import {
   MapPin,
-  Filter,
   Search,
   Building2,
-  AlertCircle,
+  AlertTriangle,
   FileText,
   Clock,
-  Layers,
   ChevronRight,
   Shield,
-  Camera,
   CheckCircle2,
+  X,
+  ChevronDown,
+  Plus,
+  Minus,
+  Crosshair,
+  FileCheck,
 } from "lucide-react";
 
 // Dynamic import with SSR disabled to prevent Leaflet "window is not defined" error
 const MapInner = dynamic(() => import("./MapInner"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[540px] rounded-xl bg-slate-100 flex flex-col items-center justify-center gap-2 text-slate-400">
-      <div className="w-7 h-7 border-2 border-orange-600 border-t-transparent rounded-full animate-spin" />
-      <span className="text-xs font-medium">Memuat Peta Geospasial...</span>
+    <div className="w-full h-full min-h-[680px] bg-slate-100 flex flex-col items-center justify-center gap-3 text-slate-400">
+      <div className="w-8 h-8 border-3 border-orange-600 border-t-transparent rounded-full animate-spin" />
+      <span className="text-xs font-semibold text-slate-600">Memuat Peta Geospasial Transparansi...</span>
     </div>
   ),
 });
@@ -33,12 +36,30 @@ export default function MapExplorer({
   reports,
   onOpenOmbudsmanDraft,
   onOpenReportModal,
+  focusedRoadId,
 }) {
-  const [selectedRoad, setSelectedRoad] = useState(roads[0] || null);
-  const [selectedReport, setSelectedReport] = useState(reports[0] || null);
+  const [selectedRoad, setSelectedRoad] = useState(roads[2] || roads[0]); // Default to Sawangan (ruas-03)
+  const [selectedReport, setSelectedReport] = useState(reports[0] || null); // Default to JGJ-DPK-081 (Jl. Raya Sawangan)
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
-  const [mapCenter, setMapCenter] = useState([-6.3985, 106.825]);
+  const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState([-6.3985, 106.7892]); // Sawangan, Depok
+  const [mapInstance, setMapInstance] = useState(null);
+
+  // Synchronize when focusedRoadId changes from external navigation (React 19 state adjustment pattern)
+  const [prevFocusedRoadId, setPrevFocusedRoadId] = useState(focusedRoadId);
+  if (focusedRoadId !== prevFocusedRoadId) {
+    setPrevFocusedRoadId(focusedRoadId);
+    if (focusedRoadId) {
+      const targetRoad = roads.find((r) => r.id === focusedRoadId);
+      if (targetRoad) {
+        setSelectedRoad(targetRoad);
+        const relatedReport = reports.find((r) => r.roadSegmentId === targetRoad.id);
+        setSelectedReport(relatedReport || null);
+        setMapCenter(targetRoad.center);
+      }
+    }
+  }
 
   // Filter logic
   const filteredRoads = useMemo(() => {
@@ -65,7 +86,12 @@ export default function MapExplorer({
 
   const handleSelectRoad = (road) => {
     setSelectedRoad(road);
-    setSelectedReport(null);
+    const relatedReport = reports.find((r) => r.roadSegmentId === road.id);
+    if (relatedReport) {
+      setSelectedReport(relatedReport);
+    } else {
+      setSelectedReport(null);
+    }
     setMapCenter(road.center);
   };
 
@@ -76,369 +102,433 @@ export default function MapExplorer({
     setMapCenter(report.coordinates);
   };
 
+  const handleResetLocation = () => {
+    setMapCenter([-6.3985, 106.825]);
+    mapInstance?.setView([-6.3985, 106.825], 11.5, { animate: true });
+  };
+
+  // Human-readable authority label
+  const authorityFilterLabel = useMemo(() => {
+    if (authorityFilter === "NASIONAL") return "Jalan Nasional";
+    if (authorityFilter === "PROVINSI") return "Jalan Provinsi";
+    if (authorityFilter === "KOTA_KAB") return "Jalan Kota/Kabupaten";
+    return "Status Jalan";
+  }, [authorityFilter]);
+
+  // Active item to display in drawer (prioritize report, fallback to road)
+  const displayItem = selectedReport || selectedRoad;
+
   return (
-    <section id="peta-transparansi" className="py-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Top Filter & Toolbar Card */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs mb-4 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-        {/* Search Input */}
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+    <section className="relative w-full h-[calc(100vh-4.25rem)] min-h-[680px] bg-slate-100 overflow-hidden font-sans">
+      {/* 1. Underlying Map Canvas */}
+      <div className="absolute inset-0 z-0">
+        <MapInner
+          roads={filteredRoads}
+          reports={filteredReports}
+          selectedRoad={selectedRoad}
+          selectedReport={selectedReport}
+          onSelectRoad={handleSelectRoad}
+          onSelectReport={handleSelectReport}
+          mapCenter={mapCenter}
+          onMapReady={setMapInstance}
+        />
+      </div>
+
+      {/* 2. Top-Left Floating Search Box & Status Filter */}
+      <div className="absolute top-4 left-4 z-[500] space-y-2 pointer-events-auto">
+        {/* Search Bar */}
+        <div className="relative w-72 sm:w-84 bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 p-2 flex items-center gap-2 transition-all">
+          <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari nama jalan atau wilayah (misal: Margonda, Cileungsi, Sawangan)..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-orange-500 focus:bg-white transition-all"
+            placeholder="Cari nama jalan atau wilayah..."
+            className="w-full text-xs text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none"
           />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
-        {/* Authority Segmented Buttons */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
-          <span className="text-slate-400 text-xs mr-1 hidden sm:inline">Wewenang:</span>
+        {/* Status Jalan Filter Pill */}
+        <div className="relative inline-block">
           <button
-            onClick={() => setAuthorityFilter("ALL")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
-              authorityFilter === "ALL"
-                ? "bg-slate-900 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
-            }`}
+            onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
+            className="px-3.5 py-2 rounded-xl bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-700 flex items-center gap-2 hover:bg-slate-50 transition-all cursor-pointer"
           >
-            Semua Ruas
+            <Shield className="w-3.5 h-3.5 text-orange-600" />
+            <span>{authorityFilterLabel}</span>
+            <ChevronDown className="w-3 h-3 text-slate-400" />
           </button>
-          <button
-            onClick={() => setAuthorityFilter("NASIONAL")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
-              authorityFilter === "NASIONAL"
-                ? "bg-blue-600 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
-            }`}
-          >
-            Nasional (PUPR)
-          </button>
-          <button
-            onClick={() => setAuthorityFilter("PROVINSI")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
-              authorityFilter === "PROVINSI"
-                ? "bg-purple-600 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
-            }`}
-          >
-            Provinsi (Bina Marga)
-          </button>
-          <button
-            onClick={() => setAuthorityFilter("KOTA_KAB")}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
-              authorityFilter === "KOTA_KAB"
-                ? "bg-teal-600 text-white font-semibold shadow-xs"
-                : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200"
-            }`}
-          >
-            Kota/Kab (Dinas PU)
-          </button>
-        </div>
 
-        {/* Legend */}
-        <div className="hidden xl:flex items-center gap-2 pl-3 border-l border-slate-200 text-[11px] text-slate-500">
-          <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-            <span>Nasional</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
-            <span>Provinsi</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
-            <span>Kota/Kab</span>
-          </div>
+          {/* Dropdown Options */}
+          {statusDropdownOpen && (
+            <div className="absolute top-full left-0 mt-1.5 w-56 rounded-xl bg-white shadow-xl border border-slate-200 py-1.5 text-xs text-slate-700 z-[600] animate-fade-in">
+              <button
+                onClick={() => {
+                  setAuthorityFilter("ALL");
+                  setStatusDropdownOpen(false);
+                }}
+                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center justify-between ${
+                  authorityFilter === "ALL" ? "font-bold text-orange-600 bg-orange-50/50" : ""
+                }`}
+              >
+                <span>Semua Status Jalan</span>
+                {authorityFilter === "ALL" && <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />}
+              </button>
+              <button
+                onClick={() => {
+                  setAuthorityFilter("NASIONAL");
+                  setStatusDropdownOpen(false);
+                }}
+                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 ${
+                  authorityFilter === "NASIONAL" ? "font-bold text-blue-700 bg-blue-50/50" : ""
+                }`}
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]" />
+                <span>Jalan Nasional (KemenPU)</span>
+              </button>
+              <button
+                onClick={() => {
+                  setAuthorityFilter("PROVINSI");
+                  setStatusDropdownOpen(false);
+                }}
+                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 ${
+                  authorityFilter === "PROVINSI" ? "font-bold text-purple-700 bg-purple-50/50" : ""
+                }`}
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7c3aed]" />
+                <span>Jalan Provinsi (Bina Marga)</span>
+              </button>
+              <button
+                onClick={() => {
+                  setAuthorityFilter("KOTA_KAB");
+                  setStatusDropdownOpen(false);
+                }}
+                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 ${
+                  authorityFilter === "KOTA_KAB" ? "font-bold text-teal-700 bg-teal-50/50" : ""
+                }`}
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0d9488]" />
+                <span>Jalan Kota / Kabupaten (PUPR)</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Main Grid: Interactive Map & Live Inspector Panel */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Left Column: Interactive Map Viewport */}
-        <div className="lg:col-span-8 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-          <div className="h-[540px] rounded-xl overflow-hidden border border-slate-200 relative bg-slate-50">
-            <MapInner
-              roads={filteredRoads}
-              reports={filteredReports}
-              selectedRoad={selectedRoad}
-              selectedReport={selectedReport}
-              onSelectRoad={handleSelectRoad}
-              onSelectReport={handleSelectReport}
-              mapCenter={mapCenter}
-            />
-          </div>
+      {/* 3. Left Side Floating Zoom Controls */}
+      <div className="absolute top-36 left-4 z-[500] flex flex-col gap-1.5 bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 p-1 pointer-events-auto">
+        <button
+          onClick={() => mapInstance?.zoomIn()}
+          title="Perbesar Peta"
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => mapInstance?.zoomOut()}
+          title="Perkecil Peta"
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors"
+        >
+          <Minus className="w-4 h-4" />
+        </button>
+        <div className="w-full h-px bg-slate-200 my-0.5" />
+        <button
+          onClick={handleResetLocation}
+          title="Pusatkan Kembali Peta"
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-700 hover:text-orange-600 hover:bg-slate-100 transition-colors"
+        >
+          <Crosshair className="w-4 h-4" />
+        </button>
+      </div>
 
-          {/* Map Status Bar */}
-          <div className="px-2 py-1.5 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2 border-t border-slate-100">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>Ruas Terdata: <strong>{filteredRoads.length}</strong></span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-orange-500" />
-                <span>Titik Aduan: <strong>{filteredReports.length}</strong></span>
-              </span>
-            </div>
-            <button
-              onClick={onOpenReportModal}
-              className="text-orange-600 hover:text-orange-700 font-semibold text-xs flex items-center gap-1"
-            >
-              <span>+ Tambah Laporan Kerusakan</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+      {/* 4. Bottom-Left Floating Legend */}
+      <div className="hidden sm:block absolute bottom-6 left-4 z-[500] space-y-1.5 pointer-events-auto">
+        <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 p-3 text-[11px] space-y-1.5 min-w-[175px]">
+          <div className="flex items-center gap-2 font-medium text-slate-700">
+            <span className="w-5 h-1 rounded bg-[#2563eb]" />
+            <span>Jalan Nasional</span>
+          </div>
+          <div className="flex items-center gap-2 font-medium text-slate-700">
+            <span className="w-5 h-1 rounded bg-[#7c3aed]" />
+            <span>Jalan Provinsi</span>
+          </div>
+          <div className="flex items-center gap-2 font-medium text-slate-700">
+            <span className="w-5 h-1 rounded bg-[#0d9488]" />
+            <span>Jalan Kota/Kabupaten</span>
           </div>
         </div>
+        <div className="text-[10px] text-slate-500 font-medium pl-1">
+          Peta dasar © OpenStreetMap contributors
+        </div>
+      </div>
 
-        {/* Right Column: Detailed Inspector Panel */}
-        <div className="lg:col-span-4 space-y-4">
-          {selectedReport ? (
-            /* Selected Citizen Report Card */
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-              {/* Ticket Code & Status */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <span className="font-mono font-bold text-slate-900 text-xs px-2.5 py-1 rounded bg-slate-100 border border-slate-200">
-                  {selectedReport.ticketCode}
+      {/* 5. Bottom-Center Floating Stats Card */}
+      <div className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-[500] bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 px-4 py-2 items-center gap-4 text-xs font-semibold text-slate-700 pointer-events-auto">
+        <span className="flex items-center gap-1.5">
+          <span className="w-4 h-4 rounded-md bg-orange-600 text-white flex items-center justify-center text-[10px] font-black">
+            !
+          </span>
+          <span>{roads.length} ruas contoh</span>
+        </span>
+        <span className="w-px h-3.5 bg-slate-300" />
+        <span className="flex items-center gap-1.5">
+          <MapPin className="w-3.5 h-3.5 text-orange-600" />
+          <span>{reports.length} titik laporan demo</span>
+        </span>
+      </div>
+
+      {/* 6. Right Side Floating Inspector Panel / Drawer */}
+      {displayItem && (
+        <aside className="absolute top-4 right-4 bottom-4 w-full max-w-[430px] z-[500] bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-fade-in pointer-events-auto">
+          {/* Drawer Header */}
+          <div className="px-5 pt-4 pb-2 flex items-center justify-between border-b border-slate-100 shrink-0">
+            <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold font-mono bg-orange-100/80 text-orange-800 border border-orange-200">
+              DEMO • {selectedReport ? selectedReport.ticketCode : selectedRoad.code}
+            </span>
+            <button
+              onClick={() => {
+                setSelectedReport(null);
+                setSelectedRoad(null);
+              }}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Drawer Body (Scrollable) */}
+          <div className="p-5 overflow-y-auto flex-1 space-y-3.5 text-xs text-slate-700">
+            {/* Title & Location */}
+            <div className="space-y-1">
+              <h2 className="text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
+                {selectedReport ? selectedReport.roadName : selectedRoad.name}
+              </h2>
+              <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span>{selectedReport ? selectedReport.address : `${selectedRoad.district} • ${selectedRoad.lengthKm} KM`}</span>
+              </p>
+            </div>
+
+            {/* Verification Status Tag */}
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-orange-50 text-orange-800 border border-orange-200">
+                <AlertTriangle className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+                <span>Contoh data • perlu verifikasi</span>
+              </span>
+            </div>
+
+            {/* Photo Banner with Carousel Dots */}
+            <div className="w-full h-44 rounded-xl overflow-hidden border border-slate-200 bg-slate-900 relative shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={
+                  selectedReport?.photoUrl ||
+                  "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80"
+                }
+                alt="Bukti Kerusakan Jalan"
+                className="w-full h-full object-cover"
+              />
+              {selectedReport?.proofPhotoUrl && (
+                <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-600 text-white shadow-xs">
+                  ✓ Bukti Penanganan Dinas Tersedia
                 </span>
-                {selectedReport.status === "OVERDUE" ? (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                    OVERDUE SLA (+{selectedReport.daysOverdue} HARI)
-                  </span>
-                ) : selectedReport.status === "DALAM_PENGERJAAN" ? (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
-                    DALAM PENGERJAAN
-                  </span>
-                ) : (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
-                    SELESAI DIPERBAIKI
-                  </span>
-                )}
-              </div>
-
-              {/* Title & Location */}
-              <div>
-                <h3 className="font-bold text-slate-900 text-base">{selectedReport.roadName}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">{selectedReport.address} ({selectedReport.district})</p>
-              </div>
-
-              {/* Verified Image Preview & Proof Comparison */}
-              {selectedReport.photoUrl && (
-                <div>
-                  {selectedReport.proofPhotoUrl ? (
-                    <div className="space-y-1.5">
-                      <div className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider flex items-center justify-between">
-                        <span>Bukti Penanganan Fisik Dinas</span>
-                        <span className="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded text-[9px]">
-                          ✓ Selesai Diperbaiki
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="space-y-1">
-                          <div className="rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-100">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={selectedReport.photoUrl}
-                              alt="Before"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <span className="text-[10px] font-bold text-slate-500 block text-center">BEFORE: Warga</span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="rounded-lg overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 h-24 bg-slate-100">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={selectedReport.proofPhotoUrl}
-                              alt="After"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <span className="text-[10px] font-bold text-emerald-700 block text-center">AFTER: Dinas</span>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="rounded-xl overflow-hidden relative border border-slate-200 h-36 bg-slate-100">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={selectedReport.photoUrl}
-                        alt={selectedReport.categoryLabel}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-white/95 text-[10px] font-bold text-slate-800 shadow-xs border border-slate-200 flex items-center gap-1">
-                        <Camera className="w-3 h-3 text-orange-600" />
-                        <span>Terverifikasi AI Vision</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
               )}
+              {/* Carousel Indicator Dots (matching screenshot) */}
+              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+              </div>
+            </div>
 
-              {/* Damage Details & Hazard Score */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
-                <div className="flex items-center justify-between font-bold">
-                  <span className="text-slate-800">{selectedReport.categoryLabel}</span>
-                  <span className="text-rose-700 font-extrabold">Skor Risiko: {selectedReport.hazardScore}/100</span>
+            {/* 4 Modular Section Cards */}
+            <div className="space-y-2.5 pt-1">
+              {/* Card 1: Kondisi Jalan */}
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
+                <div className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shrink-0 font-bold">
+                  <AlertTriangle className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  {selectedReport.aiAnalysis}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-slate-900 text-xs">Kondisi Jalan</div>
+                  <div className="text-[11px] text-slate-500 truncate">
+                    {selectedReport?.categoryLabel || selectedRoad?.condition?.replace("_", " ") || "Lubang / kerusakan permukaan"}
+                  </div>
+                </div>
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-orange-700 border border-orange-200 shrink-0">
+                  Prioritas tinggi • estimasi
+                </span>
               </div>
 
-              {/* Authority & Legal Mandate */}
-              <div
-                className="p-3.5 rounded-xl border text-xs space-y-1"
-                style={{
-                  backgroundColor: selectedReport.authority === "NASIONAL" ? "#eff6ff" : selectedReport.authority === "PROVINSI" ? "#faf5ff" : "#f0fdfa",
-                  borderColor: selectedReport.authority === "NASIONAL" ? "#bfdbfe" : selectedReport.authority === "PROVINSI" ? "#e9d5ff" : "#99f6e4",
-                }}
-              >
-                <div
-                  className="text-[10px] font-bold uppercase tracking-wider"
-                  style={{
-                    color: selectedReport.authority === "NASIONAL" ? "#1d4ed8" : selectedReport.authority === "PROVINSI" ? "#6d28d9" : "#0f766e",
-                  }}
-                >
-                  Instansi Penanggung Jawab Resmi:
+              {/* Card 2: Kewenangan ruas */}
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
+                <div className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                  <Building2 className="w-4 h-4 text-slate-600" />
                 </div>
-                <div className="font-bold text-slate-900">{selectedReport.authorityLabel}</div>
-                <div className="text-[11px] text-slate-600">{selectedReport.legalBasis}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-slate-900 text-xs">Kewenangan ruas</div>
+                  <div className="text-[11px] font-semibold text-slate-800 flex items-center gap-1.5 mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                    <span className="truncate">
+                      {selectedReport?.authorityLabel || selectedRoad?.authorityLabel}
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-slate-500 truncate mt-0.5">
+                    Dasar penetapan: {selectedReport?.legalBasis || selectedRoad?.legalBasis || "SK Kewenangan Ruas Resmi"}
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
               </div>
 
-              {/* Linked APBD Procurement with Match Confidence */}
-              {selectedReport.matchingBudget && (
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
-                  <div className="flex items-center justify-between font-bold text-slate-800">
-                    <span className="flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 text-slate-500" />
-                      Paket Tender APBD:
-                    </span>
-                    <span className="text-orange-700 font-extrabold">
-                      Rp {((selectedReport.matchingBudget.paguRp || 0)/1000000000).toFixed(1)} Miliar
-                    </span>
-                  </div>
-                  <p className="text-[11px] font-semibold text-slate-700">{selectedReport.matchingBudget.packageName}</p>
-                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-200">
-                    <span className="text-slate-500">Penyedia: {selectedReport.matchingBudget.contractor || "Belum Ditentukan"}</span>
-                    <span className="px-2 py-0.5 rounded font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Terkonfirmasi
-                    </span>
+              {/* Card 3: Informasi proyek terkait */}
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
+                <div className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                  <FileText className="w-4 h-4 text-slate-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-slate-900 text-xs">Informasi proyek terkait</div>
+                  <div className="text-[11px] text-slate-600 truncate mt-0.5">
+                    {selectedReport?.matchingBudget
+                      ? `${selectedReport.matchingBudget.packageName} (Pagu: Rp ${((selectedReport.matchingBudget.paguRp || 0) / 1000000000).toFixed(1)} Miliar)`
+                      : selectedRoad?.budget
+                      ? `${selectedRoad.budget.name} (Pagu: Rp ${((selectedRoad.budget.paguRp || 0) / 1000000000).toFixed(1)} Miliar)`
+                      : "Paket anggaran belum terhubung ke ruas ini"}
                   </div>
                 </div>
-              )}
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 shrink-0 flex items-center gap-1">
+                  <FileText className="w-3 h-3 text-slate-400" />
+                  <span>{selectedReport?.matchingBudget?.matchConfidence === "TERKONFIRMASI" ? "Terkonfirmasi" : "Belum dicocokkan"}</span>
+                </span>
+              </div>
 
-              {/* Overdue Response Escalation CTA */}
-              {selectedReport.status === "OVERDUE" && (
-                <div className="pt-2 border-t border-slate-100 space-y-2">
-                  <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-rose-700 leading-snug">
-                    Laporan melewati batas pemantauan tanggapan 14 hari kerja tanpa respons resmi dinas (UU No. 25/2009 & Ombudsman RI).
+              {/* Card 4: Riwayat laporan (Horizontal Timeline Stepper) */}
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <Clock className="w-4 h-4 text-slate-500 shrink-0" />
+                  <div>
+                    <div className="font-bold text-slate-900 text-xs">Riwayat laporan</div>
+                    <div className="text-[10px] text-slate-500">
+                      Laporan contoh dibuat{" "}
+                      {selectedReport
+                        ? new Date(selectedReport.reportDate).toLocaleDateString("id-ID", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "21 Okt 2026"}
+                    </div>
                   </div>
+                </div>
+
+                {/* Horizontal Stepper (matching screenshot exactly) */}
+                <div className="pt-2 flex items-center justify-between px-3 text-center">
+                  {/* Step 1: Diterima */}
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                      ✓
+                    </div>
+                    <span className="text-[10px] font-bold text-orange-600">Diterima</span>
+                  </div>
+
+                  {/* Connecting Line 1 */}
+                  <div className="flex-1 h-0.5 bg-slate-200 mx-2 -mt-4.5" />
+
+                  {/* Step 2: Diverifikasi */}
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                        selectedReport?.status === "DALAM_PENGERJAAN" || selectedReport?.status === "SELESAI"
+                          ? "bg-orange-600 text-white"
+                          : "bg-white border-2 border-slate-300"
+                      }`}
+                    >
+                      {selectedReport?.status === "DALAM_PENGERJAAN" || selectedReport?.status === "SELESAI" ? "✓" : ""}
+                    </div>
+                    <span className="text-[10px] font-medium text-slate-500">Diverifikasi</span>
+                  </div>
+
+                  {/* Connecting Line 2 */}
+                  <div
+                    className={`flex-1 h-0.5 mx-2 -mt-4.5 ${
+                      selectedReport?.status === "SELESAI" ? "bg-orange-500" : "bg-slate-200"
+                    }`}
+                  />
+
+                  {/* Step 3: Tindak lanjut */}
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                        selectedReport?.status === "SELESAI"
+                          ? "bg-emerald-600 text-white"
+                          : "bg-white border-2 border-slate-300"
+                      }`}
+                    >
+                      {selectedReport?.status === "SELESAI" ? "✓" : ""}
+                    </div>
+                    <span className="text-[10px] font-medium text-slate-500">Tindak lanjut</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Overdue SLA / Ombudsman Escalation Card */}
+              {selectedReport?.status === "OVERDUE" && (
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 space-y-2">
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-rose-700">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Batas Waktu Tanggapan (SLA) Terlampaui</span>
+                  </div>
+                  <p className="text-[11px] text-rose-700 leading-relaxed">
+                    Instansi terkait belum memberikan respons resmi melampaui 14 hari kerja (UU No. 25/2009). Anda berhak menerbitkan pengaduan ke Ombudsman RI.
+                  </p>
                   <button
                     onClick={() => onOpenOmbudsmanDraft(selectedReport)}
-                    className="w-full py-2.5 px-4 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-xs transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-2 px-3 rounded-lg text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                   >
-                    <FileText className="w-4 h-4" />
+                    <FileCheck className="w-3.5 h-3.5" />
                     <span>Generate Draf Laporan Ombudsman RI</span>
                   </button>
                 </div>
               )}
             </div>
-          ) : selectedRoad ? (
-            /* Selected Road Overview */
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <span
-                  className="px-2.5 py-0.5 rounded text-xs font-bold uppercase"
-                  style={{
-                    backgroundColor: selectedRoad.authority === "NASIONAL" ? "#dbeafe" : selectedRoad.authority === "PROVINSI" ? "#f3e8ff" : "#ccfbf1",
-                    color: selectedRoad.authority === "NASIONAL" ? "#1e40af" : selectedRoad.authority === "PROVINSI" ? "#6b21a8" : "#115e59",
-                  }}
-                >
-                  Wewenang {selectedRoad.authority}
-                </span>
-                <span className="text-xs text-slate-500">{selectedRoad.district}</span>
-              </div>
+          </div>
 
-              <div>
-                <h3 className="font-extrabold text-slate-900 text-lg">{selectedRoad.name}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Kode Ruas: {selectedRoad.code} • Panjang: {selectedRoad.lengthKm} KM</p>
-              </div>
+          {/* Drawer Footer Actions */}
+          <div className="p-5 pt-3 border-t border-slate-100 space-y-2 bg-white shrink-0">
+            <button
+              onClick={() => {
+                if (selectedReport?.status === "OVERDUE") {
+                  onOpenOmbudsmanDraft(selectedReport);
+                } else {
+                  alert(
+                    `Laporan ${selectedReport?.ticketCode || "JGJ-DPK-081"} saat ini berstatus: ${
+                      selectedReport?.status || "Dalam Pemantauan"
+                    }. Riwayat audit tercatat lengkap dalam sistem transparansi.`
+                  );
+                }
+              }}
+              className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Lihat riwayat laporan</span>
+            </button>
 
-              <div
-                className="p-3.5 rounded-xl border text-xs space-y-1"
-                style={{
-                  backgroundColor: selectedRoad.authority === "NASIONAL" ? "#eff6ff" : selectedRoad.authority === "PROVINSI" ? "#faf5ff" : "#f0fdfa",
-                  borderColor: selectedRoad.authority === "NASIONAL" ? "#bfdbfe" : selectedRoad.authority === "PROVINSI" ? "#e9d5ff" : "#99f6e4",
-                }}
-              >
-                <div
-                  className="text-[10px] uppercase font-bold"
-                  style={{
-                    color: selectedRoad.authority === "NASIONAL" ? "#1d4ed8" : selectedRoad.authority === "PROVINSI" ? "#6d28d9" : "#0f766e",
-                  }}
-                >
-                  Instansi Penanggung Jawab:
-                </div>
-                <div className="font-bold text-slate-900">{selectedRoad.authorityLabel}</div>
-                <div className="text-[11px] text-slate-600 italic">{selectedRoad.legalBasis}</div>
-              </div>
-
-              {selectedRoad.budget && (
-                <div className="p-3.5 rounded-xl bg-orange-50/60 border border-orange-200 text-xs space-y-1.5">
-                  <div className="flex items-center justify-between font-bold text-slate-900">
-                    <span className="flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 text-orange-600" />
-                      Paket Tender APBD TA {selectedRoad.budget.fiscalYear}
-                    </span>
-                    <span className="text-orange-700 font-extrabold">
-                      Rp {(selectedRoad.budget.paguRp / 1000000000).toFixed(1)} Miliar
-                    </span>
-                  </div>
-                  <p className="text-xs font-semibold text-slate-800">{selectedRoad.budget.name}</p>
-                  <p className="text-[11px] text-slate-600">Kontraktor: {selectedRoad.budget.contractor}</p>
-                  
-                  {/* Match Confidence & Source Provenance */}
-                  <div className="flex items-center justify-between pt-1 border-t border-orange-200/80 text-[10px]">
-                    <span className="text-slate-600">Sumber: {selectedRoad.budget.sourceDocument || "LPSE Resmi"}</span>
-                    <span className={`px-2 py-0.5 rounded font-bold ${
-                      selectedRoad.budget.matchConfidence === "TERKONFIRMASI"
-                        ? "bg-emerald-100 text-emerald-800"
-                        : "bg-amber-100 text-amber-800"
-                    }`}>
-                      {selectedRoad.budget.matchConfidence === "TERKONFIRMASI" ? "Terkonfirmasi" : "Pencocokan Parsial"}
-                    </span>
-                  </div>
-
-                  <div className="mt-1 text-[10px] p-2 rounded bg-white text-slate-700 border border-orange-200/60">
-                    <strong>Catatan Progres:</strong> {selectedRoad.budget.statusNote}
-                  </div>
-                </div>
-              )}
-
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                <div>
-                  <span className="text-slate-500 text-[11px] block">Aduan Aktif di Ruas Ini:</span>
-                  <span className="text-rose-600 font-extrabold text-base">{selectedRoad.activeReportsCount} Laporan</span>
-                </div>
-                <button
-                  onClick={onOpenReportModal}
-                  className="px-3 py-1.5 rounded-lg bg-orange-600 text-white font-semibold text-xs hover:bg-orange-700 shadow-xs"
-                >
-                  + Lapor di Ruas Ini
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center text-slate-500 space-y-2">
-              <MapPin className="w-8 h-8 text-slate-300 mx-auto" />
-              <p className="text-sm font-semibold text-slate-800">Pilih Ruas Jalan atau Titik Aduan</p>
-              <p className="text-xs text-slate-500">Klik garis jalan atau titik laporan pada peta di sebelah kiri untuk melihat rincian wewenang & anggaran APBD.</p>
-            </div>
-          )}
-        </div>
-      </div>
+            <button
+              onClick={() => onOpenReportModal()}
+              className="w-full py-2 px-4 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+              <span>Laporkan kerusakan di sekitar sini</span>
+            </button>
+          </div>
+        </aside>
+      )}
     </section>
   );
 }

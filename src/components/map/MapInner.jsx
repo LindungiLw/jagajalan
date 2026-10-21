@@ -1,55 +1,120 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 
-// Create clean, minimal map marker icon suitable for light mode dashboard
-const createReportIcon = (category, isOverdue) => {
-  let color = "#d97706"; // Amber default for pending/in-progress
-  if (isOverdue) color = "#dc2626"; // Crimson Red for overdue response
-  else if (category === "POTHOLE_CRITICAL") color = "#ea580c"; // Safety Orange
-  else color = "#d97706";
+// Create custom orange marker icon matching the high-fidelity UI design
+const createReportIcon = (category, isOverdue, isSelected) => {
+  let bgColor = "#ea580c"; // Safety Orange
+  if (isOverdue) bgColor = "#dc2626"; // Crimson Red for Overdue
+  else if (category === "SUBSIDENCE") bgColor = "#d97706";
 
+  if (isSelected) {
+    return L.divIcon({
+      className: "custom-map-marker-selected",
+      html: `
+        <div style="
+          position: relative;
+          width: 64px;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <!-- Large Radial Aura Halo (as seen in screenshot around Sawangan pin) -->
+          <div style="
+            position: absolute;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: rgba(234, 88, 12, 0.16);
+            pointer-events: none;
+          "></div>
+          <div style="
+            position: absolute;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(234, 88, 12, 0.28);
+            pointer-events: none;
+          "></div>
+          <!-- Teardrop Location Pin SVG pointing down -->
+          <div style="
+            position: relative;
+            transform: translateY(-8px);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+          ">
+            <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 0C7.61116 0 0 7.61116 0 17C0 27.5 14.5 40.5 16.2 41.8C16.65 42.1 17.35 42.1 17.8 41.8C19.5 40.5 34 27.5 34 17C34 7.61116 26.3888 0 17 0Z" fill="${bgColor}"/>
+              <circle cx="17" cy="16" r="10" fill="#ffffff" fill-opacity="0.25"/>
+              <!-- Exclamation Mark Inside Pin -->
+              <circle cx="17" cy="14" r="5" fill="#ffffff"/>
+              <path d="M17 12V14.5" stroke="${bgColor}" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="17" cy="17" r="1" fill="${bgColor}"/>
+            </svg>
+          </div>
+        </div>
+      `,
+      iconSize: [64, 64],
+      iconAnchor: [32, 46],
+    });
+  }
+
+  // Regular non-selected pin with white warning triangle icon
   return L.divIcon({
     className: "custom-map-marker",
     html: `
       <div style="
         position: relative;
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
       ">
-        ${isOverdue ? `<span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background-color: ${color}; opacity: 0.35; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></span>` : ""}
+        ${isOverdue ? `<span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background-color: ${bgColor}; opacity: 0.35; animation: ping 1.8s infinite;"></span>` : ""}
         <div style="
-          width: 20px;
-          height: 20px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
-          background: #ffffff;
-          border: 3px solid ${color};
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          background: ${bgColor};
+          border: 2px solid #ffffff;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
           display: flex;
           align-items: center;
           justify-content: center;
         ">
-          <div style="width: 6px; height: 6px; border-radius: 50%; background: ${color};"></div>
+          <!-- White Alert Triangle SVG Icon (matching screenshot exactly) -->
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
         </div>
       </div>
     `,
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
   });
 };
 
-function ChangeMapView({ center }) {
+function MapController({ center, onMapReady }) {
   const map = useMap();
+
   useEffect(() => {
-    if (center) {
+    if (map && onMapReady) {
+      onMapReady(map);
+    }
+  }, [map, onMapReady]);
+
+  useEffect(() => {
+    if (center && map) {
       map.setView(center, 13, { animate: true });
     }
   }, [center, map]);
+
   return null;
 }
 
@@ -61,17 +126,20 @@ export default function MapInner({
   onSelectRoad,
   onSelectReport,
   mapCenter,
+  onMapReady,
 }) {
   return (
     <MapContainer
       center={mapCenter || [-6.3985, 106.825]}
-      zoom={12}
+      zoom={11.5}
+      zoomControl={false}
       scrollWheelZoom={true}
-      className="w-full h-full min-h-[540px]"
+      className="w-full h-full"
+      style={{ width: "100%", height: "100%", minHeight: "680px" }}
     >
-      <ChangeMapView center={mapCenter} />
+      <MapController center={mapCenter} onMapReady={onMapReady} />
 
-      {/* Standard OpenStreetMap Clean Light Tiles */}
+      {/* CartoDB Positron / OSM Clean Light Tile Layer */}
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -90,76 +158,34 @@ export default function MapInner({
             key={road.id}
             positions={road.coordinates}
             pathOptions={{
-              color: isSelected ? "#0f172a" : color,
-              weight: isSelected ? 7 : 5,
-              opacity: isSelected ? 1 : 0.85,
-              dashArray: road.condition === "RUSAK_BERAT" ? "6, 8" : undefined,
+              color: isSelected ? "#ea580c" : color,
+              weight: isSelected ? 6 : 4,
+              opacity: isSelected ? 1 : 0.8,
+              dashArray: road.condition === "RUSAK_BERAT" ? "5, 6" : undefined,
             }}
             eventHandlers={{
               click: () => onSelectRoad(road),
             }}
-          >
-            <Popup>
-              <div className="p-1 text-xs text-slate-800">
-                <span className="font-bold text-slate-900 text-sm block">{road.name}</span>
-                <span className="text-slate-500 block mt-0.5">Kode Ruas: {road.code}</span>
-                <div
-                  className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-bold"
-                  style={{
-                    backgroundColor: road.authority === "NASIONAL" ? "#dbeafe" : road.authority === "PROVINSI" ? "#f3e8ff" : "#ccfbf1",
-                    color: road.authority === "NASIONAL" ? "#1e40af" : road.authority === "PROVINSI" ? "#6b21a8" : "#115e59",
-                  }}
-                >
-                  Wewenang: {road.authority}
-                </div>
-                <p className="mt-1.5 text-slate-700">{road.authorityLabel}</p>
-                <div className="mt-2 text-[11px] text-orange-700 font-bold bg-orange-50 p-1.5 rounded border border-orange-200">
-                  Alokasi APBD: Rp {(road.budget?.paguRp / 1000000000).toFixed(1)} Miliar
-                </div>
-              </div>
-            </Popup>
-          </Polyline>
+          />
         );
       })}
 
       {/* Citizen Report Markers */}
       {reports.map((report) => {
         const isOverdue = report.status === "OVERDUE";
-        const icon = createReportIcon(report.damageCategory, isOverdue);
+        const isSelected = selectedReport?.id === report.id;
+        const icon = createReportIcon(report.damageCategory, isOverdue, isSelected);
 
         return (
           <Marker
             key={report.id}
             position={report.coordinates}
             icon={icon}
+            zIndexOffset={isSelected ? 1000 : 1}
             eventHandlers={{
               click: () => onSelectReport(report),
             }}
-          >
-            <Popup>
-              <div className="p-1 text-xs max-w-xs text-slate-800">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="font-extrabold text-slate-900 font-mono">{report.ticketCode}</span>
-                  {isOverdue && (
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                      OVERDUE SLA
-                    </span>
-                  )}
-                </div>
-                <p className="text-slate-800 font-medium">{report.roadName}</p>
-                <p className="text-slate-500 text-[11px] mt-0.5">{report.address}</p>
-
-                <div className="mt-2 p-2 rounded bg-slate-50 border border-slate-200">
-                  <div className="text-[11px] text-orange-700 font-bold">Kategori AI: {report.categoryLabel}</div>
-                  <div className="text-[10px] text-slate-600 mt-0.5">Skor Bahaya: {report.hazardScore}/100</div>
-                </div>
-
-                <div className="mt-2 text-[10px] text-slate-500">
-                  Instansi: <strong className="text-slate-800">{report.authorityLabel}</strong>
-                </div>
-              </div>
-            </Popup>
-          </Marker>
+          />
         );
       })}
     </MapContainer>
