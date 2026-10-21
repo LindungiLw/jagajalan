@@ -17,7 +17,10 @@ export const metadata = {
   keywords: ["JagaJalan", "transparansi publik", "jalan rusak", "APBD", "ombudsman", "open government data", "infrastruktur jalan"],
   authors: [{ name: "JagaJalan Initiative" }],
   icons: {
-    icon: "/logo/logo.png",
+    icon: [
+      { url: "/logo/logo.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
     shortcut: "/logo/logo.png",
     apple: "/logo/logo.png",
   },
