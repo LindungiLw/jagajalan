@@ -37,7 +37,7 @@ export default function LegalBasisSection() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(15,23,42,0.03)] space-y-6">
+      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-[5px] border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(15,23,42,0.03)] space-y-6">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-mono mb-1">
             <Scale className="w-3.5 h-3.5 text-orange-600" />
@@ -55,10 +55,10 @@ export default function LegalBasisSection() {
           {regulations.map((reg) => (
             <div
               key={reg.code}
-              className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-2.5 flex flex-col justify-between"
+              className="p-4 rounded-[5px] bg-slate-50/70 border border-slate-200/80 space-y-2.5 flex flex-col justify-between"
             >
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white text-slate-800 border border-slate-200 inline-block">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-[5px] bg-white text-slate-800 border border-slate-200 inline-block">
                   {reg.code}
                 </span>
                 <h3 className="text-xs font-bold text-slate-900 leading-snug">

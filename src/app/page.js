@@ -78,10 +78,12 @@ export default function Home() {
       <main className="flex-1 flex flex-col">
         {activeTab === "beranda" && (
           <div className="space-y-6 animate-fade-in pb-8">
-            {/* 1. Hero Section: Crisis Metrics & Problem Definition */}
+            {/* 1. Hero Section: Data Transparency & Live Ruas Inspector */}
             <HeroSection
-              onExploreMap={() => {
-                setActiveTab("peta");
+              roads={roads}
+              reports={reports}
+              onExploreData={() => {
+                setActiveTab("data-anggaran");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               onOpenReport={() => setReportModalOpen(true)}
@@ -100,17 +102,6 @@ export default function Home() {
 
             {/* 3. Interactive Annual Trend & Progress Diagram (2021-2026) */}
             <AnnualProgressChart />
-
-            {/* 4. Deep-Dive Pilot GIS Showcase Teaser (Bening Frosted Glass) */}
-            <MapShowcaseTeaser
-              roads={roads}
-              reports={reports}
-              onExploreMap={() => {
-                setActiveTab("peta");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              onSelectRoad={handleSelectRoadOnMap}
-            />
 
             {/* 5. Macro National Stats Teaser (Directs to Full 38-Provinces Tab) */}
             <NationalStatsTeaser

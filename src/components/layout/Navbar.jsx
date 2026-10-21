@@ -61,7 +61,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
                     <span>{item.label}</span>
                     {item.badge && (
                       <span
-                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                        className={`px-1.5 py-0.5 rounded-[5px] text-[9px] font-bold uppercase tracking-wider ${
                           isActive
                             ? "bg-orange-100 text-orange-800 border border-orange-200"
                             : "bg-slate-100 text-slate-600 border border-slate-200"
@@ -74,7 +74,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
 
                   {/* Clean bottom active indicator pinned flush to border */}
                   {isActive && (
-                    <span className="absolute bottom-0 inset-x-2.5 h-[2.5px] bg-orange-600 rounded-t-full shadow-xs" />
+                    <span className="absolute bottom-0 inset-x-2.5 h-[2.5px] bg-[#c2410c] rounded-t-[3px] shadow-xs" />
                   )}
                 </button>
               );
@@ -85,7 +85,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={onOpenReportModal}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-[0.98]"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Laporkan Kerusakan</span>
@@ -95,7 +95,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
             <div className="flex lg:hidden items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="p-2 rounded-[5px] text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                 aria-label="Buka Menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -116,15 +116,15 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
                     setActiveTab(item.id);
                     setMobileMenuOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl font-medium flex items-center justify-between transition-colors ${
+                  className={`w-full text-left px-3.5 py-2.5 rounded-[5px] font-medium flex items-center justify-between transition-colors ${
                     isActive
-                      ? "bg-orange-50 text-orange-700 font-bold border border-orange-200"
+                      ? "bg-orange-50 text-orange-800 font-bold border border-orange-200"
                       : "text-slate-700 hover:bg-slate-100"
                   }`}
                 >
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
+                    <span className="px-1.5 py-0.5 rounded-[5px] text-[9px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
                       {item.badge}
                     </span>
                   )}

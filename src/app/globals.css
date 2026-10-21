@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
+@theme {
+  --font-sans: var(--font-instrument-sans), "Instrument Sans", "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -14,9 +19,10 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-instrument-sans), "Instrument Sans", "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.012em;
 }
 
 /* Minimal Dashboard Surface Classes with Glassmorphism ("Bening") */
@@ -25,6 +31,7 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 5px !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
 }
 
@@ -44,7 +51,17 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 5px !important;
   box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.04);
+}
+
+/* Enforce crisp 5px border-radius across cards, panels, and modals (avoid round/melengkung) */
+.rounded-3xl,
+.rounded-2xl,
+.rounded-xl,
+.rounded-lg,
+.rounded-md {
+  border-radius: 5px !important;
 }
 
 /* Custom Scrollbar for Light Mode */
@@ -70,7 +87,7 @@ body {
 .leaflet-container {
   background: #f1f5f9 !important;
   font-family: inherit !important;
-  border-radius: 0.75rem;
+  border-radius: 5px !important;
   z-index: 10;
 }
 
@@ -78,7 +95,7 @@ body {
   background: #ffffff !important;
   color: #0f172a !important;
   border: 1px solid #e2e8f0 !important;
-  border-radius: 0.75rem !important;
+  border-radius: 5px !important;
   box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06) !important;
 }
 

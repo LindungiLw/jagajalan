@@ -246,18 +246,18 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
-      <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-xl overflow-hidden">
+      <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-[5px] bg-white border border-slate-200 shadow-xl overflow-hidden">
         {/* Modal Header */}
         <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-white">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+            <div className="w-9 h-9 rounded-[5px] bg-orange-100 flex items-center justify-center text-orange-700">
               <Camera className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-extrabold text-slate-900 text-base">Lapor Kerusakan Jalan Baru</h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-purple-600" />
+                <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-amber-700" />
                   Gemini Vision
                 </span>
               </div>
@@ -266,7 +266,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
           </div>
           <button
             onClick={handleResetAndClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -506,7 +506,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                 <button
                   type="submit"
                   disabled={!!spamError || isAnalyzing}
-                  className="w-full py-2.5 px-4 rounded-lg font-semibold text-xs text-white bg-orange-600 hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-xs transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 rounded-[5px] font-semibold text-xs text-white bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Terbitkan Laporan & Mulai Penghitungan SLA</span>
                   <ArrowRight className="w-4 h-4" />
