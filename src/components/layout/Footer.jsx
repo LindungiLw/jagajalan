@@ -11,6 +11,7 @@ export default function Footer({ onSelectTab }) {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo/full-logo.png"
                 alt="JagaJalan - Jalan Terpantau, Publik Terberdaya"
@@ -49,6 +50,12 @@ export default function Footer({ onSelectTab }) {
               <li>
                 <button onClick={() => onSelectTab("ombudsman")} className="hover:text-orange-600 transition-colors">
                   Kawal SLA & Draf Ombudsman
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab("dinas")} className="hover:text-orange-600 transition-colors flex items-center gap-1">
+                  <span>Portal Petugas Dinas</span>
+                  <span className="px-1.5 py-0.2 rounded bg-orange-100 text-orange-800 text-[9px] font-bold">Officer</span>
                 </button>
               </li>
             </ul>

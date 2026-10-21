@@ -10,6 +10,7 @@ export { default as Footer } from "./layout/Footer";
 // Dashboard & Metrics Components
 export { default as HeroSection } from "./dashboard/HeroSection";
 export { default as NationalRankingSection } from "./dashboard/NationalRankingSection";
+export { default as OfficerDashboard } from "./dashboard/OfficerDashboard";
 
 // Geospatial & Map Components
 export { default as MapExplorer } from "./map/MapExplorer";

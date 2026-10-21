@@ -8,6 +8,7 @@ import NationalRankingSection from "@/components/dashboard/NationalRankingSectio
 import MapExplorer from "@/components/map/MapExplorer";
 import ReportModal from "@/components/modals/ReportModal";
 import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
+import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
 import { Shield, FileText, AlertTriangle, ArrowRight } from "lucide-react";
@@ -27,6 +28,14 @@ export default function Home() {
         road.id === newReport.roadSegmentId
           ? { ...road, activeReportsCount: road.activeReportsCount + 1 }
           : road
+      )
+    );
+  };
+
+  const handleUpdateReport = (reportId, updatedFields) => {
+    setReports((prevReports) =>
+      prevReports.map((report) =>
+        report.id === reportId ? { ...report, ...updatedFields } : report
       )
     );
   };
@@ -64,6 +73,10 @@ export default function Home() {
               onOpenReport={() => setReportModalOpen(true)}
               onExploreNational={() => {
                 setActiveTab("nasional");
+                window.scrollTo({ top: 100, behavior: "smooth" });
+              }}
+              onOpenOfficerPortal={() => {
+                setActiveTab("dinas");
                 window.scrollTo({ top: 100, behavior: "smooth" });
               }}
             />
@@ -169,6 +182,19 @@ export default function Home() {
                 Pasal 1 angka 3 UU No. 37 Tahun 2008 tentang Ombudsman RI mendefinisikan Maladministrasi sebagai perilaku melawan hukum, melampaui wewenang, kelalaian, atau <strong>penundaan berlarut dalam penyelenggaraan pelayanan publik</strong>. Jika laporan jalan rusak Anda dibiarkan pemda melampaui batas kewajaran dan membahayakan keselamatan umum, Ombudsman berwenang memanggil dan memeriksa penyelenggara negara terkait.
               </p>
             </div>
+          </div>
+        )}
+
+        {activeTab === "dinas" && (
+          <div className="py-2 animate-fade-in">
+            <OfficerDashboard
+              reports={reports}
+              onUpdateReport={handleUpdateReport}
+              onSwitchToMap={() => {
+                setActiveTab("peta");
+                window.scrollTo({ top: 100, behavior: "smooth" });
+              }}
+            />
           </div>
         )}
       </main>

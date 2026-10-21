@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { AlertCircle, TrendingUp, Clock, Building2, MapPin, Plus, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { AlertCircle, TrendingUp, Clock, Building2, MapPin, Plus, ArrowUpRight, ShieldCheck, HardHat } from "lucide-react";
 
-export default function HeroSection({ onExploreMap, onOpenReport, onExploreNational }) {
+export default function HeroSection({ onExploreMap, onOpenReport, onExploreNational, onOpenOfficerPortal }) {
   return (
     <section className="pt-6 pb-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -22,20 +22,27 @@ export default function HeroSection({ onExploreMap, onOpenReport, onExploreNatio
           </div>
 
           {/* Quick CTA Actions */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               onClick={onExploreMap}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold text-white bg-orange-600 hover:bg-orange-700 shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-white bg-orange-600 hover:bg-orange-700 shadow-xs transition-colors"
             >
               <MapPin className="w-3.5 h-3.5" />
               <span>Buka Peta Transparansi</span>
             </button>
             <button
               onClick={onOpenReport}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors"
             >
               <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Laporkan Kerusakan</span>
+              <span>Lapor Kerusakan</span>
+            </button>
+            <button
+              onClick={onOpenOfficerPortal}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-800 bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs"
+            >
+              <HardHat className="w-3.5 h-3.5 text-orange-400" />
+              <span>Portal Dinas</span>
             </button>
           </div>
         </div>

@@ -163,6 +163,7 @@ export const INITIAL_REPORTS = [
     hazardLevel: "SEDANG",
     aiAnalysis: "Estimasi prioritas: Penutup saluran utilitas di tepi jalan amblas 6 cm disertai aspal mengelupas seluas 2 meter.",
     photoUrl: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=800&q=80",
+    proofPhotoUrl: "https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=800&q=80",
     reporterName: "F*** H. (Pengguna Jalan)",
     reportDate: "2026-10-08T16:40:00Z",
     targetResponseDeadline: "2026-10-22T17:00:00Z",

@@ -223,19 +223,56 @@ export default function MapExplorer({
                 <p className="text-xs text-slate-500 mt-0.5">{selectedReport.address} ({selectedReport.district})</p>
               </div>
 
-              {/* Verified Image Preview */}
+              {/* Verified Image Preview & Proof Comparison */}
               {selectedReport.photoUrl && (
-                <div className="rounded-xl overflow-hidden relative border border-slate-200 h-36 bg-slate-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={selectedReport.photoUrl}
-                    alt={selectedReport.categoryLabel}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-white/95 text-[10px] font-bold text-slate-800 shadow-xs border border-slate-200 flex items-center gap-1">
-                    <Camera className="w-3 h-3 text-orange-600" />
-                    <span>Terverifikasi AI Vision</span>
-                  </div>
+                <div>
+                  {selectedReport.proofPhotoUrl ? (
+                    <div className="space-y-1.5">
+                      <div className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider flex items-center justify-between">
+                        <span>Bukti Penanganan Fisik Dinas</span>
+                        <span className="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded text-[9px]">
+                          ✓ Selesai Diperbaiki
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <div className="rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={selectedReport.photoUrl}
+                              alt="Before"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <span className="text-[10px] font-bold text-slate-500 block text-center">BEFORE: Warga</span>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="rounded-lg overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 h-24 bg-slate-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={selectedReport.proofPhotoUrl}
+                              alt="After"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <span className="text-[10px] font-bold text-emerald-700 block text-center">AFTER: Dinas</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl overflow-hidden relative border border-slate-200 h-36 bg-slate-100">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={selectedReport.photoUrl}
+                        alt={selectedReport.categoryLabel}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-white/95 text-[10px] font-bold text-slate-800 shadow-xs border border-slate-200 flex items-center gap-1">
+                        <Camera className="w-3 h-3 text-orange-600" />
+                        <span>Terverifikasi AI Vision</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

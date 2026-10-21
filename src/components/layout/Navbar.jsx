@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, BarChart3, FileText, Plus, Menu, X } from "lucide-react";
+import { MapPin, BarChart3, FileText, Plus, Menu, X, HardHat } from "lucide-react";
 
 export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,12 +15,14 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
             className="flex items-center gap-2 cursor-pointer select-none"
             onClick={() => setActiveTab("beranda")}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo/logo.png"
               alt="Logo JagaJalan"
               className="w-9 h-9 object-contain shrink-0"
             />
             <div className="flex flex-col justify-center items-start">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo/logo-name.png"
                 alt="JagaJalan"
@@ -76,6 +78,17 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
             >
               <FileText className="w-3.5 h-3.5 text-rose-600" />
               Draf Ombudsman (SLA)
+            </button>
+            <button
+              onClick={() => setActiveTab("dinas")}
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                activeTab === "dinas"
+                  ? "bg-slate-900 text-white font-semibold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <HardHat className="w-3.5 h-3.5 text-orange-400" />
+              Portal Dinas
             </button>
           </div>
 
@@ -142,6 +155,16 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReportModal }) {
             >
               <FileText className="w-3.5 h-3.5 text-rose-600" />
               Kawal SLA & Ombudsman
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("dinas");
+                setMobileMenuOpen(false);
+              }}
+              className="w-full text-left px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 font-medium flex items-center gap-2"
+            >
+              <HardHat className="w-3.5 h-3.5 text-orange-600" />
+              Portal Petugas Dinas
             </button>
             <div className="pt-2">
               <button
