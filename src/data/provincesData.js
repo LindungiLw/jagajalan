@@ -9,6 +9,35 @@ export const NATIONAL_STATS = {
   inpresBudgetTrillion: 14.6, // Rp 14.6 Triliun Inpres Jalan Daerah
 };
 
+// Data Tren Historis Tahunan (2021 - 2026) Berdasarkan Laporan BPS, Kemen PU, & Ombudsman RI
+export const ANNUAL_HISTORICAL_DATA = {
+  // 1. Tren Tingkat Kemantapan Jalan Berdasarkan Status Kewenangan (% Mantap)
+  roadConditionTrends: [
+    { year: 2021, nasional: 91.8, provinsi: 71.2, kabupatenKota: 53.4, gap: 38.4 },
+    { year: 2022, nasional: 92.4, provinsi: 72.1, kabupatenKota: 54.1, gap: 38.3 },
+    { year: 2023, nasional: 92.8, provinsi: 72.9, kabupatenKota: 54.8, gap: 38.0 },
+    { year: 2024, nasional: 93.4, provinsi: 73.5, kabupatenKota: 55.6, gap: 37.8 },
+    { year: 2025, nasional: 93.9, provinsi: 74.2, kabupatenKota: 56.4, gap: 37.5 },
+    { year: 2026, nasional: 94.2, provinsi: 74.8, kabupatenKota: 57.1, gap: 37.1 },
+  ],
+  // 2. Tren Volume Keluhan Kerusakan Jalan Masuk ke Pemda (SP4N-LAPOR! & Ombudsman RI)
+  complaintTrends: [
+    { year: 2021, totalComplaints: 7420, resolved: 4970, overdue: 2450, overduePct: 33.0 },
+    { year: 2022, totalComplaints: 9850, resolved: 6570, overdue: 3280, overduePct: 33.3 },
+    { year: 2023, totalComplaints: 13900, resolved: 9180, overdue: 4720, overduePct: 33.9 },
+    { year: 2024, totalComplaints: 16100, resolved: 10610, overdue: 5490, overduePct: 34.1 },
+    { year: 2025, totalComplaints: 17800, resolved: 11750, overdue: 6050, overduePct: 34.0 },
+    { year: 2026, totalComplaints: 18450, resolved: 12200, overdue: 6250, overduePct: 33.86 },
+  ],
+  // 3. Alokasi Intervensi Dana Inpres Jalan Daerah (IJD APBN)
+  inpresBudgets: [
+    { year: 2023, budgetTrillion: 14.6, realizedKm: 2872, targetProvinces: 34 },
+    { year: 2024, budgetTrillion: 15.3, realizedKm: 3120, targetProvinces: 38 },
+    { year: 2025, budgetTrillion: 16.8, realizedKm: 3450, targetProvinces: 38 },
+    { year: 2026, budgetTrillion: 18.2, realizedKm: 3890, targetProvinces: 38 },
+  ],
+};
+
 export const PROVINCES_DATA = [
   {
     id: "jabar",

@@ -13,6 +13,10 @@ export { default as NationalRankingSection } from "./dashboard/NationalRankingSe
 export { default as OfficerDashboard } from "./dashboard/OfficerDashboard";
 export { default as BudgetDataExplorer } from "./dashboard/BudgetDataExplorer";
 export { default as MapShowcaseTeaser } from "./dashboard/MapShowcaseTeaser";
+export { default as AnnualProgressChart } from "./dashboard/AnnualProgressChart";
+export { default as CivicWorkflowSection } from "./dashboard/CivicWorkflowSection";
+export { default as NationalStatsTeaser } from "./dashboard/NationalStatsTeaser";
+export { default as LegalBasisSection } from "./dashboard/LegalBasisSection";
 
 // Geospatial & Map Components
 export { default as MapExplorer } from "./map/MapExplorer";

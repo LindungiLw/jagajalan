@@ -11,6 +11,10 @@ import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
 import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
 import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
 import MapShowcaseTeaser from "@/components/dashboard/MapShowcaseTeaser";
+import AnnualProgressChart from "@/components/dashboard/AnnualProgressChart";
+import CivicWorkflowSection from "@/components/dashboard/CivicWorkflowSection";
+import NationalStatsTeaser from "@/components/dashboard/NationalStatsTeaser";
+import LegalBasisSection from "@/components/dashboard/LegalBasisSection";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
 import { Shield, FileText, AlertTriangle, ArrowRight } from "lucide-react";
@@ -73,7 +77,8 @@ export default function Home() {
       {/* Main Tab Content */}
       <main className="flex-1 flex flex-col">
         {activeTab === "beranda" && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-6 animate-fade-in pb-8">
+            {/* 1. Hero Section: Crisis Metrics & Problem Definition */}
             <HeroSection
               onExploreMap={() => {
                 setActiveTab("peta");
@@ -90,7 +95,13 @@ export default function Home() {
               }}
             />
 
-            {/* Deep-Dive Pilot GIS Showcase Teaser (Fast, No Duplicate Leaflet Engine) */}
+            {/* 2. Civic Workflow (How It Works): 4-Step Solution Flow */}
+            <CivicWorkflowSection onOpenReportModal={() => setReportModalOpen(true)} />
+
+            {/* 3. Interactive Annual Trend & Progress Diagram (2021-2026) */}
+            <AnnualProgressChart />
+
+            {/* 4. Deep-Dive Pilot GIS Showcase Teaser (Bening Frosted Glass) */}
             <MapShowcaseTeaser
               roads={roads}
               reports={reports}
@@ -101,8 +112,16 @@ export default function Home() {
               onSelectRoad={handleSelectRoadOnMap}
             />
 
-            {/* National 38 Provinces Section */}
-            <NationalRankingSection onSelectPilot={handleSelectPilot} />
+            {/* 5. Macro National Stats Teaser (Directs to Full 38-Provinces Tab) */}
+            <NationalStatsTeaser
+              onExploreNational={() => {
+                setActiveTab("nasional");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            />
+
+            {/* 6. Legal Foundation & Public Transparency Basis */}
+            <LegalBasisSection />
           </div>
         )}
 
