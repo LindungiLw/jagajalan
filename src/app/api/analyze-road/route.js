@@ -1,7 +1,47 @@
 import { NextResponse } from "next/server";
 
+// In-memory sliding-window rate limiter (prevents API abuse & DoS)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 25; // max 25 calls per min per IP
+const MAX_BASE64_LENGTH = 8 * 1024 * 1024; // 8 MB payload cap
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const clientData = rateLimitMap.get(ip) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW_MS };
+
+  if (now > clientData.resetTime) {
+    clientData.count = 1;
+    clientData.resetTime = now + RATE_LIMIT_WINDOW_MS;
+    rateLimitMap.set(ip, clientData);
+    return false;
+  }
+
+  if (clientData.count >= MAX_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+
+  clientData.count += 1;
+  rateLimitMap.set(ip, clientData);
+  return false;
+}
+
 export async function POST(request) {
   try {
+    // 1. IP extraction & Rate limiting
+    const forwardedFor = request.headers.get("x-forwarded-for");
+    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "127.0.0.1";
+
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        {
+          error: "Batas frekuensi permintaan terlampaui (Rate limit exceeded).",
+          message: "Harap tunggu 1 menit sebelum mengirim analisis foto kembali.",
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { imageBase64, roadContext } = body;
 
@@ -12,17 +52,41 @@ export async function POST(request) {
       );
     }
 
-    // Extract mimeType and raw base64 data
+    // 2. Payload size security validation (Max 8MB)
+    if (imageBase64.length > MAX_BASE64_LENGTH) {
+      return NextResponse.json(
+        {
+          error: "Ukuran berkas foto terlalu besar.",
+          message: "Maksimal ukuran foto adalah 8 MB untuk menjaga stabilitas sistem.",
+        },
+        { status: 413 }
+      );
+    }
+
+    // 3. Extract mimeType and raw base64 data
     let mimeType = "image/jpeg";
     let base64Data = imageBase64;
 
     const matches = imageBase64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
     if (matches && matches.length === 3) {
-      mimeType = matches[1];
+      mimeType = matches[1].toLowerCase();
       base64Data = matches[2];
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    // Validate MIME types (only legitimate image formats allowed)
+    const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
+      return NextResponse.json(
+        {
+          error: "Format gambar tidak didukung.",
+          message: "Hanya format JPEG, PNG, dan WebP yang diizinkan untuk verifikasi AI.",
+        },
+        { status: 415 }
+      );
+    }
+
+    // Strict server-side secret isolation (never expose to client)
+    const apiKey = process.env.GEMINI_API_KEY;
 
     // If Gemini API Key is available, invoke real Google Gemini Vision
     if (apiKey && apiKey.trim() !== "" && apiKey !== "your_gemini_api_key_here") {
