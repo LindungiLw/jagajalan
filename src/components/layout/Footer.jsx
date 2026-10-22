@@ -60,7 +60,7 @@ export default function Footer({ onSelectTab }) {
               <li>
                 <button onClick={() => onSelectTab("dinas")} className="hover:text-orange-600 transition-colors flex items-center gap-1">
                   <span>Portal Petugas Dinas</span>
-                  <span className="px-1.5 py-0.2 rounded bg-orange-100 text-orange-800 text-[9px] font-bold">Officer</span>
+                  <span className="px-1.5 py-0.2 rounded-[5px] bg-orange-100 text-orange-800 text-[9px] font-bold">Officer</span>
                 </button>
               </li>
             </ul>

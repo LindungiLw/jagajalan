@@ -22,7 +22,7 @@ import { getActiveOfficerSession, clearOfficerSession } from "@/data/officersDat
 import { Shield, FileText, AlertTriangle, ArrowRight } from "lucide-react";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState("beranda");
+  const [activeTab, setActiveTabState] = useState("beranda");
   const [roads, setRoads] = useState(ROAD_SEGMENTS);
   const [reports, setReports] = useState(INITIAL_REPORTS);
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -31,11 +31,32 @@ export default function Home() {
   const [focusedRoadId, setFocusedRoadId] = useState(null);
   const [officerSession, setOfficerSession] = useState(null);
 
-  // Restore existing officer session on mount
+  const setActiveTab = (tab) => {
+    setActiveTabState(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
+  // Restore existing officer session & tab on mount
   useEffect(() => {
     const session = getActiveOfficerSession();
     if (session) {
       setOfficerSession(session);
+    }
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      const hash = window.location.hash.replace("#", "");
+      const validTabs = ["beranda", "peta", "data-anggaran", "ombudsman", "nasional", "dinas"];
+      if (tabParam && validTabs.includes(tabParam)) {
+        setActiveTabState(tabParam);
+      } else if (hash && validTabs.includes(hash)) {
+        setActiveTabState(hash);
+      }
     }
   }, []);
 
@@ -175,16 +196,16 @@ export default function Home() {
               <div className="text-[11px] font-bold tracking-wider uppercase text-rose-700 font-mono mb-1">
                 Instrumen Kepatuhan Hukum & Standar Ombudsman RI
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
                 Pusat Pemantauan Tanggapan & Opsi Eskalasi Pengaduan
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed font-sans">
                 Berdasarkan standar pemantauan operasional JagaJalan yang merujuk pada asas pelayanan publik (UU No. 25/2009), aduan dipantau selama 14 hari kerja untuk mencatat respons resmi dinas. Ketiadaan tanggapan dapat menjadi dasar bagi warga untuk menyiapkan draf pengaduan penundaan berlarut (*undue delay*) kepada Ombudsman Republik Indonesia.
               </p>
             </div>
 
             {/* National Ombudsman Context Card */}
-            <div className="p-4 rounded-[5px] bg-slate-50 border border-slate-200 text-xs space-y-2">
+            <div className="p-4 rounded-[5px] bg-slate-50 border border-slate-200 text-xs space-y-2 font-sans">
               <div className="font-bold text-slate-900 flex items-center gap-1.5 font-mono uppercase text-[11px]">
                 <Shield className="w-3.5 h-3.5 text-[#c2410c]" />
                 <span>Konteks Statistik Nasional Ombudsman RI (Laporan Tahunan 2024 & 2025):</span>
@@ -192,17 +213,17 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <div className="p-2.5 rounded-[5px] bg-white border border-slate-200">
                   <div className="text-[10px] text-slate-500 uppercase font-mono">Penundaan Berlarut (2024)</div>
-                  <strong className="text-sm font-bold text-slate-900 font-mono">33,86% Laporan Selesai</strong>
+                  <strong className="text-sm font-bold text-slate-900 font-sans tabular-nums">33,86% Laporan Selesai</strong>
                   <div className="text-[10px] text-slate-500 mt-0.5">Jenis maladministrasi terbanyak yang ditutup tahun 2024</div>
                 </div>
                 <div className="p-2.5 rounded-[5px] bg-white border border-slate-200">
                   <div className="text-[10px] text-slate-500 uppercase font-mono">Laporan Pemda (2025)</div>
-                  <strong className="text-sm font-bold text-slate-900 font-mono">4.766 Laporan</strong>
+                  <strong className="text-sm font-bold text-slate-900 font-sans tabular-nums">4.766 Laporan</strong>
                   <div className="text-[10px] text-slate-500 mt-0.5">Kelompok instansi terlapor terbanyak di Indonesia</div>
                 </div>
                 <div className="p-2.5 rounded-[5px] bg-white border border-slate-200">
                   <div className="text-[10px] text-slate-500 uppercase font-mono">Infrastruktur & Jalan (2025)</div>
-                  <strong className="text-sm font-bold text-slate-900 font-mono">287 Laporan Jalan Rusak</strong>
+                  <strong className="text-sm font-bold text-slate-900 font-sans tabular-nums">287 Laporan Jalan Rusak</strong>
                   <div className="text-[10px] text-slate-500 mt-0.5">Dari 622 laporan substansi perhubungan & sarana fisik</div>
                 </div>
               </div>

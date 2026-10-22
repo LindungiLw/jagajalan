@@ -2,7 +2,8 @@
 @import "leaflet/dist/leaflet.css";
 
 @theme {
-  --font-sans: var(--font-instrument-sans), "Instrument Sans", "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-heading), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
@@ -19,10 +20,20 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-instrument-sans), "Instrument Sans", "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.011em;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.022em;
+}
+
+/* Ensure tabular figures (monospaced digits) for tables, prices, and KPI percentages */
+table, .tabular-nums, [data-metric] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Minimal Dashboard Surface Classes with Glassmorphism ("Bening") */

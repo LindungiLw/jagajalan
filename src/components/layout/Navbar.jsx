@@ -55,6 +55,7 @@ export default function Navbar({
               return (
                 <button
                   key={item.id}
+                  id={`nav-tab-${item.id}`}
                   onClick={() => setActiveTab(item.id)}
                   className={`relative h-16 flex items-center px-3 xl:px-3.5 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer select-none ${
                     isActive
@@ -79,6 +80,7 @@ export default function Navbar({
             {officerSession ? (
               <div className="hidden md:flex items-center gap-1.5 bg-orange-50/90 text-orange-950 pl-2.5 pr-1.5 py-1.5 rounded-[5px] border border-orange-200/90 shadow-2xs">
                 <div
+                  id="nav-session-officer"
                   onClick={() => setActiveTab("dinas")}
                   className="flex items-center gap-2 cursor-pointer select-none"
                   title={`Sesi Masuk: ${officerSession.name} (${officerSession.institution})`}
@@ -108,6 +110,7 @@ export default function Navbar({
               </div>
             ) : (
               <button
+                id="nav-btn-dinas"
                 onClick={() => setActiveTab("dinas")}
                 className={`hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-[5px] text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
                   activeTab === "dinas"
