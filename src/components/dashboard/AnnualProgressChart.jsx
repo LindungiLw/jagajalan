@@ -16,7 +16,7 @@ import { ANNUAL_HISTORICAL_DATA } from "@/data/provincesData";
 
 export default function AnnualProgressChart() {
   const [activeMetric, setActiveMetric] = useState("road-condition"); // 'road-condition' | 'complaints' | 'inpres'
-  const [hoveredYear, setHoveredYear] = useState(2026);
+  const [hoveredYear, setHoveredYear] = useState(2024);
 
   const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
@@ -38,10 +38,10 @@ export default function AnnualProgressChart() {
           <div>
             <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-orange-700 font-mono mb-1">
               <TrendingUp className="w-3.5 h-3.5" />
-              <span>Analisis Historis Tahunan • Sumber: BPS, Kemen PU, & Ombudsman RI</span>
+              <span>Analisis Historis Tahunan • Sumber: BPS (Sirusa) & Ombudsman RI</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Dinamika & Tren Perkembangan Kerusakan Jalan (2021 – 2026)
+              Dinamika & Tren Perkembangan Kerusakan Jalan (2020 – 2024)
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
               Memantau evolusi jurang ketimpangan jalan daerah vs nasional, lonjakan aduan masyarakat, dan eskalasi anggaran intervensi darurat pemerintah pusat.
@@ -113,7 +113,7 @@ export default function AnnualProgressChart() {
               </div>
 
               {/* Chart Visualizer */}
-              <div className="grid grid-cols-6 gap-2 sm:gap-4 items-end h-64 pt-6 pb-2 border-b border-slate-200">
+              <div className="grid grid-cols-5 gap-2 sm:gap-4 items-end h-64 pt-6 pb-2 border-b border-slate-200">
                 {roadConditionTrends.map((d) => {
                   const isHovered = d.year === hoveredYear;
                   return (
@@ -222,7 +222,7 @@ export default function AnnualProgressChart() {
               </div>
 
               {/* Stacked Visual Bar Diagram */}
-              <div className="grid grid-cols-6 gap-2 sm:gap-4 items-end h-64 pt-6 pb-2 border-b border-slate-200">
+              <div className="grid grid-cols-5 gap-2 sm:gap-4 items-end h-64 pt-6 pb-2 border-b border-slate-200">
                 {complaintTrends.map((d) => {
                   const isHovered = d.year === hoveredYear;
                   const totalHeight = (d.totalComplaints / 20000) * 100;
