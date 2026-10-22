@@ -80,7 +80,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                 <HardHat className="w-3.5 h-3.5 text-orange-700" />
                 <span>Portal Resmi Aparatur Sipil Negara & Petugas Lapangan</span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
+              <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
                 Sistem Autentikasi Penyelenggara Jalan
               </h1>
               <p className="text-xs text-slate-600 max-w-xl leading-relaxed">

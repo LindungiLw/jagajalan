@@ -255,42 +255,42 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-extrabold text-slate-900 text-base">Lapor Kerusakan Jalan Baru</h3>
-                <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
+                <h3 className="font-bold text-slate-900 text-base font-heading">Lapor Kerusakan Jalan Baru</h3>
+                <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1 font-mono">
                   <Sparkles className="w-3 h-3 text-amber-700" />
                   Gemini Vision
                 </span>
               </div>
-              <p className="text-xs text-slate-500">Verifikasi Citra AI Real-Time & Kunci Kewenangan Instansi</p>
+              <p className="text-xs text-slate-500 font-sans">Verifikasi Citra AI Real-Time & Kunci Kewenangan Instansi</p>
             </div>
           </div>
           <button
             onClick={handleResetAndClose}
-            className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1 text-xs text-slate-700 space-y-4">
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 text-xs text-slate-700 space-y-4 font-sans">
           {submitted ? (
             /* Success State */
             <div className="text-center py-6 space-y-3">
               <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h4 className="text-lg font-bold text-slate-900">Laporan Resmi Berhasil Diterbitkan</h4>
+              <h4 className="text-lg font-bold text-slate-900 font-heading">Laporan Resmi Berhasil Diterbitkan</h4>
               <p className="text-xs text-slate-600 max-w-md mx-auto">
                 Tiket pengaduan Anda telah terdaftar dalam sistem transparansi publik. Jam hitung mundur batas waktu tanggapan (14 hari kerja) telah dimulai secara terbuka.
               </p>
-              <div className="inline-block p-3 rounded-xl bg-slate-50 border border-slate-300 font-mono text-slate-900 font-extrabold text-base tracking-wider">
+              <div className="inline-block p-3 rounded-[5px] bg-slate-50 border border-slate-300 font-mono text-slate-900 font-extrabold text-base tracking-wider">
                 {createdTicket}
               </div>
               <div className="pt-2">
                 <button
                   onClick={handleResetAndClose}
-                  className="px-5 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors"
+                  className="px-5 py-2.5 rounded-[5px] bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   Tutup & Lihat Pada Peta
                 </button>
@@ -310,7 +310,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                     setSelectedRoadId(e.target.value);
                     setAiResult(null);
                   }}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
+                  className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
                 >
                   {roads.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -320,7 +320,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                 </select>
 
                 {/* Authority & APBD Box */}
-                <div className="mt-2 p-3 rounded-lg bg-orange-50/70 border border-orange-200 text-[11px] space-y-1">
+                <div className="mt-2 p-3 rounded-[5px] bg-orange-50/70 border border-orange-200 text-[11px] space-y-1">
                   <div className="text-slate-600">
                     Instansi Penanggung Jawab: <strong className="text-slate-900">{currentRoad.authorityLabel}</strong>
                   </div>
@@ -342,7 +342,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                     value={reporterName}
                     onChange={(e) => setReporterName(e.target.value)}
                     placeholder="Contoh: Budi Santoso"
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
+                    className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
                   />
                 </div>
                 <div>
@@ -355,7 +355,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                     value={addressDetail}
                     onChange={(e) => setAddressDetail(e.target.value)}
                     placeholder="Contoh: Depan SPBU / Seberang Puskesmas"
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
+                    className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -377,7 +377,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                       key={idx}
                       type="button"
                       onClick={() => handleSelectPreset(sample)}
-                      className={`px-2.5 py-1 rounded-md shrink-0 border transition-all ${
+                      className={`px-2.5 py-1 rounded-[5px] shrink-0 border transition-all ${
                         photoPreview === sample.url
                           ? "bg-orange-100 border-orange-400 text-orange-900 font-bold"
                           : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100"
@@ -388,9 +388,9 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                   ))}
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="p-3.5 rounded-[5px] bg-slate-50 border border-slate-200 space-y-3">
                   <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="relative w-full sm:w-44 h-28 rounded-lg overflow-hidden border border-slate-300 bg-slate-900 shrink-0">
+                    <div className="relative w-full sm:w-44 h-28 rounded-[5px] overflow-hidden border border-slate-300 bg-slate-900 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={photoPreview}
@@ -423,7 +423,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
                         type="button"
                         onClick={() => handleAnalyzePhoto(photoPreview)}
                         disabled={isAnalyzing}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 disabled:opacity-50 transition-colors shadow-xs"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[5px] text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 disabled:opacity-50 transition-colors shadow-xs"
                       >
                         {isAnalyzing ? (
                           <>
@@ -442,7 +442,7 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
 
                   {/* Anti-Spam Error Banner */}
                   {spamError && (
-                    <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 space-y-1 animate-fade-in">
+                    <div className="p-3.5 rounded-[5px] bg-rose-50 border border-rose-300 text-rose-800 space-y-1 animate-fade-in">
                       <div className="flex items-center gap-2 font-bold text-xs">
                         <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
                         <span>Foto Ditolak oleh Sistem Anti-Spam AI</span>
@@ -456,18 +456,18 @@ export default function ReportModal({ isOpen, onClose, roads, onNewReportAdded }
 
                   {/* AI Inspection Output Card */}
                   {aiResult && !spamError && (
-                    <div className="p-3.5 rounded-xl bg-white border border-slate-300 shadow-xs space-y-2.5 animate-fade-in">
+                    <div className="p-3.5 rounded-[5px] bg-white border border-slate-300 shadow-xs space-y-2.5 animate-fade-in">
                       <div className="flex items-center justify-between text-xs font-bold">
                         <span className="text-slate-900 flex items-center gap-1.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                           <span>{aiResult.categoryLabel}</span>
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-purple-50 text-purple-700 border border-purple-200">
+                          <span className="text-[10px] px-2 py-0.5 rounded-[5px] font-mono bg-purple-50 text-purple-700 border border-purple-200">
                             {aiResult.engine}
                           </span>
                           <span
-                            className={`font-black px-2 py-0.5 rounded text-xs ${
+                            className={`font-black px-2 py-0.5 rounded-[5px] text-xs ${
                               aiResult.hazardScore >= 80
                                 ? "bg-rose-100 text-rose-700"
                                 : "bg-amber-100 text-amber-700"

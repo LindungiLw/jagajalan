@@ -74,7 +74,7 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-extrabold text-slate-900 text-base">
+                <h3 className="font-bold text-slate-900 text-base font-heading">
                   Draf Pengaduan Maladministrasi Ombudsman RI
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-[5px] bg-rose-100 text-rose-700 border border-rose-200">

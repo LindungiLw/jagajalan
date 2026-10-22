@@ -62,16 +62,16 @@ export default function RoadDetailModal({
                 {matchBadge.label}
               </span>
             </div>
-            <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
               {road.name}
             </h2>
-            <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+            <div className="flex items-center gap-3 text-xs text-slate-500 font-medium font-sans">
               <span className="flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5 text-orange-700 shrink-0" />
                 <span>{road.district}</span>
               </span>
               <span>•</span>
-              <span>Bentang: <strong className="text-slate-800 font-mono">{road.lengthKm} Km</strong></span>
+              <span>Bentang: <strong className="text-slate-800 font-sans font-bold tabular-nums">{road.lengthKm} Km</strong></span>
               <span>•</span>
               <span>Perkerasan: <strong className="text-slate-800">{road.pavementType}</strong></span>
             </div>
@@ -87,7 +87,7 @@ export default function RoadDetailModal({
         </div>
 
         {/* 2. MODAL BODY (SCROLLABLE) */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-5 text-xs text-slate-700">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-5 text-xs text-slate-700 font-sans">
           
           {/* A. Dasar Hukum Kewenangan Ruas (Legal SK) */}
           <div className="p-3.5 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1.5">
@@ -137,7 +137,7 @@ export default function RoadDetailModal({
                     <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
                       Nilai Pagu Anggaran (HPS)
                     </span>
-                    <strong className="text-base font-black text-slate-900 font-mono">
+                    <strong className="text-base font-bold text-slate-900 font-sans tabular-nums">
                       Rp {((budget.paguRp || 0) / 1000000000).toFixed(2)} Miliar
                     </strong>
                     <span className="text-[10px] text-slate-500 block">
@@ -148,7 +148,7 @@ export default function RoadDetailModal({
                     <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
                       Nilai Kontrak Lelang
                     </span>
-                    <strong className="text-base font-black text-emerald-800 font-mono">
+                    <strong className="text-base font-bold text-emerald-800 font-sans tabular-nums">
                       Rp {((budget.contractValueRp || 0) / 1000000000).toFixed(2)} Miliar
                     </strong>
                     <span className="text-[10px] text-emerald-700 font-medium block">
