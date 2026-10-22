@@ -117,6 +117,7 @@ export default function Home() {
                 setActiveTab("dinas");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
+              onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
             />
 
             {/* 2. Civic Workflow (How It Works): 4-Step Solution Flow */}
@@ -172,70 +173,106 @@ export default function Home() {
             {/* Header */}
             <div>
               <div className="text-[11px] font-bold tracking-wider uppercase text-rose-700 font-mono mb-1">
-                Instrumen Kepatuhan Hukum Pelayanan Publik
+                Instrumen Kepatuhan Hukum & Standar Ombudsman RI
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                Pusat Eskalasi Maladministrasi & Rekam Jejak SLA
+                Pusat Pemantauan Tanggapan & Opsi Eskalasi Pengaduan
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
-                Berdasarkan UU No. 25 Tahun 2009 tentang Pelayanan Publik dan pedoman Ombudsman RI, instansi pemerintah wajib menindaklanjuti keluhan masyarakat dengan memberikan tanggapan resmi (maksimal 14 hari kerja). Laporan di bawah ini telah melampaui batas waktu pemantauan tanggapan tanpa respons dinas berwenang.
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+                Berdasarkan standar pemantauan operasional JagaJalan yang merujuk pada asas pelayanan publik (UU No. 25/2009), aduan dipantau selama 14 hari kerja untuk mencatat respons resmi dinas. Ketiadaan tanggapan dapat menjadi dasar bagi warga untuk menyiapkan draf pengaduan penundaan berlarut (*undue delay*) kepada Ombudsman Republik Indonesia.
               </p>
             </div>
 
-            {/* Overdue Reports Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {overdueReports.map((report) => (
-                <div
-                  key={report.id}
-                  className="bg-white p-5 rounded-xl border border-slate-200 border-l-4 border-l-rose-600 shadow-xs space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-900 font-mono text-xs px-2.5 py-1 rounded bg-slate-100 border border-slate-200">
-                      {report.ticketCode}
-                    </span>
-                    <span className="px-2 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 text-[10px] font-bold">
-                      OVERDUE +{report.daysOverdue} HARI KERJA
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-base">{report.roadName}</h3>
-                    <p className="text-xs text-slate-500">{report.address} ({report.district})</p>
-                  </div>
-
-                  <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 text-xs space-y-1.5">
-                    <div className="font-semibold text-rose-700 flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5" />
-                      {report.categoryLabel} (Skor Risiko: {report.hazardScore}/100)
-                    </div>
-                    <p className="text-[11px] text-slate-600">{report.aiAnalysis}</p>
-                    <div className="pt-2 text-[11px] border-t border-slate-200 text-slate-600">
-                      Instansi Terlapor: <strong className="text-slate-900">{report.authorityLabel}</strong>
-                    </div>
-                    <div className="text-[11px] text-orange-700">
-                      Pagu APBD Terdata: <strong>Rp {((report.matchingBudget?.paguRp || 0)/1000000000).toFixed(1)} Miliar</strong>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleOpenOmbudsmanDraft(report)}
-                    className="w-full py-2 px-4 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>Lihat & Unduh Draf Laporan Ombudsman RI</span>
-                  </button>
+            {/* National Ombudsman Context Card */}
+            <div className="p-4 rounded-[5px] bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <div className="font-bold text-slate-900 flex items-center gap-1.5 font-mono uppercase text-[11px]">
+                <Shield className="w-3.5 h-3.5 text-[#c2410c]" />
+                <span>Konteks Statistik Nasional Ombudsman RI (Laporan Tahunan 2024 & 2025):</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                <div className="p-2.5 rounded-[5px] bg-white border border-slate-200">
+                  <div className="text-[10px] text-slate-500 uppercase font-mono">Penundaan Berlarut (2024)</div>
+                  <strong className="text-sm font-bold text-slate-900 font-mono">33,86% Laporan Selesai</strong>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Jenis maladministrasi terbanyak yang ditutup tahun 2024</div>
                 </div>
-              ))}
+                <div className="p-2.5 rounded-[5px] bg-white border border-slate-200">
+                  <div className="text-[10px] text-slate-500 uppercase font-mono">Laporan Pemda (2025)</div>
+                  <strong className="text-sm font-bold text-slate-900 font-mono">4.766 Laporan</strong>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Kelompok instansi terlapor terbanyak di Indonesia</div>
+                </div>
+                <div className="p-2.5 rounded-[5px] bg-white border border-slate-200">
+                  <div className="text-[10px] text-slate-500 uppercase font-mono">Infrastruktur & Jalan (2025)</div>
+                  <strong className="text-sm font-bold text-slate-900 font-mono">287 Laporan Jalan Rusak</strong>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Dari 622 laporan substansi perhubungan & sarana fisik</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Overdue Reports Grid */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                <span className="font-bold text-slate-900 text-sm">
+                  Laporan Pilot yang Melewati Tenggat Pemantauan ({overdueReports.length} Kasus)
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">
+                  Tenggat Pemantauan Respons: 14 Hari Kerja
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {overdueReports.map((report) => (
+                  <div
+                    key={report.id}
+                    className="bg-white p-5 rounded-[5px] border border-slate-200 border-l-4 border-l-rose-600 shadow-2xs space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900 font-mono text-xs px-2.5 py-1 rounded-[5px] bg-slate-100 border border-slate-200">
+                        {report.ticketCode}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-[5px] bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold font-mono">
+                        MELEWATI TENGGAT (+{report.daysOverdue} HARI)
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold text-slate-900 text-base">{report.roadName}</h3>
+                      <p className="text-xs text-slate-500">{report.address} ({report.district})</p>
+                    </div>
+
+                    <div className="p-3.5 rounded-[5px] bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+                      <div className="font-semibold text-rose-700 flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5" />
+                        {report.categoryLabel} (Skor Risiko AI: {report.hazardScore}/100)
+                      </div>
+                      <p className="text-[11px] text-slate-600">{report.aiAnalysis}</p>
+                      <div className="pt-2 text-[11px] border-t border-slate-200 text-slate-600">
+                        Instansi Terlapor: <strong className="text-slate-900">{report.authorityLabel}</strong>
+                      </div>
+                      <div className="text-[11px] text-orange-800">
+                        Pagu APBD Terdata: <strong>Rp {((report.matchingBudget?.paguRp || 0)/1000000000).toFixed(2)} Miliar</strong>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleOpenOmbudsmanDraft(report)}
+                      className="w-full py-2 px-4 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>Siapkan Draf Pengaduan Ombudsman RI</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Legal Basis Education Card */}
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-2">
+            <div className="bg-white p-5 rounded-[5px] border border-slate-200 shadow-2xs space-y-2">
               <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Shield className="w-4 h-4 text-orange-600" />
-                <span>Landasan Hukum Maladministrasi Penundaan Berlarut (Undue Delay)</span>
+                <Shield className="w-4 h-4 text-orange-700" />
+                <span>Pedoman Penanganan Dugaan Maladministrasi Penundaan Berlarut (*Undue Delay*)</span>
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Pasal 1 angka 3 UU No. 37 Tahun 2008 tentang Ombudsman RI mendefinisikan Maladministrasi sebagai perilaku melawan hukum, melampaui wewenang, kelalaian, atau <strong>penundaan berlarut dalam penyelenggaraan pelayanan publik</strong>. Jika laporan jalan rusak Anda dibiarkan pemda melampaui batas kewajaran dan membahayakan keselamatan umum, Ombudsman berwenang memanggil dan memeriksa penyelenggara negara terkait.
+                Pasal 1 angka 3 UU No. 37 Tahun 2008 tentang Ombudsman RI mendefinisikan Maladministrasi sebagai perilaku melawan hukum, melampaui wewenang, kelalaian, atau <strong>penundaan berlarut dalam penyelenggaraan pelayanan publik</strong>. JagaJalan memfasilitasi pelapor dengan menyusun kronologi geotagged dan bukti administrasi digital, dengan ketentuan pelapor telah menyampaikan keluhan awal kepada instansi terkait sebelum eskalasi ke Ombudsman RI.
               </p>
             </div>
           </div>

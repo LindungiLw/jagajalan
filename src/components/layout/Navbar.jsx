@@ -6,8 +6,8 @@ import { Plus, Menu, X, ShieldCheck, LogOut } from "lucide-react";
 const NAV_ITEMS = [
   { id: "beranda", label: "Ringkasan" },
   { id: "peta", label: "Peta Transparansi" },
-  { id: "data-anggaran", label: "Data & Anggaran" },
-  { id: "ombudsman", label: "Pantau Laporan" },
+  { id: "data-anggaran", label: "Anggaran Proyek" },
+  { id: "ombudsman", label: "Lacak Laporan" },
   { id: "nasional", label: "Statistik" },
 ];
 
