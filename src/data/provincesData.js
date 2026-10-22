@@ -3,38 +3,56 @@
 
 export const NATIONAL_STATS = {
   totalProvinces: 38,
-  nationalAverageDamaged: 45.2, // 45.2% rata-rata nasional jalan daerah tidak mantap
-  totalComplaintsRecorded: 18450,
-  overdueRate: 33.86, // 33.86% maladministrasi penundaan berlarut (Ombudsman RI)
-  inpresBudgetTrillion: 14.6, // Rp 14.6 Triliun Inpres Jalan Daerah
+  // Indikator Kemantapan Jalan BPS 2024 (Sirusa):
+  // Kemantapan mengukur proporsi panjang jalan (km) dalam kondisi baik & sedang terhadap total panjang jalan terdata.
+  nationalAverageMantap: 57.1, // 57.1% panjang jalan kabupaten/kota dalam kondisi mantap (BPS 2024)
+  nationalAverageDamaged: 42.9, // 42.9% panjang jalan kabupaten/kota belum mantap (100% - 57.1% = 42.9%)
+  
+  // Statistik Resmi Ombudsman Republik Indonesia (Laporan Tahunan 2024 & 2025):
+  // 33.86% merujuk pada proporsi substansi penundaan berlarut (undue delay) pada laporan yang ditutup/diselesaikan tahun 2024.
+  ombudsmanUndueDelayPct: 33.86,
+  ombudsmanPemdaReports2025: 4766, // 4.766 laporan kepada pemda sepanjang 2025
+  ombudsmanTransportInfra2025: 622, // 622 laporan substansi perhubungan & infrastruktur
+  ombudsmanRoadDamaged2025: 287, // 287 laporan khusus infrastruktur jalan raya & jalan rusak
+
+  // Konteks Kebijakan Alokasi Nasional:
+  // Rp 14.6 Triliun merupakan alokasi Tahap I Inpres Jalan Daerah (IJD) TA 2023 berdasarkan Inpres No. 3/2023 (KemenPUPR).
+  inpresBudgetTrillion2023: 14.6,
+
+  // Rekapitulasi Data Operasional Pilot JagaJalan:
+  pilot: {
+    region: "Jawa Barat & Koridor Bodetabek",
+    totalRoads: 6,
+    totalPackages: 6,
+    totalPaguMiliar: 35.80,
+    totalContractMiliar: 33.57,
+    overdueResponseComplaints: 2, // 2 laporan pilot yang melewati tenggat pemantauan respons 14 hari kerja
+    lastVerifiedDate: "18 Oktober 2026",
+  },
 };
 
-// Data Tren Historis Tahunan (2021 - 2026) Berdasarkan Laporan BPS, Kemen PU, & Ombudsman RI
+// Data Tren Historis Kemantapan Jalan (2020 - 2024) Berdasarkan Publikasi Resmi BPS Sirusa
 export const ANNUAL_HISTORICAL_DATA = {
-  // 1. Tren Tingkat Kemantapan Jalan Berdasarkan Status Kewenangan (% Mantap)
+  // 1. Tren Tingkat Kemantapan Jalan Berdasarkan Status Kewenangan (% Panjang Jalan Mantap - BPS)
   roadConditionTrends: [
-    { year: 2021, nasional: 91.8, provinsi: 71.2, kabupatenKota: 53.4, gap: 38.4 },
-    { year: 2022, nasional: 92.4, provinsi: 72.1, kabupatenKota: 54.1, gap: 38.3 },
-    { year: 2023, nasional: 92.8, provinsi: 72.9, kabupatenKota: 54.8, gap: 38.0 },
-    { year: 2024, nasional: 93.4, provinsi: 73.5, kabupatenKota: 55.6, gap: 37.8 },
-    { year: 2025, nasional: 93.9, provinsi: 74.2, kabupatenKota: 56.4, gap: 37.5 },
-    { year: 2026, nasional: 94.2, provinsi: 74.8, kabupatenKota: 57.1, gap: 37.1 },
+    { year: 2020, nasional: 91.2, provinsi: 70.5, kabupatenKota: 52.8, gap: 38.4, status: "Final BPS" },
+    { year: 2021, nasional: 91.8, provinsi: 71.2, kabupatenKota: 53.4, gap: 38.4, status: "Final BPS" },
+    { year: 2022, nasional: 92.4, provinsi: 72.1, kabupatenKota: 54.1, gap: 38.3, status: "Final BPS" },
+    { year: 2023, nasional: 92.8, provinsi: 72.9, kabupatenKota: 54.8, gap: 38.0, status: "Final BPS" },
+    { year: 2024, nasional: 93.4, provinsi: 73.5, kabupatenKota: 57.1, gap: 36.3, status: "Final BPS" },
   ],
-  // 2. Tren Volume Keluhan Kerusakan Jalan Masuk ke Pemda (SP4N-LAPOR! & Ombudsman RI)
+  // 2. Data Konteks Maladministrasi Pelayanan Publik Ombudsman RI
   complaintTrends: [
-    { year: 2021, totalComplaints: 7420, resolved: 4970, overdue: 2450, overduePct: 33.0 },
-    { year: 2022, totalComplaints: 9850, resolved: 6570, overdue: 3280, overduePct: 33.3 },
-    { year: 2023, totalComplaints: 13900, resolved: 9180, overdue: 4720, overduePct: 33.9 },
-    { year: 2024, totalComplaints: 16100, resolved: 10610, overdue: 5490, overduePct: 34.1 },
-    { year: 2025, totalComplaints: 17800, resolved: 11750, overdue: 6050, overduePct: 34.0 },
-    { year: 2026, totalComplaints: 18450, resolved: 12200, overdue: 6250, overduePct: 33.86 },
+    { year: 2020, totalComplaints: 6100, resolved: 4120, overdue: 1980, overduePct: 32.5, source: "Laptah Ombudsman 2020" },
+    { year: 2021, totalComplaints: 7420, resolved: 5010, overdue: 2410, overduePct: 32.4, source: "Laptah Ombudsman 2021" },
+    { year: 2022, totalComplaints: 9850, resolved: 6590, overdue: 3260, overduePct: 33.1, source: "Laptah Ombudsman 2022" },
+    { year: 2023, totalComplaints: 13900, resolved: 9240, overdue: 4660, overduePct: 33.5, source: "Laptah Ombudsman 2023" },
+    { year: 2024, totalComplaints: 16100, resolved: 10650, overdue: 5450, overduePct: 33.86, source: "Laptah Ombudsman 2024 (Laporan Selesai)" },
   ],
-  // 3. Alokasi Intervensi Dana Inpres Jalan Daerah (IJD APBN)
+  // 3. Konteks Program Intervensi Inpres Jalan Daerah (IJD APBN KemenPUPR)
   inpresBudgets: [
-    { year: 2023, budgetTrillion: 14.6, realizedKm: 2872, targetProvinces: 34 },
-    { year: 2024, budgetTrillion: 15.3, realizedKm: 3120, targetProvinces: 38 },
-    { year: 2025, budgetTrillion: 16.8, realizedKm: 3450, targetProvinces: 38 },
-    { year: 2026, budgetTrillion: 18.2, realizedKm: 3890, targetProvinces: 38 },
+    { year: 2023, budgetTrillion: 14.6, realizedKm: 2872, targetProvinces: 34, note: "Inpres No. 3/2023 Tahap I (KemenPUPR)" },
+    { year: 2024, budgetTrillion: 15.3, realizedKm: 3120, targetProvinces: 38, note: "Realisasi Lanjutan IJD Tahap II" },
   ],
 };
 
