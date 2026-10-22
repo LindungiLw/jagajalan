@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   TrendingUp,
   BarChart3,
@@ -16,6 +16,7 @@ import { ANNUAL_HISTORICAL_DATA } from "@/data/provincesData";
 
 export default function AnnualProgressChart() {
   const [activeMetric, setActiveMetric] = useState("road-condition"); // 'road-condition' | 'complaints' | 'inpres'
+  const [chartViewMode, setChartViewMode] = useState("line"); // 'line' | 'bar'
   const [hoveredYear, setHoveredYear] = useState(2024);
 
   const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
@@ -24,6 +25,27 @@ export default function AnnualProgressChart() {
   const selectedRoadData = roadConditionTrends.find((d) => d.year === hoveredYear) || roadConditionTrends[roadConditionTrends.length - 1];
   const selectedComplaintData = complaintTrends.find((d) => d.year === hoveredYear) || complaintTrends[complaintTrends.length - 1];
   const selectedInpresData = inpresBudgets.find((d) => d.year === hoveredYear) || inpresBudgets[inpresBudgets.length - 1];
+
+  // SVG Coordinates for Line Chart (viewBox: 0 0 640 220)
+  const linePoints = useMemo(() => {
+    return roadConditionTrends.map((d, i) => {
+      const x = 45 + (i / 4) * 550;
+      const yNasional = 30 + ((100 - d.nasional) / 60) * 160;
+      const yProvinsi = 30 + ((100 - d.provinsi) / 60) * 160;
+      const yKabKota = 30 + ((100 - d.kabupatenKota) / 60) * 160;
+      return { year: d.year, x, yNasional, yProvinsi, yKabKota, raw: d };
+    });
+  }, [roadConditionTrends]);
+
+  const pathNasional = linePoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.yNasional}`).join(" ");
+  const pathProvinsi = linePoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.yProvinsi}`).join(" ");
+  const pathKabKota = linePoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.yKabKota}`).join(" ");
+
+  // Disparity Area Polygon between Nasional & Kab/Kota
+  const disparityPolygon = [
+    ...linePoints.map((p) => `${p.x},${p.yNasional}`),
+    ...[...linePoints].reverse().map((p) => `${p.x},${p.yKabKota}`),
+  ].join(" ");
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -40,7 +62,7 @@ export default function AnnualProgressChart() {
               <TrendingUp className="w-3.5 h-3.5" />
               <span>Analisis Historis Tahunan • Sumber: BPS (Sirusa) & Ombudsman RI</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
               Dinamika & Tren Perkembangan Kerusakan Jalan (2020 – 2024)
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
@@ -86,85 +108,303 @@ export default function AnnualProgressChart() {
           </div>
         </div>
 
-        {/* METRIC VIEW 1: JURANG KEMANTAPAN JALAN (2021-2026) */}
+        {/* METRIC VIEW 1: JURANG KEMANTAPAN JALAN (2020-2024) */}
         {activeMetric === "road-condition" && (
           <div className="space-y-6 animate-fade-in">
-            {/* SVG Interactive Multi-Line Diagram */}
             <div className="bg-slate-50/70 rounded-[5px] border border-slate-200/80 p-5 sm:p-6 relative">
+              
+              {/* Header with Switcher: Line vs Bar Chart */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div className="text-xs font-bold text-slate-700 flex items-center gap-2">
-                  <span>Persentase Jalan Mantap Berdasarkan Status Wewenang (%):</span>
+                  <span>Persentase Panjang Jalan Mantap Berdasarkan Status Wewenang (BPS Sirusa %):</span>
                 </div>
-                {/* Legend Chips */}
-                <div className="flex items-center gap-3 text-[11px] font-medium">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-slate-700" />
-                    Jalan Nasional
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-amber-600" />
-                    Jalan Provinsi
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-rose-500" />
-                    Jalan Kabupaten/Kota
-                  </span>
+
+                {/* View Switcher: Line Chart vs Bar Chart */}
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center p-0.5 rounded-[5px] bg-slate-200/80 border border-slate-300 text-[10px] font-bold">
+                    <button
+                      onClick={() => setChartViewMode("line")}
+                      className={`px-2.5 py-1 rounded-[3px] transition-all cursor-pointer flex items-center gap-1 ${
+                        chartViewMode === "line"
+                          ? "bg-white text-[#c2410c] shadow-xs font-bold"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                      title="Lihat dalam Grafik Garis Tren Kontinu"
+                    >
+                      <TrendingUp className="w-3 h-3" />
+                      <span>Grafik Garis</span>
+                    </button>
+                    <button
+                      onClick={() => setChartViewMode("bar")}
+                      className={`px-2.5 py-1 rounded-[3px] transition-all cursor-pointer flex items-center gap-1 ${
+                        chartViewMode === "bar"
+                          ? "bg-white text-[#c2410c] shadow-xs font-bold"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                      title="Lihat dalam Diagram Batang Komparatif"
+                    >
+                      <BarChart3 className="w-3 h-3" />
+                      <span>Diagram Batang</span>
+                    </button>
+                  </div>
+
+                  {/* Legend Chips */}
+                  <div className="hidden md:flex items-center gap-3 text-[11px] font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-slate-700" />
+                      Nasional
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-600" />
+                      Provinsi
+                    </span>
+                    <span className="flex items-center gap-1.5 font-bold text-[#c2410c]">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#c2410c]" />
+                      Kab/Kota
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Chart Visualizer */}
-              <div className="grid grid-cols-5 gap-2 sm:gap-4 items-end h-64 pt-6 pb-2 border-b border-slate-200">
-                {roadConditionTrends.map((d) => {
-                  const isHovered = d.year === hoveredYear;
-                  return (
-                    <div
-                      key={d.year}
-                      onMouseEnter={() => setHoveredYear(d.year)}
-                      className={`h-full flex flex-col justify-end items-center gap-1.5 transition-all cursor-pointer group ${
-                        isHovered ? "opacity-100" : "opacity-80 hover:opacity-100"
-                      }`}
+              {/* 1. VIEW A: INTERACTIVE MULTI-LINE SVG CHART */}
+              {chartViewMode === "line" ? (
+                <div className="relative w-full overflow-x-auto">
+                  <svg
+                    viewBox="0 0 640 220"
+                    className="w-full h-64 select-none"
+                    style={{ minWidth: "520px" }}
+                  >
+                    <defs>
+                      <linearGradient id="disparityGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#c2410c" stopOpacity="0.14" />
+                        <stop offset="100%" stopColor="#c2410c" stopOpacity="0.02" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Y-Axis Gridlines & Reference Labels */}
+                    {[100, 80, 60, 40].map((val) => {
+                      const y = 30 + ((100 - val) / 60) * 160;
+                      return (
+                        <g key={val}>
+                          <line
+                            x1="45"
+                            y1={y}
+                            x2="595"
+                            y2={y}
+                            stroke="#e2e8f0"
+                            strokeDasharray="3 3"
+                            strokeWidth="1"
+                          />
+                          <text
+                            x="40"
+                            y={y + 3.5}
+                            textAnchor="end"
+                            fontSize="9"
+                            fontFamily="monospace"
+                            fill="#94a3b8"
+                            fontWeight="bold"
+                          >
+                            {val}%
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Disparity Band Area between Jalan Nasional and Jalan Kab/Kota */}
+                    <polygon points={disparityPolygon} fill="url(#disparityGrad)" />
+
+                    {/* Disparity Label in the middle */}
+                    <text
+                      x="320"
+                      y="118"
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                      fill="#9a3412"
+                      opacity="0.8"
                     >
-                      {/* Bar Group for each Year */}
-                      <div className="w-full max-w-[54px] flex items-end justify-center gap-1 h-48 bg-slate-200/40 rounded-t-[3px] p-1 relative">
-                        {/* Bar 1: Jalan Nasional */}
-                        <div
-                          style={{ height: `${d.nasional}%` }}
-                          className="w-1/3 bg-slate-700 rounded-t-xs transition-all relative group-hover:bg-slate-800"
-                          title={`Nasional ${d.year}: ${d.nasional}%`}
-                        />
-                        {/* Bar 2: Jalan Provinsi */}
-                        <div
-                          style={{ height: `${d.provinsi}%` }}
-                          className="w-1/3 bg-amber-600 rounded-t-xs transition-all relative group-hover:bg-amber-700"
-                          title={`Provinsi ${d.year}: ${d.provinsi}%`}
-                        />
-                        {/* Bar 3: Jalan Kabupaten/Kota */}
-                        <div
-                          style={{ height: `${d.kabupatenKota}%` }}
-                          className="w-1/3 bg-rose-500 rounded-t-xs transition-all relative group-hover:bg-rose-600"
-                          title={`Kab/Kota ${d.year}: ${d.kabupatenKota}%`}
-                        />
+                      Jurang Ketimpangan Jalan Daerah (~36.3% - 38.4%)
+                    </text>
 
-                        {/* Highlight Ring on Hover */}
-                        {isHovered && (
-                          <div className="absolute -top-3 px-1.5 py-0.5 rounded-[5px] bg-slate-900 text-white text-[9px] font-bold font-mono shadow-xs">
-                            Gap {d.gap}%
-                          </div>
-                        )}
-                      </div>
+                    {/* Multi-Line Curves */}
+                    {/* Line 1: Jalan Nasional */}
+                    <path
+                      d={pathNasional}
+                      fill="none"
+                      stroke="#334155"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
 
-                      {/* Year Label */}
-                      <span
-                        className={`text-xs font-bold font-mono transition-colors ${
-                          isHovered ? "text-orange-700 font-extrabold" : "text-slate-500"
+                    {/* Line 2: Jalan Provinsi */}
+                    <path
+                      d={pathProvinsi}
+                      fill="none"
+                      stroke="#d97706"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    {/* Line 3: Jalan Kabupaten/Kota (Main Civic Indicator) */}
+                    <path
+                      d={pathKabKota}
+                      fill="none"
+                      stroke="#c2410c"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    {/* Vertical Tracking Line & Interactive Markers */}
+                    {linePoints.map((p) => {
+                      const isHovered = p.year === hoveredYear;
+                      return (
+                        <g
+                          key={p.year}
+                          className="cursor-pointer group"
+                          onMouseEnter={() => setHoveredYear(p.year)}
+                        >
+                          {/* Invisible hover capture rect */}
+                          <rect
+                            x={p.x - 30}
+                            y="15"
+                            width="60"
+                            height="190"
+                            fill="transparent"
+                          />
+
+                          {/* Vertical Hover Tracking Guideline */}
+                          {isHovered && (
+                            <line
+                              x1={p.x}
+                              y1="25"
+                              x2={p.x}
+                              y2="190"
+                              stroke="#c2410c"
+                              strokeWidth="1.5"
+                              strokeDasharray="2 2"
+                            />
+                          )}
+
+                          {/* Marker Point: Jalan Nasional */}
+                          <circle
+                            cx={p.x}
+                            cy={p.yNasional}
+                            r={isHovered ? 5.5 : 4}
+                            fill="#334155"
+                            stroke="#ffffff"
+                            strokeWidth="2"
+                          />
+
+                          {/* Marker Point: Jalan Provinsi */}
+                          <circle
+                            cx={p.x}
+                            cy={p.yProvinsi}
+                            r={isHovered ? 5.5 : 4}
+                            fill="#d97706"
+                            stroke="#ffffff"
+                            strokeWidth="2"
+                          />
+
+                          {/* Marker Point: Jalan Kab/Kota */}
+                          <circle
+                            cx={p.x}
+                            cy={p.yKabKota}
+                            r={isHovered ? 7 : 5}
+                            fill="#c2410c"
+                            stroke="#ffffff"
+                            strokeWidth="2.5"
+                            className="transition-all"
+                          />
+
+                          {/* Exact Value Badge on top of Kab/Kota point */}
+                          <text
+                            x={p.x}
+                            y={p.yKabKota + (isHovered ? -12 : -9)}
+                            textAnchor="middle"
+                            fontSize="9"
+                            fontFamily="monospace"
+                            fontWeight="bold"
+                            fill={isHovered ? "#9a3412" : "#c2410c"}
+                          >
+                            {p.raw.kabupatenKota}%
+                          </text>
+
+                          {/* X-Axis Year Label */}
+                          <text
+                            x={p.x}
+                            y="210"
+                            textAnchor="middle"
+                            fontSize="10"
+                            fontFamily="monospace"
+                            fontWeight={isHovered ? "bold" : "normal"}
+                            fill={isHovered ? "#c2410c" : "#64748b"}
+                          >
+                            {p.year}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </svg>
+                </div>
+              ) : (
+                /* 2. VIEW B: COMPARATIVE GROUPED BAR CHART */
+                <div className="grid grid-cols-5 gap-2 sm:gap-4 items-end h-64 pt-6 pb-2 border-b border-slate-200">
+                  {roadConditionTrends.map((d) => {
+                    const isHovered = d.year === hoveredYear;
+                    return (
+                      <div
+                        key={d.year}
+                        onMouseEnter={() => setHoveredYear(d.year)}
+                        className={`h-full flex flex-col justify-end items-center gap-1.5 transition-all cursor-pointer group ${
+                          isHovered ? "opacity-100" : "opacity-80 hover:opacity-100"
                         }`}
                       >
-                        {d.year}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+                        {/* Bar Group for each Year */}
+                        <div className="w-full max-w-[54px] flex items-end justify-center gap-1 h-48 bg-slate-200/40 rounded-t-[3px] p-1 relative">
+                          {/* Bar 1: Jalan Nasional */}
+                          <div
+                            style={{ height: `${d.nasional}%` }}
+                            className="w-1/3 bg-slate-700 rounded-t-xs transition-all relative group-hover:bg-slate-800"
+                            title={`Nasional ${d.year}: ${d.nasional}%`}
+                          />
+                          {/* Bar 2: Jalan Provinsi */}
+                          <div
+                            style={{ height: `${d.provinsi}%` }}
+                            className="w-1/3 bg-amber-600 rounded-t-xs transition-all relative group-hover:bg-amber-700"
+                            title={`Provinsi ${d.year}: ${d.provinsi}%`}
+                          />
+                          {/* Bar 3: Jalan Kabupaten/Kota */}
+                          <div
+                            style={{ height: `${d.kabupatenKota}%` }}
+                            className="w-1/3 bg-rose-500 rounded-t-xs transition-all relative group-hover:bg-rose-600"
+                            title={`Kab/Kota ${d.year}: ${d.kabupatenKota}%`}
+                          />
+
+                          {/* Highlight Ring on Hover */}
+                          {isHovered && (
+                            <div className="absolute -top-3 px-1.5 py-0.5 rounded-[5px] bg-slate-900 text-white text-[9px] font-bold font-mono shadow-xs">
+                              Gap {d.gap}%
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Year Label */}
+                        <span
+                          className={`text-xs font-bold font-mono transition-colors ${
+                            isHovered ? "text-orange-700 font-extrabold" : "text-slate-500"
+                          }`}
+                        >
+                          {d.year}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Year Detail Snapshot Banner */}
               <div className="mt-4 p-4 rounded-[5px] bg-white/90 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

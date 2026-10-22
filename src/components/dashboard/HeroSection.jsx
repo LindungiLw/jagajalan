@@ -15,6 +15,8 @@ import {
   Layers,
   Database,
   Info,
+  TrendingUp,
+  BarChart3,
 } from "lucide-react";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
@@ -31,6 +33,7 @@ export default function HeroSection({
   onOpenOmbudsmanDraft,
 }) {
   const [selectedIndex, setSelectedIndex] = useState("kemantapan"); // 'kemantapan' | 'ombudsman' | 'pagu' | 'inpres'
+  const [chartViewMode, setChartViewMode] = useState("line"); // 'line' | 'bar'
   const [selectedYear, setSelectedYear] = useState(2024);
   const [summaryTab, setSummaryTab] = useState("wewenang"); // 'wewenang' | 'aduan'
   const [searchQuery, setSearchQuery] = useState("");
@@ -94,6 +97,16 @@ export default function HeroSection({
     <section className="pt-3 pb-6 text-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3.5">
         
+        {/* HERO UTAMA: PLUS JAKARTA SANS 36-44px, 700 BOLD */}
+        <div className="pt-2 pb-1 space-y-1">
+          <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-bold font-heading text-slate-900 tracking-tight leading-tight">
+            Transparansi Kondisi Jalan, Anggaran Pemeliharaan, dan Akuntabilitas Publik
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed font-sans font-normal">
+            Platform integrasi data kemantapan jalan daerah (BPS), LPSE pengadaan tender, aduan masyarakat berbasis geotagging, dan pemantauan penundaan berlarut (SOP 14 hari) Ombudsman RI.
+          </p>
+        </div>
+
         {/* 1. TOP UTILITY BAR: MEASURED DATASET SCOPE & UNIFIED SEARCH */}
         <div className="bg-white p-3 sm:p-3.5 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
           
@@ -201,9 +214,9 @@ export default function HeroSection({
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xs sm:text-sm text-slate-900 tracking-tight uppercase">
+                <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
                   Ikhtisar Kemantapan & Konteks Kebijakan
-                </span>
+                </h2>
                 <span className="px-1.5 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200/80">
                   Data Terverifikasi
                 </span>
@@ -225,7 +238,7 @@ export default function HeroSection({
                 {/* Index 1: Kemantapan Jalan (BPS 2024) */}
                 <button
                   onClick={() => setSelectedIndex("kemantapan")}
-                  className={`w-full text-left p-2 rounded-[5px] border transition-all cursor-pointer ${
+                  className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "kemantapan"
                       ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
                       : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
@@ -241,7 +254,9 @@ export default function HeroSection({
                       2024
                     </span>
                   </div>
-                  <div className="text-base font-black font-mono mt-0.5">57,1% MANTAP</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                    57,1% <span className="text-xs font-semibold uppercase tracking-wider font-sans">MANTAP</span>
+                  </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "kemantapan" ? "text-orange-100/90" : "text-slate-500"}`}>
                     42,9% panjang jalan belum mantap
                   </div>
@@ -250,7 +265,7 @@ export default function HeroSection({
                 {/* Index 2: Konteks Ombudsman 2024 */}
                 <button
                   onClick={() => setSelectedIndex("ombudsman")}
-                  className={`w-full text-left p-2 rounded-[5px] border transition-all cursor-pointer ${
+                  className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "ombudsman"
                       ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
                       : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
@@ -266,7 +281,9 @@ export default function HeroSection({
                       2024
                     </span>
                   </div>
-                  <div className="text-base font-black font-mono mt-0.5">33,86% LAPORAN</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                    33,86% <span className="text-xs font-semibold uppercase tracking-wider font-sans">LAPORAN</span>
+                  </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "ombudsman" ? "text-orange-100/90" : "text-slate-500"}`}>
                     Penundaan berlarut pada laporan selesai
                   </div>
@@ -275,7 +292,7 @@ export default function HeroSection({
                 {/* Index 3: Pagu Paket Pilot LPSE */}
                 <button
                   onClick={() => setSelectedIndex("pagu")}
-                  className={`w-full text-left p-2 rounded-[5px] border transition-all cursor-pointer ${
+                  className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "pagu"
                       ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
                       : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
@@ -291,7 +308,9 @@ export default function HeroSection({
                       6 Paket
                     </span>
                   </div>
-                  <div className="text-base font-black font-mono mt-0.5">RP 35,80 MILIAR</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                    Rp 35,80 <span className="text-xs font-semibold uppercase tracking-wider font-sans">MIL</span>
+                  </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "pagu" ? "text-orange-100/90" : "text-slate-500"}`}>
                     Total nilai pagu lelang terverifikasi
                   </div>
@@ -300,7 +319,7 @@ export default function HeroSection({
                 {/* Index 4: Alokasi Inpres Nasional 2023 */}
                 <button
                   onClick={() => setSelectedIndex("inpres")}
-                  className={`w-full text-left p-2 rounded-[5px] border transition-all cursor-pointer ${
+                  className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "inpres"
                       ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
                       : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
@@ -316,7 +335,9 @@ export default function HeroSection({
                       TA 2023
                     </span>
                   </div>
-                  <div className="text-base font-black font-mono mt-0.5">RP 14,60 TRILIUN</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                    Rp 14,60 <span className="text-xs font-semibold uppercase tracking-wider font-sans">TRIL</span>
+                  </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "inpres" ? "text-orange-100/90" : "text-slate-500"}`}>
                     Alokasi Tahap I Inpres No. 3/2023 (PUPR)
                   </div>
@@ -326,8 +347,8 @@ export default function HeroSection({
               {/* Chart Column: Fully Populated BPS Historical Kemantapan Jalan (2020 - 2024) */}
               <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200 p-3 flex flex-col justify-between">
                 
-                {/* Chart Header with Year Selector (2020-2024 final BPS data) */}
-                <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                {/* Chart Header with Year Selector & Line/Bar Switcher */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-mono block">
                       Sumber: BPS Sirusa (2020–2024)
@@ -337,79 +358,251 @@ export default function HeroSection({
                     </strong>
                   </div>
 
-                  {/* Year Tabs */}
-                  <div className="flex items-center gap-0.5 bg-white p-0.5 rounded-[5px] border border-slate-200 text-[10px] font-bold font-mono">
-                    {[2020, 2021, 2022, 2023, 2024].map((yr) => (
+                  <div className="flex items-center gap-1.5 self-end sm:self-auto">
+                    {/* View Switcher: Line vs Bar */}
+                    <div className="flex items-center p-0.5 bg-slate-200/80 rounded-[4px] text-[10px] font-bold">
                       <button
-                        key={yr}
-                        onClick={() => setSelectedYear(yr)}
-                        className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer ${
-                          selectedYear === yr
-                            ? "bg-[#c2410c] text-white"
+                        onClick={() => setChartViewMode("line")}
+                        className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer flex items-center gap-0.5 ${
+                          chartViewMode === "line"
+                            ? "bg-white text-[#c2410c] shadow-xs"
                             : "text-slate-600 hover:text-slate-900"
                         }`}
+                        title="Grafik Garis Kontinu"
                       >
-                        {yr}
+                        <TrendingUp className="w-3 h-3" />
+                        <span>Garis</span>
                       </button>
-                    ))}
+                      <button
+                        onClick={() => setChartViewMode("bar")}
+                        className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer flex items-center gap-0.5 ${
+                          chartViewMode === "bar"
+                            ? "bg-white text-[#c2410c] shadow-xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                        title="Diagram Batang Komparatif"
+                      >
+                        <BarChart3 className="w-3 h-3" />
+                        <span>Batang</span>
+                      </button>
+                    </div>
+
+                    {/* Year Tabs */}
+                    <div className="flex items-center gap-0.5 bg-white p-0.5 rounded-[5px] border border-slate-200 text-[10px] font-bold font-mono">
+                      {[2020, 2021, 2022, 2023, 2024].map((yr) => (
+                        <button
+                          key={yr}
+                          onClick={() => setSelectedYear(yr)}
+                          className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer ${
+                            selectedYear === yr
+                              ? "bg-[#c2410c] text-white"
+                              : "text-slate-600 hover:text-slate-900"
+                          }`}
+                        >
+                          {yr}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* Populated Bar Visualizer with Clear Values Above Bars */}
-                <div className="h-36 flex items-end justify-between gap-2 pt-4 px-1">
-                  {roadConditionTrends.map((d) => {
-                    const isSelected = d.year === selectedYear;
-                    return (
-                      <div
-                        key={d.year}
-                        onClick={() => setSelectedYear(d.year)}
-                        className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
-                      >
-                        {/* Percentage Label on Top of Selected Bar */}
-                        <span
-                          className={`text-[9px] font-mono font-bold leading-none ${
-                            isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"
-                          }`}
-                        >
-                          {d.kabupatenKota}%
-                        </span>
+                {/* Chart Body: Line Chart or Bar Chart */}
+                {chartViewMode === "line" ? (
+                  <div className="h-36 pt-2 px-1 flex flex-col justify-end">
+                    <svg viewBox="0 0 380 115" className="w-full h-full select-none">
+                      {/* Horizontal Gridlines */}
+                      {[100, 80, 60, 40].map((val) => {
+                        const y = 14 + ((100 - val) / 60) * 78;
+                        return (
+                          <g key={val}>
+                            <line
+                              x1="28"
+                              y1={y}
+                              x2="365"
+                              y2={y}
+                              stroke="#e2e8f0"
+                              strokeDasharray="2 2"
+                              strokeWidth="0.8"
+                            />
+                            <text
+                              x="24"
+                              y={y + 3}
+                              textAnchor="end"
+                              fontSize="8"
+                              fontFamily="monospace"
+                              fill="#94a3b8"
+                              fontWeight="bold"
+                            >
+                              {val}%
+                            </text>
+                          </g>
+                        );
+                      })}
 
-                        {/* Bar Graphic with height proportionate to percentage (scaled 40% to 100%) */}
-                        <div className="w-full flex items-end justify-center gap-0.5 h-24 bg-slate-200/50 rounded-t-[3px] p-0.5">
-                          {/* Jalan Nasional */}
-                          <div
-                            style={{ height: `${d.nasional}%` }}
-                            className="w-1/3 bg-slate-600 rounded-t-xs"
-                            title={`Nasional ${d.year}: ${d.nasional}% Mantap`}
-                          />
-                          {/* Jalan Provinsi */}
-                          <div
-                            style={{ height: `${d.provinsi}%` }}
-                            className="w-1/3 bg-amber-600 rounded-t-xs"
-                            title={`Provinsi ${d.year}: ${d.provinsi}% Mantap`}
-                          />
-                          {/* Jalan Kab/Kota (Selected Highlight) */}
-                          <div
-                            style={{ height: `${d.kabupatenKota}%` }}
-                            className={`w-1/3 rounded-t-xs transition-colors ${
-                              isSelected ? "bg-[#c2410c]" : "bg-rose-500"
+                      {/* Disparity Area Shading between Nasional and Kab/Kota */}
+                      <polygon
+                        points={`
+                          ${roadConditionTrends.map((d, i) => `${30 + i * 82.5},${14 + ((100 - d.nasional) / 60) * 78}`).join(" ")}
+                          ${[...roadConditionTrends].reverse().map((d, i) => `${360 - i * 82.5},${14 + ((100 - d.kabupatenKota) / 60) * 78}`).join(" ")}
+                        `}
+                        fill="#c2410c"
+                        fillOpacity="0.08"
+                      />
+
+                      {/* Line 1: Jalan Nasional */}
+                      <path
+                        d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.nasional) / 60) * 78}`).join(" ")}
+                        fill="none"
+                        stroke="#475569"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+
+                      {/* Line 2: Jalan Provinsi */}
+                      <path
+                        d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.provinsi) / 60) * 78}`).join(" ")}
+                        fill="none"
+                        stroke="#d97706"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+
+                      {/* Line 3: Jalan Kab/Kota */}
+                      <path
+                        d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.kabupatenKota) / 60) * 78}`).join(" ")}
+                        fill="none"
+                        stroke="#c2410c"
+                        strokeWidth="2.8"
+                        strokeLinecap="round"
+                      />
+
+                      {/* Interactive Points on Line */}
+                      {roadConditionTrends.map((d, i) => {
+                        const x = 30 + i * 82.5;
+                        const yNas = 14 + ((100 - d.nasional) / 60) * 78;
+                        const yProv = 14 + ((100 - d.provinsi) / 60) * 78;
+                        const yKab = 14 + ((100 - d.kabupatenKota) / 60) * 78;
+                        const isSelected = d.year === selectedYear;
+
+                        return (
+                          <g
+                            key={d.year}
+                            className="cursor-pointer"
+                            onClick={() => setSelectedYear(d.year)}
+                          >
+                            <rect
+                              x={x - 20}
+                              y="5"
+                              width="40"
+                              height="100"
+                              fill="transparent"
+                            />
+
+                            {/* Guideline on selected */}
+                            {isSelected && (
+                              <line
+                                x1={x}
+                                y1="14"
+                                x2={x}
+                                y2="92"
+                                stroke="#c2410c"
+                                strokeWidth="1"
+                                strokeDasharray="2 2"
+                              />
+                            )}
+
+                            {/* Point circles */}
+                            <circle cx={x} cy={yNas} r={isSelected ? 4 : 2.5} fill="#475569" stroke="#fff" strokeWidth="1.5" />
+                            <circle cx={x} cy={yProv} r={isSelected ? 4 : 2.5} fill="#d97706" stroke="#fff" strokeWidth="1.5" />
+                            <circle cx={x} cy={yKab} r={isSelected ? 5.5 : 3.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+
+                            {/* Value label on top of Kab/Kota */}
+                            <text
+                              x={x}
+                              y={yKab - 7}
+                              textAnchor="middle"
+                              fontSize="8"
+                              fontFamily="monospace"
+                              fontWeight="bold"
+                              fill={isSelected ? "#9a3412" : "#c2410c"}
+                            >
+                              {d.kabupatenKota}%
+                            </text>
+
+                            {/* Year label on X-axis */}
+                            <text
+                              x={x}
+                              y="108"
+                              textAnchor="middle"
+                              fontSize="9"
+                              fontFamily="monospace"
+                              fontWeight={isSelected ? "bold" : "normal"}
+                              fill={isSelected ? "#c2410c" : "#64748b"}
+                            >
+                              {d.year}
+                            </text>
+                          </g>
+                        );
+                      })}
+                    </svg>
+                  </div>
+                ) : (
+                  /* Bar Chart View */
+                  <div className="h-36 flex items-end justify-between gap-2 pt-4 px-1">
+                    {roadConditionTrends.map((d) => {
+                      const isSelected = d.year === selectedYear;
+                      return (
+                        <div
+                          key={d.year}
+                          onClick={() => setSelectedYear(d.year)}
+                          className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
+                        >
+                          {/* Percentage Label on Top of Selected Bar */}
+                          <span
+                            className={`text-[9px] font-mono font-bold leading-none ${
+                              isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"
                             }`}
-                            title={`Kab/Kota ${d.year}: ${d.kabupatenKota}% Mantap`}
-                          />
-                        </div>
+                          >
+                            {d.kabupatenKota}%
+                          </span>
 
-                        {/* Year Label */}
-                        <span
-                          className={`text-[10px] font-mono font-bold ${
-                            isSelected ? "text-[#c2410c]" : "text-slate-500"
-                          }`}
-                        >
-                          {d.year}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
+                          {/* Bar Graphic with height proportionate to percentage (scaled 40% to 100%) */}
+                          <div className="w-full flex items-end justify-center gap-0.5 h-24 bg-slate-200/50 rounded-t-[3px] p-0.5">
+                            {/* Jalan Nasional */}
+                            <div
+                              style={{ height: `${d.nasional}%` }}
+                              className="w-1/3 bg-slate-600 rounded-t-xs"
+                              title={`Nasional ${d.year}: ${d.nasional}% Mantap`}
+                            />
+                            {/* Jalan Provinsi */}
+                            <div
+                              style={{ height: `${d.provinsi}%` }}
+                              className="w-1/3 bg-amber-600 rounded-t-xs"
+                              title={`Provinsi ${d.year}: ${d.provinsi}% Mantap`}
+                            />
+                            {/* Jalan Kab/Kota (Selected Highlight) */}
+                            <div
+                              style={{ height: `${d.kabupatenKota}%` }}
+                              className={`w-1/3 rounded-t-xs transition-colors ${
+                                isSelected ? "bg-[#c2410c]" : "bg-rose-500"
+                              }`}
+                              title={`Kab/Kota ${d.year}: ${d.kabupatenKota}% Mantap`}
+                            />
+                          </div>
+
+                          {/* Year Label */}
+                          <span
+                            className={`text-[10px] font-mono font-bold ${
+                              isSelected ? "text-[#c2410c]" : "text-slate-500"
+                            }`}
+                          >
+                            {d.year}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* Chart Footnote & Legend */}
                 <div className="mt-2 pt-1.5 border-t border-slate-200 text-[10px] text-slate-600 flex flex-wrap items-center justify-between gap-1 font-mono">
@@ -441,10 +634,10 @@ export default function HeroSection({
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <div>
-                <span className="font-extrabold text-xs sm:text-sm text-slate-900 tracking-tight uppercase block">
+                <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight block">
                   Rekapitulasi Koridor Pilot
-                </span>
-                <span className="text-[10px] text-slate-500">
+                </h2>
+                <span className="text-[10px] text-slate-500 font-sans">
                   Klasifikasi kewenangan ruas terdata (Bukan peringkat kinerja)
                 </span>
               </div>
@@ -468,15 +661,15 @@ export default function HeroSection({
                     <th className="py-1 font-bold text-right">Tenggat Respons</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-sans">
+                <tbody className="divide-y divide-slate-100 font-sans text-xs sm:text-[13px]">
                   <tr className="hover:bg-slate-50/80 transition-colors">
                     <td className="py-1.5">
                       <span className="font-bold text-slate-900 block text-xs">KemenPUPR (BBPJN)</span>
                       <span className="text-[10px] text-slate-500 font-semibold font-mono">JALAN NASIONAL</span>
                     </td>
-                    <td className="py-1.5 text-center font-mono font-bold text-slate-700">1</td>
-                    <td className="py-1.5 text-right font-mono font-bold text-slate-900">Rp 8,45 M</td>
-                    <td className="py-1.5 text-right font-mono text-emerald-700 font-bold">0</td>
+                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">1</td>
+                    <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 8,45 M</td>
+                    <td className="py-1.5 text-right font-sans tabular-nums text-emerald-700 font-bold">0</td>
                   </tr>
 
                   <tr className="hover:bg-slate-50/80 transition-colors">
@@ -484,9 +677,9 @@ export default function HeroSection({
                       <span className="font-bold text-slate-900 block text-xs">DBMPR Jawa Barat</span>
                       <span className="text-[10px] text-amber-800 font-semibold font-mono">JALAN PROVINSI</span>
                     </td>
-                    <td className="py-1.5 text-center font-mono font-bold text-slate-700">2</td>
-                    <td className="py-1.5 text-right font-mono font-bold text-slate-900">Rp 15,70 M</td>
-                    <td className="py-1.5 text-right font-mono text-rose-600 font-bold">1 Tiket</td>
+                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">2</td>
+                    <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 15,70 M</td>
+                    <td className="py-1.5 text-right font-sans tabular-nums text-rose-600 font-bold">1 Tiket</td>
                   </tr>
 
                   <tr className="hover:bg-slate-50/80 transition-colors">
@@ -494,16 +687,16 @@ export default function HeroSection({
                       <span className="font-bold text-slate-900 block text-xs">Dinas PUPR Depok</span>
                       <span className="text-[10px] text-orange-800 font-semibold font-mono">JALAN KAB / KOTA</span>
                     </td>
-                    <td className="py-1.5 text-center font-mono font-bold text-slate-700">3</td>
-                    <td className="py-1.5 text-right font-mono font-bold text-slate-900">Rp 11,65 M</td>
-                    <td className="py-1.5 text-right font-mono text-rose-600 font-bold">1 Tiket</td>
+                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">3</td>
+                    <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 11,65 M</td>
+                    <td className="py-1.5 text-right font-sans tabular-nums text-rose-600 font-bold">1 Tiket</td>
                   </tr>
 
                   <tr className="bg-slate-50/90 font-bold border-t border-slate-200">
                     <td className="py-1.5 text-slate-900 text-xs uppercase font-mono">Total Pilot</td>
-                    <td className="py-1.5 text-center font-mono text-slate-900">6 Ruas</td>
-                    <td className="py-1.5 text-right font-mono text-emerald-800">Rp 35,80 M</td>
-                    <td className="py-1.5 text-right font-mono text-rose-600">2 Melewati Tenggat</td>
+                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-900">6 Ruas</td>
+                    <td className="py-1.5 text-right font-sans tabular-nums text-emerald-800">Rp 35,80 M</td>
+                    <td className="py-1.5 text-right font-sans tabular-nums text-rose-600">2 Melewati Tenggat</td>
                   </tr>
                 </tbody>
               </table>
@@ -533,10 +726,10 @@ export default function HeroSection({
           {/* Table Header & View Controls */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-2.5">
             <div className="flex items-center gap-2">
-              <span className="font-black text-xs sm:text-sm text-slate-900 tracking-tight uppercase font-mono">
+              <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
                 Tabel Penelusuran Ruas & Anggaran APBD
-              </span>
-              <span className="px-1.5 py-0.5 rounded-[5px] text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+              </h2>
+              <span className="px-1.5 py-0.5 rounded-[5px] text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 font-sans tabular-nums">
                 {searchResults.matchedRoads.length} Ruas Terdata
               </span>
             </div>
@@ -544,7 +737,7 @@ export default function HeroSection({
             <div className="flex items-center gap-1.5 text-xs font-semibold">
               <button
                 onClick={onExploreData}
-                className="px-3 py-1 rounded-[5px] bg-slate-100 hover:bg-orange-50 hover:text-orange-900 text-slate-700 border border-slate-200 transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-3 py-1 rounded-[5px] bg-slate-100 hover:bg-orange-50 hover:text-orange-900 text-slate-700 border border-slate-200 transition-colors cursor-pointer flex items-center gap-1.5 font-sans"
               >
                 <FileText className="w-3.5 h-3.5 text-orange-700" />
                 <span>Penelusuran Anggaran Proyek</span>
@@ -554,7 +747,7 @@ export default function HeroSection({
 
           {/* Clean, High-Density Table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full text-left text-xs sm:text-[13px] border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 text-[10px] text-slate-400 font-mono uppercase bg-slate-50/60">
                   <th className="py-2 px-3 font-bold">Kode Ruas</th>
@@ -594,8 +787,8 @@ export default function HeroSection({
                       {/* Nama Ruas Jalan */}
                       <td className="py-2.5 px-3">
                         <span className="font-bold text-slate-900 block">{road.name}</span>
-                        <span className="text-[10px] text-slate-500 font-mono">
-                          {road.district} • {road.lengthKm} Km
+                        <span className="text-[10px] text-slate-500 font-sans">
+                          {road.district} • <strong className="font-semibold tabular-nums">{road.lengthKm}</strong> Km
                         </span>
                       </td>
 
@@ -604,7 +797,7 @@ export default function HeroSection({
                         <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-bold uppercase tracking-wider border ${badgeClass} inline-block`}>
                           {road.authority}
                         </span>
-                        <span className="block text-[10px] text-slate-500 truncate max-w-[200px] mt-0.5" title={road.legalBasis}>
+                        <span className="block text-[10px] text-slate-500 truncate max-w-[200px] mt-0.5 font-sans" title={road.legalBasis}>
                           {road.legalBasis.split(" tentang ")[0]}
                         </span>
                       </td>
@@ -618,10 +811,10 @@ export default function HeroSection({
 
                       {/* Nilai Pagu vs Kontrak */}
                       <td className="py-2.5 px-3 text-right">
-                        <div className="font-mono font-bold text-slate-900 text-xs">
+                        <div className="font-sans font-bold tabular-nums text-slate-900 text-xs sm:text-[13px]">
                           Rp {(road.budget?.paguRp / 1000000000).toFixed(2)} M
                         </div>
-                        <div className="text-[10px] font-mono text-emerald-700">
+                        <div className="text-[10px] font-sans font-medium tabular-nums text-emerald-700">
                           Kontrak: Rp {(road.budget?.contractValueRp / 1000000000).toFixed(2)} M
                         </div>
                       </td>

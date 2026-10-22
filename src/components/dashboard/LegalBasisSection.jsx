@@ -43,7 +43,7 @@ export default function LegalBasisSection() {
             <Scale className="w-3.5 h-3.5 text-orange-600" />
             <span>Landasan Regulasi & Kepatuhan Hukum</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
             Payung Hukum Transparansi & Pengawasan Publik
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">

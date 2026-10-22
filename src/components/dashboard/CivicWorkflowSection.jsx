@@ -60,7 +60,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
             <div className="text-[11px] font-bold tracking-wider uppercase text-orange-700 font-mono mb-0.5">
               Alur 4 Langkah Solusi
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
               Dari Laporan Warga Menuju Kepastian Penanganan
             </h2>
           </div>

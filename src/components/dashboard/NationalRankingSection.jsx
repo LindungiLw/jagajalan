@@ -22,34 +22,34 @@ export default function NationalRankingSection({ onSelectPilot }) {
           <div className="text-[11px] font-bold tracking-wider uppercase text-slate-500 font-mono mb-1">
             Data Agregat 38 Provinsi • Sumber: BPS & SP4N-LAPOR!
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
             Papan Skor Kemantapan Jalan & Sebaran Aduan Nasional
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl font-sans">
             Transparansi perbandingan rasio kerusakan jalan daerah serta sebaran volume keluhan masyarakat di seluruh provinsi Indonesia.
           </p>
         </div>
 
         {/* Why Pilot Card */}
-        <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 max-w-sm">
+        <div className="p-3.5 rounded-[5px] bg-slate-50 border border-slate-200 text-xs text-slate-700 max-w-sm">
           <div className="flex items-center gap-1.5 text-slate-900 font-bold mb-1">
             <Info className="w-3.5 h-3.5 shrink-0 text-orange-600" />
             <span>Cakupan Wilayah Pilot Terverifikasi</span>
           </div>
-          <p className="text-[11px] text-slate-600 leading-relaxed">
+          <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
             Koridor Jawa Barat & Bodetabek dipilih berdasarkan kelengkapan keterbukaan APBD, portal LPSE, serta keragaman status ruas jalan yang dapat diverifikasi secara faktual.
           </p>
         </div>
       </div>
 
       {/* Island Filter Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-medium">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-medium font-sans">
         <span className="text-slate-400 mr-1 hidden sm:inline">Wilayah Pulau:</span>
         {islands.map((island) => (
           <button
             key={island}
             onClick={() => setSelectedIsland(island)}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
               selectedIsland === island
                 ? "bg-slate-900 text-white font-semibold shadow-xs"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
@@ -68,7 +68,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           return (
             <div
               key={prov.id}
-              className={`bg-white p-5 rounded-xl border transition-all ${
+              className={`bg-white p-5 rounded-[5px] border transition-all ${
                 isPilot
                   ? "border-orange-400 shadow-sm ring-2 ring-orange-400/20"
                   : "border-slate-200 hover:border-slate-300 shadow-xs"
@@ -78,16 +78,16 @@ export default function NationalRankingSection({ onSelectPilot }) {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-[5px] bg-slate-100 text-slate-700 border border-slate-200 font-mono">
                       #{prov.complaintRank}
                     </span>
-                    <h3 className="font-extrabold text-slate-900 text-base">{prov.name}</h3>
+                    <h3 className="font-bold text-slate-900 text-base font-heading">{prov.name}</h3>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Ibukota: {prov.capital} • {prov.island}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5 font-sans">Ibukota: {prov.capital} • {prov.island}</p>
                 </div>
 
                 {isPilot && (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
+                  <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-200 font-mono">
                     WILAYAH PILOT
                   </span>
                 )}
@@ -95,15 +95,15 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
               {/* Progress bar % Damaged */}
               <div className="mt-4">
-                <div className="flex items-center justify-between text-xs mb-1.5">
+                <div className="flex items-center justify-between text-xs mb-1.5 font-sans">
                   <span className="text-slate-500 text-[11px]">Rasio Jalan Rusak / Non-Mantap:</span>
-                  <span className={`font-bold ${prov.damagedPercentage > 40 ? "text-rose-600" : "text-amber-600"}`}>
+                  <span className={`font-bold tabular-nums ${prov.damagedPercentage > 40 ? "text-rose-600" : "text-amber-600"}`}>
                     {prov.damagedPercentage}%
                   </span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                <div className="w-full h-2 rounded-[5px] bg-slate-100 overflow-hidden">
                   <div
-                    className={`h-full rounded-full ${
+                    className={`h-full rounded-[5px] ${
                       prov.damagedPercentage > 40
                         ? "bg-rose-500"
                         : "bg-orange-500"
@@ -115,42 +115,42 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
               {/* Stats Grid */}
               <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-[10px] text-slate-400 block">Total Aduan Masuk:</span>
-                  <strong suppressHydrationWarning className="text-slate-900 text-sm">
+                <div className="p-2.5 rounded-[5px] bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] text-slate-400 block font-sans">Total Aduan Masuk:</span>
+                  <strong suppressHydrationWarning className="text-slate-900 text-sm font-bold font-sans tabular-nums">
                     {prov.totalComplaints.toLocaleString()}
                   </strong>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-[10px] text-slate-400 block">Aduan Overdue SLA:</span>
-                  <strong suppressHydrationWarning className="text-rose-600 text-sm">
+                <div className="p-2.5 rounded-[5px] bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] text-slate-400 block font-sans">Aduan Overdue SLA:</span>
+                  <strong suppressHydrationWarning className="text-rose-600 text-sm font-bold font-sans tabular-nums">
                     {prov.overdueComplaints.toLocaleString()}
                   </strong>
                 </div>
               </div>
 
               {/* Status Summary */}
-              <p className="mt-3 text-[11px] text-slate-600 leading-relaxed line-clamp-2">
+              <p className="mt-3 text-[11px] text-slate-600 leading-relaxed line-clamp-2 font-sans">
                 {prov.statusSummary}
               </p>
 
               {/* Inpres allocation & Action */}
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <div className="text-[11px]">
+                <div className="text-[11px] font-sans">
                   <span className="text-slate-400 block text-[10px]">Alokasi Inpres (IJD):</span>
-                  <strong className="text-slate-900">Rp {prov.inpresAllocationMiliar} Miliar</strong>
+                  <strong className="text-slate-900 font-bold tabular-nums">Rp {prov.inpresAllocationMiliar} Miliar</strong>
                 </div>
 
                 {isPilot ? (
                   <button
                     onClick={onSelectPilot}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-orange-600 text-white text-xs font-semibold hover:bg-orange-700 shadow-xs transition-colors"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[5px] bg-[#c2410c] text-white text-xs font-semibold hover:bg-[#9a3412] shadow-xs transition-colors cursor-pointer font-sans"
                   >
                     <span>Buka Peta Pilot</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </button>
                 ) : (
-                  <span className="text-[11px] text-slate-400 italic">Data Agregat BPS</span>
+                  <span className="text-[11px] text-slate-400 italic font-sans">Data Agregat BPS</span>
                 )}
               </div>
             </div>

@@ -84,17 +84,17 @@ export default function BudgetDataExplorer({
           <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[5px] text-[10px] font-bold font-mono uppercase bg-orange-50 text-orange-800 border border-orange-200 mb-2">
             Verifikasi LPSE & Dokumen Anggaran TA 2026
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
             Penelusuran Anggaran Proyek & Kontrak Fisik
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed font-sans">
             Hubungkan pagu lelang tender LPSE, nama kontraktor pemenang, nilai kontrak terverifikasi, dan status pencocokan langsung dengan ruas jalan pilot yang sedang diawasi.
           </p>
         </div>
 
         <button
           onClick={onOpenReportModal}
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-colors cursor-pointer shrink-0"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[5px] text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-colors cursor-pointer shrink-0 font-sans"
         >
           <MapPin className="w-4 h-4" />
           <span>Laporkan Kerusakan</span>
@@ -109,10 +109,10 @@ export default function BudgetDataExplorer({
             <span>TOTAL PAGU TERVERIFIKASI</span>
             <DollarSign className="w-4 h-4 text-[#c2410c]" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 font-mono">
+          <div className="text-2xl sm:text-3xl font-bold font-sans tabular-nums text-slate-900">
             Rp {(totalPagu / 1000000000).toFixed(2)} M
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-slate-500 font-sans">
             Dari {filteredPackages.length} paket pengadaan fisik
           </p>
         </div>
@@ -123,10 +123,10 @@ export default function BudgetDataExplorer({
             <span>NILAI KONTRAK LELANG</span>
             <Building2 className="w-4 h-4 text-slate-700" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-emerald-800 font-mono">
+          <div className="text-2xl sm:text-3xl font-bold font-sans tabular-nums text-emerald-800">
             Rp {(totalContract / 1000000000).toFixed(2)} M
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-slate-500 font-sans">
             Nilai kesepakatan pemenang tender
           </p>
         </div>
@@ -137,10 +137,10 @@ export default function BudgetDataExplorer({
             <span>EFISIENSI LELANG TENDER</span>
             <TrendingDown className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-emerald-700 font-mono">
+          <div className="text-2xl sm:text-3xl font-bold font-sans tabular-nums text-emerald-700">
             Rp {(totalEfficiency / 1000000000).toFixed(2)} M ({efficiencyPercent}%)
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-slate-500 font-sans">
             Selisih efisiensi pagu terhadap kontrak
           </p>
         </div>
@@ -151,10 +151,10 @@ export default function BudgetDataExplorer({
             <span>STATUS PENCOCOKAN</span>
             <ShieldCheck className="w-4 h-4 text-orange-700" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 font-mono">
+          <div className="text-2xl sm:text-3xl font-bold font-sans tabular-nums text-slate-900">
             100% Terdata
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-slate-500 font-sans">
             5 Terkonfirmasi • 1 Parsial
           </p>
         </div>
@@ -297,10 +297,10 @@ export default function BudgetDataExplorer({
                     <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
                       Pagu Anggaran (HPS)
                     </span>
-                    <strong className="text-slate-900 font-bold font-mono text-sm">
+                    <strong className="text-slate-900 font-bold font-sans tabular-nums text-sm">
                       Rp {((pkg.paguRp || 0) / 1000000000).toFixed(2)} Miliar
                     </strong>
-                    <span className="text-[10px] text-slate-500 block truncate">
+                    <span className="text-[10px] text-slate-500 block truncate font-sans">
                       {pkg.source}
                     </span>
                   </div>
@@ -308,10 +308,10 @@ export default function BudgetDataExplorer({
                     <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
                       Nilai Kontrak Pemenang
                     </span>
-                    <strong className="text-emerald-800 font-bold font-mono text-sm">
+                    <strong className="text-emerald-800 font-bold font-sans tabular-nums text-sm">
                       Rp {((pkg.contractValueRp || 0) / 1000000000).toFixed(2)} Miliar
                     </strong>
-                    <span className="text-[10px] text-slate-600 block truncate font-medium">
+                    <span className="text-[10px] text-slate-600 block truncate font-medium font-sans">
                       {pkg.contractor}
                     </span>
                   </div>

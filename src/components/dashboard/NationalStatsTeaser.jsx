@@ -24,7 +24,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
               <BarChart3 className="w-3.5 h-3.5 text-orange-600" />
               <span>Data BPS & SP4N-LAPOR! • Skala Makro Nasional</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
               Peta Sebaran & Ranking Kerusakan Jalan di 38 Provinsi
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
