@@ -209,31 +209,31 @@ export default function HeroSection({
           </div>
         )}
 
-        {/* 2. OPERATIONAL PILOT SUMMARY STRIP (Clean & Verifiable Pilot Baseline) */}
+        {/* 2. OPERATIONAL PILOT SUMMARY STRIP (Pure Crisp White Text on Brand Orange) */}
         <div className="bg-[#c2410c] text-white px-4 py-2.5 rounded-[5px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-2xs gap-3 font-semibold border border-[#9a3412]">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <span className="text-orange-200 font-bold uppercase tracking-wider text-[11px] font-sans">
+            <span className="text-white font-bold uppercase tracking-wider text-[11px] font-sans">
               Cakupan Pilot JagaJalan:
             </span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
-              <span className="text-orange-100/90 text-xs font-normal">Ruas Terdata</span>
+              <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
+              <span className="text-white font-medium text-xs">Ruas Terdata</span>
             </div>
-            <span className="text-orange-300/40 hidden sm:inline">•</span>
+            <span className="text-white/50 hidden sm:inline">•</span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
-              <span className="text-orange-100/90 text-xs font-normal">Paket Proyek Teridentifikasi (Rp 35,80 M)</span>
+              <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
+              <span className="text-white font-medium text-xs">Paket Proyek Teridentifikasi (Rp 35,80 M)</span>
             </div>
-            <span className="text-orange-300/40 hidden sm:inline">•</span>
+            <span className="text-white/50 hidden sm:inline">•</span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-bold text-sm tabular-nums">2</strong>
-              <span className="text-orange-100/90 text-xs font-normal">Laporan Melewati Tenggat Respons</span>
+              <strong className="text-white font-sans font-black text-sm tabular-nums">2</strong>
+              <span className="text-white font-medium text-xs">Laporan Melewati Tenggat Respons</span>
             </div>
           </div>
 
           <button
             onClick={onExploreNational}
-            className="text-orange-200 hover:text-white transition-colors shrink-0 flex items-center gap-1 text-[11px] font-bold cursor-pointer self-end sm:self-auto font-sans"
+            className="text-white hover:text-white bg-white/15 hover:bg-white/25 border border-white/25 px-2.5 py-1 rounded-[4px] transition-all shrink-0 flex items-center gap-1 text-[11px] font-bold cursor-pointer self-end sm:self-auto font-sans shadow-2xs"
             title="Buka data makro 38 provinsi dan alokasi Inpres Jalan Daerah nasional"
           >
             <span>Konteks Nasional (38 Provinsi &amp; IJD Rp 14,6 T)</span>
