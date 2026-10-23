@@ -276,16 +276,16 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("kemantapan")}
                   className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "kemantapan"
-                      ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
-                      : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
+                      ? "bg-[#c2410c] text-white border-transparent shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/40 hover:bg-orange-50/40 hover:border-orange-200/60"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       JALAN KAB/KOTA (BPS)
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
-                      selectedIndex === "kemantapan" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
+                    <span className={`text-[9px] font-sans font-bold px-1.5 py-0.5 rounded-[3px] tabular-nums ${
+                      selectedIndex === "kemantapan" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
                     }`}>
                       2024
                     </span>
@@ -303,16 +303,16 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("ombudsman")}
                   className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "ombudsman"
-                      ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
-                      : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
+                      ? "bg-[#c2410c] text-white border-transparent shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/40 hover:bg-orange-50/40 hover:border-orange-200/60"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       UNDUE DELAY (OMBUDSMAN)
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
-                      selectedIndex === "ombudsman" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
+                    <span className={`text-[9px] font-sans font-bold px-1.5 py-0.5 rounded-[3px] tabular-nums ${
+                      selectedIndex === "ombudsman" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
                     }`}>
                       2024
                     </span>
@@ -330,16 +330,16 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("pagu")}
                   className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "pagu"
-                      ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
-                      : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
+                      ? "bg-[#c2410c] text-white border-transparent shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/40 hover:bg-orange-50/40 hover:border-orange-200/60"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       PAGU PENGADAAN PILOT
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
-                      selectedIndex === "pagu" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
+                    <span className={`text-[9px] font-sans font-bold px-1.5 py-0.5 rounded-[3px] tabular-nums ${
+                      selectedIndex === "pagu" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
                     }`}>
                       6 Paket
                     </span>
@@ -357,16 +357,16 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("inpres")}
                   className={`w-full text-left p-2.5 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "inpres"
-                      ? "bg-[#c2410c] text-white border-[#9a3412] shadow-xs"
-                      : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-orange-50/40 hover:border-orange-200"
+                      ? "bg-[#c2410c] text-white border-transparent shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/40 hover:bg-orange-50/40 hover:border-orange-200/60"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       INPRES JALAN DAERAH
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
-                      selectedIndex === "inpres" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
+                    <span className={`text-[9px] font-sans font-bold px-1.5 py-0.5 rounded-[3px] tabular-nums ${
+                      selectedIndex === "inpres" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
                     }`}>
                       TA 2023
                     </span>
@@ -381,10 +381,10 @@ export default function HeroSection({
               </div>
 
               {/* Chart Column: Fully Populated BPS Historical Kemantapan Jalan (2020 - 2024) */}
-              <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200 p-3 flex flex-col justify-between">
+              <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200/60 p-3 flex flex-col justify-between">
                 
                 {/* Chart Header: Title on Top Full-Width, Year & Switcher Controls Below */}
-                <div className="space-y-2 border-b border-slate-200 pb-2.5">
+                <div className="space-y-2 border-b border-slate-200/60 pb-2.5">
                   {/* Top: Full-Width Title & Source */}
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-sans tracking-wide block">
