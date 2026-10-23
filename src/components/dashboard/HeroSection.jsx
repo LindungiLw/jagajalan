@@ -107,73 +107,75 @@ export default function HeroSection({
           </p>
         </div>
 
-        {/* 1. TOP UTILITY BAR: TRANSLUCENT MODERN BAR WITHOUT NESTED BORDERS */}
-        <div className="bg-white/70 backdrop-blur-md p-2.5 sm:p-3 rounded-lg border border-slate-200/60 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs transition-colors hover:border-slate-300/80">
+        {/* 1. TOP UTILITY BAR: IDX-STYLE SEGMENTED TAB BAR WITH VERTICAL DIVIDERS */}
+        <div className="bg-white border border-slate-200 rounded-[4px] shadow-2xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs">
           
-          {/* Dataset Status & Verification Metadata */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
-            <div className="flex items-center gap-2 font-mono text-slate-700 text-xs">
-              <div className="flex items-center gap-1.5 font-semibold">
-                <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                <span>Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong></span>
-              </div>
-              <button
-                type="button"
-                onClick={onExploreNational}
-                className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-orange-50 text-[#c2410c] hover:bg-[#c2410c] hover:text-white transition-all cursor-pointer flex items-center gap-0.5 border border-orange-200/80 shadow-2xs"
-                title="Buka data statistik kemantapan jalan 38 provinsi se-Indonesia"
-              >
-                <span>38 Provinsi</span>
-                <ChevronRight className="w-2.5 h-2.5" />
-              </button>
-            </div>
+          {/* Segment 1: Wilayah Scope */}
+          <div className="px-3.5 py-2 flex items-center gap-2 font-mono text-slate-700 bg-slate-50/70 shrink-0">
+            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-[11px] font-semibold">
+              Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong>
+            </span>
+          </div>
 
-            <span className="hidden sm:inline text-slate-300/80">•</span>
+          {/* Segment 2: Dataset Tabs (IDX Tab Style with Vertical Dividers) */}
+          <div className="flex items-stretch divide-x divide-slate-200 shrink-0 overflow-x-auto">
+            {/* Tab 1: BPS 2024 */}
+            <button
+              type="button"
+              onClick={() => setSelectedIndex("kemantapan")}
+              className={`px-4 py-2 font-mono text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
+                selectedIndex === "kemantapan"
+                  ? "bg-[#c2410c] text-white"
+                  : "bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c]"
+              }`}
+              title="Tampilkan dataset Kemantapan Jalan BPS (Sirusa)"
+            >
+              <Database className="w-3.5 h-3.5 opacity-80" />
+              <span>BPS 2024 (Sirusa)</span>
+            </button>
 
-            <div className="flex items-center gap-1.5 text-[11px] font-mono">
-              <button
-                type="button"
-                onClick={() => setSelectedIndex("kemantapan")}
-                className={`px-2.5 py-1 rounded-full font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
-                  selectedIndex === "kemantapan"
-                    ? "bg-[#c2410c] text-white shadow-xs font-bold"
-                    : "bg-slate-100/70 text-slate-600 hover:bg-orange-50 hover:text-[#c2410c] active:bg-[#c2410c] active:text-white"
-                }`}
-                title="Tampilkan dataset Kemantapan Jalan BPS (Sirusa)"
-              >
-                <Database className="w-3 h-3 opacity-80" />
-                <span>BPS 2024 (Sirusa)</span>
-              </button>
+            {/* Tab 2: LPSE Pengadaan TA 2026 */}
+            <button
+              type="button"
+              onClick={() => setSelectedIndex("pagu")}
+              className={`px-4 py-2 font-mono text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
+                selectedIndex === "pagu"
+                  ? "bg-[#c2410c] text-white"
+                  : "bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c]"
+              }`}
+              title="Tampilkan dataset Pengadaan Tender LPSE TA 2026"
+            >
+              <FileText className="w-3.5 h-3.5 opacity-80" />
+              <span>LPSE Pengadaan TA 2026</span>
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setSelectedIndex("pagu")}
-                className={`px-2.5 py-1 rounded-full font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
-                  selectedIndex === "pagu"
-                    ? "bg-[#c2410c] text-white shadow-xs font-bold"
-                    : "bg-slate-100/70 text-slate-600 hover:bg-orange-50 hover:text-[#c2410c] active:bg-[#c2410c] active:text-white"
-                }`}
-                title="Tampilkan dataset Pengadaan Tender LPSE TA 2026"
-              >
-                <FileText className="w-3 h-3 opacity-80" />
-                <span>LPSE Pengadaan TA 2026</span>
-              </button>
+            {/* Tab 3: Konteks 38 Provinsi */}
+            <button
+              type="button"
+              onClick={onExploreNational}
+              className="px-3.5 py-2 font-mono text-[11px] font-bold bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] transition-colors cursor-pointer flex items-center gap-1 whitespace-nowrap select-none"
+              title="Buka data statistik kemantapan jalan 38 provinsi se-Indonesia"
+            >
+              <span>38 Provinsi</span>
+              <ChevronRight className="w-3 h-3 text-slate-400" />
+            </button>
 
-              <span className="hidden xl:inline text-slate-400 pl-1 text-[11px]">
-                Pembaruan: 18 Okt 2026
-              </span>
+            {/* Segment: Update Date */}
+            <div className="hidden xl:flex items-center px-3 py-2 text-[11px] font-mono text-slate-400 bg-slate-50/40 whitespace-nowrap select-none">
+              <span>Pembaruan: 18 Okt 2026</span>
             </div>
           </div>
 
-          {/* Unified Search Input with Translucent Background & Brand Orange Focus State */}
-          <div className="relative flex-1 max-w-xl group">
-            <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#c2410c] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+          {/* Segment 3: Integrated Unified Search Input */}
+          <div className="relative flex-1 min-w-[240px] flex items-center bg-white group">
+            <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#c2410c] absolute left-3 pointer-events-none transition-colors" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama ruas, kode laporan, paket pengadaan, atau kontraktor..."
-              className="w-full pl-9 pr-8 py-1.5 rounded-lg border border-slate-200/70 bg-white/60 hover:bg-white focus:bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-3 focus:ring-orange-500/15 transition-all font-sans shadow-2xs"
+              className="w-full h-full pl-9 pr-8 py-2 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none focus:bg-orange-50/15 transition-all font-sans"
             />
             {searchQuery && (
               <button
