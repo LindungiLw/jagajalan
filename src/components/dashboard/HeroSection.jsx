@@ -97,13 +97,13 @@ export default function HeroSection({
     <section className="pt-3 pb-6 text-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3.5">
         
-        {/* HERO UTAMA: PLUS JAKARTA SANS 36-44px, 700 BOLD */}
+        {/* HERO UTAMA: RESPONSIF & RINGKAS TANPA WRAPPING JANGGAL */}
         <div className="pt-2 pb-1 space-y-1">
-          <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-bold font-heading text-slate-900 tracking-tight leading-tight">
-            Transparansi Kondisi Jalan, Anggaran Pemeliharaan, dan Akuntabilitas Publik
+          <h1 className="text-xl sm:text-2xl lg:text-[28px] xl:text-[30px] font-bold font-heading text-slate-900 tracking-tight leading-snug">
+            Transparansi Kondisi Jalan, Anggaran &amp; Akuntabilitas Publik
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed font-sans font-normal">
-            Platform integrasi data kemantapan jalan daerah (BPS), LPSE pengadaan tender, aduan masyarakat berbasis geotagging, dan pemantauan penundaan berlarut (SOP 14 hari) Ombudsman RI.
+          <p className="text-xs sm:text-sm text-slate-600 max-w-4xl leading-relaxed font-sans font-normal">
+            Platform integrasi data kemantapan jalan (BPS), tender LPSE, aduan warga geotagging, dan pengawasan SOP 14 hari Ombudsman RI.
           </p>
         </div>
 
