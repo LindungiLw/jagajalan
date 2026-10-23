@@ -111,7 +111,7 @@ export default function HeroSection({
         <div className="bg-white border border-slate-200 rounded-[4px] shadow-2xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs">
           
           {/* Segment 1: Wilayah Scope */}
-          <div className="px-3.5 py-2 flex items-center gap-2 font-mono text-slate-700 bg-slate-50/70 shrink-0">
+          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/70 shrink-0">
             <MapPin className="w-3.5 h-3.5 text-slate-400" />
             <span className="text-[11px] font-semibold">
               Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong>
@@ -124,7 +124,7 @@ export default function HeroSection({
             <button
               type="button"
               onClick={() => setSelectedIndex("kemantapan")}
-              className={`px-4 py-2 font-mono text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
+              className={`px-4 py-2 font-sans text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
                 selectedIndex === "kemantapan"
                   ? "bg-[#c2410c] text-white"
                   : "bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c]"
@@ -139,7 +139,7 @@ export default function HeroSection({
             <button
               type="button"
               onClick={() => setSelectedIndex("pagu")}
-              className={`px-4 py-2 font-mono text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
+              className={`px-4 py-2 font-sans text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
                 selectedIndex === "pagu"
                   ? "bg-[#c2410c] text-white"
                   : "bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c]"
@@ -154,7 +154,7 @@ export default function HeroSection({
             <button
               type="button"
               onClick={onExploreNational}
-              className="px-3.5 py-2 font-mono text-[11px] font-bold bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] transition-colors cursor-pointer flex items-center gap-1 whitespace-nowrap select-none"
+              className="px-3.5 py-2 font-sans text-[11px] font-bold bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] transition-colors cursor-pointer flex items-center gap-1 whitespace-nowrap select-none"
               title="Buka data statistik kemantapan jalan 38 provinsi se-Indonesia"
             >
               <span>38 Provinsi</span>
@@ -162,7 +162,7 @@ export default function HeroSection({
             </button>
 
             {/* Segment: Update Date */}
-            <div className="hidden xl:flex items-center px-3 py-2 text-[11px] font-mono text-slate-400 bg-slate-50/40 whitespace-nowrap select-none">
+            <div className="hidden xl:flex items-center px-3 py-2 text-[11px] font-sans text-slate-400 bg-slate-50/40 whitespace-nowrap select-none">
               <span>Pembaruan: 18 Okt 2026</span>
             </div>
           </div>
@@ -212,31 +212,31 @@ export default function HeroSection({
         {/* 2. OPERATIONAL PILOT SUMMARY STRIP (Clean & Verifiable Pilot Baseline) */}
         <div className="bg-[#c2410c] text-white px-4 py-2.5 rounded-[5px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-2xs gap-3 font-semibold border border-[#9a3412]">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <span className="text-orange-200 font-bold uppercase tracking-wider text-[11px] font-mono">
+            <span className="text-orange-200 font-bold uppercase tracking-wider text-[11px] font-sans">
               Cakupan Pilot JagaJalan:
             </span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-mono text-sm">6</strong>
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
               <span className="text-orange-100/90 text-xs font-normal">Ruas Terdata</span>
             </div>
             <span className="text-orange-300/40 hidden sm:inline">•</span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-mono text-sm">6</strong>
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
               <span className="text-orange-100/90 text-xs font-normal">Paket Proyek Teridentifikasi (Rp 35,80 M)</span>
             </div>
             <span className="text-orange-300/40 hidden sm:inline">•</span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-mono text-sm">2</strong>
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">2</strong>
               <span className="text-orange-100/90 text-xs font-normal">Laporan Melewati Tenggat Respons</span>
             </div>
           </div>
 
           <button
             onClick={onExploreNational}
-            className="text-orange-200 hover:text-white transition-colors shrink-0 flex items-center gap-1 text-[11px] font-bold cursor-pointer self-end sm:self-auto"
+            className="text-orange-200 hover:text-white transition-colors shrink-0 flex items-center gap-1 text-[11px] font-bold cursor-pointer self-end sm:self-auto font-sans"
             title="Buka data makro 38 provinsi dan alokasi Inpres Jalan Daerah nasional"
           >
-            <span>Konteks Nasional (38 Provinsi & IJD Rp 14,6 T)</span>
+            <span>Konteks Nasional (38 Provinsi &amp; IJD Rp 14,6 T)</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -251,15 +251,15 @@ export default function HeroSection({
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
-                  Ikhtisar Kemantapan & Konteks Kebijakan
+                  Ikhtisar Kemantapan &amp; Konteks Kebijakan
                 </h2>
-                <span className="px-1.5 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200/80">
+                <span className="px-1.5 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200/80 font-sans">
                   Data Terverifikasi
                 </span>
               </div>
               <button
                 onClick={onExploreNational}
-                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer"
+                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer font-sans"
               >
                 <span>Lihat 38 Provinsi</span>
                 <ChevronRight className="w-3 h-3" />
@@ -281,10 +281,10 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold tracking-wider uppercase font-mono">
+                    <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       JALAN KAB/KOTA (BPS)
                     </span>
-                    <span className={`text-[9px] font-mono px-1 py-0.2 rounded-[3px] ${
+                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
                       selectedIndex === "kemantapan" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
                     }`}>
                       2024
@@ -293,7 +293,7 @@ export default function HeroSection({
                   <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     57,1% <span className="text-xs font-semibold uppercase tracking-wider font-sans">MANTAP</span>
                   </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "kemantapan" ? "text-orange-100/90" : "text-slate-500"}`}>
+                  <div className={`text-[10px] truncate ${selectedIndex === "kemantapan" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
                     42,9% panjang jalan belum mantap
                   </div>
                 </button>
@@ -308,10 +308,10 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold tracking-wider uppercase font-mono">
+                    <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       UNDUE DELAY (OMBUDSMAN)
                     </span>
-                    <span className={`text-[9px] font-mono px-1 py-0.2 rounded-[3px] ${
+                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
                       selectedIndex === "ombudsman" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
                     }`}>
                       2024
@@ -320,7 +320,7 @@ export default function HeroSection({
                   <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     33,86% <span className="text-xs font-semibold uppercase tracking-wider font-sans">LAPORAN</span>
                   </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "ombudsman" ? "text-orange-100/90" : "text-slate-500"}`}>
+                  <div className={`text-[10px] truncate ${selectedIndex === "ombudsman" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
                     Penundaan berlarut pada laporan selesai
                   </div>
                 </button>
@@ -335,10 +335,10 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold tracking-wider uppercase font-mono">
+                    <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       PAGU PENGADAAN PILOT
                     </span>
-                    <span className={`text-[9px] font-mono px-1 py-0.2 rounded-[3px] ${
+                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
                       selectedIndex === "pagu" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
                     }`}>
                       6 Paket
@@ -347,7 +347,7 @@ export default function HeroSection({
                   <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     Rp 35,80 <span className="text-xs font-semibold uppercase tracking-wider font-sans">MIL</span>
                   </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "pagu" ? "text-orange-100/90" : "text-slate-500"}`}>
+                  <div className={`text-[10px] truncate ${selectedIndex === "pagu" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
                     Total nilai pagu lelang terverifikasi
                   </div>
                 </button>
@@ -362,10 +362,10 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold tracking-wider uppercase font-mono">
+                    <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       INPRES JALAN DAERAH
                     </span>
-                    <span className={`text-[9px] font-mono px-1 py-0.2 rounded-[3px] ${
+                    <span className={`text-[9px] font-sans font-bold px-1 py-0.2 rounded-[3px] tabular-nums ${
                       selectedIndex === "inpres" ? "bg-orange-800 text-orange-100" : "bg-slate-200 text-slate-700"
                     }`}>
                       TA 2023
@@ -374,7 +374,7 @@ export default function HeroSection({
                   <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     Rp 14,60 <span className="text-xs font-semibold uppercase tracking-wider font-sans">TRIL</span>
                   </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "inpres" ? "text-orange-100/90" : "text-slate-500"}`}>
+                  <div className={`text-[10px] truncate ${selectedIndex === "inpres" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
                     Alokasi Tahap I Inpres No. 3/2023 (PUPR)
                   </div>
                 </button>
@@ -387,7 +387,7 @@ export default function HeroSection({
                 <div className="space-y-2 border-b border-slate-200 pb-2.5">
                   {/* Top: Full-Width Title & Source */}
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-mono block">
+                    <span className="text-[10px] text-slate-400 uppercase font-sans tracking-wide block">
                       Sumber: BPS Sirusa (2020–2024)
                     </span>
                     <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight block">
@@ -398,7 +398,7 @@ export default function HeroSection({
                   {/* Below: Controls Row (View Switcher + Year Segmented Bar) */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
                     {/* View Switcher: Line vs Bar (IDX Segmented Style) */}
-                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs">
+                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs font-sans">
                       <button
                         onClick={() => setChartViewMode("line")}
                         className={`px-2 py-1 transition-colors cursor-pointer flex items-center gap-1 ${
@@ -426,7 +426,7 @@ export default function HeroSection({
                     </div>
 
                     {/* Year Tabs: IDX Segmented Bar with Vertical Dividers */}
-                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-mono shadow-2xs">
+                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
                       {[2020, 2021, 2022, 2023, 2024].map((yr) => (
                         <button
                           key={yr}
