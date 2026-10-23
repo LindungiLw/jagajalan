@@ -112,9 +112,20 @@ export default function HeroSection({
           
           {/* Dataset Status & Verification Metadata */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
-            <div className="flex items-center gap-1.5 font-mono text-slate-700 font-semibold text-xs">
-              <MapPin className="w-3.5 h-3.5 text-slate-400" />
-              <span>Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong></span>
+            <div className="flex items-center gap-2 font-mono text-slate-700 text-xs">
+              <div className="flex items-center gap-1.5 font-semibold">
+                <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                <span>Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong></span>
+              </div>
+              <button
+                type="button"
+                onClick={onExploreNational}
+                className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-orange-50 text-[#c2410c] hover:bg-[#c2410c] hover:text-white transition-all cursor-pointer flex items-center gap-0.5 border border-orange-200/80 shadow-2xs"
+                title="Buka data statistik kemantapan jalan 38 provinsi se-Indonesia"
+              >
+                <span>38 Provinsi</span>
+                <ChevronRight className="w-2.5 h-2.5" />
+              </button>
             </div>
 
             <span className="hidden sm:inline text-slate-300/80">•</span>
