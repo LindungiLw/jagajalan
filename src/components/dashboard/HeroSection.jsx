@@ -107,45 +107,68 @@ export default function HeroSection({
           </p>
         </div>
 
-        {/* 1. TOP UTILITY BAR: MEASURED DATASET SCOPE & UNIFIED SEARCH */}
-        <div className="bg-white p-3 sm:p-3.5 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+        {/* 1. TOP UTILITY BAR: TRANSLUCENT MODERN BAR WITHOUT NESTED BORDERS */}
+        <div className="bg-white/70 backdrop-blur-md p-2.5 sm:p-3 rounded-lg border border-slate-200/60 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs transition-colors hover:border-slate-300/80">
           
-          {/* Dataset Status & Verification Metadata (Replaced 'Live' with factual audit status) */}
+          {/* Dataset Status & Verification Metadata */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
-            <div className="flex items-center gap-1.5 font-mono text-slate-700 font-semibold">
-              <span className="w-2 h-2 rounded-full bg-orange-600" />
-              <span>Wilayah: <strong>Pilot Jawa Barat & Bodetabek</strong></span>
+            <div className="flex items-center gap-1.5 font-mono text-slate-700 font-semibold text-xs">
+              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+              <span>Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong></span>
             </div>
 
-            <span className="hidden sm:inline text-slate-300">•</span>
+            <span className="hidden sm:inline text-slate-300/80">•</span>
 
-            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500">
-              <span className="px-1.5 py-0.5 rounded-[4px] bg-slate-100 border border-slate-200 text-slate-700 font-bold">
-                BPS 2024 (Sirusa)
-              </span>
-              <span className="px-1.5 py-0.5 rounded-[4px] bg-slate-100 border border-slate-200 text-slate-700 font-bold">
-                LPSE Pengadaan TA 2026
-              </span>
-              <span className="hidden lg:inline text-slate-400">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono">
+              <button
+                type="button"
+                onClick={() => setSelectedIndex("kemantapan")}
+                className={`px-2.5 py-1 rounded-full font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                  selectedIndex === "kemantapan"
+                    ? "bg-[#c2410c] text-white shadow-xs font-bold"
+                    : "bg-slate-100/70 text-slate-600 hover:bg-orange-50 hover:text-[#c2410c] active:bg-[#c2410c] active:text-white"
+                }`}
+                title="Tampilkan dataset Kemantapan Jalan BPS (Sirusa)"
+              >
+                <Database className="w-3 h-3 opacity-80" />
+                <span>BPS 2024 (Sirusa)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedIndex("pagu")}
+                className={`px-2.5 py-1 rounded-full font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                  selectedIndex === "pagu"
+                    ? "bg-[#c2410c] text-white shadow-xs font-bold"
+                    : "bg-slate-100/70 text-slate-600 hover:bg-orange-50 hover:text-[#c2410c] active:bg-[#c2410c] active:text-white"
+                }`}
+                title="Tampilkan dataset Pengadaan Tender LPSE TA 2026"
+              >
+                <FileText className="w-3 h-3 opacity-80" />
+                <span>LPSE Pengadaan TA 2026</span>
+              </button>
+
+              <span className="hidden xl:inline text-slate-400 pl-1 text-[11px]">
                 Pembaruan: 18 Okt 2026
               </span>
             </div>
           </div>
 
-          {/* Unified Search Input (Routes to Road, Report, or Procurement Package) */}
-          <div className="relative flex-1 max-w-xl">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          {/* Unified Search Input with Translucent Background & Brand Orange Focus State */}
+          <div className="relative flex-1 max-w-xl group">
+            <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#c2410c] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama ruas, kode laporan, paket pengadaan, atau kontraktor..."
-              className="w-full pl-9 pr-3 py-1.5 rounded-[5px] border border-slate-200 bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1.5 focus:ring-orange-600 focus:bg-white transition-all font-sans"
+              className="w-full pl-9 pr-8 py-1.5 rounded-lg border border-slate-200/70 bg-white/60 hover:bg-white focus:bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-3 focus:ring-orange-500/15 transition-all font-sans shadow-2xs"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 font-mono text-xs cursor-pointer"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200/80 hover:bg-orange-100 text-slate-500 hover:text-[#c2410c] flex items-center justify-center text-[10px] font-bold cursor-pointer transition-colors"
+                title="Hapus pencarian"
               >
                 ✕
               </button>
