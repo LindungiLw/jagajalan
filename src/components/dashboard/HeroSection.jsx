@@ -383,26 +383,28 @@ export default function HeroSection({
               {/* Chart Column: Fully Populated BPS Historical Kemantapan Jalan (2020 - 2024) */}
               <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200 p-3 flex flex-col justify-between">
                 
-                {/* Chart Header with Year Selector & Line/Bar Switcher */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2">
+                {/* Chart Header: Title on Top Full-Width, Year & Switcher Controls Below */}
+                <div className="space-y-2 border-b border-slate-200 pb-2.5">
+                  {/* Top: Full-Width Title & Source */}
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-mono block">
                       Sumber: BPS Sirusa (2020–2024)
                     </span>
-                    <strong className="text-xs font-black text-slate-900">
+                    <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight block">
                       Tingkat Kemantapan Jalan ({selectedYear})
                     </strong>
                   </div>
 
-                  <div className="flex items-center gap-1.5 self-end sm:self-auto">
-                    {/* View Switcher: Line vs Bar */}
-                    <div className="flex items-center p-0.5 bg-slate-200/80 rounded-[4px] text-[10px] font-bold">
+                  {/* Below: Controls Row (View Switcher + Year Segmented Bar) */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                    {/* View Switcher: Line vs Bar (IDX Segmented Style) */}
+                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs">
                       <button
                         onClick={() => setChartViewMode("line")}
-                        className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer flex items-center gap-0.5 ${
+                        className={`px-2 py-1 transition-colors cursor-pointer flex items-center gap-1 ${
                           chartViewMode === "line"
-                            ? "bg-white text-[#c2410c] shadow-xs"
-                            : "text-slate-600 hover:text-slate-900"
+                            ? "bg-[#c2410c] text-white"
+                            : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                         }`}
                         title="Grafik Garis Kontinu"
                       >
@@ -411,10 +413,10 @@ export default function HeroSection({
                       </button>
                       <button
                         onClick={() => setChartViewMode("bar")}
-                        className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer flex items-center gap-0.5 ${
+                        className={`px-2 py-1 transition-colors cursor-pointer flex items-center gap-1 ${
                           chartViewMode === "bar"
-                            ? "bg-white text-[#c2410c] shadow-xs"
-                            : "text-slate-600 hover:text-slate-900"
+                            ? "bg-[#c2410c] text-white"
+                            : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                         }`}
                         title="Diagram Batang Komparatif"
                       >
@@ -423,16 +425,16 @@ export default function HeroSection({
                       </button>
                     </div>
 
-                    {/* Year Tabs */}
-                    <div className="flex items-center gap-0.5 bg-white p-0.5 rounded-[5px] border border-slate-200 text-[10px] font-bold font-mono">
+                    {/* Year Tabs: IDX Segmented Bar with Vertical Dividers */}
+                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-mono shadow-2xs">
                       {[2020, 2021, 2022, 2023, 2024].map((yr) => (
                         <button
                           key={yr}
                           onClick={() => setSelectedYear(yr)}
-                          className={`px-1.5 py-0.5 rounded-[3px] transition-colors cursor-pointer ${
+                          className={`px-2 py-1 transition-colors cursor-pointer ${
                             selectedYear === yr
-                              ? "bg-[#c2410c] text-white"
-                              : "text-slate-600 hover:text-slate-900"
+                              ? "bg-[#c2410c] text-white font-bold"
+                              : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
                           }`}
                         >
                           {yr}
