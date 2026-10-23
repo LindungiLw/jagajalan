@@ -219,12 +219,12 @@ export default function HeroSection({
               <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
               <span className="text-white font-medium text-xs">Ruas Terdata</span>
             </div>
-            <span className="text-white/50 hidden sm:inline">•</span>
+            <span className="hidden sm:inline-block w-px h-3.5 bg-white/40 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
               <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
               <span className="text-white font-medium text-xs">Paket Proyek Teridentifikasi (Rp 35,80 M)</span>
             </div>
-            <span className="text-white/50 hidden sm:inline">•</span>
+            <span className="hidden sm:inline-block w-px h-3.5 bg-white/40 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
               <strong className="text-white font-sans font-black text-sm tabular-nums">2</strong>
               <span className="text-white font-medium text-xs">Laporan Melewati Tenggat Respons</span>
