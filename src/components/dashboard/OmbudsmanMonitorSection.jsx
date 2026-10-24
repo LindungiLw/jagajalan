@@ -67,29 +67,28 @@ export default function OmbudsmanMonitorSection({
     <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 font-sans">
       
       {/* 1. HEADER & PUBLIC MANDATE */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 border-b border-slate-100 pb-5">
-        <div className="space-y-1.5">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-slate-100 pb-4">
+        <div className="space-y-1">
           <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-rose-700 font-sans">
             <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
-            <span>Instrumen Kepatuhan Hukum • Standar Ombudsman RI &amp; UU No. 25/2009</span>
+            <span>Kepatuhan Standar UU No. 25/2009 &amp; Ombudsman RI</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
-            Pusat Pemantauan Tanggapan &amp; Eskalasi Ombudsman RI
+            Pusat Pemantauan &amp; Eskalasi Laporan
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
-            Setiap aduan warga dipantau selama <strong>14 hari kerja</strong> untuk mencatat respons resmi dinas (KemenPUPR, DBMPR, atau Dinas PUPR). 
-            Ketiadaan tindak lanjut mengaktifkan hak konstitusional warga untuk menerbitkan draf laporan formal dugaan <em>penundaan berlarut (undue delay)</em> kepada Ombudsman Republik Indonesia.
+            Pemantauan batas respons dinas (14 hari kerja). Aduan tanpa tindak lanjut dapat dieskalasi ke Ombudsman RI atas dugaan <em>penundaan berlarut (undue delay)</em>.
           </p>
         </div>
 
         {/* SLA Status Counter Badge */}
-        <div className="rounded-[5px] bg-slate-50/80 border border-slate-200/80 p-3 text-xs shrink-0 lg:max-w-xs space-y-1">
+        <div className="rounded-[5px] bg-slate-50 border border-slate-200/80 p-2.5 text-xs shrink-0 lg:max-w-xs space-y-0.5">
           <div className="flex items-center gap-1.5 text-slate-900 font-bold">
             <Clock className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-            <span>Audit Jam SLA 14 Hari Kerja</span>
+            <span>Tenggat Respons 14 Hari</span>
           </div>
-          <p className="text-[11px] text-slate-500 leading-relaxed">
-            Terdeteksi <strong className="text-rose-600 font-bold">{counts.overdue} laporan</strong> telah melampaui batas toleransi respons dinas di koridor percontohan.
+          <p className="text-[11px] text-slate-500 leading-normal">
+            <strong className="text-rose-600 font-bold">{counts.overdue} laporan</strong> melewati batas toleransi respons dinas.
           </p>
         </div>
       </div>
@@ -99,12 +98,12 @@ export default function OmbudsmanMonitorSection({
         <div className="flex items-center justify-between border-b border-slate-100 pb-2">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
             <Scale className="w-4 h-4 text-[#c2410c]" />
-            <span>Konteks Statistik Nasional Ombudsman RI (Laporan Tahunan Resmi):</span>
+            <span>Statistik Maladministrasi Nasional (Laporan Ombudsman RI)</span>
           </div>
-          <span className="text-[10px] text-slate-400 font-medium">BPS &amp; Laptah Ombudsman</span>
+          <span className="text-[10px] text-slate-400 font-medium">Laptah Ombudsman RI</span>
         </div>
 
-        {/* 3 Metrics in Single Streamline Strip (No Box-in-a-Box!) */}
+        {/* 3 Metrics in Single Streamline Strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
           
           {/* Stat 1 */}
@@ -115,8 +114,8 @@ export default function OmbudsmanMonitorSection({
             <div className="text-xl font-bold text-slate-900 tabular-nums">
               33,86% <span className="text-xs font-semibold text-slate-500 uppercase">Laporan Selesai</span>
             </div>
-            <p className="text-[11px] text-slate-500 leading-tight">
-              Bentuk maladministrasi nomor satu yang paling banyak diselesaikan Ombudsman di seluruh Indonesia.
+            <p className="text-[11px] text-slate-500 leading-normal">
+              Bentuk maladministrasi tertinggi yang ditangani Ombudsman nasional.
             </p>
           </div>
 
@@ -128,21 +127,21 @@ export default function OmbudsmanMonitorSection({
             <div className="text-xl font-bold text-slate-900 tabular-nums">
               4.766 <span className="text-xs font-semibold text-slate-500 uppercase">Aduan Pemda</span>
             </div>
-            <p className="text-[11px] text-slate-500 leading-tight">
-              Pemerintah Daerah (Pemprov/Pemkot/Pemkab) konsisten menjadi kelompok instansi terlapor nomor satu.
+            <p className="text-[11px] text-slate-500 leading-normal">
+              Instansi pemerintah daerah paling sering dilaporkan masyarakat.
             </p>
           </div>
 
           {/* Stat 3 */}
           <div className="space-y-0.5 border-t sm:border-t-0 sm:border-l border-slate-100 pt-2 sm:pt-0 sm:pl-4">
             <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
-              Sektor Infrastruktur &amp; Jalan
+              Infrastruktur &amp; Jalan
             </span>
             <div className="text-xl font-bold text-slate-900 tabular-nums">
-              287 <span className="text-xs font-semibold text-slate-500 uppercase">Kasus Jalan Rusak</span>
+              287 <span className="text-xs font-semibold text-slate-500 uppercase">Aduan Jalan Rusak</span>
             </div>
-            <p className="text-[11px] text-slate-500 leading-tight">
-              Dari 622 aduan substansi perhubungan, jalan rusak menjadi pemicu kecelakaan harian paling sering dilaporkan.
+            <p className="text-[11px] text-slate-500 leading-normal">
+              Keluhan terbanyak pada sektor perhubungan &amp; sarana publik.
             </p>
           </div>
         </div>
@@ -159,7 +158,7 @@ export default function OmbudsmanMonitorSection({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari kode tiket, nama jalan, atau dinas penanggung jawab..."
+              placeholder="Cari kode tiket, jalan, atau dinas penanggung jawab..."
               className="w-full pl-9 pr-3 py-1.5 rounded-[5px] border border-slate-200 bg-slate-50/50 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
             />
             {searchQuery && (
@@ -224,7 +223,7 @@ export default function OmbudsmanMonitorSection({
         </div>
       </div>
 
-      {/* 4. REPORTS LIST (FLUID, MODERN CARDS - ZERO BOX-IN-A-BOX) */}
+      {/* 4. REPORTS LIST (FLUID, MODERN CARDS) */}
       {filteredReports.length === 0 ? (
         <div className="bg-white rounded-[5px] border border-slate-200/90 p-8 text-center space-y-2">
           <p className="text-sm font-semibold text-slate-700">Tidak ada aduan yang sesuai dengan kriteria pencarian.</p>
@@ -260,7 +259,7 @@ export default function OmbudsmanMonitorSection({
                 }`}
               >
                 {/* Top: Ticket Code, Status Indicator, & Date */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-xs font-bold text-slate-700">
@@ -273,7 +272,7 @@ export default function OmbudsmanMonitorSection({
                       </span>
                     </div>
 
-                    {/* Status Text (Clean Typography, No Pill Box) */}
+                    {/* Status Text (Clean Typography) */}
                     {isOverdue ? (
                       <span className="text-[11px] font-bold text-rose-600 flex items-center gap-1.5 font-sans">
                         <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
@@ -282,7 +281,7 @@ export default function OmbudsmanMonitorSection({
                     ) : isCompleted ? (
                       <span className="text-[11px] font-bold text-emerald-700 flex items-center gap-1.5 font-sans">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                        <span>Selesai Ditangani Dinas</span>
+                        <span>Selesai Ditangani</span>
                       </span>
                     ) : (
                       <span className="text-[11px] font-bold text-amber-700 flex items-center gap-1.5 font-sans">
@@ -305,10 +304,10 @@ export default function OmbudsmanMonitorSection({
                 </div>
 
                 {/* Damage & Hazard AI Assessment */}
-                <div className="space-y-1.5 text-xs">
+                <div className="space-y-1 text-xs">
                   <div className="flex items-center justify-between text-slate-700 font-medium">
                     <span className="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">
-                      Klasifikasi Kerusakan (AI):
+                      Deteksi Kerusakan AI
                     </span>
                     <span className={`font-bold tabular-nums text-xs ${
                       report.hazardScore >= 85 ? "text-rose-600" : "text-[#c2410c]"
@@ -316,16 +315,16 @@ export default function OmbudsmanMonitorSection({
                       {report.categoryLabel} • Skor {report.hazardScore}/100
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed italic bg-slate-50/60 p-2.5 rounded-[5px] border border-slate-100">
-                    &ldquo;{report.aiAnalysis}&rdquo;
+                  <p className="text-[11px] text-slate-600 leading-normal">
+                    {report.aiAnalysis.replace(/^Estimasi prioritas:\s*/i, "")}
                   </p>
                 </div>
 
                 {/* Institutional & Budget Transparency Strip */}
-                <div className="py-2.5 px-3 rounded-[5px] bg-slate-50/70 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div className="py-2 px-3 rounded-[5px] bg-slate-50 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                   <div>
                     <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">
-                      Instansi Penanggung Jawab
+                      Instansi Wewenang
                     </span>
                     <strong className="text-slate-900 font-semibold block text-xs">
                       {report.authorityLabel}
@@ -335,7 +334,7 @@ export default function OmbudsmanMonitorSection({
 
                   <div className="sm:text-right border-t sm:border-t-0 pt-1.5 sm:pt-0 border-slate-200/50">
                     <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">
-                      Pagu Pemeliharaan Terdata
+                      Pagu Anggaran
                     </span>
                     <strong className="text-emerald-800 font-bold tabular-nums block text-xs">
                       Rp {((report.matchingBudget?.paguRp || 0) / 1_000_000_000).toFixed(2)} Miliar
@@ -349,9 +348,9 @@ export default function OmbudsmanMonitorSection({
                 {/* SLA Timeline Progress Bar */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between text-[10px] text-slate-500">
-                    <span>Audit Respons (Standar 14 Hari Kerja)</span>
+                    <span>Batas Respons 14 Hari Kerja</span>
                     <span className={isOverdue ? "text-rose-600 font-bold" : "text-slate-700 font-semibold"}>
-                      {isOverdue ? `Terlambat ${report.daysOverdue} Hari Kerja` : "Dalam Masa Pantau"}
+                      {isOverdue ? `Terlambat ${report.daysOverdue} Hari` : "Dalam Masa Pantau"}
                     </span>
                   </div>
                   <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -387,7 +386,7 @@ export default function OmbudsmanMonitorSection({
                     </button>
                   ) : (
                     <span className="text-[11px] text-slate-400 font-medium">
-                      {isCompleted ? "Perbaikan Tuntas Terekam" : "Draf Aktif Saat Hari >14"}
+                      {isCompleted ? "Perbaikan Tuntas" : "Draf Aktif Saat Hari >14"}
                     </span>
                   )}
                 </div>
@@ -398,36 +397,36 @@ export default function OmbudsmanMonitorSection({
       )}
 
       {/* 5. EDITORIAL LEGAL GUIDE: ALUR PENEGAKAN MALADMINISTRASI */}
-      <div className="bg-white p-5 rounded-[5px] border border-slate-200/90 shadow-2xs space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-2.5">
+      <div className="bg-white p-5 rounded-[5px] border border-slate-200/90 shadow-2xs space-y-3">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
           <Shield className="w-4 h-4 text-[#c2410c]" />
           <h3 className="font-bold text-slate-900 text-sm font-heading">
-            Pedoman Hukum Penanganan Maladministrasi Penundaan Berlarut (Undue Delay)
+            Alur Penegakan Maladministrasi (Undue Delay)
           </h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             <span className="font-mono text-[10px] font-bold text-slate-400 block">LANGKAH 01</span>
-            <strong className="text-slate-900 block text-xs font-semibold">Laporan Terkunci Geotagging</strong>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Warga melapor via JagaJalan. AI memverifikasi kerusakan dan mengunci koordinat hukum instansi wewenang (KemenPUPR/DBMPR/Dinas PUPR).
+            <strong className="text-slate-900 block text-xs font-semibold">Laporan &amp; Validasi AI</strong>
+            <p className="text-[11px] text-slate-500 leading-normal">
+              Foto geotagging diverifikasi AI dan dikunci ke dinas penanggung jawab sesuai kewenangan hukum.
             </p>
           </div>
 
-          <div className="space-y-1 border-t md:border-t-0 md:border-l border-slate-100 pt-2 md:pt-0 md:pl-4">
+          <div className="space-y-0.5 border-t md:border-t-0 md:border-l border-slate-100 pt-2 md:pt-0 md:pl-4">
             <span className="font-mono text-[10px] font-bold text-slate-400 block">LANGKAH 02</span>
-            <strong className="text-slate-900 block text-xs font-semibold">Masa Tunggu Kepatuhan 14 Hari</strong>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Sesuai amanat UU No. 25/2009 Pasal 36, dinas memiliki waktu kerja wajar untuk memberikan respons rencana penanganan fisik di lapangan.
+            <strong className="text-slate-900 block text-xs font-semibold">Masa Tanggap 14 Hari Kerja</strong>
+            <p className="text-[11px] text-slate-500 leading-normal">
+              Batas waktu toleransi standar pelayanan (UU No. 25/2009) bagi dinas untuk memulai tindakan perbaikan.
             </p>
           </div>
 
-          <div className="space-y-1 border-t md:border-t-0 md:border-l border-slate-100 pt-2 md:pt-0 md:pl-4">
+          <div className="space-y-0.5 border-t md:border-t-0 md:border-l border-slate-100 pt-2 md:pt-0 md:pl-4">
             <span className="font-mono text-[10px] font-bold text-rose-600 block">LANGKAH 03</span>
-            <strong className="text-slate-900 block text-xs font-semibold">Eskalasi Ombudsman RI (Pasal 1 UU 37/2008)</strong>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Jika diabaikan lebih dari 14 hari kerja, tombol draf otomatis aktif dan warga dapat mengirimkan berkas pengaduan resmi untuk meminta tindakan korektif Ombudsman.
+            <strong className="text-slate-900 block text-xs font-semibold">Eskalasi ke Ombudsman RI</strong>
+            <p className="text-[11px] text-slate-500 leading-normal">
+              Jika diabaikan, warga dapat mengunduh draf aduan resmi untuk diajukan ke Ombudsman RI (UU No. 37/2008).
             </p>
           </div>
         </div>
