@@ -174,17 +174,6 @@ export default function HeroSection({
               <span>LPSE Pengadaan TA 2026</span>
             </button>
 
-            {/* Tab 3: Konteks 38 Provinsi */}
-            <button
-              type="button"
-              onClick={onExploreNational}
-              className="px-3.5 py-2 font-sans text-[11px] font-bold bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] transition-colors cursor-pointer flex items-center gap-1 whitespace-nowrap select-none"
-              title="Buka data statistik kemantapan jalan 38 provinsi se-Indonesia"
-            >
-              <span>38 Provinsi</span>
-              <ChevronRight className="w-3 h-3 text-slate-400" />
-            </button>
-
             {/* Segment: Update Date */}
             <div className="hidden xl:flex items-center px-3 py-2 text-[11px] font-sans text-slate-400 bg-slate-50/40 whitespace-nowrap select-none">
               <span>Pembaruan: 18 Okt 2026</span>
@@ -255,14 +244,10 @@ export default function HeroSection({
             </div>
           </div>
 
-          <button
-            onClick={onExploreNational}
-            className="text-white hover:text-white/80 transition-colors shrink-0 flex items-center gap-1 text-[11px] font-bold cursor-pointer self-end sm:self-auto font-sans hover:underline"
-            title="Buka data makro 38 provinsi dan alokasi Inpres Jalan Daerah nasional"
-          >
-            <span>Konteks Nasional (38 Provinsi &amp; IJD Rp 14,6 T)</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/15 rounded-[3px] text-[11px] font-sans text-white/95 font-medium self-end sm:self-auto border border-white/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>Fokus Pilot: Jabar &amp; Bodetabek</span>
+          </div>
         </div>
 
         {/* 3. DUAL-PANEL DATA MONITOR */}
@@ -272,7 +257,7 @@ export default function HeroSection({
           <div className="lg:col-span-7 bg-white rounded-[5px] border border-slate-200/90 shadow-2xs p-4 flex flex-col justify-between space-y-3.5">
             
             {/* Header: Title & View Links */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
                   Ikhtisar Kemantapan &amp; Konteks Kebijakan
@@ -280,10 +265,11 @@ export default function HeroSection({
               </div>
               <button
                 onClick={onExploreNational}
-                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer font-sans"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] text-xs font-bold text-[#c2410c] bg-orange-50 hover:bg-orange-100/90 border border-orange-200/90 transition-all cursor-pointer font-sans shadow-2xs group"
+                title="Buka data komparasi kemantapan jalan 38 provinsi di menu Statistik"
               >
-                <span>Lihat 38 Provinsi</span>
-                <ChevronRight className="w-3 h-3" />
+                <span>Lihat Statistik 38 Provinsi</span>
+                <ChevronRight className="w-3.5 h-3.5 text-[#c2410c] group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
 
