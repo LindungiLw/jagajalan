@@ -726,8 +726,8 @@ export default function HeroSection({
 
                           return (
                             <g key={d.key}>
-                              <circle cx={x} cy={yPagu} r={3.5} fill="#334155" stroke="#fff" strokeWidth="1.5" />
-                              <circle cx={x} cy={yKontrak} r={4.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <rect x={x - 3.5} y={yPagu - 3.5} width="7" height="7" rx="1.5" fill="#334155" stroke="#fff" strokeWidth="1.5" />
+                              <rect x={x - 4} y={yKontrak - 4} width="8" height="8" rx="1.5" fill="#c2410c" stroke="#fff" strokeWidth="2" />
                               <text x={x} y={yPagu - 6} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill="#334155">
                                 Rp {d.pagu}M
                               </text>
@@ -849,24 +849,21 @@ export default function HeroSection({
                 )}
 
                 {/* Chart Footnote & Legend (Dynamic based on selectedIndex) */}
-                <div className="mt-2 pt-1.5 border-t border-slate-200 text-[10px] text-slate-600 flex flex-wrap items-center justify-between gap-1 font-mono">
+                <div className="mt-2.5 pt-2 border-t border-slate-200/80 text-[10px] text-slate-600 flex flex-wrap items-center justify-between gap-2">
                   {selectedIndex === "kemantapan" && (
                     <>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-slate-600" />
-                          <span>Nas: {currentRoadTrend.nasional}%</span>
+                      <div className="flex items-center gap-2 font-mono">
+                        <span className="flex items-center px-2 py-0.5 bg-slate-100 border border-slate-200 border-l-[3px] border-l-slate-600 rounded-[3px] text-slate-700">
+                          Nas: <strong className="ml-1">{currentRoadTrend.nasional}%</strong>
                         </span>
-                        <span className="flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-amber-600" />
-                          <span>Prov: {currentRoadTrend.provinsi}%</span>
+                        <span className="flex items-center px-2 py-0.5 bg-amber-50 border border-amber-200 border-l-[3px] border-l-amber-600 rounded-[3px] text-amber-900">
+                          Prov: <strong className="ml-1">{currentRoadTrend.provinsi}%</strong>
                         </span>
-                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
-                          <span>Kab/Kota: {currentRoadTrend.kabupatenKota}%</span>
+                        <span className="flex items-center px-2 py-0.5 bg-orange-50 border border-orange-200 border-l-[3px] border-l-[#c2410c] rounded-[3px] text-[#c2410c] font-bold">
+                          Kab/Kota: <strong className="ml-1">{currentRoadTrend.kabupatenKota}%</strong>
                         </span>
                       </div>
-                      <span className="text-[9px] text-slate-400">
+                      <span className="text-[9px] font-sans text-slate-400">
                         Definisi BPS: Proporsi panjang jalan (km) kondisi mantap
                       </span>
                     </>
@@ -874,52 +871,78 @@ export default function HeroSection({
 
                   {selectedIndex === "ombudsman" && (
                     <>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
-                          <span>Undue Delay: {currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Kasus)</span>
+                      <div className="flex items-center gap-2 font-mono">
+                        <span className="flex items-center px-2 py-0.5 bg-orange-50 border border-orange-200 border-l-[3px] border-l-[#c2410c] rounded-[3px] text-[#c2410c] font-bold">
+                          Undue Delay: <strong className="ml-1">{currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Kasus)</strong>
                         </span>
-                        <span className="text-slate-400">•</span>
-                        <span>Total Selesai: {currentComplaintTrend.resolved.toLocaleString("id-ID")}</span>
+                        <span className="text-slate-300">|</span>
+                        <span className="text-slate-600 text-[10px]">
+                          Total Selesai: <strong>{currentComplaintTrend.resolved.toLocaleString("id-ID")}</strong>
+                        </span>
                       </div>
-                      <span className="text-[9px] text-slate-400">
+                      <span className="text-[9px] font-sans text-slate-400">
                         Maladministrasi #1 tertinggi di Indonesia (UU 37/2008)
                       </span>
                     </>
                   )}
 
                   {selectedIndex === "pagu" && (
-                    <>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-slate-700" />
-                          <span>Pagu: Rp 35,80 M</span>
-                        </span>
-                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
-                          <span>Kontrak: Rp 33,59 M</span>
-                        </span>
-                        <span className="text-emerald-700 font-bold">
-                          (Hemat Rp 2,21 M / 6.2%)
-                        </span>
+                    <div className="w-full flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2 font-mono">
+                        {/* Pagu Chip */}
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100/90 border border-slate-200/90 border-l-[3px] border-l-slate-700 rounded-[3px] shadow-2xs">
+                          <span className="text-[10px] font-sans font-semibold tracking-wider text-slate-500 uppercase">
+                            Pagu:
+                          </span>
+                          <span className="text-[11px] font-bold text-slate-800">
+                            Rp 35,80 M
+                          </span>
+                        </div>
+
+                        {/* Kontrak Chip */}
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-orange-50/90 border border-orange-200/90 border-l-[3px] border-l-[#c2410c] rounded-[3px] shadow-2xs">
+                          <span className="text-[10px] font-sans font-semibold tracking-wider text-orange-800/80 uppercase">
+                            Kontrak:
+                          </span>
+                          <span className="text-[11px] font-bold text-[#c2410c]">
+                            Rp 33,59 M
+                          </span>
+                        </div>
+
+                        {/* Efisiensi / Hemat Chip */}
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/90 border-l-[3px] border-l-emerald-600 rounded-[3px] shadow-2xs">
+                          <span className="text-[10px] font-sans font-semibold text-emerald-700 uppercase">
+                            Hemat:
+                          </span>
+                          <span className="text-[11px] font-bold text-emerald-700">
+                            Rp 2,21 M
+                          </span>
+                          <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-[3px]">
+                            6.2%
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-[9px] text-slate-400">
-                        Sumber: LPSE &amp; SiRUP 6 Ruas Pilot
-                      </span>
-                    </>
+
+                      {/* Sumber Data */}
+                      <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 border border-slate-200/70 rounded-[3px] text-[10px] font-sans text-slate-500">
+                        <Database className="w-3 h-3 text-slate-400" />
+                        <span>Sumber: <strong className="text-slate-700">LPSE &amp; SiRUP</strong> (6 Ruas Pilot)</span>
+                      </div>
+                    </div>
                   )}
 
                   {selectedIndex === "inpres" && (
                     <>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
-                          <span>Total 2 Tahap: Rp 29,90 Triliun</span>
+                      <div className="flex items-center gap-2 font-mono">
+                        <span className="flex items-center px-2 py-0.5 bg-orange-50 border border-orange-200 border-l-[3px] border-l-[#c2410c] rounded-[3px] text-[#c2410c] font-bold">
+                          Total 2 Tahap: <strong className="ml-1">Rp 29,90 Triliun</strong>
                         </span>
-                        <span className="text-slate-400">•</span>
-                        <span>Panjang Tertangani: 5.992 KM</span>
+                        <span className="text-slate-300">|</span>
+                        <span className="text-slate-600 text-[10px]">
+                          Panjang: <strong>5.992 KM</strong>
+                        </span>
                       </div>
-                      <span className="text-[9px] text-slate-400">
+                      <span className="text-[9px] font-sans text-slate-400">
                         Inpres No. 3/2023 Percepatan Jalan Daerah
                       </span>
                     </>
