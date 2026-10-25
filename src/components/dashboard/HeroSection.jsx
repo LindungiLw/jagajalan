@@ -244,10 +244,9 @@ export default function HeroSection({
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/15 rounded-[3px] text-[11px] font-sans text-white/95 font-medium self-end sm:self-auto border border-white/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Integrasi Geospasial &amp; LPSE Aktif</span>
-          </div>
+          <span className="text-[11px] font-sans text-white/85 font-medium self-end sm:self-auto">
+            Integrasi Geospasial &amp; LPSE Aktif
+          </span>
         </div>
 
         {/* 3. DUAL-PANEL DATA MONITOR */}
