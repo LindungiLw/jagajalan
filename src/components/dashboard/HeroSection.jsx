@@ -39,12 +39,36 @@ export default function HeroSection({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRoadForDetail, setSelectedRoadForDetail] = useState(null);
 
-  const { roadConditionTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
+  const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
-  // Selected year data point
+  // Selected year data point for road condition
   const currentRoadTrend =
     roadConditionTrends.find((d) => d.year === selectedYear) ||
     roadConditionTrends[roadConditionTrends.length - 1];
+
+  // Selected year data point for ombudsman complaints
+  const currentComplaintTrend =
+    complaintTrends?.find((d) => d.year === selectedYear) ||
+    complaintTrends?.[complaintTrends.length - 1] || {
+      year: 2024,
+      overduePct: 33.86,
+      overdue: 5450,
+      totalComplaints: 16100,
+      resolved: 10650,
+    };
+
+  // Pilot budget statistics by authority
+  const pilotBudgetStats = useMemo(() => [
+    { key: "depok", label: "Dinas Depok", fullName: "Dinas PUPR Kota Depok", pagu: 11.65, kontrak: 10.87, ruas: 3, efficiency: 6.7 },
+    { key: "jabar", label: "DBMPR Jabar", fullName: "DBMPR Prov. Jawa Barat", pagu: 15.70, kontrak: 14.80, ruas: 2, efficiency: 5.7 },
+    { key: "pupr", label: "KemenPUPR", fullName: "Kementerian PUPR (BBPJN)", pagu: 8.45, kontrak: 7.92, ruas: 1, efficiency: 6.3 },
+  ], []);
+
+  // Inpres stages
+  const inpresStats = useMemo(() => [
+    { stage: "Tahap I (2023)", year: 2023, budgetTrillion: 14.60, realizedKm: 2872, provinces: 34 },
+    { stage: "Tahap II (2024)", year: 2024, budgetTrillion: 15.30, realizedKm: 3120, provinces: 38 },
+  ], []);
 
   // Multi-entity search filtering
   const searchResults = useMemo(() => {
@@ -377,7 +401,7 @@ export default function HeroSection({
                 </button>
               </div>
 
-              {/* Chart Column: Fully Populated BPS Historical Kemantapan Jalan (2020 - 2024) */}
+              {/* Chart Column: Dynamic Visual Monitor based on selectedIndex */}
               <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200/60 p-3 flex flex-col justify-between">
                 
                 {/* Chart Header: Title on Top Full-Width, Year & Switcher Controls Below */}
@@ -385,16 +409,22 @@ export default function HeroSection({
                   {/* Top: Full-Width Title & Source */}
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-sans tracking-wide block">
-                      Sumber: BPS Sirusa (2020–2024)
+                      {selectedIndex === "kemantapan" && "Sumber: BPS Sirusa (2020–2024)"}
+                      {selectedIndex === "ombudsman" && "Sumber: Laporan Tahunan Ombudsman RI (2020–2024)"}
+                      {selectedIndex === "pagu" && "Sumber: SiRUP & LPSE Pengadaan TA 2026"}
+                      {selectedIndex === "inpres" && "Sumber: Ditjen Bina Marga KemenPUPR (Inpres No. 3/2023)"}
                     </span>
                     <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight block">
-                      Tingkat Kemantapan Jalan ({selectedYear})
+                      {selectedIndex === "kemantapan" && `Tingkat Kemantapan Jalan (${selectedYear})`}
+                      {selectedIndex === "ombudsman" && `Tren Maladministrasi Penundaan Berlarut (${selectedYear})`}
+                      {selectedIndex === "pagu" && "Komparasi Pagu vs Nilai Kontrak Lelang Pilot"}
+                      {selectedIndex === "inpres" && "Alokasi & Realisasi Percepatan Inpres Jalan Daerah (IJD)"}
                     </strong>
                   </div>
 
                   {/* Below: Controls Row (View Switcher + Year Segmented Bar) */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
-                    {/* View Switcher: Line vs Bar (IDX Segmented Style) */}
+                    {/* View Switcher: Line vs Bar */}
                     <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs font-sans">
                       <button
                         onClick={() => setChartViewMode("line")}
@@ -422,242 +452,478 @@ export default function HeroSection({
                       </button>
                     </div>
 
-                    {/* Year Tabs: IDX Segmented Bar with Vertical Dividers */}
-                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
-                      {[2020, 2021, 2022, 2023, 2024].map((yr) => (
-                        <button
-                          key={yr}
-                          onClick={() => setSelectedYear(yr)}
-                          className={`px-2 py-1 transition-colors cursor-pointer ${
-                            selectedYear === yr
-                              ? "bg-[#c2410c] text-white font-bold"
-                              : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
-                          }`}
-                        >
-                          {yr}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Contextual Year Tabs */}
+                    {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman") && (
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
+                        {[2020, 2021, 2022, 2023, 2024].map((yr) => (
+                          <button
+                            key={yr}
+                            onClick={() => setSelectedYear(yr)}
+                            className={`px-2 py-1 transition-colors cursor-pointer ${
+                              selectedYear === yr
+                                ? "bg-[#c2410c] text-white font-bold"
+                                : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
+                            }`}
+                          >
+                            {yr}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {selectedIndex === "pagu" && (
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] px-2.5 py-1 text-[10px] font-bold font-sans text-slate-700 shadow-2xs">
+                        <span>3 Instansi Wewenang (6 Paket)</span>
+                      </div>
+                    )}
+
+                    {selectedIndex === "inpres" && (
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
+                        {[2023, 2024].map((yr) => (
+                          <button
+                            key={yr}
+                            onClick={() => setSelectedYear(yr)}
+                            className={`px-2 py-1 transition-colors cursor-pointer ${
+                              selectedYear === yr
+                                ? "bg-[#c2410c] text-white font-bold"
+                                : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
+                            }`}
+                          >
+                            {yr === 2023 ? "Tahap I (2023)" : "Tahap II (2024)"}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Chart Body: Line Chart or Bar Chart */}
-                {chartViewMode === "line" ? (
-                  <div className="h-36 pt-2 px-1 flex flex-col justify-end">
-                    <svg viewBox="0 0 380 115" className="w-full h-full select-none">
-                      {/* Horizontal Gridlines */}
-                      {[100, 80, 60, 40].map((val) => {
-                        const y = 14 + ((100 - val) / 60) * 78;
-                        return (
-                          <g key={val}>
-                            <line
-                              x1="28"
-                              y1={y}
-                              x2="365"
-                              y2={y}
-                              stroke="#e2e8f0"
-                              strokeDasharray="2 2"
-                              strokeWidth="0.8"
-                            />
-                            <text
-                              x="24"
-                              y={y + 3}
-                              textAnchor="end"
-                              fontSize="8"
-                              fontFamily="monospace"
-                              fill="#94a3b8"
-                              fontWeight="bold"
-                            >
-                              {val}%
-                            </text>
-                          </g>
-                        );
-                      })}
+                {/* ======================================================== */}
+                {/* 1. CHART BODY: KEMANTAPAN JALAN (BPS SIRUSA) */}
+                {/* ======================================================== */}
+                {selectedIndex === "kemantapan" && (
+                  chartViewMode === "line" ? (
+                    <div className="h-36 pt-2 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 380 115" className="w-full h-full select-none">
+                        {[100, 80, 60, 40].map((val) => {
+                          const y = 14 + ((100 - val) / 60) * 78;
+                          return (
+                            <g key={val}>
+                              <line x1="28" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
+                              <text x="24" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                                {val}%
+                              </text>
+                            </g>
+                          );
+                        })}
+                        <polygon
+                          points={`
+                            ${roadConditionTrends.map((d, i) => `${30 + i * 82.5},${14 + ((100 - d.nasional) / 60) * 78}`).join(" ")}
+                            ${[...roadConditionTrends].reverse().map((d, i) => `${360 - i * 82.5},${14 + ((100 - d.kabupatenKota) / 60) * 78}`).join(" ")}
+                          `}
+                          fill="#c2410c"
+                          fillOpacity="0.08"
+                        />
+                        <path
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.nasional) / 60) * 78}`).join(" ")}
+                          fill="none"
+                          stroke="#475569"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.provinsi) / 60) * 78}`).join(" ")}
+                          fill="none"
+                          stroke="#d97706"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.kabupatenKota) / 60) * 78}`).join(" ")}
+                          fill="none"
+                          stroke="#c2410c"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                        />
+                        {roadConditionTrends.map((d, i) => {
+                          const x = 30 + i * 82.5;
+                          const yNas = 14 + ((100 - d.nasional) / 60) * 78;
+                          const yProv = 14 + ((100 - d.provinsi) / 60) * 78;
+                          const yKab = 14 + ((100 - d.kabupatenKota) / 60) * 78;
+                          const isSelected = d.year === selectedYear;
 
-                      {/* Disparity Area Shading between Nasional and Kab/Kota */}
-                      <polygon
-                        points={`
-                          ${roadConditionTrends.map((d, i) => `${30 + i * 82.5},${14 + ((100 - d.nasional) / 60) * 78}`).join(" ")}
-                          ${[...roadConditionTrends].reverse().map((d, i) => `${360 - i * 82.5},${14 + ((100 - d.kabupatenKota) / 60) * 78}`).join(" ")}
-                        `}
-                        fill="#c2410c"
-                        fillOpacity="0.08"
-                      />
-
-                      {/* Line 1: Jalan Nasional */}
-                      <path
-                        d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.nasional) / 60) * 78}`).join(" ")}
-                        fill="none"
-                        stroke="#475569"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Line 2: Jalan Provinsi */}
-                      <path
-                        d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.provinsi) / 60) * 78}`).join(" ")}
-                        fill="none"
-                        stroke="#d97706"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Line 3: Jalan Kab/Kota */}
-                      <path
-                        d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((100 - d.kabupatenKota) / 60) * 78}`).join(" ")}
-                        fill="none"
-                        stroke="#c2410c"
-                        strokeWidth="2.8"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Interactive Points on Line */}
-                      {roadConditionTrends.map((d, i) => {
-                        const x = 30 + i * 82.5;
-                        const yNas = 14 + ((100 - d.nasional) / 60) * 78;
-                        const yProv = 14 + ((100 - d.provinsi) / 60) * 78;
-                        const yKab = 14 + ((100 - d.kabupatenKota) / 60) * 78;
+                          return (
+                            <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
+                              <rect x={x - 20} y="5" width="40" height="100" fill="transparent" />
+                              {isSelected && (
+                                <line x1={x} y1="14" x2={x} y2="92" stroke="#c2410c" strokeWidth="1" strokeDasharray="2 2" />
+                              )}
+                              <circle cx={x} cy={yNas} r={isSelected ? 4 : 2.5} fill="#475569" stroke="#fff" strokeWidth="1.5" />
+                              <circle cx={x} cy={yProv} r={isSelected ? 4 : 2.5} fill="#d97706" stroke="#fff" strokeWidth="1.5" />
+                              <circle cx={x} cy={yKab} r={isSelected ? 5.5 : 3.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                                {d.kabupatenKota}%
+                              </text>
+                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="monospace" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#64748b"}>
+                                {d.year}
+                              </text>
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="h-36 flex items-end justify-between gap-2 pt-4 px-1">
+                      {roadConditionTrends.map((d) => {
                         const isSelected = d.year === selectedYear;
-
                         return (
-                          <g
+                          <div
                             key={d.year}
-                            className="cursor-pointer"
                             onClick={() => setSelectedYear(d.year)}
+                            className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
                           >
-                            <rect
-                              x={x - 20}
-                              y="5"
-                              width="40"
-                              height="100"
-                              fill="transparent"
-                            />
-
-                            {/* Guideline on selected */}
-                            {isSelected && (
-                              <line
-                                x1={x}
-                                y1="14"
-                                x2={x}
-                                y2="92"
-                                stroke="#c2410c"
-                                strokeWidth="1"
-                                strokeDasharray="2 2"
-                              />
-                            )}
-
-                            {/* Point circles */}
-                            <circle cx={x} cy={yNas} r={isSelected ? 4 : 2.5} fill="#475569" stroke="#fff" strokeWidth="1.5" />
-                            <circle cx={x} cy={yProv} r={isSelected ? 4 : 2.5} fill="#d97706" stroke="#fff" strokeWidth="1.5" />
-                            <circle cx={x} cy={yKab} r={isSelected ? 5.5 : 3.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-
-                            {/* Value label on top of Kab/Kota */}
-                            <text
-                              x={x}
-                              y={yKab - 7}
-                              textAnchor="middle"
-                              fontSize="8"
-                              fontFamily="monospace"
-                              fontWeight="bold"
-                              fill={isSelected ? "#9a3412" : "#c2410c"}
-                            >
+                            <span className={`text-[9px] font-mono font-bold leading-none ${isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"}`}>
                               {d.kabupatenKota}%
-                            </text>
-
-                            {/* Year label on X-axis */}
-                            <text
-                              x={x}
-                              y="108"
-                              textAnchor="middle"
-                              fontSize="9"
-                              fontFamily="monospace"
-                              fontWeight={isSelected ? "bold" : "normal"}
-                              fill={isSelected ? "#c2410c" : "#64748b"}
-                            >
+                            </span>
+                            <div className="w-full flex items-end justify-center gap-0.5 h-24 bg-slate-200/50 rounded-t-[3px] p-0.5">
+                              <div style={{ height: `${d.nasional}%` }} className="w-1/3 bg-slate-600 rounded-t-xs" title={`Nasional ${d.year}: ${d.nasional}% Mantap`} />
+                              <div style={{ height: `${d.provinsi}%` }} className="w-1/3 bg-amber-600 rounded-t-xs" title={`Provinsi ${d.year}: ${d.provinsi}% Mantap`} />
+                              <div style={{ height: `${d.kabupatenKota}%` }} className={`w-1/3 rounded-t-xs transition-colors ${isSelected ? "bg-[#c2410c]" : "bg-rose-500"}`} title={`Kab/Kota ${d.year}: ${d.kabupatenKota}% Mantap`} />
+                            </div>
+                            <span className={`text-[10px] font-mono font-bold ${isSelected ? "text-[#c2410c]" : "text-slate-500"}`}>
                               {d.year}
-                            </text>
-                          </g>
+                            </span>
+                          </div>
                         );
                       })}
-                    </svg>
-                  </div>
-                ) : (
-                  /* Bar Chart View */
-                  <div className="h-36 flex items-end justify-between gap-2 pt-4 px-1">
-                    {roadConditionTrends.map((d) => {
-                      const isSelected = d.year === selectedYear;
-                      return (
-                        <div
-                          key={d.year}
-                          onClick={() => setSelectedYear(d.year)}
-                          className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
-                        >
-                          {/* Percentage Label on Top of Selected Bar */}
-                          <span
-                            className={`text-[9px] font-mono font-bold leading-none ${
-                              isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"
-                            }`}
-                          >
-                            {d.kabupatenKota}%
-                          </span>
-
-                          {/* Bar Graphic with height proportionate to percentage (scaled 40% to 100%) */}
-                          <div className="w-full flex items-end justify-center gap-0.5 h-24 bg-slate-200/50 rounded-t-[3px] p-0.5">
-                            {/* Jalan Nasional */}
-                            <div
-                              style={{ height: `${d.nasional}%` }}
-                              className="w-1/3 bg-slate-600 rounded-t-xs"
-                              title={`Nasional ${d.year}: ${d.nasional}% Mantap`}
-                            />
-                            {/* Jalan Provinsi */}
-                            <div
-                              style={{ height: `${d.provinsi}%` }}
-                              className="w-1/3 bg-amber-600 rounded-t-xs"
-                              title={`Provinsi ${d.year}: ${d.provinsi}% Mantap`}
-                            />
-                            {/* Jalan Kab/Kota (Selected Highlight) */}
-                            <div
-                              style={{ height: `${d.kabupatenKota}%` }}
-                              className={`w-1/3 rounded-t-xs transition-colors ${
-                                isSelected ? "bg-[#c2410c]" : "bg-rose-500"
-                              }`}
-                              title={`Kab/Kota ${d.year}: ${d.kabupatenKota}% Mantap`}
-                            />
-                          </div>
-
-                          {/* Year Label */}
-                          <span
-                            className={`text-[10px] font-mono font-bold ${
-                              isSelected ? "text-[#c2410c]" : "text-slate-500"
-                            }`}
-                          >
-                            {d.year}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                    </div>
+                  )
                 )}
 
-                {/* Chart Footnote & Legend */}
+                {/* ======================================================== */}
+                {/* 2. CHART BODY: OMBUDSMAN UNDUE DELAY TREND (2020 - 2024) */}
+                {/* ======================================================== */}
+                {selectedIndex === "ombudsman" && (
+                  chartViewMode === "line" ? (
+                    <div className="h-36 pt-2 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 380 115" className="w-full h-full select-none">
+                        {[35, 33, 31, 29].map((val) => {
+                          const y = 14 + ((36 - val) / 8) * 78;
+                          return (
+                            <g key={val}>
+                              <line x1="28" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
+                              <text x="24" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                                {val}%
+                              </text>
+                            </g>
+                          );
+                        })}
+                        <polygon
+                          points={`
+                            ${complaintTrends.map((d, i) => `${30 + i * 82.5},${14 + ((36 - d.overduePct) / 8) * 78}`).join(" ")}
+                            360,92 30,92
+                          `}
+                          fill="#c2410c"
+                          fillOpacity="0.12"
+                        />
+                        <path
+                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${30 + i * 82.5} ${14 + ((36 - d.overduePct) / 8) * 78}`).join(" ")}
+                          fill="none"
+                          stroke="#c2410c"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                        />
+                        {complaintTrends.map((d, i) => {
+                          const x = 30 + i * 82.5;
+                          const y = 14 + ((36 - d.overduePct) / 8) * 78;
+                          const isSelected = d.year === selectedYear;
+
+                          return (
+                            <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
+                              <rect x={x - 20} y="5" width="40" height="100" fill="transparent" />
+                              {isSelected && (
+                                <line x1={x} y1="14" x2={x} y2="92" stroke="#c2410c" strokeWidth="1" strokeDasharray="2 2" />
+                              )}
+                              <circle cx={x} cy={y} r={isSelected ? 5.5 : 3.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                                {d.overduePct}%
+                              </text>
+                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="monospace" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#64748b"}>
+                                {d.year}
+                              </text>
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="h-36 flex items-end justify-between gap-2 pt-4 px-1">
+                      {complaintTrends.map((d) => {
+                        const isSelected = d.year === selectedYear;
+                        return (
+                          <div
+                            key={d.year}
+                            onClick={() => setSelectedYear(d.year)}
+                            className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
+                          >
+                            <span className={`text-[9px] font-mono font-bold leading-none ${isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"}`}>
+                              {d.overduePct}%
+                            </span>
+                            <div className="w-full flex items-end justify-center gap-1 h-24 bg-slate-200/50 rounded-t-[3px] p-1">
+                              <div
+                                style={{ height: `${(d.overdue / d.totalComplaints) * 100 * 2.5}%` }}
+                                className={`w-3/4 rounded-t-xs transition-colors ${isSelected ? "bg-[#c2410c]" : "bg-amber-600"}`}
+                                title={`${d.year}: ${d.overdue} dari ${d.totalComplaints} laporan`}
+                              />
+                            </div>
+                            <span className={`text-[10px] font-mono font-bold ${isSelected ? "text-[#c2410c]" : "text-slate-500"}`}>
+                              {d.year}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )
+                )}
+
+                {/* ======================================================== */}
+                {/* 3. CHART BODY: PAGU VS KONTRAK LEALANG PILOT (LPSE)      */}
+                {/* ======================================================== */}
+                {selectedIndex === "pagu" && (
+                  chartViewMode === "line" ? (
+                    <div className="h-36 pt-2 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 380 115" className="w-full h-full select-none">
+                        {[20, 15, 10, 5].map((val) => {
+                          const y = 14 + ((20 - val) / 18) * 78;
+                          return (
+                            <g key={val}>
+                              <line x1="32" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
+                              <text x="28" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                                {val}M
+                              </text>
+                            </g>
+                          );
+                        })}
+                        {/* Pagu Line */}
+                        <path
+                          d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${65 + i * 125} ${14 + ((20 - d.pagu) / 18) * 78}`).join(" ")}
+                          fill="none"
+                          stroke="#334155"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        />
+                        {/* Kontrak Line */}
+                        <path
+                          d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${65 + i * 125} ${14 + ((20 - d.kontrak) / 18) * 78}`).join(" ")}
+                          fill="none"
+                          stroke="#c2410c"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                        />
+                        {pilotBudgetStats.map((d, i) => {
+                          const x = 65 + i * 125;
+                          const yPagu = 14 + ((20 - d.pagu) / 18) * 78;
+                          const yKontrak = 14 + ((20 - d.kontrak) / 18) * 78;
+
+                          return (
+                            <g key={d.key}>
+                              <circle cx={x} cy={yPagu} r={3.5} fill="#334155" stroke="#fff" strokeWidth="1.5" />
+                              <circle cx={x} cy={yKontrak} r={4.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={yPagu - 6} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill="#334155">
+                                Rp {d.pagu}M
+                              </text>
+                              <text x={x} y={yKontrak + 12} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill="#c2410c">
+                                Rp {d.kontrak}M
+                              </text>
+                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="bold" fill="#475569">
+                                {d.label}
+                              </text>
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="h-36 flex items-end justify-around gap-4 pt-3 px-2">
+                      {pilotBudgetStats.map((d) => (
+                        <div key={d.key} className="flex-1 flex flex-col justify-end items-center gap-1.5 max-w-[100px]">
+                          <div className="flex items-center gap-1.5 text-[8px] font-mono font-bold">
+                            <span className="text-slate-600">P:{d.pagu}M</span>
+                            <span className="text-[#c2410c]">K:{d.kontrak}M</span>
+                          </div>
+                          <div className="w-full flex items-end justify-center gap-1.5 h-24 bg-slate-200/50 rounded-t-[3px] p-1">
+                            <div
+                              style={{ height: `${(d.pagu / 18) * 100}%` }}
+                              className="w-1/2 bg-slate-700 rounded-t-xs"
+                              title={`Pagu: Rp ${d.pagu} Miliar`}
+                            />
+                            <div
+                              style={{ height: `${(d.kontrak / 18) * 100}%` }}
+                              className="w-1/2 bg-[#c2410c] rounded-t-xs"
+                              title={`Kontrak: Rp ${d.kontrak} Miliar (Hemat ${d.efficiency}%)`}
+                            />
+                          </div>
+                          <span className="text-[10px] font-bold font-sans text-slate-700 text-center leading-tight">
+                            {d.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )
+                )}
+
+                {/* ======================================================== */}
+                {/* 4. CHART BODY: INPRES JALAN DAERAH (IJD)                 */}
+                {/* ======================================================== */}
+                {selectedIndex === "inpres" && (
+                  chartViewMode === "line" ? (
+                    <div className="h-36 pt-2 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 380 115" className="w-full h-full select-none">
+                        {[16, 12, 8, 4].map((val) => {
+                          const y = 14 + ((16 - val) / 14) * 78;
+                          return (
+                            <g key={val}>
+                              <line x1="30" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
+                              <text x="26" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                                {val}T
+                              </text>
+                            </g>
+                          );
+                        })}
+                        <path
+                          d={`M 90 ${14 + ((16 - 14.60) / 14) * 78} L 270 ${14 + ((16 - 15.30) / 14) * 78}`}
+                          fill="none"
+                          stroke="#c2410c"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+                        {inpresStats.map((d, i) => {
+                          const x = 90 + i * 180;
+                          const y = 14 + ((16 - d.budgetTrillion) / 14) * 78;
+                          const isSelected = d.year === selectedYear;
+
+                          return (
+                            <g key={d.stage} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
+                              <circle cx={x} cy={y} r={isSelected ? 5.5 : 4} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={y - 8} textAnchor="middle" fontSize="9" fontFamily="monospace" fontWeight="bold" fill="#c2410c">
+                                Rp {d.budgetTrillion} Triliun
+                              </text>
+                              <text x={x} y={y + 14} textAnchor="middle" fontSize="8" fontFamily="monospace" fill="#64748b">
+                                ({d.realizedKm.toLocaleString("id-ID")} KM)
+                              </text>
+                              <text x={x} y="108" textAnchor="middle" fontSize="10" fontFamily="sans-serif" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#475569"}>
+                                {d.stage}
+                              </text>
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="h-36 flex items-end justify-around gap-6 pt-3 px-4">
+                      {inpresStats.map((d) => {
+                        const isSelected = d.year === selectedYear;
+                        return (
+                          <div
+                            key={d.stage}
+                            onClick={() => setSelectedYear(d.year)}
+                            className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer max-w-[130px] group"
+                          >
+                            <span className="text-[9px] font-mono font-bold text-[#c2410c]">
+                              Rp {d.budgetTrillion} T ({d.realizedKm} km)
+                            </span>
+                            <div className="w-full flex items-end justify-center h-24 bg-slate-200/50 rounded-t-[3px] p-1">
+                              <div
+                                style={{ height: `${(d.budgetTrillion / 16) * 100}%` }}
+                                className={`w-3/4 rounded-t-xs transition-colors ${isSelected ? "bg-[#c2410c]" : "bg-amber-600 group-hover:bg-[#c2410c]"}`}
+                                title={`${d.stage}: Rp ${d.budgetTrillion} Triliun untuk ${d.realizedKm} KM di ${d.provinces} Provinsi`}
+                              />
+                            </div>
+                            <span className={`text-[10px] font-bold font-sans ${isSelected ? "text-[#c2410c]" : "text-slate-600"}`}>
+                              {d.stage}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )
+                )}
+
+                {/* Chart Footnote & Legend (Dynamic based on selectedIndex) */}
                 <div className="mt-2 pt-1.5 border-t border-slate-200 text-[10px] text-slate-600 flex flex-wrap items-center justify-between gap-1 font-mono">
-                  <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-slate-600" />
-                      <span>Nas: {currentRoadTrend.nasional}%</span>
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-amber-600" />
-                      <span>Prov: {currentRoadTrend.provinsi}%</span>
-                    </span>
-                    <span className="flex items-center gap-1 text-[#c2410c] font-bold">
-                      <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
-                      <span>Kab/Kota: {currentRoadTrend.kabupatenKota}%</span>
-                    </span>
-                  </div>
-                  <span className="text-[9px] text-slate-400">
-                    Definisi BPS: Proporsi panjang jalan (km) kondisi mantap
-                  </span>
+                  {selectedIndex === "kemantapan" && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-slate-600" />
+                          <span>Nas: {currentRoadTrend.nasional}%</span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-amber-600" />
+                          <span>Prov: {currentRoadTrend.provinsi}%</span>
+                        </span>
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
+                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
+                          <span>Kab/Kota: {currentRoadTrend.kabupatenKota}%</span>
+                        </span>
+                      </div>
+                      <span className="text-[9px] text-slate-400">
+                        Definisi BPS: Proporsi panjang jalan (km) kondisi mantap
+                      </span>
+                    </>
+                  )}
+
+                  {selectedIndex === "ombudsman" && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
+                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
+                          <span>Undue Delay: {currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Kasus)</span>
+                        </span>
+                        <span className="text-slate-400">•</span>
+                        <span>Total Selesai: {currentComplaintTrend.resolved.toLocaleString("id-ID")}</span>
+                      </div>
+                      <span className="text-[9px] text-slate-400">
+                        Maladministrasi #1 tertinggi di Indonesia (UU 37/2008)
+                      </span>
+                    </>
+                  )}
+
+                  {selectedIndex === "pagu" && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-slate-700" />
+                          <span>Pagu: Rp 35,80 M</span>
+                        </span>
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
+                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
+                          <span>Kontrak: Rp 33,59 M</span>
+                        </span>
+                        <span className="text-emerald-700 font-bold">
+                          (Hemat Rp 2,21 M / 6.2%)
+                        </span>
+                      </div>
+                      <span className="text-[9px] text-slate-400">
+                        Sumber: LPSE &amp; SiRUP 6 Ruas Pilot
+                      </span>
+                    </>
+                  )}
+
+                  {selectedIndex === "inpres" && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold">
+                          <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
+                          <span>Total 2 Tahap: Rp 29,90 Triliun</span>
+                        </span>
+                        <span className="text-slate-400">•</span>
+                        <span>Panjang Tertangani: 5.992 KM</span>
+                      </div>
+                      <span className="text-[9px] text-slate-400">
+                        Inpres No. 3/2023 Percepatan Jalan Daerah
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
