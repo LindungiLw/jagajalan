@@ -136,9 +136,9 @@ export default function HeroSection({
           
           {/* Segment 1: Wilayah Scope */}
           <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/70 shrink-0">
-            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+            <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
             <span className="text-[11px] font-semibold">
-              Wilayah: <strong>Pilot Jawa Barat &amp; Bodetabek</strong>
+              Cakupan: <strong>Seluruh Indonesia (38 Provinsi)</strong>
             </span>
           </div>
 
@@ -222,20 +222,20 @@ export default function HeroSection({
           </div>
         )}
 
-        {/* 2. OPERATIONAL PILOT SUMMARY STRIP (Pure Crisp White Text on Brand Orange) */}
+        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (Pure Crisp White Text on Brand Orange) */}
         <div className="bg-[#c2410c] text-white px-4 py-2.5 rounded-[5px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-2xs gap-3 font-semibold border border-[#9a3412]">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <span className="text-white font-bold uppercase tracking-wider text-[11px] font-sans">
-              Cakupan Pilot JagaJalan:
+              Monitoring Infrastruktur Nasional:
             </span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
-              <span className="text-white font-medium text-xs">Ruas Terdata</span>
+              <strong className="text-white font-sans font-black text-sm tabular-nums">38</strong>
+              <span className="text-white font-medium text-xs">Provinsi Terdata</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/40 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
               <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
-              <span className="text-white font-medium text-xs">Paket Proyek Teridentifikasi (Rp 35,80 M)</span>
+              <span className="text-white font-medium text-xs">Paket Audit Pilot (Rp 35,80 M)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/40 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
@@ -245,8 +245,8 @@ export default function HeroSection({
           </div>
 
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/15 rounded-[3px] text-[11px] font-sans text-white/95 font-medium self-end sm:self-auto border border-white/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Fokus Pilot: Jabar &amp; Bodetabek</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Integrasi Geospasial &amp; LPSE Aktif</span>
           </div>
         </div>
 
