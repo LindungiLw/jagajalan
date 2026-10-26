@@ -11,7 +11,7 @@
   *(Know the Authority. Trace the Budget. Track the Action.)*
 
   <p align="center">
-    <strong>Platform Transparansi Jalan Publik Terintegrasi:</strong> Menghubungkan Status Kewenangan Geospasial, Penelusuran Paket Anggaran APBD/LPSE, dan Akselerasi Kepatuhan Pelayanan Publik.
+    <strong>Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan</strong>
   </p>
 
   <p align="center">

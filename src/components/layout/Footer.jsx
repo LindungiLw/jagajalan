@@ -19,7 +19,7 @@ export default function Footer({ onSelectTab }) {
               />
             </div>
             <p className="text-xs text-slate-600 leading-relaxed max-w-md">
-              Platform Transparansi Kewenangan, Keterbukaan Anggaran APBD, & Akselerasi Penanganan Jalan Publik. 
+              Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan. 
               Mengintegrasikan data geospasial terbuka, laporan partisipatif warga, verifikasi citra AI, dan kepatuhan hukum Ombudsman RI.
             </p>
             <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-500 font-medium">

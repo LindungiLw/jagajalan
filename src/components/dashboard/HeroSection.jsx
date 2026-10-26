@@ -124,10 +124,10 @@ export default function HeroSection({
         {/* HERO UTAMA: CENTERED & CLEAN */}
         <div className="pt-2 pb-2 space-y-1 text-center flex flex-col items-center">
           <h1 className="text-xl sm:text-2xl lg:text-[28px] xl:text-[30px] font-bold font-heading text-slate-900 tracking-tight leading-snug">
-            Transparansi Kondisi Jalan, Anggaran &amp; Akuntabilitas Publik
+            Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed font-sans font-normal mx-auto">
-            Platform integrasi data kemantapan jalan (BPS), tender LPSE, aduan warga geotagging, dan pengawasan SOP 14 hari Ombudsman RI.
+            Platform integrasi data kewenangan jalan (BPS), tender proyek LPSE, aduan warga terverifikasi AI, dan kepastian respons Ombudsman RI.
           </p>
         </div>
 
