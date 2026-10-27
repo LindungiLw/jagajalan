@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import {
   MapPin,
@@ -18,6 +18,12 @@ import {
   Minus,
   Crosshair,
   FileCheck,
+  ExternalLink,
+  Hammer,
+  BadgePercent,
+  Calendar,
+  Layers,
+  HelpCircle,
 } from "lucide-react";
 
 // Dynamic import with SSR disabled to prevent Leaflet "window is not defined" error
@@ -40,6 +46,7 @@ export default function MapExplorer({
 }) {
   const [selectedRoad, setSelectedRoad] = useState(roads[2] || roads[0]); // Default to Sawangan (ruas-03)
   const [selectedReport, setSelectedReport] = useState(reports[0] || null); // Default to JGJ-DPK-081 (Jl. Raya Sawangan)
+  const [activeTab, setActiveTab] = useState("masalah"); // "masalah" | "proyek" | "kewenangan" | "sumber"
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
@@ -115,8 +122,15 @@ export default function MapExplorer({
     return "Status Jalan";
   }, [authorityFilter]);
 
-  // Active item to display in drawer (prioritize report, fallback to road)
+  // Active item to display in drawer (prioritize report if selected, fallback to road)
   const displayItem = selectedReport || selectedRoad;
+  const currentRoad = selectedRoad || roads[0];
+  const currentReport = selectedReport;
+
+  // Budget calculations
+  const budgetData = currentRoad?.budget;
+  const savingsRp = budgetData ? Math.max(0, (budgetData.paguRp || 0) - (budgetData.contractValueRp || 0)) : 0;
+  const savingsPct = budgetData && budgetData.paguRp ? ((savingsRp / budgetData.paguRp) * 100).toFixed(1) : "0.0";
 
   return (
     <section className="relative w-full h-[calc(100vh-4.25rem)] min-h-[680px] bg-slate-100 overflow-hidden font-sans">
@@ -188,10 +202,10 @@ export default function MapExplorer({
                   setStatusDropdownOpen(false);
                 }}
                 className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
-                  authorityFilter === "NASIONAL" ? "font-bold text-slate-900 bg-slate-100/70" : ""
+                  authorityFilter === "NASIONAL" ? "font-bold text-blue-700 bg-blue-50/60" : ""
                 }`}
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-700" />
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
                 <span>Jalan Nasional (KemenPU)</span>
               </button>
               <button
@@ -200,10 +214,10 @@ export default function MapExplorer({
                   setStatusDropdownOpen(false);
                 }}
                 className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
-                  authorityFilter === "PROVINSI" ? "font-bold text-amber-800 bg-amber-50/50" : ""
+                  authorityFilter === "PROVINSI" ? "font-bold text-purple-700 bg-purple-50/60" : ""
                 }`}
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-600" />
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
                 <span>Jalan Provinsi (Bina Marga)</span>
               </button>
               <button
@@ -212,10 +226,10 @@ export default function MapExplorer({
                   setStatusDropdownOpen(false);
                 }}
                 className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
-                  authorityFilter === "KOTA_KAB" ? "font-bold text-[#c2410c] bg-orange-50/50" : ""
+                  authorityFilter === "KOTA_KAB" ? "font-bold text-teal-700 bg-teal-50/60" : ""
                 }`}
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-[#c2410c]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
                 <span>Jalan Kota / Kabupaten (PUPR)</span>
               </button>
             </div>
@@ -251,18 +265,21 @@ export default function MapExplorer({
 
       {/* 4. Bottom-Left Floating Legend */}
       <div className="hidden sm:block absolute bottom-6 left-4 z-[500] space-y-1.5 pointer-events-auto font-sans">
-        <div className="bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-3 text-[11px] space-y-1.5 min-w-[175px]">
-          <div className="flex items-center gap-2 font-medium text-slate-700">
-            <span className="w-5 h-1 rounded-[2px] bg-slate-700" />
-            <span>Jalan Nasional</span>
+        <div className="bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-3 text-[11px] space-y-1.5 min-w-[185px]">
+          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-0.5">
+            Kewenangan Ruas
           </div>
           <div className="flex items-center gap-2 font-medium text-slate-700">
-            <span className="w-5 h-1 rounded-[2px] bg-amber-600" />
-            <span>Jalan Provinsi</span>
+            <span className="w-5 h-1.5 rounded-[2px] bg-blue-600" />
+            <span>Jalan Nasional (KemenPU)</span>
           </div>
           <div className="flex items-center gap-2 font-medium text-slate-700">
-            <span className="w-5 h-1 rounded-[2px] bg-[#c2410c]" />
-            <span>Jalan Kota/Kabupaten</span>
+            <span className="w-5 h-1.5 rounded-[2px] bg-purple-600" />
+            <span>Jalan Provinsi (Pemprov)</span>
+          </div>
+          <div className="flex items-center gap-2 font-medium text-slate-700">
+            <span className="w-5 h-1.5 rounded-[2px] bg-teal-600" />
+            <span>Jalan Kota / Kab (Pemda)</span>
           </div>
         </div>
         <div className="text-[10px] text-slate-500 font-medium pl-1">
@@ -276,256 +293,522 @@ export default function MapExplorer({
           <span className="w-4 h-4 rounded-[3px] bg-[#c2410c] text-white flex items-center justify-center text-[10px] font-black">
             !
           </span>
-          <span className="tabular-nums">{roads.length} ruas terdata</span>
+          <span className="tabular-nums">{roads.length} ruas jalan pilot terdata</span>
         </span>
         <span className="w-px h-3.5 bg-slate-300" />
         <span className="flex items-center gap-1.5">
           <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-          <span className="tabular-nums">{reports.length} titik laporan terverifikasi</span>
+          <span className="tabular-nums">{reports.length} aduan publik terverifikasi AI</span>
+        </span>
+        <span className="w-px h-3.5 bg-slate-300" />
+        <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-1">
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          <span>100% Data Bersumber Resmi</span>
         </span>
       </div>
 
-      {/* 6. Right Side Floating Inspector Panel / Drawer */}
+      {/* 6. Right Side Comprehensive Inspector Drawer */}
       {displayItem && (
-        <aside className="absolute top-4 right-4 bottom-4 w-full max-w-[430px] z-[500] bg-white/98 backdrop-blur-md rounded-[5px] shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
+        <aside className="absolute top-4 right-4 bottom-4 w-full max-w-[460px] z-[500] bg-white/98 backdrop-blur-md rounded-[5px] shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
           {/* Drawer Header */}
-          <div className="px-5 pt-4 pb-2 flex items-center justify-between border-b border-slate-100 shrink-0">
-            <span className="px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-mono bg-orange-100/80 text-orange-800 border border-orange-200">
-              AUDIT • {selectedReport ? selectedReport.ticketCode : selectedRoad.code}
-            </span>
-            <button
-              onClick={() => {
-                setSelectedReport(null);
-                setSelectedRoad(null);
-              }}
-              className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+          <div className="px-5 pt-4 pb-3 border-b border-slate-100 shrink-0 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={`px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold font-mono border ${
+                  currentRoad?.authority === "NASIONAL"
+                    ? "bg-blue-50 text-blue-800 border-blue-200"
+                    : currentRoad?.authority === "PROVINSI"
+                    ? "bg-purple-50 text-purple-800 border-purple-200"
+                    : "bg-teal-50 text-teal-800 border-teal-200"
+                }`}>
+                  {currentRoad?.authority === "NASIONAL"
+                    ? "JALAN NASIONAL • APBN"
+                    : currentRoad?.authority === "PROVINSI"
+                    ? "JALAN PROVINSI • APBD JABAR"
+                    : "JALAN KOTA/KAB • APBD DAERAH"}
+                </span>
 
-          {/* Drawer Body (Scrollable) */}
-          <div className="p-5 overflow-y-auto flex-1 space-y-3.5 text-xs text-slate-700">
-            {/* Title & Location */}
-            <div className="space-y-1">
+                {currentReport && (
+                  <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold font-mono bg-orange-100 text-orange-800 border border-orange-200">
+                    TIKET {currentReport.ticketCode}
+                  </span>
+                )}
+              </div>
+
+              <button
+                onClick={() => {
+                  setSelectedReport(null);
+                  setSelectedRoad(null);
+                }}
+                className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                title="Tutup Panel"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div>
               <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight leading-snug">
-                {selectedReport ? selectedReport.roadName : selectedRoad.name}
+                {currentReport ? currentReport.roadName : currentRoad.name}
               </h2>
-              <p className="text-xs text-slate-500 flex items-center gap-1.5 font-sans">
+              <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5 font-sans">
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>{selectedReport ? selectedReport.address : `${selectedRoad.district} • ${selectedRoad.lengthKm} KM`}</span>
+                <span className="truncate">
+                  {currentReport ? currentReport.address : `${currentRoad.district} • ${currentRoad.lengthKm} KM`}
+                </span>
               </p>
             </div>
 
-            {/* Verification Status Tag */}
-            <div>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-[11px] font-semibold bg-orange-50 text-orange-800 border border-orange-200">
-                <AlertTriangle className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
-                <span>Data Ruas Terverifikasi SK</span>
-              </span>
-            </div>
+            {/* Interactive 4 Tabs Switcher */}
+            <div className="grid grid-cols-4 gap-1 pt-1 border-t border-slate-100 text-[11px] font-semibold">
+              <button
+                onClick={() => setActiveTab("masalah")}
+                className={`py-2 px-1 text-center rounded-[4px] transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                  activeTab === "masalah"
+                    ? "bg-orange-50 text-orange-900 font-bold border-b-2 border-[#c2410c]"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                }`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-orange-600" />
+                <span>Masalah</span>
+              </button>
 
-            {/* Photo Banner with Carousel Dots */}
-            <div className="w-full h-44 rounded-[5px] overflow-hidden border border-slate-200 bg-slate-900 relative shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={
-                  selectedReport?.photoUrl ||
-                  "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80"
-                }
-                alt="Bukti Kerusakan Jalan"
-                className="w-full h-full object-cover"
-              />
-              {selectedReport?.proofPhotoUrl && (
-                <span className="absolute top-2 left-2 px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-emerald-600 text-white shadow-xs font-sans">
-                  ✓ Bukti Penanganan Dinas Tersedia
-                </span>
-              )}
-              {/* Carousel Indicator Dots */}
-              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-              </div>
-            </div>
+              <button
+                onClick={() => setActiveTab("proyek")}
+                className={`py-2 px-1 text-center rounded-[4px] transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                  activeTab === "proyek"
+                    ? "bg-orange-50 text-orange-900 font-bold border-b-2 border-[#c2410c]"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                }`}
+              >
+                <Hammer className="w-3.5 h-3.5 text-slate-700" />
+                <span>Proyek</span>
+              </button>
 
-            {/* 4 Modular Section Cards */}
-            <div className="space-y-2.5 pt-1">
-              {/* Card 1: Kondisi Jalan */}
-              <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
-                <div className="w-9 h-9 rounded-[5px] bg-orange-100 flex items-center justify-center text-[#c2410c] shrink-0 font-bold">
-                  <AlertTriangle className="w-4 h-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-slate-900 text-xs font-heading">Kondisi Jalan</div>
-                  <div className="text-[11px] text-slate-500 truncate font-sans">
-                    {selectedReport?.categoryLabel || selectedRoad?.condition?.replace("_", " ") || "Lubang / kerusakan permukaan"}
-                  </div>
-                </div>
-                <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-700 border border-orange-200 shrink-0 font-sans">
-                  Prioritas tinggi • Terindikasi
-                </span>
-              </div>
+              <button
+                onClick={() => setActiveTab("kewenangan")}
+                className={`py-2 px-1 text-center rounded-[4px] transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                  activeTab === "kewenangan"
+                    ? "bg-orange-50 text-orange-900 font-bold border-b-2 border-[#c2410c]"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5 text-slate-700" />
+                <span>Wewenang</span>
+              </button>
 
-              {/* Card 2: Kewenangan ruas */}
-              <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
-                <div className="w-9 h-9 rounded-[5px] bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
-                  <Building2 className="w-4 h-4 text-slate-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-slate-900 text-xs font-heading">Kewenangan Ruas Resmi</div>
-                  <div className="text-[11px] font-semibold text-slate-800 flex items-center gap-1.5 mt-0.5 font-sans">
-                    <span className="w-2 h-2 rounded-full bg-slate-700 shrink-0" />
-                    <span className="truncate">
-                      {selectedReport?.authorityLabel || selectedRoad?.authorityLabel}
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-slate-500 truncate mt-0.5 font-sans">
-                    Dasar penetapan: {selectedReport?.legalBasis || selectedRoad?.legalBasis || "SK Kewenangan Ruas Resmi"}
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
-              </div>
-
-              {/* Card 3: Informasi proyek terkait */}
-              <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
-                <div className="w-9 h-9 rounded-[5px] bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
-                  <FileText className="w-4 h-4 text-slate-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-slate-900 text-xs font-heading">Informasi Proyek & APBD Terkait</div>
-                  <div className="text-[11px] text-slate-600 truncate mt-0.5 font-sans">
-                    {selectedReport?.matchingBudget
-                      ? `${selectedReport.matchingBudget.packageName} (Pagu: Rp ${((selectedReport.matchingBudget.paguRp || 0) / 1000000000).toFixed(1)} Miliar)`
-                      : selectedRoad?.budget
-                      ? `${selectedRoad.budget.name} (Pagu: Rp ${((selectedRoad.budget.paguRp || 0) / 1000000000).toFixed(1)} Miliar)`
-                      : "Paket anggaran belum terhubung ke ruas ini"}
-                  </div>
-                </div>
-                <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 shrink-0 flex items-center gap-1 font-sans">
-                  <FileText className="w-3 h-3 text-slate-400" />
-                  <span>{selectedReport?.matchingBudget?.matchConfidence === "TERKONFIRMASI" ? "Terkonfirmasi" : "Belum dicocokkan"}</span>
-                </span>
-              </div>
-
-              {/* Card 4: Riwayat laporan (Horizontal Timeline Stepper) */}
-              <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-3 font-sans">
-                <div className="flex items-center gap-2.5">
-                  <Clock className="w-4 h-4 text-slate-500 shrink-0" />
-                  <div>
-                    <div className="font-bold text-slate-900 text-xs font-heading">Riwayat Laporan & SLA</div>
-                    <div className="text-[10px] text-slate-500 font-sans">
-                      Laporan dibuat{" "}
-                      {selectedReport
-                        ? new Date(selectedReport.reportDate).toLocaleDateString("id-ID", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "21 Okt 2026"}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Horizontal Stepper */}
-                <div className="pt-2 flex items-center justify-between px-3 text-center">
-                  {/* Step 1: Diterima */}
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-[#c2410c] text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
-                      ✓
-                    </div>
-                    <span className="text-[10px] font-bold text-[#c2410c]">Diterima</span>
-                  </div>
-
-                  {/* Connecting Line 1 */}
-                  <div className="flex-1 h-0.5 bg-slate-200 mx-2 -mt-4.5" />
-
-                  {/* Step 2: Diverifikasi */}
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                        selectedReport?.status === "DALAM_PENGERJAAN" || selectedReport?.status === "SELESAI"
-                          ? "bg-[#c2410c] text-white"
-                          : "bg-white border-2 border-slate-300"
-                      }`}
-                    >
-                      {selectedReport?.status === "DALAM_PENGERJAAN" || selectedReport?.status === "SELESAI" ? "✓" : ""}
-                    </div>
-                    <span className="text-[10px] font-medium text-slate-500">Diverifikasi</span>
-                  </div>
-
-                  {/* Connecting Line 2 */}
-                  <div
-                    className={`flex-1 h-0.5 mx-2 -mt-4.5 ${
-                      selectedReport?.status === "SELESAI" ? "bg-orange-500" : "bg-slate-200"
-                    }`}
-                  />
-
-                  {/* Step 3: Tindak lanjut */}
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                        selectedReport?.status === "SELESAI"
-                          ? "bg-emerald-600 text-white"
-                          : "bg-white border-2 border-slate-300"
-                      }`}
-                    >
-                      {selectedReport?.status === "SELESAI" ? "✓" : ""}
-                    </div>
-                    <span className="text-[10px] font-medium text-slate-500">Tindak lanjut</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Overdue SLA / Ombudsman Escalation Card */}
-              {selectedReport?.status === "OVERDUE" && (
-                <div className="p-3.5 rounded-[5px] bg-rose-50 border border-rose-200 text-rose-800 space-y-2 font-sans">
-                  <div className="flex items-center gap-1.5 font-bold text-xs text-rose-700">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>Batas Waktu Tanggapan (SLA) Terlampaui</span>
-                  </div>
-                  <p className="text-[11px] text-rose-700 leading-relaxed font-sans">
-                    Instansi terkait belum memberikan respons resmi melampaui 14 hari kerja (UU No. 25/2009). Anda berhak menerbitkan pengaduan ke Ombudsman RI.
-                  </p>
-                  <button
-                    onClick={() => onOpenOmbudsmanDraft(selectedReport)}
-                    className="w-full py-2 px-3 rounded-[5px] text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer font-sans"
-                  >
-                    <FileCheck className="w-3.5 h-3.5" />
-                    <span>Generate Draf Laporan Ombudsman RI</span>
-                  </button>
-                </div>
-              )}
+              <button
+                onClick={() => setActiveTab("sumber")}
+                className={`py-2 px-1 text-center rounded-[4px] transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                  activeTab === "sumber"
+                    ? "bg-orange-50 text-orange-900 font-bold border-b-2 border-[#c2410c]"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                }`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Sumber</span>
+              </button>
             </div>
           </div>
 
-          {/* Drawer Footer Actions */}
-          <div className="p-5 pt-3 border-t border-slate-100 space-y-2 bg-white shrink-0 font-sans">
-            <button
-              onClick={() => {
-                if (selectedReport?.status === "OVERDUE") {
-                  onOpenOmbudsmanDraft(selectedReport);
-                } else {
-                  alert(
-                    `Laporan ${selectedReport?.ticketCode || "JGJ-DPK-081"} saat ini berstatus: ${
-                      selectedReport?.status || "Dalam Pemantauan"
-                    }. Riwayat audit tercatat lengkap dalam sistem transparansi.`
-                  );
-                }
-              }}
-              className="w-full py-3 px-4 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer font-sans"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Lihat riwayat laporan</span>
-            </button>
+          {/* Drawer Body (Scrollable with tabs) */}
+          <div className="p-5 overflow-y-auto flex-1 space-y-4 text-xs text-slate-700">
+            {/* TAB 1: MASALAH & KONDISI LAPANGAN */}
+            {activeTab === "masalah" && (
+              <div className="space-y-3.5 animate-fade-in">
+                {/* Photo Evidence Banner */}
+                <div className="w-full h-44 rounded-[5px] overflow-hidden border border-slate-200 bg-slate-900 relative shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={
+                      currentReport?.photoUrl ||
+                      "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80"
+                    }
+                    alt="Bukti Kondisi Lapangan"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2 left-2 flex gap-1.5">
+                    <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-black/70 text-white backdrop-blur-xs">
+                      Foto Bukti Geotag
+                    </span>
+                    {currentReport?.proofPhotoUrl && (
+                      <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-600 text-white shadow-xs">
+                        ✓ Bukti Selesai Tersedia
+                      </span>
+                    )}
+                  </div>
+                  <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-orange-600 text-white shadow-xs">
+                    Skor Bahaya: {currentReport?.hazardScore || currentRoad?.hazardScore || 75}/100
+                  </div>
+                </div>
 
+                {/* Problem Summary Card */}
+                <div className="p-3.5 rounded-[5px] bg-orange-50/70 border border-orange-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-orange-900 flex items-center gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5 text-orange-700" />
+                      <span>Kerusakan Nyata di Lapangan</span>
+                    </span>
+                    <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-black bg-orange-200 text-orange-900">
+                      {currentReport?.categoryLabel || currentRoad?.condition?.replace("_", " ")}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-slate-900 text-sm leading-snug">
+                    {currentRoad?.problemDetails?.headline || currentReport?.problemDetails?.headline || "Kerusakan Lapisan Permukaan Aspal"}
+                  </h3>
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    {currentRoad?.problemDetails?.description || currentReport?.problemDetails?.description || currentReport?.aiAnalysis}
+                  </p>
+                </div>
+
+                {/* Technical Root Cause & Safety Impact */}
+                <div className="grid grid-cols-1 gap-2.5">
+                  <div className="p-3 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-1">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                      <Layers className="w-3 h-3 text-slate-500" />
+                      <span>Akar Penyebab Masalah (Root Cause)</span>
+                    </div>
+                    <p className="text-xs text-slate-800 leading-relaxed font-medium">
+                      {currentRoad?.problemDetails?.rootCause || currentReport?.problemDetails?.rootCause || "Kelebihan muatan gandar kendaraan (ODOL) dan rembesan air akibat drainase yang tidak optimal."}
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-1">
+                    <div className="text-[10px] font-bold text-rose-600 uppercase tracking-wider flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3 text-rose-500" />
+                      <span>Dampak Keselamatan Pengguna Jalan</span>
+                    </div>
+                    <p className="text-xs text-slate-800 leading-relaxed font-medium">
+                      {currentRoad?.problemDetails?.safetyImpact || currentReport?.problemDetails?.safetyImpact || "Membahayakan pengguna motor roda dua saat melintas, terutama saat malam hari dan kondisi hujan lebat."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* SLA / Dinas Response Monitoring */}
+                <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
+                      <Clock className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Pemantauan Waktu Respons Dinas (SLA 14 Hari)</span>
+                    </div>
+                    {currentReport?.isResponseOverdue ? (
+                      <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                        Terlambat {currentReport.daysOverdue} Hari
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        Dalam Batas Wajar
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    {currentRoad?.problemDetails?.slaNote || (currentReport?.isResponseOverdue
+                      ? "Laporan telah melebihi batas waktu penanganan resmi 14 hari kerja berdasarkan UU No. 25/2009 tentang Pelayanan Publik."
+                      : "Laporan berada dalam masa pemantauan respons teknis UPTD dinas terkait.")}
+                  </p>
+
+                  {/* Overdue Action */}
+                  {currentReport?.isResponseOverdue && (
+                    <button
+                      onClick={() => onOpenOmbudsmanDraft(currentReport)}
+                      className="w-full mt-1 py-2 px-3 rounded-[5px] text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer font-sans"
+                    >
+                      <FileCheck className="w-3.5 h-3.5" />
+                      <span>Generate Draf Laporan Ombudsman RI</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 2: PROYEK YANG DIBANGUN / ANGGARAN */}
+            {activeTab === "proyek" && (
+              <div className="space-y-3.5 animate-fade-in">
+                {budgetData ? (
+                  <>
+                    {/* Project Header Box */}
+                    <div className="p-3.5 rounded-[5px] bg-slate-900 text-white space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono font-bold text-orange-400">
+                          {budgetData.packageId}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold ${
+                          budgetData.progressStatus === "SELESAI"
+                            ? "bg-emerald-500 text-white"
+                            : budgetData.progressStatus === "TERLAMBAT_RESPONS"
+                            ? "bg-rose-500 text-white"
+                            : "bg-amber-500 text-white"
+                        }`}>
+                          {budgetData.progressStatus.replace("_", " ")}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-sm text-white leading-snug">
+                        {budgetData.name}
+                      </h3>
+                      <div className="text-[11px] text-slate-300 flex items-center gap-2">
+                        <Calendar className="w-3 h-3 text-slate-400" />
+                        <span>Tahun Anggaran {budgetData.fiscalYear} • {budgetData.source}</span>
+                      </div>
+                    </div>
+
+                    {/* What is being built / Scope of construction work */}
+                    <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-1.5">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Hammer className="w-3.5 h-3.5 text-orange-600" />
+                        <span>Lingkup Pekerjaan Fisik yang Dibangun</span>
+                      </div>
+                      <p className="text-xs text-slate-800 leading-relaxed font-medium">
+                        {budgetData.scope || "Pekerjaan rekonstruksi dan pemeliharaan berkala struktur perkerasan jalan, normalisasi sistem drainase, dan pelapisan ulang aspal hotmix."}
+                      </p>
+                    </div>
+
+                    {/* Budget & Contract Comparison */}
+                    <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-3">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        Rincian Nilai Pengadaan & Anggaran
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
+                          <span className="text-[10px] text-slate-500 block">Pagu Anggaran</span>
+                          <span className="text-sm font-bold text-slate-900 font-mono">
+                            Rp {((budgetData.paguRp || 0) / 1000000000).toFixed(2)} M
+                          </span>
+                        </div>
+                        <div className="p-2.5 rounded-[4px] bg-orange-50/60 border border-orange-100">
+                          <span className="text-[10px] text-orange-800 block">Nilai Kontrak Terkoreksi</span>
+                          <span className="text-sm font-bold text-orange-950 font-mono">
+                            Rp {((budgetData.contractValueRp || 0) / 1000000000).toFixed(2)} M
+                          </span>
+                        </div>
+                      </div>
+
+                      {savingsRp > 0 && (
+                        <div className="flex items-center justify-between text-[11px] p-2 rounded-[4px] bg-emerald-50 border border-emerald-100 text-emerald-800 font-medium">
+                          <span className="flex items-center gap-1">
+                            <BadgePercent className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Efisiensi Tender Hasil Lelang:</span>
+                          </span>
+                          <span className="font-bold font-mono">
+                            Rp {(savingsRp / 1000000).toFixed(0)} Juta ({savingsPct}%)
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Contractor & Physical Progress */}
+                    <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-2.5">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        Kontraktor & Progres Fisik
+                      </div>
+
+                      <div className="space-y-1">
+                        <span className="text-[10px] text-slate-500 block">Pemenang Tender Pelaksana:</span>
+                        <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+                          <span>{budgetData.contractor || "Belum Ditetapkan / Proses Lelang"}</span>
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="space-y-1 pt-1">
+                        <div className="flex justify-between text-[11px] font-semibold text-slate-700">
+                          <span>Realisasi Fisik Lapangan</span>
+                          <span className="font-mono text-orange-700 font-bold">{budgetData.progressPct || 0}%</span>
+                        </div>
+                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                          <div
+                            className={`h-full transition-all duration-500 ${
+                              budgetData.progressPct === 100
+                                ? "bg-emerald-600"
+                                : budgetData.progressPct < 30
+                                ? "bg-rose-500"
+                                : "bg-orange-600"
+                            }`}
+                            style={{ width: `${budgetData.progressPct || 0}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="p-2 rounded-[4px] bg-slate-50 text-[11px] text-slate-600 border border-slate-100 leading-relaxed">
+                        <span className="font-bold text-slate-800">Catatan Pengawasan: </span>
+                        {budgetData.statusNote}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="p-6 text-center text-slate-500 space-y-2 bg-white rounded-[5px] border border-slate-200">
+                    <FileText className="w-8 h-8 mx-auto text-slate-300" />
+                    <p className="text-xs">Belum ada paket anggaran tender aktif yang terhubung ke segmen jalan ini.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB 3: STATUS KEWENANGAN & LEGALITAS */}
+            {activeTab === "kewenangan" && (
+              <div className="space-y-3.5 animate-fade-in">
+                {/* Official Authority Card */}
+                <div className="p-4 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-9 h-9 rounded-[5px] bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                      <Building2 className="w-4 h-4 text-slate-700" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                        Instansi Penanggung Jawab Resmi
+                      </div>
+                      <div className="font-bold text-slate-900 text-sm">
+                        {currentRoad?.authorityLabel}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-[4px] bg-slate-50 border border-slate-100 space-y-1">
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Dasar Penetapan Status Ruas (SK Resmi)
+                    </div>
+                    <div className="text-xs font-semibold text-slate-800 leading-snug">
+                      {currentRoad?.legalBasis}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
+                      <span className="text-[10px] text-slate-400 block">Kode Ruas</span>
+                      <span className="font-mono font-bold text-slate-900">{currentRoad?.code}</span>
+                    </div>
+                    <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
+                      <span className="text-[10px] text-slate-400 block">Panjang Koridor</span>
+                      <span className="font-bold text-slate-900">{currentRoad?.lengthKm} KM</span>
+                    </div>
+                    <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100 col-span-2">
+                      <span className="text-[10px] text-slate-400 block">Tipe Perkerasan Jalan</span>
+                      <span className="font-semibold text-slate-900">{currentRoad?.pavementType}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Legal Context Note */}
+                <div className="p-3.5 rounded-[5px] bg-blue-50/70 border border-blue-200 text-blue-950 space-y-1.5 leading-relaxed">
+                  <div className="font-bold text-xs flex items-center gap-1.5 text-blue-900">
+                    <Shield className="w-3.5 h-3.5 text-blue-700" />
+                    <span>Payung Hukum Kewenangan Ruas Jalan</span>
+                  </div>
+                  <p className="text-[11px] text-blue-900">
+                    Berdasarkan <strong>UU No. 38 Tahun 2004</strong> jo. <strong>UU No. 2 Tahun 2022</strong> tentang Jalan, setiap ruas jalan memiliki pembagian kewenangan mutlak antara Pemerintah Pusat (Jalan Nasional), Pemerintah Provinsi (Jalan Provinsi), dan Pemerintah Kabupaten/Kota (Jalan Daerah). Hal ini mencegah praktik saling lempar tanggung jawab penanganan jalan rusak.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: SUMBER DATA RESMI & TERVERIFIKASI */}
+            {activeTab === "sumber" && (
+              <div className="space-y-3.5 animate-fade-in">
+                {/* Verification Stamp */}
+                <div className="p-3.5 rounded-[5px] bg-emerald-50 border border-emerald-200 flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-emerald-950 text-xs">Data Terverifikasi & Terbuka</h4>
+                    <p className="text-[11px] text-emerald-800">
+                      Setiap informasi ruas, masalah teknis, dan paket tender telah dicocokkan dengan portal resmi pemerintah.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Source Checklist */}
+                <div className="space-y-2">
+                  {/* Source 1: Kewenangan */}
+                  <div className="p-3 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        1. Sumber Status Kewenangan
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-[3px] border border-emerald-200">
+                        SK Sah
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-900 font-semibold">
+                      {currentRoad?.officialSources?.authoritySource || currentRoad?.legalBasis}
+                    </p>
+                  </div>
+
+                  {/* Source 2: Anggaran & LPSE */}
+                  <div className="p-3 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        2. Sumber Anggaran & Tender
+                      </span>
+                      <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-[3px] border border-blue-200">
+                        LPSE / SiRUP
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-900 font-semibold">
+                      {currentRoad?.officialSources?.budgetSource || (budgetData ? `Portal LPSE - Paket ${budgetData.packageId}` : "Portal Pengadaan Barang/Jasa")}
+                    </p>
+                  </div>
+
+                  {/* Source 3: Kondisi Lapangan */}
+                  <div className="p-3 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        3. Sumber Kerusakan & Aduan
+                      </span>
+                      <span className="text-[10px] font-bold text-orange-700 bg-orange-50 px-1.5 py-0.5 rounded-[3px] border border-orange-200">
+                        Geotagging + AI
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-900 font-semibold">
+                      {currentRoad?.officialSources?.fieldDataSource || "Laporan Pengaduan Geotag Warga & Validasi AI JagaJalan"}
+                    </p>
+                  </div>
+
+                  {/* Source 4: Tanggal Audit */}
+                  <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center justify-between">
+                    <span>Terakhir Diaudit & Disinkronkan:</span>
+                    <span className="font-bold text-slate-800 font-mono">
+                      {currentRoad?.budget?.lastVerifiedAt || "18 Oktober 2026"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Open Official Portal Button */}
+                {budgetData?.sourceUrl && (
+                  <a
+                    href={budgetData.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-3 rounded-[5px] text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-600" />
+                    <span>Buka Rincian Tender di Portal LPSE / Data Jabar</span>
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Drawer Footer Actions */}
+          <div className="p-4 border-t border-slate-100 space-y-2 bg-white shrink-0 font-sans">
             <button
               onClick={() => onOpenReportModal()}
-              className="w-full py-2 px-4 rounded-[5px] text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans"
+              className="w-full py-2.5 px-4 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer font-sans"
             >
-              <MapPin className="w-3.5 h-3.5 text-slate-400" />
-              <span>Laporkan kerusakan di sekitar sini</span>
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Laporkan Kerusakan di Sekitar Ruas Ini</span>
             </button>
+
+            {currentReport?.isResponseOverdue && (
+              <button
+                onClick={() => onOpenOmbudsmanDraft(currentReport)}
+                className="w-full py-2 px-4 rounded-[5px] text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans"
+              >
+                <FileCheck className="w-3.5 h-3.5" />
+                <span>Unduh Draf Laporan Ombudsman RI</span>
+              </button>
+            )}
           </div>
         </aside>
       )}

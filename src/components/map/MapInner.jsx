@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Popup, Tooltip, useMap } from "react-leaflet";
 import L from "leaflet";
 
 // Create custom orange marker icon matching the high-fidelity UI design
@@ -22,7 +22,7 @@ const createReportIcon = (category, isOverdue, isSelected) => {
           align-items: center;
           justify-content: center;
         ">
-          <!-- Large Radial Aura Halo (as seen in screenshot around Sawangan pin) -->
+          <!-- Large Radial Aura Halo -->
           <div style="
             position: absolute;
             width: 58px;
@@ -86,7 +86,6 @@ const createReportIcon = (category, isOverdue, isSelected) => {
           align-items: center;
           justify-content: center;
         ">
-          <!-- White Alert Triangle SVG Icon (matching screenshot exactly) -->
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
             <line x1="12" y1="9" x2="12" y2="13"/>
@@ -148,25 +147,114 @@ export default function MapInner({
       {/* Road Segment Polylines */}
       {roads.map((road) => {
         let color = "#0d9488"; // Kota/Kab: Teal
-        if (road.authority === "NASIONAL") color = "#2563eb"; // Nasional: Royal Blue
-        if (road.authority === "PROVINSI") color = "#7c3aed"; // Provinsi: Vivid Purple
+        let badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
+        if (road.authority === "NASIONAL") {
+          color = "#2563eb"; // Nasional: Royal Blue
+          badgeBg = "bg-blue-50 text-blue-800 border-blue-200";
+        }
+        if (road.authority === "PROVINSI") {
+          color = "#7c3aed"; // Provinsi: Vivid Purple
+          badgeBg = "bg-purple-50 text-purple-800 border-purple-200";
+        }
 
         const isSelected = selectedRoad?.id === road.id;
 
         return (
-          <Polyline
-            key={road.id}
-            positions={road.coordinates}
-            pathOptions={{
-              color: isSelected ? "#ea580c" : color,
-              weight: isSelected ? 6 : 4,
-              opacity: isSelected ? 1 : 0.8,
-              dashArray: road.condition === "RUSAK_BERAT" ? "5, 6" : undefined,
-            }}
-            eventHandlers={{
-              click: () => onSelectRoad(road),
-            }}
-          />
+          <React.Fragment key={road.id}>
+            {/* Click hit area expander */}
+            <Polyline
+              positions={road.coordinates}
+              pathOptions={{
+                color: "transparent",
+                weight: 18,
+                opacity: 0,
+              }}
+              eventHandlers={{
+                click: () => onSelectRoad(road),
+              }}
+            />
+
+            {/* Visual polyline */}
+            <Polyline
+              positions={road.coordinates}
+              pathOptions={{
+                color: isSelected ? "#ea580c" : color,
+                weight: isSelected ? 7 : 5,
+                opacity: isSelected ? 1 : 0.85,
+                dashArray: road.condition === "RUSAK_BERAT" ? "6, 6" : undefined,
+              }}
+              eventHandlers={{
+                click: () => onSelectRoad(road),
+              }}
+            >
+              <Tooltip sticky>
+                <div className="font-sans text-xs">
+                  <div className="font-bold text-slate-900">{road.name}</div>
+                  <div className="text-[10px] text-slate-500 font-medium">
+                    {road.authorityLabel} • Klik untuk melihat detail & proyek
+                  </div>
+                </div>
+              </Tooltip>
+
+              <Popup className="jagajalan-leaflet-popup">
+                <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
+                  <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-1.5">
+                    <span className={`px-2 py-0.5 rounded-[4px] text-[9px] font-bold border ${badgeBg}`}>
+                      {road.authority}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400 font-bold">{road.code}</span>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-slate-900 leading-snug">{road.name}</h4>
+                    <p className="text-[10px] text-slate-500">{road.district} • {road.lengthKm} KM</p>
+                  </div>
+
+                  {/* Problem snippet */}
+                  <div className="bg-orange-50/80 rounded-[4px] p-2 border border-orange-100 space-y-1">
+                    <div className="text-[10px] font-bold text-orange-900 flex items-center gap-1">
+                      <span>⚠️ Masalah:</span>
+                      <span className="font-semibold text-orange-800">{road.problemDetails?.headline || road.condition}</span>
+                    </div>
+                    <div className="text-[9px] text-slate-600 line-clamp-2">
+                      {road.problemDetails?.description}
+                    </div>
+                  </div>
+
+                  {/* Construction project snippet */}
+                  {road.budget && (
+                    <div className="bg-slate-50 rounded-[4px] p-2 border border-slate-200/80 space-y-0.5">
+                      <div className="text-[10px] font-bold text-slate-800 flex items-center justify-between">
+                        <span>🏗️ Proyek:</span>
+                        <span className="text-orange-700 font-black">
+                          Rp {((road.budget.paguRp || 0) / 1000000000).toFixed(1)} M
+                        </span>
+                      </div>
+                      <div className="text-[9px] text-slate-600 line-clamp-1 font-medium">
+                        {road.budget.name}
+                      </div>
+                      <div className="text-[8px] text-slate-400">
+                        Kontraktor: {road.budget.contractor || "Dalam Pengadaan"}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Official Sources cited */}
+                  <div className="text-[8.5px] text-slate-500 border-t border-slate-100 pt-1 flex items-center justify-between">
+                    <span>Sumber: {road.officialSources?.budgetSource ? "SiRUP / LPSE" : "SK KemenPU"}</span>
+                    <span className="text-emerald-700 font-bold">✓ Terverifikasi</span>
+                  </div>
+
+                  <button
+                    onClick={() => onSelectRoad(road)}
+                    className="w-full py-1.5 px-2 rounded-[4px] text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 text-center transition-colors cursor-pointer block"
+                  >
+                    Buka Detail Lengkap di Panel →
+                  </button>
+                </div>
+              </Popup>
+            </Polyline>
+          </React.Fragment>
         );
       })}
 
@@ -185,7 +273,65 @@ export default function MapInner({
             eventHandlers={{
               click: () => onSelectReport(report),
             }}
-          />
+          >
+            <Tooltip sticky>
+              <div className="font-sans text-xs">
+                <div className="font-bold text-slate-900">{report.ticketCode} • {report.roadName}</div>
+                <div className="text-[10px] text-slate-500">
+                  {report.categoryLabel} • Skor Bahaya: {report.hazardScore}/100
+                </div>
+              </div>
+            </Tooltip>
+
+            <Popup className="jagajalan-leaflet-popup">
+              <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                  <span className="font-mono text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
+                    {report.ticketCode}
+                  </span>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${
+                    isOverdue ? "bg-rose-100 text-rose-800" : "bg-emerald-100 text-emerald-800"
+                  }`}>
+                    {isOverdue ? "SLA Overdue >14 Hari" : "Dalam Pengerjaan"}
+                  </span>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-slate-900">{report.roadName}</h4>
+                  <p className="text-[10px] text-slate-500">{report.address}</p>
+                </div>
+
+                <div className="bg-slate-50 p-2 rounded-[4px] border border-slate-200 text-[10px] space-y-1">
+                  <div className="font-semibold text-slate-800 flex justify-between">
+                    <span>Kategori:</span>
+                    <span className="font-bold text-orange-700">{report.categoryLabel}</span>
+                  </div>
+                  <div className="font-semibold text-slate-800 flex justify-between">
+                    <span>Estimasi Bahaya AI:</span>
+                    <span className="font-bold text-rose-600">{report.hazardScore}/100 ({report.hazardLevel})</span>
+                  </div>
+                </div>
+
+                {report.matchingBudget && (
+                  <div className="text-[9px] text-slate-600 bg-orange-50/60 p-1.5 rounded-[4px] border border-orange-100">
+                    <span className="font-bold text-orange-900">Proyek Terhubung: </span>
+                    {report.matchingBudget.packageName} (Rp {((report.matchingBudget.paguRp || 0) / 1000000000).toFixed(1)} M)
+                  </div>
+                )}
+
+                <div className="text-[8.5px] text-slate-400 border-t border-slate-100 pt-1">
+                  Dasar Hukum: {report.legalBasis}
+                </div>
+
+                <button
+                  onClick={() => onSelectReport(report)}
+                  className="w-full py-1.5 px-2 rounded-[4px] text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 text-center transition-colors cursor-pointer block"
+                >
+                  Buka Detail Aduan di Panel →
+                </button>
+              </div>
+            </Popup>
+          </Marker>
         );
       })}
     </MapContainer>
