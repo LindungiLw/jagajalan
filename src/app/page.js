@@ -11,7 +11,6 @@ import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
 import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
 import OfficerLogin from "@/components/dashboard/OfficerLogin";
 import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
-import MapShowcaseTeaser from "@/components/dashboard/MapShowcaseTeaser";
 import AnnualProgressChart from "@/components/dashboard/AnnualProgressChart";
 import CivicWorkflowSection from "@/components/dashboard/CivicWorkflowSection";
 import NationalStatsTeaser from "@/components/dashboard/NationalStatsTeaser";

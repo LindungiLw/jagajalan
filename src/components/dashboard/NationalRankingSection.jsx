@@ -74,11 +74,19 @@ export default function NationalRankingSection({ onSelectPilot }) {
         <div className="lg:max-w-sm rounded-[5px] bg-slate-50/80 border-l-2 border-l-[#c2410c] border border-slate-200/80 p-3 text-xs">
           <div className="flex items-center gap-1.5 text-slate-900 font-bold mb-1">
             <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
-            <span className="font-heading">Koridor Pilot Jawa Barat &amp; Bodetabek</span>
+            <span className="font-heading">Koridor Percontohan (Sample Pilot)</span>
           </div>
           <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
-            Dipilih sebagai kawasan inspeksi mikro awal berdasarkan kelengkapan keterbukaan data APBD, paket tender LPSE, dan kepadatan mobilitas komuter harian.
+            6 ruas di Jawa Barat &amp; Bodetabek difungsikan sebagai sampel uji coba mikro untuk mendemonstrasikan integrasi koordinat GPS, SK penetapan resmi, dan tender LPSE.
           </p>
+          {onSelectPilot && (
+            <button
+              onClick={onSelectPilot}
+              className="mt-2 text-[11px] font-bold text-[#c2410c] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <span>Buka Peta 6 Ruas Pilot →</span>
+            </button>
+          )}
         </div>
       </div>
 
