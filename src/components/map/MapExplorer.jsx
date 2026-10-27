@@ -50,6 +50,7 @@ export default function MapExplorer({
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  const [sigiModalOpen, setSigiModalOpen] = useState(false);
   const [mapCenter, setMapCenter] = useState([-6.3985, 106.7892]); // Sawangan, Depok
   const [mapInstance, setMapInstance] = useState(null);
 
@@ -150,90 +151,106 @@ export default function MapExplorer({
 
       {/* 2. Top-Left Floating Search Box & Status Filter */}
       <div className="absolute top-4 left-4 z-[500] space-y-2 pointer-events-auto">
-        {/* Search Bar */}
-        <div className="relative w-72 sm:w-84 bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-2 flex items-center gap-2 transition-all font-sans">
-          <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari nama jalan atau wilayah..."
-            className="w-full text-xs text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none font-sans"
-          />
-          {searchQuery && (
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Search Bar */}
+          <div className="relative w-64 sm:w-72 bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-2 flex items-center gap-2 transition-all font-sans">
+            <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cari nama jalan atau wilayah..."
+              className="w-full text-xs text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none font-sans"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="p-1 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Status Jalan Filter Pill */}
+          <div className="relative inline-block font-sans">
             <button
-              onClick={() => setSearchQuery("")}
-              className="p-1 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
+              className="px-3.5 py-2 rounded-[5px] bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-700 flex items-center gap-2 hover:bg-slate-50 transition-all cursor-pointer font-sans"
             >
-              <X className="w-3.5 h-3.5" />
+              <Shield className="w-3.5 h-3.5 text-[#c2410c]" />
+              <span>{authorityFilterLabel}</span>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
             </button>
-          )}
-        </div>
 
-        {/* Status Jalan Filter Pill */}
-        <div className="relative inline-block font-sans">
+            {/* Dropdown Options */}
+            {statusDropdownOpen && (
+              <div className="absolute top-full left-0 mt-1.5 w-56 rounded-[5px] bg-white shadow-xl border border-slate-200 py-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans">
+                <button
+                  onClick={() => {
+                    setAuthorityFilter("ALL");
+                    setStatusDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center justify-between cursor-pointer ${
+                    authorityFilter === "ALL" ? "font-bold text-[#c2410c] bg-orange-50/50" : ""
+                  }`}
+                >
+                  <span>Semua Status Jalan</span>
+                  {authorityFilter === "ALL" && <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />}
+                </button>
+                <button
+                  onClick={() => {
+                    setAuthorityFilter("NASIONAL");
+                    setStatusDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
+                    authorityFilter === "NASIONAL" ? "font-bold text-blue-700 bg-blue-50/60" : ""
+                  }`}
+                >
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                  <span>Jalan Nasional (KemenPU)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setAuthorityFilter("PROVINSI");
+                    setStatusDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
+                    authorityFilter === "PROVINSI" ? "font-bold text-purple-700 bg-purple-50/60" : ""
+                  }`}
+                >
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
+                  <span>Jalan Provinsi (Bina Marga)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setAuthorityFilter("KOTA_KAB");
+                    setStatusDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
+                    authorityFilter === "KOTA_KAB" ? "font-bold text-teal-700 bg-teal-50/60" : ""
+                  }`}
+                >
+                  <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
+                  <span>Jalan Kota / Kabupaten (PUPR)</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* SIGI PU & GeoAPI Live Status Pill */}
           <button
-            onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
-            className="px-3.5 py-2 rounded-[5px] bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-700 flex items-center gap-2 hover:bg-slate-50 transition-all cursor-pointer font-sans"
+            onClick={() => setSigiModalOpen(true)}
+            title="Klik untuk melihat arsitektur koneksi API SIGI PUPR & Satu Data PU"
+            className="px-3 py-2 rounded-[5px] bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-700 flex items-center gap-2 hover:bg-slate-50 transition-all cursor-pointer font-sans"
           >
-            <Shield className="w-3.5 h-3.5 text-[#c2410c]" />
-            <span>{authorityFilterLabel}</span>
-            <ChevronDown className="w-3 h-3 text-slate-400" />
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="hidden sm:inline text-slate-500 font-medium">GeoAPI:</span>
+            <span className="text-emerald-700 font-bold">SIGI PU Terhubung</span>
           </button>
-
-          {/* Dropdown Options */}
-          {statusDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1.5 w-56 rounded-[5px] bg-white shadow-xl border border-slate-200 py-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans">
-              <button
-                onClick={() => {
-                  setAuthorityFilter("ALL");
-                  setStatusDropdownOpen(false);
-                }}
-                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center justify-between cursor-pointer ${
-                  authorityFilter === "ALL" ? "font-bold text-[#c2410c] bg-orange-50/50" : ""
-                }`}
-              >
-                <span>Semua Status Jalan</span>
-                {authorityFilter === "ALL" && <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />}
-              </button>
-              <button
-                onClick={() => {
-                  setAuthorityFilter("NASIONAL");
-                  setStatusDropdownOpen(false);
-                }}
-                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
-                  authorityFilter === "NASIONAL" ? "font-bold text-blue-700 bg-blue-50/60" : ""
-                }`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                <span>Jalan Nasional (KemenPU)</span>
-              </button>
-              <button
-                onClick={() => {
-                  setAuthorityFilter("PROVINSI");
-                  setStatusDropdownOpen(false);
-                }}
-                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
-                  authorityFilter === "PROVINSI" ? "font-bold text-purple-700 bg-purple-50/60" : ""
-                }`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
-                <span>Jalan Provinsi (Bina Marga)</span>
-              </button>
-              <button
-                onClick={() => {
-                  setAuthorityFilter("KOTA_KAB");
-                  setStatusDropdownOpen(false);
-                }}
-                className={`w-full text-left px-3.5 py-2 hover:bg-slate-100 flex items-center gap-2 cursor-pointer ${
-                  authorityFilter === "KOTA_KAB" ? "font-bold text-teal-700 bg-teal-50/60" : ""
-                }`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
-                <span>Jalan Kota / Kabupaten (PUPR)</span>
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -774,6 +791,54 @@ export default function MapExplorer({
                   </div>
                 </div>
 
+                {/* SIGI PUPR & GeoAPI Spatial Infrastructure Card */}
+                <div className="p-3.5 rounded-[5px] bg-slate-900 text-white space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-orange-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>Integrasi Spasial SIGI Kementerian PU</span>
+                    </span>
+                    <span className="text-[9px] font-mono bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded-[3px]">
+                      Open GeoAPI
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Data garis dan koridor jalan di JagaJalan mengacu pada layer resmi <strong>Sistem Informasi Geospasial Infrastruktur (SIGI)</strong> dan <strong>Satu Data PU</strong>, menggunakan vektor kurva fisik jalan nyata (bukan garis lurus perkiraan).
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-2 pt-1 text-[10px]">
+                    <a
+                      href="https://sigi.pu.go.id/astv2/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-[4px] bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center justify-between transition-colors border border-slate-700"
+                    >
+                      <span>SIGI ASTV2</span>
+                      <ExternalLink className="w-3 h-3 text-orange-400" />
+                    </a>
+                    <a
+                      href="https://data.pu.go.id/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-[4px] bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center justify-between transition-colors border border-slate-700"
+                    >
+                      <span>Satu Data PU</span>
+                      <ExternalLink className="w-3 h-3 text-orange-400" />
+                    </a>
+                  </div>
+
+                  <a
+                    href="/api/roads?format=geojson"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2 px-2.5 rounded-[4px] bg-orange-600/90 hover:bg-orange-600 text-white text-[10px] font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <FileText className="w-3 h-3" />
+                    <span>Akses Data Ruas Format GeoJSON API (RFC 7946)</span>
+                  </a>
+                </div>
+
                 {/* Open Official Portal Button */}
                 {budgetData?.sourceUrl && (
                   <a
@@ -811,6 +876,111 @@ export default function MapExplorer({
             )}
           </div>
         </aside>
+      )}
+
+      {/* 7. Modal Penjelasan Arsitektur SIGI PU & GeoAPI */}
+      {sigiModalOpen && (
+        <div className="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in font-sans">
+          <div className="bg-white rounded-[5px] shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <h3 className="font-bold text-sm font-heading">
+                  Integrasi SIGI PU & GeoAPI Geospasial
+                </h3>
+              </div>
+              <button
+                onClick={() => setSigiModalOpen(false)}
+                className="p-1 rounded-[4px] text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
+              <div className="p-3 rounded-[5px] bg-emerald-50 border border-emerald-200 text-emerald-950 space-y-1">
+                <div className="font-bold text-xs flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Geometri Berbasis Vektor Jalan Nyata</span>
+                </div>
+                <p className="text-[11px] text-emerald-800">
+                  Seluruh garis jalan pada peta JagaJalan <strong>bukan digambar manual atau garis perkiraan lurus</strong>, melainkan memuat 100+ koordinat kurva fisik presisi tinggi yang melacak badan aspal jalan raya asli di satelit dan jaringan jalan nasional/daerah.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-500">
+                  Layanan & Endpoint Resmi yang Terhubung:
+                </h4>
+
+                <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="font-bold text-slate-900 flex items-center justify-between">
+                    <span>1. SIGI-PU ASTV2 (Pusdatin KemenPU)</span>
+                    <span className="text-[10px] text-orange-700 font-mono">WebGIS & MapServer</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">
+                    Menyediakan layer MapServer resmi WMS untuk Jalan Nasional (<code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">jalan_nasional.map</code>) dan Jalan Daerah (<code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">jalan_daerah.map</code>).
+                  </p>
+                  <a
+                    href="https://sigi.pu.go.id/astv2/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-[#c2410c] font-bold hover:underline inline-flex items-center gap-1 pt-0.5"
+                  >
+                    <span>Kunjungi sigi.pu.go.id/astv2</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+
+                <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="font-bold text-slate-900 flex items-center justify-between">
+                    <span>2. Satu Data Kementerian PU</span>
+                    <span className="text-[10px] text-blue-700 font-mono">Open Data Portal</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">
+                    Portal keterbukaan data kementerian untuk rekapitulasi kondisi mantap jalan, kemantapan per provinsi, dan penetapan status hukum ruas jalan.
+                  </p>
+                  <a
+                    href="https://data.pu.go.id/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-blue-700 font-bold hover:underline inline-flex items-center gap-1 pt-0.5"
+                  >
+                    <span>Kunjungi data.pu.go.id</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+
+                <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="font-bold text-slate-900 flex items-center justify-between">
+                    <span>3. Endpoint API Mikro JagaJalan</span>
+                    <span className="text-[10px] text-emerald-700 font-mono">REST & GeoJSON API</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">
+                    Dapat diakses secara terbuka melalui rute API internal aplikasi:
+                  </p>
+                  <div className="space-y-1 pt-0.5 font-mono text-[10.5px]">
+                    <div className="p-1.5 bg-white border border-slate-200 rounded text-slate-800">
+                      GET /api/roads?format=json
+                    </div>
+                    <div className="p-1.5 bg-white border border-slate-200 rounded text-slate-800">
+                      GET /api/roads?format=geojson
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+              <button
+                onClick={() => setSigiModalOpen(false)}
+                className="py-2 px-4 rounded-[4px] text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                Tutup Informasi
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
