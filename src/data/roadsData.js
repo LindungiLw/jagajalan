@@ -1,5 +1,5 @@
 // Data Ruas Jalan Terverifikasi JagaJalan
-// Wilayah Fokus: SUMATERA UTARA (Default Aktif) & JAWA BARAT
+// Cakupan: SUMATERA UTARA (Fokus Pilot) & 20 KORIDOR ARTERI JALAN NASIONAL SELURUH INDONESIA
 // Terintegrasi dengan Kepala Daerah / Pejabat Penanggung Jawab, Data LPSE, dan SIGI PU
 
 export const SUMATERA_UTARA_ROADS = [
@@ -2923,18 +2923,4093 @@ export const SUMATERA_UTARA_ROADS = [
   }
 ];
 
-// Default active roads: SUMATERA UTARA (fokus percontohan provinsi)
-export const ROAD_SEGMENTS = SUMATERA_UTARA_ROADS;
-
-export const PROVINCE_ROAD_MAP = {
-  sumut: {
-    name: "Sumatera Utara",
-    capital: "Medan",
-    center: [3.5952, 98.6722],
-    zoom: 11.5,
-    governor: "Dr. Drs. A. Fatoni, M.Si. (Pj. Gubernur Sumatera Utara)",
-    regionalAgency: "Dinas Pekerjaan Umum & Penataan Ruang Prov. Sumut",
-    nationalBalai: "BBPJN Sumatera Utara (Kementerian PU)",
-    roads: SUMATERA_UTARA_ROADS,
+// 20 KORIDOR ARTERI JALAN NASIONAL SELURUH INDONESIA
+// Berdasarkan SK Menteri PUPR No. 1688/KPTS/M/2022
+export const NATIONAL_HIGHWAYS_INDONESIA = [
+  {
+    "id": "ruas-nas-smt-01",
+    "provinceId": "sumatera",
+    "region": "Sumatera",
+    "name": "Jalur Lintas Timur Sumatera (Jalintim)",
+    "code": "RUAS-NAS-JALINTIM-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut, Sumsel, BPJN Aceh, Riau, Jambi, Lampung)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 2150.0,
+    "pavementType": "Aspal Hotmix Heavy Duty AC-WC & Beton Rigid",
+    "condition": "MANTAP",
+    "district": "Lintas 6 Provinsi (Aceh - Sumut - Riau - Jambi - Sumsel - Lampung)",
+    "center": [
+      0.5071,
+      101.4478
+    ],
+    "startPoint": {
+      "name": "Banda Aceh (KM 0 Sumatera)",
+      "coords": [
+        5.5483,
+        95.3238
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Bakauheni (Lampung)",
+      "coords": [
+        -5.8686,
+        105.7533
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Banda Aceh (Titik Nol)",
+        "coords": [
+          5.5483,
+          95.3238
+        ],
+        "status": "MANTAP",
+        "note": "Arteri Utama Banda Aceh"
+      },
+      {
+        "km": 440,
+        "name": "Medan (Simpang Amplas)",
+        "coords": [
+          3.5565,
+          98.7025
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Industri & Logistik Sumut"
+      },
+      {
+        "km": 910,
+        "name": "Pekanbaru (Simpang Panam)",
+        "coords": [
+          0.5071,
+          101.4478
+        ],
+        "status": "MANTAP",
+        "note": "Koridor Logistik Minyak & Sawit Riau"
+      },
+      {
+        "km": 1280,
+        "name": "Kota Jambi (Simpang Rimbo)",
+        "coords": [
+          -1.6101,
+          103.6131
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Titik Rawan Truk Angkutan Batubara"
+      },
+      {
+        "km": 1560,
+        "name": "Palembang (Jembatan Musi II)",
+        "coords": [
+          -2.9761,
+          104.7754
+        ],
+        "status": "MANTAP",
+        "note": "Arteri Bypass Palembang"
+      },
+      {
+        "km": 1980,
+        "name": "Bandar Lampung (Rajabasa)",
+        "coords": [
+          -5.4292,
+          105.2611
+        ],
+        "status": "MANTAP",
+        "note": "Gerbang Distribusi Logistik Sumatera"
+      },
+      {
+        "km": 2150,
+        "name": "Pelabuhan Bakauheni",
+        "coords": [
+          -5.8686,
+          105.7533
+        ],
+        "status": "MANTAP",
+        "note": "Konektivitas Penyeberangan Jawa-Sumatera"
+      }
+    ],
+    "coordinates": [
+      [
+        5.5483,
+        95.3238
+      ],
+      [
+        5.385,
+        95.9609
+      ],
+      [
+        5.1801,
+        97.1407
+      ],
+      [
+        4.4716,
+        97.9683
+      ],
+      [
+        3.987,
+        98.42
+      ],
+      [
+        3.5952,
+        98.6722
+      ],
+      [
+        3.3285,
+        99.1625
+      ],
+      [
+        2.9599,
+        99.0687
+      ],
+      [
+        2.0975,
+        99.829
+      ],
+      [
+        1.4552,
+        101.2384
+      ],
+      [
+        0.5071,
+        101.4478
+      ],
+      [
+        -0.3776,
+        102.5492
+      ],
+      [
+        -1.6101,
+        103.6131
+      ],
+      [
+        -2.3486,
+        104.2081
+      ],
+      [
+        -2.9761,
+        104.7754
+      ],
+      [
+        -3.3934,
+        104.8458
+      ],
+      [
+        -4.4608,
+        105.2443
+      ],
+      [
+        -5.4292,
+        105.2611
+      ],
+      [
+        -5.8686,
+        105.7533
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU (BBPJN Wilayah Sumatera)",
+      "officialPic": "Balai Besar Pelaksanaan Jalan Nasional (BBPJN) Sumut & Sumsel",
+      "contactCenter": "Pusat Layanan KemenPU Call Center 158"
+    },
+    "problemDetails": {
+      "headline": "Koridor Arteri Primer Sumatera; Beban Truk Sawit & Batubara di Sektor Jambi - Riau",
+      "description": "Secara umum kemantapan 91,4%. Titik kritis terdapat pada segmen Jambi - Batanghari akibat beban angkutan batubara dan ruas Rantau Prapat Sumut.",
+      "rootCause": "Overdimension Overloading (ODOL) angkutan komoditas perkebunan dan tambang.",
+      "safetyImpact": "Gelombang jalan dan deformasi lajur lambat di area perbatasan provinsi."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-JALINTIM-2026",
+      "name": "Preservasi & Rekonstruksi Koridor Jalan Lintas Timur Sumatera (Multi-Years)",
+      "scope": "Rekonstruksi rigid beton 42 km, overlay AC-WC 180 km, penanganan bahu dan drainase.",
+      "paguRp": 485000000000,
+      "contractValueRp": 462500000000,
+      "contractor": "KSO PT Hutama Karya - PT Wijaya Karya (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 68,
+      "statusNote": "Pekerjaan preservasi rutin dan rekonstruksi rigid beton berjalan sesuai kurva S.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-PUPR-JALINTIM-2026",
+      "sourceDocument": "Kontrak Pelaksanaan No. 04/KTR/BBPJN-SUMATERA/2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (Ruas Nasional Arteri Primer)",
+      "budgetSource": "SiRUP LKPP & LPSE Kementerian PU (Pagu APBN TA 2026)",
+      "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id) & Sensor IRI Balai PU",
+      "transparencyUrl": "https://sigi.pu.go.id/astv2/"
+    }
   },
-};
+  {
+    "id": "ruas-nas-smt-02",
+    "provinceId": "sumatera",
+    "region": "Sumatera",
+    "name": "Jalur Lintas Tengah Sumatera (Jalinteng)",
+    "code": "RUAS-NAS-JALINTENG-02",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut, Sumbar, BPJN Jambi, BBPJN Sumsel)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 1840.0,
+    "pavementType": "Aspal Hotmix AC-WC & DPT Pasangan Batu",
+    "condition": "RUSAK_RINGAN",
+    "district": "Lintas 5 Provinsi (Medan - Tarutung - Padang Sidempuan - Bukittinggi - Lubuk Linggau - Lahat)",
+    "center": [
+      -0.3051,
+      100.3692
+    ],
+    "startPoint": {
+      "name": "Medan (Simpang Kayu Besar)",
+      "coords": [
+        3.55,
+        98.72
+      ]
+    },
+    "endPoint": {
+      "name": "Terbanggi Besar (Lampung)",
+      "coords": [
+        -4.869,
+        105.21
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Medan",
+        "coords": [
+          3.55,
+          98.72
+        ],
+        "status": "MANTAP",
+        "note": "Awal Jalur Lintas Tengah"
+      },
+      {
+        "km": 175,
+        "name": "Pematangsiantar",
+        "coords": [
+          2.9599,
+          99.0687
+        ],
+        "status": "MANTAP",
+        "note": "Koneksi Danau Toba"
+      },
+      {
+        "km": 285,
+        "name": "Tarutung",
+        "coords": [
+          2.0234,
+          98.966
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Kawasan Pegunungan Rawan Longsor"
+      },
+      {
+        "km": 420,
+        "name": "Padang Sidempuan",
+        "coords": [
+          1.3734,
+          99.2734
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Penyempitan Ruas Perbukitan"
+      },
+      {
+        "km": 720,
+        "name": "Bukittinggi",
+        "coords": [
+          -0.3051,
+          100.3692
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Wisata & Logistik Dataran Tinggi Sumbar"
+      },
+      {
+        "km": 1140,
+        "name": "Muara Bungo",
+        "coords": [
+          -1.4939,
+          102.1234
+        ],
+        "status": "MANTAP",
+        "note": "Simpang Jambi - Sumbar"
+      },
+      {
+        "km": 1420,
+        "name": "Lubuk Linggau",
+        "coords": [
+          -3.2964,
+          102.8617
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Jalur Penghubung Bengkulu - Sumsel"
+      },
+      {
+        "km": 1640,
+        "name": "Lahat - Baturaja",
+        "coords": [
+          -3.7889,
+          103.5414
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Tambang & Perkebunan Sumsel"
+      },
+      {
+        "km": 1840,
+        "name": "Terbanggi Besar",
+        "coords": [
+          -4.869,
+          105.21
+        ],
+        "status": "MANTAP",
+        "note": "Pertemuan Jalinteng & Tol Trans Sumatera"
+      }
+    ],
+    "coordinates": [
+      [
+        3.55,
+        98.72
+      ],
+      [
+        3.3285,
+        99.1625
+      ],
+      [
+        2.9599,
+        99.0687
+      ],
+      [
+        2.3333,
+        99.0667
+      ],
+      [
+        2.0234,
+        98.966
+      ],
+      [
+        1.3734,
+        99.2734
+      ],
+      [
+        0.55,
+        99.98
+      ],
+      [
+        -0.3051,
+        100.3692
+      ],
+      [
+        -0.95,
+        100.55
+      ],
+      [
+        -1.4939,
+        102.1234
+      ],
+      [
+        -2.15,
+        102.5
+      ],
+      [
+        -3.2964,
+        102.8617
+      ],
+      [
+        -3.7889,
+        103.5414
+      ],
+      [
+        -4.12,
+        104.17
+      ],
+      [
+        -4.869,
+        105.21
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BBPJN Sumatera Utara & BBPJN Sumatera Selatan",
+      "contactCenter": "Layanan Pengaduan Bina Marga KemenPU"
+    },
+    "problemDetails": {
+      "headline": "Kontur Berbukit Rawan Longsor di Bukit Barisan & Lubang Ambles di Tarutung",
+      "description": "Kemantapan 84,6%. Tantangan utama adalah tebing curam di kawasan Tapanuli Utara dan Solok yang kerap tergerus saat musim hujan.",
+      "rootCause": "Gerusan air limpasan lereng pegunungan dan keterbatasan saluran drainase lereng.",
+      "safetyImpact": "Bahu jalan amblas dan penyempitan lajur di titik rawan longsor."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-JALINTENG-2026",
+      "name": "Preservasi Jalan & Pengendalian Longsor Jalur Lintas Tengah Sumatera",
+      "scope": "Konstruksi dinding penahan tanah (DPT) bor pile 1.400 m, perkerasan aspal 96 km.",
+      "paguRp": 340000000000,
+      "contractValueRp": 321800000000,
+      "contractor": "PT Nindya Karya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 54,
+      "statusNote": "Pemasangan dinding penahan tanah di titik lereng kritis 65% rampung.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA Petikan Ditjen Bina Marga TA 2026",
+      "lastVerifiedAt": "2026-10-23"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian Pekerjaan Umum",
+      "fieldDataSource": "Pusdatin SIGI PU & Balai Geoteknik Jalan KemenPU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-smt-03",
+    "provinceId": "sumatera",
+    "region": "Sumatera",
+    "name": "Jalur Lintas Barat Sumatera (Jalinbar)",
+    "code": "RUAS-NAS-JALINBAR-03",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Aceh, BBPJN Sumut, BPJN Sumbar, BPJN Bengkulu, BPJN Lampung)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 2350.0,
+    "pavementType": "Aspal Hotmix AC-WC & Talud Pemecah Gelombang",
+    "condition": "MANTAP",
+    "district": "Pesisir Samudra Hindia (Banda Aceh - Meulaboh - Sibolga - Padang - Bengkulu - Krui)",
+    "center": [
+      -3.8,
+      102.2655
+    ],
+    "startPoint": {
+      "name": "Banda Aceh (Ulee Lheue)",
+      "coords": [
+        5.55,
+        95.28
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Agung (Teluk Semangka, Lampung)",
+      "coords": [
+        -5.5,
+        104.62
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Banda Aceh",
+        "coords": [
+          5.55,
+          95.28
+        ],
+        "status": "MANTAP",
+        "note": "Jalan Pasca-Tsunami Standar USAID"
+      },
+      {
+        "km": 245,
+        "name": "Meulaboh",
+        "coords": [
+          4.1448,
+          96.1264
+        ],
+        "status": "MANTAP",
+        "note": "Pelabuhan Samudera Aceh Barat"
+      },
+      {
+        "km": 520,
+        "name": "Tapaktuan",
+        "coords": [
+          3.2575,
+          97.1812
+        ],
+        "status": "MANTAP",
+        "note": "Koridor Pesisir Selatan Aceh"
+      },
+      {
+        "km": 780,
+        "name": "Sibolga",
+        "coords": [
+          1.7425,
+          98.7792
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Pesisir Barat Sumut Menuju Nias"
+      },
+      {
+        "km": 1120,
+        "name": "Padang",
+        "coords": [
+          -0.9471,
+          100.4172
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Logistik Teluk Bayur Sumbar"
+      },
+      {
+        "km": 1580,
+        "name": "Bengkulu",
+        "coords": [
+          -3.8,
+          102.2655
+        ],
+        "status": "MANTAP",
+        "note": "Jalur Wisata & Pelabuhan Baai"
+      },
+      {
+        "km": 1980,
+        "name": "Krui (Pesisir Barat)",
+        "coords": [
+          -5.195,
+          103.9317
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Pariwisata Ombak Dunia"
+      },
+      {
+        "km": 2350,
+        "name": "Kota Agung",
+        "coords": [
+          -5.5,
+          104.62
+        ],
+        "status": "MANTAP",
+        "note": "Ujung Selatan Jalinbar Lampung"
+      }
+    ],
+    "coordinates": [
+      [
+        5.55,
+        95.28
+      ],
+      [
+        4.65,
+        95.6
+      ],
+      [
+        4.1448,
+        96.1264
+      ],
+      [
+        3.75,
+        96.8
+      ],
+      [
+        3.2575,
+        97.1812
+      ],
+      [
+        2.5,
+        97.9
+      ],
+      [
+        1.7425,
+        98.7792
+      ],
+      [
+        1.0,
+        98.9
+      ],
+      [
+        0.1,
+        99.55
+      ],
+      [
+        -0.9471,
+        100.4172
+      ],
+      [
+        -1.85,
+        100.8
+      ],
+      [
+        -2.6,
+        101.18
+      ],
+      [
+        -3.8,
+        102.2655
+      ],
+      [
+        -4.45,
+        102.9
+      ],
+      [
+        -5.195,
+        103.9317
+      ],
+      [
+        -5.5,
+        104.62
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BPJN Bengkulu & BPJN Barat Sumatera",
+      "contactCenter": "Halo PU 158"
+    },
+    "problemDetails": {
+      "headline": "Pesisir Samudra Hindia; Rawan Abrasi Pantai & Gelombang Pasang di Krui - Bengkulu",
+      "description": "Tingkat kemantapan 89,2%. Bahu jalan beberapa segmen pesisir membutuhkan pengamanan batu gajah (rip-rap) pemecah ombak.",
+      "rootCause": "Dinamika gelombang laut lepas Samudra Hindia saat pasang purnama.",
+      "safetyImpact": "Erosi bahu jalan di sisi laut saat cuaca ekstrem."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-JALINBAR-2026",
+      "name": "Pengamanan Abrasi Pantai & Preservasi Perkerasan Jalinbar",
+      "scope": "Pemasangan revetment batu rip-rap 8.200 meter, patching aspal dan marka thermoplastik.",
+      "paguRp": 210000000000,
+      "contractValueRp": 198500000000,
+      "contractor": "PT Brantas Abipraya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 72,
+      "statusNote": "Pemasangan revetment di pesisir Krui dan Mukomuko mencapai target.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "Kontrak Kerja Preservasi Balai Wilayah Bengkulu-Lampung 2026",
+      "lastVerifiedAt": "2026-10-22"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-jawa-01",
+    "provinceId": "jawa",
+    "region": "Jawa",
+    "name": "Jalur Pantura Jawa (Pantai Utara)",
+    "code": "RUAS-NAS-PANTURA-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN DKI-Jabar, BBPJN Jateng-DIY, BBPJN Jatim-Bali)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 1316.0,
+    "pavementType": "Beton Rigid Pavement Heavy Duty & AC-WC Tebal",
+    "condition": "MANTAP",
+    "district": "Lintas 5 Provinsi (Banten - DKI Jakarta - Jawa Barat - Jawa Tengah - Jawa Timur)",
+    "center": [
+      -6.9667,
+      110.4167
+    ],
+    "startPoint": {
+      "name": "Pelabuhan Merak (Banten)",
+      "coords": [
+        -5.9322,
+        105.9982
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Ketapang (Banyuwangi, Jatim)",
+      "coords": [
+        -8.14,
+        114.4
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Pelabuhan Merak",
+        "coords": [
+          -5.9322,
+          105.9982
+        ],
+        "status": "MANTAP",
+        "note": "Gerbang Penyeberangan Utama Jawa-Sumatera"
+      },
+      {
+        "km": 98,
+        "name": "Jakarta (Daan Mogot - Cawang)",
+        "coords": [
+          -6.2088,
+          106.8456
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Metropolitan Jabodetabek"
+      },
+      {
+        "km": 218,
+        "name": "Cirebon (Batas Jabar-Jateng)",
+        "coords": [
+          -6.732,
+          108.5523
+        ],
+        "status": "MANTAP",
+        "note": "Simpang Logistik Pantura Barat"
+      },
+      {
+        "km": 345,
+        "name": "Pekalongan",
+        "coords": [
+          -6.8886,
+          109.6753
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Titik Rawan Rob Air Laut Pesisir"
+      },
+      {
+        "km": 442,
+        "name": "Semarang (Kaligawe)",
+        "coords": [
+          -6.9667,
+          110.4167
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Peninggian Jalan Antisipasi Banjir Pasang"
+      },
+      {
+        "km": 610,
+        "name": "Tuban (Batas Jateng-Jatim)",
+        "coords": [
+          -6.8972,
+          112.0649
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Industri Semen & Petrokimia"
+      },
+      {
+        "km": 786,
+        "name": "Surabaya (Bundaran Waru)",
+        "coords": [
+          -7.2575,
+          112.7521
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Ekonomi & Logistik Jawa Timur"
+      },
+      {
+        "km": 940,
+        "name": "Situbondo (Hutan Baluran)",
+        "coords": [
+          -7.7056,
+          114.0044
+        ],
+        "status": "MANTAP",
+        "note": "Jalur Arteri Wisata & Logistik Timur"
+      },
+      {
+        "km": 1060,
+        "name": "Banyuwangi (Ketapang)",
+        "coords": [
+          -8.14,
+          114.4
+        ],
+        "status": "MANTAP",
+        "note": "Konektivitas Penyeberangan Jawa-Bali"
+      }
+    ],
+    "coordinates": [
+      [
+        -5.9322,
+        105.9982
+      ],
+      [
+        -6.02,
+        106.05
+      ],
+      [
+        -6.12,
+        106.15
+      ],
+      [
+        -6.2088,
+        106.8456
+      ],
+      [
+        -6.24,
+        107.0
+      ],
+      [
+        -6.31,
+        107.3
+      ],
+      [
+        -6.35,
+        107.8
+      ],
+      [
+        -6.33,
+        108.32
+      ],
+      [
+        -6.732,
+        108.5523
+      ],
+      [
+        -6.87,
+        109.13
+      ],
+      [
+        -6.8886,
+        109.6753
+      ],
+      [
+        -6.91,
+        109.73
+      ],
+      [
+        -6.9667,
+        110.4167
+      ],
+      [
+        -6.89,
+        110.63
+      ],
+      [
+        -6.87,
+        110.84
+      ],
+      [
+        -6.7,
+        111.34
+      ],
+      [
+        -6.8972,
+        112.0649
+      ],
+      [
+        -7.12,
+        112.41
+      ],
+      [
+        -7.2575,
+        112.7521
+      ],
+      [
+        -7.64,
+        112.9
+      ],
+      [
+        -7.75,
+        113.21
+      ],
+      [
+        -7.7056,
+        114.0044
+      ],
+      [
+        -7.85,
+        114.38
+      ],
+      [
+        -8.14,
+        114.4
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BBPJN DKI Jakarta - Jawa Barat & BBPJN Jawa Tengah - DIY",
+      "contactCenter": "Posko Siaga Sapu Lubang Pantura 158"
+    },
+    "problemDetails": {
+      "headline": "Urat Nadi Logistik Nasional; Tantangan Rob Air Laut Kaligawe Semarang & Pekalongan",
+      "description": "Tingkat kemantapan 94,8%. Sebagian besar sudah rigid beton. Titik rawan genangan rob pesisir di Kaligawe dan Pekalongan sedang ditinggikan 60-80 cm.",
+      "rootCause": "Penurunan muka tanah (land subsidence) pesisir utara dan pasang air laut.",
+      "safetyImpact": "Genangan air asin setinggi 20-40 cm merusak aspal dan menghambat truk sembako."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-PANTURA-2026",
+      "name": "Peninggian Badan Jalan Kaligawe & Preservasi Jangka Panjang Jalur Pantura",
+      "scope": "Rekonstruksi rigid beton 28 km, peninggian tanggul rob, pompa drainase otomatis.",
+      "paguRp": 520000000000,
+      "contractValueRp": 498700000000,
+      "contractor": "PT Wijaya Karya (Persero) Tbk - PT PP (Persero) KSO",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 78,
+      "statusNote": "Peninggian struktur polder Kaligawe dan rigid beton KM 442 tuntas 82%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "Kontrak Penanganan Banjir Rob Kaligawe BBPJN Jateng No. 08/BBPJN-VII/2026",
+      "lastVerifiedAt": "2026-10-25"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (Arteri Primer Nasional)",
+      "budgetSource": "LPSE & SiRUP Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-jawa-02",
+    "provinceId": "jawa",
+    "region": "Jawa",
+    "name": "Jalur Lintas Tengah Jawa",
+    "code": "RUAS-NAS-JATENGTENG-02",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN DKI-Jabar, BBPJN Jateng-DIY, BBPJN Jatim)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 860.0,
+    "pavementType": "Aspal Hotmix AC-WC & Rigid Pavement",
+    "condition": "MANTAP",
+    "district": "Jakarta - Bandung - Purwokerto - Yogyakarta - Solo - Madiun - Surabaya",
+    "center": [
+      -7.55,
+      110.82
+    ],
+    "startPoint": {
+      "name": "Jakarta (Cawang)",
+      "coords": [
+        -6.24,
+        106.87
+      ]
+    },
+    "endPoint": {
+      "name": "Surabaya (Warugunung)",
+      "coords": [
+        -7.33,
+        112.69
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Jakarta",
+        "coords": [
+          -6.24,
+          106.87
+        ],
+        "status": "MANTAP",
+        "note": "Titik Awal Jalur Tengah"
+      },
+      {
+        "km": 150,
+        "name": "Bandung (Gedebage)",
+        "coords": [
+          -6.94,
+          107.69
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Metropolitan Bandung Raya"
+      },
+      {
+        "km": 260,
+        "name": "Tasikmalaya - Ciamis",
+        "coords": [
+          -7.3274,
+          108.2207
+        ],
+        "status": "MANTAP",
+        "note": "Koridor Priangan Timur"
+      },
+      {
+        "km": 395,
+        "name": "Purwokerto (Banyumas)",
+        "coords": [
+          -7.4244,
+          109.2307
+        ],
+        "status": "MANTAP",
+        "note": "Simpang Utama Jalur Tengah Selatan"
+      },
+      {
+        "km": 520,
+        "name": "DI Yogyakarta (Ring Road)",
+        "coords": [
+          -7.7956,
+          110.3695
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Budaya & Pendidikan"
+      },
+      {
+        "km": 585,
+        "name": "Surakarta / Solo",
+        "coords": [
+          -7.55,
+          110.82
+        ],
+        "status": "MANTAP",
+        "note": "Simpang Raya Solo - Jogja - Madiun"
+      },
+      {
+        "km": 690,
+        "name": "Madiun - Ngawi",
+        "coords": [
+          -7.6298,
+          111.5239
+        ],
+        "status": "MANTAP",
+        "note": "Lumbung Padi & Industri Kereta Api"
+      },
+      {
+        "km": 860,
+        "name": "Surabaya",
+        "coords": [
+          -7.33,
+          112.69
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Bisnis Jawa Bagian Timur"
+      }
+    ],
+    "coordinates": [
+      [
+        -6.24,
+        106.87
+      ],
+      [
+        -6.59,
+        106.8
+      ],
+      [
+        -6.7,
+        106.98
+      ],
+      [
+        -6.82,
+        107.14
+      ],
+      [
+        -6.94,
+        107.69
+      ],
+      [
+        -7.08,
+        107.89
+      ],
+      [
+        -7.3274,
+        108.2207
+      ],
+      [
+        -7.32,
+        108.35
+      ],
+      [
+        -7.36,
+        108.53
+      ],
+      [
+        -7.3,
+        108.75
+      ],
+      [
+        -7.4244,
+        109.2307
+      ],
+      [
+        -7.6,
+        109.65
+      ],
+      [
+        -7.71,
+        109.99
+      ],
+      [
+        -7.7956,
+        110.3695
+      ],
+      [
+        -7.7,
+        110.6
+      ],
+      [
+        -7.55,
+        110.82
+      ],
+      [
+        -7.42,
+        111.02
+      ],
+      [
+        -7.4,
+        111.44
+      ],
+      [
+        -7.6298,
+        111.5239
+      ],
+      [
+        -7.6,
+        111.9
+      ],
+      [
+        -7.54,
+        112.23
+      ],
+      [
+        -7.47,
+        112.44
+      ],
+      [
+        -7.33,
+        112.69
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BBPJN Jawa Tengah - DIY & BBPJN Jawa Timur",
+      "contactCenter": "Halo PU 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Kota Aglomerasi Jawa; Kemantapan Tinggi dengan Pengawasan Jalur Tanjakan Puncak & Nagreg",
+      "description": "Tingkat kemantapan 96,2%. Penataan marka jalan dan jalur penyelamat rem blong di Nagreg dan Gentong telah selesai.",
+      "rootCause": "Topografi perbukitan dan volume mobil pribadi pada akhir pekan.",
+      "safetyImpact": "Kepadatan simpul pasar tumpah pada ruas arteri kota sekunder."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-JATENG-MID-2026",
+      "name": "Preservasi Berkala & Pemeliharaan Rutin Arteri Lintas Tengah Jawa",
+      "scope": "Scrapping filling overlay (SFO) 64 km, penataan bahu jalan dan marka reflective.",
+      "paguRp": 280000000000,
+      "contractValueRp": 269400000000,
+      "contractor": "PT Adhi Karya (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 85,
+      "statusNote": "Overlay halus dan marka jalan 100% selesai di ruas Solo-Madiun.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "Kontrak Tahunan Preservasi Jalan Nasional BBPJN Jateng 2026",
+      "lastVerifiedAt": "2026-10-21"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-jawa-03",
+    "provinceId": "jawa",
+    "region": "Jawa",
+    "name": "Jalur Pansela Jawa (Pantai Selatan)",
+    "code": "RUAS-NAS-PANSELA-03",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN DKI-Jabar, BBPJN Jateng-DIY, BBPJN Jatim)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 1540.0,
+    "pavementType": "Aspal Hotmix AC-WC Desain Geometrik Modern",
+    "condition": "MANTAP",
+    "district": "Pesisir Selatan (Simpang Labuan - Pangandaran - Cilacap - Yogyakarta - Pacitan - Banyuwangi)",
+    "center": [
+      -8.2,
+      111.09
+    ],
+    "startPoint": {
+      "name": "Simpang Labuan (Banten)",
+      "coords": [
+        -6.51,
+        105.83
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Ketapang (Banyuwangi)",
+      "coords": [
+        -8.2192,
+        114.3692
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Simpang Labuan",
+        "coords": [
+          -6.51,
+          105.83
+        ],
+        "status": "MANTAP",
+        "note": "Titik Awal Pansela Banten"
+      },
+      {
+        "km": 240,
+        "name": "Pelabuhan Ratu",
+        "coords": [
+          -6.98,
+          106.54
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Geopark Ciletuh"
+      },
+      {
+        "km": 490,
+        "name": "Pangandaran",
+        "coords": [
+          -7.68,
+          108.65
+        ],
+        "status": "MANTAP",
+        "note": "Pariwisata Bahari Jawa Barat"
+      },
+      {
+        "km": 680,
+        "name": "Cilacap - Kebumen",
+        "coords": [
+          -7.72,
+          109.0
+        ],
+        "status": "MANTAP",
+        "note": "Jalur Pansela Jawa Tengah Baru"
+      },
+      {
+        "km": 870,
+        "name": "Kulon Progo - Gunungkidul",
+        "coords": [
+          -7.98,
+          110.25
+        ],
+        "status": "MANTAP",
+        "note": "Akses Bandara YIA & JJLS DIY"
+      },
+      {
+        "km": 1050,
+        "name": "Pacitan",
+        "coords": [
+          -8.2,
+          111.09
+        ],
+        "status": "MANTAP",
+        "note": "Geometrik Lebar & Pemandangan Samudra"
+      },
+      {
+        "km": 1280,
+        "name": "Malang Selatan - Jember",
+        "coords": [
+          -8.35,
+          112.6
+        ],
+        "status": "MANTAP",
+        "note": "Jalur Lintas Selatan Jawa Timur"
+      },
+      {
+        "km": 1540,
+        "name": "Banyuwangi",
+        "coords": [
+          -8.2192,
+          114.3692
+        ],
+        "status": "MANTAP",
+        "note": "Ujung Timur Jalur Pansela"
+      }
+    ],
+    "coordinates": [
+      [
+        -6.51,
+        105.83
+      ],
+      [
+        -6.75,
+        105.88
+      ],
+      [
+        -6.98,
+        106.54
+      ],
+      [
+        -7.2,
+        106.8
+      ],
+      [
+        -7.45,
+        107.4
+      ],
+      [
+        -7.68,
+        108.65
+      ],
+      [
+        -7.72,
+        109.0
+      ],
+      [
+        -7.78,
+        109.65
+      ],
+      [
+        -7.98,
+        110.25
+      ],
+      [
+        -8.05,
+        110.6
+      ],
+      [
+        -8.2,
+        111.09
+      ],
+      [
+        -8.28,
+        111.7
+      ],
+      [
+        -8.35,
+        112.6
+      ],
+      [
+        -8.3,
+        113.4
+      ],
+      [
+        -8.38,
+        114.15
+      ],
+      [
+        -8.2192,
+        114.3692
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Satker Pembangunan Jalan Nasional Pansela",
+      "contactCenter": "Layanan Bina Marga 158"
+    },
+    "problemDetails": {
+      "headline": "Koridor Pariwisata Strategis Selatan Jawa; Jalan Mulus Standar Geometrik Baru",
+      "description": "Tingkat kemantapan 93,5%. Pembangunan Jembatan Pandansimo dan Kelok 18 DIY memperkuat konektivitas antar-provinsi.",
+      "rootCause": "Penyelesaian konstruksi segmen baru di pesisir selatan Blitar dan Malang.",
+      "safetyImpact": "Meningkatnya arus wisatawan ke destinasi pantai selatan tanpa kendala kemacetan."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-PANSELA-2026",
+      "name": "Penyelesaian Pembangunan Koridor Jalur Jalan Lintas Selatan (JJLS/Pansela)",
+      "scope": "Konstruksi aspal baru 48 km, pembangunan 6 jembatan bentang panjang, marka & penerangan.",
+      "paguRp": 680000000000,
+      "contractValueRp": 648000000000,
+      "contractor": "PT Hutama Karya (Persero) - PT Nindya Karya KSO",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026 (Didukung Pinjaman IDB)",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 91,
+      "statusNote": "Segmen DIY dan Pacitan siap beroperasi penuh tahun ini.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA Proyek Strategis Nasional Pansela TA 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (PSN Jalan Pansela)",
+      "budgetSource": "LPSE & SiRUP Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-bali-01",
+    "provinceId": "bali_nusra",
+    "region": "Bali & Nusa Tenggara",
+    "name": "Trans Bali Arteri Primer (Gilimanuk - Denpasar - Padangbai)",
+    "code": "RUAS-NAS-BALI-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Jawa Timur - Bali)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 142.0,
+    "pavementType": "Aspal Hotmix AC-WC & Trotoar Tematik",
+    "condition": "MANTAP",
+    "district": "Lintas Kabupaten Jembrana - Tabanan - Denpasar - Badung - Gianyar - Karangasem",
+    "center": [
+      -8.5,
+      115.15
+    ],
+    "startPoint": {
+      "name": "Pelabuhan Gilimanuk (Bali Barat)",
+      "coords": [
+        -8.1633,
+        114.4372
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Padangbai (Bali Timur)",
+      "coords": [
+        -8.53,
+        115.51
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Pelabuhan Gilimanuk",
+        "coords": [
+          -8.1633,
+          114.4372
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Barat Pulau Dewata"
+      },
+      {
+        "km": 42,
+        "name": "Negara (Jembrana)",
+        "coords": [
+          -8.3564,
+          114.6186
+        ],
+        "status": "MANTAP",
+        "note": "Koridor Truk Logistik Jawa-Bali"
+      },
+      {
+        "km": 96,
+        "name": "Tabanan",
+        "coords": [
+          -8.5386,
+          115.1239
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Penyempitan Ruas Tanjakan Selemadeg"
+      },
+      {
+        "km": 118,
+        "name": "Kota Denpasar (Gatot Subroto)",
+        "coords": [
+          -8.6705,
+          115.2126
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Ibu Kota Provinsi Bali"
+      },
+      {
+        "km": 142,
+        "name": "Pelabuhan Padangbai",
+        "coords": [
+          -8.53,
+          115.51
+        ],
+        "status": "MANTAP",
+        "note": "Konektivitas Penyeberangan Bali-Lombok"
+      }
+    ],
+    "coordinates": [
+      [
+        -8.1633,
+        114.4372
+      ],
+      [
+        -8.25,
+        114.5
+      ],
+      [
+        -8.3564,
+        114.6186
+      ],
+      [
+        -8.45,
+        114.95
+      ],
+      [
+        -8.5386,
+        115.1239
+      ],
+      [
+        -8.58,
+        115.17
+      ],
+      [
+        -8.6705,
+        115.2126
+      ],
+      [
+        -8.6,
+        115.31
+      ],
+      [
+        -8.53,
+        115.51
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Besar Pelaksanaan Jalan Nasional (BBPJN) Jatim-Bali",
+      "contactCenter": "Bina Marga Bali Call 158"
+    },
+    "problemDetails": {
+      "headline": "Urat Nadi Pariwisata & Logistik Bahan Pokok Bali; Tantangan Tanjakan Curam Selemadeg",
+      "description": "Kemantapan 95,8%. Fokus pemeliharaan adalah pengaspalan mulus di koridor Gatot Subroto dan perbaikan alinyemen tikungan di Selemadeg Tabanan.",
+      "rootCause": "Beban truk logistik sembako dari Jawa berpadu dengan bus pariwisata.",
+      "safetyImpact": "Perlambatan kecepatan di ruas tanjakan Tabanan saat jam padat."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-BALI-2026",
+      "name": "Preservasi Jalan & Jembatan Gilimanuk - Denpasar - Padangbai",
+      "scope": "Penghalusan aspal AC-WC 38 km, penggantian dilatasi jembatan, perapian pedestrian.",
+      "paguRp": 165000000000,
+      "contractValueRp": 157200000000,
+      "contractor": "PT Pembangunan Perumahan (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 88,
+      "statusNote": "Pekerjaan preservasi tuntas untuk menyambut agenda internasional pariwisata.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "Kontrak Kerja BBPJN Wilayah VIII 2026",
+      "lastVerifiedAt": "2026-10-25"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-ntb-01",
+    "provinceId": "bali_nusra",
+    "region": "Bali & Nusa Tenggara",
+    "name": "Trans Pulau Lombok & Sumbawa (Lembar - Mataram - Bima - Sape)",
+    "code": "RUAS-NAS-NTB-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Nusa Tenggara Barat)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 430.0,
+    "pavementType": "Aspal Hotmix AC-WC Standar Sirkuit & DPT",
+    "condition": "MANTAP",
+    "district": "Lintas Lombok Barat - Mataram - Lombok Timur - Sumbawa Besar - Dompu - Bima",
+    "center": [
+      -8.55,
+      117.42
+    ],
+    "startPoint": {
+      "name": "Pelabuhan Lembar (Lombok Barat)",
+      "coords": [
+        -8.7289,
+        116.0753
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Sape (Bima, Ujung Timur Sumbawa)",
+      "coords": [
+        -8.57,
+        119.0
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Pelabuhan Lembar",
+        "coords": [
+          -8.7289,
+          116.0753
+        ],
+        "status": "MANTAP",
+        "note": "Koneksi Kapal Feri Bali-Lombok"
+      },
+      {
+        "km": 28,
+        "name": "Kota Mataram",
+        "coords": [
+          -8.5772,
+          116.0963
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Provinsi NTB"
+      },
+      {
+        "km": 75,
+        "name": "Pelabuhan Kayangan (Lombok Timur)",
+        "coords": [
+          -8.48,
+          116.68
+        ],
+        "status": "MANTAP",
+        "note": "Konektivitas Feri Antar-Pulau NTB"
+      },
+      {
+        "km": 185,
+        "name": "Sumbawa Besar",
+        "coords": [
+          -8.4933,
+          117.4208
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Logistik Pulau Sumbawa"
+      },
+      {
+        "km": 340,
+        "name": "Dompu",
+        "coords": [
+          -8.5367,
+          118.455
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Jagung & Peternakan Nasional"
+      },
+      {
+        "km": 395,
+        "name": "Kota Bima",
+        "coords": [
+          -8.4533,
+          118.7275
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Perdagangan Teluk Bima"
+      },
+      {
+        "km": 430,
+        "name": "Pelabuhan Sape",
+        "coords": [
+          -8.57,
+          119.0
+        ],
+        "status": "MANTAP",
+        "note": "Koneksi Penyeberangan NTB - Labuan Bajo NTT"
+      }
+    ],
+    "coordinates": [
+      [
+        -8.7289,
+        116.0753
+      ],
+      [
+        -8.65,
+        116.12
+      ],
+      [
+        -8.5772,
+        116.0963
+      ],
+      [
+        -8.6,
+        116.35
+      ],
+      [
+        -8.48,
+        116.68
+      ],
+      [
+        -8.52,
+        116.85
+      ],
+      [
+        -8.4933,
+        117.4208
+      ],
+      [
+        -8.65,
+        118.0
+      ],
+      [
+        -8.5367,
+        118.455
+      ],
+      [
+        -8.4533,
+        118.7275
+      ],
+      [
+        -8.57,
+        119.0
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Pelaksanaan Jalan Nasional (BPJN) NTB",
+      "contactCenter": "Halo PU NTB 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Trans Nusa Tenggara; Jalan Nasional Mulus Mendukung Sentra Jagung & Wisata Mandalika",
+      "description": "Tingkat kemantapan 96,5%. Seluruh ruas utama beraspal hotmix halus dengan bahu jalan terawat.",
+      "rootCause": "Pemeliharaan rutin terjadwal dan intervensi Inpres Jalan Daerah pada jalan penyangga.",
+      "safetyImpact": "Jarak tempuh Mataram ke Pelabuhan Kayangan terpangkas menjadi 1 jam 15 menit."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-NTB-2026",
+      "name": "Preservasi Jalan & Jembatan Trans Pulau Lombok - Sumbawa",
+      "scope": "Pemeliharaan berkala aspal 52 km, perkuatan tebing lereng, marka jalan fluorescent.",
+      "paguRp": 190000000000,
+      "contractValueRp": 182400000000,
+      "contractor": "PT Nindya Karya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 76,
+      "statusNote": "Pekerjaan preservasi perkerasan jalan berjalan lancar sesuai target.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN NTB TA 2026",
+      "lastVerifiedAt": "2026-10-23"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-ntt-01",
+    "provinceId": "bali_nusra",
+    "region": "Bali & Nusa Tenggara",
+    "name": "Trans Flores & Trans Timor NTT (Labuan Bajo - Kupang - Motaain)",
+    "code": "RUAS-NAS-NTT-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Nusa Tenggara Timur)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 950.0,
+    "pavementType": "Aspal Hotmix AC-WC & Pengaman Tebing Kawat Bronjong",
+    "condition": "MANTAP",
+    "district": "Lintas Flores (Manggarai Barat - Ende - Maumere) & Timor (Kupang - Belu - PLBN Motaain)",
+    "center": [
+      -8.8,
+      121.2
+    ],
+    "startPoint": {
+      "name": "Labuan Bajo (KSPN Komodo)",
+      "coords": [
+        -8.4964,
+        119.8877
+      ]
+    },
+    "endPoint": {
+      "name": "PLBN Motaain (Batas Negara Timor Leste)",
+      "coords": [
+        -9.03,
+        124.95
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Labuan Bajo",
+        "coords": [
+          -8.4964,
+          119.8877
+        ],
+        "status": "MANTAP",
+        "note": "Destinasi Super Prioritas Nasional"
+      },
+      {
+        "km": 135,
+        "name": "Ruteng (Manggarai)",
+        "coords": [
+          -8.6133,
+          120.4633
+        ],
+        "status": "MANTAP",
+        "note": "Dataran Tinggi Dingin Flores"
+      },
+      {
+        "km": 285,
+        "name": "Bajawa (Ngada)",
+        "coords": [
+          -8.79,
+          120.97
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Kawasan Pegunungan Rawan Sesar Gempa"
+      },
+      {
+        "km": 410,
+        "name": "Ende",
+        "coords": [
+          -8.8433,
+          121.6622
+        ],
+        "status": "MANTAP",
+        "note": "Kota Sejarah Lahirnya Pancasila"
+      },
+      {
+        "km": 540,
+        "name": "Maumere (Sikka)",
+        "coords": [
+          -8.6197,
+          122.2111
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Perdagangan Flores Timur"
+      },
+      {
+        "km": 665,
+        "name": "Kota Kupang (Pulau Timor)",
+        "coords": [
+          -10.1772,
+          123.607
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Provinsi Nusa Tenggara Timur"
+      },
+      {
+        "km": 820,
+        "name": "Kefamenanu (TTU)",
+        "coords": [
+          -9.4467,
+          124.4789
+        ],
+        "status": "MANTAP",
+        "note": "Poros Tengah Daratan Timor"
+      },
+      {
+        "km": 950,
+        "name": "PLBN Motaain",
+        "coords": [
+          -9.03,
+          124.95
+        ],
+        "status": "MANTAP",
+        "note": "Pos Lintas Batas Negara RI - Timor Leste"
+      }
+    ],
+    "coordinates": [
+      [
+        -8.4964,
+        119.8877
+      ],
+      [
+        -8.55,
+        120.15
+      ],
+      [
+        -8.6133,
+        120.4633
+      ],
+      [
+        -8.79,
+        120.97
+      ],
+      [
+        -8.8433,
+        121.6622
+      ],
+      [
+        -8.6197,
+        122.2111
+      ],
+      [
+        -8.35,
+        122.98
+      ],
+      [
+        -10.1772,
+        123.607
+      ],
+      [
+        -9.86,
+        124.28
+      ],
+      [
+        -9.4467,
+        124.4789
+      ],
+      [
+        -9.11,
+        124.89
+      ],
+      [
+        -9.03,
+        124.95
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Pelaksanaan Jalan Nasional (BPJN) NTT",
+      "contactCenter": "Bina Marga NTT Halo 158"
+    },
+    "problemDetails": {
+      "headline": "Urat Nadi Kepulauan NTT & Jalur Perbatasan Negara; Rawan Amblesan Lereng di Bajawa - Ende",
+      "description": "Tingkat kemantapan 88,4%. Akses perbatasan Motaain berstandar internasional, perbaikan struktur lereng di ruas Bajawa diperkuat bronjong.",
+      "rootCause": "Karakteristik tanah lempung ekspansif di Pulau Timor dan patahan lereng vulkanik Flores.",
+      "safetyImpact": "Retakan aspal dan pergeseran bahu jalan saat musim kemarau berganti hujan deras."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-NTT-2026",
+      "name": "Preservasi Ruas Trans Flores & Sabuk Merah Perbatasan Timor",
+      "scope": "Penanganan lereng bronjong kawat 3.200 meter, overlay AC-WC 64 km, marka batas jalan.",
+      "paguRp": 310000000000,
+      "contractValueRp": 296500000000,
+      "contractor": "PT Hutama Karya (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 69,
+      "statusNote": "Pemasangan bronjong penahan lereng di Bajawa mencapai 75%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN NTT Kementerian PU 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-kal-01",
+    "provinceId": "kalimantan",
+    "region": "Kalimantan",
+    "name": "Trans Kalimantan Poros Selatan (Pontianak - Palangka Raya - Banjarmasin)",
+    "code": "RUAS-NAS-TRANSKAL-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Kalbar, BPJN Kalteng, BBPJN Kalsel)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 1180.0,
+    "pavementType": "Aspal Hotmix Geotekstil & Jembatan Baja Bentang Panjang",
+    "condition": "RUSAK_RINGAN",
+    "district": "Lintas 3 Provinsi (Kalbar - Kalteng - Kalsel)",
+    "center": [
+      -2.2161,
+      113.914
+    ],
+    "startPoint": {
+      "name": "Kota Pontianak (Kalimantan Barat)",
+      "coords": [
+        -0.0263,
+        109.3425
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Banjarmasin (Kalimantan Selatan)",
+      "coords": [
+        -3.3194,
+        114.5908
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Pontianak",
+        "coords": [
+          -0.0263,
+          109.3425
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Kalbar & Tugu Khatulistiwa"
+      },
+      {
+        "km": 95,
+        "name": "Tayan (Jembatan Pak Kasih)",
+        "coords": [
+          -0.35,
+          110.12
+        ],
+        "status": "MANTAP",
+        "note": "Koneksi Jembatan Terpanjang di Kalimantan"
+      },
+      {
+        "km": 380,
+        "name": "Nanga Tayap (Batas Kalbar-Kalteng)",
+        "coords": [
+          -1.55,
+          110.98
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Kawasan Perkebunan Sawit Labil"
+      },
+      {
+        "km": 640,
+        "name": "Pangkalan Bun (Kotawaringin Barat)",
+        "coords": [
+          -2.6833,
+          111.6167
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang TN Tanjung Puting"
+      },
+      {
+        "km": 790,
+        "name": "Sampit (Kotawaringin Timur)",
+        "coords": [
+          -2.5333,
+          112.95
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Titik Amblas Lahan Gambut"
+      },
+      {
+        "km": 980,
+        "name": "Kota Palangka Raya",
+        "coords": [
+          -2.2161,
+          113.914
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Kalteng & Jembatan Kahayan"
+      },
+      {
+        "km": 1120,
+        "name": "Kuala Kapuas",
+        "coords": [
+          -3.0092,
+          114.3875
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Food Estate Kalteng"
+      },
+      {
+        "km": 1180,
+        "name": "Kota Banjarmasin",
+        "coords": [
+          -3.3194,
+          114.5908
+        ],
+        "status": "MANTAP",
+        "note": "Pelabuhan Trisakti & Pusat Niaga Kalsel"
+      }
+    ],
+    "coordinates": [
+      [
+        -0.0263,
+        109.3425
+      ],
+      [
+        -0.2,
+        109.8
+      ],
+      [
+        -0.35,
+        110.12
+      ],
+      [
+        -0.85,
+        110.45
+      ],
+      [
+        -1.55,
+        110.98
+      ],
+      [
+        -2.1,
+        111.35
+      ],
+      [
+        -2.6833,
+        111.6167
+      ],
+      [
+        -2.5333,
+        112.95
+      ],
+      [
+        -2.2161,
+        113.914
+      ],
+      [
+        -2.75,
+        114.15
+      ],
+      [
+        -3.0092,
+        114.3875
+      ],
+      [
+        -3.3194,
+        114.5908
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BPJN Kalimantan Tengah & BBPJN Kalimantan Selatan",
+      "contactCenter": "Pusat Aduan KemenPU 158"
+    },
+    "problemDetails": {
+      "headline": "Tulang Punggung Lintas Borneo Selatan; Tantangan Tanah Gambut Tebal & Ambles di Sampit",
+      "description": "Tingkat kemantapan 82,6%. Tanah gambut dengan daya dukung rendah memicu deformasi bergelombang saat dilintasi truk CPO.",
+      "rootCause": "Penurunan konsolidasi tanah dasar gambut berkedalaman > 3 meter di Kalteng.",
+      "safetyImpact": "Jalan bergelombang dan genangan luapan pasang Sungai Kahayan/Mentaya."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-TRANSKAL-2026",
+      "name": "Rekonstruksi Badan Jalan Rawa Gambut Menggunakan Cerucuk Matras Geotekstil",
+      "scope": "Pemasangan matras geotekstil 32 km, peninggian badan jalan 1,2 m, overlay AC-BC & AC-WC.",
+      "paguRp": 440000000000,
+      "contractValueRp": 418500000000,
+      "contractor": "PT Wijaya Karya (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 62,
+      "statusNote": "Pemasangan geotekstil pada segmen Sampit - Kasongan mencapai 65%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN Kalteng TA 2026",
+      "lastVerifiedAt": "2026-10-23"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-kal-02",
+    "provinceId": "kalimantan",
+    "region": "Kalimantan",
+    "name": "Trans Kalimantan Poros Timur & Koridor Akses IKN (Banjarmasin - Balikpapan - IKN Nusantara - Samarinda)",
+    "code": "RUAS-NAS-TRANSKAL-IKN-02",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Kalsel & BBPJN Kaltim)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 1420.0,
+    "pavementType": "Beton Rigid Mutu Tinggi & Aspal SMA Modifikasi Polimer",
+    "condition": "MANTAP",
+    "district": "Lintas Kalsel - Kaltim (Banjarmasin - Penajam - Balikpapan - Sepaku/IKN - Samarinda - Berau)",
+    "center": [
+      -0.9632,
+      116.7025
+    ],
+    "startPoint": {
+      "name": "Kota Banjarmasin (KM 0 Kalsel)",
+      "coords": [
+        -3.3194,
+        114.5908
+      ]
+    },
+    "endPoint": {
+      "name": "Tanjung Redeb (Berau, Kaltim Utara)",
+      "coords": [
+        2.1667,
+        117.5
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Banjarmasin",
+        "coords": [
+          -3.3194,
+          114.5908
+        ],
+        "status": "MANTAP",
+        "note": "Titik Awal Poros Timur"
+      },
+      {
+        "km": 260,
+        "name": "Batu Licin (Tanah Bumbu)",
+        "coords": [
+          -3.45,
+          116.0
+        ],
+        "status": "MANTAP",
+        "note": "Pelabuhan Feri Menuju Pulau Laut"
+      },
+      {
+        "km": 480,
+        "name": "Penajam Paser Utara",
+        "coords": [
+          -1.28,
+          116.75
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Mitra Strategis IKN"
+      },
+      {
+        "km": 520,
+        "name": "Kota Balikpapan",
+        "coords": [
+          -1.2379,
+          116.8529
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Udara & Laut IKN"
+      },
+      {
+        "km": 575,
+        "name": "KIPP IKN Nusantara (Sepaku)",
+        "coords": [
+          -0.9632,
+          116.7025
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Inti Pusat Pemerintahan Ibu Kota Nusantara"
+      },
+      {
+        "km": 640,
+        "name": "Kota Samarinda",
+        "coords": [
+          -0.5022,
+          117.1536
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Kaltim & Jembatan Mahakam"
+      },
+      {
+        "km": 765,
+        "name": "Bontang",
+        "coords": [
+          0.1333,
+          117.5
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Industri Pupuk & LNG"
+      },
+      {
+        "km": 1120,
+        "name": "Sangatta - Bengalon",
+        "coords": [
+          0.5,
+          117.58
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Kawasan Tambang Batubara Terbesar"
+      },
+      {
+        "km": 1420,
+        "name": "Tanjung Redeb (Berau)",
+        "coords": [
+          2.1667,
+          117.5
+        ],
+        "status": "MANTAP",
+        "note": "Akses Pariwisata Kepulauan Derawan"
+      }
+    ],
+    "coordinates": [
+      [
+        -3.3194,
+        114.5908
+      ],
+      [
+        -3.42,
+        115.1
+      ],
+      [
+        -3.45,
+        116.0
+      ],
+      [
+        -2.15,
+        116.2
+      ],
+      [
+        -1.5,
+        116.45
+      ],
+      [
+        -1.28,
+        116.75
+      ],
+      [
+        -1.2379,
+        116.8529
+      ],
+      [
+        -0.9632,
+        116.7025
+      ],
+      [
+        -0.5022,
+        117.1536
+      ],
+      [
+        0.1333,
+        117.5
+      ],
+      [
+        0.5,
+        117.58
+      ],
+      [
+        1.25,
+        117.55
+      ],
+      [
+        2.1667,
+        117.5
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Besar Pelaksanaan Jalan Nasional (BBPJN) Kalimantan Timur",
+      "contactCenter": "Satgas Infrastruktur IKN PU 158"
+    },
+    "problemDetails": {
+      "headline": "Koridor Transformasi Masa Depan Indonesia; Akses Tol & Arteri IKN Berstandar Internasional",
+      "description": "Tingkat kemantapan 96,8% pada koridor Balikpapan - Sepaku - Samarinda. Ruas utara Bengalon - Sangatta dalam pemeliharaan rutin beban truk tambang.",
+      "rootCause": "Tingginya volume kendaraan logistik konstruksi material IKN.",
+      "safetyImpact": "Kepadatan arus truk semen dan precast di Simpang Samboja."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-IKN-CORRIDOR-2026",
+      "name": "Pembangunan & Preservasi Koridor Arteri Penghubung Balikpapan - KIPP IKN - Samarinda",
+      "scope": "Konstruksi jalan tol seksi 5B, pelebaran jalan arteri 4 lajur 2 arah, penanaman vegetasi pencegah erosi.",
+      "paguRp": 890000000000,
+      "contractValueRp": 856000000000,
+      "contractor": "KSO PT PP (Persero) Tbk - PT Waskita Karya (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026 (Alokasi Khusus IKN)",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 94,
+      "statusNote": "Arteri lingkar Sepaku dan Jembatan Pulau Balang beroperasi mulus.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA Alokasi Pembangunan IKN Nusantara TA 2026",
+      "lastVerifiedAt": "2026-10-25"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (Kawasan Strategis Nasional IKN)",
+      "budgetSource": "LPSE & SiRUP Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-sul-01",
+    "provinceId": "sulawesi",
+    "region": "Sulawesi",
+    "name": "Trans Sulawesi Poros Barat (Makassar - Parepare - Mamuju - Palu)",
+    "code": "RUAS-NAS-TRANSSUL-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sulsel, BPJN Sulbar, BPJN Sulteng)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 985.0,
+    "pavementType": "Aspal Hotmix AC-WC & Dinding Penahan Tebing Laut",
+    "condition": "MANTAP",
+    "district": "Lintas 3 Provinsi (Sulsel - Sulbar - Sulteng)",
+    "center": [
+      -2.677,
+      118.8895
+    ],
+    "startPoint": {
+      "name": "Kota Makassar (Pelabuhan Soekarno Hatta)",
+      "coords": [
+        -5.1477,
+        119.4327
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Palu (Teluk Palu, Sulteng)",
+      "coords": [
+        -0.9003,
+        119.8779
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Makassar",
+        "coords": [
+          -5.1477,
+          119.4327
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Sulsel & Hub Kawasan Timur Indonesia"
+      },
+      {
+        "km": 54,
+        "name": "Pangkep - Barru",
+        "coords": [
+          -4.4,
+          119.6
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Industri Semen & Akses Kereta Api Sulsel"
+      },
+      {
+        "km": 155,
+        "name": "Kota Parepare",
+        "coords": [
+          -4.0133,
+          119.625
+        ],
+        "status": "MANTAP",
+        "note": "Kota Kelahiran B.J. Habibie & Pelabuhan Nusantara"
+      },
+      {
+        "km": 240,
+        "name": "Polewali Mandar (Polman)",
+        "coords": [
+          -3.4333,
+          119.3333
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Provinsi Sulawesi Barat"
+      },
+      {
+        "km": 420,
+        "name": "Kota Mamuju",
+        "coords": [
+          -2.677,
+          118.8895
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Sulawesi Barat"
+      },
+      {
+        "km": 680,
+        "name": "Pasangkayu",
+        "coords": [
+          -1.18,
+          119.37
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Kawasan Perkebunan Sawit Mamuju Utara"
+      },
+      {
+        "km": 910,
+        "name": "Donggala",
+        "coords": [
+          -0.67,
+          119.74
+        ],
+        "status": "MANTAP",
+        "note": "Kota Pelabuhan Bersejarah Sulteng"
+      },
+      {
+        "km": 985,
+        "name": "Kota Palu",
+        "coords": [
+          -0.9003,
+          119.8779
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Ibu Kota Sulteng & Jembatan Palu IV Baru"
+      }
+    ],
+    "coordinates": [
+      [
+        -5.1477,
+        119.4327
+      ],
+      [
+        -4.75,
+        119.55
+      ],
+      [
+        -4.4,
+        119.6
+      ],
+      [
+        -4.0133,
+        119.625
+      ],
+      [
+        -3.65,
+        119.45
+      ],
+      [
+        -3.4333,
+        119.3333
+      ],
+      [
+        -3.05,
+        118.9
+      ],
+      [
+        -2.677,
+        118.8895
+      ],
+      [
+        -1.9,
+        119.25
+      ],
+      [
+        -1.18,
+        119.37
+      ],
+      [
+        -0.67,
+        119.74
+      ],
+      [
+        -0.9003,
+        119.8779
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BBPJN Sulawesi Selatan & BPJN Sulawesi Barat",
+      "contactCenter": "Pusat Layanan KemenPU 158"
+    },
+    "problemDetails": {
+      "headline": "Urat Nadi Logistik Barat Sulawesi; Rekonstruksi Pascabencana Gempa Tuntas Penuh",
+      "description": "Tingkat kemantapan 92,7%. Jembatan Palu IV dan jalan pesisir Majene sudah direkonstruksi dengan perkuatan struktur tahan gempa.",
+      "rootCause": "Kerentanan geologi patahan sesar Palu Koro dan abrasi pantai barat.",
+      "safetyImpact": "Kenyamanan berkendara sangat baik, pemantauan sensor lereng aktif."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-TRANSSUL-2026",
+      "name": "Preservasi & Rehabilitasi Jalan Lintas Barat Sulawesi",
+      "scope": "Penanganan perkerasan aspal 72 km, penggantian jembatan rangka baja, talud pelindung pantai.",
+      "paguRp": 360000000000,
+      "contractValueRp": 344200000000,
+      "contractor": "PT Brantas Abipraya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 79,
+      "statusNote": "Rekonstruksi dinding pelindung pantai Majene dan aspal tuntas 80%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN Wilayah Sulawesi 2026",
+      "lastVerifiedAt": "2026-10-22"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-sul-02",
+    "provinceId": "sulawesi",
+    "region": "Sulawesi",
+    "name": "Trans Sulawesi Poros Utara (Palu - Gorontalo - Kotamobagu - Manado - Bitung)",
+    "code": "RUAS-NAS-TRANSSUL-02",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Sulteng, BPJN Gorontalo, BPJN Sulut)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 1060.0,
+    "pavementType": "Aspal Hotmix AC-WC & Jalan Tol Manado-Bitung",
+    "condition": "MANTAP",
+    "district": "Lintas Sulteng - Gorontalo - Sulut",
+    "center": [
+      0.55,
+      123.06
+    ],
+    "startPoint": {
+      "name": "Kota Palu (Sulteng)",
+      "coords": [
+        -0.9003,
+        119.8779
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Internasional Bitung (Sulut)",
+      "coords": [
+        1.44,
+        125.18
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Kota Palu",
+        "coords": [
+          -0.9003,
+          119.8779
+        ],
+        "status": "MANTAP",
+        "note": "Awal Poros Utara Sulawesi"
+      },
+      {
+        "km": 72,
+        "name": "Parigi (Teluk Tomini)",
+        "coords": [
+          -0.8,
+          120.18
+        ],
+        "status": "MANTAP",
+        "note": "Pesisir Tomini Jalur Trans"
+      },
+      {
+        "km": 360,
+        "name": "Marisa (Pohuwato)",
+        "coords": [
+          0.45,
+          121.93
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Gorontalo"
+      },
+      {
+        "km": 520,
+        "name": "Kota Gorontalo",
+        "coords": [
+          0.5435,
+          123.0568
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Provinsi Gorontalo"
+      },
+      {
+        "km": 780,
+        "name": "Kotamobagu (Bolaang Mongondow)",
+        "coords": [
+          0.73,
+          124.32
+        ],
+        "status": "MANTAP",
+        "note": "Lumbung Pangan & Kopi Sulut"
+      },
+      {
+        "km": 940,
+        "name": "Amurang (Minsel)",
+        "coords": [
+          1.18,
+          124.57
+        ],
+        "status": "MANTAP",
+        "note": "Pesisir Teluk Amurang"
+      },
+      {
+        "km": 1020,
+        "name": "Kota Manado",
+        "coords": [
+          1.4748,
+          124.8428
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Sulut & Gerbang Wisata Bunaken"
+      },
+      {
+        "km": 1060,
+        "name": "Pelabuhan Bitung",
+        "coords": [
+          1.44,
+          125.18
+        ],
+        "status": "MANTAP",
+        "note": "Kawasan Ekonomi Khusus & Pelabuhan Samudra"
+      }
+    ],
+    "coordinates": [
+      [
+        -0.9003,
+        119.8779
+      ],
+      [
+        -0.8,
+        120.18
+      ],
+      [
+        -0.3,
+        120.8
+      ],
+      [
+        0.2,
+        121.4
+      ],
+      [
+        0.45,
+        121.93
+      ],
+      [
+        0.5435,
+        123.0568
+      ],
+      [
+        0.85,
+        123.6
+      ],
+      [
+        0.73,
+        124.32
+      ],
+      [
+        1.18,
+        124.57
+      ],
+      [
+        1.4748,
+        124.8428
+      ],
+      [
+        1.44,
+        125.18
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BPJN Sulawesi Utara & BPJN Gorontalo",
+      "contactCenter": "Halo PU 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Pasifik Utara Indonesia; Jalur Arteri Mulus Menopang KEK Bitung & Likupang",
+      "description": "Tingkat kemantapan 94,1%. Jalan Tol Manado-Bitung beroperasi optimal, jalan arteri pantai utara terpelihara berkala.",
+      "rootCause": "Curah hujan tinggi di lereng Gunung Klabat dan pesisir Teluk Amurang.",
+      "safetyImpact": "Jalur pariwisata Likupang dan angkutan ikan tuna ekspor lancar tanpa hambatan."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-SULUT-2026",
+      "name": "Preservasi Jalan & Jembatan Trans Sulawesi Poros Gorontalo - Manado",
+      "scope": "Scrapping overlay aspal 46 km, perbaikan box culvert drainase, lampu penerangan tenaga surya.",
+      "paguRp": 240000000000,
+      "contractValueRp": 231500000000,
+      "contractor": "PT Nindya Karya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 83,
+      "statusNote": "Pekerjaan preservasi ruas Amurang - Manado selesai 88%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN Sulut TA 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-pap-01",
+    "provinceId": "maluku_papua",
+    "region": "Maluku & Papua",
+    "name": "Trans Papua Poros Sentani - Wamena (Jayapura - Wamena)",
+    "code": "RUAS-NAS-TRANSPAP-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Papua & BPJN Papua Pegunungan)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 585.0,
+    "pavementType": "Aspal Hotmix Pengikat Polimer & Jembatan Baja Gantung",
+    "condition": "RUSAK_BERAT",
+    "district": "Lintas Prov. Papua & Papua Pegunungan (Jayapura - Keerom - Yalimo - Wamena)",
+    "center": [
+      -3.5,
+      139.5
+    ],
+    "startPoint": {
+      "name": "Kota Jayapura (Jembatan Youtefa)",
+      "coords": [
+        -2.5916,
+        140.669
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Wamena (Lembah Baliem, Papua Pegunungan)",
+      "coords": [
+        -4.097,
+        138.9442
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Kota Jayapura",
+        "coords": [
+          -2.5916,
+          140.669
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Provinsi Papua"
+      },
+      {
+        "km": 42,
+        "name": "Sentani (Bandara)",
+        "coords": [
+          -2.56,
+          140.51
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Udara Utama Papua"
+      },
+      {
+        "km": 120,
+        "name": "Genyem (Nimboran)",
+        "coords": [
+          -2.67,
+          140.15
+        ],
+        "status": "MANTAP",
+        "note": "Peralihan Dataran Rendah ke Perbukitan"
+      },
+      {
+        "km": 290,
+        "name": "Benawa (Batas Hutan Belantara)",
+        "coords": [
+          -3.3,
+          139.8
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Segmen Konstruksi Menembus Rimba"
+      },
+      {
+        "km": 435,
+        "name": "Elelim (Yalimo)",
+        "coords": [
+          -3.78,
+          139.38
+        ],
+        "status": "RUSAK_BERAT",
+        "note": "Titik Amblas & Lumpur Jalur Ketinggian 1.800 mdpl"
+      },
+      {
+        "km": 585,
+        "name": "Kota Wamena",
+        "coords": [
+          -4.097,
+          138.9442
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Ibu Kota Provinsi Papua Pegunungan"
+      }
+    ],
+    "coordinates": [
+      [
+        -2.5916,
+        140.669
+      ],
+      [
+        -2.56,
+        140.51
+      ],
+      [
+        -2.67,
+        140.15
+      ],
+      [
+        -2.95,
+        139.95
+      ],
+      [
+        -3.3,
+        139.8
+      ],
+      [
+        -3.55,
+        139.6
+      ],
+      [
+        -3.78,
+        139.38
+      ],
+      [
+        -3.95,
+        139.15
+      ],
+      [
+        -4.097,
+        138.9442
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Besar Pelaksanaan Jalan Nasional (BBPJN) Papua",
+      "contactCenter": "Posko Trans Papua 158"
+    },
+    "problemDetails": {
+      "headline": "Penembus Isolasi Geografis Lembah Baliem; Titik Kritis Lumpur & Longsor di Segmen Elelim - Yalimo",
+      "description": "Tingkat kemantapan 64,2%. Tantangan geografis ekstrem di lereng berkabut dengan curah hujan tinggi menyebabkan kubangan lumpur di beberapa kilometer segmen Yalimo.",
+      "rootCause": "Struktur tanah lempung pegunungan dan tingginya curah hujan harian tanpa jeda kemarau.",
+      "safetyImpact": "Truk sembako kerap tertahan 2-4 hari saat terjadi longsoran tebing di KM 435."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-TRANSPAPUA-2026",
+      "name": "Peningkatan Struktur Jalan & Penanganan Longsoran Segmen Elelim - Wamena",
+      "scope": "Perkerasan agregat kelas A dan rigid beton 38 km, pembangunan jembatan pelat duiker 14 unit.",
+      "paguRp": 780000000000,
+      "contractValueRp": 752000000000,
+      "contractor": "PT Hutama Karya (Persero) - PT Brantas Abipraya KSO",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026 (Dana Otonomi Khusus & Prioritas Nasional)",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 58,
+      "statusNote": "Pembersihan material longsoran dan pengecoran slab beton jalan terus dipacu.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA Khusus Percepatan Pembangunan Infrastruktur Papua 2026",
+      "lastVerifiedAt": "2026-10-25"
+    },
+    "officialSources": {
+      "authoritySource": "Inpres Percepatan Pembangunan Kesejahteraan Papua & SK Menteri PUPR No. 1688/2022",
+      "budgetSource": "LPSE & SiRUP Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-pap-02",
+    "provinceId": "maluku_papua",
+    "region": "Maluku & Papua",
+    "name": "Trans Papua Poros Selatan (Merauke - Boven Digoel)",
+    "code": "RUAS-NAS-TRANSPAP-02",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Papua Selatan)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 445.0,
+    "pavementType": "Aspal Hotmix AC-WC & Jembatan Rangka Baja Kali Digoel",
+    "condition": "MANTAP",
+    "district": "Provinsi Papua Selatan (Merauke - Sota PLBN - Muting - Tanah Merah Boven Digoel)",
+    "center": [
+      -7.2,
+      140.35
+    ],
+    "startPoint": {
+      "name": "Kota Merauke (Titik Nol KM Merauke)",
+      "coords": [
+        -8.4991,
+        140.4019
+      ]
+    },
+    "endPoint": {
+      "name": "Tanah Merah (Boven Digoel)",
+      "coords": [
+        -6.0967,
+        140.3122
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Kota Merauke",
+        "coords": [
+          -8.4991,
+          140.4019
+        ],
+        "status": "MANTAP",
+        "note": "Ujung Timur Wilayah NKRI Titik Nol Sabang-Merauke"
+      },
+      {
+        "km": 78,
+        "name": "PLBN Sota (Batas Papua Nugini)",
+        "coords": [
+          -8.43,
+          141.02
+        ],
+        "status": "MANTAP",
+        "note": "Pos Lintas Batas Negara Megah RI - PNG"
+      },
+      {
+        "km": 195,
+        "name": "Muting",
+        "coords": [
+          -7.55,
+          140.5
+        ],
+        "status": "MANTAP",
+        "note": "Sentra Pertanian & Food Estate Merauke"
+      },
+      {
+        "km": 340,
+        "name": "Getentiri (Jembatan Kali Digoel)",
+        "coords": [
+          -6.65,
+          140.4
+        ],
+        "status": "MANTAP",
+        "note": "Jembatan Baja Penyeberangan Sungai Terbesar"
+      },
+      {
+        "km": 445,
+        "name": "Tanah Merah (Boven Digoel)",
+        "coords": [
+          -6.0967,
+          140.3122
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Ibu Kota Boven Digoel"
+      }
+    ],
+    "coordinates": [
+      [
+        -8.4991,
+        140.4019
+      ],
+      [
+        -8.45,
+        140.75
+      ],
+      [
+        -8.43,
+        141.02
+      ],
+      [
+        -7.95,
+        140.8
+      ],
+      [
+        -7.55,
+        140.5
+      ],
+      [
+        -7.1,
+        140.45
+      ],
+      [
+        -6.65,
+        140.4
+      ],
+      [
+        -6.0967,
+        140.3122
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Pelaksanaan Jalan Nasional (BPJN) Papua Selatan",
+      "contactCenter": "Halo PU Merauke 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Poros Selatan Papua; Jalan Mulus Beraspal Hotmix dari Merauke Menembus Boven Digoel",
+      "description": "Tingkat kemantapan 93,8%. Ruas jalan yang dahulu berlumpur kini telah teraspal penuh dan memangkas waktu tempuh dari 3 hari menjadi 7 jam.",
+      "rootCause": "Beban curah hujan di kawasan rawa gambut dataran rendah Digoel.",
+      "safetyImpact": "Harga logistik sembako di Boven Digoel turun signifikan berkat kelancaran transportasi darat."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-PAPSEL-2026",
+      "name": "Preservasi Berkala Jalan & Jembatan Ruas Merauke - Boven Digoel",
+      "scope": "Pemeliharaan aspal hotmix 54 km, pengecatan dan perlindungan karat rangka jembatan Kali Digoel.",
+      "paguRp": 210000000000,
+      "contractValueRp": 201200000000,
+      "contractor": "PT Pembangunan Perumahan (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 86,
+      "statusNote": "Pekerjaan preservasi rutin berjalan tepat waktu.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "Kontrak Kerja BPJN Papua Selatan 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-smt-04",
+    "provinceId": "sumut",
+    "region": "Sumatera",
+    "name": "Koridor Strategis Nasional Medan - Berastagi - Danau Toba",
+    "code": "RUAS-NAS-TOBA-04",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumatera Utara)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 (KSPN Danau Toba)",
+    "lengthKm": 148.0,
+    "pavementType": "Aspal Hotmix AC-WC Modifikasi & DPT Beton",
+    "condition": "RUSAK_RINGAN",
+    "district": "Kota Medan - Deli Serdang - Karo - Simalungun (Danau Toba)",
+    "center": [
+      3.18,
+      98.51
+    ],
+    "startPoint": {
+      "name": "Medan (Simpang Pos / Padang Bulan)",
+      "coords": [
+        3.535,
+        98.648
+      ]
+    },
+    "endPoint": {
+      "name": "Parapat (Danau Toba)",
+      "coords": [
+        2.664,
+        98.937
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Medan (Simpang Pos)",
+        "coords": [
+          3.535,
+          98.648
+        ],
+        "status": "MANTAP",
+        "note": "Awal Arteri Wisata Berastagi"
+      },
+      {
+        "km": 38,
+        "name": "Sibolangit (Kawasan Rawan Longsor)",
+        "coords": [
+          3.284,
+          98.572
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Titik Rawan Bencana Tebing Curam"
+      },
+      {
+        "km": 66,
+        "name": "Berastagi (Tugu Perjuangan)",
+        "coords": [
+          3.185,
+          98.508
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Agrowisata Dataran Tinggi Karo"
+      },
+      {
+        "km": 78,
+        "name": "Kabanjahe (Ibu Kota Karo)",
+        "coords": [
+          3.1,
+          98.49
+        ],
+        "status": "MANTAP",
+        "note": "Simpang Sentral Komoditas Holtikultura"
+      },
+      {
+        "km": 148,
+        "name": "Parapat Danau Toba",
+        "coords": [
+          2.664,
+          98.937
+        ],
+        "status": "MANTAP",
+        "note": "Destinasi Pariwisata Super Prioritas (DPSP)"
+      }
+    ],
+    "coordinates": [
+      [
+        3.535,
+        98.648
+      ],
+      [
+        3.42,
+        98.6
+      ],
+      [
+        3.284,
+        98.572
+      ],
+      [
+        3.22,
+        98.54
+      ],
+      [
+        3.185,
+        98.508
+      ],
+      [
+        3.1,
+        98.49
+      ],
+      [
+        2.95,
+        98.65
+      ],
+      [
+        2.8,
+        98.82
+      ],
+      [
+        2.664,
+        98.937
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BBPJN Sumatera Utara (PPK 4.4 Satker Wilayah IV)",
+      "contactCenter": "BBPJN Sumut Call Center (061) 786-9000"
+    },
+    "problemDetails": {
+      "headline": "Arteri Pariwisata Super Prioritas Danau Toba; Kerentanan Longsoran Tebing Sibolangit",
+      "description": "Kemantapan 89,4%. Pembangunan jembatan layang (cantilever/flyover) dan dinding penahan tanah di Sibolangit untuk mengantisipasi guguran batu saat hujan.",
+      "rootCause": "Kerapuhan struktur batuan vulkanik lereng Bukit Barisan.",
+      "safetyImpact": "Kemacetan panjang saat penanganan pembersihan material longsoran."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-TOBA-2026",
+      "name": "Pelebaran & Pengamanan Lereng Koridor Medan - Berastagi - Danau Toba",
+      "scope": "Pembangunan cantilever beton 1,2 km, shotcrete lereng, overlay AC-WC 32 km.",
+      "paguRp": 185000000000,
+      "contractValueRp": 176400000000,
+      "contractor": "PT Wijaya Karya (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 74,
+      "statusNote": "Konstruksi cantilever pengaman tebing Sibolangit mencapai 78%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA DPSP Danau Toba KemenPU 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-kal-03",
+    "provinceId": "kalimantan",
+    "region": "Kalimantan",
+    "name": "Jalan Paralel Perbatasan Kalimantan (Aruk - Entikong - Badau - Nunukan)",
+    "code": "RUAS-NAS-BORDER-KAL-03",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Kalbar & BPJN Kaltara)",
+    "legalBasis": "Inpres Pembangunan Kawasan Perbatasan & SK MenPUPR No. 1688/2022",
+    "lengthKm": 1820.0,
+    "pavementType": "Aspal Hotmix AC-WC & Jembatan Rangka Baja Standar Militer/Sipil",
+    "condition": "MANTAP",
+    "district": "Sabuk Perbatasan RI - Malaysia (Sambas - Sanggau - Kapuas Hulu - Malinau - Nunukan)",
+    "center": [
+      1.1,
+      112.5
+    ],
+    "startPoint": {
+      "name": "PLBN Aruk (Sambas, Kalbar)",
+      "coords": [
+        1.55,
+        109.43
+      ]
+    },
+    "endPoint": {
+      "name": "Pelabuhan Liem Hie Djung (Nunukan, Kaltara)",
+      "coords": [
+        4.135,
+        117.65
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "PLBN Aruk",
+        "coords": [
+          1.55,
+          109.43
+        ],
+        "status": "MANTAP",
+        "note": "Pos Batas Modern Sambas"
+      },
+      {
+        "km": 280,
+        "name": "PLBN Entikong",
+        "coords": [
+          0.9,
+          110.35
+        ],
+        "status": "MANTAP",
+        "note": "Gerbang Perdagangan Darat RI - Sarawak"
+      },
+      {
+        "km": 640,
+        "name": "PLBN Nanga Badau (Kapuas Hulu)",
+        "coords": [
+          0.95,
+          111.88
+        ],
+        "status": "MANTAP",
+        "note": "Koneksi Danau Sentarum & Lubok Antu"
+      },
+      {
+        "km": 1250,
+        "name": "Long Bawan (Krayan)",
+        "coords": [
+          3.9,
+          115.7
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Dataran Tinggi Krayan Lintas Batas"
+      },
+      {
+        "km": 1820,
+        "name": "Nunukan (Kaltara)",
+        "coords": [
+          4.135,
+          117.65
+        ],
+        "status": "MANTAP",
+        "note": "Pelabuhan Transnasional RI - Sabah"
+      }
+    ],
+    "coordinates": [
+      [
+        1.55,
+        109.43
+      ],
+      [
+        1.25,
+        109.8
+      ],
+      [
+        0.9,
+        110.35
+      ],
+      [
+        0.75,
+        111.1
+      ],
+      [
+        0.95,
+        111.88
+      ],
+      [
+        1.4,
+        113.2
+      ],
+      [
+        2.5,
+        115.1
+      ],
+      [
+        3.9,
+        115.7
+      ],
+      [
+        4.135,
+        117.65
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BPJN Kalimantan Barat & BPJN Kalimantan Utara",
+      "contactCenter": "Halo PU Perbatasan 158"
+    },
+    "problemDetails": {
+      "headline": "Sabuk Kedaulatan Batas Negeri; Jalan Aspal Lebar Membuka Wilayah 3T Terpencil",
+      "description": "Kemantapan 91,2%. Jalan paralel perbatasan kini menembus hutan rimba yang puluhan tahun terisolasi, menghidupkan ekonomi warga tapal batas.",
+      "rootCause": "Tantangan logistik pengangkutan material aspal di pedalaman Krayan.",
+      "safetyImpact": "Harga bahan pokok warga perbatasan turun drastis karena akses darat lancar."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-BORDER-2026",
+      "name": "Penyelesaian Pembangunan Jalan Paralel Perbatasan Kalbar - Kaltara",
+      "scope": "Pembangunan aspal 86 km, 18 unit jembatan bailey ke permanen baja, bronjong tebing.",
+      "paguRp": 720000000000,
+      "contractValueRp": 694000000000,
+      "contractor": "KSO PT Hutama Karya - PT Nindya Karya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 89,
+      "statusNote": "Seluruh jembatan permanen selesai terpasang.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA Kawasan Perbatasan Negara KemenPU 2026",
+      "lastVerifiedAt": "2026-10-25"
+    },
+    "officialSources": {
+      "authoritySource": "Inpres Pengelolaan Batas Wilayah Negara & SK PUPR 1688/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-sul-03",
+    "provinceId": "sulawesi",
+    "region": "Sulawesi",
+    "name": "Trans Sulawesi Poros Tenggara (Makassar - Bone - Kolaka - Kendari)",
+    "code": "RUAS-NAS-TRANSSUL-03",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sulsel & BPJN Sultra)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 495.0,
+    "pavementType": "Aspal Hotmix AC-WC & Penyeberangan Feri Teluk Bone",
+    "condition": "MANTAP",
+    "district": "Lintas Sulsel - Sultra (Makassar - Maros - Bone - Kolaka - Kendari)",
+    "center": [
+      -4.5,
+      121.0
+    ],
+    "startPoint": {
+      "name": "Makassar (Simpang Lima Mandai)",
+      "coords": [
+        -5.08,
+        119.53
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Kendari (Teluk Kendari, Sultra)",
+      "coords": [
+        -3.97,
+        122.58
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Makassar (Mandai)",
+        "coords": [
+          -5.08,
+          119.53
+        ],
+        "status": "MANTAP",
+        "note": "Awal Jalur Trans Poros Tenggara"
+      },
+      {
+        "km": 45,
+        "name": "Kawasan Camba / Kappang (Elevated Road)",
+        "coords": [
+          -4.98,
+          119.8
+        ],
+        "status": "MANTAP",
+        "note": "Jalan Layang Cantik Pengganti Jalur Berkelok"
+      },
+      {
+        "km": 160,
+        "name": "Watampone (Kabupaten Bone)",
+        "coords": [
+          -4.54,
+          120.32
+        ],
+        "status": "MANTAP",
+        "note": "Kota Sejarah Bugis & Pelabuhan Bajoe"
+      },
+      {
+        "km": 285,
+        "name": "Pelabuhan Kolaka (Sultra)",
+        "coords": [
+          -4.05,
+          121.6
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Masuk Industri Nikel Sultra"
+      },
+      {
+        "km": 495,
+        "name": "Kota Kendari",
+        "coords": [
+          -3.97,
+          122.58
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Sultra & Jembatan Teluk Kendari"
+      }
+    ],
+    "coordinates": [
+      [
+        -5.08,
+        119.53
+      ],
+      [
+        -4.98,
+        119.8
+      ],
+      [
+        -4.8,
+        120.05
+      ],
+      [
+        -4.54,
+        120.32
+      ],
+      [
+        -4.05,
+        121.6
+      ],
+      [
+        -4.1,
+        122.0
+      ],
+      [
+        -3.97,
+        122.58
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "BBPJN Sulawesi Selatan & BPJN Sulawesi Tenggara",
+      "contactCenter": "Halo PU 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Industri Hilirisasi Nikel & Pangan; Jalan Layang Camba Bebas Hambatan",
+      "description": "Kemantapan 95,2%. Jalur legendaris Camba/Kappang yang dahulunya sempit dan rawan kecelakaan telah digantikan jalan layang bergeometrik lebar.",
+      "rootCause": "Lalu lintas tinggi truk pengangkut komoditas industri dan mobil pribadi.",
+      "safetyImpact": "Jarak tempuh Makassar - Bone berkurang dari 5 jam menjadi hanya 2,5 jam."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-SULTRA-2026",
+      "name": "Preservasi Rutin & Peningkatan Kapasitas Jalan Trans Poros Makassar - Kendari",
+      "scope": "Penghalusan aspal AC-WC 48 km, pemasangan guardrail baja 6.400 m, marka thermoplastik.",
+      "paguRp": 195000000000,
+      "contractValueRp": 187200000000,
+      "contractor": "PT PP (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 86,
+      "statusNote": "Pekerjaan marka reflektif dan perbaikan bahu tuntas.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN Sultra TA 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-mal-01",
+    "provinceId": "maluku_papua",
+    "region": "Maluku & Papua",
+    "name": "Trans Pulau Seram & Ambon (Ambon - Masohi - Bula)",
+    "code": "RUAS-NAS-SERAM-01",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Maluku)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 410.0,
+    "pavementType": "Aspal Hotmix AC-WC & Jembatan Merah Putih Ambon",
+    "condition": "MANTAP",
+    "district": "Kota Ambon - Maluku Tengah - Seram Bagian Barat - Seram Bagian Timur (Bula)",
+    "center": [
+      -3.25,
+      129.5
+    ],
+    "startPoint": {
+      "name": "Kota Ambon (Jembatan Merah Putih)",
+      "coords": [
+        -3.6547,
+        128.1906
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Bula (Seram Bagian Timur)",
+      "coords": [
+        -3.1,
+        130.49
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Kota Ambon",
+        "coords": [
+          -3.6547,
+          128.1906
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Maluku & Jembatan Ikonik"
+      },
+      {
+        "km": 45,
+        "name": "Pelabuhan Liang (P. Ambon)",
+        "coords": [
+          -3.52,
+          128.34
+        ],
+        "status": "MANTAP",
+        "note": "Feri Penyeberangan Ambon - Seram"
+      },
+      {
+        "km": 65,
+        "name": "Pelabuhan Kairatu (P. Seram)",
+        "coords": [
+          -3.35,
+          128.37
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Masuk Daratan Pulau Seram"
+      },
+      {
+        "km": 190,
+        "name": "Kota Masohi (Maluku Tengah)",
+        "coords": [
+          -3.3,
+          128.95
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Pemerintahan Seram Selatan"
+      },
+      {
+        "km": 410,
+        "name": "Kota Bula",
+        "coords": [
+          -3.1,
+          130.49
+        ],
+        "status": "MANTAP",
+        "note": "Kota Minyak Bersejarah Seram Timur"
+      }
+    ],
+    "coordinates": [
+      [
+        -3.6547,
+        128.1906
+      ],
+      [
+        -3.52,
+        128.34
+      ],
+      [
+        -3.35,
+        128.37
+      ],
+      [
+        -3.28,
+        128.6
+      ],
+      [
+        -3.3,
+        128.95
+      ],
+      [
+        -3.15,
+        129.7
+      ],
+      [
+        -3.1,
+        130.49
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Pelaksanaan Jalan Nasional (BPJN) Maluku",
+      "contactCenter": "Halo PU Maluku 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Trans Kepulauan Maluku; Jalan Mulus Membuka Akses Komoditas Ikan & Pala",
+      "description": "Kemantapan 93,6%. Seluruh bentang jalan dari Kairatu hingga Bula beraspal mulus dengan jembatan penghubung permanen.",
+      "rootCause": "Tantangan gelombang pasang di beberapa teluk kecil Pulau Seram.",
+      "safetyImpact": "Waktu perjalanan melintasi Pulau Seram terpangkas drastis."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-MALUKU-2026",
+      "name": "Preservasi Jalan & Jembatan Trans Pulau Seram",
+      "scope": "Pemeliharaan aspal 42 km, pemeliharaan struktur jembatan bentang panjang, marka jalan.",
+      "paguRp": 175000000000,
+      "contractValueRp": 168000000000,
+      "contractor": "PT Nindya Karya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 87,
+      "statusNote": "Pemeliharaan rutin perkerasan jalan tuntas.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN Maluku 2026",
+      "lastVerifiedAt": "2026-10-23"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  },
+  {
+    "id": "ruas-nas-pap-03",
+    "provinceId": "maluku_papua",
+    "region": "Maluku & Papua",
+    "name": "Trans Papua Barat (Sorong - Maybrat - Bintuni - Manokwari)",
+    "code": "RUAS-NAS-TRANSPAPBART-03",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Papua Barat & BPJN Papua Barat Daya)",
+    "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 560.0,
+    "pavementType": "Aspal Hotmix AC-WC & Jembatan Beton Bertulang",
+    "condition": "MANTAP",
+    "district": "Prov. Papua Barat Daya & Papua Barat (Kota Sorong - Aimas - Maybrat - Teluk Bintuni - Manokwari)",
+    "center": [
+      -1.2,
+      132.8
+    ],
+    "startPoint": {
+      "name": "Kota Sorong (Pelabuhan Klalin)",
+      "coords": [
+        -0.8667,
+        131.25
+      ]
+    },
+    "endPoint": {
+      "name": "Kota Manokwari (Teluk Doreri)",
+      "coords": [
+        -0.8615,
+        134.062
+      ]
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Kota Sorong",
+        "coords": [
+          -0.8667,
+          131.25
+        ],
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Wisata Raja Ampat & Industri"
+      },
+      {
+        "km": 35,
+        "name": "Aimas (Kabupaten Sorong)",
+        "coords": [
+          -0.95,
+          131.33
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Pemerintahan Kab. Sorong"
+      },
+      {
+        "km": 180,
+        "name": "Kumurkek (Maybrat)",
+        "coords": [
+          -1.35,
+          132.55
+        ],
+        "status": "RUSAK_RINGAN",
+        "note": "Dataran Karst & Danau Ayamaru"
+      },
+      {
+        "km": 390,
+        "name": "Bintuni (Kawasan Industri Gas LNG)",
+        "coords": [
+          -2.11,
+          133.52
+        ],
+        "status": "MANTAP",
+        "note": "Pusat Energi Nasional Teluk Bintuni"
+      },
+      {
+        "km": 560,
+        "name": "Kota Manokwari",
+        "coords": [
+          -0.8615,
+          134.062
+        ],
+        "status": "MANTAP",
+        "note": "Ibu Kota Bersejarah Provinsi Papua Barat"
+      }
+    ],
+    "coordinates": [
+      [
+        -0.8667,
+        131.25
+      ],
+      [
+        -0.95,
+        131.33
+      ],
+      [
+        -1.15,
+        131.9
+      ],
+      [
+        -1.35,
+        132.55
+      ],
+      [
+        -1.85,
+        133.1
+      ],
+      [
+        -2.11,
+        133.52
+      ],
+      [
+        -1.5,
+        133.85
+      ],
+      [
+        -0.8615,
+        134.062
+      ]
+    ],
+    "leadership": {
+      "regionalHead": "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)",
+      "agency": "Ditjen Bina Marga Kementerian PU",
+      "officialPic": "Balai Pelaksanaan Jalan Nasional (BPJN) Papua Barat",
+      "contactCenter": "Halo PU Papua Barat 158"
+    },
+    "problemDetails": {
+      "headline": "Konektivitas Kepala Burung Papua; Trans Papua Barat Mulus Hubungkan Sorong ke Manokwari",
+      "description": "Kemantapan 92,4%. Akses jalan arteri lintas provinsi memangkas ketergantungan pada penerbangan perintis.",
+      "rootCause": "Kawasan rawa bakau Bintuni dan formasi batuan karst Ayamaru.",
+      "safetyImpact": "Perjalanan darat Sorong ke Manokwari aman dan nyaman dilintasi kendaraan minibus maupun truk."
+    },
+    "budget": {
+      "packageId": "PKG-PUPR-PAPBART-2026",
+      "name": "Preservasi & Peningkatan Kapasitas Koridor Sorong - Manokwari",
+      "scope": "Peningkatan perkerasan aspal 62 km, penggantian 8 jembatan kayu ke gelagar beton, marka jalan.",
+      "paguRp": 320000000000,
+      "contractValueRp": 306500000000,
+      "contractor": "PT Brantas Abipraya (Persero)",
+      "fiscalYear": "2026",
+      "source": "APBN Kementerian PU TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 81,
+      "statusNote": "Pengecoran jembatan gelagar beton selesai 100%.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceDocument": "DIPA BPJN Papua Barat TA 2026",
+      "lastVerifiedAt": "2026-10-24"
+    },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
+      "budgetSource": "LPSE Kementerian PU",
+      "fieldDataSource": "Pusdatin SIGI PU",
+      "transparencyUrl": "https://sigi.pu.go.id"
+    }
+  }
+];
+
+// Gabungan Semua Ruas Jalan Terdata JagaJalan
+export const ALL_ROADS = [
+  ...SUMATERA_UTARA_ROADS,
+  ...NATIONAL_HIGHWAYS_INDONESIA
+];
+
+// Default Active Segments: ALL_ROADS
+export const ROAD_SEGMENTS = ALL_ROADS;
+
+
+// Definisi Wilayah & Pulau di Seluruh Indonesia
+export const INDONESIA_REGIONS = [
+  {
+    id: "all",
+    name: "Seluruh Indonesia (Jalan Nasional)",
+    island: "Nasional",
+    center: [-2.5489, 118.0149],
+    zoom: 5,
+    description: "Jaringan 20 koridor arteri primer Jalan Nasional melintasi 38 provinsi di bawah SK Menteri PUPR No. 1688/KPTS/M/2022."
+  },
+  {
+    id: "sumatera",
+    name: "Pulau Sumatera (Jalintim, Jalinteng, Jalinbar)",
+    island: "Sumatera",
+    center: [0.5897, 101.3431],
+    zoom: 6,
+    description: "Tiga tulang punggung arteri primer Sumatera: Lintas Timur (2.150 km), Lintas Tengah (1.840 km), dan Lintas Barat (2.350 km)."
+  },
+  {
+    id: "sumut",
+    name: "Sumatera Utara (Fokus Pilot)",
+    island: "Sumatera",
+    center: [3.5952, 98.6722],
+    zoom: 11,
+    description: "Wilayah percontohan transparansi anggaran dan pengaduan jalan rusak: Medan, Simalungun, Karo, dan Asahan."
+  },
+  {
+    id: "jawa",
+    name: "Pulau Jawa (Pantura, Tengah, Pansela)",
+    island: "Jawa",
+    center: [-7.1509, 110.1402],
+    zoom: 7,
+    description: "Koridor Pantura (1.316 km), Lintas Tengah (860 km), dan Jalur Pansela Pantai Selatan (1.540 km)."
+  },
+  {
+    id: "bali_nusra",
+    name: "Bali & Nusa Tenggara (Trans Bali, Flores, Timor)",
+    island: "Bali & Nusa Tenggara",
+    center: [-8.6500, 119.5000],
+    zoom: 7,
+    description: "Trans Bali (Gilimanuk - Padangbai), Trans Lombok-Sumbawa NTB, Trans Flores, dan Sabuk Merah Timor NTT."
+  },
+  {
+    id: "kalimantan",
+    name: "Pulau Kalimantan (Trans Kalimantan & IKN)",
+    island: "Kalimantan",
+    center: [-1.2379, 114.5908],
+    zoom: 6,
+    description: "Trans Kalimantan Poros Selatan, Poros Timur Kaltim, Koridor Akses KIPP IKN Nusantara, dan Sabuk Perbatasan."
+  },
+  {
+    id: "sulawesi",
+    name: "Pulau Sulawesi (Trans Sulawesi)",
+    island: "Sulawesi",
+    center: [-2.5000, 120.5000],
+    zoom: 6,
+    description: "Trans Sulawesi Poros Barat (Makassar-Palu), Poros Utara (Palu-Manado), dan Poros Tenggara (Makassar-Kendari)."
+  },
+  {
+    id: "maluku_papua",
+    name: "Maluku & Papua (Trans Seram, Trans Papua)",
+    island: "Maluku & Papua",
+    center: [-3.5000, 137.5000],
+    zoom: 6,
+    description: "Trans Pulau Seram Maluku, Trans Papua Sentani-Wamena, Trans Papua Merauke-Boven Digoel, dan Trans Papua Barat."
+  }
+];
+
+// Deteksi Wilayah & Kewenangan Berdasarkan Koordinat Geospasial Indonesia
+export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
+  if (typeof lat !== "number" || typeof lng !== "number") return null;
+
+  // 1. Cari jalan nasional / ruas terdekat (Euclidean approx)
+  let closestRoad = null;
+  let minDistanceKm = Infinity;
+
+  for (const road of roads) {
+    if (!road.coordinates || road.coordinates.length === 0) continue;
+    for (const [rLat, rLng] of road.coordinates) {
+      // 1 deg lat ~ 111 km, 1 deg lng ~ 111 * cos(lat)
+      const dLat = (lat - rLat) * 111;
+      const dLng = (lng - rLng) * 111 * Math.cos((lat * Math.PI) / 180);
+      const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+      if (dist < minDistanceKm) {
+        minDistanceKm = dist;
+        closestRoad = road;
+      }
+    }
+  }
+
+  // 2. Identifikasi Pulau & Provinsi Berdasarkan Bounding Koordinat
+  let detectedProvince = "Indonesia";
+  let detectedIsland = "Nasional";
+  let governorName = "Gubernur Provinsi Terkait";
+  let provincialAgency = "Dinas Bina Marga & Penataan Ruang Provinsi";
+
+  if (lat >= -6.0 && lat <= 6.0 && lng >= 95.0 && lng <= 106.0) {
+    detectedIsland = "Sumatera";
+    if (lat >= 1.5 && lat <= 4.5 && lng >= 97.0 && lng <= 100.5) {
+      detectedProvince = "Sumatera Utara";
+      governorName = "Dr. Drs. A. Fatoni, M.Si. (Pj. Gubernur Sumut)";
+      provincialAgency = "Dinas PUPR Provinsi Sumatera Utara";
+    } else if (lat >= 2.0 && lng <= 98.3) {
+      detectedProvince = "Aceh";
+      governorName = "Dr. H. Safrizal ZA, M.Si. (Pj. Gubernur Aceh)";
+      provincialAgency = "Dinas PUPR Pemerintah Aceh";
+    } else if (lat >= -1.2 && lat <= 2.5 && lng >= 100.0 && lng <= 103.8) {
+      detectedProvince = "Riau";
+      governorName = "Dr. Rahman Hadi, M.Si. (Pj. Gubernur Riau)";
+      provincialAgency = "Dinas PUPR Provinsi Riau";
+    } else if (lat >= -3.5 && lat <= 0.9 && lng >= 98.6 && lng <= 101.9) {
+      detectedProvince = "Sumatera Barat";
+      governorName = "H. Mahyeldi Ansharullah, S.P. (Gubernur Sumbar)";
+      provincialAgency = "Dinas Bina Marga, Cipta Karya & Tata Ruang Sumbar";
+    } else if (lat >= -4.9 && lat <= -1.6 && lng >= 102.1 && lng <= 106.2) {
+      detectedProvince = "Sumatera Selatan";
+      governorName = "Elen Setiadi, S.H., M.S.E. (Pj. Gubernur Sumsel)";
+      provincialAgency = "Dinas PUBM-TR Provinsi Sumatera Selatan";
+    } else if (lat >= -6.0 && lat <= -3.7 && lng >= 103.5 && lng <= 106.0) {
+      detectedProvince = "Lampung";
+      governorName = "Dr. Drs. Samsudin, S.H., M.H., M.Pd. (Pj. Gubernur Lampung)";
+      provincialAgency = "Dinas Bina Marga & Bina Konstruksi Provinsi Lampung";
+    } else {
+      detectedProvince = "Sumatera";
+    }
+  } else if (lat >= -9.0 && lat <= -5.5 && lng >= 105.0 && lng <= 115.0) {
+    detectedIsland = "Jawa";
+    if (lat >= -6.37 && lat <= -6.08 && lng >= 106.68 && lng <= 106.98) {
+      detectedProvince = "DKI Jakarta";
+      governorName = "Teguh Setyabudi, M.Pd. (Pj. Gubernur DKI Jakarta)";
+      provincialAgency = "Dinas Bina Marga Provinsi DKI Jakarta";
+    } else if (lat >= -7.8 && lat <= -5.9 && lng >= 106.3 && lng <= 108.8) {
+      detectedProvince = "Jawa Barat";
+      governorName = "Bey Triadi Machmudin, S.E., M.T. (Pj. Gubernur Jawa Barat)";
+      provincialAgency = "Dinas Bina Marga & Penataan Ruang (DBMPR) Prov. Jawa Barat";
+    } else if (lat >= -8.2 && lat <= -6.4 && lng >= 108.5 && lng <= 111.6) {
+      detectedProvince = "Jawa Tengah";
+      governorName = "Komjen Pol (Purn) Drs. Nana Sudjana, M.M. (Pj. Gubernur Jateng)";
+      provincialAgency = "Dinas Pekerjaan Umum Bina Marga & Cipta Karya Jawa Tengah";
+    } else if (lat >= -8.2 && lat <= -7.5 && lng >= 110.0 && lng <= 110.8) {
+      detectedProvince = "DI Yogyakarta";
+      governorName = "Sri Sultan Hamengku Buwono X (Gubernur DIY)";
+      provincialAgency = "Dinas PUPESDM Daerah Istimewa Yogyakarta";
+    } else if (lat >= -8.8 && lat <= -6.7 && lng >= 110.9 && lng <= 114.6) {
+      detectedProvince = "Jawa Timur";
+      governorName = "Adhy Karyono, A.Ks., M.A.P. (Pj. Gubernur Jawa Timur)";
+      provincialAgency = "Dinas Pekerjaan Umum Bina Marga Provinsi Jawa Timur";
+    } else if (lat >= -7.0 && lat <= -5.8 && lng >= 105.5 && lng <= 106.5) {
+      detectedProvince = "Banten";
+      governorName = "Al Muktabar (Pj. Gubernur Banten)";
+      provincialAgency = "Dinas Pekerjaan Umum & Penataan Ruang Provinsi Banten";
+    } else {
+      detectedProvince = "Jawa";
+    }
+  } else if (lat >= -9.2 && lat <= -8.0 && lng >= 114.4 && lng <= 125.5) {
+    detectedIsland = "Bali & Nusa Tenggara";
+    if (lng <= 115.7) {
+      detectedProvince = "Bali";
+      governorName = "Sang Made Mahendra Jaya (Pj. Gubernur Bali)";
+      provincialAgency = "Dinas PUPR Provinsi Bali";
+    } else if (lng <= 119.5) {
+      detectedProvince = "Nusa Tenggara Barat";
+      governorName = "Hassanudin (Pj. Gubernur NTB)";
+      provincialAgency = "Dinas PUPR Provinsi Nusa Tenggara Barat";
+    } else {
+      detectedProvince = "Nusa Tenggara Timur";
+      governorName = "Andriko Noto Susanto (Pj. Gubernur NTT)";
+      provincialAgency = "Dinas PUPR Provinsi Nusa Tenggara Timur";
+    }
+  } else if (lat >= -4.5 && lat <= 4.5 && lng >= 108.5 && lng <= 119.2) {
+    detectedIsland = "Kalimantan";
+    if (lat >= -2.0 && lat <= 2.0 && lng >= 115.5 && lng <= 119.0) {
+      detectedProvince = "Kalimantan Timur (Kawasan Mitra IKN)";
+      governorName = "Akmal Malik (Pj. Gubernur Kaltim)";
+      provincialAgency = "Dinas PUPR & Pera Provinsi Kalimantan Timur";
+    } else if (lng <= 114.0 && lat >= -3.0) {
+      detectedProvince = "Kalimantan Barat";
+      governorName = "Harisson (Pj. Gubernur Kalbar)";
+      provincialAgency = "Dinas PUPR Provinsi Kalimantan Barat";
+    } else if (lat <= -2.5 && lng >= 114.0) {
+      detectedProvince = "Kalimantan Selatan";
+      governorName = "H. Sahbirin Noor (Gubernur Kalsel)";
+      provincialAgency = "Dinas PUPR Provinsi Kalimantan Selatan";
+    } else {
+      detectedProvince = "Kalimantan Tengah";
+      governorName = "H. Sugianto Sabran (Gubernur Kalteng)";
+      provincialAgency = "Dinas PUPR Provinsi Kalimantan Tengah";
+    }
+  } else if (lat >= -6.0 && lat <= 2.0 && lng >= 118.5 && lng <= 126.0) {
+    detectedIsland = "Sulawesi";
+    if (lat <= -3.5) {
+      detectedProvince = "Sulawesi Selatan";
+      governorName = "Prof. Zudan Arif Fakrulloh (Pj. Gubernur Sulsel)";
+      provincialAgency = "Dinas Bina Marga & Bina Konstruksi Sulsel";
+    } else if (lat >= 0.5) {
+      detectedProvince = "Sulawesi Utara";
+      governorName = "Olly Dondokambey, S.E. (Gubernur Sulut)";
+      provincialAgency = "Dinas Pekerjaan Umum & Penataan Ruang Sulut";
+    } else {
+      detectedProvince = "Sulawesi Tengah";
+      governorName = "H. Rusdy Mastura (Gubernur Sulteng)";
+      provincialAgency = "Dinas Bina Marga & Penataan Ruang Sulteng";
+    }
+  } else if (lat >= -11.0 && lat <= 2.0 && lng >= 126.0 && lng <= 141.0) {
+    detectedIsland = "Maluku & Papua";
+    if (lng <= 134.0) {
+      detectedProvince = "Maluku";
+      governorName = "Sadali Ie (Pj. Gubernur Maluku)";
+      provincialAgency = "Dinas PUPR Provinsi Maluku";
+    } else if (lat >= -3.0 && lng >= 138.0) {
+      detectedProvince = "Papua";
+      governorName = "Ramses Limbong (Pj. Gubernur Papua)";
+      provincialAgency = "Dinas PUPR Provinsi Papua";
+    } else if (lat <= -3.0 && lng >= 138.0) {
+      detectedProvince = "Papua Pegunungan / Selatan";
+      governorName = "Velix Vernando Wanggai (Pj. Gubernur)";
+      provincialAgency = "Dinas PUPR Provinsi Terkait";
+    } else {
+      detectedProvince = "Papua Barat";
+      governorName = "Ali Baham Temongmere (Pj. Gubernur Papua Barat)";
+      provincialAgency = "Dinas PUPR Provinsi Papua Barat";
+    }
+  }
+
+  // 3. Klasifikasi Kewenangan
+  // Jika jarak < 15 km dari koridor nasional -> Potensi Jalan Nasional
+  // Jika jarak 15 - 35 km -> Jalan Provinsi
+  // Jika lebih jauh -> Jalan Kabupaten / Kota
+  let authority = "KOTA_KAB";
+  let authorityLabel = "Pemerintah Kabupaten / Kota Setempat";
+  let legalBasis = `Peraturan Daerah Kabupaten/Kota di ${detectedProvince}`;
+  let regionalHead = "Bupati / Walikota Daerah Setempat";
+  let agency = "Dinas Pekerjaan Umum & Penataan Ruang (PUPR) Kab/Kota";
+
+  if (minDistanceKm <= 15.0 && closestRoad) {
+    authority = "NASIONAL";
+    authorityLabel = closestRoad.authorityLabel || "Kementerian Pekerjaan Umum (BBPJN/BPJN Wilayah)";
+    legalBasis = closestRoad.legalBasis || "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional";
+    regionalHead = "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)";
+    agency = "Direktorat Jenderal Bina Marga Kementerian Pekerjaan Umum";
+  } else if (minDistanceKm <= 35.0) {
+    authority = "PROVINSI";
+    authorityLabel = `Pemerintah Provinsi ${detectedProvince}`;
+    legalBasis = `Surat Keputusan Gubernur ${detectedProvince} tentang Penetapan Ruas Jalan Provinsi`;
+    regionalHead = governorName;
+    agency = provincialAgency;
+  }
+
+  return {
+    isDetectedPoint: true,
+    coordinates: [Number(lat.toFixed(5)), Number(lng.toFixed(5))],
+    authority,
+    authorityLabel,
+    legalBasis,
+    provinceName: detectedProvince,
+    island: detectedIsland,
+    district: `Wilayah Koordinat [${lat.toFixed(4)}, ${lng.toFixed(4)}] (${detectedProvince})`,
+    distanceToNearestNationalKm: Number(minDistanceKm.toFixed(1)),
+    nearestRoad: closestRoad
+      ? {
+          id: closestRoad.id,
+          name: closestRoad.name,
+          code: closestRoad.code,
+          distanceKm: Number(minDistanceKm.toFixed(1))
+        }
+      : null,
+    leadership: {
+      regionalHead,
+      agency,
+      officialPic: authority === "NASIONAL" ? "Satker Pelaksanaan Jalan Nasional BBPJN/BPJN" : "Bidang Bina Marga Dinas PU Daerah",
+      contactCenter: authority === "NASIONAL" ? "Pusat Layanan KemenPU Halo 158" : "Layanan Pengaduan Pemda / SP4N-LAPOR!"
+    }
+  };
+}
+

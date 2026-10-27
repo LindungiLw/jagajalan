@@ -24,7 +24,9 @@ import {
   Calendar,
   Layers,
   HelpCircle,
+  Globe,
 } from "lucide-react";
+import { INDONESIA_REGIONS, detectJurisdictionByCoordinates } from "@/data/roadsData";
 
 // Dynamic import with SSR disabled to prevent Leaflet "window is not defined" error
 const MapInner = dynamic(() => import("./MapInner"), {
@@ -50,8 +52,12 @@ export default function MapExplorer({
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
+  const [selectedRegionId, setSelectedRegionId] = useState("all");
+  const [detectedPoint, setDetectedPoint] = useState(null);
   const [sigiModalOpen, setSigiModalOpen] = useState(false);
-  const [mapCenter, setMapCenter] = useState([3.5500, 98.6850]); // Medan, Sumatera Utara
+  const [mapCenter, setMapCenter] = useState([-2.5489, 118.0149]); // Center of Indonesia (Seluruh Indonesia)
+  const [mapZoom, setMapZoom] = useState(5);
   const [mapInstance, setMapInstance] = useState(null);
 
   // Synchronize when focusedRoadId changes from external navigation (React 19 state adjustment pattern)
@@ -110,9 +116,82 @@ export default function MapExplorer({
     setMapCenter(report.coordinates);
   };
 
+  const handleSelectRegion = (region) => {
+    setSelectedRegionId(region.id);
+    setRegionDropdownOpen(false);
+    setMapCenter(region.center);
+    setMapZoom(region.zoom);
+    mapInstance?.flyTo(region.center, region.zoom, { duration: 1.2 });
+
+    if (region.id === "sumut") {
+      const sumutRoad = roads.find((r) => r.id === "ruas-su-03" || r.provinceId === "sumut");
+      if (sumutRoad) handleSelectRoad(sumutRoad);
+    } else if (region.id === "all") {
+      const nasRoad = roads.find((r) => r.id === "ruas-nas-smt-01" || r.authority === "NASIONAL");
+      if (nasRoad) handleSelectRoad(nasRoad);
+    } else {
+      const targetRoad = roads.find(
+        (r) =>
+          r.provinceId === region.id ||
+          (r.region && r.region.toLowerCase().includes(region.island.toLowerCase()))
+      );
+      if (targetRoad) handleSelectRoad(targetRoad);
+    }
+  };
+
+  const handleMapClick = (coords) => {
+    const [lat, lng] = coords;
+    const result = detectJurisdictionByCoordinates(lat, lng, roads);
+    if (result) {
+      setDetectedPoint(result);
+      setSelectedReport(null);
+
+      const detectedRoadEntity = {
+        id: `detected-${Date.now()}`,
+        isDetectedPoint: true,
+        name: result.authority === "NASIONAL" && result.nearestRoad
+          ? `Dekat ${result.nearestRoad.name}`
+          : `Titik Geospasial [${lat.toFixed(3)}, ${lng.toFixed(3)}]`,
+        code: result.authority === "NASIONAL" ? (result.nearestRoad?.code || "RUAS-NAS-DETEKSI") : "JALAN-DAERAH-DETEKSI",
+        authority: result.authority,
+        authorityLabel: result.authorityLabel,
+        legalBasis: result.legalBasis,
+        district: result.district,
+        provinceName: result.provinceName,
+        lengthKm: result.distanceToNearestNationalKm,
+        pavementType: "Hasil Analisis Spasial JagaJalan",
+        condition: "TERDATA",
+        center: [lat, lng],
+        coordinates: [[lat, lng]],
+        leadership: result.leadership,
+        problemDetails: {
+          headline: `Kewenangan Penyelenggara: ${result.authorityLabel}`,
+          description: `Titik koordinat [${lat.toFixed(4)}, ${lng.toFixed(4)}] berada di wilayah ${result.provinceName}. ${
+            result.authority === "NASIONAL"
+              ? `Berada ~${result.distanceToNearestNationalKm} KM dari koridor Jalan Nasional (${result.nearestRoad?.name || "Arteri Primer"}). Tanggung jawab pemeliharaan berada di bawah ${result.leadership.regionalHead}.`
+              : `Kewenangan pemeliharaan berada di bawah ${result.leadership.regionalHead} (${result.leadership.agency}).`
+          }`,
+          rootCause: "Penetapan batas jurisdiksi berbasis SK Menteri PUPR No. 1688/2022 & Perda Daerah.",
+          safetyImpact: "Pastikan laporan aduan masyarakat dan pengawasan anggaran ditujukan ke instansi yang tepat."
+        },
+        officialSources: {
+          authoritySource: result.legalBasis,
+          budgetSource: "Pusdatin SIGI PU & Data Daerah",
+          fieldDataSource: "Analisis Geospasial Instan JagaJalan",
+          transparencyUrl: "https://sigi.pu.go.id"
+        }
+      };
+
+      setSelectedRoad(detectedRoadEntity);
+      setActiveTab("kewenangan");
+    }
+  };
+
   const handleResetLocation = () => {
-    setMapCenter([3.5952, 98.6722]);
-    mapInstance?.setView([3.5952, 98.6722], 11, { animate: true });
+    setMapCenter([-2.5489, 118.0149]);
+    setMapZoom(5);
+    mapInstance?.setView([-2.5489, 118.0149], 5, { animate: true });
+    setSelectedRegionId("all");
   };
 
   // Human-readable authority label
@@ -142,9 +221,12 @@ export default function MapExplorer({
           reports={filteredReports}
           selectedRoad={selectedRoad}
           selectedReport={selectedReport}
+          detectedPoint={detectedPoint}
           onSelectRoad={handleSelectRoad}
           onSelectReport={handleSelectReport}
+          onMapClick={handleMapClick}
           mapCenter={mapCenter}
+          mapZoom={mapZoom}
           onMapReady={setMapInstance}
         />
       </div>
@@ -152,14 +234,54 @@ export default function MapExplorer({
       {/* 2. Top-Left Floating Search Box & Status Filter */}
       <div className="absolute top-4 left-4 z-[500] space-y-2 pointer-events-auto">
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Province Badge Pill */}
-          <div className="px-3 py-2 rounded-[5px] bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-800 flex items-center gap-1.5 font-sans">
-            <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-            <span className="text-slate-500 font-normal">Wilayah:</span>
-            <span className="font-bold text-slate-900">Sumatera Utara</span>
-            <span className="text-[9px] font-bold bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded ml-1 border border-orange-200">
-              Pilot Aktif
-            </span>
+          {/* Interactive Region / Island Dropdown */}
+          <div className="relative inline-block font-sans">
+            <button
+              onClick={() => setRegionDropdownOpen(!regionDropdownOpen)}
+              className="px-3.5 py-2 rounded-[5px] bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-800 flex items-center gap-2 hover:bg-slate-50 transition-all cursor-pointer font-sans"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#c2410c]" />
+              <span className="text-slate-500 font-normal">Wilayah:</span>
+              <span className="font-bold text-slate-900 max-w-[130px] sm:max-w-[180px] truncate">
+                {INDONESIA_REGIONS.find((r) => r.id === selectedRegionId)?.name || "Seluruh Indonesia"}
+              </span>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
+            </button>
+
+            {regionDropdownOpen && (
+              <div
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute top-full left-0 mt-1.5 w-72 rounded-[5px] bg-white shadow-xl border border-slate-200 py-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans max-h-80 overflow-y-auto"
+              >
+                <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 flex items-center justify-between">
+                  <span>Cakupan Wilayah & Koridor</span>
+                  <span className="text-[9px] font-mono font-normal text-slate-400">{INDONESIA_REGIONS.length} Region</span>
+                </div>
+                {INDONESIA_REGIONS.map((reg) => (
+                  <button
+                    key={reg.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectRegion(reg);
+                    }}
+                    className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer border-b border-slate-50 last:border-0 ${
+                      selectedRegionId === reg.id ? "bg-orange-50/70 font-bold text-[#c2410c]" : ""
+                    }`}
+                  >
+                    <div>
+                      <div className="font-semibold text-slate-900">{reg.name}</div>
+                      <div className="text-[9.5px] text-slate-500 line-clamp-1">{reg.description}</div>
+                    </div>
+                    {reg.id === "sumut" && (
+                      <span className="text-[8.5px] bg-orange-100 text-orange-800 font-bold px-1.5 py-0.5 rounded border border-orange-200 shrink-0 ml-1">
+                        Pilot
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Search Bar */}
@@ -475,6 +597,24 @@ export default function MapExplorer({
                   </div>
                 </div>
 
+                {/* Corridor Span Boundary Pill for National Arterial Highways */}
+                {currentRoad?.startPoint && currentRoad?.endPoint && (
+                  <div className="p-2.5 rounded-[5px] bg-slate-50 border border-slate-200/90 text-xs space-y-1">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <Crosshair className="w-3 h-3 text-[#c2410c]" />
+                        <span>Bentang Batas Koridor Arteri</span>
+                      </span>
+                      <span className="font-mono text-slate-500 font-bold">{currentRoad.lengthKm} KM</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-slate-800">
+                      <span className="truncate max-w-[46%] text-slate-800">📍 {currentRoad.startPoint.name}</span>
+                      <span className="text-slate-400 font-mono font-bold">➔</span>
+                      <span className="truncate max-w-[46%] text-slate-800 text-right">🏁 {currentRoad.endPoint.name}</span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Problem Summary Card */}
                 <div className="p-3.5 rounded-[5px] bg-orange-50/70 border border-orange-200 space-y-2">
                   <div className="flex items-center justify-between">
@@ -681,6 +821,34 @@ export default function MapExplorer({
             {/* TAB 3: STATUS KEWENANGAN & LEGALITAS */}
             {activeTab === "kewenangan" && (
               <div className="space-y-3.5 animate-fade-in">
+                {/* Detected Location Special Banner */}
+                {currentRoad?.isDetectedPoint && (
+                  <div className="p-3.5 rounded-[5px] bg-teal-50 border border-teal-200 space-y-2">
+                    <div className="text-xs font-bold text-teal-900 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-teal-700" />
+                        <span>Hasil Deteksi Spasial Lokasi</span>
+                      </span>
+                      <span className="text-[9px] font-mono font-bold bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded">
+                        Otomatis
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-teal-800 leading-relaxed">
+                      Sistem mendeteksi titik koordinat ini berada di wilayah <span className="font-bold">{currentRoad.provinceName}</span> dengan kewenangan <span className="font-bold">{currentRoad.authorityLabel}</span>.
+                      {currentRoad.lengthKm > 0 && (
+                        <span> Jarak ke koridor Jalan Nasional terdekat: <strong className="font-mono">{currentRoad.lengthKm} KM</strong>.</span>
+                      )}
+                    </p>
+                    <button
+                      onClick={onOpenReportModal}
+                      className="w-full py-2 px-3 rounded-[4px] bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Buat Aduan / Lapor Jalan di Titik Ini</span>
+                    </button>
+                  </div>
+                )}
+
                 {/* Leadership & Pejabat Penanggung Jawab Card */}
                 <div className="p-3.5 rounded-[5px] bg-slate-900 text-white space-y-2.5">
                   <div className="text-[10px] font-bold text-orange-400 uppercase tracking-wider flex items-center justify-between">
@@ -707,6 +875,44 @@ export default function MapExplorer({
                     </div>
                   )}
                 </div>
+
+                {/* Interactive Milestone KM Points for National Highways */}
+                {currentRoad?.milestones && currentRoad.milestones.length > 0 && (
+                  <div className="p-3 rounded-[5px] bg-blue-50/70 border border-blue-200/90 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-blue-950">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-blue-700" />
+                        <span>Titik Patok & Milestone Batas (KM)</span>
+                      </span>
+                      <span className="text-[9px] text-blue-800 font-mono font-bold bg-blue-100 px-1.5 py-0.5 rounded">
+                        {currentRoad.milestones.length} Titik Penting
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-blue-800/80">
+                      Klik salah satu patok untuk mengarahkan peta ke koordinat titik inspeksi tersebut:
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                      {currentRoad.milestones.map((ms, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            mapInstance?.flyTo(ms.coords, 12, { duration: 1 });
+                          }}
+                          className="text-left p-1.5 bg-white rounded border border-blue-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-[10px] cursor-pointer"
+                        >
+                          <div className="flex items-center justify-between font-mono font-bold text-blue-900">
+                            <span>KM {ms.km}</span>
+                            <span className={`text-[8px] px-1 py-0.2 rounded font-sans ${
+                              ms.status === "MANTAP" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                            }`}>{ms.status}</span>
+                          </div>
+                          <div className="text-slate-800 font-semibold truncate mt-0.5">{ms.name}</div>
+                          <div className="text-[8.5px] text-slate-500 truncate">{ms.note}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Official Authority Card */}
                 <div className="p-4 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-3">

@@ -1,8 +1,95 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, Popup, Tooltip, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Popup, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
+
+// Create custom milestone marker for key KM boundaries along National Highways
+const createMilestoneIcon = (status, isSelected) => {
+  let color = "#2563eb"; // Blue for Mantap
+  if (status === "RUSAK_BERAT") color = "#dc2626"; // Crimson
+  else if (status === "RUSAK_RINGAN") color = "#d97706"; // Amber
+
+  return L.divIcon({
+    className: "custom-milestone-marker",
+    html: `
+      <div style="
+        position: relative;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      ">
+        <div style="
+          width: 20px;
+          height: 20px;
+          border-radius: 5px;
+          background: #ffffff;
+          border: 2px solid ${color};
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 8px;
+          font-weight: 800;
+          color: ${color};
+          font-family: monospace;
+          letter-spacing: -0.5px;
+        ">
+          KM
+        </div>
+      </div>
+    `,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+  });
+};
+
+// Create custom locator icon for clicked / detected geospatial point
+const createDetectedLocationIcon = () => {
+  return L.divIcon({
+    className: "custom-detected-marker",
+    html: `
+      <div style="
+        position: relative;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <span style="
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: rgba(13, 148, 136, 0.35);
+          animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        "></span>
+        <div style="
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background: #0d9488;
+          border: 2.5px solid #ffffff;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>
+          </svg>
+        </div>
+      </div>
+    `,
+    iconSize: [38, 38],
+    iconAnchor: [19, 19],
+  });
+};
 
 // Create custom orange marker icon matching the high-fidelity UI design
 const createReportIcon = (category, isOverdue, isSelected) => {
@@ -99,7 +186,7 @@ const createReportIcon = (category, isOverdue, isSelected) => {
   });
 };
 
-function MapController({ center, onMapReady }) {
+function MapController({ center, zoom = 11.5, onMapReady }) {
   const map = useMap();
 
   useEffect(() => {
@@ -110,10 +197,22 @@ function MapController({ center, onMapReady }) {
 
   useEffect(() => {
     if (center && map) {
-      map.setView(center, 13, { animate: true });
+      map.setView(center, zoom, { animate: true });
     }
-  }, [center, map]);
+  }, [center, zoom, map]);
 
+  return null;
+}
+
+// Click anywhere on map to detect jurisdiction & responsible official
+function MapClickHandler({ onMapClick }) {
+  useMapEvents({
+    click(e) {
+      if (onMapClick) {
+        onMapClick([e.latlng.lat, e.latlng.lng]);
+      }
+    },
+  });
   return null;
 }
 
@@ -122,21 +221,25 @@ export default function MapInner({
   reports,
   selectedRoad,
   selectedReport,
+  detectedPoint,
   onSelectRoad,
   onSelectReport,
+  onMapClick,
   mapCenter,
+  mapZoom = 11.5,
   onMapReady,
 }) {
   return (
     <MapContainer
       center={mapCenter || [3.5952, 98.6722]}
-      zoom={11.5}
+      zoom={mapZoom}
       zoomControl={false}
       scrollWheelZoom={true}
       className="w-full h-full"
       style={{ width: "100%", height: "100%", minHeight: "680px" }}
     >
-      <MapController center={mapCenter} onMapReady={onMapReady} />
+      <MapController center={mapCenter} zoom={mapZoom} onMapReady={onMapReady} />
+      <MapClickHandler onMapClick={onMapClick} />
 
       {/* CartoDB Positron / OSM Clean Light Tile Layer */}
       <TileLayer
@@ -339,6 +442,113 @@ export default function MapInner({
           </Marker>
         );
       })}
+
+      {/* Key Milestone Boundary Points along National Highways */}
+      {roads.map((road) => {
+        if (!road.milestones || road.milestones.length === 0) return null;
+        const isRoadSelected = selectedRoad?.id === road.id;
+
+        return road.milestones.map((ms, idx) => {
+          const msIcon = createMilestoneIcon(ms.status, isRoadSelected);
+
+          return (
+            <Marker
+              key={`${road.id}-ms-${idx}`}
+              position={ms.coords}
+              icon={msIcon}
+              zIndexOffset={isRoadSelected ? 500 : 50}
+              eventHandlers={{
+                click: () => onSelectRoad(road),
+              }}
+            >
+              <Tooltip sticky>
+                <div className="font-sans text-xs">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <span className="bg-blue-600 text-white text-[9px] px-1 py-0.2 rounded font-mono font-bold">KM {ms.km}</span>
+                    <span>{ms.name}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-500 font-medium">
+                    {road.name} • Kondisi: {ms.status}
+                  </div>
+                </div>
+              </Tooltip>
+
+              <Popup className="jagajalan-leaflet-popup">
+                <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                    <span className="font-mono text-[9px] font-bold text-blue-800 bg-blue-100 px-1.5 py-0.5 rounded-[4px]">
+                      PATOK KM {ms.km}
+                    </span>
+                    <span className="text-[9px] font-bold text-slate-500">{ms.status}</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 leading-snug">{ms.name}</h4>
+                    <p className="text-[10px] text-slate-500">{road.name}</p>
+                    <p className="text-[9px] text-slate-600 mt-1 italic">"{ms.note}"</p>
+                  </div>
+                  <div className="bg-slate-50 p-2 rounded-[4px] border border-slate-200 text-[9px] space-y-0.5">
+                    <div className="text-slate-500">Penanggung Jawab:</div>
+                    <div className="font-bold text-slate-800">{road.leadership?.regionalHead}</div>
+                    <div className="text-slate-600">{road.leadership?.agency}</div>
+                  </div>
+                  <button
+                    onClick={() => onSelectRoad(road)}
+                    className="w-full py-1.5 px-2 rounded-[4px] text-[10px] font-bold text-white bg-blue-600 hover:bg-blue-700 text-center transition-colors cursor-pointer block"
+                  >
+                    Buka Detail Koridor Nasional →
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        });
+      })}
+
+      {/* Detected Location Click Marker */}
+      {detectedPoint && detectedPoint.coordinates && (
+        <Marker
+          position={detectedPoint.coordinates}
+          icon={createDetectedLocationIcon()}
+          zIndexOffset={2000}
+        >
+          <Tooltip permanent direction="top" offset={[0, -18]}>
+            <div className="font-sans text-xs bg-teal-900 text-white px-2 py-1 rounded-[4px] shadow-lg font-bold">
+              🎯 Titik Terdeteksi: {detectedPoint.provinceName}
+            </div>
+          </Tooltip>
+          <Popup className="jagajalan-leaflet-popup" autoPan>
+            <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                <span className="font-bold text-[9px] text-teal-800 bg-teal-100 px-1.5 py-0.5 rounded-[4px]">
+                  DETEKSI GEOSPASIAL
+                </span>
+                <span className="text-[9px] font-mono font-bold text-slate-400">
+                  {detectedPoint.coordinates[0].toFixed(3)}, {detectedPoint.coordinates[1].toFixed(3)}
+                </span>
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-900">{detectedPoint.provinceName} ({detectedPoint.island})</h4>
+                <p className="text-[10px] text-teal-700 font-bold">{detectedPoint.authorityLabel}</p>
+              </div>
+              <div className="bg-slate-50 p-2 rounded-[4px] border border-slate-200 text-[9.5px] space-y-1">
+                <div>
+                  <span className="text-slate-500">Penanggung Jawab: </span>
+                  <span className="font-bold text-slate-900">{detectedPoint.leadership?.regionalHead}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Instansi: </span>
+                  <span className="font-medium text-slate-800">{detectedPoint.leadership?.agency}</span>
+                </div>
+                {detectedPoint.nearestRoad && (
+                  <div className="pt-1 border-t border-slate-200/80 text-[8.5px] text-slate-600">
+                    Koridor Nasional Terdekat: <span className="font-semibold">{detectedPoint.nearestRoad.name}</span> (~{detectedPoint.distanceToNearestNationalKm} km)
+                  </div>
+                )}
+              </div>
+            </div>
+          </Popup>
+        </Marker>
+      )}
     </MapContainer>
   );
 }

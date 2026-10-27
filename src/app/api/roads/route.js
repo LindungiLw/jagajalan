@@ -16,6 +16,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const authority = searchParams.get("authority") || "ALL";
+    const region = searchParams.get("region") || "ALL";
     const search = searchParams.get("search") || "";
     const format = searchParams.get("format") || "json";
 
@@ -24,6 +25,14 @@ export async function GET(request) {
 
     if (authority !== "ALL") {
       filtered = filtered.filter((r) => r.authority === authority);
+    }
+
+    if (region !== "ALL") {
+      filtered = filtered.filter(
+        (r) =>
+          r.provinceId === region ||
+          (r.region && r.region.toLowerCase() === region.toLowerCase())
+      );
     }
 
     if (search.trim()) {
@@ -72,6 +81,10 @@ export async function GET(request) {
             district: road.district,
             pavementType: road.pavementType,
             province: road.provinceName,
+            region: road.region,
+            startPoint: road.startPoint,
+            endPoint: road.endPoint,
+            milestones: road.milestones,
             leadership: road.leadership,
             problemHeadline: road.problemDetails?.headline,
             constructionPackage: road.budget?.name,
