@@ -16,38 +16,38 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
     {
       step: "01",
       icon: Camera,
-      badge: "AI Inspector",
+      badge: "Estimasi AI",
       badgeColor: "bg-orange-50 text-orange-700 border-orange-200",
-      title: "Inspeksi Citra AI",
+      title: "Klasifikasi Awal AI",
       description:
-        "Foto dianalisis otomatis oleh Gemini Vision untuk memverifikasi keaslian objek (anti-spam) dan mengukur skor bahaya jalan (1–100).",
+        "Analisis citra berbantuan AI untuk estimasi awal jenis kerusakan, perkiraan dimensi, dan indikator risiko keselamatan.",
     },
     {
       step: "02",
       icon: ShieldCheck,
-      badge: "SK Ruas Resmi",
+      badge: "Kewenangan Ruas",
       badgeColor: "bg-slate-100 text-slate-800 border-slate-300",
-      title: "Kunci Wewenang",
+      title: "Penetapan Ruas",
       description:
-        "GPS mencocokkan ruas ke database hukum resmi (KemenPUPR, DBMPR Provinsi, atau Pemkot/Kab) untuk menghentikan saling lempar tanggung jawab.",
+        "Menghubungkan lokasi atau segmen jalan dengan status kewenangan resmi (KemenPUPR, Provinsi, atau Pemkot/Kab) berdasarkan ketersediaan data.",
     },
     {
       step: "03",
       icon: FileSearch,
-      badge: "Lelang LPSE",
+      badge: "Keterlacakan LPSE",
       badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
-      title: "Audit APBD",
+      title: "Pelacakan Anggaran",
       description:
-        "Menyandingkan titik kerusakan dengan paket tender lelang di LPSE. Publik langsung tahu nilai pagu dan kontraktor pemenang yang ditunjuk.",
+        "Menyediakan informasi paket pengadaan LPSE yang relevan dengan ruas jalan, dilengkapi status pencocokan data.",
     },
     {
       step: "04",
       icon: Scale,
-      badge: "SLA 14 Hari",
+      badge: "SOP 14 Hari",
       badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
-      title: "Kawal Ombudsman",
+      title: "Pemantauan Respons",
       description:
-        "Hitung mundur respon dinas berwenang. Jika terabaikan melewati 14 hari kerja, sistem otomatis menyusun draf laporan ke Ombudsman RI.",
+        "Memantau tenggat respons tindak lanjut pengaduan serta memfasilitasi penyiapan draf advokasi ke Ombudsman RI jika diperlukan.",
     },
   ];
 
