@@ -127,7 +127,7 @@ export default function HeroSection({
             Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed font-sans font-normal mx-auto">
-            Platform integrasi data kewenangan jalan (BPS), tender proyek LPSE, aduan warga terverifikasi AI, dan kepastian respons Ombudsman RI.
+            Prototipe platform keterbukaan informasi kewenangan ruas jalan, penelusuran paket anggaran proyek LPSE, aduan warga dengan estimasi awal AI, dan pemantauan tenggat respons pengaduan.
           </p>
         </div>
 

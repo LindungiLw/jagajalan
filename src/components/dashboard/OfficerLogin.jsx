@@ -78,13 +78,13 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-mono tracking-wider uppercase bg-orange-50 text-orange-800 border border-orange-200">
                 <HardHat className="w-3.5 h-3.5 text-orange-700" />
-                <span>Portal Resmi Aparatur Sipil Negara & Petugas Lapangan</span>
+                <span>Prototipe Portal Dinas • Simulasi Kewenangan Penyelenggara</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
-                Sistem Autentikasi Penyelenggara Jalan
+                Portal Kerja Penyelenggara Jalan
               </h1>
               <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-                Kanal verifikasi terbatas bagi ASN / petugas UPTD Kementerian PUPR, DBMPR Provinsi, dan Dinas PUPR Kota/Kabupaten untuk menindaklanjuti laporan warga.
+                Modul prototipe untuk mendemonstrasikan alur verifikasi lapangan, pembaruan status penanganan, dan dokumentasi foto pengerjaan sesuai tingkat kewenangan instansi.
               </p>
             </div>
 

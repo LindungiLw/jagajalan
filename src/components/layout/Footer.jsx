@@ -19,8 +19,8 @@ export default function Footer({ onSelectTab }) {
               />
             </div>
             <p className="text-xs text-slate-600 leading-relaxed max-w-md">
-              Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan. 
-              Mengintegrasikan data geospasial terbuka, laporan partisipatif warga, verifikasi citra AI, dan kepatuhan hukum Ombudsman RI.
+              Prototipe Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan. 
+              Menghubungkan data geospasial resmi, penelusuran paket pengadaan LPSE, estimasi awal kondisi jalan berbantuan AI, dan pemantauan tenggat pelayanan publik.
             </p>
             <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-500 font-medium">
               <Shield className="w-3.5 h-3.5 text-orange-600" />
