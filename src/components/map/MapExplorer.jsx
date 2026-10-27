@@ -44,14 +44,14 @@ export default function MapExplorer({
   onOpenReportModal,
   focusedRoadId,
 }) {
-  const [selectedRoad, setSelectedRoad] = useState(roads[2] || roads[0]); // Default to Sawangan (ruas-03)
-  const [selectedReport, setSelectedReport] = useState(reports[0] || null); // Default to JGJ-DPK-081 (Jl. Raya Sawangan)
+  const [selectedRoad, setSelectedRoad] = useState(roads[2] || roads[0]); // Default to Katamso Medan (ruas-su-03)
+  const [selectedReport, setSelectedReport] = useState(reports[0] || null); // Default to JGJ-MDN-001
   const [activeTab, setActiveTab] = useState("masalah"); // "masalah" | "proyek" | "kewenangan" | "sumber"
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   const [sigiModalOpen, setSigiModalOpen] = useState(false);
-  const [mapCenter, setMapCenter] = useState([-6.3985, 106.7892]); // Sawangan, Depok
+  const [mapCenter, setMapCenter] = useState([3.5500, 98.6850]); // Medan, Sumatera Utara
   const [mapInstance, setMapInstance] = useState(null);
 
   // Synchronize when focusedRoadId changes from external navigation (React 19 state adjustment pattern)
@@ -111,8 +111,8 @@ export default function MapExplorer({
   };
 
   const handleResetLocation = () => {
-    setMapCenter([-6.3985, 106.825]);
-    mapInstance?.setView([-6.3985, 106.825], 11.5, { animate: true });
+    setMapCenter([3.5952, 98.6722]);
+    mapInstance?.setView([3.5952, 98.6722], 11, { animate: true });
   };
 
   // Human-readable authority label
@@ -152,6 +152,16 @@ export default function MapExplorer({
       {/* 2. Top-Left Floating Search Box & Status Filter */}
       <div className="absolute top-4 left-4 z-[500] space-y-2 pointer-events-auto">
         <div className="flex items-center gap-2 flex-wrap">
+          {/* Province Badge Pill */}
+          <div className="px-3 py-2 rounded-[5px] bg-white/95 backdrop-blur-md shadow-md border border-slate-200/90 text-xs font-semibold text-slate-800 flex items-center gap-1.5 font-sans">
+            <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
+            <span className="text-slate-500 font-normal">Wilayah:</span>
+            <span className="font-bold text-slate-900">Sumatera Utara</span>
+            <span className="text-[9px] font-bold bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded ml-1 border border-orange-200">
+              Pilot Aktif
+            </span>
+          </div>
+
           {/* Search Bar */}
           <div className="relative w-64 sm:w-72 bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-2 flex items-center gap-2 transition-all font-sans">
             <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
@@ -374,6 +384,12 @@ export default function MapExplorer({
                   {currentReport ? currentReport.address : `${currentRoad.district} • ${currentRoad.lengthKm} KM`}
                 </span>
               </p>
+              {currentRoad?.leadership?.regionalHead && (
+                <div className="mt-1.5 text-[10.5px] font-semibold text-slate-700 bg-slate-100/90 border border-slate-200/90 rounded-[4px] px-2 py-1 flex items-center justify-between">
+                  <span className="text-slate-500 font-medium">Penanggung Jawab:</span>
+                  <span className="font-bold text-slate-900 truncate max-w-[230px]">{currentRoad.leadership.regionalHead}</span>
+                </div>
+              )}
             </div>
 
             {/* Interactive 4 Tabs Switcher */}
@@ -665,6 +681,33 @@ export default function MapExplorer({
             {/* TAB 3: STATUS KEWENANGAN & LEGALITAS */}
             {activeTab === "kewenangan" && (
               <div className="space-y-3.5 animate-fade-in">
+                {/* Leadership & Pejabat Penanggung Jawab Card */}
+                <div className="p-3.5 rounded-[5px] bg-slate-900 text-white space-y-2.5">
+                  <div className="text-[10px] font-bold text-orange-400 uppercase tracking-wider flex items-center justify-between">
+                    <span>Kepala Daerah & Pejabat Berwenang</span>
+                    <span className="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-mono">PIC Terverifikasi</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="font-bold text-sm text-white">
+                      {currentRoad?.leadership?.regionalHead || "Gubernur / Walikota / Kepala BBPJN"}
+                    </div>
+                    <div className="text-[11px] text-slate-300">
+                      {currentRoad?.leadership?.agency || currentRoad?.authorityLabel}
+                    </div>
+                    {currentRoad?.leadership?.officialPic && (
+                      <div className="text-[10px] text-slate-400 pt-0.5">
+                        Pelaksana Lapangan: {currentRoad.leadership.officialPic}
+                      </div>
+                    )}
+                  </div>
+                  {currentRoad?.leadership?.contactCenter && (
+                    <div className="text-[10px] text-slate-300 border-t border-slate-800 pt-1.5 flex items-center justify-between">
+                      <span>Kanal Resmi:</span>
+                      <span className="font-mono text-orange-300 font-bold">{currentRoad.leadership.contactCenter}</span>
+                    </div>
+                  )}
+                </div>
+
                 {/* Official Authority Card */}
                 <div className="p-4 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-3">
                   <div className="flex items-center gap-2">

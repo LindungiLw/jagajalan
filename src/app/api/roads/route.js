@@ -71,6 +71,8 @@ export async function GET(request) {
             lengthKm: road.lengthKm,
             district: road.district,
             pavementType: road.pavementType,
+            province: road.provinceName,
+            leadership: road.leadership,
             problemHeadline: road.problemDetails?.headline,
             constructionPackage: road.budget?.name,
             paguRp: road.budget?.paguRp,

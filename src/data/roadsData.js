@@ -1,307 +1,2940 @@
-// Data Ruas Jalan Mikro Wilayah Pilot (Jawa Barat & Koridor Jabodetabek)
-// Sumber Terverifikasi: SK Penetapan Status Ruas Jalan KemenPUPR & Kepgub Jawa Barat No. 620/2023
-// Dokumen Anggaran: Portal Satu Data Jabar & LPSE Pengadaan Barang/Jasa
-// Data Transparansi: Dilengkapi Rincian Konstruksi, Masalah Lapangan, dan Sumber Resmi Terverifikasi
+// Data Ruas Jalan Terverifikasi JagaJalan
+// Wilayah Fokus: SUMATERA UTARA (Default Aktif) & JAWA BARAT
+// Terintegrasi dengan Kepala Daerah / Pejabat Penanggung Jawab, Data LPSE, dan SIGI PU
 
-export const ROAD_SEGMENTS = [
+export const SUMATERA_UTARA_ROADS = [
   {
-    id: "ruas-01",
-    name: "Jl. Raya Bogor (Cimanggis - Cibinong)",
-    code: "RUAS-NAS-012",
-    authority: "NASIONAL",
-    authorityLabel: "Kementerian Pekerjaan Umum (BBPJN DKI - Jabar)",
-    legalBasis: "SK Menteri PUPR No. 430/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    lengthKm: 14.8,
-    pavementType: "Aspal Hotmix AC-WC",
-    condition: "RUSAK_BERAT",
-    district: "Kota Depok - Kab. Bogor",
-    center: [-6.4025, 106.8654],
-    coordinates: [[-6.36848, 106.85327], [-6.3689, 106.85325], [-6.36936, 106.85294], [-6.36894, 106.85252], [-6.36877, 106.85231], [-6.36872, 106.8517], [-6.36909, 106.85154], [-6.36942, 106.85143], [-6.36965, 106.85142], [-6.37003, 106.85153], [-6.37025, 106.85152], [-6.37056, 106.85157], [-6.37075, 106.85157], [-6.3712, 106.8515], [-6.37179, 106.85149], [-6.37226, 106.85168], [-6.3723, 106.85342], [-6.37248, 106.85453], [-6.3729, 106.85605], [-6.37312, 106.85658], [-6.37292, 106.85741], [-6.37283, 106.85774], [-6.37296, 106.85806], [-6.37287, 106.85841], [-6.37261, 106.85881], [-6.37258, 106.85907], [-6.37264, 106.85992], [-6.37273, 106.86035], [-6.37264, 106.86103], [-6.37261, 106.86176], [-6.37231, 106.86212], [-6.37173, 106.8617], [-6.37073, 106.86111], [-6.36998, 106.86081], [-6.37191, 106.86189], [-6.3726, 106.86247], [-6.3734, 106.86291], [-6.37452, 106.8632], [-6.376, 106.86353], [-6.37651, 106.86383], [-6.37796, 106.86543], [-6.37857, 106.86658], [-6.37892, 106.86686], [-6.37993, 106.86691], [-6.38144, 106.86696], [-6.38211, 106.86698], [-6.3832, 106.86704], [-6.3841, 106.86717], [-6.38577, 106.86751], [-6.38666, 106.86759], [-6.38784, 106.86723], [-6.38993, 106.86647], [-6.39203, 106.8656], [-6.39381, 106.86485], [-6.39474, 106.86486], [-6.39736, 106.86517], [-6.39781, 106.86503], [-6.39815, 106.86473], [-6.39832, 106.8644], [-6.3986, 106.86384], [-6.39891, 106.86345], [-6.39927, 106.86315], [-6.40036, 106.86244], [-6.40147, 106.8617], [-6.40203, 106.86153], [-6.40348, 106.86165], [-6.40468, 106.86177], [-6.40541, 106.86198], [-6.40632, 106.86222], [-6.40779, 106.86209], [-6.40907, 106.86191], [-6.41055, 106.86149], [-6.41227, 106.86066], [-6.41495, 106.85945], [-6.41733, 106.85869], [-6.42002, 106.85784], [-6.42209, 106.85705], [-6.42661, 106.85666], [-6.42826, 106.85642], [-6.43143, 106.85552], [-6.43374, 106.85499], [-6.43605, 106.85287], [-6.43693, 106.85227], [-6.43786, 106.85213], [-6.43881, 106.85227], [-6.44041, 106.85299], [-6.44288, 106.85332], [-6.44726, 106.85323], [-6.44724, 106.85379], [-6.44674, 106.85483], [-6.44572, 106.85602], [-6.44499, 106.85711], [-6.44433, 106.85831], [-6.4444, 106.85889], [-6.44437, 106.85945], [-6.44435, 106.85987], [-6.44444, 106.86059], [-6.44483, 106.86099], [-6.44505, 106.86152], [-6.44527, 106.86213], [-6.44566, 106.86243], [-6.44654, 106.86302], [-6.44669, 106.86348], [-6.44663, 106.86469], [-6.44661, 106.8651], [-6.44684, 106.86606], [-6.44714, 106.86663], [-6.44619, 106.8675], [-6.44576, 106.86832], [-6.44571, 106.86907], [-6.44549, 106.87006], [-6.44494, 106.87072], [-6.44427, 106.87172], [-6.44376, 106.87276], [-6.44337, 106.87397], [-6.44331, 106.8744], [-6.44282, 106.87412], [-6.44252, 106.87428]],
-    activeReportsCount: 14,
-    criticalHolesCount: 6,
-    hazardScore: 78,
-    hazardLevel: "TINGGI",
-    problemDetails: {
-      headline: "Deformasi Aspal Bergelombang & 6 Lubang Kritis Akibat Beban ODOL",
-      description: "Permukaan jalan mengalami kerusakan retak buaya (alligator cracking) seluas ±350 m², gelombang aspal sedalam 8-12 cm, serta 6 lubang kritis berdiameter rata-rata 50-70 cm di lajur lambat arah Jakarta.",
-      rootCause: "Kelebihan muatan gandar armada truk logistik industri (Over Dimension Over Load / ODOL) yang melampaui Muatan Sumbu Terberat (MST) 10 ton, diperparah infiltrasi air rembesan dari median jalan tanpa subdrain.",
-      safetyImpact: "Sangat berbahaya bagi pengendara roda dua terutama saat malam hari dan kondisi hujan; sering memicu pengereman mendadak yang memicu tabrakan beruntun dan kemacetan hingga 2 km.",
-      slaStatus: "DALAM_PEMANTAUAN",
-      slaNote: "Material perbaikan darurat cold-mix telah disiapkan oleh PPK 1.2 BBPJN DKI-Jabar untuk penanganan bertahap malam hari.",
+    "id": "ruas-su-01",
+    "provinceId": "sumut",
+    "provinceName": "Sumatera Utara",
+    "name": "Jl. Sisingamangaraja (Medan Kota - Sp. Amplas)",
+    "code": "RUAS-NAS-SMT-001",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut)",
+    "legalBasis": "SK Menteri PUPR No. 430/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
+    "lengthKm": 7.4,
+    "pavementType": "Aspal Hotmix AC-WC",
+    "condition": "MANTAP",
+    "district": "Kota Medan - Batas Deli Serdang",
+    "center": [
+      3.5565,
+      98.7025
+    ],
+    "coordinates": [
+      [
+        3.57805,
+        98.6875
+      ],
+      [
+        3.57805,
+        98.68671
+      ],
+      [
+        3.57631,
+        98.68754
+      ],
+      [
+        3.5762,
+        98.68759
+      ],
+      [
+        3.57583,
+        98.68776
+      ],
+      [
+        3.57549,
+        98.68794
+      ],
+      [
+        3.57513,
+        98.68811
+      ],
+      [
+        3.57434,
+        98.68848
+      ],
+      [
+        3.57278,
+        98.68923
+      ],
+      [
+        3.5725,
+        98.68937
+      ],
+      [
+        3.5719,
+        98.68967
+      ],
+      [
+        3.57052,
+        98.69034
+      ],
+      [
+        3.56983,
+        98.69066
+      ],
+      [
+        3.56874,
+        98.69114
+      ],
+      [
+        3.56801,
+        98.69141
+      ],
+      [
+        3.56732,
+        98.69162
+      ],
+      [
+        3.56662,
+        98.69185
+      ],
+      [
+        3.56613,
+        98.692
+      ],
+      [
+        3.56558,
+        98.69217
+      ],
+      [
+        3.56516,
+        98.6923
+      ],
+      [
+        3.56484,
+        98.69239
+      ],
+      [
+        3.56368,
+        98.69277
+      ],
+      [
+        3.56317,
+        98.69294
+      ],
+      [
+        3.56291,
+        98.69301
+      ],
+      [
+        3.56259,
+        98.69311
+      ],
+      [
+        3.56204,
+        98.69328
+      ],
+      [
+        3.56104,
+        98.6936
+      ],
+      [
+        3.56024,
+        98.69383
+      ],
+      [
+        3.55943,
+        98.6941
+      ],
+      [
+        3.55863,
+        98.69434
+      ],
+      [
+        3.55754,
+        98.69465
+      ],
+      [
+        3.55732,
+        98.69472
+      ],
+      [
+        3.55604,
+        98.6951
+      ],
+      [
+        3.55516,
+        98.69537
+      ],
+      [
+        3.55492,
+        98.69545
+      ],
+      [
+        3.55421,
+        98.69571
+      ],
+      [
+        3.55371,
+        98.69593
+      ],
+      [
+        3.55338,
+        98.69612
+      ],
+      [
+        3.55325,
+        98.69621
+      ],
+      [
+        3.55307,
+        98.69639
+      ],
+      [
+        3.55289,
+        98.69657
+      ],
+      [
+        3.55234,
+        98.69711
+      ],
+      [
+        3.55191,
+        98.69751
+      ],
+      [
+        3.55155,
+        98.69779
+      ],
+      [
+        3.55142,
+        98.69787
+      ],
+      [
+        3.55102,
+        98.69812
+      ],
+      [
+        3.55088,
+        98.6982
+      ],
+      [
+        3.55057,
+        98.69836
+      ],
+      [
+        3.54996,
+        98.69859
+      ],
+      [
+        3.54956,
+        98.69871
+      ],
+      [
+        3.54937,
+        98.69874
+      ],
+      [
+        3.54906,
+        98.69878
+      ],
+      [
+        3.54866,
+        98.69878
+      ],
+      [
+        3.54744,
+        98.69875
+      ],
+      [
+        3.54681,
+        98.69873
+      ],
+      [
+        3.54636,
+        98.69872
+      ],
+      [
+        3.54567,
+        98.69869
+      ],
+      [
+        3.5451,
+        98.69868
+      ],
+      [
+        3.54437,
+        98.69866
+      ],
+      [
+        3.54338,
+        98.69865
+      ],
+      [
+        3.54287,
+        98.69867
+      ],
+      [
+        3.54264,
+        98.6987
+      ],
+      [
+        3.54231,
+        98.69876
+      ],
+      [
+        3.54195,
+        98.69886
+      ],
+      [
+        3.54174,
+        98.69895
+      ],
+      [
+        3.54125,
+        98.69917
+      ],
+      [
+        3.54087,
+        98.69939
+      ],
+      [
+        3.54045,
+        98.69969
+      ],
+      [
+        3.54015,
+        98.69996
+      ],
+      [
+        3.53989,
+        98.70026
+      ],
+      [
+        3.53964,
+        98.70059
+      ],
+      [
+        3.53951,
+        98.70078
+      ],
+      [
+        3.53941,
+        98.70098
+      ],
+      [
+        3.53922,
+        98.70137
+      ],
+      [
+        3.53916,
+        98.70153
+      ],
+      [
+        3.53905,
+        98.70185
+      ],
+      [
+        3.53896,
+        98.70219
+      ],
+      [
+        3.53891,
+        98.70247
+      ],
+      [
+        3.53879,
+        98.70313
+      ],
+      [
+        3.53864,
+        98.70394
+      ],
+      [
+        3.53857,
+        98.70429
+      ],
+      [
+        3.53835,
+        98.70543
+      ],
+      [
+        3.53833,
+        98.70555
+      ],
+      [
+        3.53823,
+        98.70611
+      ],
+      [
+        3.53811,
+        98.70681
+      ],
+      [
+        3.53801,
+        98.70744
+      ],
+      [
+        3.5379,
+        98.70804
+      ],
+      [
+        3.53784,
+        98.70841
+      ],
+      [
+        3.53777,
+        98.7088
+      ],
+      [
+        3.53773,
+        98.70908
+      ],
+      [
+        3.53764,
+        98.7096
+      ],
+      [
+        3.53759,
+        98.70993
+      ],
+      [
+        3.53753,
+        98.71028
+      ],
+      [
+        3.53749,
+        98.71052
+      ],
+      [
+        3.53746,
+        98.71076
+      ],
+      [
+        3.53733,
+        98.71144
+      ],
+      [
+        3.53729,
+        98.71165
+      ],
+      [
+        3.53716,
+        98.71237
+      ],
+      [
+        3.53708,
+        98.71274
+      ],
+      [
+        3.53706,
+        98.71283
+      ],
+      [
+        3.53685,
+        98.71408
+      ],
+      [
+        3.53678,
+        98.71443
+      ],
+      [
+        3.53675,
+        98.71506
+      ],
+      [
+        3.53653,
+        98.71656
+      ],
+      [
+        3.53646,
+        98.71729
+      ],
+      [
+        3.53644,
+        98.71753
+      ],
+      [
+        3.53643,
+        98.71786
+      ],
+      [
+        3.53615,
+        98.71801
+      ],
+      [
+        3.5358,
+        98.71806
+      ],
+      [
+        3.53548,
+        98.71809
+      ],
+      [
+        3.53503,
+        98.71817
+      ]
+    ],
+    "activeReportsCount": 2,
+    "criticalHolesCount": 0,
+    "hazardScore": 22,
+    "hazardLevel": "RENDAH",
+    "leadership": {
+      "regionalHead": "Menteri PU RI & Kepala BBPJN Sumatera Utara",
+      "agency": "Balai Besar Pelaksanaan Jalan Nasional (BBPJN) Sumut",
+      "officialPic": "PPK 1.1 Satker PJN Wilayah I Sumut",
+      "contactCenter": "061-7865231 (BBPJN Sumut)"
     },
-    budget: {
-      packageId: "PKG-APBN-2026-081",
-      name: "Preservasi & Rekonstruksi Jalan Sp. Depok - Batas Bogor",
-      scope: "Pekerjaan overlay aspal AC-WC tebal 4 cm, penambalan lubang struktural, normalisasi saluran drainase samping, dan perkuatan struktur lapis pondasi agregat kelas A.",
-      paguRp: 8450000000,
-      contractValueRp: 7920000000,
-      contractor: "PT Jaya Konstruksi Marga Makmur",
-      fiscalYear: "2026",
-      source: "APBN / SBSN Reguler TA 2026",
-      progressStatus: "TERTUNDA_LELANG",
-      progressPct: 35,
-      statusNote: "Proses lelang ulang pada paket preservasi jalan nasional mengalami sanggahan teknis; pengerjaan overlay utama tertunda.",
-      matchConfidence: "TERKONFIRMASI",
-      matchReason: "Ruas jalan tercantum eksplisit dalam KAK Paket Tender Preservasi BBPJN DKI-Jabar.",
-      sourceUrl: "https://lpse.pu.go.id/eproc4/lelang/view/PKG-APBN-081",
-      sourceDocument: "Dokumen Pemilihan Tender BBPJN DKI-Jabar TA 2026",
-      lastVerifiedAt: "2026-10-18",
+    "problemDetails": {
+      "headline": "Kondisi Mantap Pasca-Preservasi Jalur Utama Arteri",
+      "description": "Permukaan jalan rata dan terawat baik. Teridentifikasi 2 retak rambut minor dekat flyover Amplas tanpa mengganggu kelancaran lalu lintas.",
+      "rootCause": "Penuaan aspal wajar akibat volume kendaraan tinggi koridor keluar-masuk Kota Medan.",
+      "safetyImpact": "Risiko kecelakaan sangat rendah. Marka dan penerangan jalan berfungsi optimal.",
+      "slaStatus": "SELESAI",
+      "slaNote": "Pekerjaan preservasi rutin tuntas; inspeksi berkala terus dipantau."
     },
-    officialSources: {
-      authoritySource: "SK Menteri PUPR No. 430/KPTS/M/2022 (Lampiran II Penetapan Ruas Jalan Nasional)",
-      budgetSource: "Portal LPSE Kementerian Pekerjaan Umum & Perumahan Rakyat (Kode RUP: 41209381)",
-      fieldDataSource: "Survei Kondisi Jalan Semester I Ditjen Bina Marga & Audit Lapangan JagaJalan",
-      transparencyUrl: "https://lpse.pu.go.id",
+    "budget": {
+      "packageId": "PKG-APBN-SMT-014",
+      "name": "Preservasi Berkala Koridor Sisingamangaraja - Batas Deli Serdang",
+      "scope": "Overlay aspal hotmix AC-WC tebal 4 cm, normalisasi saluran samping, peremajaan marka jalan.",
+      "paguRp": 14200000000,
+      "contractValueRp": 13450000000,
+      "contractor": "PT Hutama Prima Konstruksi",
+      "fiscalYear": "2026",
+      "source": "APBN Murni TA 2026 (KemenPU)",
+      "progressStatus": "SELESAI",
+      "progressPct": 100,
+      "statusNote": "Pekerjaan tuntas tepat waktu; BAST Pertama (PHO) telah terbit resmi.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-SMT-014",
+      "sourceDocument": "DIPA BBPJN Sumatera Utara TA 2026",
+      "lastVerifiedAt": "2026-10-22"
     },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
+      "budgetSource": "Portal LPSE Kementerian PU (Kode RUP: 5210948)",
+      "fieldDataSource": "Survei IRMS Semester I Ditjen Bina Marga & Audit JagaJalan",
+      "transparencyUrl": "https://lpse.pu.go.id"
+    }
   },
   {
-    id: "ruas-02",
-    name: "Jl. Margonda Raya (Flyover UI - Sp. Ramanda)",
-    code: "RUAS-PRV-045",
-    authority: "PROVINSI",
-    authorityLabel: "Dinas Bina Marga & Penataan Ruang Prov. Jawa Barat",
-    legalBasis: "Keputusan Gubernur Jabar No. 620/Kep.104-DBMPR/2023 tentang Penetapan Ruas Jalan Provinsi",
-    lengthKm: 4.9,
-    pavementType: "Aspal Hotmix & Trotoar Terintegrasi",
-    condition: "RUSAK_RINGAN",
-    district: "Kota Depok",
-    center: [-6.3725, 106.8322],
-    coordinates: [[-6.35521, 106.83349], [-6.35518, 106.83387], [-6.35513, 106.8344], [-6.35513, 106.83459], [-6.35504, 106.83508], [-6.35517, 106.8351], [-6.35524, 106.83509], [-6.35532, 106.83503], [-6.3554, 106.83502], [-6.35549, 106.83502], [-6.35563, 106.83496], [-6.35549, 106.83502], [-6.3554, 106.83502], [-6.35532, 106.83503], [-6.35524, 106.83509], [-6.35517, 106.8351], [-6.35504, 106.83508], [-6.35517, 106.83476], [-6.35536, 106.83429], [-6.35547, 106.83408], [-6.35559, 106.8339], [-6.35572, 106.83375], [-6.35584, 106.83366], [-6.35601, 106.83356], [-6.35635, 106.83336], [-6.35665, 106.83318], [-6.35708, 106.83292], [-6.35747, 106.83272], [-6.35763, 106.83266], [-6.35773, 106.83264], [-6.35794, 106.83265], [-6.35819, 106.83269], [-6.35923, 106.83298], [-6.36001, 106.8332], [-6.36051, 106.83335], [-6.36116, 106.83352], [-6.36151, 106.83357], [-6.36232, 106.83365], [-6.36259, 106.83369], [-6.36326, 106.83376], [-6.36383, 106.83383], [-6.36405, 106.83385], [-6.36431, 106.83388], [-6.36525, 106.83399], [-6.36555, 106.83403], [-6.36668, 106.83412], [-6.36805, 106.8342], [-6.36838, 106.83418], [-6.36871, 106.83411], [-6.3698, 106.8338], [-6.37064, 106.83353], [-6.3714, 106.83328], [-6.37183, 106.83317], [-6.37237, 106.83304], [-6.37254, 106.833], [-6.373, 106.83287], [-6.3734, 106.83273], [-6.37348, 106.8327], [-6.37354, 106.83268], [-6.37384, 106.8326], [-6.37405, 106.83255], [-6.37419, 106.83252], [-6.37432, 106.83249], [-6.3747, 106.83241], [-6.37505, 106.83235], [-6.3752, 106.83233], [-6.37577, 106.83224], [-6.37641, 106.83209], [-6.37688, 106.83197], [-6.37712, 106.8319], [-6.37781, 106.83167], [-6.37933, 106.83113], [-6.38032, 106.83076], [-6.38113, 106.83045], [-6.38218, 106.83004], [-6.38242, 106.82995], [-6.38319, 106.82966], [-6.38412, 106.8293], [-6.38438, 106.8292], [-6.38542, 106.82878], [-6.3859, 106.82858], [-6.38616, 106.82843], [-6.38628, 106.82834], [-6.38685, 106.82785], [-6.38709, 106.82766], [-6.38743, 106.82736], [-6.38817, 106.82673], [-6.38856, 106.82645], [-6.38954, 106.82589], [-6.39013, 106.82562], [-6.3914, 106.82496], [-6.39146, 106.82509], [-6.39172, 106.82564], [-6.39185, 106.82595], [-6.39189, 106.82607], [-6.39189, 106.82616], [-6.39188, 106.82624], [-6.39179, 106.82647], [-6.39172, 106.82659], [-6.39156, 106.8268], [-6.39132, 106.82709], [-6.39124, 106.82723], [-6.39122, 106.82733], [-6.39122, 106.82751], [-6.39123, 106.82759], [-6.39181, 106.82869], [-6.39188, 106.82884], [-6.392, 106.82881]],
-    activeReportsCount: 8,
-    criticalHolesCount: 2,
-    hazardScore: 65,
-    hazardLevel: "SEDANG",
-    problemDetails: {
-      headline: "Penutup Saluran Utilitas Amblas & Aspal Mengelupas di Tepi Jalan",
-      description: "Terdapat penutup manhole utilitas kabel fiber optik dan drainase yang amblas 5-8 cm di bawah elevasi aspal, serta aspal tepi jalan mengelupas sepanjang 40 meter di depan pusat perbelanjaan Margo City arah Jakarta.",
-      rootCause: "Pemadatan tanah pasca-galian penanaman utilitas bawah tanah yang tidak merata serta beban deselerasi angkutan umum yang sering berhenti mendadak di bahu jalan.",
-      safetyImpact: "Pengendara sepeda motor kerap oleng atau mengerem mendadak untuk menghindari lubang manhole yang cekung, rawan kecelakaan pada jam sibuk pagi hari.",
-      slaStatus: "SELESAI",
-      slaNote: "UPTD Pengelolaan Jalan & Jembatan Wil. Pelayanan I telah menuntaskan perataan manhole dan penambalan hotmix pada 14 Oktober 2026.",
+    "id": "ruas-su-02",
+    "provinceId": "sumut",
+    "provinceName": "Sumatera Utara",
+    "name": "Jl. Medan - Berastagi (Sibolangit - Bandar Baru)",
+    "code": "RUAS-NAS-SMT-008",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut)",
+    "legalBasis": "SK Menteri PUPR No. 430/KPTS/M/2022",
+    "lengthKm": 18.2,
+    "pavementType": "Aspal Hotmix & Dinding Penahan Tebing",
+    "condition": "RUSAK_RINGAN",
+    "district": "Kab. Deli Serdang - Kab. Karo",
+    "center": [
+      3.285,
+      98.55
+    ],
+    "coordinates": [
+      [
+        3.32566,
+        98.56749
+      ],
+      [
+        3.32669,
+        98.5665
+      ],
+      [
+        3.32818,
+        98.56695
+      ],
+      [
+        3.33,
+        98.56794
+      ],
+      [
+        3.33275,
+        98.57038
+      ],
+      [
+        3.33436,
+        98.57277
+      ],
+      [
+        3.3356,
+        98.575
+      ],
+      [
+        3.33692,
+        98.57674
+      ],
+      [
+        3.33872,
+        98.57832
+      ],
+      [
+        3.34081,
+        98.57801
+      ],
+      [
+        3.34131,
+        98.58096
+      ],
+      [
+        3.34105,
+        98.5826
+      ],
+      [
+        3.34194,
+        98.58424
+      ],
+      [
+        3.34328,
+        98.58599
+      ],
+      [
+        3.34132,
+        98.5855
+      ],
+      [
+        3.34051,
+        98.58629
+      ],
+      [
+        3.34029,
+        98.58484
+      ],
+      [
+        3.33826,
+        98.58489
+      ],
+      [
+        3.336,
+        98.58435
+      ],
+      [
+        3.33663,
+        98.58268
+      ],
+      [
+        3.33642,
+        98.58165
+      ],
+      [
+        3.33556,
+        98.58041
+      ],
+      [
+        3.33286,
+        98.57977
+      ],
+      [
+        3.33049,
+        98.5798
+      ],
+      [
+        3.32844,
+        98.5794
+      ],
+      [
+        3.3269,
+        98.57861
+      ],
+      [
+        3.32587,
+        98.57842
+      ],
+      [
+        3.32675,
+        98.57885
+      ],
+      [
+        3.32995,
+        98.58106
+      ],
+      [
+        3.32722,
+        98.57973
+      ],
+      [
+        3.32269,
+        98.57873
+      ],
+      [
+        3.32048,
+        98.57662
+      ],
+      [
+        3.31732,
+        98.57556
+      ],
+      [
+        3.31259,
+        98.57537
+      ],
+      [
+        3.30737,
+        98.57517
+      ],
+      [
+        3.30397,
+        98.57475
+      ],
+      [
+        3.29959,
+        98.57254
+      ],
+      [
+        3.29847,
+        98.57058
+      ],
+      [
+        3.29711,
+        98.57005
+      ],
+      [
+        3.29787,
+        98.56835
+      ],
+      [
+        3.29574,
+        98.56701
+      ],
+      [
+        3.29134,
+        98.56606
+      ],
+      [
+        3.28988,
+        98.56437
+      ],
+      [
+        3.28861,
+        98.56279
+      ],
+      [
+        3.28784,
+        98.56085
+      ],
+      [
+        3.28694,
+        98.55863
+      ],
+      [
+        3.28601,
+        98.5573
+      ],
+      [
+        3.28367,
+        98.55647
+      ],
+      [
+        3.28106,
+        98.55481
+      ],
+      [
+        3.27546,
+        98.55082
+      ],
+      [
+        3.27354,
+        98.54988
+      ],
+      [
+        3.27245,
+        98.54895
+      ],
+      [
+        3.27149,
+        98.54828
+      ],
+      [
+        3.26906,
+        98.54672
+      ],
+      [
+        3.26469,
+        98.54463
+      ],
+      [
+        3.26081,
+        98.54275
+      ],
+      [
+        3.25873,
+        98.5417
+      ],
+      [
+        3.25766,
+        98.54122
+      ],
+      [
+        3.25698,
+        98.54042
+      ],
+      [
+        3.2547,
+        98.54058
+      ],
+      [
+        3.25427,
+        98.54124
+      ],
+      [
+        3.25408,
+        98.54179
+      ],
+      [
+        3.25451,
+        98.54278
+      ],
+      [
+        3.25427,
+        98.54259
+      ],
+      [
+        3.25305,
+        98.54281
+      ],
+      [
+        3.2515,
+        98.54293
+      ],
+      [
+        3.25171,
+        98.54252
+      ],
+      [
+        3.2522,
+        98.54129
+      ],
+      [
+        3.25108,
+        98.54148
+      ],
+      [
+        3.2514,
+        98.54072
+      ],
+      [
+        3.25303,
+        98.54038
+      ],
+      [
+        3.25314,
+        98.53936
+      ],
+      [
+        3.25214,
+        98.54029
+      ],
+      [
+        3.24999,
+        98.53945
+      ],
+      [
+        3.24853,
+        98.53851
+      ],
+      [
+        3.25026,
+        98.53915
+      ],
+      [
+        3.25102,
+        98.53853
+      ],
+      [
+        3.25206,
+        98.53722
+      ],
+      [
+        3.25022,
+        98.53792
+      ],
+      [
+        3.24904,
+        98.53768
+      ],
+      [
+        3.24968,
+        98.53739
+      ],
+      [
+        3.25071,
+        98.53686
+      ],
+      [
+        3.25114,
+        98.53629
+      ],
+      [
+        3.24996,
+        98.53675
+      ],
+      [
+        3.24818,
+        98.53613
+      ],
+      [
+        3.24626,
+        98.53556
+      ],
+      [
+        3.24684,
+        98.53558
+      ],
+      [
+        3.24781,
+        98.53583
+      ],
+      [
+        3.24863,
+        98.53558
+      ],
+      [
+        3.2487,
+        98.53538
+      ],
+      [
+        3.24736,
+        98.53508
+      ],
+      [
+        3.24642,
+        98.53476
+      ],
+      [
+        3.24571,
+        98.5338
+      ],
+      [
+        3.24556,
+        98.53381
+      ]
+    ],
+    "activeReportsCount": 16,
+    "criticalHolesCount": 4,
+    "hazardScore": 68,
+    "hazardLevel": "SEDANG",
+    "leadership": {
+      "regionalHead": "Kepala BBPJN Sumut & Bupati Deli Serdang / Karo",
+      "agency": "Satker Pelaksanaan Jalan Nasional Wilayah II Prov. Sumut",
+      "officialPic": "PPK 2.3 Koridor Medan - Berastagi",
+      "contactCenter": "061-8214300 (Posko Siaga Bencana BBPJN)"
     },
-    budget: {
-      packageId: "PKG-JBR-2026-029",
-      name: "Pemeliharaan Berkala & Penataan Saluran Jl. Margonda Raya Koridor Depok",
-      scope: "Pekerjaan penataan inlet drainase tepi jalan, perataan penutup utilitas beton komposit, dan pelapisan ulang aspal hotmix fine graded segmen Flyover UI s.d. Ramanda.",
-      paguRp: 3200000000,
-      contractValueRp: 2950000000,
-      contractor: "PT Citra Bina Aspalindo",
-      fiscalYear: "2026",
-      source: "APBD Provinsi Jawa Barat TA 2026",
-      progressStatus: "DALAM_PENGERJAAN",
-      progressPct: 85,
-      statusNote: "Pekerjaan fisik penambalan dan perataan permukaan hampir rampung; menyisakan marka termoplastik dan pembersihan akhir.",
-      matchConfidence: "TERKONFIRMASI",
-      matchReason: "Sesuai DPA Dinas Bina Marga & Penataan Ruang Provinsi Jawa Barat TA 2026.",
-      sourceUrl: "https://lpse.jabarprov.go.id/eproc4/lelang/view/PKG-JBR-029",
-      sourceDocument: "Daftar Pelaksanaan Anggaran (DPA) Pemprov Jabar No. DBMPR/2026/029",
-      lastVerifiedAt: "2026-10-18",
+    "problemDetails": {
+      "headline": "Retak Bahu Jalan & Tebing Labil di Tikungan Sibolangit",
+      "description": "Terdapat penurunan bahu jalan sedalam 8-10 cm dan ancaman longsor tebing di KM 38 saat curah hujan tinggi di jalur pegunungan.",
+      "rootCause": "Topografi lereng curam, resapan air lereng bukit, dan beban padat kendaraan logistik sayur & pariwisata Berastagi.",
+      "safetyImpact": "Rawan antrean macet parah dan potensi bahaya longsoran batu saat hujan deras.",
+      "slaStatus": "DALAM_PENGERJAAN",
+      "slaNote": "Pemasangan bronjong kawat dan perkuatan dinding penahan tanah sedang dikerjakan bertahap."
     },
-    officialSources: {
-      authoritySource: "Keputusan Gubernur Jabar No. 620/Kep.104-DBMPR/2023 (Status Jalan Provinsi Jawa Barat)",
-      budgetSource: "Portal LPSE Pemerintah Daerah Provinsi Jawa Barat (Tender ID: 29841014)",
-      fieldDataSource: "Laporan Geotagging Warga Terverifikasi AI JagaJalan & UPTD I Jabar",
-      transparencyUrl: "https://lpse.jabarprov.go.id",
+    "budget": {
+      "packageId": "PKG-APBN-SMT-042",
+      "name": "Penanganan Longsoran & Preservasi Jalan Medan - Berastagi",
+      "scope": "Pembangunan dinding penahan tanah (DPT) beton, perbaikan bahu jalan, saluran lereng.",
+      "paguRp": 28500000000,
+      "contractValueRp": 26900000000,
+      "contractor": "PT Wijaya Karya Konstruksi (KSO)",
+      "fiscalYear": "2026",
+      "source": "APBN (Tanggap Darurat & Preservasi Lereng)",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 55,
+      "statusNote": "Konstruksi tiang pancang lereng selesai 60%; arus lalu lintas buka-tutup bergantian.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-SMT-042",
+      "sourceDocument": "Kontrak Penanganan Bencana BBPJN Sumut TA 2026",
+      "lastVerifiedAt": "2026-10-22"
     },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
+      "budgetSource": "Portal LPSE Kementerian PU (Kode Tender: 8920114)",
+      "fieldDataSource": "Laporan Tim Reaksi Cepat BBPJN Sumut & Geotag Warga",
+      "transparencyUrl": "https://lpse.pu.go.id"
+    }
   },
   {
-    id: "ruas-03",
-    name: "Jl. Raya Sawangan (Mampang - Pasir Putih)",
-    code: "RUAS-KTA-108",
-    authority: "KOTA_KAB",
-    authorityLabel: "Dinas PUPR Kota Depok",
-    legalBasis: "Peraturan Walikota Depok No. 18 Tahun 2021 tentang Penetapan Status Jaringan Jalan Kota",
-    lengthKm: 8.2,
-    pavementType: "Aspal & Sebagian Beton",
-    condition: "RUSAK_BERAT",
-    district: "Kota Depok",
-    center: [-6.3985, 106.7892],
-    coordinates: [[-6.39107, 106.81154], [-6.39158, 106.81201], [-6.39197, 106.81282], [-6.39174, 106.81458], [-6.39259, 106.81471], [-6.39337, 106.81469], [-6.39428, 106.81451], [-6.397, 106.81391], [-6.39746, 106.8138], [-6.39891, 106.81352], [-6.39908, 106.81334], [-6.39913, 106.81302], [-6.39849, 106.8108], [-6.3982, 106.80986], [-6.39804, 106.80941], [-6.39785, 106.80894], [-6.39765, 106.80846], [-6.39755, 106.80811], [-6.39743, 106.80748], [-6.39734, 106.80669], [-6.39719, 106.80612], [-6.39701, 106.80576], [-6.3966, 106.80505], [-6.39627, 106.80446], [-6.39605, 106.80397], [-6.39578, 106.80334], [-6.39562, 106.80302], [-6.39547, 106.80288], [-6.39513, 106.80271], [-6.39481, 106.80262], [-6.39471, 106.80253], [-6.39467, 106.80239], [-6.3946, 106.8017], [-6.3946, 106.80134], [-6.39466, 106.80104], [-6.39489, 106.80026], [-6.39497, 106.79984], [-6.39501, 106.79944], [-6.39499, 106.79858], [-6.39496, 106.79779], [-6.3949, 106.79703], [-6.39483, 106.79656], [-6.39473, 106.79596], [-6.39467, 106.79551], [-6.3946, 106.79494], [-6.39455, 106.79432], [-6.39451, 106.79387], [-6.3944, 106.79297], [-6.39427, 106.7918], [-6.39422, 106.79106], [-6.39416, 106.78892], [-6.39402, 106.78764], [-6.3948, 106.78541], [-6.39519, 106.78419], [-6.39548, 106.78296], [-6.39581, 106.78067], [-6.39595, 106.7788], [-6.39604, 106.77708], [-6.39606, 106.77678], [-6.39589, 106.77519], [-6.39537, 106.77426], [-6.39475, 106.77309], [-6.3947, 106.77288], [-6.39471, 106.77279], [-6.39481, 106.77273], [-6.39538, 106.77263], [-6.39615, 106.77212], [-6.39658, 106.77183], [-6.39732, 106.77174], [-6.39819, 106.77175], [-6.39979, 106.77173], [-6.40057, 106.77168], [-6.40099, 106.77163], [-6.40156, 106.77144], [-6.40208, 106.7712], [-6.40278, 106.7709], [-6.40331, 106.77046], [-6.40351, 106.76969], [-6.40345, 106.76931], [-6.40337, 106.76866], [-6.40334, 106.76793], [-6.40332, 106.76762], [-6.40341, 106.76736], [-6.40355, 106.76699], [-6.40355, 106.76665], [-6.40352, 106.76632], [-6.40356, 106.76613], [-6.40381, 106.76573], [-6.40421, 106.76526], [-6.40455, 106.7648], [-6.40482, 106.76434], [-6.40506, 106.76381], [-6.4052, 106.76335], [-6.40558, 106.7634], [-6.40575, 106.7633], [-6.40637, 106.76309], [-6.40691, 106.76299], [-6.40721, 106.76307], [-6.40749, 106.76335], [-6.40775, 106.76355], [-6.40799, 106.76365], [-6.40818, 106.76368], [-6.40856, 106.76364], [-6.40905, 106.76348], [-6.40928, 106.76329], [-6.40952, 106.76276], [-6.4094, 106.76257]],
-    activeReportsCount: 22,
-    criticalHolesCount: 9,
-    hazardScore: 92,
-    hazardLevel: "KRITIS",
-    problemDetails: {
-      headline: "9 Lubang Kritis Dalam & Genangan Kronis 25 cm Akibat Drainase Buntu",
-      description: "Ditemukan 9 lubang jalan kritis berdiameter antara 45 cm hingga 75 cm dengan kedalaman mencapai 12-15 cm di depan Perumahan Sawangan Permai dan Simpang Mampang. Saat hujan, jalan tergenang air setinggi 25 cm.",
-      rootCause: "Saluran drainase Kali Cabang Barat tersumbat sedimentasi lumpur dan sampah rumah tangga, memicu luapan air yang menggerus lapisan perekat aspal (stripping). Ditambah keterlambatan tindak lanjut dinas.",
-      safetyImpact: "Risiko fatalitas kecelakaan sangat tinggi bagi pemotor saat lubang tertutup genangan air keruh; menyebabkan kemacetan parah di koridor penghubung utama Depok Barat.",
-      slaStatus: "OVERDUE",
-      slaNote: "Telah melewati batas waktu respons 14 hari kerja (SLA Overdue 4 hari) tanpa ada realisasi penambalan di lapangan. Draf laporan Ombudsman RI telah diaktifkan.",
+    "id": "ruas-su-03",
+    "provinceId": "sumut",
+    "provinceName": "Sumatera Utara",
+    "name": "Jl. Brigjen Katamso (Kampung Baru - Titi Kuning)",
+    "code": "RUAS-KTA-MDN-023",
+    "authority": "KOTA_KAB",
+    "authorityLabel": "Dinas SDABMBK Pemerintah Kota Medan",
+    "legalBasis": "Peraturan Walikota Medan No. 34 Tahun 2021 tentang Penetapan Jaringan Jalan Kota",
+    "lengthKm": 4.6,
+    "pavementType": "Aspal Hotmix & Saluran U-Ditch",
+    "condition": "RUSAK_BERAT",
+    "district": "Kota Medan (Medan Maimun - Medan Johor)",
+    "center": [
+      3.55,
+      98.685
+    ],
+    "coordinates": [
+      [
+        3.56921,
+        98.68193
+      ],
+      [
+        3.56932,
+        98.68097
+      ],
+      [
+        3.56939,
+        98.67863
+      ],
+      [
+        3.56935,
+        98.67848
+      ],
+      [
+        3.56927,
+        98.67851
+      ],
+      [
+        3.56918,
+        98.6785
+      ],
+      [
+        3.56911,
+        98.67845
+      ],
+      [
+        3.56906,
+        98.67839
+      ],
+      [
+        3.56906,
+        98.67829
+      ],
+      [
+        3.56913,
+        98.67817
+      ],
+      [
+        3.56921,
+        98.67813
+      ],
+      [
+        3.56926,
+        98.67813
+      ],
+      [
+        3.56931,
+        98.67814
+      ],
+      [
+        3.56937,
+        98.67818
+      ],
+      [
+        3.56942,
+        98.67824
+      ],
+      [
+        3.56977,
+        98.67822
+      ],
+      [
+        3.57037,
+        98.67813
+      ],
+      [
+        3.57077,
+        98.67807
+      ],
+      [
+        3.57122,
+        98.678
+      ],
+      [
+        3.57203,
+        98.67787
+      ],
+      [
+        3.57221,
+        98.67783
+      ],
+      [
+        3.57223,
+        98.67877
+      ],
+      [
+        3.57223,
+        98.68054
+      ],
+      [
+        3.57222,
+        98.68099
+      ],
+      [
+        3.57224,
+        98.68113
+      ],
+      [
+        3.57243,
+        98.68142
+      ],
+      [
+        3.57248,
+        98.68148
+      ],
+      [
+        3.57248,
+        98.68157
+      ],
+      [
+        3.57238,
+        98.68173
+      ],
+      [
+        3.57235,
+        98.68184
+      ],
+      [
+        3.57237,
+        98.68273
+      ],
+      [
+        3.57243,
+        98.68379
+      ],
+      [
+        3.57244,
+        98.68429
+      ],
+      [
+        3.57247,
+        98.68526
+      ],
+      [
+        3.57247,
+        98.68547
+      ],
+      [
+        3.57248,
+        98.68569
+      ],
+      [
+        3.57222,
+        98.68578
+      ],
+      [
+        3.57192,
+        98.68587
+      ],
+      [
+        3.57137,
+        98.68604
+      ],
+      [
+        3.5705,
+        98.68633
+      ],
+      [
+        3.57006,
+        98.68653
+      ],
+      [
+        3.56956,
+        98.68674
+      ],
+      [
+        3.56928,
+        98.68687
+      ],
+      [
+        3.56883,
+        98.68706
+      ],
+      [
+        3.5684,
+        98.68726
+      ],
+      [
+        3.56744,
+        98.68772
+      ],
+      [
+        3.56719,
+        98.6879
+      ],
+      [
+        3.56684,
+        98.68816
+      ],
+      [
+        3.56624,
+        98.68864
+      ],
+      [
+        3.56584,
+        98.68893
+      ],
+      [
+        3.56557,
+        98.68914
+      ],
+      [
+        3.5649,
+        98.68965
+      ],
+      [
+        3.5646,
+        98.68981
+      ],
+      [
+        3.56399,
+        98.68993
+      ],
+      [
+        3.56346,
+        98.68997
+      ],
+      [
+        3.56321,
+        98.68995
+      ],
+      [
+        3.56284,
+        98.68986
+      ],
+      [
+        3.5626,
+        98.68979
+      ],
+      [
+        3.56204,
+        98.68962
+      ],
+      [
+        3.56174,
+        98.68953
+      ],
+      [
+        3.56123,
+        98.68937
+      ],
+      [
+        3.56065,
+        98.68919
+      ],
+      [
+        3.56034,
+        98.68912
+      ],
+      [
+        3.56006,
+        98.68904
+      ],
+      [
+        3.55982,
+        98.68898
+      ],
+      [
+        3.55951,
+        98.6889
+      ],
+      [
+        3.5591,
+        98.68885
+      ],
+      [
+        3.55834,
+        98.6888
+      ],
+      [
+        3.55785,
+        98.68874
+      ],
+      [
+        3.5574,
+        98.6887
+      ],
+      [
+        3.55663,
+        98.68865
+      ],
+      [
+        3.55541,
+        98.68861
+      ],
+      [
+        3.55484,
+        98.68861
+      ],
+      [
+        3.55437,
+        98.68861
+      ],
+      [
+        3.55359,
+        98.68864
+      ],
+      [
+        3.55268,
+        98.68865
+      ],
+      [
+        3.55222,
+        98.68864
+      ],
+      [
+        3.55105,
+        98.68854
+      ],
+      [
+        3.55066,
+        98.68851
+      ],
+      [
+        3.55027,
+        98.6885
+      ],
+      [
+        3.54987,
+        98.68845
+      ],
+      [
+        3.54936,
+        98.68835
+      ],
+      [
+        3.5488,
+        98.68816
+      ],
+      [
+        3.54816,
+        98.68796
+      ],
+      [
+        3.54763,
+        98.68776
+      ],
+      [
+        3.54665,
+        98.68745
+      ],
+      [
+        3.54564,
+        98.68713
+      ],
+      [
+        3.54475,
+        98.68686
+      ],
+      [
+        3.54413,
+        98.68669
+      ],
+      [
+        3.54379,
+        98.68663
+      ],
+      [
+        3.54315,
+        98.6865
+      ],
+      [
+        3.54295,
+        98.68643
+      ],
+      [
+        3.5428,
+        98.68634
+      ],
+      [
+        3.5426,
+        98.68619
+      ],
+      [
+        3.54236,
+        98.68603
+      ],
+      [
+        3.5416,
+        98.68575
+      ],
+      [
+        3.54135,
+        98.68565
+      ],
+      [
+        3.54113,
+        98.68556
+      ],
+      [
+        3.54039,
+        98.68529
+      ],
+      [
+        3.53975,
+        98.6851
+      ],
+      [
+        3.53919,
+        98.68509
+      ],
+      [
+        3.53869,
+        98.68505
+      ],
+      [
+        3.53852,
+        98.68502
+      ],
+      [
+        3.53817,
+        98.68492
+      ],
+      [
+        3.53803,
+        98.68485
+      ],
+      [
+        3.53774,
+        98.6847
+      ],
+      [
+        3.53752,
+        98.68455
+      ],
+      [
+        3.5371,
+        98.68421
+      ],
+      [
+        3.53691,
+        98.68409
+      ],
+      [
+        3.53674,
+        98.68403
+      ],
+      [
+        3.53633,
+        98.68398
+      ],
+      [
+        3.5359,
+        98.68396
+      ],
+      [
+        3.53541,
+        98.68397
+      ],
+      [
+        3.53504,
+        98.68399
+      ],
+      [
+        3.5344,
+        98.68398
+      ],
+      [
+        3.53417,
+        98.68399
+      ],
+      [
+        3.53402,
+        98.68404
+      ],
+      [
+        3.53388,
+        98.68418
+      ],
+      [
+        3.53361,
+        98.68454
+      ],
+      [
+        3.53329,
+        98.68496
+      ],
+      [
+        3.53299,
+        98.68534
+      ],
+      [
+        3.53258,
+        98.68584
+      ],
+      [
+        3.53242,
+        98.68603
+      ],
+      [
+        3.53232,
+        98.68611
+      ],
+      [
+        3.53221,
+        98.68627
+      ],
+      [
+        3.53225,
+        98.68641
+      ],
+      [
+        3.53218,
+        98.68689
+      ],
+      [
+        3.53216,
+        98.68803
+      ],
+      [
+        3.53213,
+        98.68851
+      ]
+    ],
+    "activeReportsCount": 24,
+    "criticalHolesCount": 8,
+    "hazardScore": 88,
+    "hazardLevel": "TINGGI",
+    "leadership": {
+      "regionalHead": "Walikota Medan (M. Bobby Afif Nasution / Pjs. Walikota)",
+      "agency": "Dinas Sumber Daya Air, Bina Marga, & Bina Konstruksi (SDABMBK) Medan",
+      "officialPic": "Bidang Jalan & Jembatan Pemkot Medan",
+      "contactCenter": "061-4512000 (Call Center Pemko Medan 112)"
     },
-    budget: {
-      packageId: "PKG-DPK-2026-064",
-      name: "Pelebaran & Rekonstruksi Geometrik Jl. Raya Sawangan Koridor Barat",
-      scope: "Pelebaran badan jalan selebar 1,5 meter per sisi, rekonstruksi perkerasan kaku beton mutu f'c 30 MPa, dan pemasangan saluran box culvert precast ukuran 120x120 cm.",
-      paguRp: 5100000000,
-      contractValueRp: 4780000000,
-      contractor: "CV Sarana Mandiri Utama",
-      fiscalYear: "2026",
-      source: "APBD Kota Depok TA 2026 (Bantuan Keuangan Pemprov Jabar)",
-      progressStatus: "TERLAMBAT_RESPONS",
-      progressPct: 15,
-      statusNote: "Realisasi fisik terlambat 40 hari dari jadwal kontrak kerja (deviasi negatif -25%); pengerjaan box culvert belum selesai.",
-      matchConfidence: "TERKONFIRMASI",
-      matchReason: "Tercatat dalam Sistem Informasi Rencana Umum Pengadaan (SiRUP) LKPP Kota Depok.",
-      sourceUrl: "https://sirup.lkpp.go.id/sirup/ro/rekap/klpd/D208",
-      sourceDocument: "Dokumen Penetapan APBD Kota Depok TA 2026 Bidang Bina Marga",
-      lastVerifiedAt: "2026-10-18",
+    "problemDetails": {
+      "headline": "8 Lubang Dalam & Genangan Luapan Drainase Titi Kuning",
+      "description": "Aspal mengelupas sepanjang 150 meter dengan 8 lubang berdiameter 40-70 cm kedalaman 12 cm; sering tergenang air keruh 20 cm saat hujan 1 jam.",
+      "rootCause": "Saluran pembuangan air ke Sungai Deli tersumbat sedimen limbah domestik dan galian utilitas.",
+      "safetyImpact": "Sering menyebabkan pemotor terjatuh saat hujan; memicu kemacetan koridor Medan Selatan.",
+      "slaStatus": "OVERDUE",
+      "slaNote": "Telah melampaui batas waktu respons dinas 14 hari kerja (SLA Overdue 6 hari). Draf Ombudsman aktif."
     },
-    officialSources: {
-      authoritySource: "Peraturan Walikota Depok No. 18 Tahun 2021 (Jaringan Jalan Kewenangan Pemerintah Kota)",
-      budgetSource: "SiRUP LKPP RI & LPSE Kota Depok (Kode RUP: 48920155 / Tender #640982)",
-      fieldDataSource: "Laporan Pengaduan Geotag Warga (Tiket #JGJ-DPK-081) & Computer Vision JagaJalan",
-      transparencyUrl: "https://sirup.lkpp.go.id",
+    "budget": {
+      "packageId": "PKG-MDN-2026-031",
+      "name": "Rekonstruksi Saluran Drainase U-Ditch & Overlay Jl. Brigjen Katamso",
+      "scope": "Pemasangan saluran beton precast U-Ditch 100x100 cm, pengaspalan ulang hotmix AC-BC.",
+      "paguRp": 6800000000,
+      "contractValueRp": 6250000000,
+      "contractor": "PT Karya Deli Mandiri",
+      "fiscalYear": "2026",
+      "source": "APBD Kota Medan TA 2026",
+      "progressStatus": "TERLAMBAT_RESPONS",
+      "progressPct": 18,
+      "statusNote": "Progres fisik lambat akibat kendala pemindahan pipa PDAM Tirtanadi di lokasi saluran.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pemkomedan.go.id/eproc4/lelang/view/PKG-MDN-031",
+      "sourceDocument": "DPA Dinas SDABMBK Kota Medan TA 2026",
+      "lastVerifiedAt": "2026-10-22"
     },
+    "officialSources": {
+      "authoritySource": "Perwal Medan No. 34/2021 (Jaringan Jalan Kewenangan Kota)",
+      "budgetSource": "SiRUP LKPP & LPSE Kota Medan (RUP ID: 4102934)",
+      "fieldDataSource": "Laporan Warga Tiket #JGJ-MDN-031 & Verifikasi AI",
+      "transparencyUrl": "https://lpse.pemkomedan.go.id"
+    }
   },
   {
-    id: "ruas-04",
-    name: "Jl. Ir. H. Juanda (Pintu Tol Cijago - Cisalak)",
-    code: "RUAS-KTA-042",
-    authority: "KOTA_KAB",
-    authorityLabel: "Dinas PUPR Kota Depok",
-    legalBasis: "Peraturan Walikota Depok No. 18 Tahun 2021 tentang Penetapan Jaringan Jalan Kota",
-    lengthKm: 3.6,
-    pavementType: "Rigid Pavement (Beton Terintegrasi)",
-    condition: "MANTAP",
-    district: "Kota Depok",
-    center: [-6.3812, 106.8485],
-    coordinates: [[-6.3768, 106.832], [-6.37682, 106.83199], [-6.37688, 106.83197], [-6.37694, 106.83195], [-6.3769, 106.83183], [-6.37687, 106.83184], [-6.37678, 106.83186], [-6.37681, 106.83195], [-6.37682, 106.83199], [-6.37697, 106.83234], [-6.37709, 106.83263], [-6.37727, 106.83297], [-6.37742, 106.83325], [-6.37749, 106.83336], [-6.37781, 106.83419], [-6.37794, 106.83454], [-6.37806, 106.83492], [-6.37824, 106.83557], [-6.37831, 106.83577], [-6.37843, 106.83604], [-6.3787, 106.83656], [-6.37875, 106.83667], [-6.37905, 106.83727], [-6.37919, 106.83759], [-6.37929, 106.83788], [-6.37932, 106.83802], [-6.37936, 106.83837], [-6.37938, 106.83848], [-6.37969, 106.83947], [-6.37973, 106.8396], [-6.37975, 106.83971], [-6.37974, 106.83982], [-6.37965, 106.84082], [-6.37964, 106.84088], [-6.37962, 106.84099], [-6.37958, 106.84128], [-6.37951, 106.84173], [-6.37949, 106.84204], [-6.37948, 106.84254], [-6.37946, 106.84316], [-6.37948, 106.84334], [-6.37952, 106.84354], [-6.37969, 106.84418], [-6.37971, 106.84432], [-6.37971, 106.84445], [-6.37909, 106.84686], [-6.37905, 106.84704], [-6.37904, 106.84715], [-6.37903, 106.84732], [-6.37904, 106.8475], [-6.37909, 106.84779], [-6.37924, 106.84876], [-6.37928, 106.84903], [-6.37929, 106.84911], [-6.37942, 106.85012], [-6.37947, 106.85053], [-6.37949, 106.85064], [-6.37951, 106.8507], [-6.37953, 106.8508], [-6.37956, 106.85087], [-6.37959, 106.85094], [-6.37975, 106.8512], [-6.37987, 106.8514], [-6.37991, 106.85152], [-6.37993, 106.85162], [-6.37994, 106.85164], [-6.37995, 106.85172], [-6.37996, 106.8519], [-6.37995, 106.85349], [-6.37995, 106.8536], [-6.37997, 106.85374], [-6.38002, 106.85399], [-6.38004, 106.85405], [-6.38011, 106.85428], [-6.38015, 106.85442], [-6.38034, 106.85507], [-6.38042, 106.85541], [-6.38049, 106.85573], [-6.38071, 106.85675], [-6.38084, 106.85742], [-6.38095, 106.85812], [-6.38122, 106.85972], [-6.38154, 106.86171], [-6.38157, 106.86197], [-6.38189, 106.86559], [-6.38199, 106.86658], [-6.38199, 106.86687], [-6.382, 106.86698], [-6.38211, 106.86698], [-6.38227, 106.86699], [-6.38253, 106.867], [-6.38273, 106.86701], [-6.38312, 106.86703], [-6.3832, 106.86704], [-6.3835, 106.86707], [-6.38362, 106.86708], [-6.38378, 106.86711], [-6.38397, 106.86715], [-6.3841, 106.86717], [-6.38447, 106.86725], [-6.38477, 106.86731], [-6.38486, 106.86733], [-6.38529, 106.86742], [-6.38577, 106.86751], [-6.38611, 106.86757], [-6.38612, 106.86751], [-6.38609, 106.8675], [-6.38606, 106.8675], [-6.38607, 106.86744], [-6.38607, 106.86738], [-6.38608, 106.86719], [-6.38609, 106.86701], [-6.38617, 106.86669], [-6.38625, 106.86519], [-6.38628, 106.86451], [-6.3865, 106.86453]],
-    activeReportsCount: 2,
-    criticalHolesCount: 0,
-    hazardScore: 18,
-    hazardLevel: "RENDAH",
-    problemDetails: {
-      headline: "Kondisi Mantap Pasca-Perbaikan Sambungan & Drainase",
-      description: "Permukaan jalan secara umum dalam kondisi mantap dan rata. Teridentifikasi 2 keluhan minor terkait retak rambut permukaan sambungan beton dekat gerbang tol yang tidak membahayakan stabilitas struktur.",
-      rootCause: "Penuaan material sealent pengisi celah sambungan ekspansi beton (expansion joint) akibat paparan cuaca terik dan hujan.",
-      safetyImpact: "Tingkat risiko sangat rendah. Tidak ada lubang aktif yang membahayakan pengendara bermotor.",
-      slaStatus: "SELESAI",
-      slaNote: "Pekerjaan pemeliharaan berkala tuntas 100% dan telah diserahterimakan pertama (PHO).",
+    "id": "ruas-su-04",
+    "provinceId": "sumut",
+    "provinceName": "Sumatera Utara",
+    "name": "Jl. Pematangsiantar - Tanah Jawa (Simalungun)",
+    "code": "RUAS-PRV-SMT-054",
+    "authority": "PROVINSI",
+    "authorityLabel": "Dinas Pekerjaan Umum & Penataan Ruang Prov. Sumatera Utara",
+    "legalBasis": "Keputusan Gubernur Sumatera Utara No. 188.44/673/KPTS/2023 tentang Status Jalan Provinsi",
+    "lengthKm": 14.8,
+    "pavementType": "Aspal Hotmix & Rigid Beton Sebagian",
+    "condition": "RUSAK_BERAT",
+    "district": "Kabupaten Simalungun",
+    "center": [
+      2.94,
+      99.125
+    ],
+    "coordinates": [
+      [
+        2.95517,
+        99.06782
+      ],
+      [
+        2.95682,
+        99.0667
+      ],
+      [
+        2.95585,
+        99.06345
+      ],
+      [
+        2.95465,
+        99.064
+      ],
+      [
+        2.95276,
+        99.06488
+      ],
+      [
+        2.95243,
+        99.06503
+      ],
+      [
+        2.95233,
+        99.0651
+      ],
+      [
+        2.95223,
+        99.06512
+      ],
+      [
+        2.9522,
+        99.06528
+      ],
+      [
+        2.9521,
+        99.06575
+      ],
+      [
+        2.95216,
+        99.06613
+      ],
+      [
+        2.95206,
+        99.06638
+      ],
+      [
+        2.95024,
+        99.06706
+      ],
+      [
+        2.94958,
+        99.06731
+      ],
+      [
+        2.94799,
+        99.06806
+      ],
+      [
+        2.94679,
+        99.06863
+      ],
+      [
+        2.94635,
+        99.06884
+      ],
+      [
+        2.94532,
+        99.06931
+      ],
+      [
+        2.94329,
+        99.0702
+      ],
+      [
+        2.94057,
+        99.07166
+      ],
+      [
+        2.93974,
+        99.07217
+      ],
+      [
+        2.93872,
+        99.07279
+      ],
+      [
+        2.93756,
+        99.0735
+      ],
+      [
+        2.93589,
+        99.07448
+      ],
+      [
+        2.93528,
+        99.07483
+      ],
+      [
+        2.93364,
+        99.07576
+      ],
+      [
+        2.93307,
+        99.07606
+      ],
+      [
+        2.93204,
+        99.07652
+      ],
+      [
+        2.93121,
+        99.07684
+      ],
+      [
+        2.93087,
+        99.07708
+      ],
+      [
+        2.93009,
+        99.07793
+      ],
+      [
+        2.92943,
+        99.07867
+      ],
+      [
+        2.92919,
+        99.07897
+      ],
+      [
+        2.92902,
+        99.07945
+      ],
+      [
+        2.92857,
+        99.08059
+      ],
+      [
+        2.92588,
+        99.08469
+      ],
+      [
+        2.92484,
+        99.087
+      ],
+      [
+        2.92436,
+        99.08769
+      ],
+      [
+        2.92297,
+        99.08943
+      ],
+      [
+        2.92187,
+        99.09101
+      ],
+      [
+        2.92121,
+        99.09196
+      ],
+      [
+        2.91836,
+        99.09468
+      ],
+      [
+        2.91315,
+        99.09875
+      ],
+      [
+        2.90876,
+        99.10112
+      ],
+      [
+        2.90601,
+        99.10204
+      ],
+      [
+        2.90431,
+        99.10242
+      ],
+      [
+        2.90393,
+        99.10261
+      ],
+      [
+        2.90352,
+        99.10307
+      ],
+      [
+        2.90287,
+        99.10414
+      ],
+      [
+        2.90265,
+        99.10484
+      ],
+      [
+        2.90196,
+        99.10555
+      ],
+      [
+        2.90085,
+        99.10632
+      ],
+      [
+        2.90036,
+        99.10681
+      ],
+      [
+        2.89928,
+        99.10713
+      ],
+      [
+        2.89776,
+        99.10791
+      ],
+      [
+        2.89572,
+        99.10907
+      ],
+      [
+        2.89469,
+        99.1094
+      ],
+      [
+        2.893,
+        99.10975
+      ],
+      [
+        2.8904,
+        99.11019
+      ],
+      [
+        2.88998,
+        99.11032
+      ],
+      [
+        2.88898,
+        99.11116
+      ],
+      [
+        2.88786,
+        99.11215
+      ],
+      [
+        2.88732,
+        99.11268
+      ],
+      [
+        2.88624,
+        99.11368
+      ],
+      [
+        2.88221,
+        99.11743
+      ],
+      [
+        2.88106,
+        99.11862
+      ],
+      [
+        2.8789,
+        99.12133
+      ],
+      [
+        2.87839,
+        99.12206
+      ],
+      [
+        2.87738,
+        99.1236
+      ],
+      [
+        2.87658,
+        99.12573
+      ],
+      [
+        2.87605,
+        99.1286
+      ],
+      [
+        2.87598,
+        99.13045
+      ],
+      [
+        2.88318,
+        99.14537
+      ],
+      [
+        2.88514,
+        99.14923
+      ],
+      [
+        2.8855,
+        99.1501
+      ],
+      [
+        2.88579,
+        99.15288
+      ],
+      [
+        2.88609,
+        99.15733
+      ],
+      [
+        2.88612,
+        99.16405
+      ],
+      [
+        2.88619,
+        99.1668
+      ],
+      [
+        2.88649,
+        99.16787
+      ],
+      [
+        2.88714,
+        99.1699
+      ],
+      [
+        2.88824,
+        99.17182
+      ],
+      [
+        2.88861,
+        99.17214
+      ],
+      [
+        2.89147,
+        99.17691
+      ],
+      [
+        2.89224,
+        99.17828
+      ],
+      [
+        2.89403,
+        99.17724
+      ],
+      [
+        2.89431,
+        99.17716
+      ],
+      [
+        2.89539,
+        99.17718
+      ],
+      [
+        2.89669,
+        99.1772
+      ],
+      [
+        2.8968,
+        99.17726
+      ],
+      [
+        2.89684,
+        99.17819
+      ],
+      [
+        2.89694,
+        99.17859
+      ],
+      [
+        2.89855,
+        99.17919
+      ],
+      [
+        2.89932,
+        99.18006
+      ],
+      [
+        2.90128,
+        99.18263
+      ],
+      [
+        2.90188,
+        99.18393
+      ],
+      [
+        2.90282,
+        99.18437
+      ],
+      [
+        2.90324,
+        99.18528
+      ],
+      [
+        2.90401,
+        99.18654
+      ],
+      [
+        2.90856,
+        99.19311
+      ],
+      [
+        2.91008,
+        99.19198
+      ],
+      [
+        2.91066,
+        99.19173
+      ],
+      [
+        2.91268,
+        99.19167
+      ],
+      [
+        2.91289,
+        99.19188
+      ],
+      [
+        2.91292,
+        99.19342
+      ],
+      [
+        2.91459,
+        99.19359
+      ],
+      [
+        2.91557,
+        99.19299
+      ],
+      [
+        2.9168,
+        99.19227
+      ],
+      [
+        2.91869,
+        99.19124
+      ],
+      [
+        2.92063,
+        99.19013
+      ],
+      [
+        2.92343,
+        99.18824
+      ],
+      [
+        2.92106,
+        99.18445
+      ]
+    ],
+    "activeReportsCount": 38,
+    "criticalHolesCount": 12,
+    "hazardScore": 96,
+    "hazardLevel": "KRITIS",
+    "leadership": {
+      "regionalHead": "Pj. Gubernur Sumatera Utara (Dr. Drs. A. Fatoni, M.Si.)",
+      "agency": "Dinas PUPR Provinsi Sumatera Utara",
+      "officialPic": "UPTD Pengelolaan Jalan & Jembatan Pematangsiantar",
+      "contactCenter": "0622-21450 (UPTD Siantar Prov. Sumut)"
     },
-    budget: {
-      packageId: "PKG-DPK-2026-015",
-      name: "Pemeliharaan Berkala, Penataan Median & Saluran Jl. Ir. H. Juanda",
-      scope: "Perbaikan celah sambungan perkerasan kaku beton, pembersihan endapan sedimen saluran u-ditch samping, dan peremajaan marka jalan putih reflektif.",
-      paguRp: 2450000000,
-      contractValueRp: 2300000000,
-      contractor: "CV Pilar Mandiri Teknik",
-      fiscalYear: "2026",
-      source: "APBD Kota Depok (Bidang Bina Marga)",
-      progressStatus: "SELESAI",
-      progressPct: 100,
-      statusNote: "Pekerjaan fisik overlay dan normalisasi saluran tuntas tepat waktu. Kondisi jalan mantap.",
-      matchConfidence: "TERKONFIRMASI",
-      matchReason: "Sesuai Berita Acara Serah Terima Pertama (PHO) Dinas PUPR Depok No. 602/BAST-015/2026.",
-      sourceUrl: "https://lpse.depok.go.id/eproc4/lelang/view/PKG-DPK-015",
-      sourceDocument: "Dokumen Kontrak & Berita Acara PHO DPUPR Kota Depok TA 2026",
-      lastVerifiedAt: "2026-10-18",
+    "problemDetails": {
+      "headline": "Gorong-Gorong Amblas Separuh Jalan & Longsor Saluran",
+      "description": "Amblesan kritis di Simpang Marubun Jaya: gorong-gorong patah memutus separuh lajur jalan, kedalaman patahan 1,5 meter; hanya bisa dilintasi 1 arah bergantian.",
+      "rootCause": "Debit air banjir bandang mengikis tanah pondasi gorong-gorong tua tanpa perkuatan dinding penahan.",
+      "safetyImpact": "Sangat rawan kecelakaan fatal truk sawit terbalik; melumpuhkan urat nadi ekonomi warga Simalungun.",
+      "slaStatus": "OVERDUE",
+      "slaNote": "Telah melampaui batas tanggapan 14 hari kerja (SLA Overdue 11 hari). Draf Ombudsman siap diterbitkan."
     },
-    officialSources: {
-      authoritySource: "Peraturan Walikota Depok No. 18 Tahun 2021 (Jalan Kota)",
-      budgetSource: "LPSE Kota Depok (Paket Pengadaan Langsung/Tender Konstruksi TA 2026)",
-      fieldDataSource: "Berita Acara PHO No. 602/BAST-015/2026 & Inspeksi Lapangan JagaJalan",
-      transparencyUrl: "https://lpse.depok.go.id",
+    "budget": {
+      "packageId": "PKG-SMT-PRV-2026-088",
+      "name": "Rekonstruksi Gorong-Gorong & Peningkatan Jalan Siantar - Tanah Jawa",
+      "scope": "Pembangunan box culvert jembatan mini ganda 3x3 meter, perkerasan beton bertulang K-350.",
+      "paguRp": 18700000000,
+      "contractValueRp": 17800000000,
+      "contractor": "PT Sumber Mitra Jaya (SMJ)",
+      "fiscalYear": "2026",
+      "source": "APBD Provinsi Sumatera Utara (Program Multiyears)",
+      "progressStatus": "TERLAMBAT_RESPONS",
+      "progressPct": 20,
+      "statusNote": "Penanganan darurat jembatan bailey belum terealisasi; aduan publik menumpuk tinggi.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.sumutprov.go.id/eproc4/lelang/view/PKG-PRV-088",
+      "sourceDocument": "DPA Dinas PUPR Prov. Sumatera Utara TA 2026",
+      "lastVerifiedAt": "2026-10-22"
     },
+    "officialSources": {
+      "authoritySource": "Kepgub Sumut No. 188.44/673/KPTS/2023 (Ruas Jalan Provinsi)",
+      "budgetSource": "Portal LPSE Pemprov Sumut (Tender #401928)",
+      "fieldDataSource": "Aduan Publik SP4N-LAPOR! & Laporan Terverifikasi JagaJalan",
+      "transparencyUrl": "https://lpse.sumutprov.go.id"
+    }
   },
   {
-    id: "ruas-05",
-    name: "Jl. Raya Pajajaran (Sukasari - Warung Jambu)",
-    code: "RUAS-PRV-089",
-    authority: "PROVINSI",
-    authorityLabel: "Dinas Bina Marga & Penataan Ruang Prov. Jawa Barat",
-    legalBasis: "Keputusan Gubernur Jabar No. 620/Kep.104-DBMPR/2023",
-    lengthKm: 6.4,
-    pavementType: "Aspal Hotmix",
-    condition: "RUSAK_RINGAN",
-    district: "Kota Bogor",
-    center: [-6.5925, 106.8085],
-    coordinates: [[-6.57216, 106.80885], [-6.57225, 106.80876], [-6.57227, 106.80877], [-6.57229, 106.80878], [-6.57231, 106.80877], [-6.57232, 106.80875], [-6.57232, 106.80873], [-6.5723, 106.80871], [-6.57227, 106.80871], [-6.57225, 106.80856], [-6.57225, 106.8085], [-6.57277, 106.80839], [-6.57332, 106.80827], [-6.57371, 106.80819], [-6.57467, 106.808], [-6.57562, 106.80781], [-6.576, 106.80772], [-6.57638, 106.80766], [-6.57655, 106.80762], [-6.57747, 106.80743], [-6.57838, 106.80727], [-6.57853, 106.80724], [-6.57889, 106.80718], [-6.5792, 106.80711], [-6.57957, 106.80704], [-6.5797, 106.80702], [-6.58034, 106.80689], [-6.58071, 106.80682], [-6.58088, 106.80679], [-6.58151, 106.80668], [-6.58191, 106.80661], [-6.58284, 106.80642], [-6.58372, 106.80624], [-6.58509, 106.80596], [-6.58674, 106.8056], [-6.58764, 106.80535], [-6.58857, 106.80509], [-6.58901, 106.80497], [-6.58913, 106.80494], [-6.58945, 106.80487], [-6.58969, 106.80483], [-6.58994, 106.8048], [-6.59046, 106.80477], [-6.59117, 106.80477], [-6.59145, 106.80478], [-6.59198, 106.80477], [-6.59258, 106.80475], [-6.59269, 106.80471], [-6.59304, 106.80466], [-6.59323, 106.80464], [-6.59353, 106.80459], [-6.59372, 106.80457], [-6.59395, 106.80453], [-6.5941, 106.80451], [-6.59426, 106.80448], [-6.59463, 106.80442], [-6.59475, 106.8044], [-6.59502, 106.80436], [-6.59541, 106.8043], [-6.59555, 106.80429], [-6.59581, 106.80426], [-6.59586, 106.80426], [-6.60004, 106.80492], [-6.60057, 106.805], [-6.60077, 106.80505], [-6.60108, 106.80506], [-6.60136, 106.80484], [-6.60152, 106.80457], [-6.60164, 106.80424], [-6.60182, 106.80368], [-6.602, 106.80307], [-6.6022, 106.80244], [-6.60234, 106.80201], [-6.60258, 106.80044], [-6.60266, 106.79975], [-6.60298, 106.79908], [-6.60306, 106.7989], [-6.60307, 106.79877], [-6.60305, 106.79861], [-6.60305, 106.79848], [-6.60308, 106.79838], [-6.60317, 106.79819], [-6.60337, 106.79791], [-6.6034, 106.79787], [-6.60389, 106.79722], [-6.60408, 106.79703], [-6.60491, 106.79641], [-6.60573, 106.79567], [-6.60577, 106.79558], [-6.60607, 106.79541], [-6.6066, 106.79527], [-6.60725, 106.79513], [-6.60776, 106.79505], [-6.60785, 106.79543], [-6.60787, 106.79548], [-6.60802, 106.79616], [-6.60806, 106.79625], [-6.60811, 106.79633], [-6.6083, 106.79657], [-6.60853, 106.79685], [-6.60866, 106.79701], [-6.60887, 106.79726], [-6.60902, 106.79744], [-6.60927, 106.79774], [-6.60948, 106.79797], [-6.6097, 106.79819], [-6.61016, 106.79867], [-6.61037, 106.79891], [-6.61044, 106.79899], [-6.61071, 106.79933], [-6.61098, 106.79963], [-6.6112, 106.79995], [-6.61142, 106.80033], [-6.6116, 106.80066], [-6.6118, 106.80103], [-6.61199, 106.80146], [-6.61211, 106.80175], [-6.6123, 106.80215], [-6.61242, 106.80231], [-6.61253, 106.80241], [-6.61265, 106.8025], [-6.61276, 106.80258], [-6.61289, 106.80266], [-6.61321, 106.80288], [-6.61348, 106.80305], [-6.61366, 106.80316], [-6.61382, 106.80325], [-6.61422, 106.80345], [-6.6145, 106.8036], [-6.61479, 106.80375], [-6.61506, 106.80388], [-6.61525, 106.80398], [-6.61559, 106.80413], [-6.61548, 106.8044], [-6.61547, 106.80442], [-6.61538, 106.8044], [-6.61537, 106.8044], [-6.61532, 106.80455], [-6.61531, 106.80457], [-6.61517, 106.80453], [-6.61516, 106.80456], [-6.61512, 106.80473], [-6.61507, 106.80506], [-6.61531, 106.80536], [-6.61518, 106.80568], [-6.61511, 106.80584], [-6.61513, 106.80587], [-6.61519, 106.80591]],
-    activeReportsCount: 9,
-    criticalHolesCount: 3,
-    hazardScore: 58,
-    hazardLevel: "SEDANG",
-    problemDetails: {
-      headline: "Retak Memanjang & 3 Lubang Jalan di Segmen Sukasari - Tugu Kujang",
-      description: "Terdapat retak memanjang (longitudinal cracking) sepanjang 80 meter dan 3 lubang berdiameter 30-45 cm dengan kedalaman 5-8 cm di sekitar putaran balik arah Sukasari.",
-      rootCause: "Curah hujan tinggi di Kota Bogor yang tertahan di permukaan aspal akibat kemiringan melintang jalan (camber) yang tidak optimal mengalirkan air ke tali air samping.",
-      safetyImpact: "Berpotensi menyebabkan aquaplaning (ban selip di atas air) saat hujan lebat dan kejut setir bagi pengendara roda dua.",
-      slaStatus: "DALAM_PENGERJAAN",
-      slaNote: "Sedang dalam pengerjaan pengupasan aspal lama (scraping/milling) pada malam hari untuk menghindari kemacetan wisata Kota Bogor.",
+    "id": "ruas-su-05",
+    "provinceId": "sumut",
+    "provinceName": "Sumatera Utara",
+    "name": "Jl. Lintas Asahan (Kisaran - Batas Labuhanbatu)",
+    "code": "RUAS-NAS-SMT-021",
+    "authority": "NASIONAL",
+    "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut)",
+    "legalBasis": "SK Menteri PUPR No. 430/KPTS/M/2022",
+    "lengthKm": 26.5,
+    "pavementType": "Rigid Pavement Beton & Sebagian Aspal",
+    "condition": "RUSAK_BERAT",
+    "district": "Kabupaten Asahan - Labuhanbatu",
+    "center": [
+      2.875,
+      99.725
+    ],
+    "coordinates": [
+      [
+        2.98229,
+        99.62467
+      ],
+      [
+        2.98185,
+        99.62586
+      ],
+      [
+        2.98078,
+        99.6293
+      ],
+      [
+        2.97927,
+        99.63031
+      ],
+      [
+        2.97524,
+        99.63005
+      ],
+      [
+        2.97367,
+        99.6288
+      ],
+      [
+        2.97315,
+        99.62764
+      ],
+      [
+        2.97244,
+        99.62719
+      ],
+      [
+        2.97197,
+        99.62732
+      ],
+      [
+        2.97131,
+        99.62844
+      ],
+      [
+        2.96898,
+        99.62972
+      ],
+      [
+        2.96623,
+        99.6312
+      ],
+      [
+        2.96401,
+        99.63239
+      ],
+      [
+        2.96251,
+        99.63318
+      ],
+      [
+        2.96183,
+        99.63384
+      ],
+      [
+        2.96155,
+        99.63759
+      ],
+      [
+        2.96127,
+        99.64332
+      ],
+      [
+        2.96109,
+        99.64705
+      ],
+      [
+        2.96096,
+        99.64999
+      ],
+      [
+        2.96074,
+        99.65507
+      ],
+      [
+        2.96027,
+        99.66656
+      ],
+      [
+        2.95989,
+        99.66776
+      ],
+      [
+        2.95528,
+        99.67074
+      ],
+      [
+        2.9528,
+        99.67213
+      ],
+      [
+        2.94847,
+        99.67455
+      ],
+      [
+        2.93811,
+        99.68039
+      ],
+      [
+        2.93343,
+        99.68314
+      ],
+      [
+        2.93245,
+        99.68549
+      ],
+      [
+        2.93181,
+        99.68657
+      ],
+      [
+        2.92917,
+        99.68816
+      ],
+      [
+        2.92701,
+        99.68948
+      ],
+      [
+        2.92662,
+        99.69404
+      ],
+      [
+        2.92645,
+        99.69835
+      ],
+      [
+        2.92595,
+        99.70178
+      ],
+      [
+        2.92508,
+        99.70417
+      ],
+      [
+        2.92285,
+        99.71025
+      ],
+      [
+        2.92072,
+        99.71507
+      ],
+      [
+        2.9198,
+        99.71717
+      ],
+      [
+        2.91939,
+        99.71984
+      ],
+      [
+        2.9198,
+        99.7224
+      ],
+      [
+        2.92097,
+        99.72635
+      ],
+      [
+        2.92128,
+        99.72844
+      ],
+      [
+        2.92217,
+        99.73063
+      ],
+      [
+        2.9237,
+        99.73376
+      ],
+      [
+        2.92533,
+        99.73717
+      ],
+      [
+        2.92702,
+        99.74073
+      ],
+      [
+        2.92877,
+        99.74367
+      ],
+      [
+        2.93087,
+        99.74529
+      ],
+      [
+        2.93498,
+        99.74836
+      ],
+      [
+        2.93634,
+        99.74953
+      ],
+      [
+        2.93771,
+        99.75281
+      ],
+      [
+        2.93857,
+        99.75549
+      ],
+      [
+        2.93935,
+        99.75706
+      ],
+      [
+        2.93996,
+        99.7573
+      ],
+      [
+        2.9438,
+        99.75767
+      ],
+      [
+        2.94473,
+        99.75808
+      ],
+      [
+        2.94539,
+        99.75927
+      ],
+      [
+        2.94615,
+        99.76464
+      ],
+      [
+        2.94697,
+        99.76866
+      ],
+      [
+        2.94809,
+        99.77245
+      ],
+      [
+        2.9493,
+        99.77615
+      ],
+      [
+        2.94971,
+        99.77765
+      ],
+      [
+        2.9501,
+        99.7795
+      ],
+      [
+        2.95058,
+        99.78258
+      ],
+      [
+        2.95078,
+        99.78401
+      ],
+      [
+        2.95117,
+        99.78652
+      ],
+      [
+        2.95164,
+        99.78919
+      ],
+      [
+        2.9521,
+        99.79119
+      ],
+      [
+        2.95337,
+        99.79331
+      ],
+      [
+        2.95561,
+        99.79603
+      ],
+      [
+        2.95853,
+        99.79965
+      ],
+      [
+        2.95895,
+        99.79984
+      ],
+      [
+        2.95901,
+        99.80012
+      ],
+      [
+        2.96127,
+        99.80229
+      ],
+      [
+        2.96266,
+        99.80423
+      ],
+      [
+        2.96376,
+        99.80621
+      ],
+      [
+        2.96419,
+        99.80748
+      ],
+      [
+        2.96744,
+        99.81399
+      ],
+      [
+        2.96849,
+        99.81652
+      ],
+      [
+        2.96955,
+        99.81861
+      ],
+      [
+        2.97039,
+        99.82022
+      ],
+      [
+        2.96597,
+        99.82959
+      ],
+      [
+        2.96487,
+        99.83167
+      ],
+      [
+        2.95812,
+        99.84324
+      ],
+      [
+        2.94971,
+        99.85152
+      ],
+      [
+        2.94407,
+        99.8566
+      ],
+      [
+        2.93986,
+        99.85867
+      ],
+      [
+        2.93443,
+        99.85985
+      ],
+      [
+        2.91491,
+        99.86114
+      ],
+      [
+        2.89069,
+        99.86164
+      ],
+      [
+        2.87256,
+        99.85982
+      ],
+      [
+        2.86639,
+        99.8581
+      ],
+      [
+        2.85857,
+        99.85597
+      ],
+      [
+        2.85309,
+        99.8545
+      ],
+      [
+        2.8442,
+        99.85222
+      ],
+      [
+        2.8373,
+        99.85045
+      ],
+      [
+        2.83077,
+        99.84872
+      ],
+      [
+        2.82558,
+        99.84729
+      ],
+      [
+        2.82254,
+        99.84647
+      ],
+      [
+        2.8187,
+        99.84545
+      ],
+      [
+        2.80695,
+        99.84195
+      ],
+      [
+        2.80146,
+        99.84142
+      ],
+      [
+        2.79133,
+        99.8439
+      ],
+      [
+        2.79035,
+        99.84314
+      ]
+    ],
+    "activeReportsCount": 42,
+    "criticalHolesCount": 15,
+    "hazardScore": 91,
+    "hazardLevel": "KRITIS",
+    "leadership": {
+      "regionalHead": "Menteri PU RI & Kepala BBPJN Sumut",
+      "agency": "Balai Besar Pelaksanaan Jalan Nasional (BBPJN) Sumut",
+      "officialPic": "PPK 3.2 Lintas Timur Sumatera Utara",
+      "contactCenter": "061-7865231 (BBPJN Sumut)"
     },
-    budget: {
-      packageId: "PKG-JBR-2026-112",
-      name: "Overlay & Penataan Drainase Koridor Pajajaran Kota Bogor",
-      scope: "Pekerjaan cold milling tebal 5 cm, penghamparan aspal porus AC-WC modifikasi polimer tahan air, dan rehabilitasi tali air samping menuju saluran utama.",
-      paguRp: 4100000000,
-      contractValueRp: 3820000000,
-      contractor: "PT Tri Jaya Konstruksi Sejahtera",
-      fiscalYear: "2026",
-      source: "APBD Provinsi Jawa Barat TA 2026",
-      progressStatus: "DALAM_PENGERJAAN",
-      progressPct: 62,
-      statusNote: "Pengerjaan bertahap segmen Sukasari menuju Tugu Kujang pada shift malam (pukul 22.00 - 04.30 WIB).",
-      matchConfidence: "TERKONFIRMASI",
-      matchReason: "SK Penetapan Pemenang Lelang LPSE Prov. Jawa Barat.",
-      sourceUrl: "https://lpse.jabarprov.go.id/eproc4/lelang/view/112",
-      sourceDocument: "Surat Perjanjian Kontrak Kerja No. 602/SPK-112/DBMPR/2026",
-      lastVerifiedAt: "2026-10-18",
+    "problemDetails": {
+      "headline": "Deformasi Bergelombang & 15 Lubang Kritis Akibat Truk CPO ODOL",
+      "description": "Gelombang aspal sedalam 15 cm dan 15 lubang dalam di koridor lintas logistik perkebunan; debu tebal saat kering dan kubangan lumpur saat hujan.",
+      "rootCause": "Beban ratusan truk tangki CPO sawit 25-30 ton yang melebihi batas MST 10 ton jalan nasional kelas II.",
+      "safetyImpact": "Sangat membahayakan pemotor dan mobil pribadi; ban pecah dan as roda truk kerap patah di lokasi.",
+      "slaStatus": "DALAM_PENGERJAAN",
+      "slaNote": "Pengerjaan rekonstruksi perkerasan kaku beton sedang dilakukan oleh kontraktor."
     },
-    officialSources: {
-      authoritySource: "Keputusan Gubernur Jabar No. 620/Kep.104-DBMPR/2023 (Ruas Jalan Provinsi)",
-      budgetSource: "Portal LPSE Provinsi Jawa Barat (Surat Perjanjian No. 602/SPK-112/DBMPR/2026)",
-      fieldDataSource: "Data Pengawasan UPTD Pengelolaan Jalan Jabar Wilayah Pelayanan I & JagaJalan",
-      transparencyUrl: "https://lpse.jabarprov.go.id",
+    "budget": {
+      "packageId": "PKG-APBN-IJD-2026-112",
+      "name": "Inpres Jalan Daerah: Rekonstruksi Struktur Lintas Asahan - Labuhanbatu",
+      "scope": "Pembongkaran aspal rusak, pemasangan lean concrete dan rigid pavement beton semen tebal 30 cm.",
+      "paguRp": 34200000000,
+      "contractValueRp": 32800000000,
+      "contractor": "PT Pembangunan Perumahan (Persero) Tbk",
+      "fiscalYear": "2026",
+      "source": "Inpres Jalan Daerah (IJD) APBN TA 2026",
+      "progressStatus": "DALAM_PENGERJAAN",
+      "progressPct": 42,
+      "statusNote": "Pengecoran beton lajur kiri sepanjang 6 km selesai; dilanjutkan pembesian lajur kanan.",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-IJD-112",
+      "sourceDocument": "Lampiran Alokasi Inpres Jalan Daerah KemenPU TA 2026",
+      "lastVerifiedAt": "2026-10-22"
     },
+    "officialSources": {
+      "authoritySource": "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
+      "budgetSource": "Alokasi Inpres Jalan Daerah (Inpres No. 3/2023) & LPSE KemenPU",
+      "fieldDataSource": "Inspeksi Balai BBPJN Wilayah III & Aduan Lintas Sumatera",
+      "transparencyUrl": "https://lpse.pu.go.id"
+    }
   },
   {
-    id: "ruas-06",
-    name: "Jl. Raya Cileungsi - Jonggol (Cipambuan - Cibucil)",
-    code: "RUAS-PRV-118",
-    authority: "PROVINSI",
-    authorityLabel: "Dinas Bina Marga & Penataan Ruang Prov. Jawa Barat",
-    legalBasis: "Keputusan Gubernur Jabar No. 620/Kep.104-DBMPR/2023",
-    lengthKm: 18.5,
-    pavementType: "Aspal Hotmix & Beton Patah",
-    condition: "RUSAK_BERAT",
-    district: "Kabupaten Bogor",
-    center: [-6.4250, 107.0125],
-    coordinates: [[-6.39801, 106.96513], [-6.39858, 106.96536], [-6.39908, 106.96553], [-6.40105, 106.96568], [-6.40167, 106.96578], [-6.4036, 106.96397], [-6.40506, 106.96487], [-6.40589, 106.96661], [-6.40683, 106.96892], [-6.40719, 106.97182], [-6.40714, 106.97355], [-6.40646, 106.97556], [-6.40676, 106.97745], [-6.40802, 106.97925], [-6.40871, 106.98112], [-6.40979, 106.98499], [-6.40994, 106.98853], [-6.40975, 106.99117], [-6.40885, 106.99433], [-6.40758, 106.99666], [-6.40794, 106.99831], [-6.40869, 107.0016], [-6.40906, 107.00349], [-6.40969, 107.00661], [-6.41028, 107.0088], [-6.41156, 107.00967], [-6.41221, 107.01079], [-6.41249, 107.01208], [-6.41358, 107.01287], [-6.41414, 107.01436], [-6.41386, 107.0165], [-6.41343, 107.0183], [-6.41323, 107.02038], [-6.41404, 107.02109], [-6.41566, 107.02182], [-6.41657, 107.02457], [-6.41716, 107.02629], [-6.41787, 107.02838], [-6.41818, 107.0294], [-6.42023, 107.03192], [-6.42156, 107.03317], [-6.42372, 107.03498], [-6.42553, 107.03647], [-6.42756, 107.03797], [-6.42952, 107.0391], [-6.43042, 107.04011], [-6.43142, 107.04074], [-6.4326, 107.04037], [-6.43368, 107.04088], [-6.43444, 107.04235], [-6.43471, 107.04515], [-6.43489, 107.04728], [-6.43504, 107.0493], [-6.43528, 107.05131], [-6.4364, 107.053], [-6.43789, 107.05426], [-6.43878, 107.05445], [-6.43983, 107.05495], [-6.44093, 107.05577], [-6.44329, 107.05673], [-6.44544, 107.0577], [-6.44748, 107.05854], [-6.44993, 107.05954], [-6.45152, 107.06007], [-6.45241, 107.06023], [-6.45293, 107.06082], [-6.45371, 107.06285], [-6.45484, 107.06347], [-6.4581, 107.06449], [-6.46259, 107.06592], [-6.46431, 107.06629], [-6.46684, 107.06811], [-6.4684, 107.06842], [-6.46901, 107.06945], [-6.46972, 107.07068], [-6.47002, 107.07169], [-6.47089, 107.07232], [-6.47212, 107.07283], [-6.47381, 107.07274], [-6.47504, 107.07259], [-6.47591, 107.07276], [-6.47715, 107.07253], [-6.4781, 107.0724], [-6.4787, 107.07267], [-6.47926, 107.07421], [-6.4796, 107.07623], [-6.47871, 107.07715], [-6.47709, 107.07828], [-6.47535, 107.07869], [-6.4739, 107.07895], [-6.47318, 107.07973], [-6.47306, 107.08066], [-6.47243, 107.08115], [-6.47179, 107.08127], [-6.4704, 107.08178], [-6.4691, 107.08241], [-6.46875, 107.08289], [-6.46815, 107.08266], [-6.46745, 107.08282], [-6.46689, 107.08286], [-6.46605, 107.08272], [-6.46539, 107.08278]],
-    activeReportsCount: 31,
-    criticalHolesCount: 14,
-    hazardScore: 95,
-    hazardLevel: "KRITIS",
-    problemDetails: {
-      headline: "Badan Jalan Ambles 25 cm, 14 Lubang Dalam & Longsor Bahu Jalan",
-      description: "Kerusakan ekstrem di KM 8.7 depan Pasar Hewan Jonggol: pelat beton perkerasan retak patah, badan jalan ambles sedalam 20-30 cm sepanjang 120 meter, dan terdapat 14 kubangan lubang terisi lumpur.",
-      rootCause: "Daya dukung tanah dasar (subgrade CBR < 3%) sangat labil bekas rawa, tergerus luapan sungai saat hujan, serta dilewati ratusan dump truck tronton pengangkut pasir tambang tanpa jembatan timbang.",
-      safetyImpact: "Tingkat fatalitas sangat kritis. Sering terjadi truk pengangkut terguling dan pengendara sepeda motor jatuh terperosok; kemacetan harian mencapai 3 jam.",
-      slaStatus: "OVERDUE",
-      slaNote: "Telah melewati batas waktu tanggapan resmi 14 hari kerja (SLA Overdue 8 hari). Draf aduan Ombudsman RI terbit otomatis untuk eskalasi publik.",
+    "id": "ruas-su-06",
+    "provinceId": "sumut",
+    "provinceName": "Sumatera Utara",
+    "name": "Jl. Pangeran Diponegoro (Pusat Kota Medan)",
+    "code": "RUAS-KTA-MDN-004",
+    "authority": "KOTA_KAB",
+    "authorityLabel": "Dinas SDABMBK Pemerintah Kota Medan",
+    "legalBasis": "Peraturan Walikota Medan No. 34 Tahun 2021",
+    "lengthKm": 2.1,
+    "pavementType": "Aspal Hotmix Prima & Trotoar Granit",
+    "condition": "MANTAP",
+    "district": "Kota Medan (Medan Petisah - Medan Baru)",
+    "center": [
+      3.585,
+      98.674
+    ],
+    "coordinates": [
+      [
+        3.59213,
+        98.67225
+      ],
+      [
+        3.59249,
+        98.67206
+      ],
+      [
+        3.5924,
+        98.67178
+      ],
+      [
+        3.59231,
+        98.67152
+      ],
+      [
+        3.59226,
+        98.67139
+      ],
+      [
+        3.59224,
+        98.67111
+      ],
+      [
+        3.59225,
+        98.67099
+      ],
+      [
+        3.59227,
+        98.6708
+      ],
+      [
+        3.59203,
+        98.67096
+      ],
+      [
+        3.59183,
+        98.67109
+      ],
+      [
+        3.59166,
+        98.67118
+      ],
+      [
+        3.59146,
+        98.6713
+      ],
+      [
+        3.5911,
+        98.67147
+      ],
+      [
+        3.59102,
+        98.67151
+      ],
+      [
+        3.59066,
+        98.67166
+      ],
+      [
+        3.59041,
+        98.6718
+      ],
+      [
+        3.59022,
+        98.67185
+      ],
+      [
+        3.59007,
+        98.67192
+      ],
+      [
+        3.59002,
+        98.67195
+      ],
+      [
+        3.58993,
+        98.67204
+      ],
+      [
+        3.58986,
+        98.67214
+      ],
+      [
+        3.58981,
+        98.67221
+      ],
+      [
+        3.5897,
+        98.67243
+      ],
+      [
+        3.58969,
+        98.67247
+      ],
+      [
+        3.58967,
+        98.67261
+      ],
+      [
+        3.58963,
+        98.67285
+      ],
+      [
+        3.58963,
+        98.67289
+      ],
+      [
+        3.5896,
+        98.67317
+      ],
+      [
+        3.58955,
+        98.67369
+      ],
+      [
+        3.58955,
+        98.67382
+      ],
+      [
+        3.58949,
+        98.67396
+      ],
+      [
+        3.58946,
+        98.67402
+      ],
+      [
+        3.58943,
+        98.67407
+      ],
+      [
+        3.58939,
+        98.6741
+      ],
+      [
+        3.58936,
+        98.67412
+      ],
+      [
+        3.58922,
+        98.67415
+      ],
+      [
+        3.5889,
+        98.6741
+      ],
+      [
+        3.58838,
+        98.67401
+      ],
+      [
+        3.58803,
+        98.67394
+      ],
+      [
+        3.58776,
+        98.67389
+      ],
+      [
+        3.58733,
+        98.67382
+      ],
+      [
+        3.5871,
+        98.67379
+      ],
+      [
+        3.58689,
+        98.67378
+      ],
+      [
+        3.5865,
+        98.67375
+      ],
+      [
+        3.58638,
+        98.67375
+      ],
+      [
+        3.58628,
+        98.67374
+      ],
+      [
+        3.58611,
+        98.67375
+      ],
+      [
+        3.58589,
+        98.67379
+      ],
+      [
+        3.58575,
+        98.67384
+      ],
+      [
+        3.58566,
+        98.67387
+      ],
+      [
+        3.58562,
+        98.67389
+      ],
+      [
+        3.58536,
+        98.67406
+      ],
+      [
+        3.58491,
+        98.67432
+      ],
+      [
+        3.58425,
+        98.67477
+      ],
+      [
+        3.58416,
+        98.67484
+      ],
+      [
+        3.58412,
+        98.67486
+      ],
+      [
+        3.58395,
+        98.67497
+      ],
+      [
+        3.58387,
+        98.67502
+      ],
+      [
+        3.58372,
+        98.67513
+      ],
+      [
+        3.58364,
+        98.67518
+      ],
+      [
+        3.58354,
+        98.67526
+      ],
+      [
+        3.58344,
+        98.67534
+      ],
+      [
+        3.58315,
+        98.67553
+      ],
+      [
+        3.58313,
+        98.67554
+      ],
+      [
+        3.58289,
+        98.67572
+      ],
+      [
+        3.58258,
+        98.67592
+      ],
+      [
+        3.58222,
+        98.67614
+      ],
+      [
+        3.58204,
+        98.67626
+      ],
+      [
+        3.58193,
+        98.67634
+      ],
+      [
+        3.58187,
+        98.67638
+      ],
+      [
+        3.58182,
+        98.67642
+      ],
+      [
+        3.5817,
+        98.67644
+      ],
+      [
+        3.58152,
+        98.67647
+      ],
+      [
+        3.58142,
+        98.67649
+      ],
+      [
+        3.58096,
+        98.67657
+      ],
+      [
+        3.58067,
+        98.67663
+      ],
+      [
+        3.58065,
+        98.67664
+      ],
+      [
+        3.58014,
+        98.67668
+      ],
+      [
+        3.57982,
+        98.67672
+      ],
+      [
+        3.57885,
+        98.67689
+      ],
+      [
+        3.57869,
+        98.67692
+      ],
+      [
+        3.57855,
+        98.67691
+      ],
+      [
+        3.57851,
+        98.67691
+      ],
+      [
+        3.57847,
+        98.6769
+      ],
+      [
+        3.57827,
+        98.67681
+      ],
+      [
+        3.5781,
+        98.67674
+      ],
+      [
+        3.57796,
+        98.67668
+      ],
+      [
+        3.57799,
+        98.67658
+      ]
+    ],
+    "activeReportsCount": 1,
+    "criticalHolesCount": 0,
+    "hazardScore": 12,
+    "hazardLevel": "RENDAH",
+    "leadership": {
+      "regionalHead": "Walikota Medan (M. Bobby Afif Nasution)",
+      "agency": "Dinas SDABMBK Kota Medan",
+      "officialPic": "Bidang Preservasi Jalan Protokol Pemko Medan",
+      "contactCenter": "061-4512000 (Pemko Medan)"
     },
-    budget: {
-      packageId: "PKG-JBR-2026-204",
-      name: "Rekonstruksi Struktur & Peninggian Badan Jalan Cileungsi - Jonggol",
-      scope: "Pekerjaan perkuatan tanah dengan geotekstil dan cerucuk matras beton, peninggian elevasi badan jalan 40 cm di atas muka banjir, perkerasan beton bertulang tebal 25 cm, dan sheet pile penahan tebing bahu jalan.",
-      paguRp: 12500000000,
-      contractValueRp: 11800000000,
-      contractor: "PT Waskita Karya (Persero) Tbk",
-      fiscalYear: "2026",
-      source: "Inpres Jalan Daerah (IJD) APBN & APBD Provinsi Jabar",
-      progressStatus: "TERLAMBAT_RESPONS",
-      progressPct: 22,
-      statusNote: "Keterlambatan penanganan akibat koordinasi utilitas pipa transmisi air PDAM dan relokasi tiang listrik; progres deviasi minus 28%.",
-      matchConfidence: "PARSIAL",
-      matchReason: "Paket lelang mencakup koridor Cileungsi-Jonggol sepanjang 18.5 km secara multi-segmen.",
-      sourceUrl: "https://opendata.jabarprov.go.id/dataset/anggaran-infrastruktur-jalan-2026",
-      sourceDocument: "Lampiran Permohonan Dana IJD Tahap II Pemprov Jawa Barat & Dokumen Kontrak",
-      lastVerifiedAt: "2026-10-18",
+    "problemDetails": {
+      "headline": "Kondisi Sangat Mantap & Penataan Jalur Protokol Tuntas",
+      "description": "Jalan protokol pusat pemerintahan dalam kondisi mantap 100%. Drainase tertutup dan trotoar pedestrian terintegrasi rapi.",
+      "rootCause": "Pemeliharaan rutin terjadwal dengan pengawasan berkala UPTD Pemko Medan.",
+      "safetyImpact": "Sangat aman dan nyaman bagi seluruh pengguna jalan dan pejalan kaki.",
+      "slaStatus": "SELESAI",
+      "slaNote": "Pekerjaan penataan selesai 100% dan terawat baik."
     },
-    officialSources: {
-      authoritySource: "Keputusan Gubernur Jabar No. 620/Kep.104-DBMPR/2023 (Ruas Jalan Provinsi Jawa Barat)",
-      budgetSource: "Alokasi Inpres Jalan Daerah (Inpres No. 3/2023) & LPSE Pemprov Jabar (Tender #204128)",
-      fieldDataSource: "Laporan Warga Terverifikasi Geotag (#JGJ-JBR-109) & Audit Lapangan Tim Teknis JagaJalan",
-      transparencyUrl: "https://opendata.jabarprov.go.id",
+    "budget": {
+      "packageId": "PKG-MDN-2026-008",
+      "name": "Pemeliharaan Berkala & Penataan Jalur Pedestrian Jl. Diponegoro",
+      "scope": "Penghalusan aspal AC-WC, penataan batu alam trotoar, lampu penerangan jalan tematik.",
+      "paguRp": 4500000000,
+      "contractValueRp": 4200000000,
+      "contractor": "CV Medan Indah Cipta",
+      "fiscalYear": "2026",
+      "source": "APBD Kota Medan TA 2026",
+      "progressStatus": "SELESAI",
+      "progressPct": 100,
+      "statusNote": "Proyek tuntas tepat waktu; diserahterimakan pertama (PHO).",
+      "matchConfidence": "TERKONFIRMASI",
+      "sourceUrl": "https://lpse.pemkomedan.go.id/eproc4/lelang/view/PKG-MDN-008",
+      "sourceDocument": "Berita Acara PHO No. 602/PHO-04/SDABMBK/2026",
+      "lastVerifiedAt": "2026-10-22"
     },
-  },
+    "officialSources": {
+      "authoritySource": "Perwal Medan No. 34/2021 (Jalan Protokol Kota Medan)",
+      "budgetSource": "LPSE Kota Medan (Tender Konstruksi TA 2026)",
+      "fieldDataSource": "Berita Acara PHO No. 602/PHO-04 & Audit Geospasial JagaJalan",
+      "transparencyUrl": "https://lpse.pemkomedan.go.id"
+    }
+  }
 ];
+
+// Default active roads: SUMATERA UTARA (fokus percontohan provinsi)
+export const ROAD_SEGMENTS = SUMATERA_UTARA_ROADS;
+
+export const PROVINCE_ROAD_MAP = {
+  sumut: {
+    name: "Sumatera Utara",
+    capital: "Medan",
+    center: [3.5952, 98.6722],
+    zoom: 11.5,
+    governor: "Dr. Drs. A. Fatoni, M.Si. (Pj. Gubernur Sumatera Utara)",
+    regionalAgency: "Dinas Pekerjaan Umum & Penataan Ruang Prov. Sumut",
+    nationalBalai: "BBPJN Sumatera Utara (Kementerian PU)",
+    roads: SUMATERA_UTARA_ROADS,
+  },
+};

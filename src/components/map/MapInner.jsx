@@ -129,7 +129,7 @@ export default function MapInner({
 }) {
   return (
     <MapContainer
-      center={mapCenter || [-6.3985, 106.825]}
+      center={mapCenter || [3.5952, 98.6722]}
       zoom={11.5}
       zoomControl={false}
       scrollWheelZoom={true}
@@ -191,7 +191,7 @@ export default function MapInner({
                 <div className="font-sans text-xs">
                   <div className="font-bold text-slate-900">{road.name}</div>
                   <div className="text-[10px] text-slate-500 font-medium">
-                    {road.authorityLabel} • Klik untuk melihat detail & proyek
+                    {road.authorityLabel} • PIC: {road.leadership?.regionalHead}
                   </div>
                 </div>
               </Tooltip>
@@ -208,6 +208,11 @@ export default function MapInner({
                   <div>
                     <h4 className="font-bold text-slate-900 leading-snug">{road.name}</h4>
                     <p className="text-[10px] text-slate-500">{road.district} • {road.lengthKm} KM</p>
+                    {road.leadership?.regionalHead && (
+                      <div className="text-[9.5px] font-semibold text-slate-700 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200 mt-1">
+                        PIC: {road.leadership.regionalHead}
+                      </div>
+                    )}
                   </div>
 
                   {/* Problem snippet */}
