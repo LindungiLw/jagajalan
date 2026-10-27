@@ -47,9 +47,8 @@ Desktop.ini
 # IDE & Editor configs
 .vscode/
 .idea/
-*.swp
-*.swo
+# Scratch scripts & temporary fetch outputs
+scratch/
+*_raw.json
+accurate_*.json
 
-# TypeScript build info
-*.tsbuildinfo
-next-env.d.ts
