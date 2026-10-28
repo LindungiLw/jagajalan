@@ -1156,14 +1156,14 @@ export default function HeroSection({
                 <button
                   key={tab.id}
                   onClick={() => handleTableFilterChange(tab.id)}
-                  className={`px-3.5 py-1.5 rounded-full border transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                  className={`px-3 py-1.5 rounded-[5px] border transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
                     tableFilter === tab.id
-                      ? "bg-slate-900 text-white border-slate-900 shadow-xs font-semibold"
-                      : "bg-white hover:bg-slate-50 text-slate-600 border-slate-200/80 hover:border-slate-300 font-medium"
+                      ? "bg-[#c2410c] text-white border-[#c2410c] shadow-xs font-semibold"
+                      : "bg-white hover:bg-orange-50/60 text-slate-700 hover:text-[#c2410c] border-slate-200 font-medium"
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold tabular-nums ${
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-[4px] font-semibold tabular-nums ${
                     tableFilter === tab.id ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
                   }`}>
                     {tab.count}
@@ -1180,7 +1180,7 @@ export default function HeroSection({
                 value={tableSearch}
                 onChange={handleTableSearchChange}
                 placeholder="Cari ruas, kota, atau kontraktor..."
-                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200/90 bg-slate-50/50 focus:bg-white placeholder-slate-400 text-slate-800 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c]/20 font-sans shadow-2xs transition-all"
+                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-[5px] border border-slate-200/90 bg-slate-50/50 focus:bg-white placeholder-slate-400 text-slate-800 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c]/20 font-sans shadow-2xs transition-all"
               />
               {tableSearch && (
                 <button
@@ -1194,7 +1194,7 @@ export default function HeroSection({
           </div>
 
           {/* Clean, Non-Cramped Table with No Word Wrapping */}
-          <div className="overflow-x-auto rounded-lg border border-slate-200/80 bg-white shadow-2xs">
+          <div className="overflow-x-auto rounded-[5px] border border-slate-200/80 bg-white shadow-2xs">
             <table className="w-full text-left text-xs border-collapse min-w-[960px]">
               <thead>
                 <tr className="border-b border-slate-200 text-[11px] text-slate-500 font-mono uppercase bg-slate-50/80 whitespace-nowrap">
@@ -1230,7 +1230,7 @@ export default function HeroSection({
                             {road.name}
                           </button>
                           <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-500 font-sans flex-wrap">
-                            <span className="font-mono text-[10.5px] font-semibold px-2 py-0.5 rounded-md bg-slate-100/90 text-slate-700 border border-slate-200/70 shrink-0 shadow-2xs tracking-tight">
+                            <span className="font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[5px] bg-slate-100 text-slate-700 border border-slate-200/90 shrink-0 shadow-2xs tracking-tight">
                               {road.code}
                             </span>
                             <span>•</span>
@@ -1240,22 +1240,22 @@ export default function HeroSection({
                           </div>
                         </td>
 
-                        {/* 2. Status Wewenang & SK (Clean, integrated badge pills) */}
+                        {/* 2. Status Wewenang & SK (No black background, brand palette with lowered opacity, 5px radius) */}
                         <td className="py-3 px-3 whitespace-nowrap">
                           <div className="flex items-center">
                             {road.authority === "NASIONAL" ? (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-slate-900 text-white shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_6px_rgba(56,189,248,0.7)] shrink-0" />
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] text-xs font-semibold bg-orange-500/10 text-orange-950 border border-orange-500/25 shadow-2xs">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
                                 <span>Jalan Nasional</span>
                               </span>
                             ) : road.authority === "PROVINSI" ? (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-amber-50 text-amber-900 border border-amber-200/80 shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.5)] shrink-0" />
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] text-xs font-semibold bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-2xs">
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
                                 <span>Jalan Provinsi</span>
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-orange-50 text-orange-950 border border-orange-200/80 shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#ea580c] shadow-[0_0_6px_rgba(234,88,12,0.5)] shrink-0" />
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] text-xs font-semibold bg-slate-500/10 text-slate-800 border border-slate-300 shadow-2xs">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" />
                                 <span>Kota / Kab</span>
                               </span>
                             )}
@@ -1280,21 +1280,21 @@ export default function HeroSection({
                           )}
                         </td>
 
-                        {/* 4. Kontraktor & Sumber Dana */}
+                        {/* 4. Kontraktor & Sumber Dana (Outlined 5px radius badge) */}
                         <td className="py-3 px-3">
                           <div className="font-medium text-slate-800 text-xs truncate max-w-[210px]" title={road.budget?.contractor}>
                             {road.budget?.contractor || "Belum Ditenderkan"}
                           </div>
                           <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                            <span className={`inline-flex items-center gap-1 text-[10.5px] font-semibold whitespace-nowrap px-2 py-0.5 rounded-full shadow-2xs ${
+                            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold whitespace-nowrap px-2.5 py-1 rounded-[5px] shadow-2xs bg-white ${
                               road.budget?.matchConfidence === "TERKONFIRMASI"
-                                ? "bg-emerald-50 text-emerald-800 border border-emerald-200/70"
-                                : "bg-amber-50 text-amber-800 border border-amber-200/70"
+                                ? "text-emerald-700 border border-emerald-500/70"
+                                : "text-amber-700 border border-amber-500/70"
                             }`}>
                               {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
-                                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                               ) : (
-                                <Clock className="w-3 h-3 text-amber-600 shrink-0" />
+                                <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                               )}
                               <span>{road.budget?.matchConfidence === "TERKONFIRMASI" ? "LPSE Terverifikasi" : "Parsial"}</span>
                             </span>
@@ -1304,22 +1304,16 @@ export default function HeroSection({
                           </div>
                         </td>
 
-                        {/* 5. Status Respons Pemantauan (14 Hari) - Executive Beacon Pill Badge */}
+                        {/* 5. Status Respons Pemantauan (14 Hari) - Clean Outlined Box, 5px Radius, No Colored Fill, Slightly Larger */}
                         <td className="py-3 px-3 text-center whitespace-nowrap">
                           {isOverdue ? (
-                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-200/80 shadow-2xs">
-                              <span className="relative flex h-2 w-2 shrink-0">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
-                              </span>
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[5px] border border-rose-500 bg-white text-rose-700 text-xs font-semibold shadow-2xs">
+                              <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
                               <span>Lewat Tenggat</span>
                             </div>
                           ) : (
-                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-2xs">
-                              <span className="relative flex h-2 w-2 shrink-0">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-40"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                              </span>
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[5px] border border-emerald-500 bg-white text-emerald-700 text-xs font-semibold shadow-2xs">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                               <span>Terpantau Aman</span>
                             </div>
                           )}
@@ -1329,11 +1323,11 @@ export default function HeroSection({
                         <td className="py-3 px-3.5 text-right whitespace-nowrap">
                           <button
                             onClick={() => setSelectedRoadForDetail(road)}
-                            className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-900 text-slate-700 hover:text-white font-semibold text-xs border border-slate-200 hover:border-slate-900 transition-all duration-150 cursor-pointer inline-flex items-center gap-1.5 shadow-2xs hover:shadow-xs group/btn"
+                            className="px-3 py-1.5 rounded-[5px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] font-semibold text-xs border border-slate-200 hover:border-orange-300 transition-all duration-150 cursor-pointer inline-flex items-center gap-1.5 shadow-2xs group/btn"
                           >
-                            <Eye className="w-3.5 h-3.5 text-slate-400 group-hover/btn:text-white transition-colors" />
+                            <Eye className="w-3.5 h-3.5 text-slate-400 group-hover/btn:text-[#c2410c] transition-colors" />
                             <span>Lihat Detail</span>
-                            <ChevronRight className="w-3 h-3 text-slate-300 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
+                            <ChevronRight className="w-3 h-3 text-slate-300 group-hover/btn:text-[#c2410c] group-hover/btn:translate-x-0.5 transition-all" />
                           </button>
                         </td>
                       </tr>
