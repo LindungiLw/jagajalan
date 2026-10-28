@@ -1041,7 +1041,7 @@ export default function HeroSection({
             <div className="overflow-x-auto text-xs">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 text-[10px] text-slate-400 font-mono uppercase">
+                  <tr className="border-b border-slate-200 text-[10.5px] text-slate-500 font-sans font-semibold uppercase tracking-wider">
                     <th className="py-1 font-bold">Klasifikasi Wewenang</th>
                     <th className="py-1 font-bold text-center">Ruas</th>
                     <th className="py-1 font-bold text-right">Pagu Pengadaan</th>
@@ -1052,7 +1052,7 @@ export default function HeroSection({
                   <tr className="hover:bg-slate-50/80 transition-colors">
                     <td className="py-1.5">
                       <span className="font-bold text-slate-900 block text-xs">KemenPUPR (BBPJN)</span>
-                      <span className="text-[10px] text-slate-500 font-semibold font-mono">JALAN NASIONAL</span>
+                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-sans">Jalan Nasional</span>
                     </td>
                     <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">1</td>
                     <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 8,45 M</td>
@@ -1062,7 +1062,7 @@ export default function HeroSection({
                   <tr className="hover:bg-slate-50/80 transition-colors">
                     <td className="py-1.5">
                       <span className="font-bold text-slate-900 block text-xs">DBMPR Jawa Barat</span>
-                      <span className="text-[10px] text-amber-800 font-semibold font-mono">JALAN PROVINSI</span>
+                      <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider font-sans">Jalan Provinsi</span>
                     </td>
                     <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">2</td>
                     <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 15,70 M</td>
@@ -1072,7 +1072,7 @@ export default function HeroSection({
                   <tr className="hover:bg-slate-50/80 transition-colors">
                     <td className="py-1.5">
                       <span className="font-bold text-slate-900 block text-xs">Dinas PUPR Depok</span>
-                      <span className="text-[10px] text-orange-800 font-semibold font-mono">JALAN KAB / KOTA</span>
+                      <span className="text-[10px] text-orange-800 font-bold uppercase tracking-wider font-sans">Jalan Kab / Kota</span>
                     </td>
                     <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">3</td>
                     <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 11,65 M</td>
@@ -1080,7 +1080,7 @@ export default function HeroSection({
                   </tr>
 
                   <tr className="bg-slate-50/90 font-bold border-t border-slate-200">
-                    <td className="py-1.5 text-slate-900 text-xs uppercase font-mono">Total Pilot</td>
+                    <td className="py-1.5 text-slate-900 text-xs font-bold font-sans">Total Pilot</td>
                     <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-900">6 Ruas</td>
                     <td className="py-1.5 text-right font-sans tabular-nums text-emerald-800">Rp 35,80 M</td>
                     <td className="py-1.5 text-right font-sans tabular-nums text-rose-600">2 Melewati Tenggat</td>
@@ -1197,7 +1197,7 @@ export default function HeroSection({
           <div className="overflow-x-auto rounded-[5px] border border-slate-200/80 bg-white shadow-2xs">
             <table className="w-full text-left text-xs border-collapse min-w-[960px]">
               <thead>
-                <tr className="border-b border-slate-200 text-[11px] text-slate-500 font-mono uppercase bg-slate-50/80 whitespace-nowrap">
+                <tr className="border-b border-slate-200 text-[11px] text-slate-600 font-sans font-bold uppercase tracking-wider bg-slate-50/80 whitespace-nowrap">
                   <th className="py-2.5 px-3.5 font-bold">Ruas Jalan & Wilayah</th>
                   <th className="py-2.5 px-3 font-bold">Status Wewenang & SK</th>
                   <th className="py-2.5 px-3 font-bold text-right">Pagu vs Kontrak</th>

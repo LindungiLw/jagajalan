@@ -321,7 +321,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 text-[10px] text-slate-400 font-mono uppercase bg-slate-50/60">
+                <tr className="border-b border-slate-200 text-[10.5px] text-slate-600 font-sans font-bold uppercase tracking-wider bg-slate-50/60">
                   <th className="py-2.5 px-3 font-bold text-center w-12">Rank</th>
                   <th className="py-2.5 px-3 font-bold">Provinsi &amp; Ibukota</th>
                   <th className="py-2.5 px-3 font-bold">Pulau</th>
