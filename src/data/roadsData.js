@@ -1,20 +1,25 @@
 // Data Ruas Jalan Terverifikasi JagaJalan
-// Wilayah Fokus: SUMATERA UTARA (Fokus Pilot) & 20 KORIDOR ARTERI JALAN NASIONAL BERGEOMETRI PRESISI
+// Wilayah Fokus: JALAN NASIONAL, JALAN PROVINSI STRATEGIS SE-INDONESIA, & PILOT SUMATERA UTARA
 // Terintegrasi dengan Kepala Daerah / Pejabat Penanggung Jawab, Data LPSE, dan SIGI PU
 
 import sumutRoads from "./sumutRoadsData.json";
 import nationalHighways from "./nationalHighwaysData.json";
+import provincialRoads from "./provincialRoadsData.json";
 
 // 1. Data Koridor Ruas Percontohan Sumatera Utara (Medan, Simalungun, Karo, Asahan)
 export const SUMATERA_UTARA_ROADS = sumutRoads;
 
-// 2. Data 20 Koridor Arteri Jalan Nasional Seluruh Indonesia (SK MenPUPR No. 1688/2022)
+// 2. Data Koridor Arteri Jalan Nasional Seluruh Indonesia (SK MenPUPR No. 1688/2022)
 export const NATIONAL_HIGHWAYS_INDONESIA = nationalHighways;
 
-// 3. Gabungan Seluruh Ruas Terdata JagaJalan
+// 3. Data Koridor Arteri Jalan Provinsi Strategis Seluruh Indonesia (SK Gubernur Masing-Masing Pemprov)
+export const PROVINCIAL_ROADS_INDONESIA = provincialRoads;
+
+// 4. Gabungan Seluruh Ruas Terdata JagaJalan
 export const ALL_ROADS = [
   ...SUMATERA_UTARA_ROADS,
   ...NATIONAL_HIGHWAYS_INDONESIA,
+  ...PROVINCIAL_ROADS_INDONESIA,
 ];
 
 // Default Active Segments: ALL_ROADS

@@ -449,6 +449,7 @@ export default function MapInner({
         const isRoadSelected = selectedRoad?.id === road.id;
 
         return road.milestones.map((ms, idx) => {
+          if (!ms || !ms.coords || !Array.isArray(ms.coords) || ms.coords.length < 2) return null;
           const msIcon = createMilestoneIcon(ms.status, isRoadSelected);
 
           return (

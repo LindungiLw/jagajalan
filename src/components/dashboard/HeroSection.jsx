@@ -140,6 +140,8 @@ export default function HeroSection({
           r.district?.toLowerCase().includes("asahan") ||
           (r.island === "Sumatera" && r.code?.includes("SMT"))
       );
+    } else if (tableFilter === "PROVINSI") {
+      list = list.filter((r) => r.authority === "PROVINSI");
     } else if (tableFilter === "DAERAH") {
       list = list.filter((r) => r.authority === "PROVINSI" || r.authority === "KOTA_KAB");
     }
@@ -1136,9 +1138,9 @@ export default function HeroSection({
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-semibold font-sans">
               {[
                 { id: "ALL", label: "Semua Ruas", count: roads.length },
-                { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter(r => r.authority === "NASIONAL").length },
-                { id: "SUMUT", label: "Pilot Sumut", count: 6 },
-                { id: "DAERAH", label: "Prov & Kab/Kota", count: roads.filter(r => r.authority === "PROVINSI" || r.authority === "KOTA_KAB").length },
+                { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter((r) => r.authority === "NASIONAL").length },
+                { id: "PROVINSI", label: "Jalan Provinsi", count: roads.filter((r) => r.authority === "PROVINSI").length },
+                { id: "SUMUT", label: "Pilot Sumut", count: roads.filter((r) => r.district?.includes("Medan") || r.district?.includes("Simalungun") || r.district?.includes("Karo") || r.district?.includes("Asahan") || r.code?.includes("SMT")).length },
               ].map((tab) => (
                 <button
                   key={tab.id}
