@@ -569,8 +569,8 @@ export default function HeroSection({
                 {/* ======================================================== */}
                 {selectedIndex === "kemantapan" && (
                   chartViewMode === "line" ? (
-                    <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                    <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="kemantapanAreaGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#c2410c" stopOpacity="0.20" />
@@ -641,13 +641,11 @@ export default function HeroSection({
                                 <g>
                                   <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
                                   <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
-                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
                                 </g>
                               ) : (
                                 <g>
                                   <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
                                   <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
-                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">BPS Data</text>
                                 </g>
                               )}
                             </g>
@@ -656,8 +654,8 @@ export default function HeroSection({
                       </svg>
                     </div>
                   ) : (
-                    <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                    <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
                         {[100, 80, 60, 40].map((val) => {
                           const y = 18 + ((100 - val) / 60) * 94;
                           return (
@@ -714,13 +712,11 @@ export default function HeroSection({
                                 <g>
                                   <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
                                   <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
-                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
                                 </g>
                               ) : (
                                 <g>
                                   <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
                                   <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
-                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">Klik</text>
                                 </g>
                               )}
                             </g>
@@ -736,8 +732,8 @@ export default function HeroSection({
                 {/* ======================================================== */}
                 {selectedIndex === "ombudsman" && (
                   chartViewMode === "line" ? (
-                    <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                    <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="ombudsmanAreaGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#c2410c" stopOpacity="0.22" />
@@ -789,13 +785,11 @@ export default function HeroSection({
                                 <g>
                                   <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
                                   <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
-                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
                                 </g>
                               ) : (
                                 <g>
                                   <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
                                   <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
-                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">Klik</text>
                                 </g>
                               )}
                             </g>
@@ -804,8 +798,8 @@ export default function HeroSection({
                       </svg>
                     </div>
                   ) : (
-                    <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                    <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="ombudsmanBarGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#ea580c" />
@@ -851,13 +845,11 @@ export default function HeroSection({
                                 <g>
                                   <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
                                   <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
-                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
                                 </g>
                               ) : (
                                 <g>
                                   <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
                                   <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
-                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">Klik</text>
                                 </g>
                               )}
                             </g>
@@ -1330,8 +1322,8 @@ export default function HeroSection({
                   )
                 )}
 
-                {/* Unified Executive Metric Footnote Strip (Structured Grid, Never Wraps Weirdly) */}
-                <div className="mt-3 pt-2 border-t border-slate-200/70 font-sans">
+                {/* Unified Executive Metric Footnote Strip (Compact, Clean, Data Preserved) */}
+                <div className="mt-2.5 pt-2 border-t border-slate-200/70 font-sans">
                   {selectedIndex === "kemantapan" && (
                     <div className="bg-white rounded-[5px] border border-slate-200/80 px-3 py-2 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
@@ -1363,10 +1355,6 @@ export default function HeroSection({
                           </strong>
                         </div>
                       </div>
-                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-400">
-                        <span>Data BPS SIRUSA (Tahun {selectedYear})</span>
-                        <span>Definisi: Proporsi panjang jalan (KM) kondisi mantap</span>
-                      </div>
                     </div>
                   )}
 
@@ -1385,16 +1373,12 @@ export default function HeroSection({
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-                            Total Aduan Ditindaklanjuti
+                            Total Aduan Selesai
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">
                             {currentComplaintTrend.resolved.toLocaleString("id-ID")} Aduan
                           </strong>
                         </div>
-                      </div>
-                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-400">
-                        <span>Laporan Tahunan Ombudsman RI ({selectedYear})</span>
-                        <span>Maladministrasi #1 Nasional: Penundaan Berlarut (UU 37/2008)</span>
                       </div>
                     </div>
                   )}
@@ -1405,7 +1389,7 @@ export default function HeroSection({
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-                            Total Pagu (HPS)
+                            Total Pagu
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
                             Rp 35,80 M
@@ -1414,7 +1398,7 @@ export default function HeroSection({
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
-                            Kontrak Terlelang
+                            Kontrak
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
                             Rp 33,59 M
@@ -1423,7 +1407,7 @@ export default function HeroSection({
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                            Efisiensi Lelang
+                            Efisiensi
                           </span>
                           <div className="flex items-center gap-1">
                             <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">
@@ -1434,10 +1418,6 @@ export default function HeroSection({
                             </span>
                           </div>
                         </div>
-                      </div>
-                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-500">
-                        <span>Tahun Anggaran: <strong>TA 2026 (Januari – Oktober)</strong></span>
-                        <span>Sumber: <strong>LPSE &amp; SiRUP LKPP (6 Ruas Pilot)</strong></span>
                       </div>
                     </div>
                   )}
@@ -1457,10 +1437,6 @@ export default function HeroSection({
                           <span className="text-[10px] text-emerald-700 font-medium">Total Fisik</span>
                           <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">5.992 KM</strong>
                         </div>
-                      </div>
-                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-500">
-                        <span>Inpres No. 3/2023 Percepatan Konektivitas Jalan Daerah</span>
-                        <span>Cakupan: <strong>38 Provinsi Se-Indonesia</strong></span>
                       </div>
                     </div>
                   )}
