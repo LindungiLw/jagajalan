@@ -409,31 +409,31 @@ export default function AnnualProgressChart() {
               {/* Year Detail Snapshot Banner */}
               <div className="mt-4 p-4 rounded-[5px] bg-white/90 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200/80 font-mono font-bold text-sm">
+                  <div className="p-2.5 rounded-[5px] bg-orange-500/10 text-[#c2410c] border border-orange-500/25 font-sans font-bold text-sm tabular-nums">
                     {selectedRoadData.year}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">
-                      Jurang Ketimpangan Jalan Daerah: <span className="text-rose-600">{selectedRoadData.gap}%</span>
+                    <h4 className="text-xs font-bold text-slate-900 font-sans">
+                      Jurang Ketimpangan Jalan Daerah: <span className="text-[#c2410c]">{selectedRoadData.gap}%</span>
                     </h4>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 font-sans">
                       Jalan nasional mencapai {selectedRoadData.nasional}% mantap, sedangkan jalan kabupaten/kota hanya {selectedRoadData.kabupatenKota}% mantap (hampir separuh rusak).
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-mono shrink-0">
+                <div className="flex items-center gap-4 text-xs font-sans shrink-0">
                   <div>
                     <span className="text-[10px] text-slate-400 block">Pusat</span>
-                    <strong className="text-slate-800">{selectedRoadData.nasional}%</strong>
+                    <strong className="text-slate-800 tabular-nums">{selectedRoadData.nasional}%</strong>
                   </div>
                   <div className="border-l border-slate-200 pl-4">
                     <span className="text-[10px] text-slate-400 block">Provinsi</span>
-                    <strong className="text-amber-800">{selectedRoadData.provinsi}%</strong>
+                    <strong className="text-amber-800 tabular-nums">{selectedRoadData.provinsi}%</strong>
                   </div>
                   <div className="border-l border-slate-200 pl-4">
                     <span className="text-[10px] text-slate-400 block">Kab/Kota</span>
-                    <strong className="text-rose-600">{selectedRoadData.kabupatenKota}%</strong>
+                    <strong className="text-[#c2410c] tabular-nums">{selectedRoadData.kabupatenKota}%</strong>
                   </div>
                 </div>
               </div>

@@ -636,7 +636,7 @@ export default function HeroSection({
                             onClick={() => setSelectedYear(d.year)}
                             className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
                           >
-                            <span className={`text-[9px] font-mono font-bold leading-none ${isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"}`}>
+                            <span className={`text-[9px] font-sans font-bold tabular-nums leading-none ${isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"}`}>
                               {d.kabupatenKota}%
                             </span>
                             <div className="w-full flex items-end justify-center gap-0.5 h-24 bg-slate-200/50 rounded-t-[3px] p-0.5">
@@ -644,7 +644,7 @@ export default function HeroSection({
                               <div style={{ height: `${d.provinsi}%` }} className="w-1/3 bg-amber-600 rounded-t-xs" title={`Provinsi ${d.year}: ${d.provinsi}% Mantap`} />
                               <div style={{ height: `${d.kabupatenKota}%` }} className={`w-1/3 rounded-t-xs transition-colors ${isSelected ? "bg-[#c2410c]" : "bg-rose-500"}`} title={`Kab/Kota ${d.year}: ${d.kabupatenKota}% Mantap`} />
                             </div>
-                            <span className={`text-[10px] font-mono font-bold ${isSelected ? "text-[#c2410c]" : "text-slate-500"}`}>
+                            <span className={`text-[10px] font-sans font-bold tabular-nums ${isSelected ? "text-[#c2410c]" : "text-slate-500"}`}>
                               {d.year}
                             </span>
                           </div>
@@ -720,7 +720,7 @@ export default function HeroSection({
                             onClick={() => setSelectedYear(d.year)}
                             className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer group"
                           >
-                            <span className={`text-[9px] font-mono font-bold leading-none ${isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"}`}>
+                            <span className={`text-[9px] font-sans font-bold tabular-nums leading-none ${isSelected ? "text-[#c2410c]" : "text-slate-400 group-hover:text-slate-700"}`}>
                               {d.overduePct}%
                             </span>
                             <div className="w-full flex items-end justify-center gap-1 h-24 bg-slate-200/50 rounded-t-[3px] p-1">
@@ -730,7 +730,7 @@ export default function HeroSection({
                                 title={`${d.year}: ${d.overdue} dari ${d.totalComplaints} laporan`}
                               />
                             </div>
-                            <span className={`text-[10px] font-mono font-bold ${isSelected ? "text-[#c2410c]" : "text-slate-500"}`}>
+                            <span className={`text-[10px] font-sans font-bold tabular-nums ${isSelected ? "text-[#c2410c]" : "text-slate-500"}`}>
                               {d.year}
                             </span>
                           </div>
@@ -801,7 +801,7 @@ export default function HeroSection({
                     <div className="h-36 flex items-end justify-around gap-4 pt-3 px-2">
                       {pilotBudgetStats.map((d) => (
                         <div key={d.key} className="flex-1 flex flex-col justify-end items-center gap-1.5 max-w-[100px]">
-                          <div className="flex items-center gap-1.5 text-[8px] font-mono font-bold">
+                          <div className="flex items-center gap-1.5 text-[8.5px] font-sans font-bold tabular-nums">
                             <span className="text-slate-600">P:{d.pagu}M</span>
                             <span className="text-[#c2410c]">K:{d.kontrak}M</span>
                           </div>
@@ -904,108 +904,105 @@ export default function HeroSection({
                 )}
 
                 {/* Chart Footnote & Legend (Dynamic based on selectedIndex) */}
-                <div className="mt-2.5 pt-2 border-t border-slate-200/80 text-[10px] text-slate-600 flex flex-wrap items-center justify-between gap-2">
+                <div className="mt-3 pt-2.5 border-t border-slate-200/80 space-y-1.5">
                   {selectedIndex === "kemantapan" && (
                     <>
-                      <div className="flex items-center gap-2 font-mono flex-wrap">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 border border-slate-200/90 rounded-full text-slate-700 shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
-                          <span>Nas: <strong className="ml-0.5">{currentRoadTrend.nasional}%</strong></span>
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200/90 rounded-full text-amber-900 shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                          <span>Prov: <strong className="ml-0.5">{currentRoadTrend.provinsi}%</strong></span>
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 border border-orange-200/90 rounded-full text-[#c2410c] font-bold shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
-                          <span>Kab/Kota: <strong className="ml-0.5">{currentRoadTrend.kabupatenKota}%</strong></span>
-                        </span>
+                      <div className="flex items-center gap-1.5 font-sans">
+                        {/* Nasional */}
+                        <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-[5px] bg-slate-500/10 border border-slate-500/20 text-slate-800 text-[11px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-600 shrink-0" />
+                          <span className="font-medium text-slate-600">Nas:</span>
+                          <span className="font-bold tabular-nums text-slate-900">{currentRoadTrend.nasional}%</span>
+                        </div>
+
+                        {/* Provinsi */}
+                        <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-[5px] bg-amber-500/10 border border-amber-500/25 text-amber-950 text-[11px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                          <span className="font-medium text-amber-800">Prov:</span>
+                          <span className="font-bold tabular-nums text-amber-950">{currentRoadTrend.provinsi}%</span>
+                        </div>
+
+                        {/* Kab/Kota */}
+                        <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-[5px] bg-orange-500/10 border border-orange-500/25 text-orange-950 text-[11px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                          <span className="font-medium text-[#c2410c]">Kab/Kota:</span>
+                          <span className="font-bold tabular-nums text-orange-950">{currentRoadTrend.kabupatenKota}%</span>
+                        </div>
                       </div>
-                      <span className="text-[9px] font-sans text-slate-400">
+
+                      <div className="text-[10.5px] font-sans text-slate-400">
                         Definisi BPS: Proporsi panjang jalan (km) kondisi mantap
-                      </span>
+                      </div>
                     </>
                   )}
 
                   {selectedIndex === "ombudsman" && (
                     <>
-                      <div className="flex items-center gap-2 font-mono flex-wrap">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 border border-orange-200/90 rounded-full text-[#c2410c] font-bold shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
-                          <span>Undue Delay: <strong className="ml-1">{currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Kasus)</strong></span>
-                        </span>
+                      <div className="flex items-center gap-2 font-sans flex-wrap">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-orange-500/10 border border-orange-500/25 text-[#c2410c] text-xs font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                          <span>Undue Delay: <strong className="ml-1 font-bold tabular-nums">{currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Kasus)</strong></span>
+                        </div>
                         <span className="text-slate-300">|</span>
-                        <span className="text-slate-600 text-[10px]">
-                          Total Selesai: <strong>{currentComplaintTrend.resolved.toLocaleString("id-ID")}</strong>
+                        <span className="text-slate-600 text-xs font-medium">
+                          Total Selesai: <strong className="tabular-nums text-slate-800 font-bold">{currentComplaintTrend.resolved.toLocaleString("id-ID")}</strong>
                         </span>
                       </div>
-                      <span className="text-[9px] font-sans text-slate-400">
+                      <span className="text-[11px] font-sans text-slate-500">
                         Maladministrasi #1 tertinggi di Indonesia (UU 37/2008)
                       </span>
                     </>
                   )}
 
                   {selectedIndex === "pagu" && (
-                    <div className="w-full flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-2 font-mono">
+                    <div className="w-full flex flex-wrap items-center justify-between gap-2.5 font-sans">
+                      <div className="flex flex-wrap items-center gap-2">
                         {/* Pagu Chip */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 border border-slate-200/90 rounded-full shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
-                          <span className="text-[10px] font-sans font-semibold tracking-wider text-slate-500 uppercase">
-                            Pagu:
-                          </span>
-                          <span className="text-[11px] font-bold text-slate-800">
-                            Rp 35,80 M
-                          </span>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-slate-500/10 border border-slate-500/20 text-xs text-slate-800">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-600 shrink-0" />
+                          <span className="font-medium text-slate-600">Pagu:</span>
+                          <span className="font-bold tabular-nums text-slate-900">Rp 35,80 M</span>
                         </div>
 
                         {/* Kontrak Chip */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-50 border border-orange-200/90 rounded-full shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
-                          <span className="text-[10px] font-sans font-semibold tracking-wider text-orange-800/80 uppercase">
-                            Kontrak:
-                          </span>
-                          <span className="text-[11px] font-bold text-[#c2410c]">
-                            Rp 33,59 M
-                          </span>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-orange-500/10 border border-orange-500/25 text-xs text-orange-950">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                          <span className="font-medium text-[#c2410c]">Kontrak:</span>
+                          <span className="font-bold tabular-nums text-orange-950">Rp 33,59 M</span>
                         </div>
 
                         {/* Efisiensi / Hemat Chip */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200/90 rounded-full shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                          <span className="text-[10px] font-sans font-semibold text-emerald-700 uppercase">
-                            Hemat:
-                          </span>
-                          <span className="text-[11px] font-bold text-emerald-700">
-                            Rp 2,21 M
-                          </span>
-                          <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-emerald-500/10 border border-emerald-500/25 text-xs text-emerald-900">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
+                          <span className="font-medium text-emerald-700">Hemat:</span>
+                          <span className="font-bold tabular-nums text-emerald-900">Rp 2,21 M</span>
+                          <span className="text-[10px] font-bold bg-emerald-600/15 text-emerald-800 px-1.5 py-0.5 rounded-[3px]">
                             6.2%
                           </span>
                         </div>
                       </div>
 
                       {/* Sumber Data */}
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 border border-slate-200/70 rounded-full text-[10px] font-sans text-slate-500">
-                        <Database className="w-3 h-3 text-slate-400" />
-                        <span>Sumber: <strong className="text-slate-700">LPSE &amp; SiRUP</strong> (6 Ruas Pilot)</span>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[5px] bg-slate-100/70 border border-slate-200/80 text-[11px] text-slate-600">
+                        <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>Sumber: <strong className="text-slate-800">LPSE &amp; SiRUP</strong> (6 Ruas Pilot)</span>
                       </div>
                     </div>
                   )}
 
                   {selectedIndex === "inpres" && (
                     <>
-                      <div className="flex items-center gap-2 font-mono flex-wrap">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 border border-orange-200/90 rounded-full text-[#c2410c] font-bold shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
-                          <span>Total 2 Tahap: <strong className="ml-1">Rp 29,90 Triliun</strong></span>
-                        </span>
+                      <div className="flex items-center gap-2 font-sans flex-wrap">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-orange-500/10 border border-orange-500/25 text-xs text-orange-950 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                          <span>Total 2 Tahap: <strong className="ml-1 font-bold tabular-nums text-[#c2410c]">Rp 29,90 Triliun</strong></span>
+                        </div>
                         <span className="text-slate-300">|</span>
-                        <span className="text-slate-600 text-[10px]">
-                          Panjang: <strong>5.992 KM</strong>
+                        <span className="text-slate-600 text-xs font-medium">
+                          Panjang: <strong className="tabular-nums text-slate-800 font-bold">5.992 KM</strong>
                         </span>
                       </div>
-                      <span className="text-[9px] font-sans text-slate-400">
+                      <span className="text-[11px] font-sans text-slate-500">
                         Inpres No. 3/2023 Percepatan Jalan Daerah
                       </span>
                     </>
