@@ -276,7 +276,7 @@ export default function HeroSection({
         {searchResults.hasSearch && (
           <div className="p-2.5 rounded-lg bg-orange-50/90 border border-orange-200/90 text-xs flex flex-wrap items-center justify-between gap-2 animate-fade-in font-medium">
             <div className="flex items-center gap-3">
-              <span className="font-bold text-[#c2410c] font-mono uppercase">Hasil Pencarian:</span>
+              <span className="font-bold text-[#c2410c] font-sans uppercase">Hasil Pencarian:</span>
               <span className="text-slate-800">
                 <strong>{searchResults.matchedRoads.length}</strong> Ruas Jalan •{" "}
                 <strong>{searchResults.matchedPackages.length}</strong> Paket Pengadaan •{" "}
@@ -564,7 +564,7 @@ export default function HeroSection({
                           return (
                             <g key={val}>
                               <line x1="28" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
-                              <text x="24" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                              <text x="24" y={y + 3} textAnchor="end" fontSize="8" fontFamily="sans-serif" fill="#94a3b8" fontWeight="bold">
                                 {val}%
                               </text>
                             </g>
@@ -615,10 +615,10 @@ export default function HeroSection({
                               <circle cx={x} cy={yNas} r={isSelected ? 4 : 2.5} fill="#475569" stroke="#fff" strokeWidth="1.5" />
                               <circle cx={x} cy={yProv} r={isSelected ? 4 : 2.5} fill="#d97706" stroke="#fff" strokeWidth="1.5" />
                               <circle cx={x} cy={yKab} r={isSelected ? 5.5 : 3.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8" fontFamily="sans-serif" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
                                 {d.kabupatenKota}%
                               </text>
-                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="monospace" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#64748b"}>
+                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#64748b"}>
                                 {d.year}
                               </text>
                             </g>
@@ -666,7 +666,7 @@ export default function HeroSection({
                           return (
                             <g key={val}>
                               <line x1="28" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
-                              <text x="24" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                              <text x="24" y={y + 3} textAnchor="end" fontSize="8" fontFamily="sans-serif" fill="#94a3b8" fontWeight="bold">
                                 {val}%
                               </text>
                             </g>
@@ -699,10 +699,10 @@ export default function HeroSection({
                                 <line x1={x} y1="14" x2={x} y2="92" stroke="#c2410c" strokeWidth="1" strokeDasharray="2 2" />
                               )}
                               <circle cx={x} cy={y} r={isSelected ? 5.5 : 3.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontFamily="sans-serif" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
                                 {d.overduePct}%
                               </text>
-                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="monospace" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#64748b"}>
+                              <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#64748b"}>
                                 {d.year}
                               </text>
                             </g>
@@ -752,7 +752,7 @@ export default function HeroSection({
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
-                              <text x="28" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                              <text x="28" y={y + 3} textAnchor="end" fontSize="8" fontFamily="sans-serif" fill="#94a3b8" fontWeight="bold">
                                 {val}M
                               </text>
                             </g>
@@ -783,10 +783,10 @@ export default function HeroSection({
                             <g key={d.key}>
                               <rect x={x - 3.5} y={yPagu - 3.5} width="7" height="7" rx="1.5" fill="#334155" stroke="#fff" strokeWidth="1.5" />
                               <rect x={x - 4} y={yKontrak - 4} width="8" height="8" rx="1.5" fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={yPagu - 6} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill="#334155">
+                              <text x={x} y={yPagu - 6} textAnchor="middle" fontSize="8" fontFamily="sans-serif" fontWeight="bold" fill="#334155">
                                 Rp {d.pagu}M
                               </text>
-                              <text x={x} y={yKontrak + 12} textAnchor="middle" fontSize="8" fontFamily="monospace" fontWeight="bold" fill="#c2410c">
+                              <text x={x} y={yKontrak + 12} textAnchor="middle" fontSize="8" fontFamily="sans-serif" fontWeight="bold" fill="#c2410c">
                                 Rp {d.kontrak}M
                               </text>
                               <text x={x} y="108" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="bold" fill="#475569">
@@ -838,7 +838,7 @@ export default function HeroSection({
                           return (
                             <g key={val}>
                               <line x1="30" y1={y} x2="365" y2={y} stroke="#e2e8f0" strokeDasharray="2 2" strokeWidth="0.8" />
-                              <text x="26" y={y + 3} textAnchor="end" fontSize="8" fontFamily="monospace" fill="#94a3b8" fontWeight="bold">
+                              <text x="26" y={y + 3} textAnchor="end" fontSize="8" fontFamily="sans-serif" fill="#94a3b8" fontWeight="bold">
                                 {val}T
                               </text>
                             </g>
@@ -859,10 +859,10 @@ export default function HeroSection({
                           return (
                             <g key={d.stage} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
                               <circle cx={x} cy={y} r={isSelected ? 5.5 : 4} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={y - 8} textAnchor="middle" fontSize="9" fontFamily="monospace" fontWeight="bold" fill="#c2410c">
+                              <text x={x} y={y - 8} textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="bold" fill="#c2410c">
                                 Rp {d.budgetTrillion} Triliun
                               </text>
-                              <text x={x} y={y + 14} textAnchor="middle" fontSize="8" fontFamily="monospace" fill="#64748b">
+                              <text x={x} y={y + 14} textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill="#64748b">
                                 ({d.realizedKm.toLocaleString("id-ID")} KM)
                               </text>
                               <text x={x} y="108" textAnchor="middle" fontSize="10" fontFamily="sans-serif" fontWeight={isSelected ? "bold" : "normal"} fill={isSelected ? "#c2410c" : "#475569"}>
@@ -883,7 +883,7 @@ export default function HeroSection({
                             onClick={() => setSelectedYear(d.year)}
                             className="flex-1 flex flex-col justify-end items-center gap-1 cursor-pointer max-w-[130px] group"
                           >
-                            <span className="text-[9px] font-mono font-bold text-[#c2410c]">
+                            <span className="text-[9px] font-sans font-bold tabular-nums text-[#c2410c]">
                               Rp {d.budgetTrillion} T ({d.realizedKm} km)
                             </span>
                             <div className="w-full flex items-end justify-center h-24 bg-slate-200/50 rounded-t-[3px] p-1">

@@ -186,18 +186,18 @@ export default function OfficerDashboard({
       {/* 1. Active Authenticated Session Bar (Clean White + Orange Theme, Strict 5px radius) */}
       <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-[5px] border border-orange-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[5px] bg-orange-100 text-[#c2410c] border border-orange-200 font-mono font-bold text-sm flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-[5px] bg-orange-100 text-[#c2410c] border border-orange-200 font-sans font-bold text-sm flex items-center justify-center shrink-0">
             {currentOfficer?.avatar || "ASN"}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-extrabold text-sm text-slate-900">{currentOfficer?.name || "Aparatur Dinas Terverifikasi"}</span>
-              <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-sans font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Sesi Aktif Terotentikasi</span>
               </span>
               {currentOfficer?.authorityLevel && (
-                <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-mono font-bold uppercase tracking-wider ${
+                <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-sans font-bold uppercase tracking-wider ${
                   currentOfficer.authorityLevel === "NASIONAL"
                     ? "bg-orange-50 text-orange-900 border border-orange-200"
                     : currentOfficer.authorityLevel === "PROVINSI"
@@ -208,7 +208,7 @@ export default function OfficerDashboard({
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-600 font-mono mt-0.5">
+            <p className="text-xs text-slate-600 font-sans tabular-nums mt-0.5">
               NIP: {currentOfficer?.nip || "-"} • {currentOfficer?.institution || "Penyelenggara Jalan Resmi"}
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function OfficerDashboard({
       <div className="bg-white p-5 sm:p-6 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="space-y-1.5 max-w-3xl">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200 font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <span className="px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200 font-sans text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
               <HardHat className="w-3.5 h-3.5 text-orange-700" />
               <span>Panel Operasional Disposisi & Verifikasi Bukti Fisik</span>
             </span>
@@ -256,7 +256,7 @@ export default function OfficerDashboard({
           </p>
         </div>
 
-        <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs shrink-0 font-mono space-y-1">
+        <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs shrink-0 font-sans space-y-1">
           <div className="text-[10px] text-slate-400 uppercase">Instansi Aktif:</div>
           <div className="font-bold text-slate-900">{currentOfficer?.institution || "BBPJN • DBMPR • PUPR"}</div>
           <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 font-sans">
@@ -273,7 +273,7 @@ export default function OfficerDashboard({
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>Pembaruan status & dokumentasi bukti pengerjaan berhasil disinkronkan ke peta publik!</span>
           </div>
-          <span className="text-[11px] font-mono text-emerald-700">Audit Trail Terverifikasi</span>
+          <span className="text-[11px] font-sans font-medium text-emerald-700">Audit Trail Terverifikasi</span>
         </div>
       )}
 
@@ -413,7 +413,7 @@ export default function OfficerDashboard({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-1.5 rounded-[5px] bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-mono"
+            className="px-3 py-1.5 rounded-[5px] bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-sans"
           >
             <option value="HAZARD">Prioritas Hazard Score AI (Tertinggi)</option>
             <option value="SLA">Kritis Batas Waktu SLA (Terancam Overdue)</option>
@@ -439,7 +439,7 @@ export default function OfficerDashboard({
           <span>
             Menampilkan <strong>{filteredReports.length}</strong> tiket penanganan dinas
           </span>
-          <span className="font-mono text-[11px]">SOP Standar Kepatuhan: 14 Hari Kerja</span>
+          <span className="font-sans text-[11px]">SOP Standar Kepatuhan: 14 Hari Kerja</span>
         </div>
 
         {filteredReports.length === 0 ? (
@@ -493,7 +493,7 @@ export default function OfficerDashboard({
                       {/* Detail Text */}
                       <div className="space-y-1.5 flex-1 text-xs">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-mono font-bold text-slate-900 px-2 py-0.5 rounded-[5px] bg-slate-100 border border-slate-200 text-[11px]">
+                          <span className="font-sans tabular-nums font-bold text-slate-900 px-2 py-0.5 rounded-[5px] bg-slate-100 border border-slate-200 text-[11px]">
                             {report.ticketCode}
                           </span>
 
@@ -587,7 +587,7 @@ export default function OfficerDashboard({
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           Dokumentasi Bukti Fisik Lapangan (Before vs After Selesai Diperbaiki)
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono">Tiket Terverifikasi Selesai</span>
+                        <span className="text-[10px] text-slate-400 font-sans">Tiket Terverifikasi Selesai</span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3 max-w-md">
@@ -648,7 +648,7 @@ export default function OfficerDashboard({
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="font-extrabold text-slate-900 text-base">Tindak Lanjut & Verifikasi Dinas</h3>
-                    <span className="px-2 py-0.5 rounded-[5px] font-mono text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
+                    <span className="px-2 py-0.5 rounded-[5px] font-sans tabular-nums text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
                       {activeReportToEdit.ticketCode}
                     </span>
                   </div>

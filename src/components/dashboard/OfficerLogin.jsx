@@ -76,7 +76,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         <div className="bg-white p-6 sm:p-7 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-mono tracking-wider uppercase bg-orange-50 text-orange-800 border border-orange-200">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-sans tracking-wider uppercase bg-orange-50 text-orange-800 border border-orange-200">
                 <HardHat className="w-3.5 h-3.5 text-orange-700" />
                 <span>Prototipe Portal Dinas • Simulasi Kewenangan Penyelenggara</span>
               </div>
@@ -108,7 +108,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
             {/* Left 6 Cols: Manual Form */}
             <form onSubmit={handleSubmit} className="lg:col-span-6 space-y-4">
               <div className="border-b border-slate-100 pb-2">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-sans">
                   Masuk Manual (NIP / Email ASN)
                 </h2>
               </div>
@@ -126,7 +126,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     placeholder="Contoh: 198503152010121002"
-                    className="w-full pl-9 pr-3 py-2 rounded-[5px] border border-slate-200 bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 transition-all font-mono"
+                    className="w-full pl-9 pr-3 py-2 rounded-[5px] border border-slate-200 bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 transition-all font-sans tabular-nums"
                   />
                 </div>
               </div>
@@ -137,7 +137,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   <label className="text-xs font-bold text-slate-700 block">
                     Kata Sandi Keamanan
                   </label>
-                  <span className="text-[10px] text-slate-400 font-mono">Default: jagajalan2026</span>
+                  <span className="text-[10px] text-slate-400 font-sans">Default: jagajalan2026</span>
                 </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -147,7 +147,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full pl-9 pr-10 py-2 rounded-[5px] border border-slate-200 bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 transition-all font-mono"
+                    className="w-full pl-9 pr-10 py-2 rounded-[5px] border border-slate-200 bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 transition-all font-sans"
                   />
                   <button
                     type="button"
@@ -189,7 +189,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               <div className="flex items-center justify-between border-b border-orange-200/70 pb-2">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-orange-700" />
-                  <span className="text-xs font-bold text-slate-900 uppercase font-mono tracking-wide">
+                  <span className="text-xs font-bold text-slate-900 uppercase font-sans tracking-wide">
                     Simulasi Cepat (1-Klik untuk Evaluasi Juri)
                   </span>
                 </div>
@@ -210,7 +210,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     className="p-3 rounded-[5px] bg-white border border-slate-200 hover:border-orange-400 hover:shadow-xs transition-all cursor-pointer group flex items-start justify-between gap-3"
                   >
                     <div className="flex items-start gap-2.5">
-                      <div className="w-8 h-8 rounded-[5px] bg-orange-100 text-orange-900 border border-orange-200 font-mono font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white group-hover:border-[#c2410c] transition-colors">
+                      <div className="w-8 h-8 rounded-[5px] bg-orange-100 text-orange-900 border border-orange-200 font-sans font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white group-hover:border-[#c2410c] transition-colors">
                         {officer.avatar}
                       </div>
                       <div>
@@ -218,7 +218,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                           <h3 className="font-bold text-xs text-slate-900 group-hover:text-[#c2410c] transition-colors">
                             {officer.name}
                           </h3>
-                          <span className={`px-1.5 py-0.2 rounded-[5px] text-[9px] font-mono font-bold uppercase tracking-wider ${
+                          <span className={`px-1.5 py-0.2 rounded-[5px] text-[9px] font-sans font-bold uppercase tracking-wider ${
                             officer.authorityLevel === "NASIONAL"
                               ? "bg-slate-100 text-slate-800 border border-slate-300"
                               : officer.authorityLevel === "PROVINSI"
@@ -229,7 +229,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                           </span>
                         </div>
                         <p className="text-[10px] text-slate-500 line-clamp-1 mt-0.5">{officer.title}</p>
-                        <p className="text-[10px] text-slate-400 font-mono mt-0.5">NIP: {officer.nip}</p>
+                        <p className="text-[10px] text-slate-400 font-sans tabular-nums mt-0.5">NIP: {officer.nip}</p>
                       </div>
                     </div>
 
@@ -240,7 +240,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                 ))}
               </div>
 
-              <div className="pt-2 text-[10px] text-slate-500 border-t border-orange-200/60 flex items-center gap-1.5 font-mono">
+              <div className="pt-2 text-[10px] text-slate-500 border-t border-orange-200/60 flex items-center gap-1.5 font-sans">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                 <span>Setiap akun memiliki cakupan wilayah yurisdiksi yang berbeda.</span>
               </div>
@@ -253,7 +253,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
           <span>
             Landasan Hukum: <strong>UU No. 5/2014 (ASN)</strong> • <strong>UU No. 25/2009 (Pelayanan Publik)</strong>
           </span>
-          <span className="font-mono text-slate-400">JagaJalan InfrasTrace • Keamanan Terenkripsi</span>
+          <span className="font-sans text-slate-400">JagaJalan InfrasTrace • Keamanan Terenkripsi</span>
         </div>
       </div>
     </section>

@@ -39,7 +39,7 @@ export default function LegalBasisSection() {
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-xl border border-slate-200/80 shadow-xs space-y-6">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-mono mb-1">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-sans mb-1">
             <Scale className="w-3.5 h-3.5 text-orange-600" />
             <span>Landasan Regulasi & Kepatuhan Hukum</span>
           </div>
@@ -55,10 +55,10 @@ export default function LegalBasisSection() {
           {regulations.map((reg) => (
             <div
               key={reg.code}
-              className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 hover:border-orange-200/80 hover:shadow-2xs transition-all space-y-2.5 flex flex-col justify-between"
+              className="p-4 rounded-[5px] bg-slate-50/70 border border-slate-200/80 hover:border-orange-200/80 hover:shadow-2xs transition-all space-y-2.5 flex flex-col justify-between"
             >
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-slate-800 border border-slate-200/80 shadow-2xs inline-block">
+                <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded-[5px] bg-white text-slate-800 border border-slate-200/80 shadow-2xs inline-block">
                   {reg.code}
                 </span>
                 <h3 className="text-xs font-bold text-slate-900 leading-snug">

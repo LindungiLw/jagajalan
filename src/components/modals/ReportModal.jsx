@@ -279,7 +279,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
               <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
                 Lapor Kerusakan Jalan
               </h3>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200/80 font-mono">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200/80 font-sans">
                 <Sparkles className="w-3 h-3 text-[#c2410c]" />
                 Verifikasi AI
               </span>
@@ -337,7 +337,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     )}
                   </button>
                 </div>
-                <div className="font-mono text-xl font-bold text-slate-900 tracking-wider">
+                <div className="font-sans tabular-nums text-xl font-bold text-slate-900 tracking-wider">
                   {createdTicket}
                 </div>
                 <div className="pt-2 border-t border-slate-200/70 text-[11px] text-slate-600 flex items-center justify-between">
@@ -395,7 +395,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           {currentRoad.authorityLabel}
                         </div>
                       </div>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono shrink-0 uppercase ${
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold font-sans shrink-0 uppercase ${
                         currentRoad.authority === "NASIONAL"
                           ? "bg-slate-200 text-slate-800"
                           : currentRoad.authority === "PROVINSI"
@@ -408,7 +408,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
                     <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
                       <span className="text-slate-500">Pagu Tender Terdata:</span>
-                      <span className="font-bold text-slate-900 font-mono">
+                      <span className="font-bold text-slate-900 font-sans tabular-nums">
                         Rp {((currentRoad.budget?.paguRp || 0) / 1000000000).toFixed(2)} Miliar
                       </span>
                     </div>
@@ -569,7 +569,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                             </span>
                           </div>
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono ${
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold font-sans tabular-nums ${
                               aiResult.hazardScore >= 80
                                 ? "bg-rose-100 text-rose-800"
                                 : "bg-amber-100 text-amber-800"
@@ -583,7 +583,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           {aiResult.analysisText}
                         </p>
 
-                        <div className="pt-1.5 border-t border-slate-200/70 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                        <div className="pt-1.5 border-t border-slate-200/70 flex items-center justify-between text-[10px] text-slate-500 font-sans">
                           <span>Dimensi: <strong className="text-slate-800 font-sans">{aiResult.dimensions}</strong></span>
                           <span className="text-emerald-700 font-bold font-sans">✓ Terverifikasi AI</span>
                         </div>

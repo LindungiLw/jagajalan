@@ -111,7 +111,7 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
         {/* Modal Footer */}
         <div className="p-4 border-t border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3">
           <div className="text-xs text-slate-500">
-            Nomor Tiket: <strong className="text-slate-900 font-mono">{report.ticketCode}</strong> (Overdue {report.daysOverdue} Hari)
+            Nomor Tiket: <strong className="text-slate-900 font-sans tabular-nums font-bold">{report.ticketCode}</strong> (Overdue {report.daysOverdue} Hari)
           </div>
           <div className="flex items-center gap-2">
             <button

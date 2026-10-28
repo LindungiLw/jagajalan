@@ -86,11 +86,11 @@ export default function Navbar({
                   <div className="flex flex-col text-left">
                     <span className="text-[11px] font-bold text-slate-900 leading-tight flex items-center gap-1">
                       <span className="max-w-[130px] truncate">{officerSession.name.split(",")[0]}</span>
-                      <span className="px-1.5 py-0.2 rounded-[3px] bg-[#c2410c] text-white text-[9px] font-mono font-bold">
+                      <span className="px-1.5 py-0.2 rounded-[3px] bg-[#c2410c] text-white text-[9px] font-sans font-bold">
                         {officerSession.authorityLevel}
                       </span>
                     </span>
-                    <span className="text-[9px] text-slate-500 font-mono leading-tight">
+                    <span className="text-[9px] text-slate-500 font-sans tabular-nums leading-tight">
                       NIP: {officerSession.nip.slice(0, 10)}...
                     </span>
                   </div>
@@ -163,12 +163,12 @@ export default function Navbar({
                   className="p-3 rounded-[5px] bg-orange-50 border border-orange-200 text-slate-900 flex items-center justify-between cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-[5px] bg-[#c2410c] text-white font-mono font-bold text-xs flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-[5px] bg-[#c2410c] text-white font-sans font-bold text-xs flex items-center justify-center">
                       {officerSession.avatar}
                     </div>
                     <div>
                       <div className="text-xs font-bold text-slate-900">{officerSession.name}</div>
-                      <div className="text-[10px] text-slate-500 font-mono">NIP: {officerSession.nip}</div>
+                      <div className="text-[10px] text-slate-500 font-sans tabular-nums">NIP: {officerSession.nip}</div>
                     </div>
                   </div>
                   <span className="text-[10px] text-orange-700 font-bold">Panel →</span>

@@ -52,7 +52,7 @@ export default function RoadDetailModal({
         <div className="p-4 sm:p-5 border-b border-slate-200 flex items-start justify-between gap-3 bg-white">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[5px] bg-slate-100 border border-slate-200 text-slate-800">
+              <span className="font-sans tabular-nums text-xs font-bold px-2 py-0.5 rounded-[5px] bg-slate-100 border border-slate-200 text-slate-800">
                 {road.code}
               </span>
               <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-bold border ${authorityBadge.color}`}>
@@ -106,11 +106,11 @@ export default function RoadDetailModal({
           {/* B. Informasi Paket Pengadaan & Kroscek Anggaran LPSE */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
-              <span className="font-mono text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+              <span className="font-sans text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                 <FileText className="w-3.5 h-3.5 text-orange-700" />
                 <span>Paket Pengadaan LPSE Teridentifikasi</span>
               </span>
-              <span className="text-[10px] text-slate-500 font-mono">
+              <span className="text-[10px] text-slate-500 font-sans tabular-nums">
                 Pembaruan: {budget?.lastVerifiedAt || "18 Okt 2026"}
               </span>
             </div>
@@ -119,7 +119,7 @@ export default function RoadDetailModal({
               <div className="p-4 rounded-[5px] border border-slate-200/90 bg-white space-y-3.5 shadow-2xs">
                 <div>
                   <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="font-mono text-[11px] font-bold text-slate-500">
+                    <span className="font-sans tabular-nums text-[11px] font-bold text-slate-500">
                       ID Paket: {budget.packageId} (TA {budget.fiscalYear})
                     </span>
                     <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[5px] border border-emerald-200/80">
@@ -134,7 +134,7 @@ export default function RoadDetailModal({
                 {/* Financial Pagu vs Kontrak */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-[5px] bg-slate-50 border border-slate-200">
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold font-sans block">
                       Nilai Pagu Anggaran (HPS)
                     </span>
                     <strong className="text-base font-bold text-slate-900 font-sans tabular-nums">
@@ -145,7 +145,7 @@ export default function RoadDetailModal({
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold font-sans block">
                       Nilai Kontrak Lelang
                     </span>
                     <strong className="text-base font-bold text-emerald-800 font-sans tabular-nums">
@@ -198,7 +198,7 @@ export default function RoadDetailModal({
           {/* C. Rekam Jejak Pemantauan Respons Laporan Warga */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
-              <span className="font-mono text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+              <span className="font-sans text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-orange-700" />
                 <span>Pemantauan Respons Laporan Warga ({roadReports.length} Terdata)</span>
               </span>
@@ -224,10 +224,10 @@ export default function RoadDetailModal({
                     >
                       <div className="flex items-center justify-between gap-2 flex-wrap mb-1.5">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-slate-800">
+                          <span className="font-sans tabular-nums font-bold text-slate-800">
                             {report.ticketCode}
                           </span>
-                          <span className="text-[10px] text-slate-500 font-mono">
+                          <span className="text-[10px] text-slate-500 font-sans tabular-nums">
                             {new Date(report.reportDate).toLocaleDateString("id-ID", {
                               day: "numeric",
                               month: "short",
@@ -293,7 +293,7 @@ export default function RoadDetailModal({
         {/* 3. MODAL FOOTER */}
         <div className="p-3.5 sm:p-4 border-t border-slate-200 bg-white flex items-center justify-between gap-3">
           <div className="text-slate-500 text-[11px]">
-            Ruas ID: <strong className="font-mono text-slate-800">{road.id}</strong>
+            Ruas ID: <strong className="font-sans tabular-nums font-bold text-slate-800">{road.id}</strong>
           </div>
           <div className="flex items-center gap-2">
             {onOpenReportModal && (

@@ -20,7 +20,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
       <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-xl border border-slate-200/80 shadow-xs space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-mono mb-1">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-sans mb-1">
               <BarChart3 className="w-3.5 h-3.5 text-orange-600" />
               <span>Data BPS & SP4N-LAPOR! • Skala Makro Nasional</span>
             </div>
@@ -34,7 +34,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
 
           <button
             onClick={onExploreNational}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-xs sm:text-sm font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs hover:shadow-xs transition-all cursor-pointer self-start lg:self-auto shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-[5px] text-xs sm:text-sm font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs hover:shadow-xs transition-all cursor-pointer self-start lg:self-auto shrink-0"
           >
             <span>Buka Papan Skor Lengkap 38 Provinsi</span>
             <ArrowRight className="w-4 h-4 text-orange-200" />
@@ -47,18 +47,18 @@ export default function NationalStatsTeaser({ onExploreNational }) {
             <div
               key={prov.id}
               onClick={onExploreNational}
-              className="p-4 rounded-xl bg-white/70 hover:bg-white border border-slate-200/80 hover:border-orange-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-4 rounded-[5px] bg-white/70 hover:bg-white border border-slate-200/80 hover:border-orange-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-orange-50 text-[#c2410c] border border-orange-200/80 shadow-2xs">
+                  <span className="text-[10px] font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-[5px] bg-orange-500/10 text-[#c2410c] border border-orange-500/25">
                     Peringkat #{prov.complaintRank} Nasional
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">{prov.island}</span>
+                  <span className="text-xs text-slate-500 font-sans">{prov.island}</span>
                 </div>
 
                 <div className="mt-2.5 flex items-baseline justify-between">
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-orange-700 transition-colors">
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-orange-700 transition-colors font-heading">
                     {prov.name}
                   </h3>
                   {prov.activePilot && (
@@ -73,7 +73,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs font-mono">
+              <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs font-sans tabular-nums">
                 <div>
                   <span className="text-[10px] text-slate-400 block font-sans">Jalan Rusak</span>
                   <strong className="text-rose-600">{prov.damagedPercentage}%</strong>

@@ -305,7 +305,7 @@ export default function MapInner({
                     <span className={`px-2 py-0.5 rounded-[5px] text-[9px] font-bold border ${badgeBg}`}>
                       {road.authority}
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400 font-bold">{road.code}</span>
+                    <span className="text-[10px] font-sans tabular-nums text-slate-400 font-bold">{road.code}</span>
                   </div>
 
                   <div>
@@ -394,7 +394,7 @@ export default function MapInner({
             <Popup className="jagajalan-leaflet-popup">
               <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                  <span className="font-mono text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
+                  <span className="font-sans tabular-nums text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
                     {report.ticketCode}
                   </span>
                   <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${
@@ -465,7 +465,7 @@ export default function MapInner({
               <Tooltip sticky>
                 <div className="font-sans text-xs">
                   <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="bg-blue-600 text-white text-[9px] px-1 py-0.2 rounded font-mono font-bold">KM {ms.km}</span>
+                    <span className="bg-blue-600 text-white text-[9px] px-1 py-0.2 rounded font-sans tabular-nums font-bold">KM {ms.km}</span>
                     <span>{ms.name}</span>
                   </div>
                   <div className="text-[10px] text-slate-500 font-medium">
@@ -477,7 +477,7 @@ export default function MapInner({
               <Popup className="jagajalan-leaflet-popup">
                 <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                    <span className="font-mono text-[9px] font-bold text-blue-800 bg-blue-100 px-1.5 py-0.5 rounded-[4px]">
+                    <span className="font-sans tabular-nums text-[9px] font-bold text-blue-800 bg-blue-100 px-1.5 py-0.5 rounded-[4px]">
                       PATOK KM {ms.km}
                     </span>
                     <span className="text-[9px] font-bold text-slate-500">{ms.status}</span>
@@ -523,7 +523,7 @@ export default function MapInner({
                 <span className="font-bold text-[9px] text-teal-800 bg-teal-100 px-1.5 py-0.5 rounded-[4px]">
                   DETEKSI GEOSPASIAL
                 </span>
-                <span className="text-[9px] font-mono font-bold text-slate-400">
+                <span className="text-[9px] font-sans tabular-nums font-bold text-slate-400">
                   {detectedPoint.coordinates[0].toFixed(3)}, {detectedPoint.coordinates[1].toFixed(3)}
                 </span>
               </div>

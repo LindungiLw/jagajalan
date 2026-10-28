@@ -262,7 +262,7 @@ export default function OmbudsmanMonitorSection({
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-slate-700">
+                      <span className="font-sans tabular-nums text-xs font-bold text-slate-700">
                         #{report.ticketCode}
                       </span>
                       <span className="text-slate-300">•</span>
@@ -339,7 +339,7 @@ export default function OmbudsmanMonitorSection({
                     <strong className="text-emerald-800 font-bold tabular-nums block text-xs">
                       Rp {((report.matchingBudget?.paguRp || 0) / 1_000_000_000).toFixed(2)} Miliar
                     </strong>
-                    <span className="text-[10px] text-slate-500 font-mono">
+                    <span className="text-[10px] text-slate-500 font-sans">
                       {report.matchingBudget?.packageId || "APBD Reguler"}
                     </span>
                   </div>
@@ -405,9 +405,9 @@ export default function OmbudsmanMonitorSection({
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans">
           <div className="space-y-0.5">
-            <span className="font-mono text-[10px] font-bold text-slate-400 block">LANGKAH 01</span>
+            <span className="font-sans text-[10px] font-bold text-slate-400 block tracking-wider uppercase">LANGKAH 01</span>
             <strong className="text-slate-900 block text-xs font-semibold">Laporan &amp; Validasi AI</strong>
             <p className="text-[11px] text-slate-500 leading-normal">
               Foto geotagging diverifikasi AI dan dikunci ke dinas penanggung jawab sesuai kewenangan hukum.
@@ -415,7 +415,7 @@ export default function OmbudsmanMonitorSection({
           </div>
 
           <div className="space-y-0.5 border-t md:border-t-0 md:border-l border-slate-100 pt-2 md:pt-0 md:pl-4">
-            <span className="font-mono text-[10px] font-bold text-slate-400 block">LANGKAH 02</span>
+            <span className="font-sans text-[10px] font-bold text-slate-400 block tracking-wider uppercase">LANGKAH 02</span>
             <strong className="text-slate-900 block text-xs font-semibold">Masa Tanggap 14 Hari Kerja</strong>
             <p className="text-[11px] text-slate-500 leading-normal">
               Batas waktu toleransi standar pelayanan (UU No. 25/2009) bagi dinas untuk memulai tindakan perbaikan.
@@ -423,7 +423,7 @@ export default function OmbudsmanMonitorSection({
           </div>
 
           <div className="space-y-0.5 border-t md:border-t-0 md:border-l border-slate-100 pt-2 md:pt-0 md:pl-4">
-            <span className="font-mono text-[10px] font-bold text-rose-600 block">LANGKAH 03</span>
+            <span className="font-sans text-[10px] font-bold text-rose-600 block tracking-wider uppercase">LANGKAH 03</span>
             <strong className="text-slate-900 block text-xs font-semibold">Eskalasi ke Ombudsman RI</strong>
             <p className="text-[11px] text-slate-500 leading-normal">
               Jika diabaikan, warga dapat mengunduh draf aduan resmi untuk diajukan ke Ombudsman RI (UU No. 37/2008).

@@ -374,7 +374,7 @@ export default function MapExplorer({
                       Pulau / Arteri ({INDONESIA_REGIONS.length})
                     </button>
                   </div>
-                  <span className="text-[9.5px] font-mono text-slate-400">Total 54.544 KM</span>
+                  <span className="text-[9.5px] font-sans font-medium tabular-nums text-slate-400">Total 54.544 KM</span>
                 </div>
 
                 {regionTab === "provinces" ? (
@@ -423,7 +423,7 @@ export default function MapExplorer({
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <span className="font-mono text-[10px] font-bold text-slate-700">
+                            <span className="font-sans tabular-nums text-[10px] font-bold text-slate-700">
                               {prov.totalProvincialKm.toLocaleString("id-ID")} KM
                             </span>
                             <div className="text-[8.5px] text-slate-400">Jalan Provinsi</div>
@@ -576,7 +576,7 @@ export default function MapExplorer({
             }`}
           >
             <span>Semua Ruas</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
               authorityFilter === "ALL" ? "bg-orange-600 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.ALL}
@@ -593,7 +593,7 @@ export default function MapExplorer({
           >
             <span className="w-2 h-2 rounded-full bg-blue-600" />
             <span>Jalan Nasional</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
               authorityFilter === "NASIONAL" ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-700"
             }`}>
               {roadCounts.NASIONAL}
@@ -610,7 +610,7 @@ export default function MapExplorer({
           >
             <span className="w-2 h-2 rounded-full bg-purple-600" />
             <span>Jalan Provinsi</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
               authorityFilter === "PROVINSI" ? "bg-purple-600 text-white" : "bg-purple-50 text-purple-700"
             }`}>
               {roadCounts.PROVINSI}
@@ -627,7 +627,7 @@ export default function MapExplorer({
           >
             <span className="w-2 h-2 rounded-full bg-teal-600" />
             <span>Jalan Kota / Kab</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
               authorityFilter === "KOTA_KAB" ? "bg-teal-600 text-white" : "bg-teal-50 text-teal-700"
             }`}>
               {roadCounts.KOTA_KAB}
@@ -667,12 +667,12 @@ export default function MapExplorer({
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                 <span>Jalan Kota & Kabupaten Se-Indonesia</span>
-                <span className="text-[9px] font-mono font-bold bg-teal-50 text-teal-800 px-1.5 py-0.2 rounded-[4px] border border-teal-200">
+                <span className="text-[9px] font-sans tabular-nums font-bold bg-teal-50 text-teal-800 px-1.5 py-0.2 rounded-[4px] border border-teal-200">
                   514 Pemkab/Pemkot
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan Resmi: <strong className="text-teal-900 font-mono">445.000 KM</strong> (81% jalan nasional). Tanggung jawab Walikota & Bupati melalui Dinas PUPR Daerah. Menyumbang 42,9% jalan non-mantap dan porsi aduan terbanyak masyarakat (Inpres Jalan Daerah / Ombudsman RI).
+                Total Jaringan Resmi: <strong className="text-teal-900 font-sans tabular-nums">445.000 KM</strong> (81% jalan nasional). Tanggung jawab Walikota & Bupati melalui Dinas PUPR Daerah. Menyumbang 42,9% jalan non-mantap dan porsi aduan terbanyak masyarakat (Inpres Jalan Daerah / Ombudsman RI).
               </p>
             </div>
           </div>
@@ -689,12 +689,12 @@ export default function MapExplorer({
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                 <span>Jalan Provinsi Se-Indonesia</span>
-                <span className="text-[9px] font-mono font-bold bg-purple-50 text-purple-800 px-1.5 py-0.2 rounded-[4px] border border-purple-200">
+                <span className="text-[9px] font-sans tabular-nums font-bold bg-purple-50 text-purple-800 px-1.5 py-0.2 rounded-[4px] border border-purple-200">
                   38 Pemprov
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan Resmi: <strong className="text-purple-900 font-mono">54.544,75 KM</strong> (BPS & KemenPU). Ditayangkan terkurasi di bawah kewenangan Gubernur & Dinas Bina Marga Provinsi.
+                Total Jaringan Resmi: <strong className="text-purple-900 font-sans tabular-nums">54.544,75 KM</strong> (BPS & KemenPU). Ditayangkan terkurasi di bawah kewenangan Gubernur & Dinas Bina Marga Provinsi.
               </p>
             </div>
           </div>
@@ -711,12 +711,12 @@ export default function MapExplorer({
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                 <span>Jalan Arteri Primer Nasional</span>
-                <span className="text-[9px] font-mono font-bold bg-blue-50 text-blue-800 px-1.5 py-0.2 rounded-[4px] border border-blue-200">
+                <span className="text-[9px] font-sans font-bold bg-blue-50 text-blue-800 px-1.5 py-0.2 rounded-[4px] border border-blue-200">
                   Kementerian PU
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan Arteri: <strong className="text-blue-900 font-mono">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022. Dikelola BBPJN / BPJN Ditjen Bina Marga Kementerian PU.
+                Total Jaringan Arteri: <strong className="text-blue-900 font-sans tabular-nums">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022. Dikelola BBPJN / BPJN Ditjen Bina Marga Kementerian PU.
               </p>
             </div>
           </div>
@@ -801,7 +801,7 @@ export default function MapExplorer({
           <div className="px-5 pt-4 pb-3 border-b border-slate-100 shrink-0 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={`px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-mono border ${
+                <span className={`px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-sans tracking-wide border ${
                   currentRoad?.authority === "NASIONAL"
                     ? "bg-blue-500/10 text-blue-800 border-blue-300"
                     : currentRoad?.authority === "PROVINSI"
@@ -816,7 +816,7 @@ export default function MapExplorer({
                 </span>
 
                 {currentReport && (
-                  <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold font-mono bg-orange-100 text-orange-800 border border-orange-200">
+                  <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold font-sans tabular-nums bg-orange-100 text-orange-800 border border-orange-200">
                     TIKET {currentReport.ticketCode}
                   </span>
                 )}
@@ -943,11 +943,11 @@ export default function MapExplorer({
                         <Crosshair className="w-3 h-3 text-[#c2410c]" />
                         <span>Bentang Batas Koridor Arteri</span>
                       </span>
-                      <span className="font-mono text-slate-500 font-bold">{currentRoad.lengthKm} KM</span>
+                      <span className="font-sans tabular-nums text-slate-500 font-bold">{currentRoad.lengthKm} KM</span>
                     </div>
                     <div className="flex items-center justify-between text-[11px] font-semibold text-slate-800">
                       <span className="truncate max-w-[46%] text-slate-800">📍 {currentRoad.startPoint.name}</span>
-                      <span className="text-slate-400 font-mono font-bold">➔</span>
+                      <span className="text-slate-400 font-sans font-bold">➔</span>
                       <span className="truncate max-w-[46%] text-slate-800 text-right">🏁 {currentRoad.endPoint.name}</span>
                     </div>
                   </div>
@@ -1040,7 +1040,7 @@ export default function MapExplorer({
                     {/* Project Header Box */}
                     <div className="p-3.5 rounded-[5px] bg-slate-900 text-white space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold text-orange-400">
+                        <span className="text-[10px] font-sans tabular-nums font-bold text-orange-400">
                           {budgetData.packageId}
                         </span>
                         <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold ${
@@ -1082,13 +1082,13 @@ export default function MapExplorer({
                       <div className="grid grid-cols-2 gap-3">
                         <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
                           <span className="text-[10px] text-slate-500 block">Pagu Anggaran</span>
-                          <span className="text-sm font-bold text-slate-900 font-mono">
+                          <span className="text-sm font-bold text-slate-900 font-sans tabular-nums">
                             Rp {((budgetData.paguRp || 0) / 1000000000).toFixed(2)} M
                           </span>
                         </div>
                         <div className="p-2.5 rounded-[4px] bg-orange-50/60 border border-orange-100">
                           <span className="text-[10px] text-orange-800 block">Nilai Kontrak Terkoreksi</span>
-                          <span className="text-sm font-bold text-orange-950 font-mono">
+                          <span className="text-sm font-bold text-orange-950 font-sans tabular-nums">
                             Rp {((budgetData.contractValueRp || 0) / 1000000000).toFixed(2)} M
                           </span>
                         </div>
@@ -1100,7 +1100,7 @@ export default function MapExplorer({
                             <BadgePercent className="w-3.5 h-3.5 text-emerald-600" />
                             <span>Efisiensi Tender Hasil Lelang:</span>
                           </span>
-                          <span className="font-bold font-mono">
+                          <span className="font-bold font-sans tabular-nums">
                             Rp {(savingsRp / 1000000).toFixed(0)} Juta ({savingsPct}%)
                           </span>
                         </div>
@@ -1125,7 +1125,7 @@ export default function MapExplorer({
                       <div className="space-y-1 pt-1">
                         <div className="flex justify-between text-[11px] font-semibold text-slate-700">
                           <span>Realisasi Fisik Lapangan</span>
-                          <span className="font-mono text-orange-700 font-bold">{budgetData.progressPct || 0}%</span>
+                          <span className="font-sans tabular-nums text-orange-700 font-bold">{budgetData.progressPct || 0}%</span>
                         </div>
                         <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
                           <div
@@ -1167,14 +1167,14 @@ export default function MapExplorer({
                         <MapPin className="w-3.5 h-3.5 text-teal-700" />
                         <span>Hasil Deteksi Spasial Lokasi</span>
                       </span>
-                      <span className="text-[9px] font-mono font-bold bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-sans font-bold bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded">
                         Otomatis
                       </span>
                     </div>
                     <p className="text-[11px] text-teal-800 leading-relaxed">
                       Sistem mendeteksi titik koordinat ini berada di wilayah <span className="font-bold">{currentRoad.provinceName}</span> dengan kewenangan <span className="font-bold">{currentRoad.authorityLabel}</span>.
                       {currentRoad.lengthKm > 0 && (
-                        <span> Jarak ke koridor Jalan Nasional terdekat: <strong className="font-mono">{currentRoad.lengthKm} KM</strong>.</span>
+                        <span> Jarak ke koridor Jalan Nasional terdekat: <strong className="font-sans tabular-nums">{currentRoad.lengthKm} KM</strong>.</span>
                       )}
                     </p>
                     <button
@@ -1191,7 +1191,7 @@ export default function MapExplorer({
                 <div className="p-3.5 rounded-[5px] bg-slate-900 text-white space-y-2.5">
                   <div className="text-[10px] font-bold text-orange-400 uppercase tracking-wider flex items-center justify-between">
                     <span>Kepala Daerah & Pejabat Berwenang</span>
-                    <span className="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-mono">PIC Terverifikasi</span>
+                    <span className="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-sans font-medium">PIC Terverifikasi</span>
                   </div>
                   <div className="space-y-1">
                     <div className="font-bold text-sm text-white">
@@ -1209,7 +1209,7 @@ export default function MapExplorer({
                   {currentRoad?.leadership?.contactCenter && (
                     <div className="text-[10px] text-slate-300 border-t border-slate-800 pt-1.5 flex items-center justify-between">
                       <span>Kanal Resmi:</span>
-                      <span className="font-mono text-orange-300 font-bold">{currentRoad.leadership.contactCenter}</span>
+                      <span className="font-sans tabular-nums text-orange-300 font-bold">{currentRoad.leadership.contactCenter}</span>
                     </div>
                   )}
                 </div>
@@ -1222,7 +1222,7 @@ export default function MapExplorer({
                         <MapPin className="w-3.5 h-3.5 text-blue-700" />
                         <span>Titik Patok & Milestone Batas (KM)</span>
                       </span>
-                      <span className="text-[9px] text-blue-800 font-mono font-bold bg-blue-100 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] text-blue-800 font-sans tabular-nums font-bold bg-blue-100 px-1.5 py-0.5 rounded">
                         {currentRoad.milestones.length} Titik Penting
                       </span>
                     </div>
@@ -1238,7 +1238,7 @@ export default function MapExplorer({
                           }}
                           className="text-left p-1.5 bg-white rounded border border-blue-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-[10px] cursor-pointer"
                         >
-                          <div className="flex items-center justify-between font-mono font-bold text-blue-900">
+                          <div className="flex items-center justify-between font-sans tabular-nums font-bold text-blue-900">
                             <span>KM {ms.km}</span>
                             <span className={`text-[8px] px-1 py-0.2 rounded font-sans ${
                               ms.status === "MANTAP" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
@@ -1280,7 +1280,7 @@ export default function MapExplorer({
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
                     <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
                       <span className="text-[10px] text-slate-400 block">Kode Ruas</span>
-                      <span className="font-mono font-bold text-slate-900">{currentRoad?.code}</span>
+                      <span className="font-sans tabular-nums font-bold text-slate-900">{currentRoad?.code}</span>
                     </div>
                     <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
                       <span className="text-[10px] text-slate-400 block">Panjang Koridor</span>
@@ -1372,7 +1372,7 @@ export default function MapExplorer({
                   {/* Source 4: Tanggal Audit */}
                   <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center justify-between">
                     <span>Terakhir Diaudit & Disinkronkan:</span>
-                    <span className="font-bold text-slate-800 font-mono">
+                    <span className="font-bold text-slate-800 font-sans tabular-nums">
                       {currentRoad?.budget?.lastVerifiedAt || "18 Oktober 2026"}
                     </span>
                   </div>
@@ -1385,7 +1385,7 @@ export default function MapExplorer({
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span>Integrasi Spasial SIGI Kementerian PU</span>
                     </span>
-                    <span className="text-[9px] font-mono bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded-[3px]">
+                    <span className="text-[9px] font-sans font-bold bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded-[3px]">
                       Open GeoAPI
                     </span>
                   </div>
@@ -1503,7 +1503,7 @@ export default function MapExplorer({
                 <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center justify-between">
                     <span>1. SIGI-PU ASTV2 (Pusdatin KemenPU)</span>
-                    <span className="text-[10px] text-orange-700 font-mono">WebGIS & MapServer</span>
+                    <span className="text-[10px] text-orange-700 font-sans font-bold">WebGIS & MapServer</span>
                   </div>
                   <p className="text-[11px] text-slate-600">
                     Menyediakan layer MapServer resmi WMS untuk Jalan Nasional (<code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">jalan_nasional.map</code>) dan Jalan Daerah (<code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">jalan_daerah.map</code>).
@@ -1522,7 +1522,7 @@ export default function MapExplorer({
                 <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center justify-between">
                     <span>2. Satu Data Kementerian PU</span>
-                    <span className="text-[10px] text-blue-700 font-mono">Open Data Portal</span>
+                    <span className="text-[10px] text-blue-700 font-sans font-bold">Open Data Portal</span>
                   </div>
                   <p className="text-[11px] text-slate-600">
                     Portal keterbukaan data kementerian untuk rekapitulasi kondisi mantap jalan, kemantapan per provinsi, dan penetapan status hukum ruas jalan.
@@ -1541,7 +1541,7 @@ export default function MapExplorer({
                 <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center justify-between">
                     <span>3. Endpoint API Mikro JagaJalan</span>
-                    <span className="text-[10px] text-emerald-700 font-mono">REST & GeoJSON API</span>
+                    <span className="text-[10px] text-emerald-700 font-sans font-bold">REST & GeoJSON API</span>
                   </div>
                   <p className="text-[11px] text-slate-600">
                     Dapat diakses secara terbuka melalui rute API internal aplikasi:

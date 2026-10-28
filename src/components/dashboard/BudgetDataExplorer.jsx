@@ -81,7 +81,7 @@ export default function BudgetDataExplorer({
       {/* 1. PAGE HEADER */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[5px] text-[10px] font-bold font-mono uppercase bg-orange-50 text-orange-800 border border-orange-200 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[5px] text-[10px] font-bold font-sans uppercase bg-orange-50 text-orange-800 border border-orange-200 mb-2">
             Verifikasi LPSE & Dokumen Anggaran TA 2026
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
@@ -105,7 +105,7 @@ export default function BudgetDataExplorer({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Card 1: Total Pagu */}
         <div className="p-4 rounded-[5px] bg-white border border-slate-200/90 shadow-2xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 font-mono">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-500 font-sans uppercase tracking-wider">
             <span>TOTAL PAGU TERVERIFIKASI</span>
             <DollarSign className="w-4 h-4 text-[#c2410c]" />
           </div>
@@ -119,7 +119,7 @@ export default function BudgetDataExplorer({
 
         {/* Card 2: Nilai Kontrak */}
         <div className="p-4 rounded-[5px] bg-white border border-slate-200/90 shadow-2xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 font-mono">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-500 font-sans uppercase tracking-wider">
             <span>NILAI KONTRAK LELANG</span>
             <Building2 className="w-4 h-4 text-slate-700" />
           </div>
@@ -133,7 +133,7 @@ export default function BudgetDataExplorer({
 
         {/* Card 3: Efisiensi Tender */}
         <div className="p-4 rounded-[5px] bg-white border border-slate-200/90 shadow-2xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 font-mono">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-500 font-sans uppercase tracking-wider">
             <span>EFISIENSI LELANG TENDER</span>
             <TrendingDown className="w-4 h-4 text-emerald-600" />
           </div>
@@ -147,7 +147,7 @@ export default function BudgetDataExplorer({
 
         {/* Card 4: Keterbukaan Data */}
         <div className="p-4 rounded-[5px] bg-white border border-slate-200/90 shadow-2xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 font-mono">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-500 font-sans uppercase tracking-wider">
             <span>STATUS PENCOCOKAN</span>
             <ShieldCheck className="w-4 h-4 text-orange-700" />
           </div>
@@ -262,10 +262,10 @@ export default function BudgetDataExplorer({
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[4px] bg-slate-100 border border-slate-200 text-slate-800">
+                    <span className="font-sans tabular-nums text-[10px] font-bold px-2 py-0.5 rounded-[4px] bg-slate-100 border border-slate-200 text-slate-800">
                       {pkg.packageId}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-semibold font-mono">
+                    <span className="text-[10px] text-slate-500 font-semibold font-sans tabular-nums">
                       TA {pkg.fiscalYear}
                     </span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${matchBadge.color}`}>
@@ -284,17 +284,17 @@ export default function BudgetDataExplorer({
                   <h3 className="font-bold text-slate-900 text-sm leading-snug">
                     {pkg.name}
                   </h3>
-                  <div className="text-xs text-slate-500 flex items-center gap-1 mt-1 font-medium">
+                  <div className="text-xs text-slate-500 flex items-center gap-1 mt-1 font-medium font-sans">
                     <MapPin className="w-3.5 h-3.5 text-orange-700 shrink-0" />
                     <span className="text-slate-800">{pkg.roadName}</span>
-                    <span className="font-mono">({pkg.roadCode})</span>
+                    <span className="font-sans">({pkg.roadCode})</span>
                   </div>
                 </div>
 
                 {/* Financial Breakdown (Pagu vs Kontrak) */}
-                <div className="grid grid-cols-2 gap-2 p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs">
+                <div className="grid grid-cols-2 gap-2 p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs font-sans">
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold font-sans block">
                       Pagu Anggaran (HPS)
                     </span>
                     <strong className="text-slate-900 font-bold font-sans tabular-nums text-sm">
@@ -305,7 +305,7 @@ export default function BudgetDataExplorer({
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-bold font-mono block">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold font-sans block">
                       Nilai Kontrak Pemenang
                     </span>
                     <strong className="text-emerald-800 font-bold font-sans tabular-nums text-sm">
@@ -327,9 +327,9 @@ export default function BudgetDataExplorer({
                     <p className="text-[10px] text-slate-500 mt-1 italic">{pkg.statusNote}</p>
                   </div>
 
-                  <div className="text-[10px] text-slate-500 flex flex-wrap items-center justify-between pt-1 gap-2">
+                  <div className="text-[10px] text-slate-500 flex flex-wrap items-center justify-between pt-1 gap-2 font-sans">
                     <span>Instansi: <strong className="text-slate-800">{pkg.authorityLabel}</strong></span>
-                    <span className="font-mono text-slate-400">Verifikasi: {pkg.lastVerifiedAt || "18 Okt 2026"}</span>
+                    <span className="font-sans text-slate-500">Verifikasi: {pkg.lastVerifiedAt || "18 Okt 2026"}</span>
                   </div>
                 </div>
               </div>

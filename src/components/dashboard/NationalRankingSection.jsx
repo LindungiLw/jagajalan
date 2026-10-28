@@ -213,7 +213,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-bold font-mono text-slate-400 tracking-wider">
+                      <span className="text-xs font-bold font-sans tabular-nums text-slate-400 tracking-wider">
                         #{String(prov.complaintRank).padStart(2, "0")}
                       </span>
                       <h3 className="font-bold text-slate-900 text-base font-heading tracking-tight leading-snug">
@@ -345,7 +345,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                       }`}
                     >
                       {/* Rank */}
-                      <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-500 text-xs">
+                      <td className="py-2.5 px-3 text-center font-sans tabular-nums font-bold text-slate-500 text-xs">
                         #{String(prov.complaintRank).padStart(2, "0")}
                       </td>
 

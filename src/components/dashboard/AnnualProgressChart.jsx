@@ -58,7 +58,7 @@ export default function AnnualProgressChart() {
         {/* Section Header & View Toggles */}
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-orange-700 font-mono mb-1">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-orange-700 font-sans mb-1">
               <TrendingUp className="w-3.5 h-3.5" />
               <span>Analisis Historis Tahunan • Sumber: BPS (Sirusa) & Ombudsman RI</span>
             </div>
@@ -200,7 +200,7 @@ export default function AnnualProgressChart() {
                             y={y + 3.5}
                             textAnchor="end"
                             fontSize="9"
-                            fontFamily="monospace"
+                            fontFamily="sans-serif"
                             fill="#94a3b8"
                             fontWeight="bold"
                           >
@@ -219,7 +219,7 @@ export default function AnnualProgressChart() {
                       y="118"
                       textAnchor="middle"
                       fontSize="10"
-                      fontFamily="monospace"
+                      fontFamily="sans-serif"
                       fontWeight="bold"
                       fill="#9a3412"
                       opacity="0.8"
@@ -326,7 +326,7 @@ export default function AnnualProgressChart() {
                             y={p.yKabKota + (isHovered ? -12 : -9)}
                             textAnchor="middle"
                             fontSize="9"
-                            fontFamily="monospace"
+                            fontFamily="sans-serif"
                             fontWeight="bold"
                             fill={isHovered ? "#9a3412" : "#c2410c"}
                           >
@@ -339,7 +339,7 @@ export default function AnnualProgressChart() {
                             y="210"
                             textAnchor="middle"
                             fontSize="10"
-                            fontFamily="monospace"
+                            fontFamily="sans-serif"
                             fontWeight={isHovered ? "bold" : "normal"}
                             fill={isHovered ? "#c2410c" : "#64748b"}
                           >
@@ -386,7 +386,7 @@ export default function AnnualProgressChart() {
 
                           {/* Highlight Ring on Hover */}
                           {isHovered && (
-                            <div className="absolute -top-3 px-1.5 py-0.5 rounded-[5px] bg-slate-900 text-white text-[9px] font-bold font-mono shadow-xs">
+                            <div className="absolute -top-3 px-1.5 py-0.5 rounded-[5px] bg-slate-900 text-white text-[9px] font-bold font-sans tabular-nums shadow-xs">
                               Gap {d.gap}%
                             </div>
                           )}
@@ -394,7 +394,7 @@ export default function AnnualProgressChart() {
 
                         {/* Year Label */}
                         <span
-                          className={`text-xs font-bold font-mono transition-colors ${
+                          className={`text-xs font-bold font-sans tabular-nums transition-colors ${
                             isHovered ? "text-orange-700 font-extrabold" : "text-slate-500"
                           }`}
                         >
@@ -496,7 +496,7 @@ export default function AnnualProgressChart() {
                       </div>
 
                       <span
-                        className={`text-xs font-bold font-mono transition-colors ${
+                        className={`text-xs font-bold font-sans tabular-nums transition-colors ${
                           isHovered ? "text-orange-700 font-extrabold" : "text-slate-500"
                         }`}
                       >
@@ -510,27 +510,27 @@ export default function AnnualProgressChart() {
               {/* Snapshot Detail */}
               <div className="mt-4 p-4 rounded-[5px] bg-white/90 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-[5px] bg-rose-50 text-rose-700 font-mono font-bold text-sm">
+                  <div className="p-2.5 rounded-[5px] bg-rose-50 text-rose-700 font-sans font-bold text-sm tabular-nums">
                     {selectedComplaintData.year}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">
+                    <h4 className="text-xs font-bold text-slate-900 font-sans">
                       Total {selectedComplaintData.totalComplaints.toLocaleString("id-ID")} Aduan Masuk
                     </h4>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 font-sans">
                       Sebanyak {selectedComplaintData.overdue.toLocaleString("id-ID")} aduan ({selectedComplaintData.overduePct}%) mengalami penundaan berlarut tanpa respon resmi dalam 14 hari kerja.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-mono shrink-0">
+                <div className="flex items-center gap-4 text-xs font-sans shrink-0">
                   <div>
                     <span className="text-[10px] text-slate-400 block">Tuntas</span>
-                    <strong className="text-emerald-600">{selectedComplaintData.resolved.toLocaleString("id-ID")}</strong>
+                    <strong className="text-emerald-600 tabular-nums">{selectedComplaintData.resolved.toLocaleString("id-ID")}</strong>
                   </div>
                   <div className="border-l border-slate-200 pl-4">
                     <span className="text-[10px] text-slate-400 block">Overdue</span>
-                    <strong className="text-rose-600">{selectedComplaintData.overdue.toLocaleString("id-ID")}</strong>
+                    <strong className="text-rose-600 tabular-nums">{selectedComplaintData.overdue.toLocaleString("id-ID")}</strong>
                   </div>
                 </div>
               </div>
@@ -558,8 +558,8 @@ export default function AnnualProgressChart() {
                   return (
                     <div key={item.year} className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-slate-800 font-mono">Tahun {item.year}</span>
-                        <span className="font-extrabold text-orange-700 font-mono text-sm">
+                        <span className="font-bold text-slate-800 font-sans tabular-nums">Tahun {item.year}</span>
+                        <span className="font-extrabold text-[#c2410c] font-sans tabular-nums text-sm">
                           Rp {item.budgetTrillion} Triliun
                         </span>
                       </div>
