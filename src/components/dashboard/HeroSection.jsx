@@ -1193,17 +1193,17 @@ export default function HeroSection({
             </div>
           </div>
 
-          {/* Clean, Non-Cramped Table with No Word Wrapping */}
+          {/* Clean, Streamlined Table with Orderly Layout */}
           <div className="overflow-x-auto rounded-[5px] border border-slate-200/80 bg-white shadow-2xs">
             <table className="w-full text-left text-xs border-collapse min-w-[960px]">
               <thead>
                 <tr className="border-b border-slate-200 text-[11px] text-slate-600 font-sans font-bold uppercase tracking-wider bg-slate-50/80 whitespace-nowrap">
-                  <th className="py-2.5 px-3.5 font-bold">Ruas Jalan & Wilayah</th>
-                  <th className="py-2.5 px-3 font-bold">Status Wewenang & SK</th>
-                  <th className="py-2.5 px-3 font-bold text-right">Pagu vs Kontrak</th>
-                  <th className="py-2.5 px-3 font-bold">Kontraktor & Sumber Dana</th>
-                  <th className="py-2.5 px-3 font-bold text-center">Status Respons</th>
-                  <th className="py-2.5 px-3.5 font-bold text-right">Aksi</th>
+                  <th className="py-3 px-4 font-bold">Ruas Jalan</th>
+                  <th className="py-3 px-3 font-bold">Kewenangan</th>
+                  <th className="py-3 px-3 font-bold text-right">Pagu &amp; Kontrak</th>
+                  <th className="py-3 px-3 font-bold">Kontraktor Pelaksana</th>
+                  <th className="py-3 px-3 font-bold text-center">Status Respons</th>
+                  <th className="py-3 px-4 font-bold text-right">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-sans">
@@ -1221,113 +1221,94 @@ export default function HeroSection({
 
                     return (
                       <tr key={road.id} className="hover:bg-slate-50/70 transition-colors group">
-                        {/* 1. Ruas Jalan & Wilayah */}
-                        <td className="py-3 px-3.5">
+                        {/* 1. Ruas Jalan & Wilayah: Clean 2-Line Hierarchy */}
+                        <td className="py-3.5 px-4 min-w-[260px]">
                           <button
                             onClick={() => setSelectedRoadForDetail(road)}
-                            className="font-bold text-slate-900 group-hover:text-[#c2410c] text-xs sm:text-[13px] text-left transition-colors cursor-pointer block leading-snug"
+                            className="font-bold text-slate-900 group-hover:text-[#c2410c] text-[13px] text-left transition-colors cursor-pointer block leading-snug"
                           >
                             {road.name}
                           </button>
-                          <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-500 font-sans flex-wrap">
-                            <span className="font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[5px] bg-slate-100 text-slate-700 border border-slate-200/90 shrink-0 shadow-2xs tracking-tight">
-                              {road.code}
+                          <div className="text-[11.5px] text-slate-500 mt-1 flex items-center gap-1.5 font-sans whitespace-nowrap">
+                            <span className="text-slate-600 font-medium">{road.district}</span>
+                            <span className="text-slate-300">•</span>
+                            <span className="font-semibold text-slate-700 tabular-nums">{road.lengthKm} km</span>
+                          </div>
+                        </td>
+
+                        {/* 2. Status Wewenang: Clean Badge Only */}
+                        <td className="py-3.5 px-3 whitespace-nowrap">
+                          {road.authority === "NASIONAL" ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-orange-500/10 text-orange-950 border border-orange-500/25">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                              <span>Jalan Nasional</span>
                             </span>
-                            <span>•</span>
-                            <span className="text-slate-600 truncate max-w-[210px]">{road.district}</span>
-                            <span>•</span>
-                            <span className="font-semibold text-slate-700 tabular-nums whitespace-nowrap">{road.lengthKm} Km</span>
-                          </div>
-                        </td>
-
-                        {/* 2. Status Wewenang & SK (No black background, brand palette with lowered opacity, 5px radius) */}
-                        <td className="py-3 px-3 whitespace-nowrap">
-                          <div className="flex items-center">
-                            {road.authority === "NASIONAL" ? (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] text-xs font-semibold bg-orange-500/10 text-orange-950 border border-orange-500/25 shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
-                                <span>Jalan Nasional</span>
-                              </span>
-                            ) : road.authority === "PROVINSI" ? (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] text-xs font-semibold bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
-                                <span>Jalan Provinsi</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] text-xs font-semibold bg-slate-500/10 text-slate-800 border border-slate-300 shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" />
-                                <span>Kota / Kab</span>
-                              </span>
-                            )}
-                          </div>
-                          <span className="block text-[10px] text-slate-500 truncate max-w-[200px] mt-1 font-sans" title={road.legalBasis}>
-                            {road.legalBasis?.split(" tentang ")[0]}
-                          </span>
-                        </td>
-
-                        {/* 3. Pagu vs Kontrak */}
-                        <td className="py-3 px-3 text-right whitespace-nowrap">
-                          <div className="font-sans font-bold tabular-nums text-slate-900 text-xs sm:text-[13px] whitespace-nowrap">
-                            Rp {(road.budget?.paguRp / 1000000000).toFixed(2)} M
-                          </div>
-                          <div className="text-[11px] font-semibold tabular-nums text-emerald-700 whitespace-nowrap mt-0.5">
-                            Kontrak: Rp {(road.budget?.contractValueRp / 1000000000).toFixed(2)} M
-                          </div>
-                          {road.budget?.paguRp > road.budget?.contractValueRp && (
-                            <div className="text-[10px] font-medium text-slate-400 tabular-nums whitespace-nowrap mt-0.5">
-                              Hemat: Rp {((road.budget.paguRp - road.budget.contractValueRp) / 1000000000).toFixed(2)} M
-                            </div>
+                          ) : road.authority === "PROVINSI" ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-amber-500/10 text-amber-950 border border-amber-500/25">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                              <span>Jalan Provinsi</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-teal-500/10 text-teal-950 border border-teal-500/25">
+                              <span className="w-1.5 h-1.5 rounded-full bg-teal-600 shrink-0" />
+                              <span>Kota / Kab</span>
+                            </span>
                           )}
                         </td>
 
-                        {/* 4. Kontraktor & Sumber Dana (Outlined 5px radius badge) */}
-                        <td className="py-3 px-3">
-                          <div className="font-medium text-slate-800 text-xs truncate max-w-[210px]" title={road.budget?.contractor}>
-                            {road.budget?.contractor || "Belum Ditenderkan"}
+                        {/* 3. Pagu vs Kontrak: Clean 2 Lines */}
+                        <td className="py-3.5 px-3 text-right whitespace-nowrap">
+                          <div className="font-sans font-bold tabular-nums text-slate-900 text-[13px]">
+                            Rp {(road.budget?.paguRp / 1000000000).toFixed(2)} M
                           </div>
-                          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold whitespace-nowrap px-2.5 py-1 rounded-[5px] shadow-2xs bg-white ${
-                              road.budget?.matchConfidence === "TERKONFIRMASI"
-                                ? "text-emerald-700 border border-emerald-500/70"
-                                : "text-amber-700 border border-amber-500/70"
-                            }`}>
-                              {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                              ) : (
-                                <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                              )}
-                              <span>{road.budget?.matchConfidence === "TERKONFIRMASI" ? "LPSE Terverifikasi" : "Parsial"}</span>
-                            </span>
-                            <span className="text-[10px] text-slate-400 truncate max-w-[130px]" title={road.budget?.source}>
-                              {road.budget?.source}
-                            </span>
+                          <div className="text-[11px] font-medium text-slate-500 tabular-nums mt-0.5">
+                            Kontrak: Rp {(road.budget?.contractValueRp / 1000000000).toFixed(2)} M
                           </div>
                         </td>
 
-                        {/* 5. Status Respons Pemantauan (14 Hari) - Clean Outlined Box, 5px Radius, No Colored Fill, Slightly Larger */}
-                        <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {/* 4. Kontraktor & Status Verifikasi */}
+                        <td className="py-3.5 px-3 min-w-[200px]">
+                          <div className="font-semibold text-slate-800 text-[12.5px] truncate max-w-[220px]" title={road.budget?.contractor}>
+                            {road.budget?.contractor || "Dalam Pengadaan"}
+                          </div>
+                          <div className="text-[11px] mt-0.5 flex items-center gap-1 font-sans">
+                            {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
+                              <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                <span>LPSE Terverifikasi</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-amber-700 font-medium">
+                                <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                                <span>Parsial</span>
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* 5. Status Respons Pemantauan (14 Hari) */}
+                        <td className="py-3.5 px-3 text-center whitespace-nowrap">
                           {isOverdue ? (
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[5px] border border-rose-500 bg-white text-rose-700 text-xs font-semibold shadow-2xs">
-                              <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] border border-rose-500 bg-white text-rose-700 text-xs font-semibold shadow-2xs">
+                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
                               <span>Lewat Tenggat</span>
                             </div>
                           ) : (
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[5px] border border-emerald-500 bg-white text-emerald-700 text-xs font-semibold shadow-2xs">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[5px] border border-emerald-500 bg-white text-emerald-700 text-xs font-semibold shadow-2xs">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                               <span>Terpantau Aman</span>
                             </div>
                           )}
                         </td>
 
                         {/* 6. Aksi: Buka Detail Ruas */}
-                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                        <td className="py-3.5 px-4 text-right whitespace-nowrap">
                           <button
                             onClick={() => setSelectedRoadForDetail(road)}
-                            className="px-3 py-1.5 rounded-[5px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] font-semibold text-xs border border-slate-200 hover:border-orange-300 transition-all duration-150 cursor-pointer inline-flex items-center gap-1.5 shadow-2xs group/btn"
+                            className="px-3 py-1.5 rounded-[5px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] font-semibold text-xs border border-slate-200 hover:border-orange-300 transition-all duration-150 cursor-pointer inline-flex items-center gap-1 shadow-2xs group/btn"
                           >
-                            <Eye className="w-3.5 h-3.5 text-slate-400 group-hover/btn:text-[#c2410c] transition-colors" />
-                            <span>Lihat Detail</span>
-                            <ChevronRight className="w-3 h-3 text-slate-300 group-hover/btn:text-[#c2410c] group-hover/btn:translate-x-0.5 transition-all" />
+                            <span>Detail</span>
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:text-[#c2410c] group-hover/btn:translate-x-0.5 transition-all" />
                           </button>
                         </td>
                       </tr>
