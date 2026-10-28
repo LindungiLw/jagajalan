@@ -369,7 +369,7 @@ export default function HeroSection({
                 {/* Index 1: Kemantapan Jalan (BPS 2024) */}
                 <button
                   onClick={() => setSelectedIndex("kemantapan")}
-                  className={`w-full text-left p-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
                     selectedIndex === "kemantapan"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -385,7 +385,7 @@ export default function HeroSection({
                       2024
                     </span>
                   </div>
-                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                  <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     57,1% <span className="text-xs font-semibold uppercase tracking-wider font-sans">MANTAP</span>
                   </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "kemantapan" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
@@ -396,7 +396,7 @@ export default function HeroSection({
                 {/* Index 2: Konteks Ombudsman 2024 */}
                 <button
                   onClick={() => setSelectedIndex("ombudsman")}
-                  className={`w-full text-left p-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
                     selectedIndex === "ombudsman"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -412,7 +412,7 @@ export default function HeroSection({
                       2024
                     </span>
                   </div>
-                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                  <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     33,86% <span className="text-xs font-semibold uppercase tracking-wider font-sans">LAPORAN</span>
                   </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "ombudsman" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
@@ -423,7 +423,7 @@ export default function HeroSection({
                 {/* Index 3: Pagu Paket Pilot LPSE */}
                 <button
                   onClick={() => setSelectedIndex("pagu")}
-                  className={`w-full text-left p-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
                     selectedIndex === "pagu"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -439,7 +439,7 @@ export default function HeroSection({
                       6 Paket
                     </span>
                   </div>
-                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                  <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     Rp 35,80 <span className="text-xs font-semibold uppercase tracking-wider font-sans">MIL</span>
                   </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "pagu" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
@@ -450,7 +450,7 @@ export default function HeroSection({
                 {/* Index 4: Alokasi Inpres Nasional 2023 */}
                 <button
                   onClick={() => setSelectedIndex("inpres")}
-                  className={`w-full text-left p-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
                     selectedIndex === "inpres"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -466,7 +466,7 @@ export default function HeroSection({
                       TA 2023
                     </span>
                   </div>
-                  <div className="text-2xl sm:text-[28px] font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
+                  <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
                     Rp 14,60 <span className="text-xs font-semibold uppercase tracking-wider font-sans">TRIL</span>
                   </div>
                   <div className={`text-[10px] truncate ${selectedIndex === "inpres" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
@@ -477,26 +477,26 @@ export default function HeroSection({
 
               {/* Chart Column: Dynamic Visual Monitor based on selectedIndex */}
               <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200/60 p-3 flex flex-col justify-between">
-                     {/* Chart Header: Structured 2-Tier Header (Never Wraps Awkwardly) */}
-                <div className="space-y-2 border-b border-slate-200/60 pb-2.5">
+                {/* Chart Header: Structured 2-Tier Header (Never Wraps Awkwardly) */}
+                <div className="space-y-1.5 border-b border-slate-200/60 pb-2">
                   {/* Row 1: Title & Main Type Switcher (Garis / Batang) */}
                   <div className="flex items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[10px] font-semibold text-slate-400 uppercase font-sans tracking-wide block">
-                        {selectedIndex === "kemantapan" && "Sumber: BPS Sirusa (Data Tahunan 2020–2024)"}
-                        {selectedIndex === "ombudsman" && "Sumber: Ombudsman RI (Laporan Tahunan 2020–2024)"}
-                        {selectedIndex === "pagu" && "Sumber: SiRUP & LPSE LKPP (Tahun Anggaran 2026)"}
-                        {selectedIndex === "inpres" && "Sumber: KemenPUPR (Inpres No. 3/2023 Tahap I & II)"}
+                    <div className="min-w-0">
+                      <span className="text-[9.5px] font-semibold text-slate-400 uppercase font-sans tracking-wide truncate block">
+                        {selectedIndex === "kemantapan" && "BPS SIRUSA (DATA TAHUNAN 2020–2024)"}
+                        {selectedIndex === "ombudsman" && "OMBUDSMAN RI (LAPORAN TAHUNAN 2020–2024)"}
+                        {selectedIndex === "pagu" && "SIRUP & LPSE LKPP (TAHUN ANGGARAN 2026)"}
+                        {selectedIndex === "inpres" && "KEMENPUPR (INPRES NO. 3/2023)"}
                       </span>
-                      <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight block">
-                        {selectedIndex === "kemantapan" && `Tingkat Kemantapan Jalan (Tahun ${selectedYear})`}
-                        {selectedIndex === "ombudsman" && `Tren Maladministrasi Undue Delay (${selectedYear})`}
+                      <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight truncate block">
+                        {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan"}
+                        {selectedIndex === "ombudsman" && "Tren Penundaan Berlarut (Undue Delay)"}
                         {selectedIndex === "pagu" && (
                           budgetTimeScale === "bulanan"
-                            ? "Tren Realisasi Pagu vs Kontrak Bulanan (Jan – Okt 2026)"
-                            : "Komparasi Pagu vs Nilai Kontrak Lelang Pilot (TA 2026)"
+                            ? "Tren Realisasi Pagu vs Kontrak Bulanan"
+                            : "Komparasi Pagu vs Nilai Kontrak Pilot"
                         )}
-                        {selectedIndex === "inpres" && "Alokasi & Realisasi Fisik Inpres Jalan Daerah"}
+                        {selectedIndex === "inpres" && "Alokasi Inpres Jalan Daerah (IJD)"}
                       </strong>
                     </div>
 
@@ -504,7 +504,7 @@ export default function HeroSection({
                     <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs font-sans shrink-0">
                       <button
                         onClick={() => setChartViewMode("line")}
-                        className={`px-2 py-1 transition-colors cursor-pointer flex items-center gap-1 ${
+                        className={`px-2 py-0.5 transition-colors cursor-pointer flex items-center gap-1 ${
                           chartViewMode === "line"
                             ? "bg-[#c2410c] text-white"
                             : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
@@ -516,7 +516,7 @@ export default function HeroSection({
                       </button>
                       <button
                         onClick={() => setChartViewMode("bar")}
-                        className={`px-2 py-1 transition-colors cursor-pointer flex items-center gap-1 ${
+                        className={`px-2 py-0.5 transition-colors cursor-pointer flex items-center gap-1 ${
                           chartViewMode === "bar"
                             ? "bg-[#c2410c] text-white"
                             : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
@@ -530,30 +530,29 @@ export default function HeroSection({
                   </div>
 
                   {/* Row 2: Sub-toolbar / Legend & Filter Bar (Never wraps awkwardly!) */}
-                  <div className="flex items-center justify-between gap-2 pt-0.5 text-[10px] font-sans">
+                  <div className="flex items-center justify-between gap-1 pt-0.5 text-[9.5px] font-sans">
                     {/* Left: Dynamic Color Legend */}
                     {selectedIndex === "kemantapan" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-700" />Nasional</span>
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-600" />Provinsi</span>
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#c2410c]" />Kab/Kota</span>
+                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-slate-700" />Nas</span>
+                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-600" />Prov</span>
+                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Kab/Kota</span>
                       </div>
                     )}
                     {selectedIndex === "ombudsman" && (
-                      <div className="flex items-center gap-1.5 font-medium text-slate-600">
-                        <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
-                        <span>Persentase Aduan Terlambat (Undue Delay)</span>
+                      <div className="flex items-center gap-2 font-medium text-slate-600">
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Undue Delay (%)</span>
                       </div>
                     )}
                     {selectedIndex === "pagu" && (
-                      <div className="flex items-center gap-2.5 font-medium">
-                        <span className="flex items-center gap-1 text-slate-600"><span className="w-2 h-2 rounded-[2px] bg-slate-700" />Pagu (HPS)</span>
-                        <span className="flex items-center gap-1 text-[#c2410c]"><span className="w-2 h-2 rounded-[2px] bg-[#c2410c]" />Kontrak</span>
+                      <div className="flex items-center gap-2 font-medium">
+                        <span className="flex items-center gap-1 text-slate-600"><span className="w-1.5 h-1.5 rounded-[2px] bg-slate-700" />Pagu</span>
+                        <span className="flex items-center gap-1 text-[#c2410c]"><span className="w-1.5 h-1.5 rounded-[2px] bg-[#c2410c]" />Kontrak</span>
                       </div>
                     )}
                     {selectedIndex === "inpres" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#c2410c]" />Alokasi APBN (Triliun)</span>
+                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Alokasi APBN</span>
                       </div>
                     )}
 
@@ -564,7 +563,7 @@ export default function HeroSection({
                           <button
                             key={yr}
                             onClick={() => setSelectedYear(yr)}
-                            className={`px-2 py-0.5 transition-colors cursor-pointer ${
+                            className={`px-1.5 py-0.5 transition-colors cursor-pointer ${
                               selectedYear === yr
                                 ? "bg-[#c2410c] text-white font-bold"
                                 : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
@@ -577,26 +576,26 @@ export default function HeroSection({
                     )}
 
                     {selectedIndex === "pagu" && (
-                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs shrink-0">
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[9.5px] font-bold font-sans shadow-2xs shrink-0">
                         <button
                           onClick={() => setBudgetTimeScale("instansi")}
-                          className={`px-2 py-0.5 transition-colors cursor-pointer ${
+                          className={`px-1.5 py-0.5 transition-colors cursor-pointer ${
                             budgetTimeScale === "instansi"
                               ? "bg-[#c2410c] text-white"
                               : "bg-white text-slate-600 hover:bg-orange-50/60"
                           }`}
                         >
-                          Per Instansi (TA 2026)
+                          Per Instansi
                         </button>
                         <button
                           onClick={() => setBudgetTimeScale("bulanan")}
-                          className={`px-2 py-0.5 transition-colors cursor-pointer ${
+                          className={`px-1.5 py-0.5 transition-colors cursor-pointer ${
                             budgetTimeScale === "bulanan"
                               ? "bg-[#c2410c] text-white"
                               : "bg-white text-slate-600 hover:bg-orange-50/60"
                           }`}
                         >
-                          Skala Bulanan (Jan–Okt)
+                          Bulanan (2026)
                         </button>
                       </div>
                     )}
@@ -1527,7 +1526,7 @@ export default function HeroSection({
           </div>
 
           {/* RIGHT 5 COLS: REKAPITULASI KORIDOR PILOT */}
-          <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/80 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3">
+          <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/80 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-2.5">
             
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -1541,62 +1540,120 @@ export default function HeroSection({
               </div>
               <button
                 onClick={onExploreData}
-                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer"
+                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer font-sans"
               >
                 <span>Anggaran Proyek</span>
-                <ChevronRight className="w-3 h-3" />
+                <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* Financial-Grade Compact Table */}
-            <div className="overflow-x-auto text-xs">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200 text-[10.5px] text-slate-500 font-sans font-semibold uppercase tracking-wider">
-                    <th className="py-1 font-bold">Klasifikasi Wewenang</th>
-                    <th className="py-1 font-bold text-center">Ruas</th>
-                    <th className="py-1 font-bold text-right">Pagu Pengadaan</th>
-                    <th className="py-1 font-bold text-right">Tenggat Respons</th>
+            {/* Executive KPI Micro Strip (Eliminates barren empty space) */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-slate-50/90 border border-slate-200/70 rounded-[5px] p-2 text-center">
+                <span className="text-[9.5px] text-slate-500 font-bold uppercase tracking-wider font-sans block">
+                  Ruas Pilot
+                </span>
+                <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
+                  6 Ruas
+                </strong>
+                <span className="text-[9px] text-slate-400 font-sans block">1 Nas • 2 Prov • 3 Kota</span>
+              </div>
+              <div className="bg-slate-50/90 border border-slate-200/70 rounded-[5px] p-2 text-center">
+                <span className="text-[9.5px] text-slate-500 font-bold uppercase tracking-wider font-sans block">
+                  Total Pagu
+                </span>
+                <strong className="text-base sm:text-lg font-bold text-emerald-800 tabular-nums font-sans block mt-0.5">
+                  Rp 35,80 M
+                </strong>
+                <span className="text-[9px] text-slate-400 font-sans block">Kontrak: Rp 33,59 M</span>
+              </div>
+              <div className="bg-rose-50/70 border border-rose-200/70 rounded-[5px] p-2 text-center">
+                <span className="text-[9.5px] text-rose-700 font-bold uppercase tracking-wider font-sans block">
+                  Lewat SLA
+                </span>
+                <strong className="text-base sm:text-lg font-bold text-rose-600 tabular-nums font-sans block mt-0.5">
+                  2 Tiket
+                </strong>
+                <span className="text-[9px] text-rose-600/80 font-sans block">&gt; 14 Hari Kerja</span>
+              </div>
+            </div>
+
+            {/* Financial-Grade Structured Table */}
+            <div className="border border-slate-200/70 rounded-[5px] overflow-hidden bg-white shadow-2xs">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead className="bg-slate-50 border-b border-slate-200/70 text-[9.5px] text-slate-500 font-sans font-bold uppercase tracking-wider">
+                  <tr>
+                    <th className="py-1.5 px-2.5">Klasifikasi Wewenang</th>
+                    <th className="py-1.5 px-2 text-center">Ruas</th>
+                    <th className="py-1.5 px-2.5 text-right">Pagu Pengadaan</th>
+                    <th className="py-1.5 px-2.5 text-right">Status SLA</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-sans text-xs sm:text-[13px]">
-                  <tr className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-1.5">
-                      <span className="font-bold text-slate-900 block text-xs">KemenPUPR (BBPJN)</span>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-sans">Jalan Nasional</span>
+                <tbody className="divide-y divide-slate-100 font-sans text-xs">
+                  <tr className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-1.5 px-2.5">
+                      <div className="font-bold text-slate-900 text-xs">KemenPUPR (BBPJN)</div>
+                      <div className="text-[9.5px] text-slate-500 font-medium">Jalan Nasional</div>
                     </td>
-                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">1</td>
-                    <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 8,45 M</td>
-                    <td className="py-1.5 text-right font-sans tabular-nums text-emerald-700 font-bold">0</td>
+                    <td className="py-1.5 px-2 text-center font-bold tabular-nums text-slate-700">1</td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <div className="font-bold tabular-nums text-slate-900">Rp 8,45 M</div>
+                      <div className="text-[9px] text-slate-400 tabular-nums">23,6% Pagu</div>
+                    </td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 tabular-nums">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        Aman (0)
+                      </span>
+                    </td>
                   </tr>
 
-                  <tr className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-1.5">
-                      <span className="font-bold text-slate-900 block text-xs">DBMPR Jawa Barat</span>
-                      <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider font-sans">Jalan Provinsi</span>
+                  <tr className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-1.5 px-2.5">
+                      <div className="font-bold text-slate-900 text-xs">DBMPR Jawa Barat</div>
+                      <div className="text-[9.5px] text-amber-700 font-medium">Jalan Provinsi</div>
                     </td>
-                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">2</td>
-                    <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 15,70 M</td>
-                    <td className="py-1.5 text-right font-sans tabular-nums text-rose-600 font-bold">1 Tiket</td>
+                    <td className="py-1.5 px-2 text-center font-bold tabular-nums text-slate-700">2</td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <div className="font-bold tabular-nums text-slate-900">Rp 15,70 M</div>
+                      <div className="text-[9px] text-slate-400 tabular-nums">43,9% Pagu</div>
+                    </td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200/60 tabular-nums">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                        1 Tiket Eskalasi
+                      </span>
+                    </td>
                   </tr>
 
-                  <tr className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-1.5">
-                      <span className="font-bold text-slate-900 block text-xs">Dinas PUPR Depok</span>
-                      <span className="text-[10px] text-orange-800 font-bold uppercase tracking-wider font-sans">Jalan Kab / Kota</span>
+                  <tr className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-1.5 px-2.5">
+                      <div className="font-bold text-slate-900 text-xs">Dinas PUPR Depok</div>
+                      <div className="text-[9.5px] text-orange-700 font-medium">Jalan Kab / Kota</div>
                     </td>
-                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-700">3</td>
-                    <td className="py-1.5 text-right font-sans font-bold tabular-nums text-slate-900">Rp 11,65 M</td>
-                    <td className="py-1.5 text-right font-sans tabular-nums text-rose-600 font-bold">1 Tiket</td>
-                  </tr>
-
-                  <tr className="bg-slate-50/90 font-bold border-t border-slate-200">
-                    <td className="py-1.5 text-slate-900 text-xs font-bold font-sans">Total Pilot</td>
-                    <td className="py-1.5 text-center font-sans font-bold tabular-nums text-slate-900">6 Ruas</td>
-                    <td className="py-1.5 text-right font-sans tabular-nums text-emerald-800">Rp 35,80 M</td>
-                    <td className="py-1.5 text-right font-sans tabular-nums text-rose-600">2 Melewati Tenggat</td>
+                    <td className="py-1.5 px-2 text-center font-bold tabular-nums text-slate-700">3</td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <div className="font-bold tabular-nums text-slate-900">Rp 11,65 M</div>
+                      <div className="text-[9px] text-slate-400 tabular-nums">32,5% Pagu</div>
+                    </td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200/60 tabular-nums">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                        1 Tiket Eskalasi
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
+                <tfoot className="bg-slate-50/90 font-bold border-t border-slate-200 text-xs">
+                  <tr>
+                    <td className="py-1.5 px-2.5 text-slate-900">Total Koridor Pilot</td>
+                    <td className="py-1.5 px-2 text-center tabular-nums text-slate-900">6 Ruas</td>
+                    <td className="py-1.5 px-2.5 text-right tabular-nums text-emerald-800">Rp 35,80 M</td>
+                    <td className="py-1.5 px-2.5 text-right">
+                      <span className="text-[9.5px] font-bold text-rose-700 tabular-nums">2 Lewat SLA</span>
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
 
@@ -1607,7 +1664,7 @@ export default function HeroSection({
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
                 </span>
-                <span>2 laporan pilot telah melewati tenggat pemantauan respons (14 hari kerja).</span>
+                <span>2 laporan pilot telah melewati tenggat respons (14 hari kerja).</span>
               </div>
               <button
                 onClick={() => {
@@ -1616,9 +1673,10 @@ export default function HeroSection({
                     if (firstOverdue) onOpenOmbudsmanDraft(firstOverdue);
                   }
                 }}
-                className="font-bold text-[#c2410c] hover:underline shrink-0 cursor-pointer text-[11px]"
+                className="font-bold text-[#c2410c] hover:underline shrink-0 cursor-pointer text-[11px] flex items-center gap-0.5"
               >
-                Periksa Opsi Eskalasi →
+                <span>Periksa Opsi Eskalasi</span>
+                <ChevronRight className="w-3 h-3" />
               </button>
             </div>
           </div>
