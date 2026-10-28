@@ -249,15 +249,20 @@ export default function MapInner({
 
       {/* Road Segment Polylines */}
       {roads.map((road) => {
-        let color = "#0d9488"; // Kota/Kab: Teal
+        let color = "#0d9488"; // Kota: Teal
         let badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
         if (road.authority === "NASIONAL") {
           color = "#2563eb"; // Nasional: Royal Blue
           badgeBg = "bg-blue-50 text-blue-800 border-blue-200";
-        }
-        if (road.authority === "PROVINSI") {
+        } else if (road.authority === "PROVINSI") {
           color = "#7c3aed"; // Provinsi: Vivid Purple
           badgeBg = "bg-purple-50 text-purple-800 border-purple-200";
+        } else if (road.authority === "KABUPATEN") {
+          color = "#059669"; // Kabupaten: Emerald Green
+          badgeBg = "bg-emerald-50 text-emerald-800 border-emerald-200";
+        } else if (road.authority === "KOTA") {
+          color = "#0d9488"; // Kota: Teal
+          badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
         }
 
         const isSelected = selectedRoad?.id === road.id;

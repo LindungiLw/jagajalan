@@ -30,6 +30,24 @@ export const AUTHORITY_COLORS = {
     badgeText: "text-purple-700",
     ringColor: "ring-purple-500",
   },
+  KOTA: {
+    label: "Jalan Kota",
+    responsibleAgency: "Dinas PUPR Kota / Walikota",
+    color: "#0d9488", // Teal
+    badgeBg: "bg-teal-50",
+    badgeBorder: "border-teal-200",
+    badgeText: "text-teal-800",
+    ringColor: "ring-teal-500",
+  },
+  KABUPATEN: {
+    label: "Jalan Kabupaten",
+    responsibleAgency: "Dinas PUPR Kabupaten / Bupati",
+    color: "#059669", // Emerald
+    badgeBg: "bg-emerald-50",
+    badgeBorder: "border-emerald-200",
+    badgeText: "text-emerald-800",
+    ringColor: "ring-emerald-500",
+  },
   KOTA_KAB: {
     label: "Jalan Kota / Kabupaten",
     responsibleAgency: "Dinas PUPR Daerah",

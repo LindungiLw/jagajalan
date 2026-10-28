@@ -773,12 +773,18 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
   let agency = "Dinas Pekerjaan Umum & Penataan Ruang (PUPR) Kab/Kota";
 
   if (minDistanceKm <= 15.0 && closestRoad) {
-    if (closestRoad.authority === "KOTA_KAB") {
-      authority = "KOTA_KAB";
-      authorityLabel = closestRoad.authorityLabel || `Pemerintah ${closestRoad.district || "Kabupaten/Kota"}`;
-      legalBasis = closestRoad.legalBasis || `Peraturan Bupati / Walikota tentang Penetapan Ruas Jalan`;
-      regionalHead = closestRoad.leadership?.regionalHead || "Bupati / Walikota Setempat";
-      agency = closestRoad.leadership?.agency || "Dinas PUPR Kabupaten/Kota";
+    if (closestRoad.authority === "KOTA") {
+      authority = "KOTA";
+      authorityLabel = closestRoad.authorityLabel || `Pemerintah ${closestRoad.district || "Kota"}`;
+      legalBasis = closestRoad.legalBasis || `Peraturan Walikota tentang Penetapan Ruas Jalan Kota`;
+      regionalHead = closestRoad.leadership?.regionalHead || "Walikota Setempat";
+      agency = closestRoad.leadership?.agency || "Dinas PUPR Kota";
+    } else if (closestRoad.authority === "KABUPATEN" || closestRoad.authority === "KOTA_KAB") {
+      authority = "KABUPATEN";
+      authorityLabel = closestRoad.authorityLabel || `Pemerintah ${closestRoad.district || "Kabupaten"}`;
+      legalBasis = closestRoad.legalBasis || `Peraturan Bupati tentang Penetapan Ruas Jalan Kabupaten`;
+      regionalHead = closestRoad.leadership?.regionalHead || "Bupati Setempat";
+      agency = closestRoad.leadership?.agency || "Dinas PUPR Kabupaten";
     } else if (closestRoad.authority === "PROVINSI") {
       authority = "PROVINSI";
       authorityLabel = closestRoad.authorityLabel || `Pemerintah Provinsi ${detectedProvince}`;

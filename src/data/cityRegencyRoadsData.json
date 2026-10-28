@@ -5,7 +5,7 @@
     "region": "sumatera",
     "name": "Ruas Lubuk Pakam - Pantai Labu (Akses Pesisir & Bandara)",
     "code": "RUAS-KAB-DS-01",
-    "authority": "KOTA_KAB",
+    "authority": "KABUPATEN",
     "authorityLabel": "Jalan Kabupaten (APBD Kab. Deli Serdang)",
     "legalBasis": "Keputusan Bupati Deli Serdang No. 412/2022 tentang Penetapan Status Ruas Jalan Kabupaten",
     "district": "Kabupaten Deli Serdang (Sumatera Utara)",
@@ -37,7 +37,7 @@
       "contractor": "CV Bina Cipta Mandiri",
       "source": "APBD Kabupaten Deli Serdang TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 45.0,
+      "progressPct": 45,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -2440,7 +2440,18 @@
         3.658694,
         98.932912
       ]
-    ]
+    ],
+    "functionalClass": "Lokal Primer Penghubung Antar-Kecamatan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kabupaten Deli Serdang TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
+    }
   },
   {
     "id": "ruas-kab-su-04",
@@ -2448,7 +2459,7 @@
     "region": "sumatera",
     "name": "Ruas Perdagangan - Bandar Betsy (Sentra Perkebunan)",
     "code": "RUAS-KAB-SML-01",
-    "authority": "KOTA_KAB",
+    "authority": "KABUPATEN",
     "authorityLabel": "Jalan Kabupaten (APBD Kab. Simalungun)",
     "legalBasis": "Keputusan Bupati Simalungun No. 188.45/489/PUPR/2021 tentang Status Jalan Kabupaten Simalungun",
     "district": "Kabupaten Simalungun (Sumatera Utara)",
@@ -2480,7 +2491,7 @@
       "contractor": "PT Sinar Perkasa Raya",
       "source": "Dana Bagi Hasil (DBH) Sawit & APBD Simalungun",
       "fiscalYear": 2026,
-      "progressPct": 32.0,
+      "progressPct": 32,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -3319,7 +3330,18 @@
         3.108603,
         99.226632
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Primer Kawasan Produksi",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "Dana Bagi Hasil (DBH) Sawit & APBD Simalungun",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
+    }
   },
   {
     "id": "ruas-kab-riau-01",
@@ -3327,7 +3349,7 @@
     "region": "sumatera",
     "name": "Jl. Arifin Achmad - Tuanku Tambusai (Sentra Niaga)",
     "code": "RUAS-KTA-PKU-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Pekanbaru)",
     "legalBasis": "Keputusan Walikota Pekanbaru No. 176/2023 tentang Penetapan Ruas Jalan Kota Pekanbaru",
     "district": "Kota Pekanbaru (Riau)",
@@ -3359,7 +3381,7 @@
       "contractor": "PT Riau Multi Cipta",
       "source": "APBD Kota Pekanbaru TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 75.0,
+      "progressPct": 75,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -4654,7 +4676,18 @@
         0.504858,
         101.399846
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Pekanbaru TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-sumbar-01",
@@ -4662,7 +4695,7 @@
     "region": "sumatera",
     "name": "Jl. Bagindo Aziz Chan - Aie Pacah (Balai Kota Padang)",
     "code": "RUAS-KTA-PDG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Padang)",
     "legalBasis": "Peraturan Walikota Padang No. 34/2021 tentang Jaringan Jalan Perkotaan Kota Padang",
     "district": "Kota Padang (Sumatera Barat)",
@@ -4694,7 +4727,7 @@
       "contractor": "PT Ranah Minang Konstruksi",
       "source": "APBD Kota Padang TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 88.0,
+      "progressPct": 88,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -7009,7 +7042,18 @@
         -0.856257,
         100.400758
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Padang TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-sumsel-01",
@@ -7017,7 +7061,7 @@
     "region": "sumatera",
     "name": "Jl. R. Sukamto - Basuki Rahmat (Urat Nadi Niaga)",
     "code": "RUAS-KTA-PLG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Palembang)",
     "legalBasis": "Keputusan Walikota Palembang No. 210/KPTS/2022 tentang Penetapan Status Jalan Kota Palembang",
     "district": "Kota Palembang (Sumatera Selatan)",
@@ -7049,7 +7093,7 @@
       "contractor": "PT Sriwijaya Mandiri Perkasa",
       "source": "APBD Kota Palembang TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 60.0,
+      "progressPct": 60,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -8160,7 +8204,18 @@
         -2.940453,
         104.780069
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Palembang TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-kepri-01",
@@ -8168,7 +8223,7 @@
     "region": "sumatera",
     "name": "Jl. Engku Putri - Batam Center (Pusat Pemerintahan & Feri)",
     "code": "RUAS-KTA-BTM-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota / Kawasan Bebas (Pemko Batam / BP Batam)",
     "legalBasis": "Keputusan Walikota Batam No. KPTS.148/HK/IV/2022 tentang Jalan Kota Batam",
     "district": "Kota Batam (Kepulauan Riau)",
@@ -8200,7 +8255,7 @@
       "contractor": "PT Barelang Indo Nusa",
       "source": "APBD Kota Batam & PNBP BP Batam",
       "fiscalYear": 2026,
-      "progressPct": 90.0,
+      "progressPct": 90,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -10059,7 +10114,18 @@
         1.136611,
         104.080887
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Batam & PNBP BP Batam",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-lampung-01",
@@ -10067,7 +10133,7 @@
     "region": "sumatera",
     "name": "Jl. Raden Intan - Tanjung Karang Pusat",
     "code": "RUAS-KTA-BDL-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Bandar Lampung)",
     "legalBasis": "Peraturan Walikota Bandar Lampung No. 12/2021 tentang Jaringan Jalan Kota",
     "district": "Kota Bandar Lampung (Lampung)",
@@ -10099,7 +10165,7 @@
       "contractor": "CV Sinar Lampung Makmur",
       "source": "APBD Kota Bandar Lampung TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 65.0,
+      "progressPct": 65,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -10878,7 +10944,18 @@
         -5.429999,
         105.269957
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Bandar Lampung TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-dki-01",
@@ -10886,7 +10963,7 @@
     "region": "jawa",
     "name": "Jl. Prof. Dr. Satrio - Casablanca (Koridor Non-Tol)",
     "code": "RUAS-KTA-DKI-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota / Khusus Ibukota (APBD DKI Jakarta)",
     "legalBasis": "Keputusan Gubernur Provinsi DKI Jakarta No. 1290/2021",
     "district": "Kota Jakarta Selatan (DKI Jakarta)",
@@ -10918,7 +10995,7 @@
       "contractor": "PT Adhi Persada Properti / KSO Aspal",
       "source": "APBD Provinsi DKI Jakarta TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 92.0,
+      "progressPct": 92,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -12725,7 +12802,18 @@
         -6.224998,
         106.845036
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Provinsi DKI Jakarta TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jabar-01",
@@ -12733,7 +12821,7 @@
     "region": "jawa",
     "name": "Jl. Ir. H. Djuanda (Dago) - Simpang Dago (Ikon Kota)",
     "code": "RUAS-KTA-BDG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Bandung)",
     "legalBasis": "Keputusan Walikota Bandung No. 620/Kep.143-DBMPR/2021 tentang Status Jalan Kota Bandung",
     "district": "Kota Bandung (Jawa Barat)",
@@ -12765,7 +12853,7 @@
       "contractor": "PT Bandung Daya Usaha",
       "source": "APBD Kota Bandung TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 85.0,
+      "progressPct": 85,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -13976,7 +14064,18 @@
         -6.864792,
         107.619908
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Bandung TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jabar-02",
@@ -13984,7 +14083,7 @@
     "region": "jawa",
     "name": "Jl. Margonda Raya - Juanda (Urat Nadi Kota Depok)",
     "code": "RUAS-KTA-DPK-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Depok)",
     "legalBasis": "Peraturan Walikota Depok No. 58/2021 tentang Jaringan Jalan Perkotaan",
     "district": "Kota Depok (Jawa Barat)",
@@ -14016,7 +14115,7 @@
       "contractor": "PT Depok Graha Sejahtera",
       "source": "APBD Kota Depok TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 70.0,
+      "progressPct": 70,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -15391,7 +15490,18 @@
         -6.400384,
         106.821967
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Depok TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jabar-03",
@@ -15399,7 +15509,7 @@
     "region": "jawa",
     "name": "Jl. KH Noer Ali (Kalimalang Kota Bekasi)",
     "code": "RUAS-KTA-BKS-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Bekasi)",
     "legalBasis": "Keputusan Walikota Bekasi No. 620/Kep.318-BMSDA/2022 tentang Penetapan Status Ruas Jalan Kota",
     "district": "Kota Bekasi (Jawa Barat)",
@@ -15431,7 +15541,7 @@
       "contractor": "PT Patriot Bangun Bersama",
       "source": "Bantuan Keuangan Provinsi DKI & APBD Kota Bekasi",
       "fiscalYear": 2026,
-      "progressPct": 62.0,
+      "progressPct": 62,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -16598,7 +16708,18 @@
         -6.240051,
         107.005061
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "Bantuan Keuangan Provinsi DKI & APBD Kota Bekasi",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jabar-04",
@@ -16606,7 +16727,7 @@
     "region": "jawa",
     "name": "Ruas Cibinong - Bojonggede (Akses Stasiun KRL)",
     "code": "RUAS-KAB-BGR-01",
-    "authority": "KOTA_KAB",
+    "authority": "KABUPATEN",
     "authorityLabel": "Jalan Kabupaten (APBD Kab. Bogor)",
     "legalBasis": "Keputusan Bupati Bogor No. 620/381/Kpts/Per-UU/2021 tentang Penetapan Ruas Jalan Kabupaten Bogor",
     "district": "Kabupaten Bogor (Jawa Barat)",
@@ -16638,7 +16759,7 @@
       "contractor": "PT Tegar Beriman Konstruksi",
       "source": "APBD Kabupaten Bogor TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 40.0,
+      "progressPct": 40,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -18689,7 +18810,18 @@
         -6.50504,
         106.790056
       ]
-    ]
+    ],
+    "functionalClass": "Lokal Primer Penghubung Antar-Kecamatan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kabupaten Bogor TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
+    }
   },
   {
     "id": "ruas-kab-jateng-01",
@@ -18697,7 +18829,7 @@
     "region": "jawa",
     "name": "Jl. Pandanaran - Simpang Lima (Pusat Kota)",
     "code": "RUAS-KTA-SMG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Semarang)",
     "legalBasis": "Keputusan Walikota Semarang No. 620/847/2022 tentang Penetapan Status Jalan Kota Semarang",
     "district": "Kota Semarang (Jawa Tengah)",
@@ -18729,7 +18861,7 @@
       "contractor": "PT Semarang Jaya Abadi",
       "source": "APBD Kota Semarang TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 95.0,
+      "progressPct": 95,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -19788,7 +19920,18 @@
         -6.992017,
         110.435108
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Semarang TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jateng-02",
@@ -19796,7 +19939,7 @@
     "region": "jawa",
     "name": "Jl. Slamet Riyadi - Gladag (Arteri Kota Surakarta)",
     "code": "RUAS-KTA-SKT-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Surakarta)",
     "legalBasis": "Keputusan Walikota Surakarta No. 620/22/2021 tentang Penetapan Ruas Jalan Kota Surakarta",
     "district": "Kota Surakarta / Solo (Jawa Tengah)",
@@ -19828,7 +19971,7 @@
       "contractor": "PT Bengawan Solo Konstruksi",
       "source": "APBD Kota Surakarta TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 92.0,
+      "progressPct": 92,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -20707,7 +20850,18 @@
         -7.572007,
         110.835123
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Surakarta TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-diy-01",
@@ -20715,7 +20869,7 @@
     "region": "jawa",
     "name": "Jl. Malioboro - Margo Utomo (Sumbu Filosofi)",
     "code": "RUAS-KTA-YOG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota / Cagar Budaya UNESCO (Pemkot Yogyakarta)",
     "legalBasis": "Peraturan Walikota Yogyakarta No. 42/2022 tentang Pengelolaan Kawasan Khusus Malioboro",
     "district": "Kota Yogyakarta (DI Yogyakarta)",
@@ -20747,7 +20901,7 @@
       "contractor": "PT Mataram Cipta Kencana",
       "source": "Dana Keistimewaan (Danais) DIY & APBD Kota",
       "fiscalYear": 2026,
-      "progressPct": 98.0,
+      "progressPct": 98,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -21898,7 +22052,18 @@
         -7.801923,
         110.36501
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "Dana Keistimewaan (Danais) DIY & APBD Kota",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jatim-01",
@@ -21906,7 +22071,7 @@
     "region": "jawa",
     "name": "Jl. Raya Darmo - Wonokromo (Urat Nadi Kota Surabaya)",
     "code": "RUAS-KTA-SBY-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Surabaya)",
     "legalBasis": "Keputusan Walikota Surabaya No. 188.45/219/436.1.2/2022 tentang Penetapan Status Jalan Kota Surabaya",
     "district": "Kota Surabaya (Jawa Timur)",
@@ -21938,7 +22103,7 @@
       "contractor": "PT Surabaya Mega Konstruksi",
       "source": "APBD Kota Surabaya TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 88.0,
+      "progressPct": 88,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -22637,7 +22802,18 @@
         -7.311873,
         112.737601
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Surabaya TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-jatim-02",
@@ -22645,7 +22821,7 @@
     "region": "jawa",
     "name": "Jl. Ijen - Alun-Alun Tugu (Kawasan Bersejarah)",
     "code": "RUAS-KTA-MLG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Malang)",
     "legalBasis": "Keputusan Walikota Malang No. 188.45/144/35.73.112/2021 tentang Status Jalan Kota Malang",
     "district": "Kota Malang (Jawa Timur)",
@@ -22677,7 +22853,7 @@
       "contractor": "PT Arema Cipta Graha",
       "source": "APBD Kota Malang TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 92.0,
+      "progressPct": 92,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -23688,7 +23864,18 @@
         -7.980588,
         112.631763
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Malang TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-bali-01",
@@ -23696,7 +23883,7 @@
     "region": "bali_nusra",
     "name": "Jl. Teuku Umar - Simpang Enam (Sentra Digital & Niaga)",
     "code": "RUAS-KTA-DPS-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Denpasar)",
     "legalBasis": "Keputusan Walikota Denpasar No. 188.45/456/HK/2022 tentang Status Jalan Kota Denpasar",
     "district": "Kota Denpasar (Bali)",
@@ -23728,7 +23915,7 @@
       "contractor": "PT Bali Cipta Mandiri",
       "source": "APBD Kota Denpasar TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 70.0,
+      "progressPct": 70,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -24747,7 +24934,18 @@
         -8.667932,
         115.214996
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Denpasar TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-bali-02",
@@ -24755,7 +24953,7 @@
     "region": "bali_nusra",
     "name": "Ruas Kuta - Legian - Seminyak (Jl. Sunset Road Barat)",
     "code": "RUAS-KAB-BDG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KABUPATEN",
     "authorityLabel": "Jalan Kabupaten (APBD Kab. Badung)",
     "legalBasis": "Keputusan Bupati Badung No. 712/04.1/HK/2021 tentang Penetapan Status Ruas Jalan Kabupaten Badung",
     "district": "Kabupaten Badung (Bali)",
@@ -24787,7 +24985,7 @@
       "contractor": "PT Badung Karya Tama",
       "source": "Pendapatan Asli Daerah (PAD) PHR Kabupaten Badung",
       "fiscalYear": 2026,
-      "progressPct": 85.0,
+      "progressPct": 85,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -26594,7 +26792,18 @@
         -8.669998,
         115.159726
       ]
-    ]
+    ],
+    "functionalClass": "Lokal Primer Penghubung Antar-Kecamatan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "Pendapatan Asli Daerah (PAD) PHR Kabupaten Badung",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
+    }
   },
   {
     "id": "ruas-kab-ntb-01",
@@ -26602,7 +26811,7 @@
     "region": "bali_nusra",
     "name": "Jl. Pejanggik - Simpang Cakranegara (Pusat Niaga)",
     "code": "RUAS-KTA-MTR-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Mataram)",
     "legalBasis": "Keputusan Walikota Mataram No. 248/IV/2022 tentang Penetapan Status Ruas Jalan Kota Mataram",
     "district": "Kota Mataram (Nusa Tenggara Barat)",
@@ -26634,7 +26843,7 @@
       "contractor": "PT Sasak Indah Permai",
       "source": "APBD Kota Mataram TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 68.0,
+      "progressPct": 68,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -27469,7 +27678,18 @@
         -8.590004,
         116.145247
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Mataram TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-kaltim-01",
@@ -27477,7 +27697,7 @@
     "region": "kalimantan",
     "name": "Jl. Jenderal Sudirman - Klandasan (Pesisir Minyak)",
     "code": "RUAS-KTA-BPN-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Balikpapan)",
     "legalBasis": "Keputusan Walikota Balikpapan No. 188.45-312/2021 tentang Penetapan Status Jalan Kota Balikpapan",
     "district": "Kota Balikpapan (Kalimantan Timur)",
@@ -27509,7 +27729,7 @@
       "contractor": "PT Benua Etam Cipta",
       "source": "APBD Kota Balikpapan TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 85.0,
+      "progressPct": 85,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -28432,7 +28652,18 @@
         -1.260022,
         116.860026
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Balikpapan TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-kaltim-02",
@@ -28440,7 +28671,7 @@
     "region": "kalimantan",
     "name": "Jl. Pangeran Antasari - Juanda (Pusat Kota Tepian)",
     "code": "RUAS-KTA-SMD-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Samarinda)",
     "legalBasis": "Keputusan Walikota Samarinda No. 620/124/HK-KS/2022 tentang Status Jalan Kota Samarinda",
     "district": "Kota Samarinda (Kalimantan Timur)",
@@ -28472,7 +28703,7 @@
       "contractor": "PT Mahakam Mega Mandiri",
       "source": "APBD Kota Samarinda TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 65.0,
+      "progressPct": 65,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -29655,7 +29886,18 @@
         -0.504453,
         117.148314
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Samarinda TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-kaltim-03",
@@ -29663,7 +29905,7 @@
     "region": "kalimantan",
     "name": "Ruas Sepaku - Semoi Dua (Jalan Kabupaten Akses IKN)",
     "code": "RUAS-KAB-PPU-01",
-    "authority": "KOTA_KAB",
+    "authority": "KABUPATEN",
     "authorityLabel": "Jalan Kabupaten (APBD Kab. PPU & Inpres IJD)",
     "legalBasis": "Keputusan Bupati Penajam Paser Utara No. 620/152/2021 tentang Jaringan Jalan Kabupaten",
     "district": "Kabupaten Penajam Paser Utara (Kawasan Nusantara)",
@@ -29695,7 +29937,7 @@
       "contractor": "PT Borneo Jaya Konstruksi",
       "source": "Inpres Jalan Daerah (IJD) APBN & APBD PPU",
       "fiscalYear": 2026,
-      "progressPct": 78.0,
+      "progressPct": 78,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -32118,7 +32360,18 @@
         -0.961194,
         116.844559
       ]
-    ]
+    ],
+    "functionalClass": "Lokal Primer Penghubung Antar-Kecamatan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
+    "fundingSourceType": "INPRES_IJD",
+    "fundingSourceLabel": "Inpres Jalan Daerah (IJD) Bantuan APBN Pusat",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
+    }
   },
   {
     "id": "ruas-kab-kalsel-01",
@@ -32126,7 +32379,7 @@
     "region": "kalimantan",
     "name": "Jl. Lambung Mangkurat - Pasar Terapung Siring",
     "code": "RUAS-KTA-BJM-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Banjarmasin)",
     "legalBasis": "Keputusan Walikota Banjarmasin No. 188.45/214/2022 tentang Penetapan Status Jalan Kota Banjarmasin",
     "district": "Kota Banjarmasin (Kalimantan Selatan)",
@@ -32136,7 +32389,7 @@
     ],
     "pavementType": "Rigid Pavement Di Atas Cerucuk Galam Lahan Rawa",
     "condition": "RUSAK_RINGAN",
-    "lengthKm": 5.0,
+    "lengthKm": 5,
     "hazardScore": 46,
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
@@ -32158,7 +32411,7 @@
       "contractor": "PT Kayu Tangi Mandiri",
       "source": "APBD Kota Banjarmasin TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 72.0,
+      "progressPct": 72,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -32182,7 +32435,7 @@
         "note": "Konektivitas Pemukiman & Sentra Niaga Perkotaan"
       },
       {
-        "km": 5.0,
+        "km": 5,
         "name": "Titik Akhir: Pasar Terapung Siring",
         "status": "RUSAK_RINGAN",
         "note": "Batas Kewenangan Penyelenggara Daerah"
@@ -33077,7 +33330,18 @@
         -3.310356,
         114.609307
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Banjarmasin TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-sulsel-01",
@@ -33085,7 +33349,7 @@
     "region": "sulawesi",
     "name": "Jl. Penghibur (Pantai Losari) - Somba Opu",
     "code": "RUAS-KTA-MKS-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Makassar)",
     "legalBasis": "Keputusan Walikota Makassar No. 620/190/Kep/IV/2022 tentang Penetapan Status Ruas Jalan Kota Makassar",
     "district": "Kota Makassar (Sulawesi Selatan)",
@@ -33117,7 +33381,7 @@
       "contractor": "PT Anging Mammiri Konstruksi",
       "source": "APBD Kota Makassar TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 90.0,
+      "progressPct": 90,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -34788,7 +35052,18 @@
         -5.160083,
         119.408133
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Makassar TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-sulsel-02",
@@ -34796,7 +35071,7 @@
     "region": "sulawesi",
     "name": "Jl. Hertasning Baru - Aroepala (Koridor Pemukiman Timur)",
     "code": "RUAS-KTA-MKS-02",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Makassar & Kab. Gowa)",
     "legalBasis": "Peraturan Bersama Walikota Makassar & Bupati Gowa tentang Koridor Perbatasan Mamminasata",
     "district": "Kota Makassar - Kab. Gowa (Sulawesi Selatan)",
@@ -34828,7 +35103,7 @@
       "contractor": "PT Celebes Bangun Sejahtera",
       "source": "APBD Kota Makassar & Bantuan Keuangan Pemprov Sulsel",
       "fiscalYear": 2026,
-      "progressPct": 35.0,
+      "progressPct": 35,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -34871,7 +35146,18 @@
         -5.185,
         119.48
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Makassar & Bantuan Keuangan Pemprov Sulsel",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-sulut-01",
@@ -34879,7 +35165,7 @@
     "region": "sulawesi",
     "name": "Jl. Piere Tendean (Boulevard Manado Waterfront)",
     "code": "RUAS-KTA-MND-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Manado)",
     "legalBasis": "Keputusan Walikota Manado No. 142/Kep/PUPR/2021 tentang Status Jalan Kota Manado",
     "district": "Kota Manado (Sulawesi Utara)",
@@ -34911,7 +35197,7 @@
       "contractor": "PT Nyiur Melambai Jaya",
       "source": "APBD Kota Manado TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 88.0,
+      "progressPct": 88,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -34954,7 +35240,18 @@
         1.49,
         124.84
       ]
-    ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Manado TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-maluku-01",
@@ -34962,7 +35259,7 @@
     "region": "maluku_papua",
     "name": "Jl. Pattimura - Mardika (Pusat Kota & Dermaga Ambon)",
     "code": "RUAS-KTA-AMB-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Ambon)",
     "legalBasis": "Keputusan Walikota Ambon No. 289/2022 tentang Penetapan Status Ruas Jalan Kota Ambon",
     "district": "Kota Ambon (Maluku)",
@@ -34994,7 +35291,7 @@
       "contractor": "CV Maluku Maju Bersama",
       "source": "APBD Kota Ambon TA 2026",
       "fiscalYear": 2026,
-      "progressPct": 75.0,
+      "progressPct": 75,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -35037,7 +35334,18 @@
         -3.688,
         128.192
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kota Ambon TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-papua-01",
@@ -35045,7 +35353,7 @@
     "region": "maluku_papua",
     "name": "Jl. Percetakan Negara - Taman Imbi (Pusat Kota Jayapura)",
     "code": "RUAS-KTA-JYP-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Jayapura)",
     "legalBasis": "Keputusan Walikota Jayapura No. 188.4/112/2022 tentang Penetapan Status Jalan Kota Jayapura",
     "district": "Kota Jayapura (Papua)",
@@ -35077,7 +35385,7 @@
       "contractor": "PT Port Numbay Mandiri",
       "source": "Dana Otonomi Khusus (Otsus) Papua & APBD Kota Jayapura",
       "fiscalYear": 2026,
-      "progressPct": 90.0,
+      "progressPct": 90,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -35964,7 +36272,18 @@
         -2.53001,
         140.72194
       ]
-    ]
+    ],
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "Dana Otonomi Khusus (Otsus) Papua & APBD Kota Jayapura",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
   },
   {
     "id": "ruas-kab-pabar-01",
@@ -35972,7 +36291,7 @@
     "region": "maluku_papua",
     "name": "Jl. Basuki Rahmat Km 8 - 10 (Pintu Gerbang Sorong)",
     "code": "RUAS-KTA-SRG-01",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Jalan Kota (APBD Kota Sorong)",
     "legalBasis": "Keputusan Walikota Sorong No. 620/88/2023 tentang Status Ruas Jalan Kota Sorong",
     "district": "Kota Sorong (Papua Barat Daya)",
@@ -36004,7 +36323,7 @@
       "contractor": "PT Raja Ampat Raya Konstruksi",
       "source": "Dana Otsus Papua Barat Daya & APBD Kota Sorong",
       "fiscalYear": 2026,
-      "progressPct": 70.0,
+      "progressPct": 70,
       "progressStatus": "BERJALAN",
       "matchConfidence": "TERKONFIRMASI"
     },
@@ -36922,6 +37241,551 @@
       [
         -0.874751,
         131.314904
+      ]
+    ],
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "Dana Otsus Papua Barat Daya & APBD Kota Sorong",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
+    }
+  },
+  {
+    "id": "ruas-kab-jabar-05",
+    "provinceId": "jawa_barat",
+    "region": "jawa",
+    "name": "Ruas Soreang - Ciwidey (Akses Wisata & Sentra Hortikultura)",
+    "code": "RUAS-KAB-BDG-012",
+    "authority": "KABUPATEN",
+    "authorityLabel": "Jalan Kabupaten (APBD Kab. Bandung)",
+    "legalBasis": "Keputusan Bupati Bandung No. 620/Kep.188-DPUTR/2022",
+    "district": "Kabupaten Bandung (Jawa Barat)",
+    "center": [
+      -7.0854,
+      107.5142
+    ],
+    "pavementType": "Aspal Hotmix & Rigid Pavement Tikungan",
+    "condition": "RUSAK_RINGAN",
+    "lengthKm": 18.4,
+    "hazardScore": 54,
+    "hazardLevel": "SEDANG",
+    "activeReportsCount": 1,
+    "leadership": {
+      "regionalHead": "Bupati Bandung (Dr. H. M. Dadang Supriatna)",
+      "agency": "Dinas Pekerjaan Umum & Tata Ruang (DPUTR) Kab. Bandung",
+      "picName": "Ir. H. Zeis Zultaqawa, S.T., M.M."
+    },
+    "problemDetails": {
+      "headline": "Amblesan Bahu Jalan & Retak Struktur Akibat Longsor Lereng",
+      "description": "Retak memanjang di segmen tanjakan Ciwidey KM 11.2; drainase lereng tidak mampu menampung debit air saat curah hujan tinggi.",
+      "rootCause": "Kondisi kontur lereng perbukitan labil dan beban angkutan hasil kebun serta bus wisata akhir pekan.",
+      "safetyImpact": "Penyempitan lajur di tikungan tajam berpotensi kecelakaan bagi wisatawan dan truk sayuran."
+    },
+    "budget": {
+      "paguRp": 14800000000,
+      "contractValueRp": 13950000000,
+      "name": "Pekerjaan Penanganan Longsoran & Rekonstruksi Ruas Soreang - Ciwidey",
+      "contractor": "PT Citra Mandiri Parahyangan",
+      "source": "APBD Kabupaten Bandung & Bantuan Pemprov Jabar TA 2026",
+      "fiscalYear": 2026,
+      "progressPct": 52,
+      "progressStatus": "BERJALAN",
+      "matchConfidence": "TERKONFIRMASI"
+    },
+    "officialSources": {
+      "authoritySource": "SK Bupati Bandung No. 620/Kep.188/2022",
+      "budgetSource": "LPSE Kabupaten Bandung (Kode Tender: 14892014)",
+      "fieldDataSource": "Dinas PUTR Kabupaten Bandung",
+      "transparencyUrl": "https://lpse.bandungkab.go.id"
+    },
+    "functionalClass": "Kolektor Primer Kawasan Wisata & Pertanian",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Saluran Pasangan Batu Terbuka Tepi Tebing",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Debit Air Hujan Lereng)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kabupaten Bandung TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi retak bahu jalan lereng sebelum vs penguatan dinding penahan tanah"
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Simpang Soreang (Tol Soroja)",
+        "status": "MANTAP",
+        "note": "Titik Awal Penghubung Gerbang Tol"
+      },
+      {
+        "km": 9.2,
+        "name": "Segmen Pasirjambu",
+        "status": "RUSAK_RINGAN",
+        "note": "Titik Rawan Genangan Luapan Air Hujan"
+      },
+      {
+        "km": 18.4,
+        "name": "Pusat Kecamatan Ciwidey",
+        "status": "MANTAP",
+        "note": "Sentra Hortikultura & Wisata Kawah Putih"
+      }
+    ],
+    "coordinates": [
+      [
+        -7.0315,
+        107.5255
+      ],
+      [
+        -7.0421,
+        107.5218
+      ],
+      [
+        -7.0536,
+        107.5192
+      ],
+      [
+        -7.0678,
+        107.5155
+      ],
+      [
+        -7.0812,
+        107.5121
+      ],
+      [
+        -7.0945,
+        107.5085
+      ],
+      [
+        -7.1089,
+        107.5022
+      ],
+      [
+        -7.1232,
+        107.4958
+      ],
+      [
+        -7.135,
+        107.489
+      ]
+    ]
+  },
+  {
+    "id": "ruas-kab-diy-02",
+    "provinceId": "di_yogyakarta",
+    "region": "jawa",
+    "name": "Ruas Godean - Seyegan - Tempel (Sentra Pangan Sleman Barat)",
+    "code": "RUAS-KAB-SLM-041",
+    "authority": "KABUPATEN",
+    "authorityLabel": "Jalan Kabupaten (APBD Kab. Sleman)",
+    "legalBasis": "Keputusan Bupati Sleman No. 12.3/Kep.KDH/A/2021 tentang Status Jalan Kabupaten",
+    "district": "Kabupaten Sleman (DI Yogyakarta)",
+    "center": [
+      -7.7312,
+      107.3125
+    ],
+    "pavementType": "Aspal Hotmix HRS",
+    "condition": "RUSAK_SEDANG",
+    "lengthKm": 14.2,
+    "hazardScore": 61,
+    "hazardLevel": "SEDANG",
+    "activeReportsCount": 0,
+    "leadership": {
+      "regionalHead": "Bupati Sleman (Kustini Sri Purnomo)",
+      "agency": "Dinas Pekerjaan Umum, Perumahan & ESDM Kab. Sleman",
+      "picName": "Ir. Mirza Ansori, S.T., M.T."
+    },
+    "problemDetails": {
+      "headline": "Kerusakan Lapisan Permukaan Akibat Truk Tambang Pasir Progo",
+      "description": "Gelombang aspal dan alur roda (rutting) sedalam 6 cm di lajur kiri arah Tempel; membahayakan kendaraan roda dua warga desa.",
+      "rootCause": "Tingginya frekuensi truk angkutan pasir Merapi-Progo yang melebihi batas MST 8 ton.",
+      "safetyImpact": "Roda sepeda motor sering selip saat melintasi alur retakan jalan bergelombang."
+    },
+    "budget": {
+      "paguRp": 9600000000,
+      "contractValueRp": 9020000000,
+      "name": "Peningkatan Kapasitas & Rekonstruksi Struktur Ruas Godean - Seyegan",
+      "contractor": "PT Mataram Cipta Graha",
+      "source": "APBD Kabupaten Sleman & DAK Fisik TA 2026",
+      "fiscalYear": 2026,
+      "progressPct": 38,
+      "progressStatus": "BERJALAN",
+      "matchConfidence": "TERKONFIRMASI"
+    },
+    "officialSources": {
+      "authoritySource": "SK Bupati Sleman No. 12.3/2021",
+      "budgetSource": "LPSE Kabupaten Sleman (ID Tender: 9210214)",
+      "fieldDataSource": "Dinas PUP-ESDM Sleman",
+      "transparencyUrl": "https://lpse.slemankab.go.id"
+    },
+    "functionalClass": "Lokal Primer Penghubung Antar-Kecamatan Pertanian",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Saluran Irigasi Tersier Petani Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Perkotaan (Isu Utama: Overload Truk Pasir Merapi)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kabupaten Sleman TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi gelombang bekas lintasan truk pasir sebelum vs sesudah perkerasan"
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Pasar Godean Sleman",
+        "status": "MANTAP",
+        "note": "Sentra Kuliner Belut & Pasar Tradisional"
+      },
+      {
+        "km": 6.8,
+        "name": "Simpang Lima Seyegan",
+        "status": "RUSAK_SEDANG",
+        "note": "Segmen Perkerasan Bergelombang"
+      },
+      {
+        "km": 14.2,
+        "name": "Pertigaan Tempel (Batas Magelang)",
+        "status": "MANTAP",
+        "note": "Koneksi ke Jalur Utama Sleman-Magelang"
+      }
+    ],
+    "coordinates": [
+      [
+        -7.768,
+        110.294
+      ],
+      [
+        -7.755,
+        110.301
+      ],
+      [
+        -7.742,
+        110.309
+      ],
+      [
+        -7.728,
+        110.316
+      ],
+      [
+        -7.714,
+        110.323
+      ],
+      [
+        -7.698,
+        110.331
+      ]
+    ]
+  },
+  {
+    "id": "ruas-kab-jatim-03",
+    "provinceId": "jawa_timur",
+    "region": "jawa",
+    "name": "Ruas Gondanglegi - Balekambang (Akses Wisata Pantai Selatan)",
+    "code": "RUAS-KAB-MLG-089",
+    "authority": "KABUPATEN",
+    "authorityLabel": "Jalan Kabupaten (APBD Kab. Malang & Inpres IJD)",
+    "legalBasis": "SK Bupati Malang No. 188.45/423/KEP/35.07.013/2021 tentang Jalan Kabupaten",
+    "district": "Kabupaten Malang (Jawa Timur)",
+    "center": [
+      -8.2812,
+      112.5512
+    ],
+    "pavementType": "Aspal Hotmix AC-WC & Beton Rigid",
+    "condition": "RUSAK_BERAT",
+    "lengthKm": 31,
+    "hazardScore": 78,
+    "hazardLevel": "TINGGI",
+    "activeReportsCount": 2,
+    "leadership": {
+      "regionalHead": "Bupati Malang (Drs. H. M. Sanusi, M.M.)",
+      "agency": "Dinas Pekerjaan Umum Bina Marga Kabupaten Malang",
+      "picName": "Ir. Khairul Isnaidi Rizky, S.T., M.T."
+    },
+    "problemDetails": {
+      "headline": "Lubang Dalam Sepanjang 12 KM & Genangan Air Lumpur Tanah Kapur",
+      "description": "Jalan sempit bergelombang dan berlubang parah; membatasi akses warga nelayan serta wisatawan menuju Jalur Lintas Selatan (JLS).",
+      "rootCause": "Struktur tanah dasar lempung ekspansif kapur selatan dan drainase samping yang belum terbangun permanen.",
+      "safetyImpact": "Rentan memicu mogok dan kecelakaan mobil minibus wisatawan serta truk tebu."
+    },
+    "budget": {
+      "paguRp": 42000000000,
+      "contractValueRp": 39800000000,
+      "name": "Pelebaran & Peningkatan Struktur Ruas Gondanglegi - Balekambang (Inpres IJD Batch II)",
+      "contractor": "PT Brantas Abipraya - Sumber Karsa KSO",
+      "source": "Inpres Jalan Daerah (IJD) Kementerian PUPR TA 2026",
+      "fiscalYear": 2026,
+      "progressPct": 62,
+      "progressStatus": "BERJALAN",
+      "matchConfidence": "TERKONFIRMASI"
+    },
+    "officialSources": {
+      "authoritySource": "SK Bupati Malang No. 188.45/2021 jo. Inpres No. 3/2023",
+      "budgetSource": "LPSE Kementerian PU & LPSE Kab. Malang",
+      "fieldDataSource": "Dinas PUBM Kab. Malang & Balai Besar Pelaksanaan Jalan Nasional Jatim-Bali",
+      "transparencyUrl": "https://lpse.malangkab.go.id"
+    },
+    "functionalClass": "Kolektor Primer Penghubung Kawasan Wisata Bahari & Pesisir",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Saluran Parit Tanah Belum Permanen (Proses Pembangunan Saluran)",
+    "utilityDigIssue": "Bebas Galian Kabel (Isu Utama: Tanah Labil Kapur & Alur Truk Tebu)",
+    "fundingSourceType": "INPRES_IJD",
+    "fundingSourceLabel": "Inpres Jalan Daerah (IJD) Bantuan APBN Pusat",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi jalan tanah kapur berlubang sebelum vs pelebaran rigid beton IJD"
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Pusat Kecamatan Gondanglegi",
+        "status": "MANTAP",
+        "note": "Simpang Jalur Arteri Malang Selatan"
+      },
+      {
+        "km": 15.5,
+        "name": "Kecamatan Bantur (Segmen Kritis)",
+        "status": "RUSAK_BERAT",
+        "note": "Pekerjaan Pelebaran Inpres IJD"
+      },
+      {
+        "km": 31,
+        "name": "Pantai Balekambang (Gerbang JLS)",
+        "status": "MANTAP",
+        "note": "Pertemuan Jalur Lintas Selatan (JLS)"
+      }
+    ],
+    "coordinates": [
+      [
+        -8.172,
+        112.635
+      ],
+      [
+        -8.204,
+        112.618
+      ],
+      [
+        -8.241,
+        112.592
+      ],
+      [
+        -8.285,
+        112.568
+      ],
+      [
+        -8.332,
+        112.545
+      ],
+      [
+        -8.398,
+        112.535
+      ]
+    ]
+  },
+  {
+    "id": "ruas-kab-sulsel-03",
+    "provinceId": "sulawesi_selatan",
+    "region": "sulawesi",
+    "name": "Ruas Maros - Moncongloe (Kawasan Industri & Penyangga Mamminasata)",
+    "code": "RUAS-KAB-MRS-021",
+    "authority": "KABUPATEN",
+    "authorityLabel": "Jalan Kabupaten (APBD Kab. Maros)",
+    "legalBasis": "SK Bupati Maros No. 542/KPTS/600/XI/2021",
+    "district": "Kabupaten Maros (Sulawesi Selatan)",
+    "center": [
+      -5.112,
+      119.532
+    ],
+    "pavementType": "Rigid Pavement Beton & Hotmix",
+    "condition": "RUSAK_SEDANG",
+    "lengthKm": 12.6,
+    "hazardScore": 68,
+    "hazardLevel": "SEDANG",
+    "activeReportsCount": 1,
+    "leadership": {
+      "regionalHead": "Bupati Maros (H. A. S. Chaidir Syam, S.I.P., M.H.)",
+      "agency": "Dinas Pekerjaan Umum, Tata Ruang, Perhubungan & Pertanahan Kab. Maros",
+      "picName": "Muetazim Mansyur, S.T., M.Si."
+    },
+    "problemDetails": {
+      "headline": "Pecah Plat Beton & Amblesan Perkerasan Jalur Truk Tambang Galian C",
+      "description": "Patahan sambungan plat beton di KM 4.5 arah Moncongloe akibat intensitas truk pengangkut tanah timbunan proyek Kota Makassar.",
+      "rootCause": "Overload muatan truk tambang tanah galian C yang melebihi daya dukung subgrade tanah rawa.",
+      "safetyImpact": "Beda tinggi plat beton patah 8 cm memicu kecelakaan pemotor saat malam hari."
+    },
+    "budget": {
+      "paguRp": 11200000000,
+      "contractValueRp": 10650000000,
+      "name": "Rekonstruksi Plat Beton Rigid Ruas Maros - Moncongloe",
+      "contractor": "PT Bosowa Duta Konstruksi",
+      "source": "APBD Kabupaten Maros TA 2026",
+      "fiscalYear": 2026,
+      "progressPct": 40,
+      "progressStatus": "BERJALAN",
+      "matchConfidence": "TERKONFIRMASI"
+    },
+    "officialSources": {
+      "authoritySource": "SK Bupati Maros No. 542/2021",
+      "budgetSource": "LPSE Kabupaten Maros",
+      "fieldDataSource": "Dinas PUTRPP Kabupaten Maros",
+      "transparencyUrl": "https://lpse.maroskab.go.id"
+    },
+    "functionalClass": "Kolektor Primer Penyangga Aglomerasi Mamminasata",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Saluran Drainase Sawah Tepi Jalan",
+    "utilityDigIssue": "Bebas Galian Utilitas (Isu Utama: Tonase Truk Tanah Timbunan Makassar)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kabupaten Maros TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi patahan plat beton sebelum vs penggantian segmen rigid beton baru"
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Simpang Batangase Maros",
+        "status": "MANTAP",
+        "note": "Pertemuan Jalur Trans Sulawesi"
+      },
+      {
+        "km": 6.3,
+        "name": "Segmen Moncongloe Lappara",
+        "status": "RUSAK_SEDANG",
+        "note": "Titik Patahan Plat Beton"
+      },
+      {
+        "km": 12.6,
+        "name": "Batas Kota Makassar (Antang)",
+        "status": "MANTAP",
+        "note": "Pintu Gerbang Kota Makassar"
+      }
+    ],
+    "coordinates": [
+      [
+        -5.051,
+        119.575
+      ],
+      [
+        -5.078,
+        119.558
+      ],
+      [
+        -5.105,
+        119.542
+      ],
+      [
+        -5.132,
+        119.525
+      ],
+      [
+        -5.158,
+        119.508
+      ]
+    ]
+  },
+  {
+    "id": "ruas-kab-kalbar-01",
+    "provinceId": "kalimantan_barat",
+    "region": "kalimantan",
+    "name": "Ruas Rasau Jaya - Jembatan Kapuas III (Konektivitas Transmigrasi & Pertanian)",
+    "code": "RUAS-KAB-KKR-007",
+    "authority": "KABUPATEN",
+    "authorityLabel": "Jalan Kabupaten (APBD Kab. Kubu Raya)",
+    "legalBasis": "SK Bupati Kubu Raya No. 418/PUPR/2021 tentang Ruas Jalan Kabupaten",
+    "district": "Kabupaten Kubu Raya (Kalimantan Barat)",
+    "center": [
+      -0.158,
+      109.382
+    ],
+    "pavementType": "Aspal Penetrasi & Perkerasan Beton Geotekstil",
+    "condition": "RUSAK_SEDANG",
+    "lengthKm": 16.5,
+    "hazardScore": 59,
+    "hazardLevel": "SEDANG",
+    "activeReportsCount": 0,
+    "leadership": {
+      "regionalHead": "Bupati Kubu Raya (Muda Mahendrawan, S.H.)",
+      "agency": "Dinas Pekerjaan Umum & Penataan Ruang Kab. Kubu Raya",
+      "picName": "Ir. Stefanus Suparmin, S.T., M.T."
+    },
+    "problemDetails": {
+      "headline": "Penurunan Tanah Gambut Membentuk Cekungan & Genangan Air Pasang Sungai",
+      "description": "Amblesan perkerasan jalan di atas tanah gambut sedalam 15-25 cm saat pasang air Sungai Kapuas; mengganggu angkutan kelapa sawit & sayuran.",
+      "rootCause": "Konsolidasi gambut dan daya dukung tanah sangat rendah tanpa fondasi geotekstil memadai.",
+      "safetyImpact": "Licin berlumpur saat air pasang; rawan tergelincir bagi kendaraan roda dua warga desa."
+    },
+    "budget": {
+      "paguRp": 13500000000,
+      "contractValueRp": 12850000000,
+      "name": "Peningkatan Struktur Jalan di Atas Lahan Gambut Ruas Rasau Jaya",
+      "contractor": "PT Equator Pratama Mandiri",
+      "source": "APBD Kabupaten Kubu Raya TA 2026",
+      "fiscalYear": 2026,
+      "progressPct": 45,
+      "progressStatus": "BERJALAN",
+      "matchConfidence": "TERKONFIRMASI"
+    },
+    "officialSources": {
+      "authoritySource": "SK Bupati Kubu Raya No. 418/2021",
+      "budgetSource": "LPSE Kabupaten Kubu Raya",
+      "fieldDataSource": "Dinas PUPR Kabupaten Kubu Raya",
+      "transparencyUrl": "https://lpse.kuburayakab.go.id"
+    },
+    "functionalClass": "Lokal Primer Kawasan Transmigrasi & Pertanian Gambut",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Saluran Primer Kanal Pasang Surut Gambut",
+    "utilityDigIssue": "Bebas Galian Utilitas (Isu Utama: Konsolidasi Gambut & Rob Sungai Kapuas)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Kabupaten Kubu Raya TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi jalan tanah gambut sebelum vs perkuatan geotekstil matras beton"
+    },
+    "milestones": [
+      {
+        "km": 0,
+        "name": "Dermaga Feri Rasau Jaya",
+        "status": "MANTAP",
+        "note": "Simpul Angkutan Sungai & Laut Pontianak"
+      },
+      {
+        "km": 8.2,
+        "name": "Segmen Kanal Gambut Rasau Dua",
+        "status": "RUSAK_SEDANG",
+        "note": "Titik Amblesan Gambut"
+      },
+      {
+        "km": 16.5,
+        "name": "Pintu Masuk Jembatan Kapuas III",
+        "status": "MANTAP",
+        "note": "Koneksi Akses Kota Pontianak"
+      }
+    ],
+    "coordinates": [
+      [
+        -0.102,
+        109.345
+      ],
+      [
+        -0.125,
+        109.362
+      ],
+      [
+        -0.148,
+        109.378
+      ],
+      [
+        -0.171,
+        109.395
+      ],
+      [
+        -0.194,
+        109.412
       ]
     ]
   }

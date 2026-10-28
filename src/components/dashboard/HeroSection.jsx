@@ -131,6 +131,12 @@ export default function HeroSection({
     // 1. Filter by category
     if (tableFilter === "NASIONAL") {
       list = list.filter((r) => r.authority === "NASIONAL");
+    } else if (tableFilter === "PROVINSI") {
+      list = list.filter((r) => r.authority === "PROVINSI");
+    } else if (tableFilter === "KOTA") {
+      list = list.filter((r) => r.authority === "KOTA");
+    } else if (tableFilter === "KABUPATEN") {
+      list = list.filter((r) => r.authority === "KABUPATEN");
     } else if (tableFilter === "SUMUT") {
       list = list.filter(
         (r) =>
@@ -140,10 +146,8 @@ export default function HeroSection({
           r.district?.toLowerCase().includes("asahan") ||
           (r.island === "Sumatera" && r.code?.includes("SMT"))
       );
-    } else if (tableFilter === "PROVINSI") {
-      list = list.filter((r) => r.authority === "PROVINSI");
     } else if (tableFilter === "DAERAH") {
-      list = list.filter((r) => r.authority === "PROVINSI" || r.authority === "KOTA_KAB");
+      list = list.filter((r) => r.authority === "PROVINSI" || r.authority === "KOTA" || r.authority === "KABUPATEN" || r.authority === "KOTA_KAB");
     }
 
     // 2. Filter by local search query
@@ -1148,6 +1152,8 @@ export default function HeroSection({
                 { id: "ALL", label: "Semua Ruas", count: roads.length },
                 { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter((r) => r.authority === "NASIONAL").length },
                 { id: "PROVINSI", label: "Jalan Provinsi", count: roads.filter((r) => r.authority === "PROVINSI").length },
+                { id: "KOTA", label: "Jalan Kota", count: roads.filter((r) => r.authority === "KOTA").length },
+                { id: "KABUPATEN", label: "Jalan Kabupaten", count: roads.filter((r) => r.authority === "KABUPATEN").length },
                 { id: "SUMUT", label: "Pilot Sumut", count: roads.filter((r) => r.district?.includes("Medan") || r.district?.includes("Simalungun") || r.district?.includes("Karo") || r.district?.includes("Asahan") || r.code?.includes("SMT")).length },
               ].map((tab) => (
                 <button
@@ -1236,19 +1242,24 @@ export default function HeroSection({
                         {/* 2. Status Wewenang: Clean Badge Only */}
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           {road.authority === "NASIONAL" ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-orange-500/10 text-orange-950 border border-orange-500/25">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-blue-500/10 text-blue-950 border border-blue-500/25">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                               <span>Jalan Nasional</span>
                             </span>
                           ) : road.authority === "PROVINSI" ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-amber-500/10 text-amber-950 border border-amber-500/25">
-                              <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-purple-500/10 text-purple-950 border border-purple-500/25">
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-600 shrink-0" />
                               <span>Jalan Provinsi</span>
                             </span>
-                          ) : (
+                          ) : road.authority === "KOTA" ? (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-teal-500/10 text-teal-950 border border-teal-500/25">
                               <span className="w-1.5 h-1.5 rounded-full bg-teal-600 shrink-0" />
-                              <span>Kota / Kab</span>
+                              <span>Jalan Kota</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-semibold bg-emerald-500/10 text-emerald-950 border border-emerald-500/25">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
+                              <span>Jalan Kabupaten</span>
                             </span>
                           )}
                         </td>

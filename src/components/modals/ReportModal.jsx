@@ -397,10 +397,12 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                       </div>
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold font-sans shrink-0 uppercase ${
                         currentRoad.authority === "NASIONAL"
-                          ? "bg-slate-200 text-slate-800"
+                          ? "bg-blue-100 text-blue-900"
                           : currentRoad.authority === "PROVINSI"
-                          ? "bg-amber-100 text-amber-900"
-                          : "bg-orange-100 text-orange-900"
+                          ? "bg-purple-100 text-purple-900"
+                          : currentRoad.authority === "KOTA"
+                          ? "bg-teal-100 text-teal-900"
+                          : "bg-emerald-100 text-emerald-900"
                       }`}>
                         {currentRoad.authority}
                       </span>

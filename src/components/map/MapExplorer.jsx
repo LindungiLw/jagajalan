@@ -25,6 +25,7 @@ import {
   Layers,
   HelpCircle,
   Globe,
+  Eye,
 } from "lucide-react";
 import {
   INDONESIA_REGIONS,
@@ -115,7 +116,9 @@ export default function MapExplorer({
       ALL: roads.length,
       NASIONAL: roads.filter((r) => r.authority === "NASIONAL").length,
       PROVINSI: roads.filter((r) => r.authority === "PROVINSI").length,
-      KOTA_KAB: roads.filter((r) => r.authority === "KOTA_KAB").length,
+      KOTA: roads.filter((r) => r.authority === "KOTA").length,
+      KABUPATEN: roads.filter((r) => r.authority === "KABUPATEN").length,
+      KOTA_KAB: roads.filter((r) => r.authority === "KOTA" || r.authority === "KABUPATEN" || r.authority === "KOTA_KAB").length,
     };
   }, [roads]);
 
@@ -618,19 +621,36 @@ export default function MapExplorer({
           </button>
 
           <button
-            onClick={() => setAuthorityFilter("KOTA_KAB")}
+            onClick={() => setAuthorityFilter("KOTA")}
             className={`px-3 py-1.5 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
-              authorityFilter === "KOTA_KAB"
+              authorityFilter === "KOTA"
                 ? "bg-teal-500/10 border-teal-500 text-teal-800 shadow-xs ring-1 ring-teal-500/30 font-bold"
                 : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-teal-50/40"
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-teal-600" />
-            <span>Jalan Kota / Kab</span>
+            <span>Jalan Kota</span>
             <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
-              authorityFilter === "KOTA_KAB" ? "bg-teal-600 text-white" : "bg-teal-50 text-teal-700"
+              authorityFilter === "KOTA" ? "bg-teal-600 text-white" : "bg-teal-50 text-teal-700"
             }`}>
-              {roadCounts.KOTA_KAB}
+              {roadCounts.KOTA}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setAuthorityFilter("KABUPATEN")}
+            className={`px-3 py-1.5 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              authorityFilter === "KABUPATEN"
+                ? "bg-emerald-500/10 border-emerald-500 text-emerald-800 shadow-xs ring-1 ring-emerald-500/30 font-bold"
+                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-emerald-50/40"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-600" />
+            <span>Jalan Kabupaten</span>
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
+              authorityFilter === "KABUPATEN" ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-700"
+            }`}>
+              {roadCounts.KABUPATEN}
             </span>
           </button>
         </div>
@@ -657,8 +677,8 @@ export default function MapExplorer({
         </div>
       )}
 
-      {/* City & Regency Transparency Context Banner */}
-      {authorityFilter === "KOTA_KAB" && (
+      {/* City Transparency Context Banner */}
+      {authorityFilter === "KOTA" && (
         <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-teal-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
           <div className="flex items-start gap-2.5">
             <div className="w-6 h-6 rounded-[5px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 mt-0.5">
@@ -666,13 +686,35 @@ export default function MapExplorer({
             </div>
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
-                <span>Jalan Kota & Kabupaten Se-Indonesia</span>
+                <span>Jalan Kota Se-Indonesia</span>
                 <span className="text-[9px] font-sans tabular-nums font-bold bg-teal-50 text-teal-800 px-1.5 py-0.2 rounded-[4px] border border-teal-200">
-                  514 Pemkab/Pemkot
+                  98 Pemkot
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan Resmi: <strong className="text-teal-900 font-sans tabular-nums">445.000 KM</strong> (81% jalan nasional). Tanggung jawab Walikota & Bupati melalui Dinas PUPR Daerah. Menyumbang 42,9% jalan non-mantap dan porsi aduan terbanyak masyarakat (Inpres Jalan Daerah / Ombudsman RI).
+                Total Jaringan: <strong className="text-teal-900 font-sans tabular-nums">~52.000 KM</strong> di bawah Walikota & Dinas PUPR Kota. Isu utama: Kerapatan drainase perkotaan, bekas galian pipa/kabel fiber utilitas, serta batas muatan MST 8-10 Ton.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Regency Transparency Context Banner */}
+      {authorityFilter === "KABUPATEN" && (
+        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-emerald-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
+          <div className="flex items-start gap-2.5">
+            <div className="w-6 h-6 rounded-[5px] bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+              <Building2 className="w-3.5 h-3.5" />
+            </div>
+            <div className="space-y-1 text-left flex-1 min-w-0">
+              <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
+                <span>Jalan Kabupaten Se-Indonesia</span>
+                <span className="text-[9px] font-sans tabular-nums font-bold bg-emerald-50 text-emerald-800 px-1.5 py-0.2 rounded-[4px] border border-emerald-200">
+                  416 Pemkab & IJD
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-600 leading-snug">
+                Total Jaringan: <strong className="text-emerald-900 font-sans tabular-nums">~393.000 KM</strong> (tulang punggung konektivitas antar-kecamatan & sentra pangan). Dikelola Dinas PUPR Kabupaten dan didukung Inpres Jalan Daerah (IJD) Kementerian PU.
               </p>
             </div>
           </div>
@@ -766,7 +808,11 @@ export default function MapExplorer({
           </div>
           <div className="flex items-center gap-2 font-medium text-slate-700">
             <span className="w-5 h-1.5 rounded-[2px] bg-teal-600" />
-            <span>Jalan Kota / Kab (Pemda)</span>
+            <span>Jalan Kota (Pemkot)</span>
+          </div>
+          <div className="flex items-center gap-2 font-medium text-slate-700">
+            <span className="w-5 h-1.5 rounded-[2px] bg-emerald-600" />
+            <span>Jalan Kabupaten (Pemkab)</span>
           </div>
         </div>
         <div className="text-[10px] text-slate-500 font-medium pl-1">
@@ -806,13 +852,17 @@ export default function MapExplorer({
                     ? "bg-blue-500/10 text-blue-800 border-blue-300"
                     : currentRoad?.authority === "PROVINSI"
                     ? "bg-purple-500/10 text-purple-800 border-purple-300"
-                    : "bg-teal-500/10 text-teal-800 border-teal-300"
+                    : currentRoad?.authority === "KOTA"
+                    ? "bg-teal-500/10 text-teal-800 border-teal-300"
+                    : "bg-emerald-500/10 text-emerald-800 border-emerald-300"
                 }`}>
                   {currentRoad?.authority === "NASIONAL"
                     ? "JALAN NASIONAL • APBN"
                     : currentRoad?.authority === "PROVINSI"
                     ? "JALAN PROVINSI • APBD PROVINSI"
-                    : "JALAN KOTA / KAB • APBD DAERAH"}
+                    : currentRoad?.authority === "KOTA"
+                    ? "JALAN KOTA • APBD KOTA"
+                    : "JALAN KABUPATEN • APBD KAB / IJD"}
                 </span>
 
                 {currentReport && (
@@ -844,6 +894,34 @@ export default function MapExplorer({
                   {currentReport ? currentReport.address : `${currentRoad.district} • ${currentRoad.lengthKm} KM`}
                 </span>
               </p>
+
+              {/* Urban & Regency Characteristic Tags */}
+              {(currentRoad?.functionalClass || currentRoad?.maxAxleLoad || currentRoad?.fundingSourceLabel) && (
+                <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
+                  {currentRoad.functionalClass && (
+                    <span className="px-2 py-0.5 rounded-[4px] bg-slate-100 text-slate-700 text-[10px] font-semibold border border-slate-200">
+                      {currentRoad.functionalClass}
+                    </span>
+                  )}
+                  {currentRoad.maxAxleLoad && (
+                    <span className="px-2 py-0.5 rounded-[4px] bg-amber-50 text-amber-900 text-[10px] font-semibold border border-amber-200">
+                      MST: {currentRoad.maxAxleLoad}
+                    </span>
+                  )}
+                  {currentRoad.fundingSourceLabel && (
+                    <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold border ${
+                      currentRoad.fundingSourceType === "IJD"
+                        ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                        : currentRoad.authority === "KOTA"
+                        ? "bg-teal-50 text-teal-800 border-teal-200"
+                        : "bg-slate-50 text-slate-700 border-slate-200"
+                    }`}>
+                      {currentRoad.fundingSourceLabel}
+                    </span>
+                  )}
+                </div>
+              )}
+
               {currentRoad?.leadership?.regionalHead && (
                 <div className="mt-1.5 text-[10.5px] font-semibold text-slate-700 bg-slate-100/90 border border-slate-200/90 rounded-[4px] px-2 py-1 flex items-center justify-between">
                   <span className="text-slate-500 font-medium">Penanggung Jawab:</span>
@@ -971,6 +1049,75 @@ export default function MapExplorer({
                     {currentRoad?.problemDetails?.description || currentReport?.problemDetails?.description || currentReport?.aiAnalysis}
                   </p>
                 </div>
+
+                {/* Dual Before-After Audit Photo Comparison */}
+                {currentRoad?.photos?.beforeUrl && currentRoad?.photos?.afterUrl && (
+                  <div className="p-3 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                        <Eye className="w-3 h-3 text-slate-600" />
+                        <span>Perbandingan Lapangan (Before vs After)</span>
+                      </span>
+                      <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                        Audit Fisik
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <div className="text-[9.5px] font-bold text-rose-700 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
+                          <span>Sebelum Penanganan</span>
+                        </div>
+                        <div className="h-28 rounded-[4px] overflow-hidden border border-slate-200 bg-slate-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={currentRoad.photos.beforeUrl} alt="Sebelum Penanganan" className="w-full h-full object-cover" />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-[9.5px] font-bold text-emerald-700 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                          <span>Hasil Terkini</span>
+                        </div>
+                        <div className="h-28 rounded-[4px] overflow-hidden border border-slate-200 bg-slate-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={currentRoad.photos.afterUrl} alt="Hasil Terkini" className="w-full h-full object-cover" />
+                        </div>
+                      </div>
+                    </div>
+                    {currentRoad.photos.description && (
+                      <p className="text-[10.5px] text-slate-600 leading-snug pt-0.5">
+                        {currentRoad.photos.description}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Urban Drainage & Utility Dig Specific Indicator */}
+                {(currentRoad?.urbanDrainageStatus || currentRoad?.utilityDigIssue) && (
+                  <div className="p-3.5 rounded-[5px] bg-teal-50/70 border border-teal-200/90 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
+                        <Building2 className="w-3.5 h-3.5 text-teal-700" />
+                        <span>Isu Khas Jalan Perkotaan & Saluran</span>
+                      </span>
+                      <span className="text-[9px] font-bold bg-teal-200/70 text-teal-950 px-1.5 py-0.5 rounded">
+                        Drainase & Utilitas
+                      </span>
+                    </div>
+                    {currentRoad.urbanDrainageStatus && (
+                      <div className="text-[11px] text-slate-800 leading-snug">
+                        <strong className="text-teal-950 block text-[10.5px]">Sistem Drainase & Genangan:</strong>
+                        <span>{currentRoad.urbanDrainageStatus}</span>
+                      </div>
+                    )}
+                    {currentRoad.utilityDigIssue && (
+                      <div className="text-[11px] text-slate-800 leading-snug pt-1 border-t border-teal-200/60">
+                        <strong className="text-teal-950 block text-[10.5px]">Galian Utilitas (Kabel / Pipa):</strong>
+                        <span>{currentRoad.utilityDigIssue}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Technical Root Cause & Safety Impact */}
                 <div className="grid grid-cols-1 gap-2.5">
@@ -1286,10 +1433,28 @@ export default function MapExplorer({
                       <span className="text-[10px] text-slate-400 block">Panjang Koridor</span>
                       <span className="font-bold text-slate-900">{currentRoad?.lengthKm} KM</span>
                     </div>
+                    {currentRoad?.functionalClass && (
+                      <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
+                        <span className="text-[10px] text-slate-400 block">Klasifikasi Fungsi</span>
+                        <span className="font-semibold text-slate-900">{currentRoad.functionalClass}</span>
+                      </div>
+                    )}
+                    {currentRoad?.maxAxleLoad && (
+                      <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100">
+                        <span className="text-[10px] text-slate-400 block">Batas Muatan Gandar (MST)</span>
+                        <span className="font-sans tabular-nums font-bold text-amber-900">{currentRoad.maxAxleLoad}</span>
+                      </div>
+                    )}
                     <div className="p-2.5 rounded-[4px] bg-slate-50 border border-slate-100 col-span-2">
                       <span className="text-[10px] text-slate-400 block">Tipe Perkerasan Jalan</span>
                       <span className="font-semibold text-slate-900">{currentRoad?.pavementType}</span>
                     </div>
+                    {currentRoad?.fundingSourceLabel && (
+                      <div className="p-2.5 rounded-[4px] bg-teal-50/50 border border-teal-100 col-span-2">
+                        <span className="text-[10px] text-teal-800 font-medium block">Sumber Anggaran & Bantuan</span>
+                        <span className="font-bold text-teal-950">{currentRoad.fundingSourceLabel}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 

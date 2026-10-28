@@ -82,7 +82,10 @@ export default function OfficerDashboard({
   const filteredReports = useMemo(() => {
     return reports
       .filter((r) => {
-        const matchAuth = selectedAuthority === "ALL" || r.authority === selectedAuthority;
+        const matchAuth =
+          selectedAuthority === "ALL" ||
+          r.authority === selectedAuthority ||
+          (selectedAuthority === "KOTA_KAB" && (r.authority === "KOTA" || r.authority === "KABUPATEN" || r.authority === "KOTA_KAB"));
         const matchStatus =
           selectedStatusFilter === "ALL" ||
           (selectedStatusFilter === "NEED_VERIFY" && r.status === "MENUNGGU_VERIFIKASI") ||
@@ -199,10 +202,12 @@ export default function OfficerDashboard({
               {currentOfficer?.authorityLevel && (
                 <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-sans font-bold uppercase tracking-wider ${
                   currentOfficer.authorityLevel === "NASIONAL"
-                    ? "bg-orange-50 text-orange-900 border border-orange-200"
+                    ? "bg-blue-50 text-blue-900 border border-blue-200"
                     : currentOfficer.authorityLevel === "PROVINSI"
-                    ? "bg-amber-50 text-amber-900 border border-amber-200"
-                    : "bg-stone-100 text-stone-800 border border-stone-200"
+                    ? "bg-purple-50 text-purple-900 border border-purple-200"
+                    : currentOfficer.authorityLevel === "KOTA"
+                    ? "bg-teal-50 text-teal-900 border border-teal-200"
+                    : "bg-emerald-50 text-emerald-900 border border-emerald-200"
                 }`}>
                   Tingkat {currentOfficer.authorityLevel}
                 </span>
@@ -396,14 +401,24 @@ export default function OfficerDashboard({
             Bina Marga (Provinsi)
           </button>
           <button
-            onClick={() => setSelectedAuthority("KOTA_KAB")}
+            onClick={() => setSelectedAuthority("KOTA")}
             className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
-              selectedAuthority === "KOTA_KAB"
-                ? "bg-stone-700 text-white font-bold shadow-xs"
+              selectedAuthority === "KOTA"
+                ? "bg-teal-700 text-white font-bold shadow-xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
-            PUPR (Kota/Kab)
+            PUPR (Kota)
+          </button>
+          <button
+            onClick={() => setSelectedAuthority("KABUPATEN")}
+            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
+              selectedAuthority === "KABUPATEN"
+                ? "bg-emerald-700 text-white font-bold shadow-xs"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+            }`}
+          >
+            PUPR (Kabupaten)
           </button>
         </div>
 

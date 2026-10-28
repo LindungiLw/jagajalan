@@ -32,10 +32,12 @@ export default function RoadDetailModal({
 
   const authorityBadge =
     road.authority === "NASIONAL"
-      ? { label: "Jalan Nasional (APBN)", color: "bg-slate-100 text-slate-800 border-slate-300" }
+      ? { label: "Jalan Nasional (APBN)", color: "bg-blue-50 text-blue-900 border-blue-200" }
       : road.authority === "PROVINSI"
-      ? { label: "Jalan Provinsi (APBD Jabar)", color: "bg-amber-50 text-amber-900 border-amber-200" }
-      : { label: "Jalan Kota / Kabupaten (APBD)", color: "bg-orange-50 text-orange-900 border-orange-200" };
+      ? { label: "Jalan Provinsi (APBD Provinsi)", color: "bg-purple-50 text-purple-900 border-purple-200" }
+      : road.authority === "KOTA"
+      ? { label: "Jalan Kota (APBD Kota)", color: "bg-teal-50 text-teal-900 border-teal-200" }
+      : { label: "Jalan Kabupaten (APBD Kab / IJD)", color: "bg-emerald-50 text-emerald-900 border-emerald-200" };
 
   const matchBadge =
     budget?.matchConfidence === "TERKONFIRMASI"
@@ -61,11 +63,16 @@ export default function RoadDetailModal({
               <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-bold border ${matchBadge.color}`}>
                 {matchBadge.label}
               </span>
+              {road.fundingSourceLabel && (
+                <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold border bg-slate-50 text-slate-700 border-slate-200">
+                  {road.fundingSourceLabel}
+                </span>
+              )}
             </div>
             <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
               {road.name}
             </h2>
-            <div className="flex items-center gap-3 text-xs text-slate-500 font-medium font-sans">
+            <div className="flex items-center gap-3 text-xs text-slate-500 font-medium font-sans flex-wrap">
               <span className="flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5 text-orange-700 shrink-0" />
                 <span>{road.district}</span>
@@ -74,6 +81,18 @@ export default function RoadDetailModal({
               <span>Bentang: <strong className="text-slate-800 font-sans font-bold tabular-nums">{road.lengthKm} Km</strong></span>
               <span>•</span>
               <span>Perkerasan: <strong className="text-slate-800">{road.pavementType}</strong></span>
+              {road.functionalClass && (
+                <>
+                  <span>•</span>
+                  <span>Fungsi: <strong className="text-slate-800">{road.functionalClass}</strong></span>
+                </>
+              )}
+              {road.maxAxleLoad && (
+                <>
+                  <span>•</span>
+                  <span>MST: <strong className="text-amber-800 font-sans tabular-nums font-bold">{road.maxAxleLoad}</strong></span>
+                </>
+              )}
             </div>
           </div>
 
@@ -102,6 +121,75 @@ export default function RoadDetailModal({
               Instansi Penanggung Jawab Teknis: <strong className="text-slate-800">{road.authorityLabel}</strong>
             </p>
           </div>
+
+          {/* A2. Foto Perbandingan Audit Sebelum vs Sesudah (Before vs After) */}
+          {road?.photos?.beforeUrl && road?.photos?.afterUrl && (
+            <div className="p-3.5 rounded-[5px] bg-white border border-slate-200 shadow-2xs space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Audit Perbandingan Fisik Lapangan (Before vs After)</span>
+                </span>
+                <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-200">
+                  Dokumentasi Terverifikasi
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold text-rose-700 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-rose-600" />
+                    <span>Sebelum Penanganan / Kerusakan Awal</span>
+                  </div>
+                  <div className="h-36 rounded-[4px] overflow-hidden border border-slate-200 bg-slate-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={road.photos.beforeUrl} alt="Sebelum Penanganan" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold text-emerald-700 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                    <span>Kondisi Terkini / Hasil Penanganan</span>
+                  </div>
+                  <div className="h-36 rounded-[4px] overflow-hidden border border-slate-200 bg-slate-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={road.photos.afterUrl} alt="Hasil Penanganan" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+              </div>
+              {road.photos.description && (
+                <p className="text-[11px] text-slate-600 leading-relaxed pt-1 border-t border-slate-100">
+                  {road.photos.description}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* A3. Isu Khas Perkotaan / Drainase & Galian Utilitas */}
+          {(road?.urbanDrainageStatus || road?.utilityDigIssue) && (
+            <div className="p-3.5 rounded-[5px] bg-teal-50/60 border border-teal-200 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-teal-700" />
+                  <span>Kondisi Drainase & Utilitas Perkotaan</span>
+                </span>
+                <span className="text-[9px] font-bold bg-teal-200/70 text-teal-950 px-1.5 py-0.5 rounded">
+                  Infrastruktur Bawah Permukaan
+                </span>
+              </div>
+              {road.urbanDrainageStatus && (
+                <div className="text-[11px] text-slate-800 leading-snug">
+                  <strong className="text-teal-950 block text-[10.5px]">Sistem Saluran Drainase:</strong>
+                  <span>{road.urbanDrainageStatus}</span>
+                </div>
+              )}
+              {road.utilityDigIssue && (
+                <div className="text-[11px] text-slate-800 leading-snug pt-1 border-t border-teal-200/60">
+                  <strong className="text-teal-950 block text-[10.5px]">Galian Utilitas (Kabel / Pipa):</strong>
+                  <span>{road.utilityDigIssue}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* B. Informasi Paket Pengadaan & Kroscek Anggaran LPSE */}
           <div className="space-y-3">

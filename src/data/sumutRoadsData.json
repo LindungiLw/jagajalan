@@ -947,7 +947,7 @@
     "provinceName": "Sumatera Utara",
     "name": "Jl. Brigjen Katamso (Kampung Baru - Titi Kuning)",
     "code": "RUAS-KTA-MDN-023",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Dinas SDABMBK Pemerintah Kota Medan",
     "legalBasis": "Peraturan Walikota Medan No. 34 Tahun 2021 tentang Penetapan Jaringan Jalan Kota",
     "lengthKm": 4.6,
@@ -1516,6 +1516,17 @@
       "budgetSource": "SiRUP LKPP & LPSE Kota Medan (RUP ID: 4102934)",
       "fieldDataSource": "Laporan Warga Tiket #JGJ-MDN-031 & Verifikasi AI",
       "transparencyUrl": "https://lpse.pemkomedan.go.id"
+    },
+    "functionalClass": "Kolektor Sekunder Perkotaan",
+    "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
+    "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
+    "utilityDigIssue": "Bekas Galian Kabel Fiber Optik & Pipa PDAM Tanpa Pemadatan Aspal Standar",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Murni Kota Medan TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+      "caption": "Kondisi genangan luapan drainase & galian kabel sebelum vs target overlay hotmix"
     }
   },
   {
@@ -2510,7 +2521,7 @@
     "provinceName": "Sumatera Utara",
     "name": "Jl. Pangeran Diponegoro (Pusat Kota Medan)",
     "code": "RUAS-KTA-MDN-004",
-    "authority": "KOTA_KAB",
+    "authority": "KOTA",
     "authorityLabel": "Dinas SDABMBK Pemerintah Kota Medan",
     "legalBasis": "Peraturan Walikota Medan No. 34 Tahun 2021",
     "lengthKm": 2.1,
@@ -2915,6 +2926,17 @@
       "budgetSource": "LPSE Kota Medan (Tender Konstruksi TA 2026)",
       "fieldDataSource": "Berita Acara PHO No. 602/PHO-04 & Audit Geospasial JagaJalan",
       "transparencyUrl": "https://lpse.pemkomedan.go.id"
+    },
+    "functionalClass": "Arteri Sekunder Perkotaan",
+    "maxAxleLoad": "MST 10 Ton (Muatan Sumbu Terberat Kelas II)",
+    "urbanDrainageStatus": "Terawat & Terhubung Sistem Drainase Induk Kota",
+    "utilityDigIssue": "Bebas Galian Utilitas Aktif (Ducting Terpadu)",
+    "fundingSourceType": "APBD_MURNI",
+    "fundingSourceLabel": "APBD Murni Kota Medan TA 2026",
+    "photos": {
+      "before": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80",
+      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+      "caption": "Koridor pusat niaga kota dalam kondisi mantap dengan trotoar pedestrian"
     }
   }
 ]
