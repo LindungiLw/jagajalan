@@ -53,7 +53,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-7 rounded-[5px] border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.03)] space-y-5">
+      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-7 rounded-xl border border-slate-200/80 shadow-xs space-y-5">
         {/* Header - Simple & Clean */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -67,7 +67,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
 
           <button
             onClick={onOpenReportModal}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-all cursor-pointer self-start sm:self-auto shrink-0"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs hover:shadow-xs transition-all cursor-pointer self-start sm:self-auto shrink-0"
           >
             <span>Uji Coba Lapor</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -81,20 +81,20 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
             return (
               <div
                 key={item.step}
-                className="p-4 rounded-[5px] bg-slate-50/60 hover:bg-white border border-slate-200/70 hover:border-orange-200 hover:shadow-xs transition-all flex flex-col justify-between space-y-3 group"
+                className="p-4 rounded-xl bg-slate-50/60 hover:bg-white border border-slate-200/70 hover:border-orange-200/80 hover:shadow-xs transition-all flex flex-col justify-between space-y-3 group"
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="w-6 h-6 rounded-[5px] bg-white border border-slate-200 flex items-center justify-center text-[11px] font-mono font-black text-slate-500 group-hover:text-orange-700 group-hover:border-orange-300 transition-colors">
+                    <span className="w-6 h-6 rounded-md bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center text-[11px] font-mono font-bold text-slate-500 group-hover:text-orange-700 group-hover:border-orange-300 transition-colors">
                       {item.step}
                     </span>
-                    <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-bold uppercase tracking-wider border ${item.badgeColor}`}>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border shadow-2xs ${item.badgeColor}`}>
                       {item.badge}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2.5 pt-0.5">
-                    <div className="p-2 rounded-[5px] bg-white border border-slate-200/80 text-slate-700 group-hover:text-orange-700 group-hover:border-orange-200 transition-colors shrink-0">
+                    <div className="p-2 rounded-lg bg-white border border-slate-200/80 shadow-2xs text-slate-700 group-hover:text-orange-700 group-hover:border-orange-200 transition-colors shrink-0">
                       <Icon className="w-4 h-4" />
                     </div>
                     <h3 className="font-bold text-sm text-slate-900 group-hover:text-orange-700 transition-colors">

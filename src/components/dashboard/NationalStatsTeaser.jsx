@@ -17,7 +17,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-[5px] border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(15,23,42,0.03)] space-y-6">
+      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-xl border border-slate-200/80 shadow-xs space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-mono mb-1">
@@ -34,7 +34,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
 
           <button
             onClick={onExploreNational}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-[5px] text-xs sm:text-sm font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-all cursor-pointer self-start lg:self-auto shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-xs sm:text-sm font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs hover:shadow-xs transition-all cursor-pointer self-start lg:self-auto shrink-0"
           >
             <span>Buka Papan Skor Lengkap 38 Provinsi</span>
             <ArrowRight className="w-4 h-4 text-orange-200" />
@@ -47,11 +47,11 @@ export default function NationalStatsTeaser({ onExploreNational }) {
             <div
               key={prov.id}
               onClick={onExploreNational}
-              className="p-4 rounded-[5px] bg-white/70 hover:bg-white border border-slate-200/80 hover:border-orange-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-4 rounded-xl bg-white/70 hover:bg-white border border-slate-200/80 hover:border-orange-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200">
+                  <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-orange-50 text-[#c2410c] border border-orange-200/80 shadow-2xs">
                     Peringkat #{prov.complaintRank} Nasional
                   </span>
                   <span className="text-xs text-slate-400 font-mono">{prov.island}</span>

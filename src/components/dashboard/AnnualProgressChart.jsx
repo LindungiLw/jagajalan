@@ -50,7 +50,7 @@ export default function AnnualProgressChart() {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       {/* Outer Bening Glassmorphic Container */}
-      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-[5px] border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(15,23,42,0.04)] relative overflow-hidden space-y-6">
+      <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-xl border border-slate-200/80 shadow-xs relative overflow-hidden space-y-6">
         {/* Subtle Ambient Glow */}
         <div className="absolute -left-20 -top-20 w-72 h-72 bg-orange-400/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -right-20 -bottom-20 w-72 h-72 bg-amber-400/5 rounded-full blur-3xl pointer-events-none" />
@@ -70,13 +70,13 @@ export default function AnnualProgressChart() {
             </p>
           </div>
 
-          {/* Metric Selector Tabs (Bening Pill Buttons, rounded-[5px]) */}
-          <div className="flex items-center p-1 rounded-[5px] bg-slate-100/80 border border-slate-200/80 text-xs font-semibold shrink-0">
+          {/* Metric Selector Tabs (Pill Tabs) */}
+          <div className="flex items-center p-1 rounded-full bg-slate-100/90 border border-slate-200/80 text-xs font-semibold shrink-0 shadow-2xs">
             <button
               onClick={() => setActiveMetric("road-condition")}
-              className={`px-3 py-2 rounded-[5px] transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeMetric === "road-condition"
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
+                  ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -85,9 +85,9 @@ export default function AnnualProgressChart() {
             </button>
             <button
               onClick={() => setActiveMetric("complaints")}
-              className={`px-3 py-2 rounded-[5px] transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeMetric === "complaints"
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
+                  ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -96,9 +96,9 @@ export default function AnnualProgressChart() {
             </button>
             <button
               onClick={() => setActiveMetric("inpres")}
-              className={`px-3 py-2 rounded-[5px] transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeMetric === "inpres"
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
+                  ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -111,7 +111,7 @@ export default function AnnualProgressChart() {
         {/* METRIC VIEW 1: JURANG KEMANTAPAN JALAN (2020-2024) */}
         {activeMetric === "road-condition" && (
           <div className="space-y-6 animate-fade-in">
-            <div className="bg-slate-50/70 rounded-[5px] border border-slate-200/80 p-5 sm:p-6 relative">
+            <div className="bg-slate-50/70 rounded-xl border border-slate-200/80 p-5 sm:p-6 relative">
               
               {/* Header with Switcher: Line vs Bar Chart */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
