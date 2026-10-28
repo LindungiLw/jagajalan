@@ -5,6 +5,7 @@
 import sumutRoads from "./sumutRoadsData.json";
 import nationalHighways from "./nationalHighwaysData.json";
 import provincialRoads from "./provincialRoadsData.json";
+import cityRegencyRoads from "./cityRegencyRoadsData.json";
 
 // 1. Data Koridor Ruas Percontohan Sumatera Utara (Medan, Simalungun, Karo, Asahan)
 export const SUMATERA_UTARA_ROADS = sumutRoads;
@@ -15,11 +16,15 @@ export const NATIONAL_HIGHWAYS_INDONESIA = nationalHighways;
 // 3. Data Koridor Arteri Jalan Provinsi Strategis Seluruh Indonesia (SK Gubernur Masing-Masing Pemprov)
 export const PROVINCIAL_ROADS_INDONESIA = provincialRoads;
 
-// 4. Gabungan Seluruh Ruas Terdata JagaJalan
+// 4. Data Koridor Jalan Kota & Kabupaten Strategis Seluruh Indonesia (SK Walikota & SK Bupati)
+export const CITY_REGENCY_ROADS_INDONESIA = cityRegencyRoads;
+
+// 5. Gabungan Seluruh Ruas Terdata JagaJalan
 export const ALL_ROADS = [
   ...SUMATERA_UTARA_ROADS,
   ...NATIONAL_HIGHWAYS_INDONESIA,
   ...PROVINCIAL_ROADS_INDONESIA,
+  ...CITY_REGENCY_ROADS_INDONESIA,
 ];
 
 // Default Active Segments: ALL_ROADS
@@ -100,8 +105,9 @@ export const PROVINCIAL_NETWORK_STATS = {
   totalProvinces: 38,
   activeCuratedProvincialCorridors: 20,
   activeCuratedNationalCorridors: 21,
+  activeCuratedCityRegencyCorridors: 32,
   activeCuratedPilotRoads: 6,
-  dataSource: "PUSDATIN SIGI Kementerian PU x BPS Statistik Transportasi Darat x SK Gubernur Se-Indonesia",
+  dataSource: "PUSDATIN SIGI Kementerian PU x BPS Statistik Transportasi Darat x SK Walikota & SK Bupati Se-Indonesia",
 };
 
 // Katalog 38 Provinsi Indonesia dengan Data Kewenangan Jalan Provinsi Resmi
@@ -759,22 +765,33 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
     }
   }
 
-  // 3. Klasifikasi Kewenangan
-  // Jika jarak < 15 km dari koridor nasional -> Potensi Jalan Nasional
-  // Jika jarak 15 - 35 km -> Jalan Provinsi
-  // Jika lebih jauh -> Jalan Kabupaten / Kota
+  // 3. Klasifikasi Kewenangan Berdasarkan Ruas Terdekat & Proksimitas
   let authority = "KOTA_KAB";
-  let authorityLabel = "Pemerintah Kabupaten / Kota Setempat";
-  let legalBasis = `Peraturan Daerah Kabupaten/Kota di ${detectedProvince}`;
+  let authorityLabel = `Pemerintah Kabupaten / Kota Setempat (${detectedProvince})`;
+  let legalBasis = `Peraturan Bupati / Walikota tentang Penetapan Status Ruas Jalan di ${detectedProvince}`;
   let regionalHead = "Bupati / Walikota Daerah Setempat";
   let agency = "Dinas Pekerjaan Umum & Penataan Ruang (PUPR) Kab/Kota";
 
   if (minDistanceKm <= 15.0 && closestRoad) {
-    authority = "NASIONAL";
-    authorityLabel = closestRoad.authorityLabel || "Kementerian Pekerjaan Umum (BBPJN/BPJN Wilayah)";
-    legalBasis = closestRoad.legalBasis || "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional";
-    regionalHead = "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)";
-    agency = "Direktorat Jenderal Bina Marga Kementerian Pekerjaan Umum";
+    if (closestRoad.authority === "KOTA_KAB") {
+      authority = "KOTA_KAB";
+      authorityLabel = closestRoad.authorityLabel || `Pemerintah ${closestRoad.district || "Kabupaten/Kota"}`;
+      legalBasis = closestRoad.legalBasis || `Peraturan Bupati / Walikota tentang Penetapan Ruas Jalan`;
+      regionalHead = closestRoad.leadership?.regionalHead || "Bupati / Walikota Setempat";
+      agency = closestRoad.leadership?.agency || "Dinas PUPR Kabupaten/Kota";
+    } else if (closestRoad.authority === "PROVINSI") {
+      authority = "PROVINSI";
+      authorityLabel = closestRoad.authorityLabel || `Pemerintah Provinsi ${detectedProvince}`;
+      legalBasis = closestRoad.legalBasis || `Surat Keputusan Gubernur ${detectedProvince} tentang Penetapan Ruas Jalan Provinsi`;
+      regionalHead = closestRoad.leadership?.regionalHead || governorName;
+      agency = closestRoad.leadership?.agency || provincialAgency;
+    } else {
+      authority = "NASIONAL";
+      authorityLabel = closestRoad.authorityLabel || "Kementerian Pekerjaan Umum (BBPJN/BPJN Wilayah)";
+      legalBasis = closestRoad.legalBasis || "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional";
+      regionalHead = "Ir. Dody Hanggodo, M.PE. (Menteri Pekerjaan Umum RI)";
+      agency = "Direktorat Jenderal Bina Marga Kementerian Pekerjaan Umum";
+    }
   } else if (minDistanceKm <= 35.0) {
     authority = "PROVINSI";
     authorityLabel = `Pemerintah Provinsi ${detectedProvince}`;

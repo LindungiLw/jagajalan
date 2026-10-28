@@ -302,7 +302,7 @@ export default function MapInner({
               <Popup className="jagajalan-leaflet-popup">
                 <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
                   <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-1.5">
-                    <span className={`px-2 py-0.5 rounded-[4px] text-[9px] font-bold border ${badgeBg}`}>
+                    <span className={`px-2 py-0.5 rounded-[5px] text-[9px] font-bold border ${badgeBg}`}>
                       {road.authority}
                     </span>
                     <span className="text-[10px] font-mono text-slate-400 font-bold">{road.code}</span>
@@ -312,14 +312,14 @@ export default function MapInner({
                     <h4 className="font-bold text-slate-900 leading-snug">{road.name}</h4>
                     <p className="text-[10px] text-slate-500">{road.district} • {road.lengthKm} KM</p>
                     {road.leadership?.regionalHead && (
-                      <div className="text-[9.5px] font-semibold text-slate-700 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200 mt-1">
+                      <div className="text-[9.5px] font-semibold text-slate-700 bg-slate-50 px-1.5 py-0.5 rounded-[5px] border border-slate-200 mt-1">
                         PIC: {road.leadership.regionalHead}
                       </div>
                     )}
                   </div>
 
                   {/* Problem snippet */}
-                  <div className="bg-orange-50/80 rounded-[4px] p-2 border border-orange-100 space-y-1">
+                  <div className="bg-orange-50/80 rounded-[5px] p-2 border border-orange-100 space-y-1">
                     <div className="text-[10px] font-bold text-orange-900 flex items-center gap-1">
                       <span>⚠️ Masalah:</span>
                       <span className="font-semibold text-orange-800">{road.problemDetails?.headline || road.condition}</span>
@@ -331,7 +331,7 @@ export default function MapInner({
 
                   {/* Construction project snippet */}
                   {road.budget && (
-                    <div className="bg-slate-50 rounded-[4px] p-2 border border-slate-200/80 space-y-0.5">
+                    <div className="bg-slate-50 rounded-[5px] p-2 border border-slate-200/80 space-y-0.5">
                       <div className="text-[10px] font-bold text-slate-800 flex items-center justify-between">
                         <span>🏗️ Proyek:</span>
                         <span className="text-orange-700 font-black">
@@ -355,7 +355,7 @@ export default function MapInner({
 
                   <button
                     onClick={() => onSelectRoad(road)}
-                    className="w-full py-1.5 px-2 rounded-[4px] text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 text-center transition-colors cursor-pointer block"
+                    className="w-full py-1.5 px-2 rounded-[5px] text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 text-center transition-colors cursor-pointer block"
                   >
                     Buka Detail Lengkap di Panel →
                   </button>

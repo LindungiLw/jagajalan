@@ -85,16 +85,39 @@ export default function MapExplorer({
   }
 
   const filteredProvinces = useMemo(() => {
-    if (!provinceSearchQuery.trim()) return INDONESIA_PROVINCES;
+    const list = INDONESIA_PROVINCES.map((prov) => {
+      const roadCount = roads.filter(
+        (r) =>
+          r.provinceId === prov.id ||
+          (r.district && r.district.toLowerCase().includes(prov.name.toLowerCase()))
+      ).length;
+      return {
+        ...prov,
+        roadCount,
+        hasPilotCorridor: roadCount > 0,
+      };
+    });
+
+    if (!provinceSearchQuery.trim()) return list;
     const q = provinceSearchQuery.toLowerCase();
-    return INDONESIA_PROVINCES.filter(
+    return list.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.capital.toLowerCase().includes(q) ||
         p.agency.toLowerCase().includes(q) ||
         p.governor.toLowerCase().includes(q)
     );
-  }, [provinceSearchQuery]);
+  }, [roads, provinceSearchQuery]);
+
+  // Aggregate road counts per authority
+  const roadCounts = useMemo(() => {
+    return {
+      ALL: roads.length,
+      NASIONAL: roads.filter((r) => r.authority === "NASIONAL").length,
+      PROVINSI: roads.filter((r) => r.authority === "PROVINSI").length,
+      KOTA_KAB: roads.filter((r) => r.authority === "KOTA_KAB").length,
+    };
+  }, [roads]);
 
   // Filter logic
   const filteredRoads = useMemo(() => {
@@ -291,6 +314,17 @@ export default function MapExplorer({
         />
       </div>
 
+      {/* Click-away backdrop for floating dropdowns */}
+      {(regionDropdownOpen || statusDropdownOpen) && (
+        <div
+          className="fixed inset-0 z-[490]"
+          onClick={() => {
+            setRegionDropdownOpen(false);
+            setStatusDropdownOpen(false);
+          }}
+        />
+      )}
+
       {/* 2. Top-Left Floating Search Box & Status Filter */}
       <div className="absolute top-4 left-4 z-[500] space-y-2 pointer-events-auto">
         <div className="flex items-center gap-2 flex-wrap">
@@ -374,12 +408,15 @@ export default function MapExplorer({
                         >
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <span className="font-semibold text-slate-900">{prov.name}</span>
-                              {prov.hasPilotCorridor && (
-                                <span className="text-[8.5px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded border border-emerald-200">
+                              {prov.roadCount > 0 ? (
+                                <span className="text-[8.5px] bg-emerald-50 text-emerald-800 font-bold px-1.5 py-0.2 rounded-[4px] border border-emerald-300">
+                                  {prov.roadCount} Ruas Terdata
+                                </span>
+                              ) : prov.hasPilotCorridor ? (
+                                <span className="text-[8.5px] bg-emerald-50 text-emerald-800 font-bold px-1.5 py-0.2 rounded-[4px] border border-emerald-300">
                                   Koridor Terdata
                                 </span>
-                              )}
+                              ) : null}
                             </div>
                             <div className="text-[10px] text-slate-500 truncate max-w-[240px]">
                               {prov.agency} • Ibu Kota: {prov.capital}
@@ -527,6 +564,76 @@ export default function MapExplorer({
             <span className="text-emerald-700 font-bold">SIGI PU Terhubung</span>
           </button>
         </div>
+
+        {/* Quick Authority Filter Badges */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <button
+            onClick={() => setAuthorityFilter("ALL")}
+            className={`px-3 py-1.5 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              authorityFilter === "ALL"
+                ? "bg-orange-500/10 border-orange-500 text-orange-800 shadow-xs ring-1 ring-orange-500/30"
+                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-slate-50"
+            }`}
+          >
+            <span>Semua Ruas</span>
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+              authorityFilter === "ALL" ? "bg-orange-600 text-white" : "bg-slate-100 text-slate-600"
+            }`}>
+              {roadCounts.ALL}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setAuthorityFilter("NASIONAL")}
+            className={`px-3 py-1.5 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              authorityFilter === "NASIONAL"
+                ? "bg-blue-500/10 border-blue-500 text-blue-800 shadow-xs ring-1 ring-blue-500/30"
+                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-blue-50/40"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-blue-600" />
+            <span>Jalan Nasional</span>
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+              authorityFilter === "NASIONAL" ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-700"
+            }`}>
+              {roadCounts.NASIONAL}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setAuthorityFilter("PROVINSI")}
+            className={`px-3 py-1.5 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              authorityFilter === "PROVINSI"
+                ? "bg-purple-500/10 border-purple-500 text-purple-800 shadow-xs ring-1 ring-purple-500/30"
+                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-purple-50/40"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-purple-600" />
+            <span>Jalan Provinsi</span>
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+              authorityFilter === "PROVINSI" ? "bg-purple-600 text-white" : "bg-purple-50 text-purple-700"
+            }`}>
+              {roadCounts.PROVINSI}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setAuthorityFilter("KOTA_KAB")}
+            className={`px-3 py-1.5 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              authorityFilter === "KOTA_KAB"
+                ? "bg-teal-500/10 border-teal-500 text-teal-800 shadow-xs ring-1 ring-teal-500/30 font-bold"
+                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-teal-50/40"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-teal-600" />
+            <span>Jalan Kota / Kab</span>
+            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-mono font-bold ${
+              authorityFilter === "KOTA_KAB" ? "bg-teal-600 text-white" : "bg-teal-50 text-teal-700"
+            }`}>
+              {roadCounts.KOTA_KAB}
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Floating Notice / Province Context Banner */}
@@ -550,22 +657,66 @@ export default function MapExplorer({
         </div>
       )}
 
+      {/* City & Regency Transparency Context Banner */}
+      {authorityFilter === "KOTA_KAB" && (
+        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-teal-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
+          <div className="flex items-start gap-2.5">
+            <div className="w-6 h-6 rounded-[5px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 mt-0.5">
+              <Building2 className="w-3.5 h-3.5" />
+            </div>
+            <div className="space-y-1 text-left flex-1 min-w-0">
+              <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
+                <span>Jalan Kota & Kabupaten Se-Indonesia</span>
+                <span className="text-[9px] font-mono font-bold bg-teal-50 text-teal-800 px-1.5 py-0.2 rounded-[4px] border border-teal-200">
+                  514 Pemkab/Pemkot
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-600 leading-snug">
+                Total Jaringan Resmi: <strong className="text-teal-900 font-mono">445.000 KM</strong> (81% jalan nasional). Tanggung jawab Walikota & Bupati melalui Dinas PUPR Daerah. Menyumbang 42,9% jalan non-mantap dan porsi aduan terbanyak masyarakat (Inpres Jalan Daerah / Ombudsman RI).
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Provincial Transparency Context Banner */}
       {authorityFilter === "PROVINSI" && (
-        <div className="hidden sm:block absolute bottom-28 left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[6px] shadow-lg border border-purple-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
+        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-purple-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
           <div className="flex items-start gap-2.5">
-            <div className="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-6 h-6 rounded-[5px] bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 mt-0.5">
               <Building2 className="w-3.5 h-3.5" />
             </div>
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                 <span>Jalan Provinsi Se-Indonesia</span>
-                <span className="text-[9px] font-mono font-bold bg-purple-100 text-purple-800 px-1.5 py-0.2 rounded">
+                <span className="text-[9px] font-mono font-bold bg-purple-50 text-purple-800 px-1.5 py-0.2 rounded-[4px] border border-purple-200">
                   38 Pemprov
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan Resmi: <strong className="text-purple-900 font-mono">54.544,75 KM</strong> (BPS & KemenPU). Ditayangkan bertahap via On-Demand Cloud Streaming demi responsivitas peta gawai warga.
+                Total Jaringan Resmi: <strong className="text-purple-900 font-mono">54.544,75 KM</strong> (BPS & KemenPU). Ditayangkan terkurasi di bawah kewenangan Gubernur & Dinas Bina Marga Provinsi.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* National Transparency Context Banner */}
+      {authorityFilter === "NASIONAL" && (
+        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-blue-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
+          <div className="flex items-start gap-2.5">
+            <div className="w-6 h-6 rounded-[5px] bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+              <Building2 className="w-3.5 h-3.5" />
+            </div>
+            <div className="space-y-1 text-left flex-1 min-w-0">
+              <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
+                <span>Jalan Arteri Primer Nasional</span>
+                <span className="text-[9px] font-mono font-bold bg-blue-50 text-blue-800 px-1.5 py-0.2 rounded-[4px] border border-blue-200">
+                  Kementerian PU
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-600 leading-snug">
+                Total Jaringan Arteri: <strong className="text-blue-900 font-mono">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022. Dikelola BBPJN / BPJN Ditjen Bina Marga Kementerian PU.
               </p>
             </div>
           </div>
@@ -574,7 +725,7 @@ export default function MapExplorer({
 
 
       {/* 3. Left Side Floating Zoom Controls */}
-      <div className="absolute top-36 left-4 z-[500] flex flex-col gap-1.5 bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-1 pointer-events-auto font-sans">
+      <div className="absolute top-[118px] left-4 z-[500] flex flex-col gap-1.5 bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-1 pointer-events-auto font-sans">
         <button
           onClick={() => mapInstance?.zoomIn()}
           title="Perbesar Peta"
@@ -650,18 +801,18 @@ export default function MapExplorer({
           <div className="px-5 pt-4 pb-3 border-b border-slate-100 shrink-0 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={`px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold font-mono border ${
+                <span className={`px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold font-mono border ${
                   currentRoad?.authority === "NASIONAL"
-                    ? "bg-blue-50 text-blue-800 border-blue-200"
+                    ? "bg-blue-500/10 text-blue-800 border-blue-300"
                     : currentRoad?.authority === "PROVINSI"
-                    ? "bg-purple-50 text-purple-800 border-purple-200"
-                    : "bg-teal-50 text-teal-800 border-teal-200"
+                    ? "bg-purple-500/10 text-purple-800 border-purple-300"
+                    : "bg-teal-500/10 text-teal-800 border-teal-300"
                 }`}>
                   {currentRoad?.authority === "NASIONAL"
                     ? "JALAN NASIONAL • APBN"
                     : currentRoad?.authority === "PROVINSI"
-                    ? "JALAN PROVINSI • APBD JABAR"
-                    : "JALAN KOTA/KAB • APBD DAERAH"}
+                    ? "JALAN PROVINSI • APBD PROVINSI"
+                    : "JALAN KOTA / KAB • APBD DAERAH"}
                 </span>
 
                 {currentReport && (

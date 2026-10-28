@@ -53,14 +53,16 @@ const db = getFirestore(app);
 // 2. Baca dataset
 const nasHighways = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "src/data/nationalHighwaysData.json"), "utf-8"));
 const prvRoads = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "src/data/provincialRoadsData.json"), "utf-8"));
+const cityRoads = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "src/data/cityRegencyRoadsData.json"), "utf-8"));
 const sumutRoads = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "src/data/sumutRoadsData.json"), "utf-8"));
 
 console.log(`📊 Membaca Dataset:`);
 console.log(`   - Jalan Nasional   : ${nasHighways.length} koridor`);
 console.log(`   - Jalan Provinsi   : ${prvRoads.length} koridor`);
+console.log(`   - Jalan Kota/Kab   : ${cityRoads.length} koridor`);
 console.log(`   - Pilot Sumut      : ${sumutRoads.length} ruas`);
 
-const allRoads = [...sumutRoads, ...nasHighways, ...prvRoads];
+const allRoads = [...sumutRoads, ...nasHighways, ...prvRoads, ...cityRoads];
 // Remove duplicates by ID if any
 const roadMap = new Map();
 for (const r of allRoads) {
