@@ -18,6 +18,9 @@ import {
   Check,
 } from "lucide-react";
 import confetti from "canvas-confetti";
+import { db } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
+
 
 // Preset photos for quick demonstration during pitching/testing
 const SAMPLE_PHOTOS = [
@@ -227,6 +230,16 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
     setCreatedTicket(newTicketCode);
     setSubmitted(true);
 
+    // Asinkronus: Sinkronisasi ke Cloud Firestore koleksi 'reports' jika terkonfigurasi
+    if (db) {
+      addDoc(collection(db, "reports"), {
+        ...newReport,
+        syncedToCloudAt: new Date().toISOString(),
+      }).catch((err) => {
+        console.warn("Sinkronisasi laporan ke Cloud Firestore dilewati:", err.message);
+      });
+    }
+
     try {
       confetti({
         particleCount: 70,
@@ -237,6 +250,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
       // ignore
     }
   };
+
 
   const handleCopyTicket = () => {
     if (createdTicket) {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ROAD_SEGMENTS } from "@/data/roadsData";
+import { ROAD_SEGMENTS, INDONESIA_PROVINCES, PROVINCIAL_NETWORK_STATS } from "@/data/roadsData";
 
 /**
  * Endpoint API Geospasial Ruas Jalan JagaJalan
@@ -8,6 +8,8 @@ import { ROAD_SEGMENTS } from "@/data/roadsData";
  * 
  * Query Params:
  * - authority: 'ALL' | 'NASIONAL' | 'PROVINSI' | 'KOTA_KAB'
+ * - provinceId: string (id provinsi, cth: 'jawa_barat', 'sumatera_utara', 'bali')
+ * - region: 'ALL' | 'sumatera' | 'jawa' | 'kalimantan' | 'sulawesi' | 'bali_nusra' | 'maluku_papua'
  * - search: string (nama jalan / kode ruas / wilayah)
  * - format: 'json' (default) | 'geojson' (FeatureCollection standar RFC 7946)
  */
@@ -16,6 +18,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const authority = searchParams.get("authority") || "ALL";
+    const provinceId = searchParams.get("provinceId") || "";
     const region = searchParams.get("region") || "ALL";
     const search = searchParams.get("search") || "";
     const format = searchParams.get("format") || "json";
@@ -27,7 +30,15 @@ export async function GET(request) {
       filtered = filtered.filter((r) => r.authority === authority);
     }
 
-    if (region !== "ALL") {
+    if (provinceId && provinceId !== "ALL" && provinceId !== "all") {
+      filtered = filtered.filter(
+        (r) =>
+          r.provinceId === provinceId ||
+          (r.provinceName && r.provinceName.toLowerCase().includes(provinceId.replace(/_/g, " ").toLowerCase()))
+      );
+    }
+
+    if (region !== "ALL" && region !== "all") {
       filtered = filtered.filter(
         (r) =>
           r.provinceId === region ||
@@ -41,9 +52,18 @@ export async function GET(request) {
         (r) =>
           r.name.toLowerCase().includes(q) ||
           r.code.toLowerCase().includes(q) ||
-          r.district.toLowerCase().includes(q)
+          r.district.toLowerCase().includes(q) ||
+          (r.provinceName && r.provinceName.toLowerCase().includes(q))
       );
     }
+
+    const provinceInfo = provinceId
+      ? INDONESIA_PROVINCES.find((p) => p.id === provinceId) || null
+      : null;
+
+    const totalLengthKm = Number(
+      filtered.reduce((sum, r) => sum + (Number(r.lengthKm) || 0), 0).toFixed(1)
+    );
 
     // 2. Format as GeoJSON FeatureCollection if requested
     if (format.toLowerCase() === "geojson") {
@@ -111,6 +131,14 @@ export async function GET(request) {
       {
         success: true,
         total: filtered.length,
+        totalLengthKm,
+        provinceInfo,
+        nationalProvincialStats: PROVINCIAL_NETWORK_STATS,
+        streamingArchitecture: {
+          status: "ONLINE",
+          mode: "DYNAMIC_ON_DEMAND",
+          description: "Data koridor jalan dimuat secara tersegmen on-demand per provinsi/kewenangan demi efisiensi memori gawai warga.",
+        },
         sigiIntegration: {
           status: "CONNECTED",
           description: "Layanan Geospasial Infrastruktur Jalan Nasional & Daerah",
@@ -125,6 +153,7 @@ export async function GET(request) {
         },
         data: filtered,
       },
+
       {
         headers: {
           "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
