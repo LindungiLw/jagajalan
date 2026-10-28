@@ -336,12 +336,12 @@ export default function HeroSection({
             {/* Split: Index List (Left) + Interactive Visual Chart (Right) */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
               
-              {/* Index Column (5 cols, accurate labels & clear sources) */}
-              <div className="sm:col-span-5 space-y-1.5">
-                {/* Index 1: Kemantapan Jalan (BPS 2024) */}
+              {/* Index Column (5 cols, clean uncluttered metric tabs) */}
+              <div className="sm:col-span-5 space-y-2">
+                {/* Index 1: Kemantapan Jalan (BPS) */}
                 <button
                   onClick={() => setSelectedIndex("kemantapan")}
-                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2.5 px-3 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "kemantapan"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -351,24 +351,17 @@ export default function HeroSection({
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       JALAN KAB/KOTA (BPS)
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-2 py-0.5 rounded-full tabular-nums ${
-                      selectedIndex === "kemantapan" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
-                    }`}>
-                      2024
-                    </span>
+                    <ChevronRight className={`w-3.5 h-3.5 transition-transform ${selectedIndex === "kemantapan" ? "text-white translate-x-0.5" : "text-slate-400"}`} />
                   </div>
                   <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
-                    57,1% <span className="text-xs font-semibold uppercase tracking-wider font-sans">MANTAP</span>
-                  </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "kemantapan" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
-                    42,9% panjang jalan belum mantap
+                    57,1% <span className={`text-xs font-semibold uppercase tracking-wider font-sans ${selectedIndex === "kemantapan" ? "text-orange-100" : "text-slate-500"}`}>MANTAP</span>
                   </div>
                 </button>
 
-                {/* Index 2: Konteks Ombudsman 2024 */}
+                {/* Index 2: Konteks Ombudsman */}
                 <button
                   onClick={() => setSelectedIndex("ombudsman")}
-                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2.5 px-3 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "ombudsman"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -378,24 +371,17 @@ export default function HeroSection({
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       UNDUE DELAY (OMBUDSMAN)
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-2 py-0.5 rounded-full tabular-nums ${
-                      selectedIndex === "ombudsman" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
-                    }`}>
-                      2024
-                    </span>
+                    <ChevronRight className={`w-3.5 h-3.5 transition-transform ${selectedIndex === "ombudsman" ? "text-white translate-x-0.5" : "text-slate-400"}`} />
                   </div>
                   <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
-                    33,86% <span className="text-xs font-semibold uppercase tracking-wider font-sans">LAPORAN</span>
-                  </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "ombudsman" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
-                    Penundaan berlarut pada laporan selesai
+                    33,86% <span className={`text-xs font-semibold uppercase tracking-wider font-sans ${selectedIndex === "ombudsman" ? "text-orange-100" : "text-slate-500"}`}>LAPORAN</span>
                   </div>
                 </button>
 
                 {/* Index 3: Pagu Paket Pilot LPSE */}
                 <button
                   onClick={() => setSelectedIndex("pagu")}
-                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2.5 px-3 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "pagu"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -405,24 +391,17 @@ export default function HeroSection({
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       PAGU PENGADAAN PILOT
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-2 py-0.5 rounded-full tabular-nums ${
-                      selectedIndex === "pagu" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
-                    }`}>
-                      6 Paket
-                    </span>
+                    <ChevronRight className={`w-3.5 h-3.5 transition-transform ${selectedIndex === "pagu" ? "text-white translate-x-0.5" : "text-slate-400"}`} />
                   </div>
                   <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
-                    Rp 35,80 <span className="text-xs font-semibold uppercase tracking-wider font-sans">MIL</span>
-                  </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "pagu" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
-                    Total nilai pagu lelang terverifikasi
+                    Rp 35,80 <span className={`text-xs font-semibold uppercase tracking-wider font-sans ${selectedIndex === "pagu" ? "text-orange-100" : "text-slate-500"}`}>MIL</span>
                   </div>
                 </button>
 
-                {/* Index 4: Alokasi Inpres Nasional 2023 */}
+                {/* Index 4: Alokasi Inpres Nasional */}
                 <button
                   onClick={() => setSelectedIndex("inpres")}
-                  className={`w-full text-left py-2 px-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left py-2.5 px-3 rounded-[5px] border transition-all cursor-pointer ${
                     selectedIndex === "inpres"
                       ? "bg-[#c2410c] text-white border-transparent shadow-xs"
                       : "bg-slate-50/70 text-slate-800 border-slate-200/60 hover:bg-orange-50/40 hover:border-orange-200/60"
@@ -432,17 +411,10 @@ export default function HeroSection({
                     <span className="text-[10px] font-bold tracking-wider uppercase font-sans">
                       INPRES JALAN DAERAH
                     </span>
-                    <span className={`text-[9px] font-sans font-bold px-1.5 py-0.5 rounded-[3px] tabular-nums ${
-                      selectedIndex === "inpres" ? "bg-white/20 text-white" : "bg-slate-200/60 text-slate-600"
-                    }`}>
-                      TA 2023
-                    </span>
+                    <ChevronRight className={`w-3.5 h-3.5 transition-transform ${selectedIndex === "inpres" ? "text-white translate-x-0.5" : "text-slate-400"}`} />
                   </div>
                   <div className="text-xl sm:text-2xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight">
-                    Rp 14,60 <span className="text-xs font-semibold uppercase tracking-wider font-sans">TRIL</span>
-                  </div>
-                  <div className={`text-[10px] truncate ${selectedIndex === "inpres" ? "text-orange-100/90" : "text-slate-500"} font-sans`}>
-                    Alokasi Tahap I Inpres No. 3/2023 (PUPR)
+                    Rp 14,60 <span className={`text-xs font-semibold uppercase tracking-wider font-sans ${selectedIndex === "inpres" ? "text-orange-100" : "text-slate-500"}`}>TRIL</span>
                   </div>
                 </button>
               </div>
