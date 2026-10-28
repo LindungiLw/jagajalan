@@ -117,8 +117,17 @@ export default function BudgetDataExplorer({
           Number(road.budget.progressPct) < 50 &&
           (road.budget.progressStatus === "TERLAMBAT_RESPONS" || road.budget.progressStatus === "TERTUNDA_LELANG");
 
+        const packageId =
+          road.budget.packageId ||
+          (road.authority === "PROVINSI"
+            ? `PKG-PRV-${(road.provinceId || "DAERAH").toUpperCase()}-${road.id.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`
+            : road.authority === "NASIONAL"
+            ? `PKG-APBN-${road.id.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`
+            : `PKG-${(road.authority || "DAERAH").toUpperCase()}-${road.id.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`);
+
         return {
           ...road.budget,
+          packageId,
           paguRp,
           contractValueRp,
           roadId: road.id,
@@ -478,7 +487,7 @@ export default function BudgetDataExplorer({
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
-          {filteredPackages.map((pkg) => {
+          {filteredPackages.map((pkg, idx) => {
             let statusBadge = {
               label: "Selesai (PHO)",
               color: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -514,10 +523,11 @@ export default function BudgetDataExplorer({
             // Audit forensic badge
             const isLowComp = pkg.audit?.isLowTenderCompetition;
             const isDevRisk = pkg.audit?.isNegativeDeviationRisk;
+            const cardKey = pkg.packageId || `pkg-${pkg.roadId || pkg.road?.id || idx}`;
 
             return (
               <div
-                key={pkg.packageId}
+                key={cardKey}
                 className="bg-white rounded-[5px] border border-slate-200/90 p-4 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between gap-3.5"
               >
                 {/* Header Info */}

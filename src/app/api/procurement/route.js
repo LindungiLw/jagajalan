@@ -76,8 +76,16 @@ function processAndAuditPackage(road) {
     auditNote = `Penghematan anggaran APBN/APBD mencapai ${efficiencyPct}% (${formatRupiahShort(efficiencyRp)}).`;
   }
 
+  const packageId =
+    b.packageId ||
+    (road.authority === "PROVINSI"
+      ? `PKG-PRV-${(road.provinceId || "DAERAH").toUpperCase()}-${road.id.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`
+      : road.authority === "NASIONAL"
+      ? `PKG-APBN-${road.id.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`
+      : `PKG-${(road.authority || "DAERAH").toUpperCase()}-${road.id.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`);
+
   return {
-    packageId: b.packageId,
+    packageId,
     name: b.name,
     scope: b.scope,
     fiscalYear: b.fiscalYear || "2026",
