@@ -220,64 +220,36 @@ export default function HeroSection({
           </p>
         </div>
 
-        {/* 1. TOP UTILITY BAR: IDX-STYLE SEGMENTED TAB BAR WITH VERTICAL DIVIDERS */}
-        <div className="bg-white border border-slate-200/90 rounded-xl shadow-2xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200/90 text-xs">
+        {/* 1. TOP UTILITY BAR: UNIFIED GLOBAL SEARCH & NATIONAL DATA SCOPE */}
+        <div className="bg-white border border-slate-200/90 rounded-[5px] shadow-2xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200/90 text-xs">
           
           {/* Segment 1: Wilayah Scope */}
-          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/70 shrink-0">
-            <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-            <span className="text-[11px] font-semibold">
-              Cakupan: <strong>Seluruh Indonesia (38 Provinsi)</strong>
+          <div className="px-3.5 py-2.5 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/70 shrink-0">
+            <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+            <span className="text-[11.5px] font-semibold">
+              Cakupan: <strong className="text-slate-900">Seluruh Indonesia (38 Provinsi)</strong>
             </span>
           </div>
 
-          {/* Segment 2: Dataset Tabs (IDX Tab Style with Vertical Dividers) */}
-          <div className="flex items-stretch divide-x divide-slate-200 shrink-0 overflow-x-auto">
-            {/* Tab 1: BPS 2024 */}
-            <button
-              type="button"
-              onClick={() => setSelectedIndex("kemantapan")}
-              className={`px-4 py-2 font-sans text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
-                selectedIndex === "kemantapan"
-                  ? "bg-[#c2410c] text-white"
-                  : "bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c]"
-              }`}
-              title="Tampilkan dataset Kemantapan Jalan BPS (Sirusa)"
-            >
-              <Database className="w-3.5 h-3.5 opacity-80" />
-              <span>BPS 2024 (Sirusa)</span>
-            </button>
-
-            {/* Tab 2: LPSE Pengadaan TA 2026 */}
-            <button
-              type="button"
-              onClick={() => setSelectedIndex("pagu")}
-              className={`px-4 py-2 font-sans text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap select-none ${
-                selectedIndex === "pagu"
-                  ? "bg-[#c2410c] text-white"
-                  : "bg-white text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c]"
-              }`}
-              title="Tampilkan dataset Pengadaan Tender LPSE TA 2026"
-            >
-              <FileText className="w-3.5 h-3.5 opacity-80" />
-              <span>LPSE Pengadaan TA 2026</span>
-            </button>
-
-            {/* Segment: Update Date */}
-            <div className="hidden xl:flex items-center px-3 py-2 text-[11px] font-sans text-slate-400 bg-slate-50/40 whitespace-nowrap select-none">
-              <span>Pembaruan: 18 Okt 2026</span>
-            </div>
+          {/* Segment 2: Official Verified Sources Indicator */}
+          <div className="hidden lg:flex items-center gap-2 px-3.5 py-2.5 text-[11px] font-sans text-slate-600 bg-slate-50/40 shrink-0 select-none">
+            <span className="inline-flex items-center gap-1.5 font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-200 font-sans">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              <span>BPS • LPSE • KemenPU • Ombudsman</span>
+            </span>
+            <span className="text-slate-300">|</span>
+            <span className="text-slate-400">Update: 18 Okt 2026</span>
           </div>
 
-          {/* Segment 3: Integrated Unified Search Input */}
-          <div className="relative flex-1 min-w-[240px] flex items-center bg-white group">
+          {/* Segment 3: Spacious Global Search Input */}
+          <div className="relative flex-1 min-w-[280px] flex items-center bg-white group">
             <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#c2410c] absolute left-3 pointer-events-none transition-colors" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari nama ruas, kode laporan, paket pengadaan, atau kontraktor..."
-              className="w-full h-full pl-9 pr-8 py-2 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none focus:bg-orange-50/15 transition-all font-sans"
+              placeholder="Cari nama ruas jalan, kode laporan, paket pengadaan, atau kontraktor..."
+              className="w-full h-full pl-9 pr-8 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none focus:bg-orange-50/15 transition-all font-sans"
             />
             {searchQuery && (
               <button
