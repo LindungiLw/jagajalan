@@ -106,7 +106,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-orange-100 selection:text-orange-900">
+    <div className={`flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-orange-100 selection:text-orange-900 ${
+      activeTab === "peta" ? "h-screen overflow-hidden" : "min-h-screen"
+    }`}>
       {/* Global Navigation */}
       <Navbar
         activeTab={activeTab}
@@ -117,7 +119,7 @@ export default function Home() {
       />
 
       {/* Main Tab Content */}
-      <main className="flex-1 flex flex-col">
+      <main className={`flex-1 flex flex-col ${activeTab === "peta" ? "min-h-0 overflow-hidden" : ""}`}>
         {activeTab === "beranda" && (
           <div className="space-y-6 animate-fade-in pb-8">
             {/* 1. Hero Section: Data Transparency & Live Ruas Inspector */}
@@ -160,7 +162,7 @@ export default function Home() {
         )}
 
         {activeTab === "peta" && (
-          <div className="w-full h-[calc(100vh-4rem)] overflow-hidden animate-fade-in flex-1">
+          <div className="w-full h-full min-h-0 overflow-hidden animate-fade-in flex-1">
             <MapExplorer
               roads={roads}
               reports={reports}

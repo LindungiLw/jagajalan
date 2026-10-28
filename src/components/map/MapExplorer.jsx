@@ -299,7 +299,7 @@ export default function MapExplorer({
   const savingsPct = budgetData && budgetData.paguRp ? ((savingsRp / budgetData.paguRp) * 100).toFixed(1) : "0.0";
 
   return (
-    <section className="relative w-full h-full min-h-[500px] bg-slate-100 overflow-hidden font-sans">
+    <section className="relative w-full h-full min-h-0 bg-slate-100 overflow-hidden font-sans">
       {/* 1. Underlying Map Canvas */}
       <div className="absolute inset-0 z-0">
         <MapInner
@@ -993,12 +993,12 @@ export default function MapExplorer({
           </div>
 
           {/* Drawer Body (Scrollable with tabs) */}
-          <div className="p-4 overflow-y-auto flex-1 space-y-3.5 text-xs text-slate-700">
+          <div className="p-3.5 sm:p-4 overflow-y-auto flex-1 space-y-3 text-xs text-slate-700">
             {/* TAB 1: MASALAH & KONDISI LAPANGAN */}
             {activeTab === "masalah" && (
-              <div className="space-y-3.5 animate-fade-in">
+              <div className="space-y-3 animate-fade-in">
                 {/* Photo Evidence Banner */}
-                <div className="w-full h-44 rounded-[5px] overflow-hidden border border-slate-200 bg-slate-900 relative shrink-0">
+                <div className="w-full h-36 sm:h-40 rounded-[5px] overflow-hidden border border-slate-200 bg-slate-900 relative shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={

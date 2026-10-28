@@ -236,7 +236,7 @@ export default function MapInner({
       zoomControl={false}
       scrollWheelZoom={true}
       className="w-full h-full"
-      style={{ width: "100%", height: "100%", minHeight: "680px" }}
+      style={{ width: "100%", height: "100%" }}
     >
       <MapController center={mapCenter} zoom={mapZoom} onMapReady={onMapReady} />
       <MapClickHandler onMapClick={onMapClick} />
