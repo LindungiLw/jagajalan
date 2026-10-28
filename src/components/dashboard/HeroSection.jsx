@@ -36,6 +36,7 @@ export default function HeroSection({
   const [selectedIndex, setSelectedIndex] = useState("kemantapan"); // 'kemantapan' | 'ombudsman' | 'pagu' | 'inpres'
   const [chartViewMode, setChartViewMode] = useState("line"); // 'line' | 'bar'
   const [selectedYear, setSelectedYear] = useState(2024);
+  const [budgetTimeScale, setBudgetTimeScale] = useState("instansi"); // 'instansi' | 'bulanan'
   const [summaryTab, setSummaryTab] = useState("wewenang"); // 'wewenang' | 'aduan'
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRoadForDetail, setSelectedRoadForDetail] = useState(null);
@@ -64,11 +65,25 @@ export default function HeroSection({
       resolved: 10650,
     };
 
-  // Pilot budget statistics by authority
+  // Pilot budget statistics by authority (TA 2026)
   const pilotBudgetStats = useMemo(() => [
-    { key: "depok", label: "Dinas Depok", fullName: "Dinas PUPR Depok", pagu: 11.65, kontrak: 10.87, ruas: 3, efficiency: 6.7, savings: "0,78 M" },
-    { key: "jabar", label: "DBMPR Jabar", fullName: "DBMPR Jawa Barat", pagu: 15.70, kontrak: 14.80, ruas: 2, efficiency: 5.7, savings: "0,90 M" },
-    { key: "pupr", label: "KemenPUPR", fullName: "KemenPUPR (BBPJN)", pagu: 8.45, kontrak: 7.92, ruas: 1, efficiency: 6.3, savings: "0,53 M" },
+    { key: "depok", label: "Dinas Depok", fullName: "Dinas PUPR Depok", timeline: "Mar – Jul 2026", pagu: 11.65, kontrak: 10.87, ruas: 3, efficiency: 6.7, savings: "0,78 M" },
+    { key: "jabar", label: "DBMPR Jabar", fullName: "DBMPR Jawa Barat", timeline: "Mei – Jun 2026", pagu: 15.70, kontrak: 14.80, ruas: 2, efficiency: 5.7, savings: "0,90 M" },
+    { key: "pupr", label: "KemenPUPR", fullName: "KemenPUPR (BBPJN)", timeline: "Feb – Apr 2026", pagu: 8.45, kontrak: 7.92, ruas: 1, efficiency: 6.3, savings: "0,53 M" },
+  ], []);
+
+  // Monthly progress for Pilot Budget (TA 2026: Jan - Okt)
+  const monthlyPilotBudgetTrend = useMemo(() => [
+    { month: "Jan", pagu: 3.50, kontrak: 0.00, phase: "SiRUP LKPP" },
+    { month: "Feb", pagu: 8.45, kontrak: 7.92, phase: "KemenPUPR Selesai" },
+    { month: "Mar", pagu: 14.20, kontrak: 13.40, phase: "Depok Paket 1" },
+    { month: "Apr", pagu: 20.10, kontrak: 18.79, phase: "Depok Paket 2" },
+    { month: "Mei", pagu: 24.15, kontrak: 22.54, phase: "DBMPR Jabar 1" },
+    { month: "Jun", pagu: 31.85, kontrak: 29.80, phase: "DBMPR Jabar 2" },
+    { month: "Jul", pagu: 33.50, kontrak: 31.35, phase: "Depok Paket 3" },
+    { month: "Ags", pagu: 34.90, kontrak: 32.70, phase: "MC-50 Lapangan" },
+    { month: "Sep", pagu: 35.80, kontrak: 33.59, phase: "MC-100 Lapangan" },
+    { month: "Okt", pagu: 35.80, kontrak: 33.59, phase: "Audit PHO Selesai" },
   ], []);
 
   // Inpres stages
@@ -462,29 +477,31 @@ export default function HeroSection({
 
               {/* Chart Column: Dynamic Visual Monitor based on selectedIndex */}
               <div className="sm:col-span-7 bg-slate-50/80 rounded-[5px] border border-slate-200/60 p-3 flex flex-col justify-between">
-                
-                {/* Chart Header: Title on Top Full-Width, Year & Switcher Controls Below */}
+                     {/* Chart Header: Structured 2-Tier Header (Never Wraps Awkwardly) */}
                 <div className="space-y-2 border-b border-slate-200/60 pb-2.5">
-                  {/* Top: Full-Width Title & Source */}
-                  <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-sans tracking-wide block">
-                      {selectedIndex === "kemantapan" && "Sumber: BPS Sirusa (2020–2024)"}
-                      {selectedIndex === "ombudsman" && "Sumber: Laporan Tahunan Ombudsman RI (2020–2024)"}
-                      {selectedIndex === "pagu" && "Sumber: SiRUP & LPSE Pengadaan TA 2026"}
-                      {selectedIndex === "inpres" && "Sumber: Ditjen Bina Marga KemenPUPR (Inpres No. 3/2023)"}
-                    </span>
-                    <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight block">
-                      {selectedIndex === "kemantapan" && `Tingkat Kemantapan Jalan (${selectedYear})`}
-                      {selectedIndex === "ombudsman" && `Tren Maladministrasi Penundaan Berlarut (${selectedYear})`}
-                      {selectedIndex === "pagu" && "Komparasi Pagu vs Nilai Kontrak Lelang Pilot"}
-                      {selectedIndex === "inpres" && "Alokasi & Realisasi Percepatan Inpres Jalan Daerah (IJD)"}
-                    </strong>
-                  </div>
+                  {/* Row 1: Title & Main Type Switcher (Garis / Batang) */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <span className="text-[10px] font-semibold text-slate-400 uppercase font-sans tracking-wide block">
+                        {selectedIndex === "kemantapan" && "Sumber: BPS Sirusa (Data Tahunan 2020–2024)"}
+                        {selectedIndex === "ombudsman" && "Sumber: Ombudsman RI (Laporan Tahunan 2020–2024)"}
+                        {selectedIndex === "pagu" && "Sumber: SiRUP & LPSE LKPP (Tahun Anggaran 2026)"}
+                        {selectedIndex === "inpres" && "Sumber: KemenPUPR (Inpres No. 3/2023 Tahap I & II)"}
+                      </span>
+                      <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight block">
+                        {selectedIndex === "kemantapan" && `Tingkat Kemantapan Jalan (Tahun ${selectedYear})`}
+                        {selectedIndex === "ombudsman" && `Tren Maladministrasi Undue Delay (${selectedYear})`}
+                        {selectedIndex === "pagu" && (
+                          budgetTimeScale === "bulanan"
+                            ? "Tren Realisasi Pagu vs Kontrak Bulanan (Jan – Okt 2026)"
+                            : "Komparasi Pagu vs Nilai Kontrak Lelang Pilot (TA 2026)"
+                        )}
+                        {selectedIndex === "inpres" && "Alokasi & Realisasi Fisik Inpres Jalan Daerah"}
+                      </strong>
+                    </div>
 
-                  {/* Below: Controls Row (View Switcher + Year Segmented Bar) */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
-                    {/* View Switcher: Line vs Bar */}
-                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs font-sans">
+                    {/* Mode Switcher: Garis / Batang */}
+                    <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold shadow-2xs font-sans shrink-0">
                       <button
                         onClick={() => setChartViewMode("line")}
                         className={`px-2 py-1 transition-colors cursor-pointer flex items-center gap-1 ${
@@ -510,40 +527,44 @@ export default function HeroSection({
                         <span>Batang</span>
                       </button>
                     </div>
+                  </div>
 
-                    {/* Contextual Year Tabs & Legend */}
+                  {/* Row 2: Sub-toolbar / Legend & Filter Bar (Never wraps awkwardly!) */}
+                  <div className="flex items-center justify-between gap-2 pt-0.5 text-[10px] font-sans">
+                    {/* Left: Dynamic Color Legend */}
                     {selectedIndex === "kemantapan" && (
-                      <div className="flex items-center gap-2.5">
-                        <div className="hidden sm:flex items-center gap-2 text-[9.5px] font-sans font-semibold text-slate-500">
-                          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-700" />Nasional</span>
-                          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-600" />Provinsi</span>
-                          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#c2410c]" />Kab/Kota</span>
-                        </div>
-                        <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
-                          {[2020, 2021, 2022, 2023, 2024].map((yr) => (
-                            <button
-                              key={yr}
-                              onClick={() => setSelectedYear(yr)}
-                              className={`px-2 py-1 transition-colors cursor-pointer ${
-                                selectedYear === yr
-                                  ? "bg-[#c2410c] text-white font-bold"
-                                  : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
-                              }`}
-                            >
-                              {yr}
-                            </button>
-                          ))}
-                        </div>
+                      <div className="flex items-center gap-2 font-medium text-slate-600">
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-700" />Nasional</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-600" />Provinsi</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#c2410c]" />Kab/Kota</span>
+                      </div>
+                    )}
+                    {selectedIndex === "ombudsman" && (
+                      <div className="flex items-center gap-1.5 font-medium text-slate-600">
+                        <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
+                        <span>Persentase Aduan Terlambat (Undue Delay)</span>
+                      </div>
+                    )}
+                    {selectedIndex === "pagu" && (
+                      <div className="flex items-center gap-2.5 font-medium">
+                        <span className="flex items-center gap-1 text-slate-600"><span className="w-2 h-2 rounded-[2px] bg-slate-700" />Pagu (HPS)</span>
+                        <span className="flex items-center gap-1 text-[#c2410c]"><span className="w-2 h-2 rounded-[2px] bg-[#c2410c]" />Kontrak</span>
+                      </div>
+                    )}
+                    {selectedIndex === "inpres" && (
+                      <div className="flex items-center gap-2 font-medium text-slate-600">
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#c2410c]" />Alokasi APBN (Triliun)</span>
                       </div>
                     )}
 
-                    {selectedIndex === "ombudsman" && (
-                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
+                    {/* Right: Year Selector / Time Scale Toggle */}
+                    {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman") && (
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
                         {[2020, 2021, 2022, 2023, 2024].map((yr) => (
                           <button
                             key={yr}
                             onClick={() => setSelectedYear(yr)}
-                            className={`px-2 py-1 transition-colors cursor-pointer ${
+                            className={`px-2 py-0.5 transition-colors cursor-pointer ${
                               selectedYear === yr
                                 ? "bg-[#c2410c] text-white font-bold"
                                 : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
@@ -556,30 +577,37 @@ export default function HeroSection({
                     )}
 
                     {selectedIndex === "pagu" && (
-                      <div className="flex items-center gap-2.5">
-                        <div className="hidden sm:flex items-center gap-2.5 text-[10px] font-sans font-semibold">
-                          <div className="flex items-center gap-1">
-                            <span className="w-2.5 h-2.5 rounded-[2px] bg-slate-800" />
-                            <span className="text-slate-600">Pagu (HPS)</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="w-2.5 h-2.5 rounded-[2px] bg-[#c2410c]" />
-                            <span className="text-[#c2410c]">Nilai Kontrak</span>
-                          </div>
-                        </div>
-                        <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] px-2 py-1 text-[10px] font-bold font-sans text-slate-700 shadow-2xs">
-                          <span>3 Instansi (6 Paket)</span>
-                        </div>
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs shrink-0">
+                        <button
+                          onClick={() => setBudgetTimeScale("instansi")}
+                          className={`px-2 py-0.5 transition-colors cursor-pointer ${
+                            budgetTimeScale === "instansi"
+                              ? "bg-[#c2410c] text-white"
+                              : "bg-white text-slate-600 hover:bg-orange-50/60"
+                          }`}
+                        >
+                          Per Instansi (TA 2026)
+                        </button>
+                        <button
+                          onClick={() => setBudgetTimeScale("bulanan")}
+                          className={`px-2 py-0.5 transition-colors cursor-pointer ${
+                            budgetTimeScale === "bulanan"
+                              ? "bg-[#c2410c] text-white"
+                              : "bg-white text-slate-600 hover:bg-orange-50/60"
+                          }`}
+                        >
+                          Skala Bulanan (Jan–Okt)
+                        </button>
                       </div>
                     )}
 
                     {selectedIndex === "inpres" && (
-                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums">
+                      <div className="inline-flex items-center border border-slate-200 bg-white rounded-[4px] overflow-hidden divide-x divide-slate-200 text-[10px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
                         {[2023, 2024].map((yr) => (
                           <button
                             key={yr}
                             onClick={() => setSelectedYear(yr)}
-                            className={`px-2 py-1 transition-colors cursor-pointer ${
+                            className={`px-2.5 py-0.5 transition-colors cursor-pointer ${
                               selectedYear === yr
                                 ? "bg-[#c2410c] text-white font-bold"
                                 : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
@@ -594,15 +622,15 @@ export default function HeroSection({
                 </div>
 
                 {/* ======================================================== */}
-                {/* 1. CHART BODY: KEMANTAPAN JALAN (BPS SIRUSA) */}
+                {/* 1. CHART BODY: KEMANTAPAN JALAN (BPS SIRUSA 2020 - 2024) */}
                 {/* ======================================================== */}
                 {selectedIndex === "kemantapan" && (
                   chartViewMode === "line" ? (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 152" className="w-full h-full select-none font-sans">
+                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="kemantapanAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#c2410c" stopOpacity="0.18" />
+                            <stop offset="0%" stopColor="#c2410c" stopOpacity="0.20" />
                             <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
                           </linearGradient>
                         </defs>
@@ -610,44 +638,44 @@ export default function HeroSection({
                           const y = 18 + ((100 - val) / 60) * 94;
                           return (
                             <g key={val}>
-                              <line x1="32" y1={y} x2="440" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
                               <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
                                 {val}%
                               </text>
                             </g>
                           );
                         })}
-                        <line x1="32" y1="112" x2="440" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${roadConditionTrends.map((d, i) => `${55 + i * 86},${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
-                            ${[...roadConditionTrends].reverse().map((d, i) => `${399 - i * 86},${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
+                            ${roadConditionTrends.map((d, i) => `${68 + i * 82},${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
+                            ${[...roadConditionTrends].reverse().map((d, i) => `${396 - i * 82},${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           `}
                           fill="url(#kemantapanAreaGrad)"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${55 + i * 86} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#334155"
                           strokeWidth="2.2"
                           strokeLinecap="round"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${55 + i * 86} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#d97706"
                           strokeWidth="2.2"
                           strokeLinecap="round"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${55 + i * 86} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="3"
                           strokeLinecap="round"
                         />
                         {roadConditionTrends.map((d, i) => {
-                          const x = 55 + i * 86;
+                          const x = 68 + i * 82;
                           const yNas = 18 + ((100 - d.nasional) / 60) * 94;
                           const yProv = 18 + ((100 - d.provinsi) / 60) * 94;
                           const yKab = 18 + ((100 - d.kabupatenKota) / 60) * 94;
@@ -655,7 +683,7 @@ export default function HeroSection({
 
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
-                              <rect x={x - 22} y="10" width="44" height="130" fill="transparent" />
+                              <rect x={x - 24} y="10" width="48" height="135" fill="transparent" />
                               {isSelected && (
                                 <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
                               )}
@@ -665,9 +693,20 @@ export default function HeroSection({
                               <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
                                 {d.kabupatenKota}%
                               </text>
-                              <text x={x} y="130" textAnchor="middle" fontSize="9.5" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#64748b"}>
-                                {d.year}
-                              </text>
+                              {/* Bottom Year Button Pill */}
+                              {isSelected ? (
+                                <g>
+                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
+                                </g>
+                              ) : (
+                                <g>
+                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">BPS Data</text>
+                                </g>
+                              )}
                             </g>
                           );
                         })}
@@ -675,40 +714,72 @@ export default function HeroSection({
                     </div>
                   ) : (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 152" className="w-full h-full select-none font-sans">
+                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
                         {[100, 80, 60, 40].map((val) => {
                           const y = 18 + ((100 - val) / 60) * 94;
                           return (
                             <g key={val}>
-                              <line x1="32" y1={y} x2="440" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
                               <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
                                 {val}%
                               </text>
                             </g>
                           );
                         })}
-                        <line x1="32" y1="112" x2="440" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         {roadConditionTrends.map((d, i) => {
-                          const xCenter = 60 + i * 84;
+                          const xCenter = 68 + i * 82;
                           const isSelected = d.year === selectedYear;
                           const hNas = ((d.nasional - 40) / 60) * 94;
                           const hProv = ((d.provinsi - 40) / 60) * 94;
                           const hKab = ((d.kabupatenKota - 40) / 60) * 94;
+                          const yNas = 112 - hNas;
+                          const yProv = 112 - hProv;
+                          const yKab = 112 - hKab;
 
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
+                              {/* Selected Year Card Framing */}
                               {isSelected && (
-                                <rect x={xCenter - 26} y="12" width="52" height="100" rx="4" fill="#c2410c" fillOpacity="0.06" />
+                                <rect x={xCenter - 23} y="14" width="46" height="98" rx="5" fill="#f8fafc" stroke="#fed7aa" strokeWidth="1" />
                               )}
-                              <rect x={xCenter - 18} y={112 - hNas} width="10" height={hNas} rx="2" fill="#334155" />
-                              <rect x={xCenter - 5} y={112 - hProv} width="10" height={hProv} rx="2" fill="#d97706" />
-                              <rect x={xCenter + 8} y={112 - hKab} width="10" height={hKab} rx="2" fill="#c2410c" />
-                              <text x={xCenter + 13} y={112 - hKab - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
+                              
+                              {/* Nasional Bar */}
+                              <rect x={xCenter - 18} y={yNas} width="11" height={hNas} rx="2.5" fill="#334155" />
+                              {isSelected && (
+                                <text x={xCenter - 12.5} y={yNas - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#334155">
+                                  {d.nasional}%
+                                </text>
+                              )}
+
+                              {/* Provinsi Bar */}
+                              <rect x={xCenter - 5} y={yProv} width="11" height={hProv} rx="2.5" fill="#d97706" />
+                              {isSelected && (
+                                <text x={xCenter + 0.5} y={yProv - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#b45309">
+                                  {d.provinsi}%
+                                </text>
+                              )}
+
+                              {/* Kab/Kota Bar */}
+                              <rect x={xCenter + 8} y={yKab} width="11" height={hKab} rx="2.5" fill="#c2410c" />
+                              <text x={xCenter + 13.5} y={yKab - 3.5} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
                                 {d.kabupatenKota}%
                               </text>
-                              <text x={xCenter} y="130" textAnchor="middle" fontSize="9.5" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#64748b"}>
-                                {d.year}
-                              </text>
+
+                              {/* Year Button Pill Under Baseline */}
+                              {isSelected ? (
+                                <g>
+                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
+                                </g>
+                              ) : (
+                                <g>
+                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">Klik</text>
+                                </g>
+                              )}
                             </g>
                           );
                         })}
@@ -723,7 +794,7 @@ export default function HeroSection({
                 {selectedIndex === "ombudsman" && (
                   chartViewMode === "line" ? (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 152" className="w-full h-full select-none font-sans">
+                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="ombudsmanAreaGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#c2410c" stopOpacity="0.22" />
@@ -734,36 +805,36 @@ export default function HeroSection({
                           const y = 18 + ((36 - val) / 8) * 94;
                           return (
                             <g key={val}>
-                              <line x1="32" y1={y} x2="440" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
                               <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
                                 {val}%
                               </text>
                             </g>
                           );
                         })}
-                        <line x1="32" y1="112" x2="440" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${complaintTrends.map((d, i) => `${55 + i * 86},${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
-                            399,112 55,112
+                            ${complaintTrends.map((d, i) => `${68 + i * 82},${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
+                            396,112 68,112
                           `}
                           fill="url(#ombudsmanAreaGrad)"
                         />
                         <path
-                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${55 + i * 86} ${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
+                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="2.8"
                           strokeLinecap="round"
                         />
                         {complaintTrends.map((d, i) => {
-                          const x = 55 + i * 86;
+                          const x = 68 + i * 82;
                           const y = 18 + ((36 - d.overduePct) / 8) * 94;
                           const isSelected = d.year === selectedYear;
 
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
-                              <rect x={x - 22} y="10" width="44" height="130" fill="transparent" />
+                              <rect x={x - 22} y="10" width="44" height="135" fill="transparent" />
                               {isSelected && (
                                 <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
                               )}
@@ -771,9 +842,19 @@ export default function HeroSection({
                               <text x={x} y={y - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
                                 {d.overduePct}%
                               </text>
-                              <text x={x} y="130" textAnchor="middle" fontSize="9.5" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#64748b"}>
-                                {d.year}
-                              </text>
+                              {isSelected ? (
+                                <g>
+                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
+                                </g>
+                              ) : (
+                                <g>
+                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <text x={x} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">Klik</text>
+                                </g>
+                              )}
                             </g>
                           );
                         })}
@@ -781,7 +862,7 @@ export default function HeroSection({
                     </div>
                   ) : (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 152" className="w-full h-full select-none font-sans">
+                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="ombudsmanBarGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#ea580c" />
@@ -792,16 +873,16 @@ export default function HeroSection({
                           const y = 18 + ((36 - val) / 8) * 94;
                           return (
                             <g key={val}>
-                              <line x1="32" y1={y} x2="440" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
                               <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
                                 {val}%
                               </text>
                             </g>
                           );
                         })}
-                        <line x1="32" y1="112" x2="440" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         {complaintTrends.map((d, i) => {
-                          const xCenter = 60 + i * 84;
+                          const xCenter = 68 + i * 82;
                           const isSelected = d.year === selectedYear;
                           const h = ((d.overduePct - 28) / 8) * 94;
                           const yBar = 112 - h;
@@ -823,9 +904,19 @@ export default function HeroSection({
                               <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
                                 {d.overduePct}%
                               </text>
-                              <text x={xCenter} y="130" textAnchor="middle" fontSize="9.5" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#64748b"}>
-                                {d.year}
-                              </text>
+                              {isSelected ? (
+                                <g>
+                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#c2410c">Terpilih</text>
+                                </g>
+                              ) : (
+                                <g>
+                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <text x={xCenter} y="148" textAnchor="middle" fontSize="7" fill="#94a3b8">Klik</text>
+                                </g>
+                              )}
                             </g>
                           );
                         })}
@@ -835,210 +926,351 @@ export default function HeroSection({
                 )}
 
                 {/* ======================================================== */}
-                {/* 3. CHART BODY: PAGU VS KONTRAK LELANG PILOT (LPSE)       */}
+                {/* 3. CHART BODY: PAGU VS KONTRAK LELANG PILOT (LPSE TA 2026) */}
                 {/* ======================================================== */}
                 {selectedIndex === "pagu" && (
-                  chartViewMode === "line" ? (
-                    <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 160" className="w-full h-full select-none font-sans">
-                        <defs>
-                          <linearGradient id="paguLineGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#334155" stopOpacity="0.18" />
-                            <stop offset="100%" stopColor="#334155" stopOpacity="0.0" />
-                          </linearGradient>
-                          <linearGradient id="kontrakLineGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#c2410c" stopOpacity="0.22" />
-                            <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
-                          </linearGradient>
-                        </defs>
-                        {[20, 15, 10, 5].map((val) => {
-                          const y = 20 + ((20 - val) / 20) * 92;
-                          return (
-                            <g key={val}>
-                              <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                              <text x="26" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
-                                {val}M
-                              </text>
-                            </g>
-                          );
-                        })}
-                        <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                  budgetTimeScale === "bulanan" ? (
+                    // VIEW A: REALISASI BULANAN TA 2026 (JANUARI - OKTOBER 2026)
+                    chartViewMode === "line" ? (
+                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
+                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                          <defs>
+                            <linearGradient id="paguMonthGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#334155" stopOpacity="0.18" />
+                              <stop offset="100%" stopColor="#334155" stopOpacity="0.0" />
+                            </linearGradient>
+                            <linearGradient id="kontrakMonthGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#c2410c" stopOpacity="0.25" />
+                              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
+                            </linearGradient>
+                          </defs>
+                          {[40, 30, 20, 10].map((val) => {
+                            const y = 18 + ((40 - val) / 40) * 94;
+                            return (
+                              <g key={val}>
+                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                                <text x="26" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
+                                  {val}M
+                                </text>
+                              </g>
+                            );
+                          })}
+                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
 
-                        {/* Pagu Area & Line */}
-                        <polygon
-                          points={`
-                            ${pilotBudgetStats.map((d, i) => `${100 + i * 137},${20 + ((20 - d.pagu) / 20) * 92}`).join(" ")}
-                            374,112 100,112
-                          `}
-                          fill="url(#paguLineGrad)"
-                        />
-                        <path
-                          d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${100 + i * 137} ${20 + ((20 - d.pagu) / 20) * 92}`).join(" ")}
-                          fill="none"
-                          stroke="#334155"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                        />
+                          {/* Pagu Area & Line */}
+                          <polygon
+                            points={`
+                              ${monthlyPilotBudgetTrend.map((d, i) => `${45 + i * 42},${18 + ((40 - d.pagu) / 40) * 94}`).join(" ")}
+                              423,112 45,112
+                            `}
+                            fill="url(#paguMonthGrad)"
+                          />
+                          <path
+                            d={monthlyPilotBudgetTrend.map((d, i) => `${i === 0 ? "M" : "L"} ${45 + i * 42} ${18 + ((40 - d.pagu) / 40) * 94}`).join(" ")}
+                            fill="none"
+                            stroke="#334155"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                          />
 
-                        {/* Kontrak Area & Line */}
-                        <polygon
-                          points={`
-                            ${pilotBudgetStats.map((d, i) => `${100 + i * 137},${20 + ((20 - d.kontrak) / 20) * 92}`).join(" ")}
-                            374,112 100,112
-                          `}
-                          fill="url(#kontrakLineGrad)"
-                        />
-                        <path
-                          d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${100 + i * 137} ${20 + ((20 - d.kontrak) / 20) * 92}`).join(" ")}
-                          fill="none"
-                          stroke="#c2410c"
-                          strokeWidth="2.8"
-                          strokeLinecap="round"
-                        />
+                          {/* Kontrak Area & Line */}
+                          <polygon
+                            points={`
+                              ${monthlyPilotBudgetTrend.map((d, i) => `${45 + i * 42},${18 + ((40 - d.kontrak) / 40) * 94}`).join(" ")}
+                              423,112 45,112
+                            `}
+                            fill="url(#kontrakMonthGrad)"
+                          />
+                          <path
+                            d={monthlyPilotBudgetTrend.map((d, i) => `${i === 0 ? "M" : "L"} ${45 + i * 42} ${18 + ((40 - d.kontrak) / 40) * 94}`).join(" ")}
+                            fill="none"
+                            stroke="#c2410c"
+                            strokeWidth="2.8"
+                            strokeLinecap="round"
+                          />
 
-                        {pilotBudgetStats.map((d, i) => {
-                          const x = 100 + i * 137;
-                          const yPagu = 20 + ((20 - d.pagu) / 20) * 92;
-                          const yKontrak = 20 + ((20 - d.kontrak) / 20) * 92;
+                          {monthlyPilotBudgetTrend.map((d, i) => {
+                            const x = 45 + i * 42;
+                            const yPagu = 18 + ((40 - d.pagu) / 40) * 94;
+                            const yKontrak = 18 + ((40 - d.kontrak) / 40) * 94;
+                            const isLast = i === monthlyPilotBudgetTrend.length - 1;
 
-                          return (
-                            <g key={d.key}>
-                              <line x1={x} y1="20" x2={x} y2="112" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="2 2" />
-                              <circle cx={x} cy={yPagu} r="4.5" fill="#334155" stroke="#fff" strokeWidth="1.8" />
-                              <circle cx={x} cy={yKontrak} r="5" fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              
-                              <text x={x} y={yPagu - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#334155">
-                                Rp {d.pagu}M
-                              </text>
-                              <text x={x} y={yKontrak + 14} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
-                                Rp {d.kontrak}M
-                              </text>
-                              
-                              {/* Institution Header */}
-                              <text x={x} y="126" textAnchor="middle" fontSize="10.5" fontWeight="bold" fill="#0f172a">
-                                {d.fullName}
-                              </text>
-                              
-                              {/* Savings Badge */}
-                              <rect x={x - 48} y="132" width="96" height="13" rx="3.5" fill="#ecfdf5" stroke="#a7f3d0" strokeWidth="0.8" />
-                              <text x={x} y="141.5" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#047857">
-                                Hemat {d.efficiency}% (Rp {d.savings})
-                              </text>
-                              
-                              {/* Subtitle */}
-                              <text x={x} y="155" textAnchor="middle" fontSize="8" fill="#64748b">
-                                {d.ruas} Paket Pilot Lelang LPSE
-                              </text>
-                            </g>
-                          );
-                        })}
-                      </svg>
-                    </div>
+                            return (
+                              <g key={d.month} className="group">
+                                <circle cx={x} cy={yPagu} r={isLast ? 4 : 2.5} fill="#334155" stroke="#fff" strokeWidth="1.5" />
+                                <circle cx={x} cy={yKontrak} r={isLast ? 5 : 3} fill="#c2410c" stroke="#fff" strokeWidth="1.8" />
+                                
+                                {isLast && (
+                                  <g>
+                                    <text x={x} y={yPagu - 8} textAnchor="end" fontSize="8" fontWeight="bold" fill="#334155">
+                                      Pagu: Rp {d.pagu}M
+                                    </text>
+                                    <text x={x} y={yKontrak + 13} textAnchor="end" fontSize="8.5" fontWeight="bold" fill="#c2410c">
+                                      Kontrak: Rp {d.kontrak}M
+                                    </text>
+                                  </g>
+                                )}
+
+                                <text x={x} y="126" textAnchor="middle" fontSize="9" fontWeight={isLast ? "bold" : "600"} fill={isLast ? "#c2410c" : "#475569"}>
+                                  {d.month}
+                                </text>
+                                <text x={x} y="138" textAnchor="middle" fontSize="6.5" fill="#94a3b8">
+                                  {i < 3 ? "Q1" : i < 6 ? "Q2" : i < 9 ? "Q3" : "Q4"}
+                                </text>
+                              </g>
+                            );
+                          })}
+                          <text x="235" y="154" textAnchor="middle" fontSize="8" fill="#64748b">
+                            Skala Waktu: Realisasi Kumulatif Pengadaan Jan – Okt TA 2026
+                          </text>
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
+                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                          {[40, 30, 20, 10].map((val) => {
+                            const y = 18 + ((40 - val) / 40) * 94;
+                            return (
+                              <g key={val}>
+                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                                <text x="26" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
+                                  {val}M
+                                </text>
+                              </g>
+                            );
+                          })}
+                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                          {monthlyPilotBudgetTrend.map((d, i) => {
+                            const xCenter = 45 + i * 42;
+                            const hPagu = (d.pagu / 40) * 94;
+                            const hKontrak = (d.kontrak / 40) * 94;
+                            const yPagu = 112 - hPagu;
+                            const yKontrak = 112 - hKontrak;
+                            const isLast = i === monthlyPilotBudgetTrend.length - 1;
+
+                            return (
+                              <g key={d.month} className="group">
+                                <rect x={xCenter - 10} y={yPagu} width="9" height={hPagu} rx="2" fill="#334155" />
+                                <rect x={xCenter + 1} y={yKontrak} width="9" height={hKontrak} rx="2" fill="#ea580c" />
+                                {isLast && (
+                                  <text x={xCenter + 5} y={yKontrak - 4} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#c2410c">
+                                    33.6M
+                                  </text>
+                                )}
+                                <text x={xCenter} y="126" textAnchor="middle" fontSize="9" fontWeight={isLast ? "bold" : "600"} fill={isLast ? "#c2410c" : "#475569"}>
+                                  {d.month}
+                                </text>
+                                <text x={xCenter} y="138" textAnchor="middle" fontSize="6.5" fill="#94a3b8">
+                                  {d.phase.substring(0, 7)}
+                                </text>
+                              </g>
+                            );
+                          })}
+                          <text x="235" y="154" textAnchor="middle" fontSize="8" fill="#64748b">
+                            Skala Waktu: Realisasi Kumulatif Pengadaan Jan – Okt TA 2026
+                          </text>
+                        </svg>
+                      </div>
+                    )
                   ) : (
-                    <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 160" className="w-full h-full select-none font-sans">
-                        <defs>
-                          <linearGradient id="paguBarGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#475569" />
-                            <stop offset="100%" stopColor="#1e293b" />
-                          </linearGradient>
-                          <linearGradient id="kontrakBarGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#f97316" />
-                            <stop offset="100%" stopColor="#c2410c" />
-                          </linearGradient>
-                          <filter id="barShadow" x="-10%" y="-10%" width="120%" height="120%">
-                            <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#0f172a" floodOpacity="0.08" />
-                          </filter>
-                        </defs>
+                    // VIEW B: PER INSTANSI (TA 2026 DENGAN TIMELINE LELANG)
+                    chartViewMode === "line" ? (
+                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
+                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                          <defs>
+                            <linearGradient id="paguLineGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#334155" stopOpacity="0.18" />
+                              <stop offset="100%" stopColor="#334155" stopOpacity="0.0" />
+                            </linearGradient>
+                            <linearGradient id="kontrakLineGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#c2410c" stopOpacity="0.22" />
+                              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
+                            </linearGradient>
+                          </defs>
+                          {[20, 15, 10, 5].map((val) => {
+                            const y = 20 + ((20 - val) / 20) * 92;
+                            return (
+                              <g key={val}>
+                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                                <text x="26" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
+                                  {val}M
+                                </text>
+                              </g>
+                            );
+                          })}
+                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
 
-                        {/* Grid Lines */}
-                        {[20, 15, 10, 5].map((val) => {
-                          const y = 20 + ((20 - val) / 20) * 92;
-                          return (
-                            <g key={val}>
-                              <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                              <text x="26" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
-                                {val}M
-                              </text>
-                            </g>
-                          );
-                        })}
-                        {/* Baseline */}
-                        <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                          {/* Pagu Area & Line */}
+                          <polygon
+                            points={`
+                              ${pilotBudgetStats.map((d, i) => `${100 + i * 137},${20 + ((20 - d.pagu) / 20) * 92}`).join(" ")}
+                              374,112 100,112
+                            `}
+                            fill="url(#paguLineGrad)"
+                          />
+                          <path
+                            d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${100 + i * 137} ${20 + ((20 - d.pagu) / 20) * 92}`).join(" ")}
+                            fill="none"
+                            stroke="#334155"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                          />
 
-                        {/* Grouped Bars */}
-                        {pilotBudgetStats.map((d, i) => {
-                          const xCenter = 100 + i * 137;
-                          const hPagu = (d.pagu / 20) * 92;
-                          const hKontrak = (d.kontrak / 20) * 92;
-                          const yPagu = 112 - hPagu;
-                          const yKontrak = 112 - hKontrak;
+                          {/* Kontrak Area & Line */}
+                          <polygon
+                            points={`
+                              ${pilotBudgetStats.map((d, i) => `${100 + i * 137},${20 + ((20 - d.kontrak) / 20) * 92}`).join(" ")}
+                              374,112 100,112
+                            `}
+                            fill="url(#kontrakLineGrad)"
+                          />
+                          <path
+                            d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${100 + i * 137} ${20 + ((20 - d.kontrak) / 20) * 92}`).join(" ")}
+                            fill="none"
+                            stroke="#c2410c"
+                            strokeWidth="2.8"
+                            strokeLinecap="round"
+                          />
 
-                          return (
-                            <g key={d.key} className="group">
-                              {/* Background hover guide */}
-                              <rect x={xCenter - 54} y="12" width="108" height="100" rx="6" fill="transparent" className="hover:fill-slate-50 transition-colors" />
+                          {pilotBudgetStats.map((d, i) => {
+                            const x = 100 + i * 137;
+                            const yPagu = 20 + ((20 - d.pagu) / 20) * 92;
+                            const yKontrak = 20 + ((20 - d.kontrak) / 20) * 92;
 
-                              {/* Pagu Bar */}
-                              <rect
-                                x={xCenter - 30}
-                                y={yPagu}
-                                width="28"
-                                height={hPagu}
-                                rx="3.5"
-                                fill="url(#paguBarGrad)"
-                                filter="url(#barShadow)"
-                                className="transition-all hover:opacity-95"
-                              />
-                              <text x={xCenter - 16} y={yPagu - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#334155">
-                                {d.pagu}M
-                              </text>
+                            return (
+                              <g key={d.key}>
+                                <line x1={x} y1="20" x2={x} y2="112" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="2 2" />
+                                <circle cx={x} cy={yPagu} r={4.5} fill="#334155" stroke="#fff" strokeWidth="1.8" />
+                                <circle cx={x} cy={yKontrak} r={5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                                
+                                <text x={x} y={yPagu - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#334155">
+                                  Rp {d.pagu}M
+                                </text>
+                                <text x={x} y={yKontrak + 14} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
+                                  Rp {d.kontrak}M
+                                </text>
+                                
+                                <text x={x} y="126" textAnchor="middle" fontSize="10.5" fontWeight="bold" fill="#0f172a">
+                                  {d.fullName}
+                                </text>
+                                
+                                <rect x={x - 48} y="132" width="96" height="13" rx="3.5" fill="#ecfdf5" stroke="#a7f3d0" strokeWidth="0.8" />
+                                <text x={x} y="141.5" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#047857">
+                                  Hemat {d.efficiency}% ({d.timeline})
+                                </text>
+                                
+                                <text x={x} y="155" textAnchor="middle" fontSize="8" fill="#64748b">
+                                  {d.ruas} Paket Pilot • TA 2026
+                                </text>
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
+                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
+                          <defs>
+                            <linearGradient id="paguBarGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#475569" />
+                              <stop offset="100%" stopColor="#1e293b" />
+                            </linearGradient>
+                            <linearGradient id="kontrakBarGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#f97316" />
+                              <stop offset="100%" stopColor="#c2410c" />
+                            </linearGradient>
+                            <filter id="barShadow" x="-10%" y="-10%" width="120%" height="120%">
+                              <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#0f172a" floodOpacity="0.08" />
+                            </filter>
+                          </defs>
 
-                              {/* Kontrak Bar */}
-                              <rect
-                                x={xCenter + 2}
-                                y={yKontrak}
-                                width="28"
-                                height={hKontrak}
-                                rx="3.5"
-                                fill="url(#kontrakBarGrad)"
-                                filter="url(#barShadow)"
-                                className="transition-all hover:opacity-95"
-                              />
-                              <text x={xCenter + 16} y={yKontrak - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
-                                {d.kontrak}M
-                              </text>
+                          {/* Grid Lines */}
+                          {[20, 15, 10, 5].map((val) => {
+                            const y = 20 + ((20 - val) / 20) * 92;
+                            return (
+                              <g key={val}>
+                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                                <text x="26" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
+                                  {val}M
+                                </text>
+                              </g>
+                            );
+                          })}
+                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
 
-                              {/* Institution Label */}
-                              <text x={xCenter} y="126" textAnchor="middle" fontSize="10.5" fontWeight="bold" fill="#0f172a">
-                                {d.fullName}
-                              </text>
+                          {/* Grouped Bars */}
+                          {pilotBudgetStats.map((d, i) => {
+                            const xCenter = 100 + i * 137;
+                            const hPagu = (d.pagu / 20) * 92;
+                            const hKontrak = (d.kontrak / 20) * 92;
+                            const yPagu = 112 - hPagu;
+                            const yKontrak = 112 - hKontrak;
 
-                              {/* Savings Badge */}
-                              <rect x={xCenter - 48} y="132" width="96" height="13" rx="3.5" fill="#ecfdf5" stroke="#a7f3d0" strokeWidth="0.8" />
-                              <text x={xCenter} y="141.5" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#047857">
-                                Hemat {d.efficiency}% (Rp {d.savings})
-                              </text>
+                            return (
+                              <g key={d.key} className="group">
+                                <rect x={xCenter - 54} y="12" width="108" height="100" rx="6" fill="transparent" className="hover:fill-slate-50 transition-colors" />
 
-                              {/* Subtitle */}
-                              <text x={xCenter} y="155" textAnchor="middle" fontSize="8" fill="#64748b">
-                                {d.ruas} Paket Pilot Lelang LPSE
-                              </text>
-                            </g>
-                          );
-                        })}
-                      </svg>
-                    </div>
+                                {/* Pagu Bar */}
+                                <rect
+                                  x={xCenter - 30}
+                                  y={yPagu}
+                                  width="28"
+                                  height={hPagu}
+                                  rx="3.5"
+                                  fill="url(#paguBarGrad)"
+                                  filter="url(#barShadow)"
+                                  className="transition-all hover:opacity-95"
+                                />
+                                <text x={xCenter - 16} y={yPagu - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#334155">
+                                  {d.pagu}M
+                                </text>
+
+                                {/* Kontrak Bar */}
+                                <rect
+                                  x={xCenter + 2}
+                                  y={yKontrak}
+                                  width="28"
+                                  height={hKontrak}
+                                  rx="3.5"
+                                  fill="url(#kontrakBarGrad)"
+                                  filter="url(#barShadow)"
+                                  className="transition-all hover:opacity-95"
+                                />
+                                <text x={xCenter + 16} y={yKontrak - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
+                                  {d.kontrak}M
+                                </text>
+
+                                {/* Institution Label */}
+                                <text x={xCenter} y="126" textAnchor="middle" fontSize="10.5" fontWeight="bold" fill="#0f172a">
+                                  {d.fullName}
+                                </text>
+
+                                {/* Savings Badge with Timeline Months */}
+                                <rect x={xCenter - 52} y="132" width="104" height="13" rx="3.5" fill="#ecfdf5" stroke="#a7f3d0" strokeWidth="0.8" />
+                                <text x={xCenter} y="141.5" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#047857">
+                                  Hemat {d.efficiency}% ({d.timeline})
+                                </text>
+
+                                {/* Subtitle */}
+                                <text x={xCenter} y="155" textAnchor="middle" fontSize="8" fill="#64748b">
+                                  {d.ruas} Paket Pilot Lelang TA 2026
+                                </text>
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      </div>
+                    )
                   )
                 )}
 
                 {/* ======================================================== */}
-                {/* 4. CHART BODY: INPRES JALAN DAERAH (IJD)                 */}
+                {/* 4. CHART BODY: INPRES JALAN DAERAH (IJD 2023 - 2024)     */}
                 {/* ======================================================== */}
                 {selectedIndex === "inpres" && (
                   chartViewMode === "line" ? (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 152" className="w-full h-full select-none font-sans">
+                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="inpresLineGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#c2410c" stopOpacity="0.25" />
@@ -1049,14 +1281,14 @@ export default function HeroSection({
                           const y = 18 + ((16 - val) / 14) * 94;
                           return (
                             <g key={val}>
-                              <line x1="32" y1={y} x2="440" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
                               <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
                                 {val}T
                               </text>
                             </g>
                           );
                         })}
-                        <line x1="32" y1="112" x2="440" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
                             120,${18 + ((16 - 14.60) / 14) * 94}
@@ -1089,7 +1321,7 @@ export default function HeroSection({
                               <text x={x} y="130" textAnchor="middle" fontSize="10" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#475569"}>
                                 {d.stage}
                               </text>
-                              <text x={x} y="142" textAnchor="middle" fontSize="8" fill="#94a3b8">
+                              <text x={x} y="146" textAnchor="middle" fontSize="8" fill="#94a3b8">
                                 {d.provinces} Provinsi Penerima
                               </text>
                             </g>
@@ -1099,7 +1331,7 @@ export default function HeroSection({
                     </div>
                   ) : (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                      <svg viewBox="0 0 460 152" className="w-full h-full select-none font-sans">
+                      <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
                         <defs>
                           <linearGradient id="inpresBarGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#ea580c" />
@@ -1110,14 +1342,14 @@ export default function HeroSection({
                           const y = 18 + ((16 - val) / 14) * 94;
                           return (
                             <g key={val}>
-                              <line x1="32" y1={y} x2="440" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
                               <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
                                 {val}T
                               </text>
                             </g>
                           );
                         })}
-                        <line x1="32" y1="112" x2="440" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         {inpresStats.map((d, i) => {
                           const xCenter = 140 + i * 180;
                           const isSelected = d.year === selectedYear;
@@ -1144,7 +1376,7 @@ export default function HeroSection({
                               <text x={xCenter} y="128" textAnchor="middle" fontSize="10" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#475569"}>
                                 {d.stage}
                               </text>
-                              <text x={xCenter} y="141" textAnchor="middle" fontSize="8" fill="#64748b">
+                              <text x={xCenter} y="143" textAnchor="middle" fontSize="8" fill="#64748b">
                                 {d.realizedKm.toLocaleString("id-ID")} KM • {d.provinces} Prov
                               </text>
                             </g>
@@ -1155,106 +1387,137 @@ export default function HeroSection({
                   )
                 )}
 
-                {/* Unified Executive Metric Footnote Strip (Clean, Harmonious & Borderless) */}
+                {/* Unified Executive Metric Footnote Strip (Structured Grid, Never Wraps Weirdly) */}
                 <div className="mt-3 pt-2 border-t border-slate-200/70 font-sans">
                   {selectedIndex === "kemantapan" && (
-                    <div className="bg-white rounded-[5px] border border-slate-200/80 p-2 sm:px-3 sm:py-2 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
-                      <div className="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-slate-700 shrink-0" />
-                          <span className="text-slate-500 font-medium">Jalan Nasional:</span>
-                          <strong className="text-slate-900 font-bold tabular-nums">{currentRoadTrend.nasional}%</strong>
+                    <div className="bg-white rounded-[5px] border border-slate-200/80 px-3 py-2 shadow-2xs">
+                      <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                            Nasional
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
+                            {currentRoadTrend.nasional}%
+                          </strong>
                         </div>
-                        <span className="hidden sm:inline text-slate-200">|</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-amber-600 shrink-0" />
-                          <span className="text-slate-500 font-medium">Jalan Provinsi:</span>
-                          <strong className="text-amber-900 font-bold tabular-nums">{currentRoadTrend.provinsi}%</strong>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                            Provinsi
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-amber-900 tabular-nums">
+                            {currentRoadTrend.provinsi}%
+                          </strong>
                         </div>
-                        <span className="hidden sm:inline text-slate-200">|</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c] shrink-0" />
-                          <span className="text-[#c2410c] font-medium">Jalan Kab/Kota:</span>
-                          <strong className="text-orange-950 font-bold tabular-nums">{currentRoadTrend.kabupatenKota}%</strong>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-[#c2410c] font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+                            Kab/Kota
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
+                            {currentRoadTrend.kabupatenKota}%
+                          </strong>
                         </div>
                       </div>
-                      <div className="text-[10px] text-slate-400">
-                        Definisi BPS: Proporsi panjang jalan (KM) kondisi mantap
+                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-400">
+                        <span>Data BPS SIRUSA (Tahun {selectedYear})</span>
+                        <span>Definisi: Proporsi panjang jalan (KM) kondisi mantap</span>
                       </div>
                     </div>
                   )}
 
                   {selectedIndex === "ombudsman" && (
-                    <div className="bg-white rounded-[5px] border border-slate-200/80 p-2 sm:px-3 sm:py-2 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
-                      <div className="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c] shrink-0" />
-                          <span className="text-slate-500 font-medium">Undue Delay (Terlambat Respons):</span>
-                          <strong className="text-[#c2410c] font-bold tabular-nums">
-                            {currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Laporan)
+                    <div className="bg-white rounded-[5px] border border-slate-200/80 px-3 py-2 shadow-2xs">
+                      <div className="grid grid-cols-2 gap-2 text-center divide-x divide-slate-100">
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+                            Undue Delay ({selectedYear})
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
+                            {currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Aduan)
                           </strong>
                         </div>
-                        <span className="hidden sm:inline text-slate-200">|</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-slate-500 font-medium">Total Selesai:</span>
-                          <strong className="text-slate-800 font-bold tabular-nums">
-                            {currentComplaintTrend.resolved.toLocaleString("id-ID")}
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                            Total Aduan Ditindaklanjuti
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">
+                            {currentComplaintTrend.resolved.toLocaleString("id-ID")} Aduan
                           </strong>
                         </div>
                       </div>
-                      <div className="text-[10px] text-slate-400">
-                        Maladministrasi #1 tertinggi di Indonesia (UU 37/2008)
+                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-400">
+                        <span>Laporan Tahunan Ombudsman RI ({selectedYear})</span>
+                        <span>Maladministrasi #1 Nasional: Penundaan Berlarut (UU 37/2008)</span>
                       </div>
                     </div>
                   )}
 
                   {selectedIndex === "pagu" && (
-                    <div className="bg-white rounded-[5px] border border-slate-200/80 p-2 sm:px-3 sm:py-2 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
-                      <div className="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-slate-700 shrink-0" />
-                          <span className="text-slate-500 font-medium">Total Pagu:</span>
-                          <strong className="text-slate-900 font-bold tabular-nums">Rp 35,80 M</strong>
-                        </div>
-                        <span className="hidden sm:inline text-slate-200">|</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c] shrink-0" />
-                          <span className="text-slate-500 font-medium">Kontrak Lelang:</span>
-                          <strong className="text-[#c2410c] font-bold tabular-nums">Rp 33,59 M</strong>
-                        </div>
-                        <span className="hidden sm:inline text-slate-200">|</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
-                          <span className="text-slate-500 font-medium">Efisiensi Tender:</span>
-                          <strong className="text-emerald-800 font-bold tabular-nums">Rp 2,21 M</strong>
-                          <span className="text-[9.5px] font-black bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded border border-emerald-200">
-                            6,2%
+                    <div className="bg-white rounded-[5px] border border-slate-200/80 px-3 py-2 shadow-2xs">
+                      <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                            Total Pagu (HPS)
                           </span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
+                            Rp 35,80 M
+                          </strong>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+                            Kontrak Terlelang
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
+                            Rp 33,59 M
+                          </strong>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                            Efisiensi Lelang
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">
+                              Rp 2,21 M
+                            </strong>
+                            <span className="text-[9px] font-black bg-emerald-100 text-emerald-800 px-1 py-0.2 rounded border border-emerald-200">
+                              6,2%
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-[10.5px] text-slate-500 flex items-center gap-1.5">
-                        <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>Sumber: <strong className="text-slate-700">LPSE &amp; SiRUP</strong> (6 Ruas Pilot)</span>
+                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-500">
+                        <span>Tahun Anggaran: <strong>TA 2026 (Januari – Oktober)</strong></span>
+                        <span>Sumber: <strong>LPSE &amp; SiRUP LKPP (6 Ruas Pilot)</strong></span>
                       </div>
                     </div>
                   )}
 
                   {selectedIndex === "inpres" && (
-                    <div className="bg-white rounded-[5px] border border-slate-200/80 p-2 sm:px-3 sm:py-2 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
-                      <div className="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#c2410c] shrink-0" />
-                          <span className="text-slate-500 font-medium">Total Alokasi 2 Tahap:</span>
-                          <strong className="text-[#c2410c] font-bold tabular-nums">Rp 29,90 Triliun</strong>
+                    <div className="bg-white rounded-[5px] border border-slate-200/80 px-3 py-2 shadow-2xs">
+                      <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium">Tahap I (2023)</span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">Rp 14,60 T</strong>
                         </div>
-                        <span className="hidden sm:inline text-slate-200">|</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-slate-500 font-medium">Panjang Fisik:</span>
-                          <strong className="text-slate-800 font-bold tabular-nums">5.992 KM</strong>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium">Tahap II (2024)</span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">Rp 15,30 T</strong>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-emerald-700 font-medium">Total Fisik</span>
+                          <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">5.992 KM</strong>
                         </div>
                       </div>
-                      <div className="text-[10px] text-slate-400">
-                        Inpres No. 3/2023 Percepatan Jalan Daerah
+                      <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9.5px] text-slate-500">
+                        <span>Inpres No. 3/2023 Percepatan Konektivitas Jalan Daerah</span>
+                        <span>Cakupan: <strong>38 Provinsi Se-Indonesia</strong></span>
                       </div>
                     </div>
                   )}
