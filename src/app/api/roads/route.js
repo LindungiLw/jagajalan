@@ -27,7 +27,13 @@ export async function GET(request) {
     let filtered = ROAD_SEGMENTS;
 
     if (authority !== "ALL") {
-      filtered = filtered.filter((r) => r.authority === authority);
+      if (authority === "KOTA_KAB" || authority === "KOTA" || authority === "KABUPATEN") {
+        filtered = filtered.filter(
+          (r) => r.authority === "KOTA_KAB" || r.authority === "KOTA" || r.authority === "KABUPATEN"
+        );
+      } else {
+        filtered = filtered.filter((r) => r.authority === authority);
+      }
     }
 
     if (provinceId && provinceId !== "ALL" && provinceId !== "all") {
