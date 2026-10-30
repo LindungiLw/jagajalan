@@ -1,99 +1,110 @@
 "use client";
 
 import React from "react";
-import { Scale, FileText, CheckCircle2, Shield, Landmark } from "lucide-react";
+import { Scale, CheckCircle2, ShieldCheck, ArrowUpRight } from "lucide-react";
 
 export default function LegalBasisSection() {
   const regulations = [
     {
       code: "UU No. 14 / 2008",
       title: "Keterbukaan Informasi Publik",
-      role: "Hak Warga atas Informasi Anggaran",
+      mandate: "Hak Akses Rincian Anggaran",
       description:
-        "Menjamin hak setiap warga negara untuk mengetahui rencana kebijakan publik, program pelayanan publik, serta rincian penggunaan anggaran APBD/APBN.",
-      accent: "text-orange-800 bg-orange-50 border-orange-200/80",
-      pill: "Keterbukaan Anggaran",
+        "Menjamin hak setiap warga negara untuk mengetahui rencana kebijakan, pagu alokasi belanja daerah, dan rincian tender proyek jalan.",
+      feature: "Audit LPSE & SiRUP",
     },
     {
       code: "UU No. 25 / 2009",
       title: "Pelayanan Publik",
-      role: "Batas Waktu Tanggapan (SLA 14 Hari)",
+      mandate: "Kepastian Respons 14 Hari",
       description:
-        "Mewajibkan instansi penyelenggara pelayanan publik memberikan kepastian waktu dan tanggapan resmi, dengan sanksi administratif bagi instansi yang mengabaikan.",
-      accent: "text-amber-800 bg-amber-50 border-amber-200/80",
-      pill: "Standar Layanan Publik",
+        "Mewajibkan dinas penyelenggara layanan memberikan kepastian waktu dan tanggapan formal. Keterlambatan dikenai sanksi administratif.",
+      feature: "Countdown SLA 14 Hari",
     },
     {
       code: "UU No. 37 / 2008",
       title: "Ombudsman Republik Indonesia",
-      role: "Penindakan Penundaan Berlarut",
+      mandate: "Pengawasan Penundaan Berlarut",
       description:
-        "Memberikan wewenang kepada Ombudsman RI untuk memeriksa dan menindak dugaan maladministrasi penundaan berlarut (undue delay) oleh dinas/pemerintah daerah.",
-      accent: "text-rose-700 bg-rose-50 border-rose-200/80",
-      pill: "Pengawasan Maladministrasi",
+        "Memberikan wewenang pengawasan eksternal untuk menindak dugaan maladministrasi penundaan berlarut (undue delay) oleh dinas berwenang.",
+      feature: "Generator Draf Eskalasi",
     },
     {
       code: "Inpres No. 3 / 2023",
-      title: "Konektivitas Jalan Daerah",
-      role: "Intervensi Darurat APBN",
+      title: "Konektivitas Jalan Daerah (IJD)",
+      mandate: "Intervensi Fiskal APBN",
       description:
-        "Instruksi Presiden bagi percepatan peningkatan konektivitas jalan daerah dengan mengalokasikan belasan triliun rupiah APBN untuk intervensi jalan rusak.",
-      accent: "text-orange-900 bg-orange-50/70 border-orange-200/70",
-      pill: "Intervensi Fiskal Nasional",
+        "Instruksi Presiden bagi percepatan penanganan jalan daerah yang rusak parah melalui kucuran anggaran intervensi darurat pemerintah pusat.",
+      feature: "Pelacakan Bantuan APBN",
     },
   ];
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div className="bg-white/95 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
-        <div className="max-w-2xl space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase text-slate-700 bg-slate-100 border border-slate-200">
-            <Scale className="w-3 h-3 text-orange-600" />
-            <span>Landasan Regulasi & Kepatuhan Hukum</span>
+        {/* Header - Direct, Framed Icon, No redundant badge */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icon/report.png"
+                alt="Landasan Hukum"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
+                Payung Hukum Transparansi &amp; Pengawasan Publik
+              </h2>
+              <p className="text-xs text-slate-500 max-w-2xl leading-relaxed font-sans">
+                Setiap data, hitung mundur SLA, dan laporan di JagaJalan berlandaskan instrumen perundang-undangan resmi Republik Indonesia untuk menjamin akuntabilitas dinas.
+              </p>
+            </div>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-            Payung Hukum Transparansi &amp; Pengawasan Publik
-          </h2>
-          <p className="text-xs text-slate-500 leading-relaxed font-sans">
-            JagaJalan berdiri di atas instrumen perundang-undangan resmi Republik Indonesia untuk memastikan setiap aduan memiliki kekuatan hukum dan akuntabilitas dinas yang terukur.
-          </p>
+
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span>4 Landasan Regulasi Aktif</span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {regulations.map((reg) => (
             <div
               key={reg.code}
-              className="p-5 rounded-xl bg-slate-50/70 hover:bg-white border border-slate-200/80 hover:border-slate-300 hover:shadow-md transition-all duration-200 space-y-3 flex flex-col justify-between group"
+              className="p-5 rounded-xl bg-slate-50/70 hover:bg-white border border-slate-200/80 hover:border-orange-300 hover:shadow-md transition-all duration-200 space-y-3.5 flex flex-col justify-between group"
             >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono font-bold tracking-tight px-2 py-0.5 rounded-md bg-white text-slate-800 border border-slate-200 shadow-2xs inline-block">
+              <div className="space-y-2.5">
+                {/* Code & Feature Badge */}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-mono font-bold tracking-tight px-2.5 py-1 rounded-md bg-white text-slate-800 border border-slate-200/90 shadow-2xs inline-block">
                     {reg.code}
                   </span>
-                  <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${reg.accent}`}>
-                    {reg.pill}
+                  <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-md bg-orange-50 text-orange-950 border border-orange-200/80 font-sans shadow-2xs">
+                    {reg.mandate}
                   </span>
                 </div>
-                
-                <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug pt-0.5">
+
+                {/* Title */}
+                <h3 className="text-sm font-bold text-slate-900 leading-snug pt-0.5 group-hover:text-orange-950 transition-colors">
                   {reg.title}
                 </h3>
-                
-                <div className="text-[11px] font-semibold text-orange-700">
-                  {reg.role}
-                </div>
-                
-                <p className="text-xs text-slate-600 leading-relaxed pt-0.5 font-sans">
+
+                {/* Description */}
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
                   {reg.description}
                 </p>
               </div>
 
-              <div className="pt-2.5 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
-                <span className="flex items-center gap-1.5">
-                  <Landmark className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 transition-colors" />
-                  <span>Kepatuhan Resmi</span>
+              {/* Functional Integration in JagaJalan */}
+              <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between gap-2 text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors">
+                <span className="flex items-center gap-1.5 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                  <span className="truncate">{reg.feature}</span>
                 </span>
-                <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/70 shrink-0 flex items-center gap-0.5">
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                   <span>Berlaku</span>
                 </span>
@@ -105,3 +116,4 @@ export default function LegalBasisSection() {
     </section>
   );
 }
+
