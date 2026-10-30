@@ -507,27 +507,56 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                       className="w-full h-full object-cover"
                     />
 
-                    {/* Minimal hover overlay */}
-                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    {/* AI Laser Scanning Beam & HUD Crosshairs while Analyzing */}
+                    {isAnalyzing && (
+                      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[1px] flex flex-col items-center justify-center p-3 text-white overflow-hidden z-20">
+                        {/* Laser Beam sweeping up and down */}
+                        <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent shadow-[0_0_16px_#ea580c] animate-scan-line pointer-events-none" />
+
+                        {/* Futuristic HUD Crosshair */}
+                        <div className="w-16 h-16 border border-orange-400/50 rounded-lg flex items-center justify-center relative mb-2">
+                          <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-ping" />
+                          <div className="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-orange-400" />
+                          <div className="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-orange-400" />
+                          <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-orange-400" />
+                          <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-orange-400" />
+                        </div>
+
+                        <div className="text-[11px] font-mono font-bold text-orange-300 tracking-wider uppercase flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 animate-spin text-orange-400" />
+                          <span>AI Vision Scanning...</span>
+                        </div>
+                        <span className="text-[9.5px] text-slate-300 font-sans mt-0.5 text-center">
+                          Mengukur kedalaman lubang & menghitung estimasi indeks bahaya
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Minimal hover overlay (when not analyzing) */}
+                    {!isAnalyzing && (
+                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="px-3.5 py-1.5 rounded-lg bg-white/95 text-slate-900 font-bold text-xs hover:bg-white flex items-center gap-1.5 shadow-md cursor-pointer transition-transform active:scale-95"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>Unggah Foto Sendiri</span>
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Small button visible on mobile */}
+                    {!isAnalyzing && (
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-3.5 py-1.5 rounded-lg bg-white/95 text-slate-900 font-bold text-xs hover:bg-white flex items-center gap-1.5 shadow-md cursor-pointer transition-transform active:scale-95"
+                        className="sm:hidden absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/70 text-white text-[10px] font-medium flex items-center gap-1"
                       >
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>Unggah Foto Sendiri</span>
+                        <Upload className="w-3 h-3" />
+                        <span>Ganti</span>
                       </button>
-                    </div>
-
-                    {/* Small button visible on mobile */}
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="sm:hidden absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/70 text-white text-[10px] font-medium flex items-center gap-1"
-                    >
-                      <Upload className="w-3 h-3" />
-                      <span>Ganti</span>
-                    </button>
+                    )}
                   </div>
 
                   <input

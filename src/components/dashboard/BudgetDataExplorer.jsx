@@ -662,6 +662,34 @@ export default function BudgetDataExplorer({
                     </div>
                   </div>
 
+                  {/* Progress Bar Realisasi Fisik Lapangan vs Target */}
+                  <div className="space-y-1.5 pt-1 bg-slate-50/70 p-2.5 rounded-xl border border-slate-100">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />
+                        <span>Realisasi Fisik Proyek:</span>
+                        <strong className={`tabular-nums ${pkg.progressPct >= 75 ? "text-emerald-700" : pkg.progressPct >= 40 ? "text-amber-700" : "text-rose-700"}`}>
+                          {pkg.progressPct || 0}%
+                        </strong>
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        Target TA {pkg.fiscalYear}
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden p-0.5">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          pkg.progressPct >= 75
+                            ? "bg-gradient-to-r from-emerald-500 to-teal-500"
+                            : pkg.progressPct >= 40
+                            ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                            : "bg-gradient-to-r from-rose-500 to-red-500"
+                        }`}
+                        style={{ width: `${Math.min(100, Math.max(6, pkg.progressPct || 0))}%` }}
+                      />
+                    </div>
+                  </div>
+
                   {/* Contractor & Verification Details */}
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-0.5">
                     <div className="flex items-center gap-1.5 truncate">
@@ -765,9 +793,19 @@ export default function BudgetDataExplorer({
                       {pkg.contractor || "-"}
                     </td>
                     <td className="py-3 px-3 text-center whitespace-nowrap">
-                      <span className="font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-[10px]">
-                        {pkg.progressPct || 0}%
-                      </span>
+                      <div className="inline-flex flex-col items-center gap-1 w-16">
+                        <span className="font-bold text-slate-800 text-[10.5px] tabular-nums">
+                          {pkg.progressPct || 0}%
+                        </span>
+                        <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${
+                              pkg.progressPct >= 75 ? "bg-emerald-600" : pkg.progressPct >= 40 ? "bg-amber-500" : "bg-rose-500"
+                            }`}
+                            style={{ width: `${Math.min(100, Math.max(8, pkg.progressPct || 0))}%` }}
+                          />
+                        </div>
+                      </div>
                     </td>
                     <td className="py-3 px-4 text-right whitespace-nowrap">
                       <button

@@ -58,6 +58,7 @@ export default function MapExplorer({
   const [selectedRoadForDetailModal, setSelectedRoadForDetailModal] = useState(null);
   const [activeTab, setActiveTab] = useState("masalah"); // "masalah" | "proyek" | "kewenangan" | "sumber"
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
+  const [highlightFilter, setHighlightFilter] = useState("ALL"); // "ALL" | "OVERDUE" | "CRITICAL" | "BUDGET"
   const [searchQuery, setSearchQuery] = useState("");
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
@@ -124,6 +125,21 @@ export default function MapExplorer({
     };
   }, [roads]);
 
+  // Special Highlight Counts
+  const overdueRoadCount = useMemo(() => {
+    const overdueRoadIds = new Set(reports.filter((r) => r.status === "OVERDUE").map((r) => r.roadSegmentId));
+    return roads.filter((r) => overdueRoadIds.has(r.id)).length;
+  }, [roads, reports]);
+
+  const criticalRoadCount = useMemo(() => {
+    const critRoadIds = new Set(reports.filter((r) => (r.hazardScore || 0) >= 80).map((r) => r.roadSegmentId));
+    return roads.filter((r) => critRoadIds.has(r.id)).length;
+  }, [roads, reports]);
+
+  const budgetRoadCount = useMemo(() => {
+    return roads.filter((r) => (r.budget?.paguRp || 0) > 0).length;
+  }, [roads]);
+
   // Filter logic
   const filteredRoads = useMemo(() => {
     return roads.filter((road) => {
@@ -132,9 +148,19 @@ export default function MapExplorer({
         road.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         road.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         road.district.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchAuth && matchSearch;
+
+      let matchHighlight = true;
+      if (highlightFilter === "OVERDUE") {
+        matchHighlight = reports.some((rep) => rep.roadSegmentId === road.id && rep.status === "OVERDUE");
+      } else if (highlightFilter === "CRITICAL") {
+        matchHighlight = reports.some((rep) => rep.roadSegmentId === road.id && (rep.hazardScore || 0) >= 80);
+      } else if (highlightFilter === "BUDGET") {
+        matchHighlight = (road.budget?.paguRp || 0) > 0;
+      }
+
+      return matchAuth && matchSearch && matchHighlight;
     });
-  }, [roads, authorityFilter, searchQuery]);
+  }, [roads, reports, authorityFilter, searchQuery, highlightFilter]);
 
   const filteredReports = useMemo(() => {
     return reports.filter((rep) => {
@@ -143,9 +169,19 @@ export default function MapExplorer({
         rep.roadName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         rep.ticketCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
         rep.address.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchAuth && matchSearch;
+
+      let matchHighlight = true;
+      if (highlightFilter === "OVERDUE") {
+        matchHighlight = rep.status === "OVERDUE";
+      } else if (highlightFilter === "CRITICAL") {
+        matchHighlight = (rep.hazardScore || 0) >= 80;
+      } else if (highlightFilter === "BUDGET") {
+        matchHighlight = (rep.matchingBudget?.paguRp || 0) > 0;
+      }
+
+      return matchAuth && matchSearch && matchHighlight;
     });
-  }, [reports, authorityFilter, searchQuery]);
+  }, [reports, authorityFilter, searchQuery, highlightFilter]);
 
   const handleSelectRoad = (road) => {
     setSelectedRoad(road);
@@ -657,6 +693,60 @@ export default function MapExplorer({
               authorityFilter === "KABUPATEN" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.KABUPATEN}
+            </span>
+          </button>
+
+          <div className="w-px h-5 bg-slate-300 mx-0.5 shrink-0" />
+
+          {/* Special Quick Toggles */}
+          <button
+            onClick={() => setHighlightFilter(highlightFilter === "OVERDUE" ? "ALL" : "OVERDUE")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+              highlightFilter === "OVERDUE"
+                ? "bg-rose-600 border-rose-600 text-white shadow-xs"
+                : "bg-white/95 backdrop-blur-md text-rose-700 border-rose-200 hover:bg-rose-50"
+            }`}
+          >
+            <span className={`w-2 h-2 rounded-full ${highlightFilter === "OVERDUE" ? "bg-white" : "bg-rose-600 animate-pulse"}`} />
+            <span>Overdue SLA</span>
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] tabular-nums font-bold ${
+              highlightFilter === "OVERDUE" ? "bg-white/20 text-white" : "bg-rose-100 text-rose-800"
+            }`}>
+              {overdueRoadCount}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setHighlightFilter(highlightFilter === "CRITICAL" ? "ALL" : "CRITICAL")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+              highlightFilter === "CRITICAL"
+                ? "bg-amber-600 border-amber-600 text-white shadow-xs"
+                : "bg-white/95 backdrop-blur-md text-amber-800 border-amber-200 hover:bg-amber-50"
+            }`}
+          >
+            <span className={`w-2 h-2 rounded-full ${highlightFilter === "CRITICAL" ? "bg-white" : "bg-amber-600"}`} />
+            <span>Rusak Berat (AI &gt;80)</span>
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] tabular-nums font-bold ${
+              highlightFilter === "CRITICAL" ? "bg-white/20 text-white" : "bg-amber-100 text-amber-900"
+            }`}>
+              {criticalRoadCount}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setHighlightFilter(highlightFilter === "BUDGET" ? "ALL" : "BUDGET")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+              highlightFilter === "BUDGET"
+                ? "bg-emerald-700 border-emerald-700 text-white shadow-xs"
+                : "bg-white/95 backdrop-blur-md text-emerald-800 border-emerald-200 hover:bg-emerald-50"
+            }`}
+          >
+            <span className={`w-2 h-2 rounded-full ${highlightFilter === "BUDGET" ? "bg-white" : "bg-emerald-600"}`} />
+            <span>Paket LPSE</span>
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] tabular-nums font-bold ${
+              highlightFilter === "BUDGET" ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-900"
+            }`}>
+              {budgetRoadCount}
             </span>
           </button>
         </div>

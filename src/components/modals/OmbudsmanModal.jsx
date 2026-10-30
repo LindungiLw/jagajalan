@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { X, Copy, Check, Printer, FileText, AlertCircle, ShieldCheck } from "lucide-react";
+import confetti from "canvas-confetti";
 
 export default function OmbudsmanModal({ isOpen, onClose, report }) {
   const [copied, setCopied] = useState(false);
@@ -57,9 +58,30 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
     navigator.clipboard.writeText(letterText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
+
+    try {
+      confetti({
+        particleCount: 50,
+        spread: 60,
+        origin: { y: 0.7 },
+        colors: ["#ea580c", "#f59e0b", "#3b82f6", "#10b981"],
+      });
+    } catch {
+      // ignore
+    }
   };
 
   const handlePrint = () => {
+    try {
+      confetti({
+        particleCount: 40,
+        spread: 50,
+        origin: { y: 0.7 },
+        colors: ["#ea580c", "#f59e0b", "#10b981"],
+      });
+    } catch {
+      // ignore
+    }
     window.print();
   };
 

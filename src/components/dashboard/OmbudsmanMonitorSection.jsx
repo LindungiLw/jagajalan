@@ -467,24 +467,49 @@ export default function OmbudsmanMonitorSection({
                     </span>
                   </div>
 
-                  {/* SLA Countdown Bar */}
-                  <div className="space-y-1 pt-1">
-                    <div className="flex items-center justify-between text-[10.5px] text-slate-500 font-sans">
-                      <span>Batas Wajib SLA 14 Hari Kerja</span>
-                      <span className={isOverdue ? "text-rose-600 font-bold" : "text-slate-700 font-medium"}>
-                        {isOverdue ? `Terlambat ${report.daysOverdue} Hari` : "Tenggat Berjalan"}
+                  {/* Dual-Phase SLA Timeline Bar */}
+                  <div className="space-y-1.5 pt-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                    <div className="flex items-center justify-between text-[11px] font-sans">
+                      <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+                        <span>SLA Respons Pelayanan Publik:</span>
+                      </span>
+                      <span className={isOverdue ? "text-rose-700 font-bold tabular-nums" : isCompleted ? "text-emerald-700 font-bold" : "text-amber-800 font-semibold"}>
+                        {isOverdue ? `Lewat +${report.daysOverdue} Hari` : isCompleted ? "Selesai Tepat Waktu" : "Hari ke-8 dari 14 Hari"}
                       </span>
                     </div>
-                    <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          isOverdue
-                            ? "bg-rose-500 w-full"
-                            : isCompleted
-                            ? "bg-emerald-600 w-full"
-                            : "bg-amber-500 w-3/4"
-                        }`}
-                      />
+
+                    {/* Dual-Phase Bar Graphic */}
+                    <div className="space-y-1">
+                      <div className="flex h-2 rounded-full overflow-hidden bg-slate-200/80 p-0.5 gap-0.5">
+                        {/* Phase 1: 14 Days Legal Threshold */}
+                        <div
+                          className={`h-full rounded-l-full transition-all duration-500 ${
+                            isCompleted
+                              ? "w-full bg-emerald-500 rounded-r-full"
+                              : isOverdue
+                              ? "w-[65%] bg-amber-500"
+                              : "w-[50%] bg-amber-500"
+                          }`}
+                          title="Fase 1 (Hari 1-14): Masa Toleransi Respons Resmi Dinas"
+                        />
+                        {/* Phase 2: Overdue / Maladministration Zone */}
+                        {isOverdue && (
+                          <div
+                            className="h-full w-[35%] bg-gradient-to-r from-rose-500 to-red-600 rounded-r-full animate-pulse"
+                            title="Fase 2 (Hari 15+): Pelanggaran Maladministrasi Penundaan Berlarut (Undue Delay)"
+                          />
+                        )}
+                      </div>
+
+                      {/* Timeline Markers */}
+                      <div className="flex justify-between text-[9.5px] text-slate-400 font-medium font-sans px-0.5">
+                        <span>H-0 Lapor</span>
+                        <span className="font-bold text-slate-600">Batas 14 Hari (UU 25/2009)</span>
+                        <span className={isOverdue ? "text-rose-600 font-bold" : "text-slate-400"}>
+                          {isOverdue ? "Ombudsman RI" : "Selesai"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
