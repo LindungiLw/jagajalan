@@ -270,27 +270,37 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
-      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-lg bg-white border border-slate-200/90 shadow-2xl overflow-hidden text-slate-800">
+      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-slate-200/90 shadow-2xl overflow-hidden text-slate-800">
         
         {/* Modern Clean Header */}
         <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
-                Lapor Kerusakan Jalan
-              </h3>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200/80 font-sans">
-                <Sparkles className="w-3 h-3 text-[#c2410c]" />
-                Verifikasi AI
-              </span>
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icon/report.png"
+                alt="Lapor Kerusakan"
+                className="w-full h-full object-contain"
+              />
             </div>
-            <p className="text-xs text-slate-500">
-              Pengaduan publik terintegrasi kewenangan resmi instansi dan audit anggaran proyek.
-            </p>
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
+                  Lapor Kerusakan Jalan
+                </h3>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200/80 font-sans">
+                  <Sparkles className="w-3 h-3 text-[#c2410c]" />
+                  Verifikasi AI
+                </span>
+              </div>
+              <p className="text-xs text-slate-500">
+                Pengaduan publik terintegrasi kewenangan resmi instansi dan audit anggaran proyek.
+              </p>
+            </div>
           </div>
           <button
             onClick={handleResetAndClose}
-            className="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
             aria-label="Tutup"
           >
             <X className="w-5 h-5" />
@@ -302,8 +312,13 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
           {submitted ? (
             /* Clean Success View */
             <div className="text-center py-8 px-4 max-w-lg mx-auto space-y-4 animate-fade-in">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-2xs">
-                <CheckCircle2 className="w-6 h-6" />
+              <div className="w-16 h-16 rounded-2xl bg-orange-50/90 border border-orange-200 flex items-center justify-center mx-auto shadow-xs p-2.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icon/report.png"
+                  alt="Tiket Terbit"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="space-y-1">
                 <h4 className="text-lg font-bold text-slate-900 font-heading">
@@ -315,7 +330,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
               </div>
 
               {/* Ticket Card */}
-              <div className="p-3.5 rounded-md bg-slate-50 border border-slate-200 text-left space-y-2">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-left space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
                     Kode Tiket Pengaduan
@@ -349,7 +364,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
               <div className="pt-3 flex justify-center gap-2.5">
                 <button
                   onClick={handleResetAndClose}
-                  className="px-5 py-2.5 rounded-md bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs"
+                  className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs"
                 >
                   Selesai & Buka Peta Transparansi
                 </button>
@@ -374,7 +389,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         setSelectedRoadId(e.target.value);
                         setAiResult(null);
                       }}
-                      className="w-full px-3 py-2 rounded-md bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all cursor-pointer font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all cursor-pointer font-medium"
                     >
                       {roads.map((r) => (
                         <option key={r.id} value={r.id}>
@@ -385,7 +400,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                   </div>
 
                   {/* Clean Government & Budget Meta Card */}
-                  <div className="p-3 rounded-md bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
                     <div className="flex items-start justify-between gap-2">
                       <div className="space-y-0.5">
                         <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide block">
@@ -395,7 +410,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           {currentRoad.authorityLabel}
                         </div>
                       </div>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold font-sans shrink-0 uppercase ${
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans shrink-0 uppercase ${
                         currentRoad.authority === "NASIONAL"
                           ? "bg-blue-100 text-blue-900"
                           : currentRoad.authority === "PROVINSI"
@@ -428,7 +443,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         value={reporterName}
                         onChange={(e) => setReporterName(e.target.value)}
                         placeholder="Contoh: Budi Santoso"
-                        className="w-full px-3 py-2 rounded-md bg-white border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
                       />
                     </div>
 
@@ -442,7 +457,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         value={addressDetail}
                         onChange={(e) => setAddressDetail(e.target.value)}
                         placeholder="Contoh: Depan SPBU 34-16401, lajur lambat arah Jakarta"
-                        className="w-full px-3 py-2 rounded-md bg-white border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
                       />
                       <span className="text-[10px] text-slate-400 block">
                         Privasi terjamin: Nama warga disamarkan otomatis di pelacakan publik.
@@ -484,7 +499,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                   </div>
 
                   {/* Photo Preview & Upload Card */}
-                  <div className="relative rounded-md border border-slate-300 overflow-hidden bg-slate-900 h-44 group flex items-center justify-center">
+                  <div className="relative rounded-xl border border-slate-300 overflow-hidden bg-slate-900 h-44 group flex items-center justify-center">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={photoPreview}
@@ -497,7 +512,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-3 py-1.5 rounded bg-white/95 text-slate-900 font-bold text-xs hover:bg-white flex items-center gap-1.5 shadow-md cursor-pointer transition-transform active:scale-95"
+                        className="px-3.5 py-1.5 rounded-lg bg-white/95 text-slate-900 font-bold text-xs hover:bg-white flex items-center gap-1.5 shadow-md cursor-pointer transition-transform active:scale-95"
                       >
                         <Upload className="w-3.5 h-3.5" />
                         <span>Unggah Foto Sendiri</span>
@@ -508,7 +523,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="sm:hidden absolute bottom-2 right-2 px-2.5 py-1 rounded bg-black/70 text-white text-[10px] font-medium flex items-center gap-1"
+                      className="sm:hidden absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/70 text-white text-[10px] font-medium flex items-center gap-1"
                     >
                       <Upload className="w-3 h-3" />
                       <span>Ganti</span>
@@ -531,7 +546,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         type="button"
                         onClick={() => handleAnalyzePhoto(photoPreview)}
                         disabled={isAnalyzing}
-                        className="w-full py-2 px-3 rounded-md bg-slate-100 hover:bg-orange-50 hover:text-[#c2410c] hover:border-orange-200 border border-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
+                        className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#c2410c] hover:border-orange-200 border border-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
                       >
                         {isAnalyzing ? (
                           <>
@@ -549,7 +564,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
                     {/* Spam Alert */}
                     {spamError && (
-                      <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-800 space-y-1 animate-fade-in text-xs">
+                      <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 space-y-1 animate-fade-in text-xs">
                         <div className="flex items-center gap-1.5 font-bold text-rose-900">
                           <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
                           <span>Foto Ditolak (Anti-Spam)</span>
@@ -562,7 +577,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
                     {/* Verified Result Card */}
                     {aiResult && !spamError && (
-                      <div className="p-3 rounded-md bg-slate-50 border border-slate-200/90 space-y-2 animate-fade-in text-xs">
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-2 animate-fade-in text-xs">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
                             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -571,7 +586,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                             </span>
                           </div>
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold font-sans tabular-nums ${
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tabular-nums ${
                               aiResult.hazardScore >= 80
                                 ? "bg-rose-100 text-rose-800"
                                 : "bg-amber-100 text-amber-800"
@@ -607,14 +622,14 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                   <button
                     type="button"
                     onClick={handleResetAndClose}
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
                     disabled={!!spamError || isAnalyzing}
-                    className="flex-1 sm:flex-none px-5 py-2 rounded-md bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-2xs hover:shadow flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Terbitkan Laporan</span>
                     <ArrowRight className="w-3.5 h-3.5" />
