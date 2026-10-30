@@ -47,7 +47,7 @@ export default function RoadDetailModal({
       : { label: "Belum Ditemukan Paket", color: "bg-slate-100 text-slate-700 border-slate-200" };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
       <div className="relative w-full max-w-3xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
         
         {/* 1. MODAL HEADER */}
