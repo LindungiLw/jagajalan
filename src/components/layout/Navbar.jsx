@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Menu, X, LogOut } from "lucide-react";
+import { Plus, Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { id: "beranda", label: "Ringkasan", icon: "/icon/jalan.png" },
@@ -79,50 +79,8 @@ export default function Navbar({
             })}
           </nav>
 
-          {/* Right Action Area: Officer Active Session + Civic Action */}
+          {/* Right Action Area: Civic Action */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-            {/* Show Officer Session Pill ONLY if logged in */}
-            {officerSession && (
-              <div className="hidden md:flex items-center gap-2 bg-orange-50/90 text-orange-950 pl-2 pr-1.5 py-1.5 rounded-xl border border-orange-200/90 shadow-2xs">
-                <div
-                  id="nav-session-officer"
-                  onClick={() => setActiveTab("dinas")}
-                  className="flex items-center gap-2 cursor-pointer select-none"
-                  title={`Sesi Masuk: ${officerSession.name} (${officerSession.institution})`}
-                >
-                  <div className="relative shrink-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/icon/profile.png"
-                      alt="Sesi Petugas"
-                      className="w-6 h-6 object-contain rounded-full ring-1 ring-orange-300"
-                    />
-                    <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white animate-pulse" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[11px] font-bold text-slate-900 leading-tight flex items-center gap-1">
-                      <span className="max-w-[120px] truncate">{officerSession.name.split(",")[0]}</span>
-                      <span className="px-1.5 py-0.2 rounded-md bg-orange-600 text-white text-[9px] font-sans font-bold">
-                        {officerSession.authorityLevel}
-                      </span>
-                    </span>
-                    <span className="text-[9px] text-slate-500 font-sans tabular-nums leading-tight">
-                      NIP: {officerSession.nip.slice(0, 10)}...
-                    </span>
-                  </div>
-                </div>
-                {onLogoutOfficer && (
-                  <button
-                    onClick={onLogoutOfficer}
-                    className="ml-1 p-1 rounded-lg hover:bg-orange-100 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
-                    title="Keluar (Logout)"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-            )}
-
             {/* Primary Citizen Action */}
             <button
               onClick={onOpenReportModal}
@@ -176,44 +134,6 @@ export default function Navbar({
                 </button>
               );
             })}
-
-            {/* Officer Access in Mobile Menu (Only if already logged in) */}
-            {officerSession && (
-              <div className="pt-2 mt-2 border-t border-slate-100 space-y-1.5">
-                <div
-                  onClick={() => {
-                    setActiveTab("dinas");
-                    setMobileMenuOpen(false);
-                  }}
-                  className="p-3 rounded-xl bg-orange-50 border border-orange-200 text-slate-900 flex items-center justify-between cursor-pointer"
-                >
-                  <div className="flex items-center gap-2.5">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/icon/profile.png"
-                      alt="Petugas"
-                      className="w-8 h-8 object-contain rounded-full ring-1 ring-orange-300"
-                    />
-                    <div>
-                      <div className="text-xs font-bold text-slate-900">{officerSession.name}</div>
-                      <div className="text-[10px] text-slate-500 font-sans tabular-nums">NIP: {officerSession.nip}</div>
-                    </div>
-                  </div>
-                  <span className="text-[10px] text-orange-700 font-bold">Panel →</span>
-                </div>
-                {onLogoutOfficer && (
-                  <button
-                    onClick={() => {
-                      onLogoutOfficer();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full text-center py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 border border-rose-200 rounded-xl cursor-pointer"
-                  >
-                    Keluar dari Sesi Petugas
-                  </button>
-                )}
-              </div>
-            )}
           </div>
         )}
       </div>
