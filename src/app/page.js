@@ -13,7 +13,6 @@ import OfficerLogin from "@/components/dashboard/OfficerLogin";
 import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
 import AnnualProgressChart from "@/components/dashboard/AnnualProgressChart";
 import CivicWorkflowSection from "@/components/dashboard/CivicWorkflowSection";
-import NationalStatsTeaser from "@/components/dashboard/NationalStatsTeaser";
 import LegalBasisSection from "@/components/dashboard/LegalBasisSection";
 import OmbudsmanMonitorSection from "@/components/dashboard/OmbudsmanMonitorSection";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
@@ -145,18 +144,7 @@ export default function Home() {
             {/* 2. Civic Workflow (How It Works): 4-Step Solution Flow */}
             <CivicWorkflowSection onOpenReportModal={() => setReportModalOpen(true)} />
 
-            {/* 3. Interactive Annual Trend & Progress Diagram (2021-2026) */}
-            <AnnualProgressChart />
-
-            {/* 5. Macro National Stats Teaser (Directs to Full 38-Provinces Tab) */}
-            <NationalStatsTeaser
-              onExploreNational={() => {
-                setActiveTab("nasional");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-            />
-
-            {/* 6. Legal Foundation & Public Transparency Basis */}
+            {/* 3. Legal Foundation & Public Transparency Basis */}
             <LegalBasisSection />
           </div>
         )}
@@ -185,7 +173,11 @@ export default function Home() {
         )}
 
         {activeTab === "nasional" && (
-          <div className="py-4 animate-fade-in">
+          <div className="py-2 animate-fade-in space-y-4">
+            {/* 1. Macro Annual Trend & Progress Diagram (2020-2024 Context) */}
+            <AnnualProgressChart />
+
+            {/* 2. Full 38 Provinces Scoreboard & Registry */}
             <NationalRankingSection onSelectPilot={handleSelectPilot} />
           </div>
         )}

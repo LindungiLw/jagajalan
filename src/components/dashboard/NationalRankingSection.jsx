@@ -52,26 +52,36 @@ export default function NationalRankingSection({ onSelectPilot }) {
   }, [selectedIsland, searchQuery, sortBy]);
 
   return (
-    <section id="papan-skor-nasional" className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <section id="papan-skor-nasional" className="pt-2 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       {/* 1. SECTION HEADER & METRIC SNAPSHOT */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 border-b border-slate-100 pb-5">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-slate-500 font-sans">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
-            <span>Data Agregat 38 Provinsi • Sumber: BPS SIRUSA &amp; Ombudsman RI</span>
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-orange-50/90 border border-orange-200/80 p-2 shadow-xs shrink-0 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icon/time.png"
+              alt="Statistik Nasional"
+              className="w-full h-full object-contain"
+            />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
-            Papan Skor Kemantapan Jalan &amp; Sebaran Aduan Nasional
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-sans leading-relaxed">
-            Transparansi perbandingan rasio kerusakan jalan daerah (BPS), sebaran volume aduan publik,
-            serta eskalasi alokasi Instruksi Presiden (Inpres) Jalan Daerah di seluruh provinsi Indonesia.
-          </p>
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 font-sans">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+              <span>Data Agregat 38 Provinsi • Sumber: BPS SIRUSA &amp; Ombudsman RI</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
+              Papan Skor Kemantapan Jalan &amp; Sebaran Aduan Nasional
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-sans leading-relaxed">
+              Transparansi perbandingan rasio kerusakan jalan daerah (BPS), sebaran volume aduan publik,
+              serta eskalasi alokasi Instruksi Presiden (Inpres) Jalan Daerah di seluruh provinsi Indonesia.
+            </p>
+          </div>
         </div>
 
         {/* Verified Pilot Context Callout */}
-        <div className="lg:max-w-sm rounded-[5px] bg-slate-50/80 border-l-2 border-l-[#c2410c] border border-slate-200/80 p-3 text-xs">
+        <div className="lg:max-w-sm rounded-xl bg-slate-50/80 border-l-2 border-l-[#c2410c] border border-slate-200/80 p-3 text-xs">
           <div className="flex items-center gap-1.5 text-slate-900 font-bold mb-1">
             <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
             <span className="font-heading">Koridor Percontohan (Sample Pilot)</span>
@@ -91,7 +101,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
       </div>
 
       {/* 2. MODERN CONTROL BAR: SEARCH, ISLAND TABS, SORT, & VIEW SWITCHER */}
-      <div className="bg-white p-3 rounded-[5px] border border-slate-200/90 shadow-2xs space-y-3 font-sans">
+      <div className="bg-white p-3 rounded-xl border border-slate-200/90 shadow-2xs space-y-3 font-sans">
         
         {/* Row 1: Search & Sort Controls */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -104,7 +114,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari provinsi atau ibukota (misal: Jawa Barat, Medan, Papua)..."
-              className="w-full pl-9 pr-3 py-1.5 rounded-[5px] border border-slate-200 bg-slate-50/50 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
+              className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
             />
             {searchQuery && (
               <button
