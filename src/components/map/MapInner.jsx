@@ -249,20 +249,20 @@ export default function MapInner({
 
       {/* Road Segment Polylines */}
       {roads.map((road) => {
-        let color = "#0d9488"; // Kota: Teal
-        let badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
+        let color = "#ea580c"; // Kota: Warm Orange
+        let badgeBg = "bg-orange-50/70 text-orange-900 border-orange-200/70";
         if (road.authority === "NASIONAL") {
-          color = "#2563eb"; // Nasional: Royal Blue
-          badgeBg = "bg-blue-50 text-blue-800 border-blue-200";
+          color = "#c2410c"; // Nasional: Safety Orange
+          badgeBg = "bg-orange-50 text-orange-950 border-orange-200";
         } else if (road.authority === "PROVINSI") {
-          color = "#7c3aed"; // Provinsi: Vivid Purple
-          badgeBg = "bg-purple-50 text-purple-800 border-purple-200";
+          color = "#d97706"; // Provinsi: Amber
+          badgeBg = "bg-amber-50 text-amber-950 border-amber-200";
         } else if (road.authority === "KABUPATEN") {
-          color = "#059669"; // Kabupaten: Emerald Green
-          badgeBg = "bg-emerald-50 text-emerald-800 border-emerald-200";
+          color = "#78716c"; // Kabupaten: Stone
+          badgeBg = "bg-stone-50 text-stone-900 border-stone-200";
         } else if (road.authority === "KOTA") {
-          color = "#0d9488"; // Kota: Teal
-          badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
+          color = "#ea580c"; // Kota: Warm Orange
+          badgeBg = "bg-orange-50/70 text-orange-900 border-orange-200/70";
         }
 
         const isSelected = selectedRoad?.id === road.id;

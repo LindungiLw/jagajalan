@@ -412,11 +412,11 @@ export default function MapExplorer({
                           <div>
                             <div className="flex items-center gap-1.5">
                               {prov.roadCount > 0 ? (
-                                <span className="text-[8.5px] bg-emerald-50 text-emerald-800 font-bold px-1.5 py-0.2 rounded-[4px] border border-emerald-300">
+                                <span className="text-[8.5px] bg-orange-50 text-orange-950 font-bold px-1.5 py-0.2 rounded-[4px] border border-orange-200/90 shadow-2xs">
                                   {prov.roadCount} Ruas Terdata
                                 </span>
                               ) : prov.hasPilotCorridor ? (
-                                <span className="text-[8.5px] bg-emerald-50 text-emerald-800 font-bold px-1.5 py-0.2 rounded-[4px] border border-emerald-300">
+                                <span className="text-[8.5px] bg-orange-50 text-orange-950 font-bold px-1.5 py-0.2 rounded-[4px] border border-orange-200/90 shadow-2xs">
                                   Koridor Terdata
                                 </span>
                               ) : null}
@@ -576,15 +576,15 @@ export default function MapExplorer({
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 max-w-full">
           <button
             onClick={() => setAuthorityFilter("ALL")}
-            className={`px-2.5 py-1 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
               authorityFilter === "ALL"
-                ? "bg-orange-500/10 border-orange-500 text-orange-800 shadow-xs ring-1 ring-orange-500/30 font-bold"
-                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-slate-50"
+                ? "bg-[#c2410c] border-[#c2410c] text-white shadow-xs font-semibold"
+                : "bg-white/95 backdrop-blur-md text-slate-700 border-slate-200/90 hover:bg-slate-50"
             }`}
           >
             <span>Semua Ruas</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
-              authorityFilter === "ALL" ? "bg-orange-600 text-white" : "bg-slate-100 text-slate-600"
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-sans tabular-nums font-semibold ${
+              authorityFilter === "ALL" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.ALL}
             </span>
@@ -592,16 +592,16 @@ export default function MapExplorer({
 
           <button
             onClick={() => setAuthorityFilter("NASIONAL")}
-            className={`px-2.5 py-1 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
               authorityFilter === "NASIONAL"
-                ? "bg-blue-500/10 border-blue-500 text-blue-800 shadow-xs ring-1 ring-blue-500/30 font-bold"
-                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-blue-50/40"
+                ? "bg-[#c2410c] border-[#c2410c] text-white shadow-xs font-semibold"
+                : "bg-white/95 backdrop-blur-md text-slate-700 border-slate-200/90 hover:bg-slate-50"
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-blue-600" />
+            <span className={`w-2 h-2 rounded-full ${authorityFilter === "NASIONAL" ? "bg-white" : "bg-slate-700"}`} />
             <span>Jalan Nasional</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
-              authorityFilter === "NASIONAL" ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-700"
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-sans tabular-nums font-semibold ${
+              authorityFilter === "NASIONAL" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.NASIONAL}
             </span>
@@ -609,16 +609,16 @@ export default function MapExplorer({
 
           <button
             onClick={() => setAuthorityFilter("PROVINSI")}
-            className={`px-2.5 py-1 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
               authorityFilter === "PROVINSI"
-                ? "bg-purple-500/10 border-purple-500 text-purple-800 shadow-xs ring-1 ring-purple-500/30 font-bold"
-                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-purple-50/40"
+                ? "bg-[#c2410c] border-[#c2410c] text-white shadow-xs font-semibold"
+                : "bg-white/95 backdrop-blur-md text-slate-700 border-slate-200/90 hover:bg-slate-50"
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-purple-600" />
+            <span className={`w-2 h-2 rounded-full ${authorityFilter === "PROVINSI" ? "bg-white" : "bg-amber-600"}`} />
             <span>Jalan Provinsi</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
-              authorityFilter === "PROVINSI" ? "bg-purple-600 text-white" : "bg-purple-50 text-purple-700"
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-sans tabular-nums font-semibold ${
+              authorityFilter === "PROVINSI" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.PROVINSI}
             </span>
@@ -626,16 +626,16 @@ export default function MapExplorer({
 
           <button
             onClick={() => setAuthorityFilter("KOTA")}
-            className={`px-2.5 py-1 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
               authorityFilter === "KOTA"
-                ? "bg-teal-500/10 border-teal-500 text-teal-800 shadow-xs ring-1 ring-teal-500/30 font-bold"
-                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-teal-50/40"
+                ? "bg-[#c2410c] border-[#c2410c] text-white shadow-xs font-semibold"
+                : "bg-white/95 backdrop-blur-md text-slate-700 border-slate-200/90 hover:bg-slate-50"
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-teal-600" />
+            <span className={`w-2 h-2 rounded-full ${authorityFilter === "KOTA" ? "bg-white" : "bg-orange-500"}`} />
             <span>Jalan Kota</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
-              authorityFilter === "KOTA" ? "bg-teal-600 text-white" : "bg-teal-50 text-teal-700"
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-sans tabular-nums font-semibold ${
+              authorityFilter === "KOTA" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.KOTA}
             </span>
@@ -643,16 +643,16 @@ export default function MapExplorer({
 
           <button
             onClick={() => setAuthorityFilter("KABUPATEN")}
-            className={`px-2.5 py-1 rounded-[5px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
               authorityFilter === "KABUPATEN"
-                ? "bg-emerald-500/10 border-emerald-500 text-emerald-800 shadow-xs ring-1 ring-emerald-500/30 font-bold"
-                : "bg-white/95 backdrop-blur-md text-slate-600 border-slate-200/90 hover:bg-emerald-50/40"
+                ? "bg-[#c2410c] border-[#c2410c] text-white shadow-xs font-semibold"
+                : "bg-white/95 backdrop-blur-md text-slate-700 border-slate-200/90 hover:bg-slate-50"
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-600" />
+            <span className={`w-2 h-2 rounded-full ${authorityFilter === "KABUPATEN" ? "bg-white" : "bg-stone-500"}`} />
             <span>Jalan Kabupaten</span>
-            <span className={`px-1.5 py-0.2 rounded-[4px] text-[10px] font-sans tabular-nums font-bold ${
-              authorityFilter === "KABUPATEN" ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-700"
+            <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-sans tabular-nums font-semibold ${
+              authorityFilter === "KABUPATEN" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
             }`}>
               {roadCounts.KABUPATEN}
             </span>
@@ -683,20 +683,20 @@ export default function MapExplorer({
 
       {/* City Transparency Context Banner */}
       {authorityFilter === "KOTA" && (
-        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-teal-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
+        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-orange-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
           <div className="flex items-start gap-2.5">
-            <div className="w-6 h-6 rounded-[5px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-6 h-6 rounded-[5px] bg-orange-100 text-orange-800 flex items-center justify-center shrink-0 mt-0.5">
               <Building2 className="w-3.5 h-3.5" />
             </div>
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                 <span>Jalan Kota Se-Indonesia</span>
-                <span className="text-[9px] font-sans tabular-nums font-bold bg-teal-50 text-teal-800 px-1.5 py-0.2 rounded-[4px] border border-teal-200">
+                <span className="text-[9px] font-sans tabular-nums font-bold bg-orange-50 text-orange-950 px-1.5 py-0.2 rounded-[4px] border border-orange-200 shadow-2xs">
                   98 Pemkot
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan: <strong className="text-teal-900 font-sans tabular-nums">~52.000 KM</strong> di bawah Walikota & Dinas PUPR Kota. Isu utama: Kerapatan drainase perkotaan, bekas galian pipa/kabel fiber utilitas, serta batas muatan MST 8-10 Ton.
+                Total Jaringan: <strong className="text-orange-950 font-sans tabular-nums">~52.000 KM</strong> di bawah Walikota & Dinas PUPR Kota. Isu utama: Kerapatan drainase perkotaan, bekas galian pipa/kabel fiber utilitas, serta batas muatan MST 8-10 Ton.
               </p>
             </div>
           </div>
@@ -705,20 +705,20 @@ export default function MapExplorer({
 
       {/* Regency Transparency Context Banner */}
       {authorityFilter === "KABUPATEN" && (
-        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-emerald-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
+        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-stone-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
           <div className="flex items-start gap-2.5">
-            <div className="w-6 h-6 rounded-[5px] bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-6 h-6 rounded-[5px] bg-stone-100 text-stone-700 flex items-center justify-center shrink-0 mt-0.5">
               <Building2 className="w-3.5 h-3.5" />
             </div>
             <div className="space-y-1 text-left flex-1 min-w-0">
               <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                 <span>Jalan Kabupaten Se-Indonesia</span>
-                <span className="text-[9px] font-sans tabular-nums font-bold bg-emerald-50 text-emerald-800 px-1.5 py-0.2 rounded-[4px] border border-emerald-200">
+                <span className="text-[9px] font-sans tabular-nums font-bold bg-stone-50 text-stone-900 px-1.5 py-0.2 rounded-[4px] border border-stone-200 shadow-2xs">
                   416 Pemkab & IJD
                 </span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan: <strong className="text-emerald-900 font-sans tabular-nums">~393.000 KM</strong> (tulang punggung konektivitas antar-kecamatan & sentra pangan). Dikelola Dinas PUPR Kabupaten dan didukung Inpres Jalan Daerah (IJD) Kementerian PU.
+                Total Jaringan: <strong className="text-stone-900 font-sans tabular-nums">~393.000 KM</strong> (tulang punggung konektivitas antar-kecamatan & sentra pangan). Dikelola Dinas PUPR Kabupaten dan didukung Inpres Jalan Daerah (IJD) Kementerian PU.
               </p>
             </div>
           </div>
@@ -729,20 +729,20 @@ export default function MapExplorer({
       <div className="absolute bottom-3 left-3 z-[500] flex flex-col gap-2 pointer-events-none font-sans max-w-[280px]">
         {/* Provincial Transparency Context Banner */}
         {authorityFilter === "PROVINSI" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-purple-200/90 p-2.5 animate-fade-in pointer-events-auto">
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-amber-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-[4px] bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
                 <div className="text-[10.5px] font-bold text-slate-900 flex items-center justify-between">
                   <span>Jalan Provinsi</span>
-                  <span className="text-[8.5px] font-sans tabular-nums font-bold bg-purple-50 text-purple-800 px-1 py-0.2 rounded border border-purple-200">
+                  <span className="text-[8.5px] font-sans tabular-nums font-bold bg-amber-50 text-amber-950 px-1 py-0.2 rounded border border-amber-200 shadow-2xs">
                     38 Pemprov
                   </span>
                 </div>
                 <p className="text-[9.5px] text-slate-600 leading-tight">
-                  <strong className="text-purple-900 font-sans tabular-nums">54.544 KM</strong> jaringan resmi di bawah kewenangan Pemprov.
+                  <strong className="text-amber-950 font-sans tabular-nums">54.544 KM</strong> jaringan resmi di bawah kewenangan Pemprov.
                 </p>
               </div>
             </div>
@@ -751,20 +751,20 @@ export default function MapExplorer({
 
         {/* National Transparency Context Banner */}
         {authorityFilter === "NASIONAL" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-blue-200/90 p-2.5 animate-fade-in pointer-events-auto">
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-orange-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-[4px] bg-orange-100 text-orange-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
                 <div className="text-[10.5px] font-bold text-slate-900 flex items-center justify-between">
                   <span>Jalan Arteri Nasional</span>
-                  <span className="text-[8.5px] font-sans font-bold bg-blue-50 text-blue-800 px-1 py-0.2 rounded border border-blue-200">
+                  <span className="text-[8.5px] font-sans font-bold bg-orange-50 text-orange-950 px-1 py-0.2 rounded border border-orange-200 shadow-2xs">
                     KemenPU
                   </span>
                 </div>
                 <p className="text-[9.5px] text-slate-600 leading-tight">
-                  <strong className="text-blue-900 font-sans tabular-nums">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022.
+                  <strong className="text-orange-950 font-sans tabular-nums">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022.
                 </p>
               </div>
             </div>
@@ -857,15 +857,7 @@ export default function MapExplorer({
           <div className="px-4 pt-3.5 pb-2.5 border-b border-slate-100 shrink-0 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 min-w-0">
-                <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold font-sans tracking-wide border shrink-0 ${
-                  currentRoad?.authority === "NASIONAL"
-                    ? "bg-blue-500/10 text-blue-800 border-blue-300"
-                    : currentRoad?.authority === "PROVINSI"
-                    ? "bg-purple-500/10 text-purple-800 border-purple-300"
-                    : currentRoad?.authority === "KOTA"
-                    ? "bg-teal-500/10 text-teal-800 border-teal-300"
-                    : "bg-emerald-500/10 text-emerald-800 border-emerald-300"
-                }`}>
+                <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold font-sans tracking-wide border bg-slate-50 text-slate-700 border-slate-200 shrink-0">
                   {currentRoad?.authority === "NASIONAL"
                     ? "JALAN NASIONAL • APBN"
                     : currentRoad?.authority === "PROVINSI"
@@ -876,7 +868,7 @@ export default function MapExplorer({
                 </span>
 
                 {currentReport && (
-                  <span className="px-1.5 py-0.5 rounded-[4px] text-[9.5px] font-bold font-sans tabular-nums bg-orange-100 text-orange-800 border border-orange-200 shrink-0">
+                  <span className="px-1.5 py-0.5 rounded-[4px] text-[9.5px] font-bold font-sans tabular-nums bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
                     TIKET {currentReport.ticketCode}
                   </span>
                 )}
@@ -921,9 +913,9 @@ export default function MapExplorer({
                   {currentRoad.fundingSourceLabel && (
                     <span className={`px-1.5 py-0.2 rounded-[3px] text-[9.5px] font-bold border ${
                       currentRoad.fundingSourceType === "IJD"
-                        ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                        ? "bg-orange-50 text-orange-950 border-orange-300"
                         : currentRoad.authority === "KOTA"
-                        ? "bg-teal-50 text-teal-800 border-teal-200"
+                        ? "bg-amber-50 text-amber-950 border-amber-200"
                         : "bg-slate-50 text-slate-700 border-slate-200"
                     }`}>
                       {currentRoad.fundingSourceLabel}
@@ -1068,7 +1060,7 @@ export default function MapExplorer({
                         <Eye className="w-3 h-3 text-slate-600" />
                         <span>Perbandingan Lapangan (Before vs After)</span>
                       </span>
-                      <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                      <span className="text-[9px] font-bold text-orange-950 bg-orange-50/90 px-1.5 py-0.2 rounded border border-orange-200/90 shadow-2xs">
                         Audit Fisik
                       </span>
                     </div>
@@ -1084,8 +1076,8 @@ export default function MapExplorer({
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <div className="text-[9.5px] font-bold text-emerald-700 flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                        <div className="text-[9.5px] font-bold text-orange-800 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />
                           <span>Hasil Terkini</span>
                         </div>
                         <div className="h-28 rounded-[4px] overflow-hidden border border-slate-200 bg-slate-100">
@@ -1104,25 +1096,25 @@ export default function MapExplorer({
 
                 {/* Urban Drainage & Utility Dig Specific Indicator */}
                 {(currentRoad?.urbanDrainageStatus || currentRoad?.utilityDigIssue) && (
-                  <div className="p-3.5 rounded-[5px] bg-teal-50/70 border border-teal-200/90 space-y-2">
+                  <div className="p-3.5 rounded-[5px] bg-amber-50/70 border border-amber-200/90 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-teal-700" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
+                        <Building2 className="w-3.5 h-3.5 text-amber-700" />
                         <span>Isu Khas Jalan Perkotaan & Saluran</span>
                       </span>
-                      <span className="text-[9px] font-bold bg-teal-200/70 text-teal-950 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold bg-amber-200/70 text-amber-950 px-1.5 py-0.5 rounded">
                         Drainase & Utilitas
                       </span>
                     </div>
                     {currentRoad.urbanDrainageStatus && (
                       <div className="text-[11px] text-slate-800 leading-snug">
-                        <strong className="text-teal-950 block text-[10.5px]">Sistem Drainase & Genangan:</strong>
+                        <strong className="text-amber-950 block text-[10.5px]">Sistem Drainase & Genangan:</strong>
                         <span>{currentRoad.urbanDrainageStatus}</span>
                       </div>
                     )}
                     {currentRoad.utilityDigIssue && (
-                      <div className="text-[11px] text-slate-800 leading-snug pt-1 border-t border-teal-200/60">
-                        <strong className="text-teal-950 block text-[10.5px]">Galian Utilitas (Kabel / Pipa):</strong>
+                      <div className="text-[11px] text-slate-800 leading-snug pt-1 border-t border-amber-200/60">
+                        <strong className="text-amber-950 block text-[10.5px]">Galian Utilitas (Kabel / Pipa):</strong>
                         <span>{currentRoad.utilityDigIssue}</span>
                       </div>
                     )}
@@ -1164,7 +1156,7 @@ export default function MapExplorer({
                         Terlambat {currentReport.daysOverdue} Hari
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-orange-50 text-orange-950 border border-orange-200/90 shadow-2xs">
                         Dalam Batas Wajar
                       </span>
                     )}
@@ -1202,7 +1194,7 @@ export default function MapExplorer({
                         </span>
                         <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold ${
                           budgetData.progressStatus === "SELESAI"
-                            ? "bg-emerald-500 text-white"
+                            ? "bg-orange-600 text-white"
                             : budgetData.progressStatus === "TERLAMBAT_RESPONS"
                             ? "bg-rose-500 text-white"
                             : "bg-amber-500 text-white"
@@ -1252,9 +1244,9 @@ export default function MapExplorer({
                       </div>
 
                       {savingsRp > 0 && (
-                        <div className="flex items-center justify-between text-[11px] p-2 rounded-[4px] bg-emerald-50 border border-emerald-100 text-emerald-800 font-medium">
+                        <div className="flex items-center justify-between text-[11px] p-2 rounded-[4px] bg-orange-50/80 border border-orange-200/80 text-orange-950 font-medium">
                           <span className="flex items-center gap-1">
-                            <BadgePercent className="w-3.5 h-3.5 text-emerald-600" />
+                            <BadgePercent className="w-3.5 h-3.5 text-orange-600" />
                             <span>Efisiensi Tender Hasil Lelang:</span>
                           </span>
                           <span className="font-bold font-sans tabular-nums">
@@ -1318,17 +1310,17 @@ export default function MapExplorer({
               <div className="space-y-3.5 animate-fade-in">
                 {/* Detected Location Special Banner */}
                 {currentRoad?.isDetectedPoint && (
-                  <div className="p-3.5 rounded-[5px] bg-teal-50 border border-teal-200 space-y-2">
-                    <div className="text-xs font-bold text-teal-900 flex items-center justify-between">
+                  <div className="p-3.5 rounded-[5px] bg-amber-50/70 border border-amber-200/90 space-y-2">
+                    <div className="text-xs font-bold text-amber-950 flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-teal-700" />
+                        <MapPin className="w-3.5 h-3.5 text-amber-700" />
                         <span>Hasil Deteksi Spasial Lokasi</span>
                       </span>
-                      <span className="text-[9px] font-sans font-bold bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-sans font-bold bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded shadow-2xs">
                         Otomatis
                       </span>
                     </div>
-                    <p className="text-[11px] text-teal-800 leading-relaxed">
+                    <p className="text-[11px] text-amber-950 leading-relaxed">
                       Sistem mendeteksi titik koordinat ini berada di wilayah <span className="font-bold">{currentRoad.provinceName}</span> dengan kewenangan <span className="font-bold">{currentRoad.authorityLabel}</span>.
                       {currentRoad.lengthKm > 0 && (
                         <span> Jarak ke koridor Jalan Nasional terdekat: <strong className="font-sans tabular-nums">{currentRoad.lengthKm} KM</strong>.</span>
@@ -1373,17 +1365,17 @@ export default function MapExplorer({
 
                 {/* Interactive Milestone KM Points for National Highways */}
                 {currentRoad?.milestones && currentRoad.milestones.length > 0 && (
-                  <div className="p-3 rounded-[5px] bg-blue-50/70 border border-blue-200/90 space-y-2">
-                    <div className="flex items-center justify-between text-xs font-bold text-blue-950">
+                  <div className="p-3 rounded-[5px] bg-orange-50/70 border border-orange-200/90 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-orange-950">
                       <span className="flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-blue-700" />
+                        <MapPin className="w-3.5 h-3.5 text-orange-700" />
                         <span>Titik Patok & Milestone Batas (KM)</span>
                       </span>
-                      <span className="text-[9px] text-blue-800 font-sans tabular-nums font-bold bg-blue-100 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] text-orange-950 font-sans tabular-nums font-bold bg-orange-100 px-1.5 py-0.5 rounded shadow-2xs">
                         {currentRoad.milestones.length} Titik Penting
                       </span>
                     </div>
-                    <p className="text-[10px] text-blue-800/80">
+                    <p className="text-[10px] text-orange-900/80">
                       Klik salah satu patok untuk mengarahkan peta ke koordinat titik inspeksi tersebut:
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
@@ -1393,12 +1385,12 @@ export default function MapExplorer({
                           onClick={() => {
                             mapInstance?.flyTo(ms.coords, 12, { duration: 1 });
                           }}
-                          className="text-left p-1.5 bg-white rounded border border-blue-200 hover:border-blue-500 hover:bg-blue-50 transition-all text-[10px] cursor-pointer"
+                          className="text-left p-1.5 bg-white rounded border border-orange-200 hover:border-orange-500 hover:bg-orange-50 transition-all text-[10px] cursor-pointer"
                         >
-                          <div className="flex items-center justify-between font-sans tabular-nums font-bold text-blue-900">
+                          <div className="flex items-center justify-between font-sans tabular-nums font-bold text-orange-950">
                             <span>KM {ms.km}</span>
                             <span className={`text-[8px] px-1 py-0.2 rounded font-sans ${
-                              ms.status === "MANTAP" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                              ms.status === "MANTAP" ? "bg-orange-100 text-orange-900" : "bg-amber-100 text-amber-900"
                             }`}>{ms.status}</span>
                           </div>
                           <div className="text-slate-800 font-semibold truncate mt-0.5">{ms.name}</div>
@@ -1460,21 +1452,21 @@ export default function MapExplorer({
                       <span className="font-semibold text-slate-900">{currentRoad?.pavementType}</span>
                     </div>
                     {currentRoad?.fundingSourceLabel && (
-                      <div className="p-2.5 rounded-[4px] bg-teal-50/50 border border-teal-100 col-span-2">
-                        <span className="text-[10px] text-teal-800 font-medium block">Sumber Anggaran & Bantuan</span>
-                        <span className="font-bold text-teal-950">{currentRoad.fundingSourceLabel}</span>
+                      <div className="p-2.5 rounded-[4px] bg-amber-50/50 border border-amber-200/70 col-span-2">
+                        <span className="text-[10px] text-amber-800 font-medium block">Sumber Anggaran & Bantuan</span>
+                        <span className="font-bold text-amber-950">{currentRoad.fundingSourceLabel}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Legal Context Note */}
-                <div className="p-3.5 rounded-[5px] bg-blue-50/70 border border-blue-200 text-blue-950 space-y-1.5 leading-relaxed">
-                  <div className="font-bold text-xs flex items-center gap-1.5 text-blue-900">
-                    <Shield className="w-3.5 h-3.5 text-blue-700" />
+                <div className="p-3.5 rounded-[5px] bg-orange-50/70 border border-orange-200 text-orange-950 space-y-1.5 leading-relaxed">
+                  <div className="font-bold text-xs flex items-center gap-1.5 text-orange-900">
+                    <Shield className="w-3.5 h-3.5 text-orange-700" />
                     <span>Payung Hukum Kewenangan Ruas Jalan</span>
                   </div>
-                  <p className="text-[11px] text-blue-900">
+                  <p className="text-[11px] text-orange-950">
                     Berdasarkan <strong>UU No. 38 Tahun 2004</strong> jo. <strong>UU No. 2 Tahun 2022</strong> tentang Jalan, setiap ruas jalan memiliki pembagian kewenangan mutlak antara Pemerintah Pusat (Jalan Nasional), Pemerintah Provinsi (Jalan Provinsi), dan Pemerintah Kabupaten/Kota (Jalan Daerah). Hal ini mencegah praktik saling lempar tanggung jawab penanganan jalan rusak.
                   </p>
                 </div>
@@ -1485,13 +1477,13 @@ export default function MapExplorer({
             {activeTab === "sumber" && (
               <div className="space-y-3.5 animate-fade-in">
                 {/* Verification Stamp */}
-                <div className="p-3.5 rounded-[5px] bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0">
+                <div className="p-3.5 rounded-[5px] bg-orange-50 border border-orange-200/90 flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold shrink-0">
                     ✓
                   </div>
                   <div>
-                    <h4 className="font-bold text-emerald-950 text-xs">Data Terverifikasi & Terbuka</h4>
-                    <p className="text-[11px] text-emerald-800">
+                    <h4 className="font-bold text-orange-950 text-xs">Data Terverifikasi & Terbuka</h4>
+                    <p className="text-[11px] text-orange-800">
                       Setiap informasi ruas, masalah teknis, dan paket tender telah dicocokkan dengan portal resmi pemerintah.
                     </p>
                   </div>
@@ -1505,7 +1497,7 @@ export default function MapExplorer({
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                         1. Sumber Status Kewenangan
                       </span>
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-[3px] border border-emerald-200">
+                      <span className="text-[10px] font-bold text-orange-950 bg-orange-50/90 px-1.5 py-0.5 rounded-[3px] border border-orange-200/90 shadow-2xs">
                         SK Sah
                       </span>
                     </div>
@@ -1520,7 +1512,7 @@ export default function MapExplorer({
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                         2. Sumber Anggaran & Tender
                       </span>
-                      <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-[3px] border border-blue-200">
+                      <span className="text-[10px] font-bold text-amber-950 bg-amber-50/90 px-1.5 py-0.5 rounded-[3px] border border-amber-200/90 shadow-2xs">
                         LPSE / SiRUP
                       </span>
                     </div>
@@ -1660,12 +1652,12 @@ export default function MapExplorer({
             </div>
 
             <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
-              <div className="p-3 rounded-[5px] bg-emerald-50 border border-emerald-200 text-emerald-950 space-y-1">
+              <div className="p-3 rounded-[5px] bg-orange-50 border border-orange-200/90 text-orange-950 space-y-1 shadow-2xs">
                 <div className="font-bold text-xs flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2 className="w-4 h-4 text-orange-600" />
                   <span>Geometri Berbasis Vektor Jalan Nyata</span>
                 </div>
-                <p className="text-[11px] text-emerald-800">
+                <p className="text-[11px] text-orange-900">
                   Seluruh garis jalan pada peta JagaJalan <strong>bukan digambar manual atau garis perkiraan lurus</strong>, melainkan memuat 100+ koordinat kurva fisik presisi tinggi yang melacak badan aspal jalan raya asli di satelit dan jaringan jalan nasional/daerah.
                 </p>
               </div>
