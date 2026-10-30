@@ -472,7 +472,7 @@ export default function MapExplorer({
 
           {/* Search Bar */}
           <div className="relative flex-1 min-w-[150px] sm:min-w-[190px] flex items-center gap-1.5 px-2 py-1 font-sans">
-            <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <img src="/icon/search_icon.png" alt="" className="w-3.5 h-3.5 object-contain shrink-0" />
             <input
               type="text"
               value={searchQuery}
@@ -933,7 +933,7 @@ export default function MapExplorer({
                 <div className="absolute top-2 left-2 flex items-center gap-1.5 flex-wrap">
                   {currentReport?.hazardScore && (
                     <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-rose-600/95 text-white backdrop-blur-xs shadow-xs flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3" />
+                      <img src="/icon/warning_icon.png" alt="" className="w-3.5 h-3.5 object-contain" />
                       <span>Bahaya: {currentReport.hazardScore} / 100</span>
                     </span>
                   )}
@@ -972,7 +972,7 @@ export default function MapExplorer({
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/90 space-y-1.5">
               <div className="flex items-center justify-between text-slate-500 text-[10.5px]">
                 <span className="font-semibold uppercase tracking-wider flex items-center gap-1 text-slate-600">
-                  <Building2 className="w-3.5 h-3.5 text-[#c2410c]" />
+                  <img src="/icon/hukum_icon.png" alt="" className="w-3.5 h-3.5 object-contain" />
                   <span>Instansi Penanggung Jawab</span>
                 </span>
                 <span className="text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
@@ -1004,7 +1004,7 @@ export default function MapExplorer({
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/90 space-y-2">
                 <div className="flex items-center justify-between text-[10.5px]">
                   <span className="font-semibold uppercase tracking-wider flex items-center gap-1 text-slate-600">
-                    <FileText className="w-3.5 h-3.5 text-blue-600" />
+                    <img src="/icon/financial.png" alt="" className="w-3.5 h-3.5 object-contain" />
                     <span>Anggaran & Data LPSE</span>
                   </span>
                   <span className="text-[10px] font-bold text-slate-600 bg-white px-1.5 py-0.2 rounded border border-slate-200 tabular-nums">
@@ -1077,7 +1077,7 @@ export default function MapExplorer({
               }`}>
                 <div className="flex items-center justify-between text-[10.5px]">
                   <span className="font-semibold uppercase tracking-wider flex items-center gap-1 text-slate-600">
-                    <Clock className="w-3.5 h-3.5 text-amber-600" />
+                    <img src="/icon/time.png" alt="" className="w-3.5 h-3.5 object-contain" />
                     <span>SLA Respons KemenPAN-RB</span>
                   </span>
                   <span className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded border ${

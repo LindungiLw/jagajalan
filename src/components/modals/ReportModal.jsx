@@ -278,7 +278,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
             <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/icon/report.png"
+                src="/icon/plus_icon.png"
                 alt="Lapor Kerusakan"
                 className="w-full h-full object-contain"
               />
@@ -470,7 +470,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                      <Camera className="w-3.5 h-3.5 text-[#c2410c]" />
+                      <img src="/icon/camera_icon.png" alt="" className="w-4 h-4 object-contain shrink-0" />
                       <span>Foto Bukti Kerusakan</span>
                     </label>
                     <span className="text-[10px] text-slate-400">Format: JPG, PNG (Maks 8MB)</span>

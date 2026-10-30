@@ -7,7 +7,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
   const steps = [
     {
       step: "01",
-      customIcon: "/icon/report.png",
+      customIcon: "/icon/camera_icon.png",
       badge: "AI Vision",
       title: "Klasifikasi Otomatis AI",
       description:

@@ -60,7 +60,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-orange-50/90 border border-orange-200/80 p-2 shadow-xs shrink-0 flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/icon/time.png"
+              src="/icon/statistik_icon.png"
               alt="Statistik Nasional"
               className="w-full h-full object-contain"
             />
@@ -108,7 +108,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           
           {/* Quick Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <img src="/icon/search_icon.png" alt="" className="w-4 h-4 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}

@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { id: "peta", label: "Peta Transparansi", icon: "/icon/maps.png" },
   { id: "data-anggaran", label: "Anggaran Proyek", icon: "/icon/financial.png" },
   { id: "ombudsman", label: "Lacak Laporan", icon: "/icon/report.png" },
-  { id: "nasional", label: "Statistik", icon: "/icon/time.png" },
+  { id: "nasional", label: "Statistik", icon: "/icon/statistik_icon.png" },
 ];
 
 export default function Navbar({
@@ -86,7 +86,7 @@ export default function Navbar({
               onClick={onOpenReportModal}
               className="inline-flex items-center gap-1.5 px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-[0.98] ring-1 ring-orange-500/30"
             >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
+              <img src="/icon/plus_icon.png" alt="" className="w-4 h-4 object-contain shrink-0" />
               <span>Laporkan Kerusakan</span>
             </button>
 

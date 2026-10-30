@@ -243,7 +243,7 @@ export default function HeroSection({
 
           {/* Segment 3: Spacious Global Search Input */}
           <div className="relative flex-1 min-w-[280px] flex items-center bg-white group">
-            <Search className="w-4 h-4 text-slate-400 group-focus-within:text-[#c2410c] absolute left-3 pointer-events-none transition-colors" />
+            <img src="/icon/search_icon.png" alt="" className="w-4 h-4 object-contain absolute left-3 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
@@ -400,7 +400,7 @@ export default function HeroSection({
                     }`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src="/icon/time.png"
+                        src="/icon/warning_icon.png"
                         alt="Undue Delay"
                         className="w-full h-full object-contain"
                       />
@@ -1776,7 +1776,7 @@ export default function HeroSection({
 
             {/* Quick Search */}
             <div className="relative w-full md:w-72 shrink-0">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <img src="/icon/search_icon.png" alt="" className="w-3.5 h-3.5 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 value={tableSearch}

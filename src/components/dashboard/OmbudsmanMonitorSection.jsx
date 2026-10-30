@@ -171,8 +171,8 @@ export default function OmbudsmanMonitorSection({
             <span className="text-[11px] font-semibold text-rose-700 font-sans">
               Melewati Tenggat (&gt;14 Hari)
             </span>
-            <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
-              <AlertTriangle className="w-4 h-4" />
+            <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center p-0.5">
+              <img src="/icon/warning_icon.png" alt="" className="w-5 h-5 object-contain" />
             </div>
           </div>
           <div>
@@ -242,7 +242,7 @@ export default function OmbudsmanMonitorSection({
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <img src="/icon/search_icon.png" alt="" className="w-4 h-4 object-contain absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}

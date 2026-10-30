@@ -20,7 +20,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
               <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/icon/jalan.png"
+                  src="/icon/statistik_icon.png"
                   alt="Statistik Nasional"
                   className="w-full h-full object-contain"
                 />

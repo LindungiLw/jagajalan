@@ -72,8 +72,8 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
             <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/icon/time.png"
-                alt="Batas Waktu SLA"
+                src="/icon/hukum_icon.png"
+                alt="Eskalasi Hukum Ombudsman"
                 className="w-full h-full object-contain"
               />
             </div>
