@@ -68,33 +68,43 @@ export default function OmbudsmanMonitorSection({
       
       {/* 1. HEADER & PUBLIC MANDATE */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-slate-100 pb-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-rose-700 font-sans">
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
-            <span>Kepatuhan Standar UU No. 25/2009 &amp; Ombudsman RI</span>
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-orange-50/90 border border-orange-200/80 p-2 shadow-xs shrink-0 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icon/time.png"
+              alt="Batas Waktu SLA"
+              className="w-full h-full object-contain"
+            />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
-            Pusat Pemantauan &amp; Eskalasi Laporan
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
-            Pemantauan batas respons dinas (14 hari kerja). Aduan tanpa tindak lanjut dapat dieskalasi ke Ombudsman RI atas dugaan <em>penundaan berlarut (undue delay)</em>.
-          </p>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-rose-700 font-sans">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+              <span>Kepatuhan Standar UU No. 25/2009 &amp; Ombudsman RI</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
+              Pusat Pemantauan &amp; Eskalasi Laporan
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+              Pemantauan batas respons dinas (14 hari kerja). Aduan tanpa tindak lanjut dapat dieskalasi ke Ombudsman RI atas dugaan <em>penundaan berlarut (undue delay)</em>.
+            </p>
+          </div>
         </div>
 
         {/* SLA Status Counter Badge */}
-        <div className="rounded-[5px] bg-slate-50 border border-slate-200/80 p-2.5 text-xs shrink-0 lg:max-w-xs space-y-0.5">
+        <div className="rounded-xl bg-rose-50/60 border border-rose-200/80 p-3 text-xs shrink-0 lg:max-w-xs space-y-0.5">
           <div className="flex items-center gap-1.5 text-slate-900 font-bold">
             <Clock className="w-3.5 h-3.5 text-rose-600 shrink-0" />
             <span>Tenggat Respons 14 Hari</span>
           </div>
-          <p className="text-[11px] text-slate-500 leading-normal">
+          <p className="text-[11px] text-slate-600 leading-normal">
             <strong className="text-rose-600 font-bold">{counts.overdue} laporan</strong> melewati batas toleransi respons dinas.
           </p>
         </div>
       </div>
 
       {/* 2. STATISTICAL RIBBON: REKAM JEJAK MALADMINISTRASI OMBUDSMAN RI */}
-      <div className="bg-white rounded-[5px] border border-slate-200/90 p-4 shadow-2xs space-y-3">
+      <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs space-y-3">
         <div className="flex items-center justify-between border-b border-slate-100 pb-2">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
             <Scale className="w-4 h-4 text-[#c2410c]" />

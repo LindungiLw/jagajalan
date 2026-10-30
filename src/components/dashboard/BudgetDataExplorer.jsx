@@ -270,24 +270,34 @@ export default function BudgetDataExplorer({
       {/* 1. PAGE HEADER & VERCEL LIVE API SYNC BAR */}
       <div className="space-y-4 border-b border-slate-200 pb-5">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[5px] text-[10px] font-bold font-sans uppercase bg-emerald-50 text-emerald-800 border border-emerald-200 mb-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Gateway API Serverless Aktif (Vercel Ready)</span>
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-orange-50/90 border border-orange-200/80 p-2 shadow-xs shrink-0 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icon/financial.png"
+                alt="Anggaran Proyek"
+                className="w-full h-full object-contain"
+              />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
-              Penelusuran Anggaran Proyek & Audit Kontrak LPSE
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed font-sans">
-              Portal keterbukaan informasi publik (UU KIP No. 14/2008). Menghubungkan pagu lelang HPS, nilai kontrak pemenang, kontraktor pelaksana, dan perhitungan efisiensi per kilometer secara real-time.
-            </p>
+            <div>
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[10px] font-semibold font-sans uppercase bg-slate-50 text-slate-700 border border-slate-200/90 mb-1.5 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-[#c2410c] animate-pulse" />
+                <span>Gateway API Serverless Aktif (Vercel Ready)</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight">
+                Penelusuran Anggaran Proyek & Audit Kontrak LPSE
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed font-sans">
+                Portal keterbukaan informasi publik (UU KIP No. 14/2008). Menghubungkan pagu lelang HPS, nilai kontrak pemenang, kontraktor pelaksana, dan perhitungan efisiensi per kilometer secara real-time.
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => fetchProcurementData(true)}
               disabled={isSyncing}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-[5px] text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-2xs transition-colors cursor-pointer disabled:opacity-50 font-sans"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-2xs transition-colors cursor-pointer disabled:opacity-50 font-sans"
               title="Sinkronkan data dengan API Gateway INAPROC LKPP & LPSE"
             >
               <RefreshCw className={`w-3.5 h-3.5 text-orange-700 ${isSyncing ? "animate-spin" : ""}`} />
@@ -296,7 +306,7 @@ export default function BudgetDataExplorer({
 
             <button
               onClick={onOpenReportModal}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[5px] text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-colors cursor-pointer font-sans"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-sm transition-all cursor-pointer font-sans"
             >
               <MapPin className="w-4 h-4" />
               <span>Laporkan Kerusakan</span>
@@ -305,7 +315,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Live Gateway & Integrity Status Banner */}
-        <div className="bg-slate-50 border border-slate-200/90 rounded-[5px] p-3 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+        <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
           <div className="flex items-center gap-2 text-slate-700 font-sans">
             <Database className="w-4 h-4 text-orange-700 shrink-0" />
             <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
@@ -319,15 +329,15 @@ export default function BudgetDataExplorer({
           </div>
 
           <div className="flex items-center gap-2 text-[11px] text-slate-500 font-sans">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <ShieldCheck className="w-3.5 h-3.5 text-orange-600" />
             <span>Dasar Hukum: <strong>UU KIP No. 14/2008 & SK PUPR 1688/2022</strong></span>
           </div>
         </div>
 
         {/* Sync Toast Feedback */}
         {syncFeedback && (
-          <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-[5px] text-xs text-emerald-900 font-medium font-sans flex items-center gap-2 animate-fade-in">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <div className="p-2.5 bg-orange-50 border border-orange-200/90 rounded-xl text-xs text-orange-950 font-medium font-sans flex items-center gap-2 animate-fade-in shadow-2xs">
+            <CheckCircle2 className="w-4 h-4 text-orange-600 shrink-0" />
             <span>{syncFeedback}</span>
           </div>
         )}
@@ -490,13 +500,13 @@ export default function BudgetDataExplorer({
           {filteredPackages.map((pkg, idx) => {
             let statusBadge = {
               label: "Selesai (PHO)",
-              color: "bg-emerald-50 text-emerald-800 border-emerald-200",
+              color: "bg-slate-50 text-slate-700 border-slate-200/90",
               icon: CheckCircle2,
             };
             if (pkg.progressStatus === "DALAM_PENGERJAAN") {
               statusBadge = {
                 label: `Fisik: ${pkg.progressPct || 0}%`,
-                color: "bg-orange-50 text-orange-800 border-orange-200",
+                color: "bg-slate-50 text-slate-700 border-slate-200/90",
                 icon: Clock,
               };
             } else if (pkg.progressStatus === "TERLAMBAT_RESPONS") {
@@ -517,7 +527,7 @@ export default function BudgetDataExplorer({
 
             const matchBadge =
               pkg.matchConfidence === "TERKONFIRMASI"
-                ? { label: "Terkonfirmasi LPSE", color: "bg-emerald-50 text-emerald-800 border-emerald-200" }
+                ? { label: "Terkonfirmasi LPSE", color: "bg-slate-50 text-slate-700 border-slate-200/90" }
                 : { label: "Pencocokan Parsial", color: "bg-amber-50 text-amber-800 border-amber-200" };
 
             // Audit forensic badge

@@ -186,28 +186,33 @@ export default function OfficerDashboard({
 
   return (
     <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-fade-in">
-      {/* 1. Active Authenticated Session Bar (Clean White + Orange Theme, Strict 5px radius) */}
-      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-[5px] border border-orange-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[5px] bg-orange-100 text-[#c2410c] border border-orange-200 font-sans font-bold text-sm flex items-center justify-center shrink-0">
-            {currentOfficer?.avatar || "ASN"}
+      {/* 1. Active Authenticated Session Bar */}
+      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-2xl border border-orange-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icon/profile.png"
+              alt="Profil Petugas"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-extrabold text-sm text-slate-900">{currentOfficer?.name || "Aparatur Dinas Terverifikasi"}</span>
-              <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-sans font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-orange-50/90 text-orange-950 border border-orange-200/90 flex items-center gap-1 shadow-2xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
                 <span>Sesi Aktif Terotentikasi</span>
               </span>
               {currentOfficer?.authorityLevel && (
-                <span className={`px-2 py-0.5 rounded-[5px] text-[10px] font-sans font-bold uppercase tracking-wider ${
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider ${
                   currentOfficer.authorityLevel === "NASIONAL"
-                    ? "bg-blue-50 text-blue-900 border border-blue-200"
+                    ? "bg-orange-50 text-orange-950 border border-orange-200"
                     : currentOfficer.authorityLevel === "PROVINSI"
-                    ? "bg-purple-50 text-purple-900 border border-purple-200"
+                    ? "bg-amber-50 text-amber-950 border border-amber-200"
                     : currentOfficer.authorityLevel === "KOTA"
-                    ? "bg-teal-50 text-teal-900 border border-teal-200"
-                    : "bg-emerald-50 text-emerald-900 border border-emerald-200"
+                    ? "bg-orange-50/70 text-orange-900 border border-orange-200/70"
+                    : "bg-stone-50 text-stone-900 border border-stone-200"
                 }`}>
                   Tingkat {currentOfficer.authorityLevel}
                 </span>
@@ -223,7 +228,7 @@ export default function OfficerDashboard({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onSwitchToMap}
-            className="px-3 py-1.5 rounded-[5px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
           >
             <Eye className="w-3.5 h-3.5 text-orange-700" />
             <span>Pratinjau Peta Publik</span>
@@ -231,7 +236,7 @@ export default function OfficerDashboard({
           {onLogout && (
             <button
               onClick={onLogout}
-              className="px-3 py-1.5 rounded-[5px] bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Keluar dari sesi verifikator dinas"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-600" />
@@ -249,7 +254,7 @@ export default function OfficerDashboard({
               <HardHat className="w-3.5 h-3.5 text-orange-700" />
               <span>Panel Operasional Disposisi & Verifikasi Bukti Fisik</span>
             </span>
-            <span className="px-2 py-0.5 rounded-[5px] bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-semibold font-sans">
+            <span className="px-2 py-0.5 rounded-[5px] bg-amber-50 text-amber-900 border border-amber-200 text-[10px] font-semibold font-sans">
               Kepatuhan UU No. 25/2009 (SLA 14 Hari)
             </span>
           </div>
@@ -264,7 +269,7 @@ export default function OfficerDashboard({
         <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs shrink-0 font-sans space-y-1">
           <div className="text-[10px] text-slate-400 uppercase">Instansi Aktif:</div>
           <div className="font-bold text-slate-900">{currentOfficer?.institution || "BBPJN • DBMPR • PUPR"}</div>
-          <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 font-sans">
+          <div className="text-[10px] text-orange-800 font-semibold flex items-center gap-1 font-sans">
             <Check className="w-3 h-3" />
             <span>Kewenangan Disposisi Sah</span>
           </div>
@@ -273,12 +278,12 @@ export default function OfficerDashboard({
 
       {/* Success Notification Banner */}
       {isSuccessToast && (
-        <div className="p-4 rounded-[5px] bg-emerald-50 border border-emerald-300 text-emerald-900 flex items-center justify-between animate-fade-in shadow-xs">
+        <div className="p-4 rounded-[5px] bg-orange-50 border border-orange-200/90 text-orange-950 flex items-center justify-between animate-fade-in shadow-2xs">
           <div className="flex items-center gap-2.5 text-xs font-semibold font-sans">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-orange-600" />
             <span>Pembaruan status & dokumentasi bukti pengerjaan berhasil disinkronkan ke peta publik!</span>
           </div>
-          <span className="text-[11px] font-sans font-medium text-emerald-700">Audit Trail Terverifikasi</span>
+          <span className="text-[11px] font-sans font-medium text-orange-800">Audit Trail Terverifikasi</span>
         </div>
       )}
 
@@ -329,13 +334,13 @@ export default function OfficerDashboard({
           onClick={() => setSelectedStatusFilter("COMPLETED")}
           className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
             selectedStatusFilter === "COMPLETED"
-              ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20"
+              ? "bg-orange-50 border-orange-400 ring-2 ring-orange-400/20"
               : "bg-white border-slate-200 hover:border-slate-300"
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai (+Foto Bukti)</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Selesai (+Foto Bukti)</span>
+            <CheckCircle2 className="w-4 h-4 text-orange-600" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.completed}</span>
@@ -477,7 +482,7 @@ export default function OfficerDashboard({
                     isOverdue
                       ? "border-rose-300 border-l-4 border-l-rose-600 shadow-xs"
                       : isDone
-                      ? "border-emerald-300 border-l-4 border-l-emerald-600 shadow-xs"
+                      ? "border-orange-300 border-l-4 border-l-orange-600 shadow-xs"
                       : isInProgress
                       ? "border-orange-300 border-l-4 border-l-orange-500 shadow-xs"
                       : "border-amber-300 border-l-4 border-l-amber-500 shadow-xs"
@@ -499,7 +504,7 @@ export default function OfficerDashboard({
                         </span>
 
                         {report.proofPhotoUrl && (
-                          <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded-[3px] text-[9px] font-bold bg-emerald-600 text-white shadow-xs">
+                          <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded-[3px] text-[9px] font-bold bg-orange-600 text-white shadow-xs">
                             ✓ Ada Bukti Selesai
                           </span>
                         )}
@@ -519,7 +524,7 @@ export default function OfficerDashboard({
                             </span>
                           )}
                           {isDone && (
-                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-950 border border-orange-200/90 shadow-2xs">
                               PENANGANAN SELESAI
                             </span>
                           )}
@@ -620,7 +625,7 @@ export default function OfficerDashboard({
                           </span>
                         </div>
                         <div className="space-y-1">
-                          <div className="h-24 rounded-[5px] overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
+                          <div className="h-24 rounded-[5px] overflow-hidden border border-orange-400 ring-2 ring-orange-400/20 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={report.proofPhotoUrl}
@@ -628,7 +633,7 @@ export default function OfficerDashboard({
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-[10px] font-bold text-emerald-700 block text-center">
+                          <span className="text-[10px] font-bold text-orange-800 block text-center">
                             AFTER: Hasil Pengerjaan Dinas
                           </span>
                         </div>
@@ -709,12 +714,12 @@ export default function OfficerDashboard({
                     onClick={() => setTargetStatus("SELESAI")}
                     className={`p-3 rounded-[5px] border text-left transition-all cursor-pointer ${
                       targetStatus === "SELESAI"
-                        ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20 text-emerald-900"
+                        ? "bg-orange-50 border-orange-400 ring-2 ring-orange-400/20 text-orange-950"
                         : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
                     }`}
                   >
                     <div className="font-bold flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-orange-600" />
                       <span>Penanganan Selesai Diperbaiki</span>
                     </div>
                     <p className="text-[11px] text-slate-500 mt-1">
@@ -785,7 +790,7 @@ export default function OfficerDashboard({
                       onClick={() => setProofPhotoUrl(proof.url)}
                       className={`px-2.5 py-1 rounded-[5px] shrink-0 border transition-all cursor-pointer ${
                         proofPhotoUrl === proof.url
-                          ? "bg-emerald-100 border-emerald-400 text-emerald-900 font-bold"
+                          ? "bg-orange-100 border-orange-400 text-orange-950 font-bold"
                           : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100"
                       }`}
                     >
@@ -811,10 +816,10 @@ export default function OfficerDashboard({
 
                   {/* After with Upload Button */}
                   <div className="space-y-1">
-                    <span className="text-[11px] font-bold text-emerald-800">
+                    <span className="text-[11px] font-bold text-orange-950">
                       Hasil Pengerjaan Dinas (AFTER)
                     </span>
-                    <div className="relative h-32 rounded-[5px] overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
+                    <div className="relative h-32 rounded-[5px] overflow-hidden border border-orange-400 ring-2 ring-orange-400/20 bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={proofPhotoUrl}
