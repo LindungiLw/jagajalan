@@ -15,47 +15,47 @@ export const AUTHORITY_COLORS = {
   NASIONAL: {
     label: "Jalan Nasional",
     responsibleAgency: "Kementerian Pekerjaan Umum (BBPJN)",
-    color: "#2563eb", // Royal Blue
-    badgeBg: "bg-blue-50",
-    badgeBorder: "border-blue-200",
-    badgeText: "text-blue-700",
-    ringColor: "ring-blue-500",
+    color: "#c2410c", // Safety Orange
+    badgeBg: "bg-orange-50",
+    badgeBorder: "border-orange-200",
+    badgeText: "text-orange-900",
+    ringColor: "ring-orange-500",
   },
   PROVINSI: {
     label: "Jalan Provinsi",
     responsibleAgency: "Dinas Bina Marga Provinsi",
-    color: "#7c3aed", // Vivid Purple / Violet
-    badgeBg: "bg-purple-50",
-    badgeBorder: "border-purple-200",
-    badgeText: "text-purple-700",
-    ringColor: "ring-purple-500",
+    color: "#d97706", // Amber
+    badgeBg: "bg-amber-50",
+    badgeBorder: "border-amber-200",
+    badgeText: "text-amber-900",
+    ringColor: "ring-amber-500",
   },
   KOTA: {
     label: "Jalan Kota",
     responsibleAgency: "Dinas PUPR Kota / Walikota",
-    color: "#0d9488", // Teal
-    badgeBg: "bg-teal-50",
-    badgeBorder: "border-teal-200",
-    badgeText: "text-teal-800",
-    ringColor: "ring-teal-500",
+    color: "#ea580c", // Warm Orange
+    badgeBg: "bg-orange-50/70",
+    badgeBorder: "border-orange-200/70",
+    badgeText: "text-orange-950",
+    ringColor: "ring-orange-400",
   },
   KABUPATEN: {
     label: "Jalan Kabupaten",
     responsibleAgency: "Dinas PUPR Kabupaten / Bupati",
-    color: "#059669", // Emerald
-    badgeBg: "bg-emerald-50",
-    badgeBorder: "border-emerald-200",
-    badgeText: "text-emerald-800",
-    ringColor: "ring-emerald-500",
+    color: "#78716c", // Stone
+    badgeBg: "bg-stone-50",
+    badgeBorder: "border-stone-200",
+    badgeText: "text-stone-900",
+    ringColor: "ring-stone-400",
   },
   KOTA_KAB: {
     label: "Jalan Kota / Kabupaten",
     responsibleAgency: "Dinas PUPR Daerah",
-    color: "#0d9488", // Teal
-    badgeBg: "bg-teal-50",
-    badgeBorder: "border-teal-200",
-    badgeText: "text-teal-700",
-    ringColor: "ring-teal-500",
+    color: "#b45309", // Warm Amber
+    badgeBg: "bg-amber-50/70",
+    badgeBorder: "border-amber-200/70",
+    badgeText: "text-amber-950",
+    ringColor: "ring-amber-400",
   },
 };
 
@@ -67,11 +67,11 @@ export const REPORT_STATUS = {
   },
   DALAM_PENGERJAAN: {
     label: "Dalam Penanganan Fisik",
-    badgeBg: "bg-sky-50 text-sky-800 border-sky-200",
+    badgeBg: "bg-orange-50 text-orange-800 border-orange-200",
   },
   SELESAI: {
     label: "Penanganan Selesai",
-    badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
+    badgeBg: "bg-orange-50/90 text-orange-950 border-orange-200/90",
   },
   OVERDUE: {
     label: "Terlambat Menanggapi (>14 Hari)",
@@ -83,17 +83,17 @@ export const REPORT_STATUS = {
 export const BUDGET_MATCH_CONFIDENCE = {
   TERKONFIRMASI: {
     label: "Terkonfirmasi",
-    badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    badgeBg: "bg-orange-50/90 text-orange-950 border-orange-200/90",
     desc: "Paket lelang LPSE terverifikasi spesifik pada ruas jalan ini.",
   },
   PARSIAL: {
     label: "Pencocokan Parsial",
-    badgeBg: "bg-amber-50 text-amber-700 border-amber-200",
+    badgeBg: "bg-amber-50 text-amber-800 border-amber-200",
     desc: "Paket pemeliharaan koridor mencakup beberapa segmen ruas terkait.",
   },
   BELUM_DITEMUKAN: {
     label: "Belum Ditemukan",
-    badgeBg: "bg-slate-100 text-slate-600 border-slate-200",
+    badgeBg: "bg-slate-100 text-slate-700 border-slate-200",
     desc: "Belum terdata paket lelang APBD pemeliharaan periodik pada tahun anggaran berjalan.",
   },
 };

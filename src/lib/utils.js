@@ -71,5 +71,5 @@ export function getHazardScoreClass(score) {
   if (score >= 85) return "text-red-700 bg-red-50 border-red-200";
   if (score >= 70) return "text-orange-700 bg-orange-50 border-orange-200";
   if (score >= 50) return "text-amber-700 bg-amber-50 border-amber-200";
-  return "text-emerald-700 bg-emerald-50 border-emerald-200";
+  return "text-slate-700 bg-slate-100 border-slate-200";
 }

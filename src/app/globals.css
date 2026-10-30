@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
@@ -14,8 +15,12 @@
   --card-bg: #ffffff;
   --card-border: #e2e8f0;
   --accent-orange: #ea580c;
+  --accent-orange-hover: #c2410c;
   --accent-orange-light: #fff7ed;
   --accent-slate: #0f172a;
+  --authority-nasional: #2563eb;
+  --authority-provinsi: #7c3aed;
+  --authority-daerah: #0d9488;
 }
 
 body {
@@ -24,6 +29,7 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.011em;
 }
 
@@ -37,49 +43,53 @@ table, .tabular-nums, [data-metric] {
   font-variant-numeric: tabular-nums;
 }
 
-/* Minimal Dashboard Surface Classes with Glassmorphism ("Bening") */
+/* Modern Civic Surface System (Replacing Generic AI Flat Boxes) */
 .dashboard-card {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(226, 232, 240, 0.85);
-  border-radius: 5px !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  border-radius: 1rem; /* 16px natural curve */
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dashboard-card-hover {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dashboard-card-hover:hover {
   background: rgba(255, 255, 255, 0.98);
-  border-color: rgba(203, 213, 225, 0.95);
-  box-shadow: 0 8px 22px -4px rgba(15, 23, 42, 0.06);
-  transform: translateY(-1px);
+  border-color: rgba(203, 213, 225, 1);
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.07), 0 4px 8px -4px rgba(15, 23, 42, 0.03);
+  transform: translateY(-1.5px);
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  border-radius: 5px !important;
+  border-radius: 1rem;
   box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.04);
 }
 
-/* Enforce crisp 5px border-radius across cards, panels, and modals (avoid round/melengkung) */
-.rounded-3xl,
-.rounded-2xl,
-.rounded-xl,
-.rounded-lg,
-.rounded-md {
-  border-radius: 5px !important;
+/* Soft Pill Badge Utility */
+.civic-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
 }
 
 /* Custom Scrollbar for Light Mode */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -89,6 +99,7 @@ table, .tabular-nums, [data-metric] {
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
+  border: 2px solid #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -99,7 +110,7 @@ table, .tabular-nums, [data-metric] {
 .leaflet-container {
   background: #f1f5f9 !important;
   font-family: inherit !important;
-  border-radius: 5px !important;
+  border-radius: 0.75rem !important;
   z-index: 10;
 }
 
@@ -107,10 +118,22 @@ table, .tabular-nums, [data-metric] {
   background: #ffffff !important;
   color: #0f172a !important;
   border: 1px solid #e2e8f0 !important;
-  border-radius: 5px !important;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06) !important;
+  border-radius: 0.875rem !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+  padding: 0 !important;
+  overflow: hidden;
 }
 
 .leaflet-popup-tip {
   background: #ffffff !important;
+}
+
+/* Focus Ring Accessibility */
+.focus-ring {
+  outline: none;
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(234, 88, 12, 0.35);
 }
