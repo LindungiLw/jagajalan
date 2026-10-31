@@ -380,9 +380,9 @@ export default function MapExplorer({
       )}
 
       {/* 2. Top-Left Unified GIS Command Toolbar */}
-      <div className="absolute top-3 left-3 z-[500] flex flex-col gap-1.5 max-w-[calc(100vw-24px)] lg:max-w-3xl pointer-events-auto font-sans">
+      <div className="absolute top-3 left-3 z-[500] flex flex-col gap-1.5 max-w-[calc(100vw-24px)] pointer-events-auto font-sans">
         {/* Main Floating Control Bar */}
-        <div className="flex items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 flex-wrap sm:flex-nowrap">
+        <div className="w-fit max-w-full flex items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90">
           {/* Interactive Region & Province Dropdown */}
           <div className="relative inline-block font-sans shrink-0">
             <button
@@ -523,7 +523,7 @@ export default function MapExplorer({
           <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
 
           {/* Search Bar */}
-          <div className="relative flex-1 min-w-[140px] sm:min-w-[190px] h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-lg border border-slate-200/60 font-sans transition-all">
+          <div className="relative w-36 sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-lg border border-slate-200/60 font-sans transition-all shrink-0">
             <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <input
               type="text"
