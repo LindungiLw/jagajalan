@@ -249,20 +249,32 @@ export default function MapInner({
 
       {/* Road Segment Polylines */}
       {roads.map((road) => {
-        let color = "#ea580c"; // Kota: Warm Orange
-        let badgeBg = "bg-orange-50/70 text-orange-900 border-orange-200/70";
+        // Distinct, high-contrast, user-friendly palette matching the platform design
+        let color = "#0d9488"; // Kota: Ocean Teal
+        let hoverColor = "#0f766e";
+        let badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
+        let popupBtnBg = "bg-teal-600 hover:bg-teal-700";
+
         if (road.authority === "NASIONAL") {
-          color = "#c2410c"; // Nasional: Safety Orange
-          badgeBg = "bg-orange-50 text-orange-950 border-orange-200";
+          color = "#2563eb"; // Nasional: Royal Blue (KemenPU)
+          hoverColor = "#1d4ed8";
+          badgeBg = "bg-blue-50 text-blue-800 border-blue-200";
+          popupBtnBg = "bg-blue-600 hover:bg-blue-700";
         } else if (road.authority === "PROVINSI") {
-          color = "#d97706"; // Provinsi: Amber
-          badgeBg = "bg-amber-50 text-amber-950 border-amber-200";
+          color = "#9333ea"; // Provinsi: Royal Purple (Bina Marga Pemprov)
+          hoverColor = "#7e22ce";
+          badgeBg = "bg-purple-50 text-purple-800 border-purple-200";
+          popupBtnBg = "bg-purple-600 hover:bg-purple-700";
         } else if (road.authority === "KABUPATEN") {
-          color = "#78716c"; // Kabupaten: Stone
-          badgeBg = "bg-stone-50 text-stone-900 border-stone-200";
+          color = "#059669"; // Kabupaten: Deep Emerald (Dinas PUPR Pemkab)
+          hoverColor = "#047857";
+          badgeBg = "bg-emerald-50 text-emerald-800 border-emerald-200";
+          popupBtnBg = "bg-emerald-600 hover:bg-emerald-700";
         } else if (road.authority === "KOTA") {
-          color = "#ea580c"; // Kota: Warm Orange
-          badgeBg = "bg-orange-50/70 text-orange-900 border-orange-200/70";
+          color = "#0d9488"; // Kota: Ocean Teal (Dinas PU Pemkot)
+          hoverColor = "#0f766e";
+          badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
+          popupBtnBg = "bg-teal-600 hover:bg-teal-700";
         }
 
         const isSelected = selectedRoad?.id === road.id;
@@ -274,7 +286,7 @@ export default function MapInner({
               positions={road.coordinates}
               pathOptions={{
                 color: "transparent",
-                weight: 18,
+                weight: 20,
                 opacity: 0,
               }}
               eventHandlers={{
@@ -282,25 +294,67 @@ export default function MapInner({
               }}
             />
 
+            {/* Selected High-Contrast Glow / Outline Casing */}
+            {isSelected && (
+              <>
+                <Polyline
+                  positions={road.coordinates}
+                  pathOptions={{
+                    color: "#0f172a",
+                    weight: 10,
+                    opacity: 0.35,
+                    lineCap: "round",
+                    lineJoin: "round",
+                  }}
+                />
+                <Polyline
+                  positions={road.coordinates}
+                  pathOptions={{
+                    color: "#ffffff",
+                    weight: 8,
+                    opacity: 0.95,
+                    lineCap: "round",
+                    lineJoin: "round",
+                  }}
+                />
+              </>
+            )}
+
             {/* Visual polyline */}
             <Polyline
               positions={road.coordinates}
               pathOptions={{
-                color: isSelected ? "#ea580c" : color,
-                weight: isSelected ? 7 : 5,
-                opacity: isSelected ? 1 : 0.85,
+                color: color,
+                weight: isSelected ? 5.5 : 4.5,
+                opacity: isSelected ? 1 : 0.9,
                 dashArray: road.condition === "RUSAK_BERAT" ? "6, 6" : undefined,
+                lineCap: "round",
+                lineJoin: "round",
               }}
               eventHandlers={{
                 click: () => onSelectRoad(road),
               }}
             >
               <Tooltip sticky>
-                <div className="font-sans text-xs">
-                  <div className="font-bold text-slate-900">{road.name}</div>
-                  <div className="text-[10px] text-slate-500 font-medium">
-                    {road.authorityLabel} • PIC: {road.leadership?.regionalHead}
+                <div className="font-sans text-xs p-0.5">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs"
+                      style={{ backgroundColor: color }}
+                    />
+                    <span>{road.name}</span>
                   </div>
+                  <div className="text-[10px] text-slate-500 font-medium mt-0.5 flex items-center gap-1.5">
+                    <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold border ${badgeBg}`}>
+                      {road.authority}
+                    </span>
+                    <span>• {road.district || road.provinceName} • {road.lengthKm} KM</span>
+                  </div>
+                  {road.leadership?.regionalHead && (
+                    <div className="text-[9.5px] text-slate-600 font-semibold mt-1">
+                      PIC: {road.leadership.regionalHead}
+                    </div>
+                  )}
                 </div>
               </Tooltip>
 
@@ -360,7 +414,7 @@ export default function MapInner({
 
                   <button
                     onClick={() => onSelectRoad(road)}
-                    className="w-full py-1.5 px-2 rounded-[5px] text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 text-center transition-colors cursor-pointer block"
+                    className={`w-full py-1.5 px-2 rounded-[5px] text-[10px] font-bold text-white ${popupBtnBg} text-center transition-colors cursor-pointer block`}
                   >
                     Buka Detail Lengkap di Panel →
                   </button>

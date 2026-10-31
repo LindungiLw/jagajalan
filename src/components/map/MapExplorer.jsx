@@ -551,14 +551,38 @@ export default function MapExplorer({
               }}
               className={`px-2.5 py-1.5 rounded-[4px] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer font-sans ${
                 authorityFilter !== "ALL"
-                  ? "bg-orange-50 text-orange-900 border border-orange-200"
+                  ? authorityFilter === "NASIONAL"
+                    ? "bg-blue-50 text-blue-900 border border-blue-200"
+                    : authorityFilter === "PROVINSI"
+                    ? "bg-purple-50 text-purple-900 border border-purple-200"
+                    : authorityFilter === "KOTA"
+                    ? "bg-teal-50 text-teal-900 border border-teal-200"
+                    : "bg-emerald-50 text-emerald-900 border border-emerald-200"
                   : "text-slate-700 hover:bg-slate-50"
               }`}
             >
-              <Shield className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+              <Shield className={`w-3.5 h-3.5 shrink-0 ${
+                authorityFilter === "NASIONAL"
+                  ? "text-blue-600"
+                  : authorityFilter === "PROVINSI"
+                  ? "text-purple-600"
+                  : authorityFilter === "KOTA"
+                  ? "text-teal-600"
+                  : authorityFilter === "KABUPATEN"
+                  ? "text-emerald-600"
+                  : "text-[#c2410c]"
+              }`} />
               <span>{authorityFilterLabel}</span>
               {authorityFilter !== "ALL" && (
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />
+                <span className={`w-1.5 h-1.5 rounded-full ${
+                  authorityFilter === "NASIONAL"
+                    ? "bg-blue-600"
+                    : authorityFilter === "PROVINSI"
+                    ? "bg-purple-600"
+                    : authorityFilter === "KOTA"
+                    ? "bg-teal-600"
+                    : "bg-emerald-600"
+                }`} />
               )}
               <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
             </button>
@@ -591,8 +615,8 @@ export default function MapExplorer({
                     setAuthorityFilter("NASIONAL");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer ${
-                    authorityFilter === "NASIONAL" ? "font-bold text-blue-700 bg-blue-50/60" : ""
+                  className={`w-full text-left px-3.5 py-2 hover:bg-blue-50/60 flex items-center justify-between cursor-pointer ${
+                    authorityFilter === "NASIONAL" ? "font-bold text-blue-700 bg-blue-50" : ""
                   }`}
                 >
                   <span className="flex items-center gap-2">
@@ -608,13 +632,13 @@ export default function MapExplorer({
                     setAuthorityFilter("PROVINSI");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer ${
-                    authorityFilter === "PROVINSI" ? "font-bold text-purple-700 bg-purple-50/60" : ""
+                  className={`w-full text-left px-3.5 py-2 hover:bg-purple-50/60 flex items-center justify-between cursor-pointer ${
+                    authorityFilter === "PROVINSI" ? "font-bold text-purple-700 bg-purple-50" : ""
                   }`}
                 >
                   <span className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
-                    <span>Jalan Provinsi (Bina Marga)</span>
+                    <span>Jalan Provinsi (Pemprov)</span>
                   </span>
                   <span className="text-[10px] bg-purple-100 text-purple-800 font-bold px-1.5 py-0.2 rounded font-sans tabular-nums">
                     {roadCounts.PROVINSI}
@@ -625,15 +649,15 @@ export default function MapExplorer({
                     setAuthorityFilter("KOTA");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer ${
-                    authorityFilter === "KOTA" ? "font-bold text-orange-700 bg-orange-50/60" : ""
+                  className={`w-full text-left px-3.5 py-2 hover:bg-teal-50/60 flex items-center justify-between cursor-pointer ${
+                    authorityFilter === "KOTA" ? "font-bold text-teal-700 bg-teal-50" : ""
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
                     <span>Jalan Kota (Pemkot)</span>
                   </span>
-                  <span className="text-[10px] bg-orange-100 text-orange-800 font-bold px-1.5 py-0.2 rounded font-sans tabular-nums">
+                  <span className="text-[10px] bg-teal-100 text-teal-800 font-bold px-1.5 py-0.2 rounded font-sans tabular-nums">
                     {roadCounts.KOTA}
                   </span>
                 </button>
@@ -642,15 +666,15 @@ export default function MapExplorer({
                     setAuthorityFilter("KABUPATEN");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between cursor-pointer ${
-                    authorityFilter === "KABUPATEN" ? "font-bold text-stone-700 bg-stone-50/60" : ""
+                  className={`w-full text-left px-3.5 py-2 hover:bg-emerald-50/60 flex items-center justify-between cursor-pointer ${
+                    authorityFilter === "KABUPATEN" ? "font-bold text-emerald-700 bg-emerald-50" : ""
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-stone-500" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
                     <span>Jalan Kabupaten (Pemkab)</span>
                   </span>
-                  <span className="text-[10px] bg-stone-100 text-stone-800 font-bold px-1.5 py-0.2 rounded font-sans tabular-nums">
+                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded font-sans tabular-nums">
                     {roadCounts.KABUPATEN}
                   </span>
                 </button>
@@ -813,90 +837,90 @@ export default function MapExplorer({
         </div>
       )}
 
-      {/* City Transparency Context Banner */}
-      {authorityFilter === "KOTA" && (
-        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-orange-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
-          <div className="flex items-start gap-2.5">
-            <div className="w-6 h-6 rounded-[5px] bg-orange-100 text-orange-800 flex items-center justify-center shrink-0 mt-0.5">
-              <Building2 className="w-3.5 h-3.5" />
-            </div>
-            <div className="space-y-1 text-left flex-1 min-w-0">
-              <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
-                <span>Jalan Kota Se-Indonesia</span>
-                <span className="text-[9px] font-sans tabular-nums font-bold bg-orange-50 text-orange-950 px-1.5 py-0.2 rounded-[4px] border border-orange-200 shadow-2xs">
-                  98 Pemkot
-                </span>
-              </div>
-              <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan: <strong className="text-orange-950 font-sans tabular-nums">~52.000 KM</strong> di bawah Walikota & Dinas PUPR Kota. Isu utama: Kerapatan drainase perkotaan, bekas galian pipa/kabel fiber utilitas, serta batas muatan MST 8-10 Ton.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Regency Transparency Context Banner */}
-      {authorityFilter === "KABUPATEN" && (
-        <div className="hidden sm:block absolute bottom-[142px] left-4 z-[500] max-w-sm bg-white/95 backdrop-blur-md rounded-[5px] shadow-lg border border-stone-200/90 p-3 animate-fade-in font-sans pointer-events-auto">
-          <div className="flex items-start gap-2.5">
-            <div className="w-6 h-6 rounded-[5px] bg-stone-100 text-stone-700 flex items-center justify-center shrink-0 mt-0.5">
-              <Building2 className="w-3.5 h-3.5" />
-            </div>
-            <div className="space-y-1 text-left flex-1 min-w-0">
-              <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
-                <span>Jalan Kabupaten Se-Indonesia</span>
-                <span className="text-[9px] font-sans tabular-nums font-bold bg-stone-50 text-stone-900 px-1.5 py-0.2 rounded-[4px] border border-stone-200 shadow-2xs">
-                  416 Pemkab & IJD
-                </span>
-              </div>
-              <p className="text-[10px] text-slate-600 leading-snug">
-                Total Jaringan: <strong className="text-stone-900 font-sans tabular-nums">~393.000 KM</strong> (tulang punggung konektivitas antar-kecamatan & sentra pangan). Dikelola Dinas PUPR Kabupaten dan didukung Inpres Jalan Daerah (IJD) Kementerian PU.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* 3. Bottom-Left Stack: Zoom Controls, Context Banners & Map Legend */}
-      <div className="absolute bottom-3 left-3 z-[500] flex flex-col gap-2 pointer-events-none font-sans max-w-[280px]">
-        {/* Provincial Transparency Context Banner */}
-        {authorityFilter === "PROVINSI" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-amber-200/90 p-2.5 animate-fade-in pointer-events-auto">
+      <div className="absolute bottom-5 left-12 sm:left-14 z-[500] flex flex-col gap-2 pointer-events-none font-sans max-w-[290px]">
+        {/* National Transparency Context Banner */}
+        {authorityFilter === "NASIONAL" && (
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-blue-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-[4px] bg-blue-100 text-blue-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
                 <div className="text-[10.5px] font-bold text-slate-900 flex items-center justify-between">
-                  <span>Jalan Provinsi</span>
-                  <span className="text-[8.5px] font-sans tabular-nums font-bold bg-amber-50 text-amber-950 px-1 py-0.2 rounded border border-amber-200 shadow-2xs">
-                    38 Pemprov
+                  <span>Jalan Arteri Nasional</span>
+                  <span className="text-[8.5px] font-sans font-bold bg-blue-50 text-blue-950 px-1 py-0.2 rounded border border-blue-200 shadow-2xs">
+                    KemenPU
                   </span>
                 </div>
                 <p className="text-[9.5px] text-slate-600 leading-tight">
-                  <strong className="text-amber-950 font-sans tabular-nums">54.544 KM</strong> jaringan resmi di bawah kewenangan Pemprov.
+                  <strong className="text-blue-950 font-sans tabular-nums">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022.
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* National Transparency Context Banner */}
-        {authorityFilter === "NASIONAL" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-orange-200/90 p-2.5 animate-fade-in pointer-events-auto">
+        {/* Provincial Transparency Context Banner */}
+        {authorityFilter === "PROVINSI" && (
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-purple-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-orange-100 text-orange-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-[4px] bg-purple-100 text-purple-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
                 <div className="text-[10.5px] font-bold text-slate-900 flex items-center justify-between">
-                  <span>Jalan Arteri Nasional</span>
-                  <span className="text-[8.5px] font-sans font-bold bg-orange-50 text-orange-950 px-1 py-0.2 rounded border border-orange-200 shadow-2xs">
-                    KemenPU
+                  <span>Jalan Provinsi</span>
+                  <span className="text-[8.5px] font-sans tabular-nums font-bold bg-purple-50 text-purple-950 px-1 py-0.2 rounded border border-purple-200 shadow-2xs">
+                    38 Pemprov
                   </span>
                 </div>
                 <p className="text-[9.5px] text-slate-600 leading-tight">
-                  <strong className="text-orange-950 font-sans tabular-nums">47.017 KM</strong> di bawah SK MenPUPR No. 1688/2022.
+                  <strong className="text-purple-950 font-sans tabular-nums">54.544 KM</strong> jaringan resmi di bawah kewenangan Pemprov.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* City Transparency Context Banner */}
+        {authorityFilter === "KOTA" && (
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-teal-200/90 p-2.5 animate-fade-in pointer-events-auto">
+            <div className="flex items-start gap-2">
+              <div className="w-5 h-5 rounded-[4px] bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 mt-0.5">
+                <Building2 className="w-3 h-3" />
+              </div>
+              <div className="space-y-0.5 text-left flex-1 min-w-0">
+                <div className="text-[10.5px] font-bold text-slate-900 flex items-center justify-between">
+                  <span>Jalan Kota Se-Indonesia</span>
+                  <span className="text-[8.5px] font-sans tabular-nums font-bold bg-teal-50 text-teal-950 px-1 py-0.2 rounded border border-teal-200 shadow-2xs">
+                    98 Pemkot
+                  </span>
+                </div>
+                <p className="text-[9.5px] text-slate-600 leading-tight">
+                  <strong className="text-teal-950 font-sans tabular-nums">~52.000 KM</strong> di bawah Walikota &amp; Dinas PUPR Kota.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Regency Transparency Context Banner */}
+        {authorityFilter === "KABUPATEN" && (
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-emerald-200/90 p-2.5 animate-fade-in pointer-events-auto">
+            <div className="flex items-start gap-2">
+              <div className="w-5 h-5 rounded-[4px] bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                <Building2 className="w-3 h-3" />
+              </div>
+              <div className="space-y-0.5 text-left flex-1 min-w-0">
+                <div className="text-[10.5px] font-bold text-slate-900 flex items-center justify-between">
+                  <span>Jalan Kabupaten</span>
+                  <span className="text-[8.5px] font-sans tabular-nums font-bold bg-emerald-50 text-emerald-950 px-1 py-0.2 rounded border border-emerald-200 shadow-2xs">
+                    416 Pemkab &amp; IJD
+                  </span>
+                </div>
+                <p className="text-[9.5px] text-slate-600 leading-tight">
+                  <strong className="text-emerald-950 font-sans tabular-nums">~393.000 KM</strong> tulang punggung konektivitas &amp; sentra pangan.
                 </p>
               </div>
             </div>
@@ -931,29 +955,104 @@ export default function MapExplorer({
 
         {/* Bottom-Left Floating Legend */}
         <div className="hidden sm:block pointer-events-auto">
-          <div className="bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-2.5 text-[10.5px] space-y-1.5 min-w-[175px]">
-            <div className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider pb-0.5">
-              Kewenangan Ruas
+          <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-slate-200/90 p-3 text-[11px] space-y-1.5 min-w-[205px]">
+            <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+              <span className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">
+                Kewenangan Ruas
+              </span>
+              <span className="text-[8.5px] text-slate-400 font-medium">Klik untuk filter</span>
             </div>
-            <div className="flex items-center gap-2 font-medium text-slate-700 text-[10px]">
-              <span className="w-4 h-1.5 rounded-[2px] bg-blue-600" />
-              <span>Jalan Nasional (KemenPU)</span>
-            </div>
-            <div className="flex items-center gap-2 font-medium text-slate-700 text-[10px]">
-              <span className="w-4 h-1.5 rounded-[2px] bg-purple-600" />
-              <span>Jalan Provinsi (Pemprov)</span>
-            </div>
-            <div className="flex items-center gap-2 font-medium text-slate-700 text-[10px]">
-              <span className="w-4 h-1.5 rounded-[2px] bg-teal-600" />
-              <span>Jalan Kota (Pemkot)</span>
-            </div>
-            <div className="flex items-center gap-2 font-medium text-slate-700 text-[10px]">
-              <span className="w-4 h-1.5 rounded-[2px] bg-emerald-600" />
-              <span>Jalan Kabupaten (Pemkab)</span>
-            </div>
+
+            {/* Nasional */}
+            <button
+              onClick={() => setAuthorityFilter(authorityFilter === "NASIONAL" ? "ALL" : "NASIONAL")}
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+                authorityFilter === "NASIONAL"
+                  ? "bg-blue-50 text-blue-900 font-bold border border-blue-200 shadow-2xs"
+                  : "text-slate-700 hover:bg-slate-50 font-medium"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-3.5 h-1.5 rounded-[2px] bg-blue-600 shadow-2xs shrink-0" />
+                <span>Jalan Nasional (KemenPU)</span>
+              </span>
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+                authorityFilter === "NASIONAL" ? "bg-blue-100 text-blue-800" : "bg-slate-100 text-slate-600"
+              }`}>
+                {roadCounts.NASIONAL}
+              </span>
+            </button>
+
+            {/* Provinsi */}
+            <button
+              onClick={() => setAuthorityFilter(authorityFilter === "PROVINSI" ? "ALL" : "PROVINSI")}
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+                authorityFilter === "PROVINSI"
+                  ? "bg-purple-50 text-purple-900 font-bold border border-purple-200 shadow-2xs"
+                  : "text-slate-700 hover:bg-slate-50 font-medium"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-3.5 h-1.5 rounded-[2px] bg-purple-600 shadow-2xs shrink-0" />
+                <span>Jalan Provinsi (Pemprov)</span>
+              </span>
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+                authorityFilter === "PROVINSI" ? "bg-purple-100 text-purple-800" : "bg-slate-100 text-slate-600"
+              }`}>
+                {roadCounts.PROVINSI}
+              </span>
+            </button>
+
+            {/* Kota */}
+            <button
+              onClick={() => setAuthorityFilter(authorityFilter === "KOTA" ? "ALL" : "KOTA")}
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+                authorityFilter === "KOTA"
+                  ? "bg-teal-50 text-teal-900 font-bold border border-teal-200 shadow-2xs"
+                  : "text-slate-700 hover:bg-slate-50 font-medium"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-3.5 h-1.5 rounded-[2px] bg-teal-600 shadow-2xs shrink-0" />
+                <span>Jalan Kota (Pemkot)</span>
+              </span>
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+                authorityFilter === "KOTA" ? "bg-teal-100 text-teal-800" : "bg-slate-100 text-slate-600"
+              }`}>
+                {roadCounts.KOTA}
+              </span>
+            </button>
+
+            {/* Kabupaten */}
+            <button
+              onClick={() => setAuthorityFilter(authorityFilter === "KABUPATEN" ? "ALL" : "KABUPATEN")}
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+                authorityFilter === "KABUPATEN"
+                  ? "bg-emerald-50 text-emerald-900 font-bold border border-emerald-200 shadow-2xs"
+                  : "text-slate-700 hover:bg-slate-50 font-medium"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-3.5 h-1.5 rounded-[2px] bg-emerald-600 shadow-2xs shrink-0" />
+                <span>Jalan Kabupaten (Pemkab)</span>
+              </span>
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+                authorityFilter === "KABUPATEN" ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600"
+              }`}>
+                {roadCounts.KABUPATEN}
+              </span>
+            </button>
           </div>
-          <div className="text-[9px] text-slate-500 font-medium pl-1 pt-1">
-            © OpenStreetMap • SIGI PU
+          <div className="text-[9.5px] text-slate-500 font-medium pl-1 pt-1 flex items-center justify-between">
+            <span>© OpenStreetMap • SIGI PU</span>
+            {authorityFilter !== "ALL" && (
+              <button
+                onClick={() => setAuthorityFilter("ALL")}
+                className="text-[9px] text-[#c2410c] hover:underline font-bold cursor-pointer"
+              >
+                Tampilkan Semua
+              </button>
+            )}
           </div>
         </div>
       </div>

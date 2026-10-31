@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost", "127.0.0.1:3000", "localhost:3000"],
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
+  },
   /* config options here */
   turbopack: {
     rules: {

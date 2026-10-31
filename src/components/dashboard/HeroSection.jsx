@@ -1842,22 +1842,22 @@ export default function HeroSection({
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           {road.authority === "NASIONAL" ? (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/90">
-                              <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                               <span>Jalan Nasional</span>
                             </span>
                           ) : road.authority === "PROVINSI" ? (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/90">
-                              <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-600 shrink-0" />
                               <span>Jalan Provinsi</span>
                             </span>
                           ) : road.authority === "KOTA" ? (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/90">
-                              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-teal-600 shrink-0" />
                               <span>Jalan Kota</span>
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/90">
-                              <span className="w-1.5 h-1.5 rounded-full bg-stone-500 shrink-0" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
                               <span>Jalan Kabupaten</span>
                             </span>
                           )}
