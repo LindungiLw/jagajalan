@@ -41,6 +41,9 @@ export default function Navbar({
             <img
               src="/logo/logo.png"
               alt="Logo JagaJalan"
+              width={32}
+              height={32}
+              style={{ width: "32px", height: "32px", maxWidth: "32px", maxHeight: "32px" }}
               className="w-8 h-8 object-contain shrink-0 transition-transform duration-200 group-hover:scale-105"
             />
             <div className="flex items-center">
@@ -48,6 +51,8 @@ export default function Navbar({
               <img
                 src="/logo/logo-name.png"
                 alt="JagaJalan"
+                height={21}
+                style={{ height: "21px", width: "auto", maxHeight: "21px" }}
                 className="h-[21px] w-auto object-contain object-left block"
               />
             </div>
@@ -72,6 +77,9 @@ export default function Navbar({
                   <img
                     src={item.icon}
                     alt=""
+                    width={16}
+                    height={16}
+                    style={{ width: "16px", height: "16px" }}
                     className={`w-4 h-4 object-contain shrink-0 transition-all duration-200 group-hover:scale-110 ${
                       isActive ? "opacity-100" : "opacity-70 group-hover:opacity-100"
                     }`}
@@ -94,7 +102,14 @@ export default function Navbar({
               onClick={onOpenReportModal}
               className="inline-flex items-center gap-1.5 px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-sm hover:shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-[0.98] ring-1 ring-orange-500/30"
             >
-              <img src="/icon/plus_icon.png" alt="" className="w-4 h-4 object-contain shrink-0" />
+              <img
+                src="/icon/plus_icon.png"
+                alt=""
+                width={16}
+                height={16}
+                style={{ width: "16px", height: "16px" }}
+                className="w-4 h-4 object-contain shrink-0"
+              />
               <span>Laporkan Kerusakan</span>
             </button>
 
@@ -130,6 +145,9 @@ export default function Navbar({
                   <img
                     src={item.icon}
                     alt=""
+                    width={20}
+                    height={20}
+                    style={{ width: "20px", height: "20px" }}
                     className="w-5 h-5 object-contain shrink-0"
                   />
                   <span className="flex-1">{item.label}</span>

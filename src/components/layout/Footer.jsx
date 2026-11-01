@@ -24,6 +24,8 @@ export default function Footer({ onSelectTab }) {
               <img
                 src="/logo/full-logo.png"
                 alt="JagaJalan"
+                height={32}
+                style={{ height: "32px", width: "auto", maxHeight: "32px" }}
                 className="h-8 w-auto object-contain cursor-pointer"
                 onClick={() => handleNav("beranda")}
               />

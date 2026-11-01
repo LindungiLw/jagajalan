@@ -1,5 +1,6 @@
 
 @import "tailwindcss";
+@source "../";
 @import "leaflet/dist/leaflet.css";
 
 @theme {
