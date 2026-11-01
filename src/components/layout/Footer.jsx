@@ -1,105 +1,187 @@
 "use client";
 
 import React from "react";
-import { Shield, ExternalLink, Award, Database, Scale } from "lucide-react";
 
 export default function Footer({ onSelectTab }) {
+  const handleNav = (tabId) => {
+    if (onSelectTab) {
+      onSelectTab(tabId);
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  };
+
   return (
-    <footer className="bg-white border-t border-slate-200 mt-16 text-xs text-slate-500">
+    <footer className="bg-white border-t border-slate-200 mt-16 text-slate-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand Info */}
-          <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-slate-100">
+          {/* Column 1: Brand & Deskripsi */}
+          <div className="lg:col-span-4 space-y-3">
+            <div className="flex items-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo/full-logo.png"
-                alt="JagaJalan - Jalan Terpantau, Publik Terberdaya"
-                className="h-9 w-auto object-contain"
+                alt="JagaJalan"
+                className="h-8 w-auto object-contain cursor-pointer"
+                onClick={() => handleNav("beranda")}
               />
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed max-w-md">
-              Prototipe Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan. 
-              Menghubungkan data geospasial resmi, penelusuran paket pengadaan LPSE, estimasi awal kondisi jalan berbantuan AI, dan pemantauan tenggat pelayanan publik.
+            <p className="text-xs text-slate-500 leading-relaxed font-sans max-w-sm">
+              Platform transparansi kewenangan jalan, pengawasan anggaran lelang proyek, dan kepastian tindak lanjut pengaduan publik berbasis data geospasial resmi.
             </p>
-            <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-500 font-medium">
-              <Shield className="w-3.5 h-3.5 text-orange-600" />
-              <span>Inisiatif Keterbukaan Informasi & Pengawasan Partisipatif Publik</span>
-            </div>
+            <p className="text-[11px] text-slate-400 font-sans">
+              Sesuai amanat UU KIP No. 14/2008 & UU Pelayanan Publik No. 25/2009.
+            </p>
           </div>
 
-          {/* Quick Nav */}
-          <div>
-            <h4 className="font-bold text-slate-900 uppercase tracking-wider text-[11px] mb-3">Fitur Platform</h4>
-            <ul className="space-y-2">
+          {/* Column 2: Modul & Navigasi */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="font-semibold text-slate-900 text-xs tracking-wider uppercase">
+              Modul & Navigasi
+            </h4>
+            <ul className="space-y-2 text-xs">
               <li>
-                <button onClick={() => onSelectTab("beranda")} className="hover:text-orange-600 transition-colors">
+                <button
+                  onClick={() => handleNav("beranda")}
+                  className="text-slate-600 hover:text-orange-600 transition-colors cursor-pointer text-left"
+                >
                   Ringkasan Krisis & Metrik
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab("peta")} className="hover:text-orange-600 transition-colors">
+                <button
+                  onClick={() => handleNav("peta")}
+                  className="text-slate-600 hover:text-orange-600 transition-colors cursor-pointer text-left"
+                >
                   Peta Transparansi Geospasial
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab("data-anggaran")} className="hover:text-orange-600 transition-colors">
-                  Keterbukaan Anggaran & LPSE
+                <button
+                  onClick={() => handleNav("data-anggaran")}
+                  className="text-slate-600 hover:text-orange-600 transition-colors cursor-pointer text-left"
+                >
+                  Anggaran Proyek & Audit LPSE
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab("nasional")} className="hover:text-orange-600 transition-colors">
-                  Peringkat 38 Provinsi (BPS)
+                <button
+                  onClick={() => handleNav("ombudsman")}
+                  className="text-slate-600 hover:text-orange-600 transition-colors cursor-pointer text-left"
+                >
+                  Lacak Laporan & Draf Ombudsman
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab("ombudsman")} className="hover:text-orange-600 transition-colors">
-                  Kawal SLA & Draf Ombudsman
+                <button
+                  onClick={() => handleNav("nasional")}
+                  className="text-slate-600 hover:text-orange-600 transition-colors cursor-pointer text-left"
+                >
+                  Statistik Kemantapan 38 Provinsi
                 </button>
               </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Sumber Data Resmi */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="font-semibold text-slate-900 text-xs tracking-wider uppercase">
+              Sumber Data Resmi
+            </h4>
+            <ul className="space-y-2 text-xs">
               <li>
-                <a href="/admin" className="hover:text-orange-600 transition-colors text-slate-400 text-[11px]">
-                  Akses Petugas (/admin)
+                <a
+                  href="https://data.pu.go.id"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-600 hover:text-orange-600 transition-colors block"
+                >
+                  Satu Data Kementerian PU
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://sirusa.bps.go.id"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-600 hover:text-orange-600 transition-colors block"
+                >
+                  BPS SIRUSA (Statistik Jalan)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://ombudsman.go.id"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-600 hover:text-orange-600 transition-colors block"
+                >
+                  Ombudsman Republik Indonesia
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://inaproc.id"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-600 hover:text-orange-600 transition-colors block"
+                >
+                  LKPP LPSE & Inaproc
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://opendata.jabarprov.go.id"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-600 hover:text-orange-600 transition-colors block"
+                >
+                  Open Data Daerah (APBD)
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Open Data Sources */}
-          <div>
-            <h4 className="font-bold text-slate-900 uppercase tracking-wider text-[11px] mb-3">Sumber Data Resmi</h4>
-            <ul className="space-y-2 text-[11px]">
-              <li className="flex items-center gap-1.5 hover:text-slate-900 transition-colors">
-                <Database className="w-3.5 h-3.5 text-orange-600" />
-                <a href="https://data.pu.go.id" target="_blank" rel="noreferrer" className="flex items-center gap-1">
-                  Satu Data Kementerian PU <ExternalLink className="w-2.5 h-2.5" />
-                </a>
+          {/* Column 4: Regulasi */}
+          <div className="lg:col-span-2 space-y-3">
+            <h4 className="font-semibold text-slate-900 text-xs tracking-wider uppercase">
+              Regulasi
+            </h4>
+            <ul className="space-y-2.5 text-xs text-slate-600">
+              <li>
+                <div className="font-medium text-slate-800">UU No. 2 Tahun 2022</div>
+                <div className="text-[11px] text-slate-400">Perubahan Kedua UU Jalan</div>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-slate-900 transition-colors">
-                <Database className="w-3.5 h-3.5 text-slate-600" />
-                <a href="https://www.bps.go.id" target="_blank" rel="noreferrer" className="flex items-center gap-1">
-                  Badan Pusat Statistik (BPS) <ExternalLink className="w-2.5 h-2.5" />
-                </a>
+              <li>
+                <div className="font-medium text-slate-800">Inpres No. 3 / 2023</div>
+                <div className="text-[11px] text-slate-400">Percepatan Jalan Daerah (IJD)</div>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-slate-900 transition-colors">
-                <Scale className="w-3.5 h-3.5 text-rose-600" />
-                <a href="https://ombudsman.go.id" target="_blank" rel="noreferrer" className="flex items-center gap-1">
-                  Laporan Tahunan Ombudsman RI <ExternalLink className="w-2.5 h-2.5" />
-                </a>
-              </li>
-              <li className="flex items-center gap-1.5 hover:text-slate-900 transition-colors">
-                <Database className="w-3.5 h-3.5 text-emerald-600" />
-                <a href="https://opendata.jabarprov.go.id" target="_blank" rel="noreferrer" className="flex items-center gap-1">
-                  Open Data Jawa Barat (APBD) <ExternalLink className="w-2.5 h-2.5" />
-                </a>
+              <li>
+                <div className="font-medium text-slate-800">Pasal 24 UU LLAJ</div>
+                <div className="text-[11px] text-slate-400">Kewajiban Penyelenggara</div>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
+        {/* SLA Pelayanan Publik (Clean & simple, no icons) */}
+        <div className="py-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs text-slate-500 font-sans">
+          <span className="font-medium text-slate-700">Standar Tenggat Pelayanan Publik (SLA):</span>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-600 text-[11px]">
+            <span>Jalan Nasional: <strong>≤ 24 Jam Darurat</strong></span>
+            <span className="text-slate-300 hidden sm:inline">•</span>
+            <span>Jalan Provinsi: <strong>≤ 48 Jam Verifikasi</strong></span>
+            <span className="text-slate-300 hidden sm:inline">•</span>
+            <span>Jalan Kab/Kota: <strong>≤ 7 Hari Tindak Lanjut</strong></span>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2 font-sans">
           <p>© 2026 JagaJalan Platform. Hak Cipta Terbuka di Bawah Lisensi MIT.</p>
-          <p>Portal Transparansi Geospasial Kewenangan & Anggaran Infrastruktur Jalan</p>
+          <p className="text-[11px]">Inisiatif Keterbukaan Informasi & Pengawasan Partisipatif Publik</p>
         </div>
       </div>
     </footer>

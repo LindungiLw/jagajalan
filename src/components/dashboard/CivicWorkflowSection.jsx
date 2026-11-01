@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 
 export default function CivicWorkflowSection({ onOpenReportModal }) {
   const steps = [
@@ -44,15 +44,11 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 font-sans">
-      <div className="bg-white/95 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
-        {/* Header - Direct, Clear & Punchy */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wider bg-orange-50 text-orange-800 border border-orange-200/80 shadow-2xs font-sans">
-              <Sparkles className="w-3 h-3 text-orange-600" />
-              <span>Pipeline Verifikasi Otomatis</span>
-            </div>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 font-sans">
+      <div className="bg-white/95 backdrop-blur-xl p-4 sm:p-5 lg:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        {/* Header - Direct, Clear & Punchy (Badge Removed) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+          <div className="space-y-1">
             <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
               Dari Laporan Warga Menuju Kepastian Penanganan
             </h2>
@@ -63,7 +59,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
 
           <button
             onClick={onOpenReportModal}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-sm hover:shadow-md transition-all cursor-pointer self-start sm:self-auto shrink-0 active:scale-[0.98] font-sans"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-sm hover:shadow-md transition-all cursor-pointer self-start sm:self-auto shrink-0 active:scale-[0.98] font-sans"
           >
             <span>Uji Coba Lapor</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -71,7 +67,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
         </div>
 
         {/* 4 Connected Pipeline Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 relative">
           {steps.map((item, index) => {
             const isLast = index === steps.length - 1;
 

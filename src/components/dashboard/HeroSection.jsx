@@ -578,9 +578,9 @@ export default function HeroSection({
                     {/* Left: Dynamic Color Legend */}
                     {selectedIndex === "kemantapan" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-slate-700" />Nas</span>
-                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-600" />Prov</span>
-                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Kab/Kota</span>
+                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-600" />Nasional</span>
+                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-purple-600" />Provinsi</span>
+                        <span className="flex items-center gap-1 text-orange-700 font-bold"><span className="w-1.5 h-1.5 rounded-full bg-orange-600" />Kab/Kota</span>
                       </div>
                     )}
                     {selectedIndex === "ombudsman" && (
@@ -699,22 +699,22 @@ export default function HeroSection({
                         <path
                           d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
                           fill="none"
-                          stroke="#334155"
-                          strokeWidth="2.2"
+                          stroke="#2563eb"
+                          strokeWidth="2.5"
                           strokeLinecap="round"
                         />
                         <path
                           d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
                           fill="none"
-                          stroke="#d97706"
+                          stroke="#9333ea"
                           strokeWidth="2.2"
                           strokeLinecap="round"
                         />
                         <path
                           d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           fill="none"
-                          stroke="#c2410c"
-                          strokeWidth="3"
+                          stroke="#ea580c"
+                          strokeWidth="3.2"
                           strokeLinecap="round"
                         />
                         {roadConditionTrends.map((d, i) => {
@@ -728,12 +728,12 @@ export default function HeroSection({
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
                               <rect x={x - 24} y="10" width="48" height="135" fill="transparent" />
                               {isSelected && (
-                                <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
+                                <line x1={x} y1="18" x2={x} y2="112" stroke="#ea580c" strokeWidth="1.2" strokeDasharray="2 2" />
                               )}
-                              <circle cx={x} cy={yNas} r={isSelected ? 4.5 : 3} fill="#334155" stroke="#fff" strokeWidth="1.5" />
-                              <circle cx={x} cy={yProv} r={isSelected ? 4.5 : 3} fill="#d97706" stroke="#fff" strokeWidth="1.5" />
-                              <circle cx={x} cy={yKab} r={isSelected ? 6 : 4} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                              <circle cx={x} cy={yNas} r={isSelected ? 4.5 : 3} fill="#2563eb" stroke="#fff" strokeWidth="1.5" />
+                              <circle cx={x} cy={yProv} r={isSelected ? 4.5 : 3} fill="#9333ea" stroke="#fff" strokeWidth="1.5" />
+                              <circle cx={x} cy={yKab} r={isSelected ? 6 : 4} fill="#ea580c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={isSelected ? "#9a3412" : "#ea580c"}>
                                 {d.kabupatenKota}%
                               </text>
                               {/* Bottom Year Button Pill */}
@@ -1429,7 +1429,7 @@ export default function HeroSection({
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
                             Nasional
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
@@ -1438,19 +1438,19 @@ export default function HeroSection({
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
                             Provinsi
                           </span>
-                          <strong className="text-xs sm:text-sm font-bold text-amber-900 tabular-nums">
+                          <strong className="text-xs sm:text-sm font-bold text-purple-900 tabular-nums">
                             {currentRoadTrend.provinsi}%
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-[#c2410c] font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+                          <span className="text-[10px] text-orange-700 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />
                             Kab/Kota
                           </span>
-                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
+                          <strong className="text-xs sm:text-sm font-bold text-orange-900 tabular-nums">
                             {currentRoadTrend.kabupatenKota}%
                           </strong>
                         </div>

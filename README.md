@@ -124,6 +124,13 @@ Modul Computer Vision cerdas berfungsi sebagai alat bantu estimasi prioritas (*d
 ### C. Dashboard Komparatif Regional 38 Provinsi
 Menyajikan visualisasi data makro agregat 38 provinsi di Indonesia (bersumber dari publikasi resmi BPS dan SP4N-LAPOR!) yang dilengkapi filter wilayah pulau guna memberikan konteks perbandingan kebijakan publik nasional.
 
+### D. Panel Detail Ruas (Live Inspector): Audit Deviasi & Kepatuhan Hukum
+Panel inspektur interaktif pada peta transparansi menyajikan audit terpadu per segmen jalan:
+- **Bukti Lapangan & Indikator Bahaya AI**: Foto riil kondisi lapangan dengan *AI Hazard Score* (skala 1-100), estimasi tipe kerusakan, serta proyeksi kerugian keselamatan pemudik/pengendara roda dua.
+- **Tracker Timeline Kepatuhan SLA 14 Hari**: Pelacakan kronologis 3 tahap transparan (*Laporan Masuk ➔ Batas Tanggapan 14 Hari ➔ Status Lapangan*) berlandaskan mandat UU No. 25/2009 dan PermenPAN-RB No. 62/2018.
+- **Scoreboard Finansial & Deviasi Progres**: Komparasi Pagu HPS, Nilai Kontrak SPK, efisiensi tender LPSE, serta meter pembanding progres fisik lapangan vs serapan komitmen SPK untuk mendeteksi potensi deviasi audit.
+- **Kepastian Yuridis Penyelenggara**: Penguncian instansi penanggung jawab mutlak (*Wewenang Mutlak*), pimpinan instansi (PIC), dan nomor regulasi hukum penetapan ruas jalan.
+
 ---
 
 ## 5. Alur Perjalanan Pengguna (Multi-Role User Journey)
@@ -270,33 +277,43 @@ Model data dirancang dengan normalisasi relasional yang memisahkan relasi paket 
 
 ```
 +-----------------------------------------------------------------------------------+
-|                        ARSITEKTUR KOMPONEN APLIKASI                               |
+|               ARSITEKTUR MULTI-TIER & ALUR DATA SISTEM JAGAJALAN                  |
 +-----------------------------------------------------------------------------------+
 
-                    [ Pengguna: Warga / Publik ]
-                                 │
-                                 ▼
-             +─────────────────────────────────────────+
-             |         Next.js App Router (UI)         |
-             |   Navbar • KPI Header • Papan 38 Prov   |
-             +────────────────────┬────────────────────+
-                                  │
-         ┌────────────────────────┴────────────────────────┐
-         ▼                                                 ▼
-+───────────────────────────+             +───────────────────────────────────+
-+   Interactive Map Engine  |             |      Smart AI Report Module       |
-|  - React-Leaflet Viewport |             |  - Geotagging & Ruas Matching     |
-|  - OpenStreetMap Tiles    |             |  - Computer Vision Classification |
-|  - Dual Color Palette     |             |  - Decision Support Hazard Score  |
-+─────────────┬─────────────+             +─────────────────┬─────────────────+
-              │                                             │
-              ▼                                             ▼
-+───────────────────────────+             +───────────────────────────────────+
-|     Inspector Drawer      |             |     SLA & Compliance Tracker      |
-|  - Kunci Wewenang Instansi|             |  - Monitor Batas Waktu 14 Hari    |
-|  - Paket LPSE & Confidence|             |  - Deteksi Overdue Tanggapan      |
-|  - Jejak Status Pengerjaan|             |  - 1-Click Ombudsman RI Generator |
-+───────────────────────────+             +───────────────────────────────────+
+                            [ Pengguna: Publik & Dinas ]
+                                         │
+                                         ▼
++───────────────────────────────────────────────────────────────────────────────────+
+|                           PRESENTATION LAYER (Next.js 16)                         |
+|  - Layout: Navbar bersegmen, Footer minimalis regulasi & SLA                      |
+|  - Modul Utama: HeroSection, BudgetDataExplorer, NationalRanking, OfficerPortal   |
+|  - Engine Peta: Leaflet.js Geotagged polyline, dynamic pins & Live Ruas Inspector |
+|  - Dialog Interaktif: ReportModal (AI Vision), OmbudsmanModal, RoadDetailModal    |
++────────────────────────────────────────┬──────────────────────────────────────────+
+                                         │
+                                         ▼
++───────────────────────────────────────────────────────────────────────────────────+
+|                       APPLICATION & SERVICE LAYER (src/services/)                 |
+|  - roadService: Filter yurisdiksi, komparasi kemantapan & konversi GeoJSON        |
+|  - procurementService: Analisis audit deviasi, kalkulasi efisiensi HPS vs SPK     |
+|  - aiService: Client bridge Google Gemini Vision AI road distress analysis        |
++────────────────────────────────────────┬──────────────────────────────────────────+
+                                         │
+                                         ▼
++───────────────────────────────────────────────────────────────────────────────────+
+|                      REST API & SERVERLESS ROUTES (src/app/api/)                  |
+|  - /api/roads: Standar RFC 7946 GeoJSON & metadata wewenang SIGI PU               |
+|  - /api/procurement: Sinkronisasi paket lelang LPSE & SIRUP LKPP                  |
+|  - /api/analyze-road: Endpoint serverless Google Gemini 1.5 Pro / Flash Vision    |
++────────────────────────────────────────┬──────────────────────────────────────────+
+                                         │
+                                         ▼
++───────────────────────────────────────────────────────────────────────────────────+
+|                        DATA & EXTERNAL INTEGRATION LAYER                          |
+|  - Sumber Data Resmi: Satu Data Kementerian PU, SIGI ASTv2, BPS SIRUSA, LPSE     |
+|  - Preprocessing ETL: Python Data Engineering Pipeline (scripts/pipeline/)       |
+|  - Penyimpanan Cloud Opsional: Firebase Firestore (Cloud Sync Laporan Masuk)     |
++───────────────────────────────────────────────────────────────────────────────────+
 ```
 
 ---
@@ -307,68 +324,100 @@ Model data dirancang dengan normalisasi relasional yang memisahkan relasi paket 
 jagajalan/
 ├── src/
 │   ├── app/                     # Next.js App Router (Halaman & Desain Global)
-│   │   ├── api/
-│   │   │   └── analyze-road/    # API Route: Google Gemini Vision AI Damage Inspector
+│   │   ├── api/                 # Endpoints REST API Terpadu
+│   │   │   ├── analyze-road/    # API Route: Google Gemini Vision AI Damage Inspector
+│   │   │   ├── procurement/     # API Route: Penelusuran Paket Pengadaan LPSE / SIRUP
+│   │   │   └── roads/           # API Route: Geodata Ruas Jalan (JSON & GeoJSON RFC 7946)
+│   │   ├── admin/               # Redirect routing untuk Portal Dinas
 │   │   ├── globals.css          # Desain sistem & token tema Clean Light Dashboard
 │   │   ├── layout.js            # Metadata root & pembungkus font interaktif
 │   │   └── page.js              # Halaman utama orkestrator tab navigasi
-│   ├── components/              # Komponen Antarmuka Terstruktur
-│   │   ├── layout/              # 1. Kerangka Tata Letak Global (Navbar, Footer)
+│   ├── components/              # Komponen Antarmuka Terstruktur & Modular
+│   │   ├── layout/              # Kerangka Tata Letak Global
 │   │   │   ├── Navbar.jsx       # Header navigasi bersegmen & tombol lapor
-│   │   │   └── Footer.jsx       # Navigasi penutup & atribusi data resmi
-│   │   ├── dashboard/           # 2. Ringkasan Analitik & Metrik Eksekutif
-│   │   │   ├── HeroSection.jsx  # Metrik ringkasan & diferensiasi 3 pilar utama
-│   │   │   ├── NationalRankingSection.jsx # Papan skor perbandingan makro 38 provinsi
-│   │   │   └── OfficerDashboard.jsx # Portal kerja verifikasi & bukti fisik dinas
-│   │   ├── map/                 # 3. Mesin Pemetaan Geospasial
-│   │   │   ├── MapExplorer.jsx  # Workspace peta & panel rincian APBD/Wewenang
+│   │   │   └── Footer.jsx       # Footer minimalis, atribusi data resmi & SLA
+│   │   ├── dashboard/           # Modul Ringkasan Analitik & Metrik Eksekutif
+│   │   │   ├── HeroSection.jsx  # Metrik krisis, diferensiasi pilar, & feed aduan
+│   │   │   ├── BudgetDataExplorer.jsx # Explorer transparansi pagu HPS vs SPK LPSE
+│   │   │   ├── AnnualProgressChart.jsx # Tren historis penanganan jalan & IJD
+│   │   │   ├── NationalRankingSection.jsx # Papan skor kemantapan 38 provinsi
+│   │   │   ├── OmbudsmanMonitorSection.jsx # Pengawasan SLA tanggapan pelayanan publik
+│   │   │   ├── CivicWorkflowSection.jsx # Alur partisipasi publik & dasar hukum
+│   │   │   ├── LegalBasisSection.jsx # Landasan regulasi (UU Jalan, UU Pelayanan Publik)
+│   │   │   ├── OfficerDashboard.jsx # Portal kerja verifikasi & bukti fisik dinas
+│   │   │   └── OfficerLogin.jsx # Autentikasi sesi verifikator dinas
+│   │   ├── map/                 # Mesin Pemetaan Geospasial
+│   │   │   ├── MapExplorer.jsx  # Workspace peta, drawer ruas & audit LPSE
 │   │   │   └── MapInner.jsx     # Layer OpenStreetMap, polyline ruas & custom pins
-│   │   ├── modals/              # 4. Dialog Interaktif & Eskalasi Hukum
+│   │   ├── modals/              # Dialog Interaktif & Eskalasi Hukum
 │   │   │   ├── ReportModal.jsx  # Formulir geotag aduan & verifikasi Gemini Vision
-│   │   │   └── OmbudsmanModal.jsx # Generator draf laporan formal ke Ombudsman RI
+│   │   │   ├── OmbudsmanModal.jsx # Generator draf laporan formal ke Ombudsman RI
+│   │   │   └── RoadDetailModal.jsx # Detail komparasi audit fisik vs serapan dana
 │   │   └── index.js             # Sentralisasi barrel export komponen
+│   ├── services/                # Lapisan Layanan Bisnis & Abstraksi Data (Service Layer)
+│   │   ├── roadService.js       # Layanan data geospasial & filter kewenangan jalan
+│   │   ├── procurementService.js # Layanan kalkulasi efisiensi & anomali LPSE
+│   │   ├── aiService.js         # Layanan koneksi Computer Vision Gemini AI
+│   │   └── index.js             # Barrel export services
 │   ├── data/                    # Sumber Basis Data & Agregasi Resmi
+│   │   ├── roadsData.js         # Master data ruas jalan pilot & paket lelang
+│   │   ├── reportsData.js       # Rekam aduan geotagged warga & status SLA
 │   │   ├── provincesData.js     # Data makro 38 provinsi (BPS & SP4N-LAPOR!)
-│   │   ├── roadsData.js         # Ruas jalan pilot, SK wewenang & paket LPSE
-│   │   └── reportsData.js       # Rekam aduan geotagged warga & status SLA
-│   └── lib/                     # Modul Utilitas & Standar Global
-│       ├── constants.js         # Kodefikasi warna (Biru/Ungu/Teal) & limit SLA
-│       └── utils.js             # Format mata uang Rupiah, kalkulasi SLA, & skor AI
+│   │   ├── officersData.js      # Profil verifikator kewenangan dinas terkait
+│   │   ├── nationalHighwaysData.json # Geometri presisi jalan nasional Trans-Jawa/Sumatera
+│   │   ├── provincialRoadsData.json # Geometri ruas jalan provinsi percontohan
+│   │   ├── cityRegencyRoadsData.json # Geometri koridor jalan kab/kota strategis
+│   │   └── index.js             # Sentralisasi barrel export basis data
+│   └── lib/                     # Modul Utilitas & Konfigurasi Global
+│       ├── constants.js         # Kodefikasi warna & standar limit SLA pelayanan publik
+│       ├── utils.js             # Format mata uang Rupiah, kalkulasi SLA, & helper waktu
+│       ├── firebase.js          # Inisialisasi Firebase Firestore (opsional cloud sync)
+│       └── index.js             # Sentralisasi barrel export lib
+├── scripts/                     # Otomasi & Pipeline Rekayasa Data (ETL)
+│   ├── pipeline/                # Skrip pemrosesan geometri koordinat Open Data PU
+│   │   ├── data/                # Arsip data mentah geospasial
+│   │   └── README.md            # Dokumentasi metodologi pipeline data
+│   ├── seed-firestore-roads.mjs # Skrip seeding data jalan ke Firestore
+│   └── test-db.mjs              # Pengujian konektivitas basis data
 ├── public/                      # Aset statis & identitas visual
 │   └── logo/                    # Varian logo resmi JagaJalan
-│       ├── logo.png             # Simbol ikon utama (siluet 'J' jalan raya & pin)
-│       ├── logo-name.png        # Tipografi resmi nama "JagaJalan"
-│       └── full-logo.png        # Kombinasi penuh simbol ikon & logotype
-├── .env.example                 # Konfigurasi contoh environment (GEMINI_API_KEY)
-├── .gitignore                   # Proteksi dependensi, node_modules, cache, & env
+├── .gitignore                   # Proteksi dependensi, cache, & env
+├── jsconfig.json                # Konfigurasi path aliases (@components, @services, dll.)
 ├── LICENSE                      # Lisensi resmi MIT License
-├── package.json                 # Konfigurasi dependensi Next.js 16 & Tailwind v4
-└── README.md                    # Dokumen konsep, skema database, & arsitektur sistem
+├── package.json                 # Dependensi Next.js 16, React 19, & Tailwind v4
+└── README.md                    # Dokumentasi lengkap sistem & spesifikasi lomba
 ```
 
 ---
 
 ## 10. Spesifikasi Tumpukan Teknologi (Tech Stack)
 
-- **Frontend Framework**: Next.js 16 (App Router Architecture, React 19)
-- **Styling Engine**: Tailwind CSS v4 (Sistem Desain Slate Terang & Safety Orange)
-- **Geospatial Engine**: Leaflet.js dan React-Leaflet
-- **Map Tile Provider**: OpenStreetMap Standard Light Layer (Lisensi Terbuka, Tanpa Watermark)
-- **AI Analytics Module**: Computer Vision Decision Support
+- **Frontend & Serverless Framework**: Next.js 16 (App Router Architecture, React 19)
+- **Architecture Pattern**: Layered Clean Architecture (Presentation Layer ➔ Service Layer ➔ API Route Handlers ➔ Data Repositories)
+- **Styling Engine**: Tailwind CSS v4 (Sistem Desain Slate Minimalis & Safety Orange)
+- **Geospatial Engine**: Leaflet.js dan React-Leaflet (GeoJSON RFC 7946 Standard)
+- **Map Tile Provider**: OpenStreetMap Standard Light Layer (Lisensi Terbuka, Bebas Watermark)
+- **AI Computer Vision**: Google Gemini 1.5 Vision Model (Automated Distress Classification & Hazard Scoring)
+- **Data Engineering / ETL**: Python 3.12 Geodata Scripts (Ekstraksi kurva dan boundary koridor PU)
+- **Database / Cloud Sync**: Firebase Firestore & In-Memory JSON Structured Cache
 - **Iconography**: Lucide React
-- **Build Engine**: Next.js Turbopack
+- **Build Engine**: Next.js Webpack / Turbopack
 
 ---
 
 ## 11. Sumber Data Resmi dan Dasar Regulasi Hukum
 
 1. **Laporan Tahunan Ombudsman Republik Indonesia (2025/2026)**: Statistik pengaduan maladministrasi instansi pemerintah daerah, substansi perhubungan/infrastruktur, dan prevalensi penundaan berlarut (*undue delay*).
-2. **Satu Data Kementerian Pekerjaan Umum**: Basis data panjang jalan, tingkat kemantapan jalan nasional, dan data penanganan Inpres Jalan Daerah (IJD).
+2. **Satu Data Kementerian Pekerjaan Umum & SIGI ASTv2**: Basis data panjang jalan, tingkat kemantapan jalan nasional, dan data penanganan Inpres Jalan Daerah (IJD).
 3. **Badan Pusat Statistik (BPS)**: Statistik Transportasi Darat Indonesia dan agregat kemantapan jalan provinsi.
 4. **Portal Satu Data Jawa Barat & LPSE Jabar**: Data pengadaan paket tender pemeliharaan berkala jalan APBD/LPSE dan realisasi fisik.
 5. **Keputusan Menteri PUPR & Keputusan Kepala Daerah**: Dokumen penetapan status dan nomor kode ruas jalan.
-6. **Undang-Undang No. 25 Tahun 2009 tentang Pelayanan Publik**: Dasar penentuan batas waktu tanggapan pelayanan publik (Response SLA 14 hari kerja).
-7. **Undang-Undang No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia**: Landasan hak hukum masyarakat untuk melaporkan dugaan maladministrasi penundaan berlarut (*undue delay*).
+6. **Undang-Undang No. 2 Tahun 2022**: Perubahan Kedua atas UU No. 38/2004 tentang Jalan (penegasan tanggung jawab negara dan intervensi perbaikan jalan daerah).
+7. **Instruksi Presiden (Inpres) No. 3 Tahun 2023**: Percepatan Peningkatan Konektivitas Jalan Daerah (IJD) melalui alokasi dana fiskal APBN.
+8. **Undang-Undang No. 22 Tahun 2009 (UU LLAJ)**: Khususnya Pasal 24 mengenai kewajiban hukum penyelenggara jalan untuk segera dan patut memperbaiki jalan yang rusak.
+9. **Undang-Undang No. 25 Tahun 2009 tentang Pelayanan Publik**: Dasar penentuan batas waktu tanggapan pelayanan publik (Response SLA 14 hari kerja).
+10. **Undang-Undang No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia**: Landasan hak hukum masyarakat untuk melaporkan dugaan maladministrasi penundaan berlarut (*undue delay*).
+11. **Peraturan Menteri PANRB No. 62 Tahun 2018**: Pedoman Sistem Pengelolaan Pengaduan Pelayanan Publik Nasional (SP4N).
 
 ---
 

@@ -20,6 +20,14 @@ export default function Navbar({
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+    setMobileMenuOpen(false);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,7 +35,7 @@ export default function Navbar({
           {/* Logo & Brand Identity */}
           <div
             className="flex items-center gap-2.5 cursor-pointer select-none shrink-0 group"
-            onClick={() => setActiveTab("beranda")}
+            onClick={() => handleTabClick("beranda")}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -53,7 +61,7 @@ export default function Navbar({
                 <button
                   key={item.id}
                   id={`nav-tab-${item.id}`}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => handleTabClick(item.id)}
                   className={`group relative h-16 flex items-center gap-1.5 px-3 xl:px-3.5 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer select-none ${
                     isActive
                       ? "text-[#c2410c] font-bold"
@@ -111,10 +119,7 @@ export default function Navbar({
               return (
                 <button
                   key={item.id}
-                  onClick={() => {
-                    setActiveTab(item.id);
-                    setMobileMenuOpen(false);
-                  }}
+                  onClick={() => handleTabClick(item.id)}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl font-medium flex items-center gap-3 transition-colors ${
                     isActive
                       ? "bg-orange-50 text-orange-800 font-bold border border-orange-200"

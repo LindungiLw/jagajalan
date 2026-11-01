@@ -16,7 +16,7 @@ console.log("=======================================================\n");
 const envLocalPath = path.resolve(process.cwd(), ".env.local");
 if (!fs.existsSync(envLocalPath)) {
   console.error("❌ Berkas .env.local TIDAK DITEMUKAN di root proyek!");
-  console.log("   Silakan buat berkas .env.local terlebih dahulu dari template .env.example.");
+  console.log("   Silakan buat berkas .env.local terlebih dahulu.");
   process.exit(1);
 }
 console.log("✅ Berkas .env.local ditemukan di:", envLocalPath);
@@ -58,7 +58,7 @@ console.log("- NEXT_PUBLIC_FIREBASE_APP_ID        :", appId ? `✅ Terisi (${app
 
 // Check if still placeholder
 if (apiKey && apiKey.includes("ExampleApiKey")) {
-  console.warn("\n⚠️ PERINGATAN: NEXT_PUBLIC_FIREBASE_API_KEY masih menggunakan nilai contoh dari .env.example!");
+  console.warn("\n⚠️ PERINGATAN: NEXT_PUBLIC_FIREBASE_API_KEY masih menggunakan nilai placeholder!");
 }
 if (projectId && projectId.includes("example")) {
   console.warn("⚠️ PERINGATAN: NEXT_PUBLIC_FIREBASE_PROJECT_ID masih menggunakan nilai contoh!");
