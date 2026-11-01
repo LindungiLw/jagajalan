@@ -48,7 +48,7 @@ export default function MapShowcaseTeaser({
             </div>
 
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
-              Jelajahi garis ruas jalan ber-SK resmi di Jawa Barat & koridor Bodetabek. Buka kotak hitam birokrasi: identifikasi instansi penanggung jawab secara pasti, lacak posisi lubang aspal terverifikasi AI, dan bandingkan langsung dengan paket tender APBD di LPSE.
+              Jelajahi garis ruas jalan ber-SK resmi lintas 38 provinsi di Indonesia dan koridor pilot Sumatera Utara. Buka kotak hitam birokrasi: identifikasi instansi penanggung jawab secara pasti, lacak posisi lubang aspal terverifikasi AI, dan bandingkan langsung dengan paket tender APBN & APBD di LPSE.
             </p>
 
             {/* Quick Metrics Badges - Clean Frosted Glass */}
@@ -56,7 +56,7 @@ export default function MapShowcaseTeaser({
               <div className="p-3.5 rounded-xl bg-slate-50/80 backdrop-blur-md border border-slate-200/70 shadow-2xs hover:bg-white hover:border-slate-300 transition-all">
                 <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider font-sans">Ruas Terpetakan</div>
                 <div className="text-xl font-bold font-sans tabular-nums text-slate-900 mt-0.5">{roads.length} Ruas</div>
-                <div className="text-[10px] text-emerald-600 font-bold mt-0.5 font-sans">3 Wewenang Terpisah</div>
+                <div className="text-[10px] text-emerald-600 font-bold mt-0.5 font-sans">4 Status Wewenang</div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-50/80 backdrop-blur-md border border-slate-200/70 shadow-2xs hover:bg-white hover:border-slate-300 transition-all">

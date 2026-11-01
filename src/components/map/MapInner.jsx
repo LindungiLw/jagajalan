@@ -91,6 +91,31 @@ const createDetectedLocationIcon = () => {
   });
 };
 
+// Helper to split coordinates if there is an ocean-crossing jump (>55km) into clean multi-polyline segments
+const getPolylinePositions = (coords) => {
+  if (!coords || !coords.length) return [];
+  if (Array.isArray(coords[0]) && Array.isArray(coords[0][0])) return coords;
+
+  const segments = [];
+  let currentSegment = [coords[0]];
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p1 = coords[i];
+    const p2 = coords[i + 1];
+    if (!p1 || !p2) continue;
+    const dLat = (p2[0] - p1[0]) * 111;
+    const dLng = (p2[1] - p1[1]) * 111 * Math.cos((p1[0] * Math.PI) / 180);
+    const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+    if (dist > 55) {
+      segments.push(currentSegment);
+      currentSegment = [p2];
+    } else {
+      currentSegment.push(p2);
+    }
+  }
+  segments.push(currentSegment);
+  return segments.length > 1 ? segments : coords;
+};
+
 // Create custom orange marker icon matching the high-fidelity UI design
 const createReportIcon = (category, isOverdue, isSelected) => {
   let bgColor = "#ea580c"; // Safety Orange
@@ -278,12 +303,13 @@ export default function MapInner({
         }
 
         const isSelected = selectedRoad?.id === road.id;
+        const polylinePositions = getPolylinePositions(road.coordinates);
 
         return (
           <React.Fragment key={road.id}>
             {/* Click hit area expander */}
             <Polyline
-              positions={road.coordinates}
+              positions={polylinePositions}
               pathOptions={{
                 color: "transparent",
                 weight: 20,
@@ -298,7 +324,7 @@ export default function MapInner({
             {isSelected && (
               <>
                 <Polyline
-                  positions={road.coordinates}
+                  positions={polylinePositions}
                   pathOptions={{
                     color: "#0f172a",
                     weight: 10,
@@ -308,7 +334,7 @@ export default function MapInner({
                   }}
                 />
                 <Polyline
-                  positions={road.coordinates}
+                  positions={polylinePositions}
                   pathOptions={{
                     color: "#ffffff",
                     weight: 8,
@@ -320,14 +346,13 @@ export default function MapInner({
               </>
             )}
 
-            {/* Visual polyline */}
+            {/* Visual polyline - clean continuous solid line without disjointed dashes */}
             <Polyline
-              positions={road.coordinates}
+              positions={polylinePositions}
               pathOptions={{
                 color: color,
                 weight: isSelected ? 5.5 : 4.5,
                 opacity: isSelected ? 1 : 0.9,
-                dashArray: road.condition === "RUSAK_BERAT" ? "6, 6" : undefined,
                 lineCap: "round",
                 lineJoin: "round",
               }}
