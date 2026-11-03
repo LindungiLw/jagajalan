@@ -26,7 +26,7 @@ export const NATIONAL_STATS = {
     totalPackages: 6,
     totalPaguMiliar: 35.80,
     totalContractMiliar: 33.57,
-    overdueResponseComplaints: 2, // 2 laporan pilot yang melewati tenggat pemantauan respons 14 hari kerja
+    overdueResponseComplaints: 2, // 2 laporan pilot yang melewati tenggat pemantauan respons resmi dinas
     lastVerifiedDate: "18 Oktober 2026",
   },
 };

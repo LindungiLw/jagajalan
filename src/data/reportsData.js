@@ -1,6 +1,6 @@
 // Data Laporan Kerusakan Jalan dari Warga (Aduan Publik Geotagged)
 // Wilayah Percontohan: SUMATERA UTARA (Medan, Simalungun, Deli Serdang - Karo, Asahan)
-// Terintegrasi Deteksi AI, SLA Respons 14 Hari Kerja, & Pejabat Penanggung Jawab
+// Terintegrasi Deteksi AI, SLA Respons Resmi, & Pejabat Penanggung Jawab
 
 export const INITIAL_REPORTS = [
   {
@@ -71,7 +71,7 @@ export const INITIAL_REPORTS = [
       {
         date: "2026-10-17T09:00:00Z",
         officer: "Sistem Audit SLA JagaJalan",
-        note: "Batas 14 hari kerja terlampaui tanpa aksi fisik. Draf Ombudsman RI siap diterbitkan.",
+        note: "Tenggat batas waktu respons resmi terlampaui tanpa aksi fisik. Draf Ombudsman RI siap diterbitkan.",
       },
     ],
   },
@@ -138,7 +138,7 @@ export const INITIAL_REPORTS = [
       {
         date: "2026-10-10T08:00:00Z",
         officer: "Sistem Audit SLA JagaJalan",
-        note: "Batas 14 hari pemantauan tanggapan terlampaui tanpa aksi nyata. Draf pengaduan Ombudsman RI diaktifkan.",
+        note: "Tenggat batas waktu pemantauan respons terlampaui tanpa aksi nyata. Draf pengaduan Ombudsman RI diaktifkan.",
       },
     ],
   },

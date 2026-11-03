@@ -74,7 +74,7 @@ export const REPORT_STATUS = {
     badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
   },
   OVERDUE: {
-    label: "Terlambat Menanggapi (>14 Hari)",
+    label: "Melewati Tenggat Respons",
     badgeBg: "bg-rose-50 text-rose-700 border-rose-200 font-bold",
   },
 };

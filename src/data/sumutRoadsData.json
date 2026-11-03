@@ -1492,7 +1492,7 @@
       "rootCause": "Saluran pembuangan air ke Sungai Deli tersumbat sedimen limbah domestik dan galian utilitas.",
       "safetyImpact": "Sering menyebabkan pemotor terjatuh saat hujan; memicu kemacetan koridor Medan Selatan.",
       "slaStatus": "OVERDUE",
-      "slaNote": "Telah melampaui batas waktu respons dinas 14 hari kerja (SLA Overdue 6 hari). Draf Ombudsman aktif."
+      "slaNote": "Telah melampaui batas waktu respons resmi dinas (SLA Overdue 6 hari). Draf Ombudsman aktif."
     },
     "budget": {
       "packageId": "PKG-MDN-2026-031",
@@ -2012,7 +2012,7 @@
       "rootCause": "Debit air banjir bandang mengikis tanah pondasi gorong-gorong tua tanpa perkuatan dinding penahan.",
       "safetyImpact": "Sangat rawan kecelakaan fatal truk sawit terbalik; melumpuhkan urat nadi ekonomi warga Simalungun.",
       "slaStatus": "OVERDUE",
-      "slaNote": "Telah melampaui batas tanggapan 14 hari kerja (SLA Overdue 11 hari). Draf Ombudsman siap diterbitkan."
+      "slaNote": "Telah melampaui batas tenggat tanggapan dinas (SLA Overdue 11 hari). Draf Ombudsman siap diterbitkan."
     },
     "budget": {
       "packageId": "PKG-SMT-PRV-2026-088",
