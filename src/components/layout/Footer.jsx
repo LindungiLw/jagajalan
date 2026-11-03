@@ -84,6 +84,16 @@ export default function Footer({ onSelectTab }) {
                   Statistik Kemantapan 38 Provinsi
                 </button>
               </li>
+              <li className="pt-1.5 border-t border-slate-100">
+                <a
+                  href="/portaldinas"
+                  className="text-slate-400 hover:text-slate-700 transition-colors inline-flex items-center gap-1.5 text-[11px] font-medium"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icon/profile.png" alt="" width={12} height={12} className="w-3 h-3 object-contain opacity-70" />
+                  <span>Portal Kerja Dinas (Aparatur)</span>
+                </a>
+              </li>
             </ul>
           </div>
 

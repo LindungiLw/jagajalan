@@ -50,7 +50,7 @@ export default function Home() {
       const tabParam = params.get("tab");
       const hash = window.location.hash.replace("#", "");
       const validTabs = ["beranda", "peta", "data-anggaran", "ombudsman", "nasional", "dinas"];
-      if (tabParam === "admin" || hash === "admin") {
+      if (tabParam === "admin" || hash === "admin" || tabParam === "portaldinas" || hash === "portaldinas") {
         setActiveTabState("dinas");
       } else if (tabParam && validTabs.includes(tabParam)) {
         setActiveTabState(tabParam);

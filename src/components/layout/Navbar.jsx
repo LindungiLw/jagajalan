@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   Menu,
   X,
-  LogOut,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -59,9 +58,6 @@ export default function Navbar({
                 style={{ height: "20px", width: "auto", maxHeight: "20px" }}
                 className="h-5 w-auto object-contain object-left block"
               />
-              <span className="hidden xl:inline-block text-[10px] font-mono font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/80">
-                v2.6 Civic Audit
-              </span>
             </div>
           </div>
 
@@ -100,42 +96,8 @@ export default function Navbar({
             })}
           </nav>
 
-          {/* Right Action Area: Officer Portal & Primary Citizen Action */}
+          {/* Right Action Area: Primary Citizen Action */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Portal Dinas Quick Switch */}
-            <button
-              onClick={() => handleTabClick("dinas")}
-              className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
-                activeTab === "dinas"
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : officerSession
-                  ? "bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300"
-              }`}
-              title="Portal Verifikasi Penyelenggara Jalan"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/profile.png"
-                alt=""
-                width={16}
-                height={16}
-                style={{ width: "16px", height: "16px" }}
-                className="w-4 h-4 object-contain shrink-0"
-              />
-              <span>{officerSession ? officerSession.name.split(" ")[0] : "Portal Dinas"}</span>
-            </button>
-
-            {officerSession && (
-              <button
-                onClick={onLogoutOfficer}
-                className="hidden sm:inline-flex p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors cursor-pointer"
-                title="Keluar Sesi Petugas"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-              </button>
-            )}
-
             {/* Primary Citizen Action: Solid Institutional Safety Orange */}
             <button
               onClick={onOpenReportModal}
@@ -195,27 +157,6 @@ export default function Navbar({
                 </button>
               );
             })}
-            <button
-              onClick={() => handleTabClick("dinas")}
-              className={`w-full text-left px-3 py-2.5 rounded-lg font-medium flex items-center gap-3 transition-colors ${
-                activeTab === "dinas"
-                  ? "bg-slate-900 text-white font-semibold"
-                  : "text-slate-700 hover:bg-slate-100"
-              }`}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/profile.png"
-                alt=""
-                width={20}
-                height={20}
-                style={{ width: "20px", height: "20px" }}
-                className="w-5 h-5 object-contain shrink-0"
-              />
-              <span className="flex-1">
-                {officerSession ? `Portal Dinas (${officerSession.name})` : "Portal Kerja Dinas"}
-              </span>
-            </button>
           </div>
         )}
       </div>

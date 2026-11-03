@@ -18,9 +18,6 @@ import {
   Info,
   TrendingUp,
   BarChart3,
-  Landmark,
-  Route,
-  Compass,
   ShieldCheck,
 } from "lucide-react";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
@@ -366,12 +363,20 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "kemantapan"
-                        ? "bg-[#c2410c] text-white"
-                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
+                        ? "bg-white/20 border border-white/30 shadow-xs"
+                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
                     }`}>
-                      <Route className="w-4 h-4 sm:w-5 sm:h-5" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/icon/jalan.png"
+                        alt="Jalan Kab/Kota"
+                        width={28}
+                        height={28}
+                        style={{ width: "28px", height: "28px" }}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
@@ -406,12 +411,20 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "ombudsman"
-                        ? "bg-[#c2410c] text-white"
-                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
+                        ? "bg-white/20 border border-white/30 shadow-xs"
+                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
                     }`}>
-                      <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/icon/warning_icon.png"
+                        alt="Undue Delay"
+                        width={28}
+                        height={28}
+                        style={{ width: "28px", height: "28px" }}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
@@ -446,12 +459,20 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "pagu"
-                        ? "bg-[#c2410c] text-white"
-                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
+                        ? "bg-white/20 border border-white/30 shadow-xs"
+                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
                     }`}>
-                      <Landmark className="w-4 h-4 sm:w-5 sm:h-5" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/icon/financial.png"
+                        alt="Pagu LPSE"
+                        width={28}
+                        height={28}
+                        style={{ width: "28px", height: "28px" }}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
@@ -486,12 +507,20 @@ export default function HeroSection({
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "inpres"
-                        ? "bg-[#c2410c] text-white"
-                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
+                        ? "bg-white/20 border border-white/30 shadow-xs"
+                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
                     }`}>
-                      <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/icon/maps.png"
+                        alt="Inpres Jalan Daerah"
+                        width={28}
+                        height={28}
+                        style={{ width: "28px", height: "28px" }}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
