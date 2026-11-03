@@ -347,7 +347,7 @@ export default function MapExplorer({
 
   // Human-readable highlight filter label
   const highlightFilterLabel = useMemo(() => {
-    if (highlightFilter === "OVERDUE") return "Overdue SLA (>14 Hari)";
+    if (highlightFilter === "OVERDUE") return "Melewati Tenggat Respons";
     if (highlightFilter === "CRITICAL") return "Rusak Berat (AI >80)";
     if (highlightFilter === "BUDGET") return "Ada Tender LPSE";
     return "Sorotan Kondisi";
@@ -731,7 +731,7 @@ export default function MapExplorer({
                 >
                   <div>
                     <div className="font-medium text-slate-800">Overdue SLA</div>
-                    <div className="text-[10px] text-slate-400">&gt;14 Hari Tanpa Respon</div>
+                    <div className="text-[10px] text-slate-400">Melewati Batas Respons</div>
                   </div>
                   <span className="text-[10px] bg-rose-50 text-rose-700 font-bold px-1.5 py-0.5 rounded border border-rose-100 font-sans tabular-nums">
                     {overdueRoadCount}
@@ -1206,7 +1206,7 @@ export default function MapExplorer({
               </div>
             )}
 
-            {/* 2. Status Akuntabilitas SLA 14 Hari (KemenPAN-RB & Ombudsman) */}
+            {/* 2. Status Akuntabilitas Respons (KemenPAN-RB & Ombudsman) */}
             <div
               className={`rounded-xl p-3.5 border space-y-2.5 transition-all shadow-2xs ${
                 currentReport?.isResponseOverdue
@@ -1241,7 +1241,7 @@ export default function MapExplorer({
                 </div>
 
                 <div className="p-2 rounded-lg bg-white border border-slate-200/80">
-                  <div className="text-[9.5px] text-slate-400">2. Batas 14 Hari</div>
+                  <div className="text-[9.5px] text-slate-400">2. Batas Tenggat</div>
                   <div className="font-bold text-slate-800 text-[11px] font-sans mt-0.5">
                     {currentReport?.deadlineAt || "28 Okt 2026"}
                   </div>
@@ -1268,7 +1268,7 @@ export default function MapExplorer({
               </div>
 
               <p className="text-[10px] text-slate-500 leading-relaxed pt-0.5">
-                Berdasarkan <strong>UU No. 25/2009</strong> &amp; <strong>PermenPAN-RB No. 62/2018</strong>, instansi wajib memberikan tanggapan tindak lanjut maksimal 14 hari kerja. Keterlambatan ini memenuhi syarat rekomendasi Ombudsman RI.
+                Berdasarkan <strong>UU No. 25/2009</strong> &amp; <strong>PermenPAN-RB No. 62/2018</strong>, instansi wajib memberikan kepastian tanggapan tindak lanjut. Keterlambatan ini memenuhi syarat rekomendasi Ombudsman RI.
               </p>
             </div>
 

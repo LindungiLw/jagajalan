@@ -319,7 +319,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                   Laporan Berhasil Diterbitkan
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Laporan Anda kini tercatat secara terbuka. Instansi terkait memiliki batas waktu respons maksimal <strong>14 hari kerja</strong> sesuai standar pelayanan publik.
+                  Laporan Anda kini tercatat secara terbuka. Instansi terkait memiliki kewajiban batas waktu respons sesuai standar pelayanan publik.
                 </p>
               </div>
 
@@ -646,7 +646,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
               <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Dipantau SOP 14 Hari Kerja Ombudsman RI</span>
+                  <span>Dipantau Standar Kepatuhan Ombudsman RI</span>
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">

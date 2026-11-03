@@ -314,7 +314,7 @@ export default function RoadDetailModal({
               </span>
               {overdueReports.length > 0 && (
                 <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
-                  {overdueReports.length} Melewati Tenggat Respons (14 Hari)
+                  {overdueReports.length} Melewati Batas Respons
                 </span>
               )}
             </div>
@@ -371,7 +371,7 @@ export default function RoadDetailModal({
                       {isOverdue && onOpenOmbudsmanDraft && (
                         <div className="pt-2 border-t border-rose-200/80 flex items-center justify-between">
                           <span className="text-[10px] text-rose-800 font-medium">
-                            Telah melewati batas 14 hari pemantauan tanpa respons dinas
+                            Telah melewati batas waktu pemantauan tanpa respons dinas
                           </span>
                           <button
                             onClick={() => {
@@ -400,7 +400,7 @@ export default function RoadDetailModal({
           <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-[10px] text-amber-900 space-y-1">
             <strong>Catatan Keterbukaan Publik:</strong>
             <p>
-              Penetapan status tenggat 14 hari kerja mengacu pada standar pemantauan respons pelayanan publik (UU No. 25/2009). Status ini mencatat keaktifan tindak lanjut tanggapan resmi instansi, bukan keputusan final maladministrasi. Eskalasi ke Ombudsman Republik Indonesia tetap melalui verifikasi bukti dan prosedur resmi.
+              Penetapan status tenggat respons mengacu pada standar pemantauan respons pelayanan publik (UU No. 25/2009). Status ini mencatat keaktifan tindak lanjut tanggapan resmi instansi, bukan keputusan final maladministrasi. Eskalasi ke Ombudsman Republik Indonesia tetap melalui verifikasi bukti dan prosedur resmi.
             </p>
           </div>
         </div>

@@ -484,7 +484,7 @@ export default function MapInner({
                   <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${
                     isOverdue ? "bg-rose-100 text-rose-800" : "bg-emerald-100 text-emerald-800"
                   }`}>
-                    {isOverdue ? "SLA Overdue >14 Hari" : "Dalam Pengerjaan"}
+                    {isOverdue ? "Melewati Tenggat Respons" : "Dalam Pengerjaan"}
                   </span>
                 </div>
 
