@@ -32,6 +32,7 @@ import {
   ArrowDown,
   DollarSign,
   Activity,
+  Scale,
 } from "lucide-react";
 import {
   INDONESIA_REGIONS,
@@ -806,7 +807,7 @@ export default function MapExplorer({
 
       {/* Floating Notice / Province Context Banner */}
       {floatingNotice && (
-        <div className="absolute top-18 left-4 z-[500] max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-[6px] shadow-xl border border-slate-200/90 p-3 flex items-start gap-2.5 animate-fade-in font-sans pointer-events-auto">
+        <div className="absolute top-18 left-4 z-[500] max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-slate-200/90 p-3 flex items-start gap-2.5 animate-fade-in font-sans pointer-events-auto">
           <div className="w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center shrink-0 mt-0.5">
             <Globe className="w-3.5 h-3.5" />
           </div>
@@ -829,9 +830,9 @@ export default function MapExplorer({
       <div className="absolute bottom-5 left-12 sm:left-14 z-[500] flex flex-col gap-2 pointer-events-none font-sans max-w-[290px]">
         {/* National Transparency Context Banner */}
         {authorityFilter === "NASIONAL" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-blue-200/90 p-2.5 animate-fade-in pointer-events-auto">
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-blue-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-blue-100 text-blue-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-md bg-blue-100 text-blue-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
@@ -851,9 +852,9 @@ export default function MapExplorer({
 
         {/* Provincial Transparency Context Banner */}
         {authorityFilter === "PROVINSI" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-purple-200/90 p-2.5 animate-fade-in pointer-events-auto">
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-purple-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-purple-100 text-purple-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-md bg-purple-100 text-purple-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
@@ -873,9 +874,9 @@ export default function MapExplorer({
 
         {/* City Transparency Context Banner */}
         {authorityFilter === "KOTA" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-teal-200/90 p-2.5 animate-fade-in pointer-events-auto">
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-teal-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-md bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
@@ -895,9 +896,9 @@ export default function MapExplorer({
 
         {/* Regency Transparency Context Banner */}
         {authorityFilter === "KABUPATEN" && (
-          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-emerald-200/90 p-2.5 animate-fade-in pointer-events-auto">
+          <div className="hidden sm:block bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-emerald-200/90 p-2.5 animate-fade-in pointer-events-auto">
             <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-[4px] bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-md bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
                 <Building2 className="w-3 h-3" />
               </div>
               <div className="space-y-0.5 text-left flex-1 min-w-0">
@@ -916,18 +917,18 @@ export default function MapExplorer({
         )}
 
         {/* Zoom & Reset Location Controls */}
-        <div className="flex flex-col gap-1 bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 p-1 pointer-events-auto w-fit">
+        <div className="flex flex-col gap-1 bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 p-1 pointer-events-auto w-fit">
           <button
             onClick={() => mapInstance?.zoomIn()}
             title="Perbesar Peta"
-            className="w-7 h-7 rounded-[4px] flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => mapInstance?.zoomOut()}
             title="Perkecil Peta"
-            className="w-7 h-7 rounded-[4px] flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
@@ -935,7 +936,7 @@ export default function MapExplorer({
           <button
             onClick={handleResetLocation}
             title="Pusatkan Kembali Peta"
-            className="w-7 h-7 rounded-[4px] flex items-center justify-center text-slate-700 hover:text-[#c2410c] hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:text-[#c2410c] hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <Crosshair className="w-3.5 h-3.5" />
           </button>
@@ -1046,13 +1047,13 @@ export default function MapExplorer({
       </div>
 
       {/* 4. Bottom-Center Floating Stats Card */}
-      <div className={`hidden md:flex absolute bottom-3 z-[480] bg-white/95 backdrop-blur-md rounded-[5px] shadow-md border border-slate-200/90 px-3 py-1.5 items-center gap-3 text-xs font-semibold text-slate-700 pointer-events-auto font-sans transition-all duration-300 ${
+      <div className={`hidden md:flex absolute bottom-3 z-[480] bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-slate-200/90 px-3 py-1.5 items-center gap-3 text-xs font-semibold text-slate-700 pointer-events-auto font-sans transition-all duration-300 ${
         displayItem
           ? "left-[210px] xl:left-1/2 xl:-translate-x-1/2"
           : "left-1/2 -translate-x-1/2"
       }`}>
         <span className="flex items-center gap-1.5">
-          <span className="w-3.5 h-3.5 rounded-[3px] bg-[#c2410c] text-white flex items-center justify-center text-[9px] font-black">
+          <span className="w-3.5 h-3.5 rounded-xs bg-[#c2410c] text-white flex items-center justify-center text-[9px] font-black">
             !
           </span>
           <span className="tabular-nums text-[11px]">{roads.length} ruas terdata</span>
@@ -1071,7 +1072,7 @@ export default function MapExplorer({
 
       {/* 5. Right Side Modern Executive Inspector Drawer (Inspired by Analytical Cards Reference) */}
       {displayItem && (
-        <aside className="absolute top-3 right-3 bottom-3 w-full sm:w-[410px] lg:w-[430px] max-w-[calc(100vw-24px)] z-[500] bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
+        <aside className="absolute top-3 right-3 bottom-3 w-full sm:w-[410px] lg:w-[430px] max-w-[calc(100vw-24px)] z-[500] bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
           {/* Drawer Header */}
           <div className="px-4 py-3 border-b border-slate-100 shrink-0 bg-white">
             <div className="flex items-center justify-between mb-2">
@@ -1367,7 +1368,15 @@ export default function MapExplorer({
             <div className="rounded-xl p-3.5 bg-slate-50 border border-slate-200/90 space-y-2 shadow-2xs">
               <div className="flex items-center justify-between text-[10.5px]">
                 <span className="font-bold uppercase tracking-wider flex items-center gap-1.5 text-slate-700">
-                  <img src="/icon/hukum_icon.png" alt="" className="w-3.5 h-3.5 object-contain" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icon/hukum_icon.png"
+                    alt=""
+                    width={14}
+                    height={14}
+                    style={{ width: "14px", height: "14px" }}
+                    className="w-3.5 h-3.5 object-contain"
+                  />
                   <span>Instansi Penanggung Jawab</span>
                 </span>
                 <span className="text-[9.5px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
@@ -1439,7 +1448,7 @@ export default function MapExplorer({
       {/* 7. Modal Penjelasan Arsitektur SIGI PU & GeoAPI */}
       {sigiModalOpen && (
         <div className="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in font-sans">
-          <div className="bg-white rounded-[5px] shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
             <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -1449,14 +1458,14 @@ export default function MapExplorer({
               </div>
               <button
                 onClick={() => setSigiModalOpen(false)}
-                className="p-1 rounded-[4px] text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
-              <div className="p-3 rounded-[5px] bg-orange-50 border border-orange-200/90 text-orange-950 space-y-1 shadow-2xs">
+              <div className="p-3 rounded-xl bg-orange-50 border border-orange-200/90 text-orange-950 space-y-1 shadow-2xs">
                 <div className="font-bold text-xs flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-orange-600" />
                   <span>Geometri Berbasis Vektor Jalan Nyata</span>
@@ -1471,7 +1480,7 @@ export default function MapExplorer({
                   Layanan & Endpoint Resmi yang Terhubung:
                 </h4>
 
-                <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center justify-between">
                     <span>1. SIGI-PU ASTV2 (Pusdatin KemenPU)</span>
                     <span className="text-[10px] text-orange-700 font-sans font-bold">WebGIS & MapServer</span>
@@ -1490,7 +1499,7 @@ export default function MapExplorer({
                   </a>
                 </div>
 
-                <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center justify-between">
                     <span>2. Satu Data Kementerian PU</span>
                     <span className="text-[10px] text-blue-700 font-sans font-bold">Open Data Portal</span>
@@ -1509,7 +1518,7 @@ export default function MapExplorer({
                   </a>
                 </div>
 
-                <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 space-y-1">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center justify-between">
                     <span>3. Endpoint API Mikro JagaJalan</span>
                     <span className="text-[10px] text-emerald-700 font-sans font-bold">REST & GeoJSON API</span>
@@ -1518,10 +1527,10 @@ export default function MapExplorer({
                     Dapat diakses secara terbuka melalui rute API internal aplikasi:
                   </p>
                   <div className="space-y-1 pt-0.5 font-mono text-[10.5px]">
-                    <div className="p-1.5 bg-white border border-slate-200 rounded text-slate-800">
+                    <div className="p-1.5 bg-white border border-slate-200 rounded-lg text-slate-800">
                       GET /api/roads?format=json
                     </div>
-                    <div className="p-1.5 bg-white border border-slate-200 rounded text-slate-800">
+                    <div className="p-1.5 bg-white border border-slate-200 rounded-lg text-slate-800">
                       GET /api/roads?format=geojson
                     </div>
                   </div>
@@ -1532,7 +1541,7 @@ export default function MapExplorer({
             <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
               <button
                 onClick={() => setSigiModalOpen(false)}
-                className="py-2 px-4 rounded-[4px] text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors cursor-pointer"
+                className="py-2 px-4 rounded-lg text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 Tutup Informasi
               </button>

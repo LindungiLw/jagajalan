@@ -3,7 +3,6 @@
 import React, { useState, useRef } from "react";
 import {
   X,
-  Camera,
   MapPin,
   CheckCircle2,
   Building2,
@@ -12,12 +11,11 @@ import {
   Loader2,
   Upload,
   AlertTriangle,
-  Sparkles,
+  ScanLine,
   FileText,
   Copy,
   Check,
 } from "lucide-react";
-import confetti from "canvas-confetti";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -239,16 +237,6 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
         console.warn("Sinkronisasi laporan ke Cloud Firestore dilewati:", err.message);
       });
     }
-
-    try {
-      confetti({
-        particleCount: 70,
-        spread: 60,
-        origin: { y: 0.6 },
-      });
-    } catch {
-      // ignore
-    }
   };
 
 
@@ -270,7 +258,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
-      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-slate-200/90 shadow-2xl overflow-hidden text-slate-800">
+      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-xl bg-white border border-slate-200 shadow-2xl overflow-hidden text-slate-800">
         
         {/* Modern Clean Header */}
         <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
@@ -280,7 +268,10 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
               <img
                 src="/icon/plus_icon.png"
                 alt="Lapor Kerusakan"
-                className="w-full h-full object-contain"
+                width={24}
+                height={24}
+                style={{ width: "24px", height: "24px" }}
+                className="w-6 h-6 object-contain"
               />
             </div>
             <div className="space-y-0.5">
@@ -288,8 +279,8 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
                   Lapor Kerusakan Jalan
                 </h3>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200/80 font-sans">
-                  <Sparkles className="w-3 h-3 text-[#c2410c]" />
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-[#9a3412] border border-orange-200/80 font-sans">
+                  <ScanLine className="w-3 h-3 text-[#c2410c]" />
                   Verifikasi AI
                 </span>
               </div>
@@ -317,7 +308,10 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 <img
                   src="/icon/report.png"
                   alt="Tiket Terbit"
-                  className="w-full h-full object-contain"
+                  width={40}
+                  height={40}
+                  style={{ width: "40px", height: "40px" }}
+                  className="w-10 h-10 object-contain"
                 />
               </div>
               <div className="space-y-1">
@@ -393,7 +387,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     >
                       {roads.map((r) => (
                         <option key={r.id} value={r.id}>
-                          {r.name} ({r.district}) — {r.authority}
+                          {r.name} ({r.district}) • {r.authority}
                         </option>
                       ))}
                     </select>
@@ -470,7 +464,15 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                      <img src="/icon/camera_icon.png" alt="" className="w-4 h-4 object-contain shrink-0" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/icon/camera_icon.png"
+                        alt=""
+                        width={16}
+                        height={16}
+                        style={{ width: "16px", height: "16px" }}
+                        className="w-4 h-4 object-contain shrink-0"
+                      />
                       <span>Foto Bukti Kerusakan</span>
                     </label>
                     <span className="text-[10px] text-slate-400">Format: JPG, PNG (Maks 8MB)</span>
@@ -523,7 +525,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         </div>
 
                         <div className="text-[11px] font-mono font-bold text-orange-300 tracking-wider uppercase flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5 animate-spin text-orange-400" />
+                          <ScanLine className="w-3.5 h-3.5 animate-pulse text-orange-400" />
                           <span>AI Vision Scanning...</span>
                         </div>
                         <span className="text-[9.5px] text-slate-300 font-sans mt-0.5 text-center">
@@ -584,7 +586,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           </>
                         ) : (
                           <>
-                            <Sparkles className="w-3.5 h-3.5 text-[#c2410c]" />
+                            <ScanLine className="w-3.5 h-3.5 text-[#c2410c]" />
                             <span>Verifikasi Foto dengan AI Inspector</span>
                           </>
                         )}
@@ -651,14 +653,14 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                   <button
                     type="button"
                     onClick={handleResetAndClose}
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
                     disabled={!!spamError || isAnalyzing}
-                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-lg bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-colors shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Terbitkan Laporan</span>
                     <ArrowRight className="w-3.5 h-3.5" />

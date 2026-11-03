@@ -9,9 +9,7 @@ import {
   FileText,
   AlertTriangle,
   CheckCircle2,
-  Clock,
   ShieldCheck,
-  Scale,
   ArrowRight,
 } from "lucide-react";
 
@@ -41,14 +39,14 @@ export default function RoadDetailModal({
 
   const matchBadge =
     budget?.matchConfidence === "TERKONFIRMASI"
-      ? { label: "Terkonfirmasi LPSE", color: "bg-slate-100 text-slate-700 border-slate-200" }
+      ? { label: "Terkonfirmasi LPSE", color: "bg-emerald-50 text-emerald-700 border-emerald-200" }
       : budget?.matchConfidence === "PARSIAL"
       ? { label: "Pencocokan Parsial", color: "bg-amber-50 text-amber-800 border-amber-200" }
       : { label: "Belum Ditemukan Paket", color: "bg-slate-100 text-slate-700 border-slate-200" };
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-      <div className="relative w-full max-w-3xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-3xl max-h-[92vh] flex flex-col rounded-xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
         
         {/* 1. MODAL HEADER */}
         <div className="p-4 sm:p-5 border-b border-slate-200 flex items-start justify-between gap-3 bg-white">
@@ -112,7 +110,14 @@ export default function RoadDetailModal({
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
             <div className="flex items-center gap-2 text-slate-900 font-bold">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon/hukum_icon.png" alt="Dasar Hukum" className="w-4 h-4 object-contain shrink-0" />
+              <img
+                src="/icon/hukum_icon.png"
+                alt="Dasar Hukum"
+                width={16}
+                height={16}
+                style={{ width: "16px", height: "16px" }}
+                className="w-4 h-4 object-contain shrink-0"
+              />
               <span>Dasar Hukum Penetapan Status Kewenangan:</span>
             </div>
             <p className="text-xs text-slate-800 font-medium pl-6">
@@ -128,10 +133,10 @@ export default function RoadDetailModal({
             <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-orange-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Audit Perbandingan Fisik Lapangan (Before vs After)</span>
                 </span>
-                <span className="text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                   Dokumentasi Terverifikasi
                 </span>
               </div>
@@ -147,11 +152,11 @@ export default function RoadDetailModal({
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-[10px] font-bold text-orange-800 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-orange-600" />
+                  <div className="text-[10px] font-bold text-emerald-800 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-600" />
                     <span>Kondisi Terkini / Hasil Penanganan</span>
                   </div>
-                  <div className="h-36 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                  <div className="h-36 rounded-lg overflow-hidden border border-emerald-200 bg-slate-100">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={road.photos.afterUrl} alt="Hasil Penanganan" className="w-full h-full object-cover" />
                   </div>
@@ -197,7 +202,14 @@ export default function RoadDetailModal({
             <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
               <span className="font-sans text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icon/financial.png" alt="Pengadaan LPSE" className="w-4 h-4 object-contain shrink-0" />
+                <img
+                  src="/icon/financial.png"
+                  alt="Pengadaan LPSE"
+                  width={16}
+                  height={16}
+                  style={{ width: "16px", height: "16px" }}
+                  className="w-4 h-4 object-contain shrink-0"
+                />
                 <span>Paket Pengadaan LPSE Teridentifikasi</span>
               </span>
               <span className="text-[10px] text-slate-500 font-sans tabular-nums">
@@ -290,7 +302,14 @@ export default function RoadDetailModal({
             <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
               <span className="font-sans text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icon/time.png" alt="Waktu Respons" className="w-4 h-4 object-contain shrink-0" />
+                <img
+                  src="/icon/time.png"
+                  alt="Waktu Respons"
+                  width={16}
+                  height={16}
+                  style={{ width: "16px", height: "16px" }}
+                  className="w-4 h-4 object-contain shrink-0"
+                />
                 <span>Pemantauan Respons Laporan Warga ({roadReports.length} Terdata)</span>
               </span>
               {overdueReports.length > 0 && (
@@ -304,6 +323,7 @@ export default function RoadDetailModal({
               <div className="space-y-2.5">
                 {roadReports.map((report) => {
                   const isOverdue = report.status === "OVERDUE";
+                  const isCompleted = report.status === "SELESAI";
                   return (
                     <div
                       key={report.id}
@@ -327,11 +347,15 @@ export default function RoadDetailModal({
                           </span>
                         </div>
                         {isOverdue ? (
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                          <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
                             Melewati Tenggat (+{report.daysOverdue} Hari)
                           </span>
+                        ) : isCompleted ? (
+                          <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Penanganan Selesai
+                          </span>
                         ) : (
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-50 text-orange-900 border border-orange-200/90 shadow-2xs">
+                          <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
                             Dalam Batas Respons
                           </span>
                         )}
@@ -393,16 +417,23 @@ export default function RoadDetailModal({
                   onClose();
                   onOpenReportModal();
                 }}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors cursor-pointer flex items-center gap-1.5"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icon/plus_icon.png" alt="Lapor" className="w-3.5 h-3.5 object-contain" />
+                <img
+                  src="/icon/plus_icon.png"
+                  alt="Lapor"
+                  width={14}
+                  height={14}
+                  style={{ width: "14px", height: "14px" }}
+                  className="w-3.5 h-3.5 object-contain"
+                />
                 <span>Laporkan Ruas Ini</span>
               </button>
             )}
             <button
               onClick={onClose}
-              className="px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 transition-colors cursor-pointer shadow-xs"
+              className="px-4 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs"
             >
               Tutup
             </button>
