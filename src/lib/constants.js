@@ -10,52 +10,52 @@
 // Batas Waktu Pemantauan Tanggapan Instansi Terkait (Response SLA) berdasarkan UU No. 25 Tahun 2009 & Ombudsman RI
 export const SLA_RESPONSE_DAYS_LIMIT = 14;
 
-// 1. Sistem Warna Status Kewenangan Jalan
+// 1. Sistem Warna Status Kewenangan Jalan (Terpisah tegas dari warna aksi & status SLA)
 export const AUTHORITY_COLORS = {
   NASIONAL: {
     label: "Jalan Nasional",
     responsibleAgency: "Kementerian Pekerjaan Umum (BBPJN)",
-    color: "#c2410c", // Safety Orange
-    badgeBg: "bg-orange-50",
-    badgeBorder: "border-orange-200",
-    badgeText: "text-orange-900",
-    ringColor: "ring-orange-500",
+    color: "#2563eb", // Blue
+    badgeBg: "bg-blue-50",
+    badgeBorder: "border-blue-200",
+    badgeText: "text-blue-800",
+    ringColor: "ring-blue-500",
   },
   PROVINSI: {
     label: "Jalan Provinsi",
     responsibleAgency: "Dinas Bina Marga Provinsi",
-    color: "#d97706", // Amber
-    badgeBg: "bg-amber-50",
-    badgeBorder: "border-amber-200",
-    badgeText: "text-amber-900",
-    ringColor: "ring-amber-500",
+    color: "#7c3aed", // Purple
+    badgeBg: "bg-purple-50",
+    badgeBorder: "border-purple-200",
+    badgeText: "text-purple-800",
+    ringColor: "ring-purple-500",
   },
   KOTA: {
     label: "Jalan Kota",
     responsibleAgency: "Dinas PUPR Kota / Walikota",
-    color: "#ea580c", // Warm Orange
-    badgeBg: "bg-orange-50/70",
-    badgeBorder: "border-orange-200/70",
-    badgeText: "text-orange-950",
-    ringColor: "ring-orange-400",
+    color: "#0d9488", // Teal
+    badgeBg: "bg-teal-50",
+    badgeBorder: "border-teal-200",
+    badgeText: "text-teal-800",
+    ringColor: "ring-teal-500",
   },
   KABUPATEN: {
     label: "Jalan Kabupaten",
     responsibleAgency: "Dinas PUPR Kabupaten / Bupati",
-    color: "#78716c", // Stone
-    badgeBg: "bg-stone-50",
-    badgeBorder: "border-stone-200",
-    badgeText: "text-stone-900",
-    ringColor: "ring-stone-400",
+    color: "#059669", // Emerald
+    badgeBg: "bg-emerald-50",
+    badgeBorder: "border-emerald-200",
+    badgeText: "text-emerald-800",
+    ringColor: "ring-emerald-500",
   },
   KOTA_KAB: {
     label: "Jalan Kota / Kabupaten",
     responsibleAgency: "Dinas PUPR Daerah",
-    color: "#b45309", // Warm Amber
-    badgeBg: "bg-amber-50/70",
-    badgeBorder: "border-amber-200/70",
-    badgeText: "text-amber-950",
-    ringColor: "ring-amber-400",
+    color: "#0d9488", // Teal
+    badgeBg: "bg-teal-50",
+    badgeBorder: "border-teal-200",
+    badgeText: "text-teal-800",
+    ringColor: "ring-teal-500",
   },
 };
 
@@ -67,15 +67,15 @@ export const REPORT_STATUS = {
   },
   DALAM_PENGERJAAN: {
     label: "Dalam Penanganan Fisik",
-    badgeBg: "bg-orange-50 text-orange-800 border-orange-200",
+    badgeBg: "bg-amber-50 text-amber-800 border-amber-200",
   },
   SELESAI: {
     label: "Penanganan Selesai",
-    badgeBg: "bg-orange-50/90 text-orange-950 border-orange-200/90",
+    badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
   },
   OVERDUE: {
     label: "Terlambat Menanggapi (>14 Hari)",
-    badgeBg: "bg-red-50 text-red-700 border-red-200 font-bold",
+    badgeBg: "bg-rose-50 text-rose-700 border-rose-200 font-bold",
   },
 };
 
@@ -83,7 +83,7 @@ export const REPORT_STATUS = {
 export const BUDGET_MATCH_CONFIDENCE = {
   TERKONFIRMASI: {
     label: "Terkonfirmasi",
-    badgeBg: "bg-orange-50/90 text-orange-950 border-orange-200/90",
+    badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
     desc: "Paket lelang LPSE terverifikasi spesifik pada ruas jalan ini.",
   },
   PARSIAL: {
