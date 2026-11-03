@@ -1058,69 +1058,69 @@ export default function BudgetDataExplorer({
               <p className="text-[11px] text-slate-400">Silakan ubah filter atau kata kunci pencarian Anda.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto -mx-5 px-5">
-              <table className="w-full text-left text-xs font-sans">
+            <div className="w-full">
+              <table className="w-full text-left text-xs font-sans md:table-fixed border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 text-slate-500 font-semibold text-[11px]">
-                    <th className="py-2.5 px-3">Paket & Ruas Jalan</th>
-                    <th className="py-2.5 px-3">Kewenangan</th>
-                    <th className="py-2.5 px-3 text-right">Pagu (HPS)</th>
-                    <th className="py-2.5 px-3 text-right">Nilai Kontrak</th>
-                    <th className="py-2.5 px-3 text-right">Efisiensi</th>
-                    <th className="py-2.5 px-3 text-center">Fisik</th>
-                    <th className="py-2.5 px-3 text-right">Aksi</th>
+                  <tr className="border-y border-slate-100 bg-slate-50/70 text-slate-500 font-bold text-[10.5px] uppercase tracking-wider">
+                    <th className="py-2.5 px-2.5 md:w-[32%]">Paket &amp; Ruas Jalan</th>
+                    <th className="py-2.5 px-2 md:w-[14%]">Kewenangan</th>
+                    <th className="py-2.5 px-2 md:w-[19%] text-right">Pagu &amp; Kontrak</th>
+                    <th className="py-2.5 px-2 md:w-[13%] text-right hidden sm:table-cell">Efisiensi</th>
+                    <th className="py-2.5 px-2 md:w-[11%] text-center">Fisik</th>
+                    <th className="py-2.5 px-2.5 md:w-[11%] text-right">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {paginatedPackages.map((pkg, idx) => {
                     const authBadge =
                       pkg.authority === "NASIONAL"
-                        ? { label: "Nasional", color: "bg-blue-50 text-blue-700 border-blue-200" }
+                        ? { label: "Nasional", color: "bg-blue-50/80 text-blue-800", dot: "bg-blue-600" }
                         : pkg.authority === "PROVINSI"
-                        ? { label: "Provinsi", color: "bg-purple-50 text-purple-700 border-purple-200" }
-                        : { label: "Kab/Kota", color: "bg-teal-50 text-teal-700 border-teal-200" };
+                        ? { label: "Provinsi", color: "bg-purple-50/80 text-purple-800", dot: "bg-purple-600" }
+                        : { label: "Kab/Kota", color: "bg-teal-50/80 text-teal-800", dot: "bg-teal-600" };
 
                     return (
                       <tr
                         key={pkg.packageId || idx}
-                        className="hover:bg-slate-50/80 transition-colors group"
+                        className="hover:bg-slate-50/70 transition-colors group"
                       >
                         {/* Paket & Ruas Jalan */}
-                        <td className="py-3 px-3 max-w-[200px]">
+                        <td className="py-3 px-2.5 align-middle">
                           <div
                             onClick={() => handleOpenDetailModal(pkg)}
-                            className="font-bold text-slate-900 group-hover:text-sky-700 transition-colors cursor-pointer truncate"
+                            className="font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors cursor-pointer truncate text-[12.5px]"
                             title={pkg.roadName || pkg.name}
                           >
                             {pkg.roadName || pkg.name}
                           </div>
-                          <div className="text-[10.5px] text-slate-400 font-mono truncate">
+                          <div className="text-[10.5px] text-slate-400 font-sans truncate mt-0.5">
                             {pkg.packageId} • {pkg.contractor || "Rekanan LPSE"}
                           </div>
                         </td>
 
-                        {/* Kewenangan */}
-                        <td className="py-3 px-3 whitespace-nowrap">
+                        {/* Kewenangan (Borderless Pill) */}
+                        <td className="py-3 px-2 align-middle">
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold border ${authBadge.color}`}
+                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10.5px] font-semibold ${authBadge.color}`}
                           >
-                            {authBadge.label}
+                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${authBadge.dot}`} />
+                            <span>{authBadge.label}</span>
                           </span>
                         </td>
 
-                        {/* Pagu HPS */}
-                        <td className="py-3 px-3 text-right font-semibold text-slate-900 tabular-nums whitespace-nowrap">
-                          {formatRupiahShort(pkg.paguRp)}
-                        </td>
-
-                        {/* Nilai Kontrak */}
-                        <td className="py-3 px-3 text-right font-bold text-slate-900 tabular-nums whitespace-nowrap">
-                          {formatRupiahShort(pkg.contractValueRp)}
+                        {/* Pagu & Nilai Kontrak (Clean 2-Line Stack) */}
+                        <td className="py-3 px-2 text-right tabular-nums align-middle">
+                          <div className="font-bold text-slate-900 text-[12.5px]">
+                            {formatRupiahShort(pkg.paguRp)}
+                          </div>
+                          <div className="text-[10.5px] text-slate-500 font-medium mt-0.5">
+                            Kontrak: {formatRupiahShort(pkg.contractValueRp)}
+                          </div>
                         </td>
 
                         {/* Efisiensi */}
-                        <td className="py-3 px-3 text-right tabular-nums whitespace-nowrap">
-                          <span className="text-emerald-700 font-bold">
+                        <td className="py-3 px-2 text-right tabular-nums align-middle hidden sm:table-cell">
+                          <span className="text-emerald-700 font-bold text-[12px]">
                             {formatRupiahShort(pkg.calculations?.efficiencyRp)}
                           </span>
                           <span className="text-[10px] text-emerald-600 block">
@@ -1129,8 +1129,8 @@ export default function BudgetDataExplorer({
                         </td>
 
                         {/* Fisik */}
-                        <td className="py-3 px-3 text-center whitespace-nowrap">
-                          <div className="inline-flex flex-col items-center gap-1 w-16">
+                        <td className="py-3 px-2 text-center align-middle">
+                          <div className="inline-flex flex-col items-center gap-1 w-14">
                             <span className="font-bold text-slate-800 text-[10.5px] tabular-nums">
                               {pkg.progressPct || 0}%
                             </span>
@@ -1150,11 +1150,11 @@ export default function BudgetDataExplorer({
                         </td>
 
                         {/* Aksi */}
-                        <td className="py-3 px-3 text-right whitespace-nowrap">
-                          <div className="inline-flex items-center gap-1.5">
+                        <td className="py-3 px-2.5 text-right align-middle">
+                          <div className="inline-flex items-center gap-1">
                             <button
                               onClick={() => handleOpenDetailModal(pkg)}
-                              className="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 hover:text-white bg-slate-100 hover:bg-slate-800 transition-colors cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#c2410c] bg-slate-100/80 hover:bg-orange-50 transition-colors cursor-pointer"
                             >
                               Detail
                             </button>
