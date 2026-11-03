@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { ALL_ROADS } from "@/data/roadsData";
 
 /**
- * JagaJalan — Serverless Procurement API Handler & Audit Calculation Engine
+ * JagaJalan: Serverless Procurement API Handler & Audit Calculation Engine
  * Didesain khusus untuk deployment Vercel Serverless / Edge Function.
  *
  * Mengintegrasikan data pengadaan publik resmi:

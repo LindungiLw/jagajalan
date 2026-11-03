@@ -29,7 +29,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "JagaJalan — Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan",
+  title: "JagaJalan | Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan",
   description: "Membuka kotak hitam birokrasi jalan rusak: pemetaan wewenang otomatis, transparansi anggaran APBD/LPSE, dan kepastian tindak lanjut pengaduan berbasis data Ombudsman RI.",
   keywords: ["JagaJalan", "transparansi publik", "jalan rusak", "APBD", "ombudsman", "open government data", "infrastruktur jalan"],
   authors: [{ name: "JagaJalan Initiative" }],
