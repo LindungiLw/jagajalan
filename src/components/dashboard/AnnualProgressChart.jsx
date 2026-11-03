@@ -791,7 +791,7 @@ export default function AnnualProgressChart() {
             </div>
 
             <div className="p-4 rounded-xl bg-rose-50/70 border border-rose-200">
-              <span className="text-[11px] font-semibold text-rose-700 block">Overdue (&gt;14 Hari)</span>
+              <span className="text-[11px] font-semibold text-rose-700 block">Melewati Tenggat Respons</span>
               <div className="text-2xl font-extrabold text-rose-800 font-sans tabular-nums mt-1">
                 {selectedComplaintData.overdue.toLocaleString("id-ID")}
               </div>

@@ -16,10 +16,10 @@ export default function LegalBasisSection() {
     {
       code: "UU No. 25 / 2009",
       title: "Pelayanan Publik",
-      mandate: "Kepastian Respons 14 Hari",
+      mandate: "Kepastian Batas Waktu Respons",
       description:
         "Mewajibkan dinas penyelenggara layanan memberikan kepastian waktu dan tanggapan formal. Keterlambatan dikenai sanksi administratif.",
-      feature: "Countdown SLA 14 Hari",
+      feature: "Pemantauan Tenggat Respons",
     },
     {
       code: "UU No. 37 / 2008",

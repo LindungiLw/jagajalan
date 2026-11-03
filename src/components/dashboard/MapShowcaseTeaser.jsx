@@ -68,7 +68,7 @@ export default function MapShowcaseTeaser({
               <div className="p-3.5 rounded-xl bg-slate-50/80 backdrop-blur-md border border-slate-200/70 shadow-2xs hover:bg-white hover:border-slate-300 transition-all">
                 <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider font-sans">Overdue SLA</div>
                 <div className="text-xl font-bold font-sans tabular-nums text-rose-600 mt-0.5">{overdueCount} Laporan</div>
-                <div className="text-[10px] text-rose-600/80 font-bold mt-0.5 font-sans">&gt; 14 Hari Tanpa Respon</div>
+                <div className="text-[10px] text-rose-600/80 font-bold mt-0.5 font-sans">Melewati Batas Respons</div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-50/80 backdrop-blur-md border border-slate-200/70 shadow-2xs hover:bg-white hover:border-slate-300 transition-all">

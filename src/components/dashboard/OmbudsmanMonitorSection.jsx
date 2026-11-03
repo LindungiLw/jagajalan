@@ -123,7 +123,7 @@ export default function OmbudsmanMonitorSection({
                 Pusat Pemantauan SLA &amp; Eskalasi Ombudsman
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed font-sans">
-                Menghitung mundur batas toleransi respons dinas (14 hari kerja). Laporan yang melewati tenggat dapat langsung dieskalasi sebagai dugaan maladministrasi.
+                Menghitung mundur batas toleransi respons dinas. Laporan yang melewati tenggat resmi dapat langsung dieskalasi sebagai dugaan maladministrasi.
               </p>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function OmbudsmanMonitorSection({
               </span>
             </div>
             <p className="text-[11px] text-slate-500 leading-normal">
-              Dinas diwajibkan memberikan kepastian jadwal kerja dalam 14 hari.
+              Dinas diwajibkan memberikan kepastian tindak lanjut dan jadwal penanganan.
             </p>
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function OmbudsmanMonitorSection({
         <div className="p-4 sm:p-5 rounded-xl bg-white border border-rose-200 shadow-2xs flex flex-col justify-between space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold text-rose-700 font-sans">
-              Melewati Tenggat (&gt;14 Hari)
+              Melewati Batas Tenggat Respons
             </span>
             <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center p-0.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -494,14 +494,14 @@ export default function OmbudsmanMonitorSection({
                         <span>SLA Respons Pelayanan Publik:</span>
                       </span>
                       <span className={isOverdue ? "text-rose-700 font-bold tabular-nums" : isCompleted ? "text-emerald-700 font-bold" : "text-amber-800 font-semibold"}>
-                        {isOverdue ? `Lewat +${report.daysOverdue} Hari` : isCompleted ? "Selesai Tepat Waktu" : "Hari ke-8 dari 14 Hari"}
+                        {isOverdue ? `Lewat +${report.daysOverdue} Hari` : isCompleted ? "Selesai Tepat Waktu" : "Dalam Masa Pemantauan"}
                       </span>
                     </div>
 
                     {/* Dual-Phase Bar Graphic */}
                     <div className="space-y-1">
                       <div className="flex h-2 rounded-full overflow-hidden bg-slate-200/80 p-0.5 gap-0.5">
-                        {/* Phase 1: 14 Days Legal Threshold */}
+                        {/* Phase 1: Legal Threshold */}
                         <div
                           className={`h-full rounded-l-full transition-all duration-500 ${
                             isCompleted
@@ -510,13 +510,13 @@ export default function OmbudsmanMonitorSection({
                               ? "w-[65%] bg-amber-500"
                               : "w-[50%] bg-amber-500"
                           }`}
-                          title="Fase 1 (Hari 1-14): Masa Toleransi Respons Resmi Dinas"
+                          title="Fase 1: Masa Pemantauan Respons Resmi Dinas"
                         />
                         {/* Phase 2: Overdue / Maladministration Zone */}
                         {isOverdue && (
                           <div
                             className="h-full w-[35%] bg-gradient-to-r from-rose-500 to-red-600 rounded-r-full animate-pulse"
-                            title="Fase 2 (Hari 15+): Pelanggaran Maladministrasi Penundaan Berlarut (Undue Delay)"
+                            title="Fase 2: Pelanggaran Maladministrasi Penundaan Berlarut (Undue Delay)"
                           />
                         )}
                       </div>
@@ -524,7 +524,7 @@ export default function OmbudsmanMonitorSection({
                       {/* Timeline Markers */}
                       <div className="flex justify-between text-[9.5px] text-slate-400 font-medium font-sans px-0.5">
                         <span>H-0 Lapor</span>
-                        <span className="font-bold text-slate-600">Batas 14 Hari (UU 25/2009)</span>
+                        <span className="font-bold text-slate-600">Batas Tenggat Respons</span>
                         <span className={isOverdue ? "text-rose-600 font-bold" : "text-slate-400"}>
                           {isOverdue ? "Ombudsman RI" : "Selesai"}
                         </span>
@@ -553,7 +553,7 @@ export default function OmbudsmanMonitorSection({
                     </button>
                   ) : (
                     <span className="text-[11px] font-medium text-slate-400 font-sans">
-                      {isCompleted ? "Tindak Lanjut Tuntas" : "Aktif jika lewat 14 hari"}
+                      {isCompleted ? "Tindak Lanjut Tuntas" : "Aktif jika melewati tenggat"}
                     </span>
                   )}
                 </div>
@@ -711,9 +711,9 @@ export default function OmbudsmanMonitorSection({
             <span className="text-[10px] font-bold text-amber-700 tracking-wider uppercase block">
               LANGKAH 02
             </span>
-            <strong className="text-slate-900 block text-xs font-bold">Masa Tanggap 14 Hari (UU 25/2009)</strong>
+            <strong className="text-slate-900 block text-xs font-bold">Masa Tanggap Resmi Dinas</strong>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Dinas berwenang diberikan tenggat hukum 14 hari kerja untuk merespons dan menjadwalkan perbaikan fisik jalan.
+              Dinas berwenang diberikan batas waktu untuk merespons dan menjadwalkan perbaikan fisik jalan.
             </p>
           </div>
 

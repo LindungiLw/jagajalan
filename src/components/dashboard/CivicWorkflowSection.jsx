@@ -38,7 +38,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
       badge: "UU No. 25/2009",
       title: "SLA & Ombudsman RI",
       description:
-        "Hitung mundur batas respons 14 hari kerja. Jika diabaikan, draf pengaduan maladministrasi siap diunduh.",
+        "Memantau kepatuhan batas waktu respons dinas. Jika diabaikan, draf pengaduan maladministrasi siap diunduh.",
       outcome: "Kepastian Hukum & Eskalasi",
     },
   ];

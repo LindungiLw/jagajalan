@@ -246,7 +246,7 @@ export default function OfficerDashboard({
               <span>Panel Operasional Disposisi &amp; Verifikasi Bukti Fisik</span>
             </span>
             <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200 text-[10px] font-semibold font-sans">
-              Kepatuhan UU No. 25/2009 (SLA 14 Hari)
+              Kepatuhan UU No. 25/2009 (Tenggat Respons)
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold font-heading tracking-tight text-slate-900">
@@ -355,7 +355,7 @@ export default function OfficerDashboard({
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold font-sans tabular-nums text-rose-700">{stats.overdue}</span>
-            <span className="text-xs text-slate-500 font-sans">&gt;14 hari tanpa tanggapan</span>
+            <span className="text-xs text-slate-500 font-sans">Belum ada tanggapan dinas</span>
           </div>
           <p className="mt-1 text-[11px] text-rose-600 font-sans">Objek pengawasan Ombudsman RI</p>
         </div>
@@ -450,7 +450,7 @@ export default function OfficerDashboard({
           <span>
             Menampilkan <strong>{filteredReports.length}</strong> tiket penanganan dinas
           </span>
-          <span className="font-sans text-[11px]">SOP Standar Kepatuhan: 14 Hari Kerja</span>
+          <span className="font-sans text-[11px]">Standar Pelayanan Publik Nasional</span>
         </div>
 
         {filteredReports.length === 0 ? (
@@ -637,7 +637,7 @@ export default function OfficerDashboard({
                     <span>
                       Riwayat Audit: <strong>{report.updates?.length || 1} aktivitas tercatat</strong>
                     </span>
-                    <span>Tenggat Tanggapan Resmi: 14 Hari Kerja</span>
+                    <span>Tenggat Tanggapan Resmi Dinas</span>
                   </div>
                 </div>
               );
