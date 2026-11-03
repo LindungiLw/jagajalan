@@ -14,7 +14,6 @@ import {
   FileCheck,
   Building2,
   Calendar,
-  Sparkles,
   ExternalLink,
   ChevronRight,
   X,
@@ -24,7 +23,6 @@ import {
   UserCheck,
   BadgeCheck,
 } from "lucide-react";
-import confetti from "canvas-confetti";
 
 // Preset photos of finished road repairs for rapid pitching demonstration
 const PRESET_PROOF_PHOTOS = [
@@ -171,48 +169,41 @@ export default function OfficerDashboard({
     setActiveReportToEdit(null);
     setIsSuccessToast(true);
 
-    if (isNowDone) {
-      try {
-        confetti({
-          particleCount: 50,
-          spread: 60,
-          origin: { y: 0.6 },
-        });
-      } catch {}
-    }
-
     setTimeout(() => setIsSuccessToast(false), 3500);
   };
 
   return (
-    <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-fade-in">
+    <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 animate-fade-in">
       {/* 1. Active Authenticated Session Bar */}
-      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-2xl border border-orange-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon/profile.png"
               alt="Profil Petugas"
-              className="w-full h-full object-contain"
+              width={28}
+              height={28}
+              style={{ width: "28px", height: "28px" }}
+              className="w-7 h-7 object-contain"
             />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-extrabold text-sm text-slate-900">{currentOfficer?.name || "Aparatur Dinas Terverifikasi"}</span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-orange-50/90 text-orange-950 border border-orange-200/90 flex items-center gap-1 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Sesi Aktif Terotentikasi</span>
               </span>
               {currentOfficer?.authorityLevel && (
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider ${
+                <span className={`px-2 py-0.5 rounded text-[10px] font-sans font-bold uppercase tracking-wider border ${
                   currentOfficer.authorityLevel === "NASIONAL"
-                    ? "bg-orange-50 text-orange-950 border border-orange-200"
+                    ? "bg-blue-50 text-blue-800 border-blue-200"
                     : currentOfficer.authorityLevel === "PROVINSI"
-                    ? "bg-amber-50 text-amber-950 border border-amber-200"
+                    ? "bg-purple-50 text-purple-800 border-purple-200"
                     : currentOfficer.authorityLevel === "KOTA"
-                    ? "bg-orange-50/70 text-orange-900 border border-orange-200/70"
-                    : "bg-stone-50 text-stone-900 border border-stone-200"
+                    ? "bg-teal-50 text-teal-800 border-teal-200"
+                    : "bg-emerald-50 text-emerald-800 border-emerald-200"
                 }`}>
                   Tingkat {currentOfficer.authorityLevel}
                 </span>
@@ -228,15 +219,15 @@ export default function OfficerDashboard({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onSwitchToMap}
-            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+            className="px-3.5 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Eye className="w-3.5 h-3.5 text-orange-700" />
+            <Eye className="w-3.5 h-3.5 text-[#c2410c]" />
             <span>Pratinjau Peta Publik</span>
           </button>
           {onLogout && (
             <button
               onClick={onLogout}
-              className="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Keluar dari sesi verifikator dinas"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-600" />
@@ -247,29 +238,29 @@ export default function OfficerDashboard({
       </div>
 
       {/* 2. Institutional Operation Notice */}
-      <div className="bg-white p-5 sm:p-6 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div className="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="space-y-1.5 max-w-3xl">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200 font-sans text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <HardHat className="w-3.5 h-3.5 text-orange-700" />
-              <span>Panel Operasional Disposisi & Verifikasi Bukti Fisik</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2 py-0.5 rounded bg-orange-50 text-orange-800 border border-orange-200 font-sans text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <HardHat className="w-3.5 h-3.5 text-[#c2410c]" />
+              <span>Panel Operasional Disposisi &amp; Verifikasi Bukti Fisik</span>
             </span>
-            <span className="px-2 py-0.5 rounded-[5px] bg-amber-50 text-amber-900 border border-amber-200 text-[10px] font-semibold font-sans">
+            <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200 text-[10px] font-semibold font-sans">
               Kepatuhan UU No. 25/2009 (SLA 14 Hari)
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
+          <h1 className="text-xl sm:text-2xl font-bold font-heading tracking-tight text-slate-900">
             Daftar Antrean Tindak Lanjut Penyelenggara Jalan
           </h1>
           <p className="text-xs text-slate-600 leading-relaxed font-sans">
-            Perbarui tahapan pengerjaan fisik di lapangan sebelum batas tenggat SLA terlampaui. Setiap tiket yang diselesaikan wajib melampirkan dokumentasi foto bukti pengerjaan (*Before-After*) untuk membatalkan draf eskalasi Ombudsman RI.
+            Perbarui tahapan pengerjaan fisik di lapangan sebelum batas tenggat SLA terlampaui. Setiap tiket yang diselesaikan wajib melampirkan dokumentasi foto bukti pengerjaan (<em>Before-After</em>) untuk membatalkan draf eskalasi Ombudsman RI.
           </p>
         </div>
 
-        <div className="p-3 rounded-[5px] bg-slate-50 border border-slate-200 text-xs shrink-0 font-sans space-y-1">
+        <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs shrink-0 font-sans space-y-1">
           <div className="text-[10px] text-slate-400 uppercase">Instansi Aktif:</div>
           <div className="font-bold text-slate-900">{currentOfficer?.institution || "BBPJN • DBMPR • PUPR"}</div>
-          <div className="text-[10px] text-orange-800 font-semibold flex items-center gap-1 font-sans">
+          <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 font-sans">
             <Check className="w-3 h-3" />
             <span>Kewenangan Disposisi Sah</span>
           </div>
@@ -278,24 +269,24 @@ export default function OfficerDashboard({
 
       {/* Success Notification Banner */}
       {isSuccessToast && (
-        <div className="p-4 rounded-[5px] bg-orange-50 border border-orange-200/90 text-orange-950 flex items-center justify-between animate-fade-in shadow-2xs">
+        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 flex items-center justify-between animate-fade-in shadow-2xs">
           <div className="flex items-center gap-2.5 text-xs font-semibold font-sans">
-            <CheckCircle2 className="w-4 h-4 text-orange-600" />
-            <span>Pembaruan status & dokumentasi bukti pengerjaan berhasil disinkronkan ke peta publik!</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>Pembaruan status &amp; dokumentasi bukti pengerjaan berhasil disinkronkan ke peta publik!</span>
           </div>
-          <span className="text-[11px] font-sans font-medium text-orange-800">Audit Trail Terverifikasi</span>
+          <span className="text-[11px] font-sans font-medium text-emerald-800">Audit Trail Terverifikasi</span>
         </div>
       )}
 
-      {/* 4 Status KPI Counters (Strict 5px radius) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 4 Status KPI Counters */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Counter 1: Butuh Verifikasi */}
         <div
           onClick={() => setSelectedStatusFilter("NEED_VERIFY")}
-          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
+          className={`cursor-pointer p-4 rounded-xl border transition-all ${
             selectedStatusFilter === "NEED_VERIFY"
               ? "bg-amber-50 border-amber-400 ring-2 ring-amber-400/20"
-              : "bg-white border-slate-200 hover:border-slate-300"
+              : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
@@ -312,15 +303,15 @@ export default function OfficerDashboard({
         {/* Counter 2: Dalam Penanganan */}
         <div
           onClick={() => setSelectedStatusFilter("IN_PROGRESS")}
-          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
+          className={`cursor-pointer p-4 rounded-xl border transition-all ${
             selectedStatusFilter === "IN_PROGRESS"
               ? "bg-orange-50 border-orange-300 ring-2 ring-orange-300/30 text-orange-900"
-              : "bg-white border-slate-200 hover:border-slate-300"
+              : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
             <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Dalam Pengerjaan</span>
-            <HardHat className="w-4 h-4 text-orange-700" />
+            <HardHat className="w-4 h-4 text-[#c2410c]" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.inProgress}</span>
@@ -329,21 +320,21 @@ export default function OfficerDashboard({
           <p className="mt-1 text-[11px] text-slate-600 font-sans">Sedang ditambal/overlay di lapangan</p>
         </div>
 
-        {/* Counter 3: Selesai Diperbaiki */}
+        {/* Counter 3: Selesai Diperbaiki (Emerald) */}
         <div
           onClick={() => setSelectedStatusFilter("COMPLETED")}
-          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
+          className={`cursor-pointer p-4 rounded-xl border transition-all ${
             selectedStatusFilter === "COMPLETED"
-              ? "bg-orange-50 border-orange-400 ring-2 ring-orange-400/20"
-              : "bg-white border-slate-200 hover:border-slate-300"
+              ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20"
+              : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Selesai (+Foto Bukti)</span>
-            <CheckCircle2 className="w-4 h-4 text-orange-600" />
+            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai (+Foto Bukti)</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.completed}</span>
+            <span className="text-3xl font-bold font-sans tabular-nums text-emerald-800">{stats.completed}</span>
             <span className="text-xs text-slate-500 font-sans">tiket ditutup</span>
           </div>
           <p className="mt-1 text-[11px] text-slate-600 font-sans">Terbukti dengan foto before-after</p>
@@ -352,10 +343,10 @@ export default function OfficerDashboard({
         {/* Counter 4: Overdue SLA */}
         <div
           onClick={() => setSelectedStatusFilter("OVERDUE")}
-          className={`cursor-pointer p-4 rounded-[5px] border transition-all ${
+          className={`cursor-pointer p-4 rounded-xl border transition-all ${
             selectedStatusFilter === "OVERDUE"
               ? "bg-rose-50 border-rose-400 ring-2 ring-rose-400/20"
-              : "bg-white border-slate-200 hover:border-slate-300"
+              : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
@@ -370,16 +361,16 @@ export default function OfficerDashboard({
         </div>
       </div>
 
-      {/* Filter Toolbar Card (Strict 5px radius) */}
-      <div className="bg-white p-4 sm:p-4.5 rounded-[5px] border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Filter Toolbar Card */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Authority Selection */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
           <span className="text-slate-500 mr-1 hidden sm:inline">Instansi Anda:</span>
           <button
             onClick={() => setSelectedAuthority("ALL")}
-            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               selectedAuthority === "ALL"
-                ? "bg-[#c2410c] text-white font-bold shadow-xs"
+                ? "bg-slate-900 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
@@ -387,9 +378,9 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("NASIONAL")}
-            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               selectedAuthority === "NASIONAL"
-                ? "bg-[#c2410c] text-white font-bold shadow-xs"
+                ? "bg-blue-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
@@ -397,9 +388,9 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("PROVINSI")}
-            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               selectedAuthority === "PROVINSI"
-                ? "bg-amber-700 text-white font-bold shadow-xs"
+                ? "bg-purple-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
@@ -407,9 +398,9 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("KOTA")}
-            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               selectedAuthority === "KOTA"
-                ? "bg-teal-700 text-white font-bold shadow-xs"
+                ? "bg-teal-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
@@ -417,9 +408,9 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("KABUPATEN")}
-            className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               selectedAuthority === "KABUPATEN"
-                ? "bg-emerald-700 text-white font-bold shadow-xs"
+                ? "bg-emerald-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
@@ -433,7 +424,7 @@ export default function OfficerDashboard({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-1.5 rounded-[5px] bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-sans"
+            className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-sans"
           >
             <option value="HAZARD">Prioritas Hazard Score AI (Tertinggi)</option>
             <option value="SLA">Kritis Batas Waktu SLA (Terancam Overdue)</option>
@@ -444,7 +435,7 @@ export default function OfficerDashboard({
           {selectedStatusFilter !== "ALL" && (
             <button
               onClick={() => setSelectedStatusFilter("ALL")}
-              className="px-2.5 py-1.5 rounded-[5px] bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+              className="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
               <span>Reset Filter</span>
@@ -463,7 +454,7 @@ export default function OfficerDashboard({
         </div>
 
         {filteredReports.length === 0 ? (
-          <div className="bg-white p-10 rounded-[5px] border border-slate-200 text-center space-y-2">
+          <div className="bg-white p-10 rounded-xl border border-slate-200 text-center space-y-2">
             <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
             <h4 className="font-bold text-slate-900 text-sm">Tidak ada antrean dalam kategori ini</h4>
             <p className="text-xs text-slate-500">Semua laporan untuk filter ini telah diproses dengan baik.</p>
@@ -478,34 +469,34 @@ export default function OfficerDashboard({
               return (
                 <div
                   key={report.id}
-                  className={`bg-white p-5 rounded-[5px] border transition-all ${
+                  className={`bg-white p-5 rounded-xl border transition-all shadow-2xs ${
                     isOverdue
-                      ? "border-rose-300 border-l-4 border-l-rose-600 shadow-xs"
+                      ? "border-rose-300 border-l-4 border-l-rose-600"
                       : isDone
-                      ? "border-orange-300 border-l-4 border-l-orange-600 shadow-xs"
+                      ? "border-emerald-300 border-l-4 border-l-emerald-600"
                       : isInProgress
-                      ? "border-orange-300 border-l-4 border-l-orange-500 shadow-xs"
-                      : "border-amber-300 border-l-4 border-l-amber-500 shadow-xs"
+                      ? "border-orange-300 border-l-4 border-l-orange-500"
+                      : "border-amber-300 border-l-4 border-l-amber-500"
                   }`}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                     {/* Left: Info & Photos */}
                     <div className="flex flex-col sm:flex-row gap-4 flex-1">
                       {/* Photo Thumbnail */}
-                      <div className="relative w-full sm:w-40 h-28 rounded-[5px] overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                      <div className="relative w-full sm:w-40 h-28 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={report.photoUrl}
                           alt="Bukti Laporan"
                           className="w-full h-full object-cover"
                         />
-                        <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-[3px] text-[9px] font-bold bg-slate-800/80 text-white backdrop-blur-xs">
+                        <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800/80 text-white backdrop-blur-xs">
                           Foto Warga (Before)
                         </span>
 
                         {report.proofPhotoUrl && (
-                          <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded-[3px] text-[9px] font-bold bg-orange-600 text-white shadow-xs">
-                            ✓ Ada Bukti Selesai
+                          <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-600 text-white shadow-xs">
+                            ✓ Bukti Selesai
                           </span>
                         )}
                       </div>
@@ -513,28 +504,28 @@ export default function OfficerDashboard({
                       {/* Detail Text */}
                       <div className="space-y-1.5 flex-1 text-xs">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-sans tabular-nums font-bold text-slate-900 px-2 py-0.5 rounded-[5px] bg-slate-100 border border-slate-200 text-[11px]">
+                          <span className="font-sans tabular-nums font-bold text-slate-900 px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px]">
                             {report.ticketCode}
                           </span>
 
                           {/* Status Badge */}
                           {isOverdue && (
-                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
                               OVERDUE +{report.daysOverdue} HARI KERJA
                             </span>
                           )}
                           {isDone && (
-                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-950 border border-orange-200/90 shadow-2xs">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                               PENANGANAN SELESAI
                             </span>
                           )}
                           {isInProgress && (
-                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
                               DALAM PENGERJAAN FISIK
                             </span>
                           )}
                           {report.status === "MENUNGGU_VERIFIKASI" && (
-                            <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
                               MENUNGGU VERIFIKASI DISPOSISI
                             </span>
                           )}
@@ -556,11 +547,11 @@ export default function OfficerDashboard({
 
                         {/* AI & APBD Pills */}
                         <div className="pt-1 flex flex-wrap items-center gap-2 text-[11px]">
-                          <span className="px-2 py-0.5 rounded-[5px] bg-slate-100 font-semibold text-slate-800 border border-slate-200">
+                          <span className="px-2 py-0.5 rounded bg-slate-100 font-semibold text-slate-800 border border-slate-200">
                             {report.categoryLabel}
                           </span>
                           <span
-                            className={`px-2 py-0.5 rounded-[5px] font-bold ${
+                            className={`px-2 py-0.5 rounded font-bold ${
                               report.hazardScore >= 80
                                 ? "bg-rose-100 text-rose-700"
                                 : "bg-amber-100 text-amber-700"
@@ -568,12 +559,12 @@ export default function OfficerDashboard({
                           >
                             Skor Bahaya AI: {report.hazardScore}/100
                           </span>
-                          <span className="text-orange-700 font-medium">
+                          <span className="text-[#c2410c] font-medium">
                             Pagu APBD: Rp {((report.matchingBudget?.paguRp || 0) / 1000000000).toFixed(1)} Miliar ({report.matchingBudget?.packageName || "Pemeliharaan Jalan"})
                           </span>
                         </div>
 
-                        <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-[5px] border border-slate-200">
+                        <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200">
                           {report.aiAnalysis}
                         </p>
                       </div>
@@ -583,7 +574,7 @@ export default function OfficerDashboard({
                     <div className="flex lg:flex-col items-center justify-end gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                       <button
                         onClick={() => handleOpenActionModal(report)}
-                        className="w-full sm:w-auto px-4 py-2 rounded-[5px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        className="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <HardHat className="w-3.5 h-3.5 text-white" />
                         <span>Proses Tindak Lanjut Dinas</span>
@@ -591,7 +582,7 @@ export default function OfficerDashboard({
 
                       <button
                         onClick={onSwitchToMap}
-                        className="w-full sm:w-auto px-3 py-2 rounded-[5px] text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        className="w-full sm:w-auto px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5 text-slate-500" />
                         <span>Buka Koordinat Peta</span>
@@ -612,7 +603,7 @@ export default function OfficerDashboard({
 
                       <div className="grid grid-cols-2 gap-3 max-w-md">
                         <div className="space-y-1">
-                          <div className="h-24 rounded-[5px] overflow-hidden border border-slate-300 bg-slate-100">
+                          <div className="h-24 rounded-lg overflow-hidden border border-slate-300 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={report.photoUrl}
@@ -625,7 +616,7 @@ export default function OfficerDashboard({
                           </span>
                         </div>
                         <div className="space-y-1">
-                          <div className="h-24 rounded-[5px] overflow-hidden border border-orange-400 ring-2 ring-orange-400/20 bg-slate-100">
+                          <div className="h-24 rounded-lg overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={report.proofPhotoUrl}
@@ -633,7 +624,7 @@ export default function OfficerDashboard({
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-[10px] font-bold text-orange-800 block text-center">
+                          <span className="text-[10px] font-bold text-emerald-800 block text-center">
                             AFTER: Hasil Pengerjaan Dinas
                           </span>
                         </div>
@@ -655,20 +646,20 @@ export default function OfficerDashboard({
         )}
       </div>
 
-      {/* Action Modal / Drawer for Officer (Strict 5px radius) */}
+      {/* Action Modal / Drawer for Officer */}
       {activeReportToEdit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-          <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-[5px] bg-white border border-slate-200 shadow-xl overflow-hidden">
-            {/* Modal Header (Clean White + Warm Orange Accent) */}
+          <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-xl bg-white border border-slate-200 shadow-xl overflow-hidden">
+            {/* Modal Header */}
             <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-white text-slate-900">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-[5px] bg-orange-50 border border-orange-200 flex items-center justify-center text-[#c2410c]">
+                <div className="w-9 h-9 rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center text-[#c2410c]">
                   <HardHat className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-extrabold text-slate-900 text-base">Tindak Lanjut & Verifikasi Dinas</h3>
-                    <span className="px-2 py-0.5 rounded-[5px] font-sans tabular-nums text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
+                    <h3 className="font-extrabold text-slate-900 text-base">Tindak Lanjut &amp; Verifikasi Dinas</h3>
+                    <span className="px-2 py-0.5 rounded font-sans tabular-nums text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">
                       {activeReportToEdit.ticketCode}
                     </span>
                   </div>
@@ -677,7 +668,7 @@ export default function OfficerDashboard({
               </div>
               <button
                 onClick={() => setActiveReportToEdit(null)}
-                className="p-1.5 rounded-[5px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -694,14 +685,14 @@ export default function OfficerDashboard({
                   <button
                     type="button"
                     onClick={() => setTargetStatus("DALAM_PENGERJAAN")}
-                    className={`p-3 rounded-[5px] border text-left transition-all cursor-pointer ${
+                    className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                       targetStatus === "DALAM_PENGERJAAN"
                         ? "bg-orange-50 border-orange-300 ring-2 ring-orange-300/30 text-orange-950"
                         : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
                     }`}
                   >
                     <div className="font-bold flex items-center gap-1.5">
-                      <HardHat className="w-3.5 h-3.5 text-orange-700" />
+                      <HardHat className="w-3.5 h-3.5 text-[#c2410c]" />
                       <span>Dalam Penanganan Fisik</span>
                     </div>
                     <p className="text-[11px] text-slate-500 mt-1">
@@ -712,14 +703,14 @@ export default function OfficerDashboard({
                   <button
                     type="button"
                     onClick={() => setTargetStatus("SELESAI")}
-                    className={`p-3 rounded-[5px] border text-left transition-all cursor-pointer ${
+                    className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                       targetStatus === "SELESAI"
-                        ? "bg-orange-50 border-orange-400 ring-2 ring-orange-400/20 text-orange-950"
+                        ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20 text-emerald-950"
                         : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
                     }`}
                   >
                     <div className="font-bold flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-orange-600" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                       <span>Penanganan Selesai Diperbaiki</span>
                     </div>
                     <p className="text-[11px] text-slate-500 mt-1">
@@ -741,7 +732,7 @@ export default function OfficerDashboard({
                     value={officerName}
                     onChange={(e) => setOfficerName(e.target.value)}
                     placeholder="Contoh: Ir. Hendra (Koordinator UPTD Barat)"
-                    className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
                   />
                 </div>
                 <div>
@@ -752,7 +743,7 @@ export default function OfficerDashboard({
                     type="text"
                     disabled
                     value={activeReportToEdit.authorityLabel}
-                    className="w-full px-3 py-2 rounded-[5px] bg-slate-100 border border-slate-200 text-xs text-slate-600 cursor-not-allowed font-medium"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-100 border border-slate-200 text-xs text-slate-600 cursor-not-allowed font-medium"
                   />
                 </div>
               </div>
@@ -767,7 +758,7 @@ export default function OfficerDashboard({
                   value={officerNote}
                   onChange={(e) => setOfficerNote(e.target.value)}
                   placeholder="Deskripsikan material yang digunakan, volume penambalan, dan hasil pengerjaan..."
-                  className="w-full px-3 py-2 rounded-[5px] bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
                 />
               </div>
 
@@ -788,9 +779,9 @@ export default function OfficerDashboard({
                       key={idx}
                       type="button"
                       onClick={() => setProofPhotoUrl(proof.url)}
-                      className={`px-2.5 py-1 rounded-[5px] shrink-0 border transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg shrink-0 border transition-all cursor-pointer ${
                         proofPhotoUrl === proof.url
-                          ? "bg-orange-100 border-orange-400 text-orange-950 font-bold"
+                          ? "bg-emerald-50 border-emerald-400 text-emerald-950 font-bold"
                           : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100"
                       }`}
                     >
@@ -800,11 +791,11 @@ export default function OfficerDashboard({
                 </div>
 
                 {/* Side-by-side Before vs After Preview */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-[5px] bg-slate-50 border border-slate-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                   {/* Before */}
                   <div className="space-y-1">
                     <span className="text-[11px] font-bold text-slate-600">Foto Laporan Warga (BEFORE)</span>
-                    <div className="h-32 rounded-[5px] overflow-hidden border border-slate-200 bg-slate-100">
+                    <div className="h-32 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={activeReportToEdit.photoUrl}
@@ -816,10 +807,10 @@ export default function OfficerDashboard({
 
                   {/* After with Upload Button */}
                   <div className="space-y-1">
-                    <span className="text-[11px] font-bold text-orange-950">
+                    <span className="text-[11px] font-bold text-emerald-900">
                       Hasil Pengerjaan Dinas (AFTER)
                     </span>
-                    <div className="relative h-32 rounded-[5px] overflow-hidden border border-orange-400 ring-2 ring-orange-400/20 bg-slate-100">
+                    <div className="relative h-32 rounded-lg overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={proofPhotoUrl}
@@ -851,10 +842,10 @@ export default function OfficerDashboard({
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 rounded-[5px] font-bold text-xs text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-lg font-bold text-xs text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <FileCheck className="w-4 h-4" />
-                  <span>Simpan Perubahan & Terbitkan Bukti ke Publik</span>
+                  <span>Simpan Perubahan &amp; Terbitkan Bukti ke Publik</span>
                 </button>
               </div>
             </form>

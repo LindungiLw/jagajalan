@@ -15,7 +15,7 @@ import {
   ArrowLeft,
   KeyRound,
   FileText,
-  Sparkles,
+  UserCheck,
 } from "lucide-react";
 import { OFFICIAL_OFFICERS, authenticateOfficer } from "@/data/officersData";
 
@@ -71,17 +71,20 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       </div>
 
       {/* Main Login Card */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
         {/* Institutional Header Banner */}
         <div className="bg-white p-6 sm:p-7 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-orange-50 border border-orange-200/80 p-2 shadow-xs shrink-0 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/profile.png"
                   alt="Akses Petugas"
-                  className="w-full h-full object-contain"
+                  width={36}
+                  height={36}
+                  style={{ width: "36px", height: "36px" }}
+                  className="w-9 h-9 object-contain"
                 />
               </div>
               <div className="space-y-1.5">
@@ -177,7 +180,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 disabled:opacity-60 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                className="w-full py-2.5 px-4 rounded-lg text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-60 shadow-2xs transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
               >
                 {isLoading ? (
                   <span>Memverifikasi NIP...</span>
@@ -191,16 +194,16 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
             </form>
 
             {/* Right 6 Cols: 1-Click Simulation Cards for Evaluator/Judges */}
-            <div className="lg:col-span-6 space-y-3.5 bg-orange-50/40 p-4 sm:p-5 rounded-2xl border border-orange-200/80">
-              <div className="flex items-center justify-between border-b border-orange-200/70 pb-2">
+            <div className="lg:col-span-6 space-y-3.5 bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                 <div className="flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-orange-700" />
+                  <UserCheck className="w-4 h-4 text-[#c2410c]" />
                   <span className="text-xs font-bold text-slate-900 uppercase font-sans tracking-wide">
-                    Simulasi Cepat (1-Klik untuk Evaluasi Juri)
+                    Simulasi Cepat (1-Klik Akun Instansi)
                   </span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-orange-100 text-orange-800 border border-orange-300">
-                  Demo WIA 2026
+                <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-orange-50 text-[#9a3412] border border-orange-200">
+                  Demo Evaluasi
                 </span>
               </div>
 
@@ -213,10 +216,10 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   <div
                     key={officer.id}
                     onClick={() => handleQuickLogin(officer)}
-                    className="p-3 rounded-xl bg-white border border-slate-200 hover:border-orange-400 hover:shadow-sm transition-all cursor-pointer group flex items-start justify-between gap-3"
+                    className="p-3 rounded-xl bg-white border border-slate-200 hover:border-orange-300 hover:shadow-2xs transition-all cursor-pointer group flex items-start justify-between gap-3"
                   >
                     <div className="flex items-start gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-900 border border-orange-200 font-sans font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white group-hover:border-[#c2410c] transition-colors">
+                      <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 font-sans font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white group-hover:border-[#c2410c] transition-colors">
                         {officer.avatar}
                       </div>
                       <div>
@@ -224,12 +227,12 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                           <h3 className="font-bold text-xs text-slate-900 group-hover:text-[#c2410c] transition-colors">
                             {officer.name}
                           </h3>
-                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-sans font-bold uppercase tracking-wider ${
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-sans font-bold uppercase tracking-wider border ${
                             officer.authorityLevel === "NASIONAL"
-                              ? "bg-slate-100 text-slate-800 border border-slate-300"
+                              ? "bg-blue-50 text-blue-800 border-blue-200"
                               : officer.authorityLevel === "PROVINSI"
-                              ? "bg-amber-100 text-amber-900 border border-amber-300"
-                              : "bg-orange-100 text-orange-900 border border-orange-300"
+                              ? "bg-purple-50 text-purple-800 border-purple-200"
+                              : "bg-teal-50 text-teal-800 border-teal-200"
                           }`}>
                             {officer.authorityLevel}
                           </span>
