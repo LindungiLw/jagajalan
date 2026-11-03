@@ -36,15 +36,15 @@ function formatRupiahShort(amount) {
   return `Rp ${Number(amount).toLocaleString("id-ID")}`;
 }
 
-// Dataset historis perbandingan Pagu HPS vs Nilai Kontrak SPK (2020 – 2026)
+// Dataset historis perbandingan Pagu HPS vs Nilai Kontrak SPK (2020 – 2026) dalam Triliun Rupiah
 const HISTORICAL_BAR_DATA = [
-  { year: "2020", pagu: 100, kontrak: 88, paguRp: "Rp 32,4 T", kontrakRp: "Rp 28,5 T" },
-  { year: "2021", pagu: 75, kontrak: 66, paguRp: "Rp 34,1 T", kontrakRp: "Rp 30,7 T" },
-  { year: "2022", pagu: 50, kontrak: 42, paguRp: "Rp 36,8 T", kontrakRp: "Rp 32,9 T" },
-  { year: "2023", pagu: 75, kontrak: 68, paguRp: "Rp 38,5 T", kontrakRp: "Rp 34,2 T" },
-  { year: "2024", pagu: 50, kontrak: 40, paguRp: "Rp 39,7 T", kontrakRp: "Rp 35,6 T" },
-  { year: "2025", pagu: 100, kontrak: 90, paguRp: "Rp 40,8 T", kontrakRp: "Rp 36,8 T" },
-  { year: "2026", pagu: 90, kontrak: 75, paguRp: "Rp 41,2 T", kontrakRp: "Rp 37,1 T" },
+  { year: "2020", pagu: 32.4, kontrak: 28.5, paguRp: "Rp 32,4 T", kontrakRp: "Rp 28,5 T" },
+  { year: "2021", pagu: 34.1, kontrak: 30.7, paguRp: "Rp 34,1 T", kontrakRp: "Rp 30,7 T" },
+  { year: "2022", pagu: 36.8, kontrak: 32.9, paguRp: "Rp 36,8 T", kontrakRp: "Rp 32,9 T" },
+  { year: "2023", pagu: 38.5, kontrak: 34.2, paguRp: "Rp 38,5 T", kontrakRp: "Rp 34,2 T" },
+  { year: "2024", pagu: 39.7, kontrak: 35.6, paguRp: "Rp 39,7 T", kontrakRp: "Rp 35,6 T" },
+  { year: "2025", pagu: 40.8, kontrak: 36.8, paguRp: "Rp 40,8 T", kontrakRp: "Rp 36,8 T" },
+  { year: "2026", pagu: 41.2, kontrak: 37.1, paguRp: "Rp 41,2 T", kontrakRp: "Rp 37,1 T" },
 ];
 
 // Helper kurva bezier halus (Cubic Bezier Spline) untuk Area Chart
@@ -403,21 +403,21 @@ export default function BudgetDataExplorer({
     return filteredPackages.slice(start, start + pageSize);
   }, [filteredPackages, currentPage, pageSize]);
 
-  // Precomputed SVG coordinate points for Area Chart (Email Sent equivalent)
+  // Precomputed SVG coordinate points for Area Chart (Alokasi vs Realisasi Fisik dalam Triliun Rp, skala 0 - 50 T)
   const areaPoints = useMemo(() => {
     const years = ["2020", "2021", "2022", "2023", "2024", "2025", "2026"];
-    const upperVals = [30, 140, 115, 170, 110, 145, 165];
-    const lowerVals = [15, 75, 55, 75, 50, 70, 90];
+    const upperVals = [32.4, 34.1, 36.8, 38.5, 39.7, 40.8, 41.2];
+    const lowerVals = [28.5, 30.7, 32.9, 34.2, 35.6, 36.8, 37.1];
 
     const upperPts = years.map((yr, i) => {
       const x = 40 + i * 76.66;
-      const y = 180 - (upperVals[i] / 200) * 150;
+      const y = 180 - (upperVals[i] / 50) * 150;
       return { x, y, year: yr, val: upperVals[i] };
     });
 
     const lowerPts = years.map((yr, i) => {
       const x = 40 + i * 76.66;
-      const y = 180 - (lowerVals[i] / 200) * 150;
+      const y = 180 - (lowerVals[i] / 50) * 150;
       return { x, y, year: yr, val: lowerVals[i] };
     });
 
@@ -436,11 +436,11 @@ export default function BudgetDataExplorer({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4 animate-fade-in text-slate-800">
       {/* ========================================================================= */}
-      {/* TIER 1: 4 TOP STAT CARDS (Clean JagaJalan Design - Tanpa Shadow Gelap)    */}
+      {/* TIER 1: 4 TOP STAT CARDS                                                  */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Card 1: Total Pagu Anggaran (Orange theme) */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between space-y-3 hover:border-orange-300 transition-all">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Total Pagu Anggaran (HPS)
@@ -453,12 +453,12 @@ export default function BudgetDataExplorer({
             </p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-orange-500 rounded-full w-full" />
+            <div className="h-full bg-[#c2410c] rounded-full w-full" />
           </div>
         </div>
 
         {/* Card 2: Realisasi Kontrak SPK (Blue theme) */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between space-y-3 hover:border-blue-300 transition-all">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-blue-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Realisasi Kontrak (SPK)
@@ -479,7 +479,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 3: Efisiensi Lelang LPSE (Emerald theme) */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between space-y-3 hover:border-emerald-300 transition-all">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-emerald-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Efisiensi Lelang LPSE
@@ -500,10 +500,10 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 4: Atensi Audit Proyek (Amber theme) */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between space-y-3 hover:border-amber-300 transition-all">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-amber-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
-              Atensi Audit & Fisik
+              Atensi Audit &amp; Fisik
             </span>
             <div className="text-2xl sm:text-[27px] font-bold text-slate-900 tracking-tight font-sans tabular-nums mt-1">
               {anomalyCount} Paket
@@ -522,16 +522,16 @@ export default function BudgetDataExplorer({
       </div>
 
       {/* ========================================================================= */}
-      {/* TIER 2: 2 ANALYTICAL CHARTS (Data Realistis & Indikator Sinkron)          */}
+      {/* TIER 2: 2 ANALYTICAL CHARTS (Data Proporsional Triliun Rupiah)            */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Left Card: Perbandingan Pagu HPS vs Nilai Kontrak (Double Bar Chart) */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
           {/* Card Header & 3 Top Metric Badges (100% Real Sesuai Data Aktif) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                Perbandingan Pagu HPS vs Nilai Kontrak
+                Perbandingan Pagu HPS vs Nilai Kontrak (Nasional)
               </h3>
             </div>
 
@@ -539,7 +539,7 @@ export default function BudgetDataExplorer({
             <div className="grid grid-cols-3 gap-2 py-2 border-y border-slate-100 text-center">
               <div>
                 <div className="inline-flex items-center justify-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-orange-500 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-slate-800 shrink-0" />
                   <span className="text-sm sm:text-base font-bold text-slate-900 font-sans tabular-nums">
                     {formatRupiahShort(totalPagu)}
                   </span>
@@ -549,7 +549,7 @@ export default function BudgetDataExplorer({
 
               <div>
                 <div className="inline-flex items-center justify-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-[#c2410c] shrink-0" />
                   <span className="text-sm sm:text-base font-bold text-slate-900 font-sans tabular-nums">
                     {formatRupiahShort(totalContract)}
                   </span>
@@ -569,26 +569,26 @@ export default function BudgetDataExplorer({
             </div>
           </div>
 
-          {/* SVG Double Bar Chart (2020 – 2026) */}
+          {/* SVG Double Bar Chart (2020 – 2026) - Proportional 0–50 Triliun Scale */}
           <div className="w-full relative">
             <svg
               viewBox="0 0 520 220"
               className="w-full h-auto overflow-visible select-none"
             >
-              {/* Horizontal Gridlines & Y-Axis Labels (0, 25, 50, 75, 100) */}
+              {/* Horizontal Gridlines & Y-Axis Labels (0T, 12.5T, 25T, 37.5T, 50T) */}
               {[
-                { val: 100, y: 30 },
-                { val: 75, y: 67.5 },
-                { val: 50, y: 105 },
-                { val: 25, y: 142.5 },
-                { val: 0, y: 180 },
+                { val: "50T", y: 30 },
+                { val: "38T", y: 67.5 },
+                { val: "25T", y: 105 },
+                { val: "12T", y: 142.5 },
+                { val: "0", y: 180 },
               ].map((grid) => (
                 <g key={grid.val}>
                   <text
-                    x="24"
+                    x="28"
                     y={grid.y + 4}
                     textAnchor="end"
-                    className="text-[11px] fill-slate-400 font-sans font-medium"
+                    className="text-[10.5px] fill-slate-400 font-sans font-medium"
                   >
                     {grid.val}
                   </text>
@@ -606,8 +606,8 @@ export default function BudgetDataExplorer({
               {/* Double Bars per Year */}
               {HISTORICAL_BAR_DATA.map((item, idx) => {
                 const centerX = 40 + idx * 76.66;
-                const paguH = (item.pagu / 100) * 150;
-                const kontrakH = (item.kontrak / 100) * 150;
+                const paguH = (item.pagu / 50) * 150;
+                const kontrakH = (item.kontrak / 50) * 150;
                 const paguY = 180 - paguH;
                 const kontrakY = 180 - kontrakH;
                 const isHovered = hoveredBarIndex === idx;
@@ -631,24 +631,24 @@ export default function BudgetDataExplorer({
                       />
                     )}
 
-                    {/* Bar 1: Pagu (Blue) */}
+                    {/* Bar 1: Pagu (Slate-800) */}
                     <rect
                       x={centerX - 13}
                       y={paguY}
                       width="11"
                       height={paguH}
-                      fill={isHovered ? "#0369a1" : "#0284c7"}
+                      fill={isHovered ? "#0f172a" : "#334155"}
                       rx="2"
                       className="transition-colors duration-200"
                     />
 
-                    {/* Bar 2: Kontrak (Light Gray) */}
+                    {/* Bar 2: Kontrak (Safety Orange) */}
                     <rect
                       x={centerX + 2}
                       y={kontrakY}
                       width="11"
                       height={kontrakH}
-                      fill={isHovered ? "#94a3b8" : "#cbd5e1"}
+                      fill={isHovered ? "#9a3412" : "#c2410c"}
                       rx="2"
                       className="transition-colors duration-200"
                     />
@@ -678,12 +678,12 @@ export default function BudgetDataExplorer({
                 <div className="font-bold text-white mb-0.5">
                   Tahun {HISTORICAL_BAR_DATA[hoveredBarIndex].year}
                 </div>
-                <div className="flex items-center gap-1.5 text-sky-300">
-                  <span className="w-2 h-2 rounded-full bg-sky-400" />
+                <div className="flex items-center gap-1.5 text-slate-300">
+                  <span className="w-2 h-2 rounded-full bg-slate-400" />
                   <span>Pagu: {HISTORICAL_BAR_DATA[hoveredBarIndex].paguRp}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-slate-300">
-                  <span className="w-2 h-2 rounded-full bg-slate-300" />
+                <div className="flex items-center gap-1.5 text-orange-300">
+                  <span className="w-2 h-2 rounded-full bg-orange-400" />
                   <span>Kontrak: {HISTORICAL_BAR_DATA[hoveredBarIndex].kontrakRp}</span>
                 </div>
               </div>
@@ -693,23 +693,23 @@ export default function BudgetDataExplorer({
           {/* Chart Legend */}
           <div className="flex items-center justify-center gap-6 pt-1 text-xs text-slate-500">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-[#0284c7]" />
-              <span className="font-medium">Pagu HPS Resmi</span>
+              <span className="w-3 h-3 rounded bg-[#334155]" />
+              <span className="font-medium">Pagu HPS Resmi (Rp Triliun)</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-[#cbd5e1]" />
-              <span className="font-medium">Realisasi SPK Terkoreksi</span>
+              <span className="w-3 h-3 rounded bg-[#c2410c]" />
+              <span className="font-medium">Realisasi SPK Terikat (Rp Triliun)</span>
             </div>
           </div>
         </div>
 
         {/* Right Card: Tren Alokasi Anggaran Preservasi Jalan (Smooth Multi-Layer Area Chart) */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
           {/* Card Header & 3 Top Metric Badges (100% Real Sesuai authorityBreakdown) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                Tren Alokasi Anggaran Preservasi Jalan
+                Tren Alokasi &amp; Realisasi Anggaran Preservasi Jalan
               </h3>
             </div>
 
@@ -756,31 +756,31 @@ export default function BudgetDataExplorer({
               <defs>
                 {/* Upper Area Gradient (Smooth Gray/Slate) */}
                 <linearGradient id="upperAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.95" />
-                  <stop offset="100%" stopColor="#f8fafc" stopOpacity="0.3" />
+                  <stop offset="0%" stopColor="#cbd5e1" stopOpacity="0.65" />
+                  <stop offset="100%" stopColor="#f8fafc" stopOpacity="0.1" />
                 </linearGradient>
 
-                {/* Lower Area Gradient (Vibrant Sky Blue) */}
+                {/* Lower Area Gradient (Institutional Orange) */}
                 <linearGradient id="lowerAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.95" />
-                  <stop offset="100%" stopColor="#0284c7" stopOpacity="0.85" />
+                  <stop offset="0%" stopColor="#ea580c" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="#c2410c" stopOpacity="0.05" />
                 </linearGradient>
               </defs>
 
-              {/* Horizontal Gridlines & Y-Axis Labels (0, 50, 100, 150, 200) */}
+              {/* Horizontal Gridlines & Y-Axis Labels (0, 12T, 25T, 38T, 50T) */}
               {[
-                { val: 200, y: 30 },
-                { val: 150, y: 67.5 },
-                { val: 100, y: 105 },
-                { val: 50, y: 142.5 },
-                { val: 0, y: 180 },
+                { val: "50T", y: 30 },
+                { val: "38T", y: 67.5 },
+                { val: "25T", y: 105 },
+                { val: "12T", y: 142.5 },
+                { val: "0", y: 180 },
               ].map((grid) => (
                 <g key={grid.val}>
                   <text
-                    x="24"
+                    x="28"
                     y={grid.y + 4}
                     textAnchor="end"
-                    className="text-[11px] fill-slate-400 font-sans font-medium"
+                    className="text-[10.5px] fill-slate-400 font-sans font-medium"
                   >
                     {grid.val}
                   </text>
@@ -803,8 +803,9 @@ export default function BudgetDataExplorer({
               <path
                 d={areaPoints.upperLine}
                 fill="none"
-                stroke="#cbd5e1"
+                stroke="#64748b"
                 strokeWidth="2"
+                strokeDasharray="4 3"
               />
 
               {/* Lower Smooth Area Layer (Realisasi Efektif Fisik) */}
@@ -815,11 +816,11 @@ export default function BudgetDataExplorer({
               <path
                 d={areaPoints.lowerLine}
                 fill="none"
-                stroke="#0284c7"
+                stroke="#c2410c"
                 strokeWidth="2.5"
               />
 
-              {/* Interactive Dots on the Lower Blue Curve */}
+              {/* Interactive Dots on the Lower Curve */}
               {areaPoints.lowerPts.map((pt, idx) => {
                 const isHovered = hoveredAreaIndex === idx;
                 return (
@@ -836,7 +837,7 @@ export default function BudgetDataExplorer({
                         y1="25"
                         x2={pt.x}
                         y2="180"
-                        stroke="#0284c7"
+                        stroke="#c2410c"
                         strokeWidth="1"
                         strokeDasharray="3 3"
                         opacity="0.6"
@@ -849,7 +850,7 @@ export default function BudgetDataExplorer({
                       cy={pt.y}
                       r={isHovered ? 5.5 : 3.5}
                       fill="#ffffff"
-                      stroke="#0284c7"
+                      stroke="#c2410c"
                       strokeWidth={isHovered ? 3 : 2}
                       className="transition-all duration-200"
                     />
@@ -881,11 +882,11 @@ export default function BudgetDataExplorer({
                 </div>
                 <div className="flex items-center gap-1.5 text-slate-300">
                   <span className="w-2 h-2 rounded-full bg-slate-300" />
-                  <span>Alokasi Rencana: Indeks {areaPoints.upperPts[hoveredAreaIndex].val}</span>
+                  <span>Alokasi Rencana: Rp {areaPoints.upperPts[hoveredAreaIndex].val} T</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-sky-300">
-                  <span className="w-2 h-2 rounded-full bg-sky-400" />
-                  <span>Realisasi Fisik: Indeks {areaPoints.lowerPts[hoveredAreaIndex].val}</span>
+                <div className="flex items-center gap-1.5 text-orange-300">
+                  <span className="w-2 h-2 rounded-full bg-orange-400" />
+                  <span>Realisasi Fisik: Rp {areaPoints.lowerPts[hoveredAreaIndex].val} T</span>
                 </div>
               </div>
             )}
@@ -894,39 +895,39 @@ export default function BudgetDataExplorer({
           {/* Chart Legend */}
           <div className="flex items-center justify-center gap-6 pt-1 text-xs text-slate-500">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-[#cbd5e1]" />
-              <span className="font-medium">Total Rencana Anggaran (APBN & APBD)</span>
+              <span className="w-3 h-3 rounded bg-[#64748b]" />
+              <span className="font-medium">Total Rencana Anggaran (Rp Triliun)</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-[#0284c7]" />
-              <span className="font-medium">Realisasi Efektif Lapangan</span>
+              <span className="w-3 h-3 rounded bg-[#c2410c]" />
+              <span className="font-medium">Realisasi Efektif Lapangan (Rp Triliun)</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* TIER 3: BOTTOM ASYMMETRIC SPLIT (Goal Completion & Recent Contacts)       */}
+      {/* TIER 3: BOTTOM ASYMMETRIC SPLIT (KPI Akuntabilitas & Daftar Paket LPSE)   */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Left Column: Goal Completion Equivalent (Capaian & Akuntabilitas Anggaran) */}
-        <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200/90 p-5 space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between">
+        {/* Left Column: Capaian & Akuntabilitas Anggaran */}
+        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs">
           <div>
             <div className="pb-3 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                  Capaian & Akuntabilitas Anggaran
+                  Capaian &amp; Akuntabilitas Anggaran
                 </h3>
                 <p className="text-[11px] text-slate-400 font-sans mt-0.5">
-                  Key Performance Indicators (KPI) Riil
+                  Indikator Kinerja Pelaksanaan Anggaran (IKPA)
                 </p>
               </div>
-              <span className="text-[10px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">
-                Resmi
+              <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded border border-orange-200">
+                Terverifikasi
               </span>
             </div>
 
-            {/* Stack of Goal Completion Progress Bars (100% Sesuai Data Riil) */}
+            {/* Stack of Progress Bars (100% Sesuai Data Riil) */}
             <div className="space-y-4 mt-4">
               {dynamicKpiList.map((item, idx) => (
                 <div key={idx} className="space-y-1">
@@ -934,14 +935,13 @@ export default function BudgetDataExplorer({
                     <span className="font-medium text-slate-700 truncate pr-2">
                       {item.label}
                     </span>
-                    <span className="font-bold text-[#0284c7] tabular-nums shrink-0">
+                    <span className="font-bold text-slate-900 tabular-nums shrink-0">
                       {item.pct}%
                     </span>
                   </div>
-                  {/* Clean Blue Progress Track */}
                   <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                     <div
-                      className="h-full bg-[#0284c7] rounded-full transition-all duration-700 ease-out"
+                      className="h-full bg-[#c2410c] rounded-full transition-all duration-700 ease-out"
                       style={{ width: `${item.pct}%` }}
                     />
                   </div>
@@ -965,8 +965,8 @@ export default function BudgetDataExplorer({
           </div>
         </div>
 
-        {/* Right Column: Recent Contacts Equivalent (Daftar Paket Pengadaan LPSE & SIRUP) */}
-        <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200/90 p-5 space-y-4 hover:border-slate-300 transition-all">
+        {/* Right Column: Daftar Paket Pengadaan LPSE & SIRUP */}
+        <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all shadow-2xs">
           {/* Header & Controls Toolbar */}
           <div className="space-y-3 pb-3 border-b border-slate-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">

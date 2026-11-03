@@ -18,6 +18,10 @@ import {
   Info,
   TrendingUp,
   BarChart3,
+  Landmark,
+  Route,
+  Compass,
+  ShieldCheck,
 } from "lucide-react";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
@@ -210,21 +214,27 @@ export default function HeroSection({
     <section className="pt-3 pb-6 text-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3.5">
         
-        {/* HERO UTAMA: CENTERED & CLEAN */}
-        <div className="pt-2 pb-2 space-y-1 text-center flex flex-col items-center">
-          <h1 className="text-xl sm:text-2xl lg:text-[28px] xl:text-[30px] font-bold font-heading text-slate-900 tracking-tight leading-snug">
-            Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed font-sans font-normal mx-auto">
-            Prototipe platform keterbukaan informasi kewenangan ruas jalan, penelusuran paket anggaran proyek LPSE, aduan warga dengan estimasi awal AI, dan pemantauan tenggat respons pengaduan.
+        {/* HERO UTAMA: EDITORIAL & INSTITUTIONAL LEFT-ALIGNED HEADER */}
+        <div className="pt-2 pb-1 flex flex-col lg:flex-row lg:items-end justify-between gap-3 border-b border-slate-200/80">
+          <div className="space-y-1.5 max-w-3xl">
+            <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#c2410c] font-sans">
+              <span className="w-2 h-2 rounded-full bg-[#c2410c]" />
+              <span>Sistem Informasi Geospasial &amp; Akuntabilitas Publik</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl lg:text-[26px] font-bold font-heading text-slate-950 tracking-tight leading-snug">
+              Transparansi Kewenangan Jalan, Audit Anggaran LPSE, &amp; Pengawasan SLA Pengaduan
+            </h1>
+          </div>
+          <p className="text-xs text-slate-600 max-w-md leading-relaxed font-sans font-normal lg:text-right">
+            Pemetaan wewenang ruas jalan (UU No. 2/2022), penelusuran paket lelang LPSE, verifikasi visual AI, dan pemantauan batas respons 14 hari kerja.
           </p>
         </div>
 
         {/* 1. TOP UTILITY BAR: UNIFIED GLOBAL SEARCH & NATIONAL DATA SCOPE */}
-        <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl shadow-xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200/80 text-xs transition-all">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-2xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs transition-all">
           
           {/* Segment 1: Wilayah Scope */}
-          <div className="px-3.5 py-2.5 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/70 shrink-0">
+          <div className="px-3.5 py-2.5 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/80 shrink-0">
             <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
             <span className="text-[11.5px] font-semibold">
               Cakupan: <strong className="text-slate-900">Seluruh Indonesia (38 Provinsi)</strong>
@@ -233,23 +243,31 @@ export default function HeroSection({
 
           {/* Segment 2: Official Verified Sources Indicator */}
           <div className="hidden lg:flex items-center gap-2 px-3.5 py-2.5 text-[11px] font-sans text-slate-600 bg-slate-50/40 shrink-0 select-none">
-            <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-slate-100/90 px-2.5 py-1 rounded-lg border border-slate-200/90 font-sans shadow-2xs">
-              <CheckCircle2 className="w-3 h-3 text-[#c2410c]" />
+            <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/90 font-sans">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
               <span>BPS • LPSE • KemenPU • Ombudsman</span>
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-400">Update: 18 Okt 2026</span>
+            <span className="text-slate-500 font-medium">Data Terverifikasi TA 2026</span>
           </div>
 
           {/* Segment 3: Spacious Global Search Input */}
           <div className="relative flex-1 min-w-[280px] flex items-center bg-white group">
-            <img src="/icon/search_icon.png" alt="" className="w-4 h-4 object-contain absolute left-3 pointer-events-none" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icon/search_icon.png"
+              alt=""
+              width={16}
+              height={16}
+              style={{ width: "16px", height: "16px" }}
+              className="w-4 h-4 object-contain absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+            />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama ruas jalan, kode laporan, paket pengadaan, atau kontraktor..."
-              className="w-full h-full pl-9 pr-8 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none focus:bg-orange-50/15 transition-all font-sans"
+              className="w-full h-full pl-9 pr-8 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none focus:bg-slate-50/50 transition-all font-sans"
             />
             {searchQuery && (
               <button
@@ -343,27 +361,22 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("kemantapan")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer group ${
                     selectedIndex === "kemantapan"
-                      ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white border-transparent shadow-md"
-                      : "bg-slate-50/70 text-slate-800 border-slate-200/70 hover:bg-orange-50/50 hover:border-orange-200/80 hover:shadow-2xs"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/80 hover:bg-white hover:border-slate-300"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "kemantapan"
-                        ? "bg-white/20 border border-white/30 shadow-xs"
-                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
+                        ? "bg-[#c2410c] text-white"
+                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
                     }`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/icon/jalan.png"
-                        alt="Jalan Kab/Kota"
-                        className="w-full h-full object-contain"
-                      />
+                      <Route className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "kemantapan" ? "text-orange-50" : "text-slate-700"
+                          selectedIndex === "kemantapan" ? "text-slate-300" : "text-slate-600"
                         }`}>
                           Jalan Kab/Kota (BPS)
                         </span>
@@ -374,7 +387,7 @@ export default function HeroSection({
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
                         <span>57,1%</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "kemantapan" ? "text-orange-100" : "text-slate-500"
+                          selectedIndex === "kemantapan" ? "text-slate-300" : "text-slate-500"
                         }`}>
                           Mantap
                         </span>
@@ -388,27 +401,22 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("ombudsman")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer group ${
                     selectedIndex === "ombudsman"
-                      ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white border-transparent shadow-md"
-                      : "bg-slate-50/70 text-slate-800 border-slate-200/70 hover:bg-orange-50/50 hover:border-orange-200/80 hover:shadow-2xs"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/80 hover:bg-white hover:border-slate-300"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "ombudsman"
-                        ? "bg-white/20 border border-white/30 shadow-xs"
-                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
+                        ? "bg-[#c2410c] text-white"
+                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
                     }`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/icon/warning_icon.png"
-                        alt="Undue Delay"
-                        className="w-full h-full object-contain"
-                      />
+                      <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "ombudsman" ? "text-orange-50" : "text-slate-700"
+                          selectedIndex === "ombudsman" ? "text-slate-300" : "text-slate-600"
                         }`}>
                           Undue Delay (Ombudsman)
                         </span>
@@ -419,7 +427,7 @@ export default function HeroSection({
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
                         <span>33,86%</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "ombudsman" ? "text-orange-100" : "text-slate-500"
+                          selectedIndex === "ombudsman" ? "text-slate-300" : "text-slate-500"
                         }`}>
                           Laporan
                         </span>
@@ -433,27 +441,22 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("pagu")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer group ${
                     selectedIndex === "pagu"
-                      ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white border-transparent shadow-md"
-                      : "bg-slate-50/70 text-slate-800 border-slate-200/70 hover:bg-orange-50/50 hover:border-orange-200/80 hover:shadow-2xs"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/80 hover:bg-white hover:border-slate-300"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "pagu"
-                        ? "bg-white/20 border border-white/30 shadow-xs"
-                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
+                        ? "bg-[#c2410c] text-white"
+                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
                     }`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/icon/financial.png"
-                        alt="Pagu Pengadaan"
-                        className="w-full h-full object-contain"
-                      />
+                      <Landmark className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "pagu" ? "text-orange-50" : "text-slate-700"
+                          selectedIndex === "pagu" ? "text-slate-300" : "text-slate-600"
                         }`}>
                           Pagu Pengadaan Pilot
                         </span>
@@ -464,7 +467,7 @@ export default function HeroSection({
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
                         <span>Rp 35,80</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "pagu" ? "text-orange-100" : "text-slate-500"
+                          selectedIndex === "pagu" ? "text-slate-300" : "text-slate-500"
                         }`}>
                           Miliar
                         </span>
@@ -478,27 +481,22 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("inpres")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer group ${
                     selectedIndex === "inpres"
-                      ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white border-transparent shadow-md"
-                      : "bg-slate-50/70 text-slate-800 border-slate-200/70 hover:bg-orange-50/50 hover:border-orange-200/80 hover:shadow-2xs"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                      : "bg-slate-50/70 text-slate-800 border-slate-200/80 hover:bg-white hover:border-slate-300"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "inpres"
-                        ? "bg-white/20 border border-white/30 shadow-xs"
-                        : "bg-white border border-slate-200/90 shadow-2xs group-hover:border-orange-200"
+                        ? "bg-[#c2410c] text-white"
+                        : "bg-white border border-slate-200 text-slate-700 group-hover:text-[#c2410c] group-hover:border-orange-200"
                     }`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/icon/maps.png"
-                        alt="Inpres Jalan"
-                        className="w-full h-full object-contain"
-                      />
+                      <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "inpres" ? "text-orange-50" : "text-slate-700"
+                          selectedIndex === "inpres" ? "text-slate-300" : "text-slate-600"
                         }`}>
                           Inpres Jalan Daerah
                         </span>
@@ -509,7 +507,7 @@ export default function HeroSection({
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
                         <span>Rp 14,60</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "inpres" ? "text-orange-100" : "text-slate-500"
+                          selectedIndex === "inpres" ? "text-slate-300" : "text-slate-500"
                         }`}>
                           Triliun
                         </span>
@@ -786,23 +784,23 @@ export default function HeroSection({
                               )}
                               
                               {/* Nasional Bar */}
-                              <rect x={xCenter - 18} y={yNas} width="11" height={hNas} rx="2.5" fill="#334155" />
+                              <rect x={xCenter - 18} y={yNas} width="11" height={hNas} rx="2.5" fill="#2563eb" />
                               {isSelected && (
-                                <text x={xCenter - 12.5} y={yNas - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#334155">
+                                <text x={xCenter - 12.5} y={yNas - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#1d4ed8">
                                   {d.nasional}%
                                 </text>
                               )}
 
                               {/* Provinsi Bar */}
-                              <rect x={xCenter - 5} y={yProv} width="11" height={hProv} rx="2.5" fill="#d97706" />
+                              <rect x={xCenter - 5} y={yProv} width="11" height={hProv} rx="2.5" fill="#7c3aed" />
                               {isSelected && (
-                                <text x={xCenter + 0.5} y={yProv - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#b45309">
+                                <text x={xCenter + 0.5} y={yProv - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#6d28d9">
                                   {d.provinsi}%
                                 </text>
                               )}
 
                               {/* Kab/Kota Bar */}
-                              <rect x={xCenter + 8} y={yKab} width="11" height={hKab} rx="2.5" fill="#c2410c" />
+                              <rect x={xCenter + 8} y={yKab} width="11" height={hKab} rx="2.5" fill="#ea580c" />
                               <text x={xCenter + 13.5} y={yKab - 3.5} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
                                 {d.kabupatenKota}%
                               </text>
@@ -1712,16 +1710,19 @@ export default function HeroSection({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/jalan.png"
-                  alt="Ruas Jalan"
-                  className="w-full h-full object-contain"
+                  alt="Jalan"
+                  width={24}
+                  height={24}
+                  style={{ width: "24px", height: "24px" }}
+                  className="w-6 h-6 object-contain"
                 />
               </div>
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
-                    Tabel Penelusuran Ruas & Anggaran APBD
+                    Tabel Penelusuran Ruas &amp; Anggaran APBD
                   </h2>
-                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80 font-sans tabular-nums shadow-2xs">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80 font-sans tabular-nums">
                     {processedTableRoads.length} Ruas Terdata
                   </span>
                 </div>
@@ -1734,10 +1735,17 @@ export default function HeroSection({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={onExploreData}
-                className="px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-orange-50 hover:text-orange-900 text-slate-700 border border-slate-200/90 transition-all cursor-pointer flex items-center gap-2 font-sans text-xs font-semibold shadow-2xs"
+                className="px-3.5 py-2 rounded-lg bg-slate-50 hover:bg-orange-50 hover:text-orange-900 text-slate-700 border border-slate-200/90 transition-all cursor-pointer flex items-center gap-2 font-sans text-xs font-semibold"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icon/financial.png" alt="" className="w-4 h-4 object-contain" />
+                <img
+                  src="/icon/financial.png"
+                  alt=""
+                  width={16}
+                  height={16}
+                  style={{ width: "16px", height: "16px" }}
+                  className="w-4 h-4 object-contain"
+                />
                 <span>Penelusuran Anggaran Proyek</span>
               </button>
             </div>
@@ -1758,14 +1766,14 @@ export default function HeroSection({
                 <button
                   key={tab.id}
                   onClick={() => handleTableFilterChange(tab.id)}
-                  className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                  className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
                     tableFilter === tab.id
-                      ? "bg-[#c2410c] text-white border-[#c2410c] shadow-xs font-semibold"
-                      : "bg-white hover:bg-orange-50/60 text-slate-700 hover:text-[#c2410c] border-slate-200 font-medium"
+                      ? "bg-slate-900 text-white border-slate-900 font-semibold"
+                      : "bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border-slate-200 font-medium"
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-md font-semibold tabular-nums ${
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold tabular-nums ${
                     tableFilter === tab.id ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
                   }`}>
                     {tab.count}
@@ -1776,13 +1784,21 @@ export default function HeroSection({
 
             {/* Quick Search */}
             <div className="relative w-full md:w-72 shrink-0">
-              <img src="/icon/search_icon.png" alt="" className="w-3.5 h-3.5 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icon/search_icon.png"
+                alt=""
+                width={14}
+                height={14}
+                style={{ width: "14px", height: "14px" }}
+                className="w-3.5 h-3.5 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              />
               <input
                 type="text"
                 value={tableSearch}
                 onChange={handleTableSearchChange}
                 placeholder="Cari ruas, kota, atau kontraktor..."
-                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200/90 bg-slate-50/50 focus:bg-white placeholder-slate-400 text-slate-800 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c]/20 font-sans shadow-2xs transition-all"
+                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200/90 bg-slate-50/50 focus:bg-white placeholder-slate-400 text-slate-800 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c]/20 font-sans transition-all"
               />
               {tableSearch && (
                 <button
@@ -1880,8 +1896,8 @@ export default function HeroSection({
                           </div>
                           <div className="text-[11px] mt-0.5 flex items-center gap-1 font-sans">
                             {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
-                              <span className="inline-flex items-center gap-1 text-slate-600 font-medium">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+                              <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                                 <span>LPSE Terverifikasi</span>
                               </span>
                             ) : (

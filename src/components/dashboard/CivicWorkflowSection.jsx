@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function CivicWorkflowSection({ onOpenReportModal }) {
   const steps = [
@@ -11,7 +11,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
       badge: "AI Vision",
       title: "Klasifikasi Otomatis AI",
       description:
-        "Menyaring foto palsu/spam dan menghitung skor bahaya kerusakan jalan secara instan.",
+        "Menyaring foto tidak relevan dan mengestimasi tingkat keparahan kerusakan jalan secara instan.",
       outcome: "Anti-Spam & Skor Bahaya",
     },
     {
@@ -20,7 +20,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
       badge: "SK Geospasial",
       title: "Kunci Wewenang Instansi",
       description:
-        "Mencocokkan koordinat GPS dengan SK batas jalan resmi agar dinas tidak bisa saling lempar tanggung jawab.",
+        "Mencocokkan koordinat GPS dengan SK batas jalan resmi agar instansi tidak saling lempar tanggung jawab.",
       outcome: "Kunci Pejabat & Dinas PIC",
     },
     {
@@ -38,94 +38,83 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
       badge: "UU No. 25/2009",
       title: "SLA & Ombudsman RI",
       description:
-        "Hitung mundur batas respons 14 hari kerja. Jika diabaikan, draf somasi Ombudsman langsung diterbitkan.",
+        "Hitung mundur batas respons 14 hari kerja. Jika diabaikan, draf pengaduan maladministrasi siap diunduh.",
       outcome: "Kepastian Hukum & Eskalasi",
     },
   ];
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 font-sans">
-      <div className="bg-white/95 backdrop-blur-xl p-4 sm:p-5 lg:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-        {/* Header - Direct, Clear & Punchy (Badge Removed) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+      <div className="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs space-y-5">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div className="space-y-1">
-            <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-              Dari Laporan Warga Menuju Kepastian Penanganan
+            <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
+              Alur Verifikasi &amp; Akuntabilitas Tindak Lanjut
             </h2>
             <p className="text-xs sm:text-[13px] text-slate-500 max-w-2xl font-sans">
-              Empat tahapan sistem yang menjamin laporan jalan rusak tidak di-ghosting dinas, terverifikasi AI, dan berkepastian hukum.
+              Empat tahapan sistem yang menjamin laporan jalan rusak terverifikasi secara geospasial, transparan secara anggaran, dan terikat batas waktu hukum.
             </p>
           </div>
 
           <button
             onClick={onOpenReportModal}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-sm hover:shadow-md transition-all cursor-pointer self-start sm:self-auto shrink-0 active:scale-[0.98] font-sans"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs transition-colors cursor-pointer self-start sm:self-auto shrink-0 active:scale-[0.98] font-sans"
           >
-            <span>Uji Coba Lapor</span>
+            <span>Buat Laporan Baru</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* 4 Connected Pipeline Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 relative">
-          {steps.map((item, index) => {
-            const isLast = index === steps.length - 1;
+        {/* Clean Architectural 4-Column Pipeline */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/80 border border-slate-200/80 rounded-xl overflow-hidden bg-slate-50/40">
+          {steps.map((item) => (
+            <div
+              key={item.step}
+              className="p-4 sm:p-5 bg-white hover:bg-slate-50/60 transition-colors flex flex-col justify-between space-y-4 group"
+            >
+              <div className="space-y-3">
+                {/* Top Row: Step Number & Tech Category Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-[#c2410c] tracking-wider">
+                    TAHAP {item.step}
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/80 font-sans">
+                    {item.badge}
+                  </span>
+                </div>
 
-            return (
-              <div key={item.step} className="relative group">
-                {/* Desktop Connecting Arrow between steps */}
-                {!isLast && (
-                  <div className="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                    <div className="w-6 h-6 rounded-full bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-orange-600 group-hover:border-orange-300 transition-colors">
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </div>
+                {/* Icon + Title */}
+                <div className="flex items-center gap-2.5 pt-0.5">
+                  <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.customIcon}
+                      alt={item.title}
+                      width={24}
+                      height={24}
+                      style={{ width: "24px", height: "24px" }}
+                      className="w-6 h-6 object-contain"
+                    />
                   </div>
-                )}
+                  <h3 className="font-bold text-sm text-slate-900 leading-snug">
+                    {item.title}
+                  </h3>
+                </div>
 
-                <div className="h-full p-4 sm:p-5 rounded-xl bg-slate-50/70 hover:bg-white border border-slate-200/80 hover:border-orange-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between space-y-4">
-                  <div className="space-y-3">
-                    {/* Top Row: Step Number & Tech Category Badge */}
-                    <div className="flex items-center justify-between">
-                      <span className="w-7 h-7 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center text-xs font-sans tabular-nums font-bold text-slate-700 group-hover:text-orange-700 group-hover:border-orange-300 transition-colors">
-                        {item.step}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold border bg-white text-slate-700 border-slate-200/90 shadow-2xs font-sans">
-                        {item.badge}
-                      </span>
-                    </div>
+                {/* Description */}
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  {item.description}
+                </p>
+              </div>
 
-                    {/* Icon + Title */}
-                    <div className="flex items-center gap-2.5 pt-0.5">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-slate-200/80 p-1.5 shadow-2xs shrink-0 transition-transform group-hover:scale-105 flex items-center justify-center">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={item.customIcon}
-                          alt={item.title}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                      <h3 className="font-bold text-sm text-slate-900 group-hover:text-orange-900 transition-colors leading-snug">
-                        {item.title}
-                      </h3>
-                    </div>
-
-                    {/* Punchy 2-line Description */}
-                    <p className="text-xs text-slate-600 leading-relaxed font-sans min-h-[48px]">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* Clean Bottom Outcome Tag (No Truncation) */}
-                  <div className="pt-3 border-t border-slate-200/60">
-                    <div className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200/70 shadow-2xs text-[11px] font-bold text-slate-700 group-hover:text-orange-950 group-hover:bg-orange-50/60 group-hover:border-orange-200/80 transition-colors flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
-                      <span className="leading-tight">{item.outcome}</span>
-                    </div>
-                  </div>
+                {/* Clean Bottom Outcome Line */}
+                <div className="pt-3 border-t border-slate-100 flex items-center gap-1.5 text-[11px] font-semibold text-slate-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                  <span>{item.outcome}</span>
                 </div>
               </div>
-            );
-          })}
+          ))}
         </div>
       </div>
     </section>

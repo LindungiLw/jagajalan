@@ -61,13 +61,21 @@ export default function NationalRankingSection({ onSelectPilot }) {
           
           {/* Quick Search */}
           <div className="relative flex-1 max-w-md">
-            <img src="/icon/search_icon.png" alt="" className="w-4 h-4 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icon/search_icon.png"
+              alt=""
+              width={16}
+              height={16}
+              style={{ width: "16px", height: "16px" }}
+              className="w-4 h-4 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari provinsi atau ibukota (misal: Jawa Barat, Medan, Papua)..."
-              className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-slate-50/50 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
             />
             {searchQuery && (
               <button
@@ -88,7 +96,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="py-1 px-2.5 rounded-[5px] border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-slate-300 focus:outline-none focus:border-[#c2410c] cursor-pointer"
+                className="py-1.5 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-slate-300 focus:outline-none focus:border-[#c2410c] cursor-pointer"
               >
                 <option value="complaints">Volume Aduan Terbanyak</option>
                 <option value="damaged">Jalan Rusak Tertinggi (% Non-Mantap)</option>
@@ -97,10 +105,10 @@ export default function NationalRankingSection({ onSelectPilot }) {
             </div>
 
             {/* View Mode Toggle: Grid vs Table */}
-            <div className="flex items-center rounded-[5px] border border-slate-200 p-0.5 bg-slate-100/70 shrink-0">
+            <div className="flex items-center rounded-lg border border-slate-200 p-0.5 bg-slate-100/70 shrink-0">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-[4px] transition-all cursor-pointer ${
+                className={`p-1.5 rounded-md transition-all cursor-pointer ${
                   viewMode === "grid"
                     ? "bg-white text-slate-900 shadow-2xs font-bold"
                     : "text-slate-500 hover:text-slate-900"
@@ -111,7 +119,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               </button>
               <button
                 onClick={() => setViewMode("table")}
-                className={`p-1.5 rounded-[4px] transition-all cursor-pointer ${
+                className={`p-1.5 rounded-md transition-all cursor-pointer ${
                   viewMode === "table"
                     ? "bg-white text-slate-900 shadow-2xs font-bold"
                     : "text-slate-500 hover:text-slate-900"
@@ -133,7 +141,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 <button
                   key={island.id}
                   onClick={() => setSelectedIsland(island.id)}
-                  className={`px-3 py-1 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
                     selectedIsland === island.id
                       ? "bg-[#0f172a] text-white shadow-xs"
                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
@@ -149,7 +157,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
       {/* 3. MAIN DATA DISPLAY (GRID CARDS OR LEADERBOARD TABLE) */}
       {filteredAndSortedProvinces.length === 0 ? (
-        <div className="bg-white rounded-[5px] border border-slate-200/90 p-8 text-center space-y-2">
+        <div className="bg-white rounded-xl border border-slate-200/90 p-8 text-center space-y-2">
           <p className="text-sm font-semibold text-slate-700">Tidak ada provinsi yang cocok dengan pencarian.</p>
           <p className="text-xs text-slate-400">Silakan ubah filter gugus pulau atau kata kunci pencarian Anda.</p>
         </div>
@@ -166,7 +174,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
             return (
               <div
                 key={prov.id}
-                className={`bg-white rounded-[5px] border p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
+                className={`bg-white rounded-xl border p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
                   isPilot
                     ? "border-orange-300/80 shadow-xs ring-1 ring-orange-200/50"
                     : "border-slate-200/80 hover:border-slate-300 hover:shadow-xs"
@@ -228,7 +236,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 </div>
 
                 {/* Integrated Financial Metric Strip (No Clunky Boxes!) */}
-                <div className="py-2.5 px-3 rounded-[5px] bg-slate-50/70 border border-slate-100 flex items-center justify-between text-center">
+                <div className="py-2.5 px-3 rounded-lg bg-slate-50/70 border border-slate-100 flex items-center justify-between text-center">
                   <div className="flex-1 text-left">
                     <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider block">Total Aduan</span>
                     <strong className="text-sm font-bold text-slate-900 tabular-nums">
@@ -280,7 +288,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
         /* ------------------------------------------------------------- */
         /* VIEW 2: LEADERBOARD TABLE (High-Density, Bloomberg/IDX Style) */
         /* ------------------------------------------------------------- */
-        <div className="bg-white rounded-[5px] border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
+        <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>

@@ -10,7 +10,6 @@ import {
   Coins,
   CheckCircle2,
   Clock,
-  Sparkles,
   ChevronRight,
   ExternalLink,
   BookOpen,
@@ -221,7 +220,7 @@ export default function AnnualProgressChart() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch animate-fade-in">
           
           {/* LEFT CARD (~67% width): 4 Open KPI Columns + Direct White Combo Chart + Clean Footer */}
-          <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-2xs p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* 1. TOP 4 OPEN KPI COLUMNS (Executive SaaS Layout, No Truncation, Airy & Clean) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 pb-3 border-b border-slate-100">
@@ -280,7 +279,7 @@ export default function AnnualProgressChart() {
                 <div className="h-6 flex items-center justify-between gap-1 mb-1">
                   <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jurang Ketimpangan</span>
                   <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    <Sparkles className="w-2.5 h-2.5 text-rose-500" />
+                    <AlertTriangle className="w-2.5 h-2.5 text-rose-500" />
                     Kesenjangan
                   </span>
                 </div>
@@ -627,7 +626,7 @@ export default function AnnualProgressChart() {
           </div>
 
           {/* RIGHT CARD (~33% width): Balanced Donut Chart & Rich Breakdown with Micro-Bars */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 shadow-2xs p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* Header */}
             <div>
@@ -728,12 +727,12 @@ export default function AnnualProgressChart() {
               })}
             </div>
 
-            {/* Explanatory Policy Callout Box (Light amber styling matching reference) */}
+            {/* Explanatory Policy Callout Box */}
             <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-950 flex items-start gap-2.5">
-              <span className="text-base select-none">💡</span>
+              <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
               <div className="leading-relaxed text-amber-900">
                 <strong className="text-amber-950">Akar Permasalahan Jalan Daerah:</strong>{" "}
-                Sebesar <strong>81.4% (446.900 Km)</strong> jalan di Indonesia berada di bawah wewenang Pemerintah Kabupaten & Kota dengan kapasitas fiskal PAD yang terbatas. Ketimpangan beban bentang inilah yang memicu terbitnya <strong>Inpres No. 3/2023</strong>.
+                Sebesar <strong>81.4% (446.900 Km)</strong> jalan di Indonesia berada di bawah wewenang Pemerintah Kabupaten &amp; Kota dengan kapasitas fiskal PAD yang terbatas. Ketimpangan beban bentang inilah yang memicu terbitnya <strong>Inpres No. 3/2023</strong>.
               </div>
             </div>
           </div>
