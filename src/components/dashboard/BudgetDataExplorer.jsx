@@ -965,267 +965,285 @@ export default function BudgetDataExplorer({
           </div>
         </div>
 
-        {/* Right Column: Daftar Paket Pengadaan LPSE & SIRUP */}
-        <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all shadow-2xs">
-          {/* Header & Controls Toolbar */}
-          <div className="space-y-3 pb-3 border-b border-slate-100">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                  Daftar Paket Pengadaan & Audit Kontrak
-                </h3>
-                <p className="text-[11px] text-slate-400 font-sans mt-0.5">
-                  Sinkronisasi LPSE KemenPUPR & SIRUP Pemda ({filteredPackages.length} Paket)
-                </p>
-              </div>
+        {/* Right Column: Daftar Paket Pengadaan LPSE & SIRUP (DOUBLE-BEZEL AGENCY TIER) */}
+        <div className="lg:col-span-8 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+          <div className="bg-white rounded-[1.25rem] p-5 sm:p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
+            
+            {/* Header & Controls Toolbar */}
+            <div className="space-y-3 pb-3 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.16em] font-bold text-slate-500 bg-slate-100 font-sans">
+                      Sinkronisasi LPSE &amp; SIRUP
+                    </span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-xs font-mono font-medium text-slate-500 tabular-nums">
+                      {filteredPackages.length} Paket Audit
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-950 font-heading tracking-tight mt-1">
+                    Daftar Paket Pengadaan &amp; Audit Kontrak
+                  </h3>
+                </div>
 
-              {/* Sort Selector */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs shrink-0 self-start sm:self-auto">
-                <ArrowUpDown className="w-3.5 h-3.5 text-slate-500" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent text-slate-700 font-semibold focus:outline-none cursor-pointer font-sans"
-                >
-                  <option value="value-desc">Nilai Anggaran Tertinggi</option>
-                  <option value="efficiency-desc">Efisiensi Hemat Tertinggi</option>
-                  <option value="progress-desc">Progres Fisik Tertinggi</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Search Input & Quick Filter Chips */}
-            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
-              <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari kode paket, nama ruas, atau rekanan pelaksana..."
-                  className="w-full pl-9 pr-7 py-1.5 rounded-lg border border-slate-200 bg-slate-50/70 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 focus:bg-white transition-all font-sans"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 cursor-pointer"
+                {/* Sort Selector (Pill Styled) */}
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 ring-1 ring-slate-200/80 text-xs shrink-0 self-start sm:self-auto font-sans">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-transparent text-slate-700 font-medium focus:outline-none cursor-pointer"
                   >
-                    ✕
-                  </button>
-                )}
+                    <option value="value-desc">Nilai Anggaran Tertinggi</option>
+                    <option value="efficiency-desc">Efisiensi Hemat Tertinggi</option>
+                    <option value="progress-desc">Progres Fisik Tertinggi</option>
+                  </select>
+                </div>
               </div>
 
-              <div className="flex items-center gap-1.5 flex-wrap">
-                {[
-                  { id: "ALL", label: "Semua" },
-                  { id: "NASIONAL", label: "Nasional" },
-                  { id: "PROVINSI", label: "Provinsi" },
-                  { id: "KOTA_KAB", label: "Kab/Kota" },
-                ].map((tab) => (
+              {/* Search Input & Quick Filter Chips */}
+              <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
+                <div className="relative flex-1">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari kode paket, nama ruas, rekanan..."
+                    className="w-full pl-9 pr-7 py-2 rounded-full bg-slate-50/90 ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:bg-white transition-all font-sans"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 cursor-pointer font-bold"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-slate-900/5">
+                    {[
+                      { id: "ALL", label: "Semua" },
+                      { id: "NASIONAL", label: "Nasional" },
+                      { id: "PROVINSI", label: "Provinsi" },
+                      { id: "KOTA_KAB", label: "Kab/Kota" },
+                    ].map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setSelectedAuthority(tab.id)}
+                        className={`px-3 py-1 rounded-full text-xs transition-all cursor-pointer ${
+                          selectedAuthority === tab.id
+                            ? "bg-slate-900 text-white font-bold shadow-2xs"
+                            : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+
                   <button
-                    key={tab.id}
-                    onClick={() => setSelectedAuthority(tab.id)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                      selectedAuthority === tab.id
-                        ? "bg-slate-900 text-white shadow-2xs"
-                        : "bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200"
+                    onClick={() => setAnomalyFilterOnly(!anomalyFilterOnly)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                      anomalyFilterOnly
+                        ? "bg-amber-600 text-white shadow-2xs"
+                        : "bg-amber-50 text-amber-800 hover:bg-amber-100/80"
                     }`}
                   >
-                    {tab.label}
+                    <AlertTriangle className="w-3 h-3" />
+                    <span>Sorotan ({anomalyCount})</span>
                   </button>
-                ))}
-
-                <button
-                  onClick={() => setAnomalyFilterOnly(!anomalyFilterOnly)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1 border ${
-                    anomalyFilterOnly
-                      ? "bg-amber-600 text-white border-amber-600 shadow-2xs"
-                      : "bg-amber-50/70 hover:bg-amber-100 text-amber-800 border-amber-200"
-                  }`}
-                >
-                  <AlertTriangle className="w-3 h-3" />
-                  <span>Sorotan ({anomalyCount})</span>
-                </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Data Table */}
-          {filteredPackages.length === 0 ? (
-            <div className="py-12 text-center space-y-2">
-              <AlertCircle className="w-8 h-8 text-slate-300 mx-auto" />
-              <p className="text-xs font-bold text-slate-700">Tidak ada paket lelang yang cocok</p>
-              <p className="text-[11px] text-slate-400">Silakan ubah filter atau kata kunci pencarian Anda.</p>
-            </div>
-          ) : (
-            <div className="w-full">
-              <table className="w-full text-left text-xs font-sans md:table-fixed border-collapse">
-                <thead>
-                  <tr className="border-y border-slate-100 bg-slate-50/70 text-slate-500 font-bold text-[10.5px] uppercase tracking-wider">
-                    <th className="py-2.5 px-2.5 md:w-[32%]">Paket &amp; Ruas Jalan</th>
-                    <th className="py-2.5 px-2 md:w-[14%]">Kewenangan</th>
-                    <th className="py-2.5 px-2 md:w-[19%] text-right">Pagu &amp; Kontrak</th>
-                    <th className="py-2.5 px-2 md:w-[13%] text-right hidden sm:table-cell">Efisiensi</th>
-                    <th className="py-2.5 px-2 md:w-[11%] text-center">Fisik</th>
-                    <th className="py-2.5 px-2.5 md:w-[11%] text-right">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {paginatedPackages.map((pkg, idx) => {
-                    const authBadge =
-                      pkg.authority === "NASIONAL"
-                        ? { label: "Nasional", color: "bg-blue-50/80 text-blue-800", dot: "bg-blue-600" }
-                        : pkg.authority === "PROVINSI"
-                        ? { label: "Provinsi", color: "bg-purple-50/80 text-purple-800", dot: "bg-purple-600" }
-                        : { label: "Kab/Kota", color: "bg-teal-50/80 text-teal-800", dot: "bg-teal-600" };
+            {/* Data Table */}
+            {filteredPackages.length === 0 ? (
+              <div className="py-12 text-center space-y-2">
+                <AlertCircle className="w-8 h-8 text-slate-300 mx-auto" />
+                <p className="text-xs font-bold text-slate-700">Tidak ada paket lelang yang cocok</p>
+                <p className="text-[11px] text-slate-400">Silakan ubah filter atau kata kunci pencarian Anda.</p>
+              </div>
+            ) : (
+              <div className="w-full">
+                <table className="w-full text-left text-xs font-sans md:table-fixed border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/70 text-slate-400 font-bold text-[10px] uppercase tracking-[0.14em]">
+                      <th className="py-3 px-2.5 md:w-[32%]">Paket &amp; Ruas Jalan</th>
+                      <th className="py-3 px-2 md:w-[15%]">Kewenangan</th>
+                      <th className="py-3 px-2 md:w-[19%] text-right">Pagu &amp; Kontrak</th>
+                      <th className="py-3 px-2 md:w-[13%] text-right hidden sm:table-cell">Efisiensi</th>
+                      <th className="py-3 px-2 md:w-[10%] text-center">Fisik</th>
+                      <th className="py-3 px-2.5 md:w-[11%] text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {paginatedPackages.map((pkg, idx) => {
+                      const authColor =
+                        pkg.authority === "NASIONAL"
+                          ? "bg-blue-600"
+                          : pkg.authority === "PROVINSI"
+                          ? "bg-purple-600"
+                          : "bg-teal-600";
+                      const authLabel =
+                        pkg.authority === "NASIONAL"
+                          ? "Nasional"
+                          : pkg.authority === "PROVINSI"
+                          ? "Provinsi"
+                          : "Kab/Kota";
+
+                      return (
+                        <tr
+                          key={pkg.packageId || idx}
+                          className="hover:bg-slate-50/70 transition-colors group"
+                        >
+                          {/* Paket & Ruas Jalan */}
+                          <td className="py-3.5 px-2.5 align-middle">
+                            <div
+                              onClick={() => handleOpenDetailModal(pkg)}
+                              className="font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors cursor-pointer truncate text-[12.5px]"
+                              title={pkg.roadName || pkg.name}
+                            >
+                              {pkg.roadName || pkg.name}
+                            </div>
+                            <div className="text-[10.5px] text-slate-400 font-sans truncate mt-0.5">
+                              {pkg.packageId} • {pkg.contractor || "Rekanan LPSE"}
+                            </div>
+                          </td>
+
+                          {/* Kewenangan (Minimalist Indicator) */}
+                          <td className="py-3.5 px-2 align-middle">
+                            <div className="flex items-center gap-1.5">
+                              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${authColor}`} />
+                              <span className="font-medium text-slate-700 text-[11.5px] truncate">
+                                {authLabel}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Pagu & Nilai Kontrak (Clean 2-Line Stack) */}
+                          <td className="py-3.5 px-2 text-right tabular-nums align-middle">
+                            <div className="font-bold text-slate-900 text-[12.5px]">
+                              {formatRupiahShort(pkg.paguRp)}
+                            </div>
+                            <div className="text-[10.5px] font-mono text-slate-400 mt-0.5">
+                              Kontrak: {formatRupiahShort(pkg.contractValueRp)}
+                            </div>
+                          </td>
+
+                          {/* Efisiensi */}
+                          <td className="py-3.5 px-2 text-right tabular-nums align-middle hidden sm:table-cell">
+                            <span className="text-emerald-700 font-bold text-[12px]">
+                              {formatRupiahShort(pkg.calculations?.efficiencyRp)}
+                            </span>
+                            <span className="text-[10px] text-emerald-600 block">
+                              ({pkg.calculations?.efficiencyPct || 0}%)
+                            </span>
+                          </td>
+
+                          {/* Fisik */}
+                          <td className="py-3.5 px-2 text-center align-middle">
+                            <div className="inline-flex flex-col items-center gap-1 w-14">
+                              <span className="font-bold text-slate-800 text-[10.5px] tabular-nums">
+                                {pkg.progressPct || 0}%
+                              </span>
+                              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full ${
+                                    pkg.progressPct >= 75
+                                      ? "bg-emerald-600"
+                                      : pkg.progressPct >= 40
+                                      ? "bg-amber-500"
+                                      : "bg-rose-500"
+                                  }`}
+                                  style={{ width: `${Math.min(100, Math.max(8, pkg.progressPct || 0))}%` }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Aksi */}
+                          <td className="py-3.5 px-2.5 text-right align-middle">
+                            <div className="inline-flex items-center gap-1">
+                              <button
+                                onClick={() => handleOpenDetailModal(pkg)}
+                                className="px-2.5 py-1 rounded-full text-xs font-semibold text-slate-700 hover:text-white bg-slate-100 hover:bg-slate-900 transition-all cursor-pointer active:scale-[0.96]"
+                              >
+                                Detail
+                              </button>
+                              {onSelectRoadOnMap && pkg.roadId && (
+                                <button
+                                  onClick={() => onSelectRoadOnMap(pkg.roadId)}
+                                  className="p-1 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
+                                  title="Lihat Ruas di Peta GIS"
+                                >
+                                  <MapPin className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* Clean Floating Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between gap-4 pt-3 border-t border-slate-100 font-sans text-xs">
+                <div className="text-slate-400 text-[11.5px]">
+                  Halaman <strong>{currentPage}</strong> dari <strong>{totalPages}</strong> (
+                  {filteredPackages.length} paket total)
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
+                  >
+                    Prev
+                  </button>
+
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) pageNum = i + 1;
+                    else if (currentPage <= 3) pageNum = i + 1;
+                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                    else pageNum = currentPage - 2 + i;
 
                     return (
-                      <tr
-                        key={pkg.packageId || idx}
-                        className="hover:bg-slate-50/70 transition-colors group"
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`w-7 h-7 rounded-full text-xs font-bold transition-all cursor-pointer tabular-nums ${
+                          currentPage === pageNum
+                            ? "bg-slate-900 text-white shadow-2xs"
+                            : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
+                        }`}
                       >
-                        {/* Paket & Ruas Jalan */}
-                        <td className="py-3 px-2.5 align-middle">
-                          <div
-                            onClick={() => handleOpenDetailModal(pkg)}
-                            className="font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors cursor-pointer truncate text-[12.5px]"
-                            title={pkg.roadName || pkg.name}
-                          >
-                            {pkg.roadName || pkg.name}
-                          </div>
-                          <div className="text-[10.5px] text-slate-400 font-sans truncate mt-0.5">
-                            {pkg.packageId} • {pkg.contractor || "Rekanan LPSE"}
-                          </div>
-                        </td>
-
-                        {/* Kewenangan (Borderless Pill) */}
-                        <td className="py-3 px-2 align-middle">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10.5px] font-semibold ${authBadge.color}`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${authBadge.dot}`} />
-                            <span>{authBadge.label}</span>
-                          </span>
-                        </td>
-
-                        {/* Pagu & Nilai Kontrak (Clean 2-Line Stack) */}
-                        <td className="py-3 px-2 text-right tabular-nums align-middle">
-                          <div className="font-bold text-slate-900 text-[12.5px]">
-                            {formatRupiahShort(pkg.paguRp)}
-                          </div>
-                          <div className="text-[10.5px] text-slate-500 font-medium mt-0.5">
-                            Kontrak: {formatRupiahShort(pkg.contractValueRp)}
-                          </div>
-                        </td>
-
-                        {/* Efisiensi */}
-                        <td className="py-3 px-2 text-right tabular-nums align-middle hidden sm:table-cell">
-                          <span className="text-emerald-700 font-bold text-[12px]">
-                            {formatRupiahShort(pkg.calculations?.efficiencyRp)}
-                          </span>
-                          <span className="text-[10px] text-emerald-600 block">
-                            ({pkg.calculations?.efficiencyPct || 0}%)
-                          </span>
-                        </td>
-
-                        {/* Fisik */}
-                        <td className="py-3 px-2 text-center align-middle">
-                          <div className="inline-flex flex-col items-center gap-1 w-14">
-                            <span className="font-bold text-slate-800 text-[10.5px] tabular-nums">
-                              {pkg.progressPct || 0}%
-                            </span>
-                            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                              <div
-                                className={`h-full rounded-full ${
-                                  pkg.progressPct >= 75
-                                    ? "bg-emerald-600"
-                                    : pkg.progressPct >= 40
-                                    ? "bg-amber-500"
-                                    : "bg-rose-500"
-                                }`}
-                                style={{ width: `${Math.min(100, Math.max(8, pkg.progressPct || 0))}%` }}
-                              />
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Aksi */}
-                        <td className="py-3 px-2.5 text-right align-middle">
-                          <div className="inline-flex items-center gap-1">
-                            <button
-                              onClick={() => handleOpenDetailModal(pkg)}
-                              className="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#c2410c] bg-slate-100/80 hover:bg-orange-50 transition-colors cursor-pointer"
-                            >
-                              Detail
-                            </button>
-                            {onSelectRoadOnMap && pkg.roadId && (
-                              <button
-                                onClick={() => onSelectRoadOnMap(pkg.roadId)}
-                                className="p-1 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 transition-colors cursor-pointer"
-                                title="Lihat Ruas di Peta GIS"
-                              >
-                                <MapPin className="w-3.5 h-3.5" />
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
+                        {pageNum}
+                      </button>
                     );
                   })}
-                </tbody>
-              </table>
-            </div>
-          )}
 
-          {/* Clean Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between gap-4 pt-3 border-t border-slate-100 font-sans text-xs">
-              <div className="text-slate-400 text-[11.5px]">
-                Halaman <strong>{currentPage}</strong> dari <strong>{totalPages}</strong> (
-                {filteredPackages.length} paket total)
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
+            )}
 
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
-                >
-                  Prev
-                </button>
-
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) pageNum = i + 1;
-                  else if (currentPage <= 3) pageNum = i + 1;
-                  else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
-                  else pageNum = currentPage - 2 + i;
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`w-7 h-7 rounded-lg border text-xs font-bold transition-all cursor-pointer tabular-nums ${
-                        currentPage === pageNum
-                          ? "bg-slate-900 text-white border-slate-900 shadow-2xs"
-                          : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-
-                <button
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </div>
 

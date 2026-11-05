@@ -1720,329 +1720,316 @@ export default function HeroSection({
           </div>
         </div>
 
-        {/* 4. ACTIVE DATA MONITORING TABLE: RUAS & ANGGARAN APBD / LPSE (NO HORIZONTAL SCROLL, NO NESTED BORDERS) */}
-        <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-4">
-          
-          {/* Table Header: Title + Button */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-orange-50/80 p-1.5 shrink-0 flex items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/icon/jalan.png"
-                  alt="Jalan"
-                  width={24}
-                  height={24}
-                  style={{ width: "24px", height: "24px" }}
-                  className="w-6 h-6 object-contain"
-                />
-              </div>
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
-                    Tabel Penelusuran Ruas &amp; Anggaran APBD
-                  </h2>
-                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-sans tabular-nums">
+        {/* 4. ACTIVE DATA MONITORING TABLE: RUAS & ANGGARAN APBD / LPSE (DOUBLE-BEZEL AGENCY TIER) */}
+        <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+          <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-5">
+            
+            {/* Table Header: Eyebrow + Title + Button-in-Button CTA */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
+              <div className="space-y-1.5 max-w-2xl">
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-slate-500 bg-slate-100 inline-block font-sans">
+                    Katalog Ruas &amp; LPSE
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-xs font-mono font-medium text-slate-500 tabular-nums">
                     {processedTableRoads.length} Ruas Terdata
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 font-sans">
-                  Transparansi status wewenang dinas, kepatuhan batas tenggat respons, serta pagu dan realisasi kontrak proyek APBD/APBN.
+                <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
+                  Tabel Penelusuran Ruas &amp; Anggaran APBD
+                </h2>
+                <p className="text-xs text-slate-500 font-sans leading-relaxed">
+                  Transparansi wewenang dinas, kepatuhan batas waktu respons resmi, serta pagu dan realisasi kontrak proyek pengadaan fisik jalan.
                 </p>
+              </div>
+
+              {/* Island Button-in-Button CTA */}
+              <div className="shrink-0 self-start sm:self-auto">
+                <button
+                  onClick={onExploreData}
+                  className="group inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer font-sans"
+                >
+                  <span>Penelusuran Anggaran Proyek</span>
+                  <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                    <ChevronRight className="w-3.5 h-3.5 text-white" />
+                  </span>
+                </button>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={onExploreData}
-                className="px-3.5 py-2 rounded-lg bg-slate-100/80 hover:bg-orange-50 hover:text-[#c2410c] text-slate-700 transition-all cursor-pointer flex items-center gap-2 font-sans text-xs font-semibold"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/icon/financial.png"
-                  alt=""
-                  width={16}
-                  height={16}
-                  style={{ width: "16px", height: "16px" }}
-                  className="w-4 h-4 object-contain"
-                />
-                <span>Penelusuran Anggaran Proyek</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Table Controls: Category Filter Tabs + Search Input */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            {/* Borderless Segmented Filter Pills */}
-            <div className="flex items-center gap-1 flex-wrap bg-slate-100/70 p-1 rounded-xl text-xs font-sans">
-              {[
-                { id: "ALL", label: "Semua Ruas", count: roads.length },
-                { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter((r) => r.authority === "NASIONAL").length },
-                { id: "PROVINSI", label: "Jalan Provinsi", count: roads.filter((r) => r.authority === "PROVINSI").length },
-                { id: "KOTA", label: "Jalan Kota", count: roads.filter((r) => r.authority === "KOTA").length },
-                { id: "KABUPATEN", label: "Jalan Kabupaten", count: roads.filter((r) => r.authority === "KABUPATEN").length },
-                { id: "SUMUT", label: "Pilot Sumut", count: roads.filter((r) => r.district?.includes("Medan") || r.district?.includes("Simalungun") || r.district?.includes("Karo") || r.district?.includes("Asahan") || r.code?.includes("SMT")).length },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTableFilterChange(tab.id)}
-                  className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                    tableFilter === tab.id
-                      ? "bg-slate-900 text-white font-semibold shadow-2xs"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-white/70 font-medium"
-                  }`}
-                >
-                  <span>{tab.label}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold tabular-nums ${
-                    tableFilter === tab.id ? "bg-white/20 text-white" : "bg-slate-200/70 text-slate-600"
-                  }`}>
-                    {tab.count}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* Quick Search */}
-            <div className="relative w-full lg:w-72 shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/search_icon.png"
-                alt=""
-                width={14}
-                height={14}
-                style={{ width: "14px", height: "14px" }}
-                className="w-3.5 h-3.5 object-contain absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-              />
-              <input
-                type="text"
-                value={tableSearch}
-                onChange={handleTableSearchChange}
-                placeholder="Cari ruas, kota, atau kontraktor..."
-                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg bg-slate-100/70 focus:bg-white border border-transparent focus:border-[#c2410c]/40 placeholder-slate-400 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#c2410c]/15 font-sans transition-all"
-              />
-              {tableSearch && (
-                <button
-                  onClick={() => { setTableSearch(""); setTablePage(1); }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Full-Width Responsive Table Without Horizontal Scroll & Without Nested Border */}
-          <div className="w-full">
-            <table className="w-full text-left text-xs border-collapse md:table-fixed">
-              <thead>
-                <tr className="border-y border-slate-100 text-[10.5px] text-slate-500 font-sans font-bold uppercase tracking-wider bg-slate-50/70">
-                  <th className="py-3 px-3 md:w-[28%] font-bold">Ruas Jalan &amp; Wilayah</th>
-                  <th className="py-3 px-2.5 md:w-[15%] font-bold">Kewenangan</th>
-                  <th className="py-3 px-2.5 md:w-[16%] font-bold text-right">Pagu &amp; Kontrak</th>
-                  <th className="py-3 px-2.5 md:w-[21%] font-bold hidden sm:table-cell">Kontraktor Pelaksana</th>
-                  <th className="py-3 px-2.5 md:w-[12%] font-bold text-center">Status Respons</th>
-                  <th className="py-3 px-3 md:w-[8%] font-bold text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-sans">
-                {paginatedRoads.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-8 text-center text-slate-500 font-sans">
-                      <p className="font-semibold text-slate-700">Tidak ada ruas jalan yang cocok</p>
-                      <p className="text-[11px] text-slate-400 mt-1">Coba gunakan kata kunci pencarian atau ubah filter kategori di atas.</p>
-                    </td>
-                  </tr>
-                ) : (
-                  paginatedRoads.map((road) => {
-                    const rep = reports.find((r) => r.roadSegmentId === road.id);
-                    const isOverdue = rep?.status === "OVERDUE";
-
-                    return (
-                      <tr key={road.id} className="hover:bg-slate-50/60 transition-colors group">
-                        {/* 1. Ruas Jalan & Wilayah */}
-                        <td className="py-3.5 px-3 align-middle">
-                          <button
-                            onClick={() => setSelectedRoadForDetail(road)}
-                            className="font-bold text-slate-900 group-hover:text-[#c2410c] text-[13px] text-left transition-colors cursor-pointer block leading-snug line-clamp-1"
-                            title={road.name}
-                          >
-                            {road.name}
-                          </button>
-                          <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1.5 font-sans flex-wrap">
-                            <span className="text-slate-600 font-medium truncate">{road.district}</span>
-                            <span className="text-slate-300">•</span>
-                            <span className="font-semibold text-slate-700 tabular-nums shrink-0">{road.lengthKm} km</span>
-                          </div>
-                        </td>
-
-                        {/* 2. Status Wewenang (Borderless Soft Pill) */}
-                        <td className="py-3.5 px-2.5 align-middle">
-                          {road.authority === "NASIONAL" ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-medium bg-blue-50/70 text-blue-900">
-                              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
-                              <span className="truncate">Jalan Nasional</span>
-                            </span>
-                          ) : road.authority === "PROVINSI" ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-medium bg-purple-50/70 text-purple-900">
-                              <span className="w-1.5 h-1.5 rounded-full bg-purple-600 shrink-0" />
-                              <span className="truncate">Jalan Provinsi</span>
-                            </span>
-                          ) : road.authority === "KOTA" ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-medium bg-teal-50/70 text-teal-900">
-                              <span className="w-1.5 h-1.5 rounded-full bg-teal-600 shrink-0" />
-                              <span className="truncate">Jalan Kota</span>
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11.5px] font-medium bg-emerald-50/70 text-emerald-900">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
-                              <span className="truncate">Jalan Kabupaten</span>
-                            </span>
-                          )}
-                        </td>
-
-                        {/* 3. Pagu vs Kontrak */}
-                        <td className="py-3.5 px-2.5 text-right align-middle">
-                          <div className="font-sans font-bold tabular-nums text-slate-900 text-[13px]">
-                            Rp {(road.budget?.paguRp / 1000000000).toFixed(2)} M
-                          </div>
-                          <div className="text-[11px] font-medium text-slate-500 tabular-nums mt-0.5">
-                            Kontrak: Rp {(road.budget?.contractValueRp / 1000000000).toFixed(2)} M
-                          </div>
-                        </td>
-
-                        {/* 4. Kontraktor & Status Verifikasi */}
-                        <td className="py-3.5 px-2.5 align-middle hidden sm:table-cell">
-                          <div className="font-semibold text-slate-800 text-[12px] truncate" title={road.budget?.contractor}>
-                            {road.budget?.contractor || "Dalam Pengadaan"}
-                          </div>
-                          <div className="text-[11px] mt-0.5 flex items-center gap-1 font-sans">
-                            {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
-                              <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
-                                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                                <span className="truncate">LPSE Terverifikasi</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 text-slate-500 font-medium">
-                                <Clock className="w-3 h-3 text-slate-400 shrink-0" />
-                                <span>Parsial</span>
-                              </span>
-                            )}
-                          </div>
-                        </td>
-
-                        {/* 5. Status Respons Pemantauan Tenggat (Borderless Badge) */}
-                        <td className="py-3.5 px-2.5 text-center align-middle">
-                          {isOverdue ? (
-                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 text-[11px] font-semibold">
-                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
-                              <span>Lewat Tenggat</span>
-                            </div>
-                          ) : (
-                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100/80 text-slate-700 text-[11px] font-medium">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                              <span>Terpantau Aman</span>
-                            </div>
-                          )}
-                        </td>
-
-                        {/* 6. Aksi: Buka Detail Ruas (Borderless Clean Button) */}
-                        <td className="py-3.5 px-3 text-right align-middle">
-                          <button
-                            onClick={() => setSelectedRoadForDetail(road)}
-                            className="px-2.5 py-1.5 rounded-lg bg-slate-100/80 hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] font-semibold text-xs transition-all duration-150 cursor-pointer inline-flex items-center gap-1 group/btn"
-                          >
-                            <span>Detail</span>
-                            <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:text-[#c2410c] group-hover/btn:translate-x-0.5 transition-all" />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination Controls */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs text-slate-600 font-sans border-t border-slate-100">
-            {/* Counter */}
-            <div className="text-slate-500">
-              Menampilkan{" "}
-              <strong className="text-slate-800 font-semibold tabular-nums">
-                {processedTableRoads.length === 0 ? 0 : (tablePage - 1) * (tablePageSize === "ALL" ? processedTableRoads.length : tablePageSize) + 1}
-              </strong>
-              {" - "}
-              <strong className="text-slate-800 font-semibold tabular-nums">
-                {tablePageSize === "ALL" ? processedTableRoads.length : Math.min(tablePage * tablePageSize, processedTableRoads.length)}
-              </strong>
-              {" dari "}
-              <strong className="text-slate-800 font-semibold tabular-nums">
-                {processedTableRoads.length}
-              </strong>{" "}
-              ruas jalan
-            </div>
-
-            {/* Pagination Buttons & Page Size Selector */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Page size toggle */}
-              <div className="flex items-center gap-1 text-[11px] text-slate-500 mr-2">
-                <span>Per hal:</span>
-                {[6, 12, "ALL"].map((size) => (
+            {/* Table Controls: Floating Pill Filter Bar + Refined Search */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+              {/* Floating Pill Filter Bar */}
+              <div className="flex items-center gap-1 flex-wrap bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-slate-900/5">
+                {[
+                  { id: "ALL", label: "Semua Ruas", count: roads.length },
+                  { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter((r) => r.authority === "NASIONAL").length },
+                  { id: "PROVINSI", label: "Jalan Provinsi", count: roads.filter((r) => r.authority === "PROVINSI").length },
+                  { id: "KOTA", label: "Jalan Kota", count: roads.filter((r) => r.authority === "KOTA").length },
+                  { id: "KABUPATEN", label: "Jalan Kabupaten", count: roads.filter((r) => r.authority === "KABUPATEN").length },
+                  { id: "SUMUT", label: "Pilot Sumut", count: roads.filter((r) => r.district?.includes("Medan") || r.district?.includes("Simalungun") || r.district?.includes("Karo") || r.district?.includes("Asahan") || r.code?.includes("SMT")).length },
+                ].map((tab) => (
                   <button
-                    key={size}
-                    onClick={() => {
-                      setTablePageSize(size);
-                      setTablePage(1);
-                    }}
-                    className={`px-2 py-0.5 rounded-md cursor-pointer font-bold transition-colors ${
-                      tablePageSize === size
-                        ? "bg-[#c2410c] text-white shadow-2xs"
-                        : "bg-slate-100/80 hover:bg-slate-200/70 text-slate-600"
+                    key={tab.id}
+                    onClick={() => handleTableFilterChange(tab.id)}
+                    className={`px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                      tableFilter === tab.id
+                        ? "bg-white text-slate-950 font-bold shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900 font-medium hover:bg-white/50"
                     }`}
                   >
-                    {size === "ALL" ? "Semua" : size}
+                    <span>{tab.label}</span>
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold tabular-nums ${
+                      tableFilter === tab.id ? "bg-slate-100 text-slate-900" : "bg-slate-200/60 text-slate-500"
+                    }`}>
+                      {tab.count}
+                    </span>
                   </button>
                 ))}
               </div>
 
-              {/* Prev & Next */}
-              {tablePageSize !== "ALL" && totalTablePages > 1 && (
-                <div className="flex items-center gap-1">
+              {/* Refined Pill Search */}
+              <div className="relative w-full lg:w-72 shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icon/search_icon.png"
+                  alt=""
+                  width={14}
+                  height={14}
+                  style={{ width: "14px", height: "14px" }}
+                  className="w-3.5 h-3.5 object-contain absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-60"
+                />
+                <input
+                  type="text"
+                  value={tableSearch}
+                  onChange={handleTableSearchChange}
+                  placeholder="Cari ruas, kota, rekanan..."
+                  className="w-full pl-9 pr-7 py-2 text-xs rounded-full bg-slate-50/90 focus:bg-white ring-1 ring-slate-200/80 focus:ring-2 focus:ring-slate-900/10 placeholder-slate-400 text-slate-900 focus:outline-none font-sans transition-all"
+                />
+                {tableSearch && (
                   <button
-                    onClick={() => setTablePage((p) => Math.max(1, p - 1))}
-                    disabled={tablePage === 1}
-                    className="px-2.5 py-1 rounded-lg bg-slate-100/80 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-semibold cursor-pointer transition-colors"
+                    onClick={() => { setTableSearch(""); setTablePage(1); }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold"
                   >
-                    Sebelumnya
+                    ×
                   </button>
+                )}
+              </div>
+            </div>
 
-                  {/* Page numbers */}
-                  {Array.from({ length: totalTablePages }, (_, i) => i + 1).map((num) => (
+            {/* High-Legibility Table */}
+            <div className="w-full">
+              <table className="w-full text-left text-xs border-collapse md:table-fixed">
+                <thead>
+                  <tr className="border-b border-slate-200/70 text-[10px] text-slate-400 font-sans font-bold uppercase tracking-[0.14em]">
+                    <th className="py-3 px-3 md:w-[28%]">Ruas Jalan &amp; Wilayah</th>
+                    <th className="py-3 px-2.5 md:w-[15%]">Kewenangan</th>
+                    <th className="py-3 px-2.5 md:w-[17%] text-right">Pagu &amp; Kontrak</th>
+                    <th className="py-3 px-2.5 md:w-[20%] hidden sm:table-cell">Pelaksana LPSE</th>
+                    <th className="py-3 px-2.5 md:w-[12%] text-center">Status Respons</th>
+                    <th className="py-3 px-3 md:w-[8%] text-right">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-sans">
+                  {paginatedRoads.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-slate-400 font-sans">
+                        <p className="font-semibold text-slate-700 text-sm">Tidak ada ruas jalan yang cocok</p>
+                        <p className="text-xs text-slate-400 mt-1">Coba gunakan kata kunci pencarian atau ubah filter kategori di atas.</p>
+                      </td>
+                    </tr>
+                  ) : (
+                    paginatedRoads.map((road) => {
+                      const rep = reports.find((r) => r.roadSegmentId === road.id);
+                      const isOverdue = rep?.status === "OVERDUE";
+
+                      return (
+                        <tr key={road.id} className="hover:bg-slate-50/70 transition-colors group">
+                          {/* 1. Ruas Jalan & Wilayah */}
+                          <td className="py-4 px-3 align-middle">
+                            <button
+                              onClick={() => setSelectedRoadForDetail(road)}
+                              className="font-bold text-slate-900 group-hover:text-[#c2410c] text-[13px] text-left transition-colors cursor-pointer block leading-snug line-clamp-1"
+                              title={road.name}
+                            >
+                              {road.name}
+                            </button>
+                            <div className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1.5 font-sans">
+                              <span className="text-slate-600 font-medium">{road.district}</span>
+                              <span className="text-slate-300">•</span>
+                              <span className="font-mono text-slate-500 tabular-nums">{road.lengthKm} km</span>
+                            </div>
+                          </td>
+
+                          {/* 2. Status Wewenang (Editorial Clean Indicator) */}
+                          <td className="py-4 px-2.5 align-middle">
+                            <div className="flex items-center gap-2">
+                              <span className={`w-2 h-2 rounded-full shrink-0 ${
+                                road.authority === "NASIONAL"
+                                  ? "bg-blue-600 ring-2 ring-blue-100"
+                                  : road.authority === "PROVINSI"
+                                  ? "bg-purple-600 ring-2 ring-purple-100"
+                                  : road.authority === "KOTA"
+                                  ? "bg-teal-600 ring-2 ring-teal-100"
+                                  : "bg-emerald-600 ring-2 ring-emerald-100"
+                              }`} />
+                              <span className="font-medium text-slate-700 text-[11.5px] truncate">
+                                {road.authority === "NASIONAL"
+                                  ? "Jalan Nasional"
+                                  : road.authority === "PROVINSI"
+                                  ? "Jalan Provinsi"
+                                  : road.authority === "KOTA"
+                                  ? "Jalan Kota"
+                                  : "Jalan Kabupaten"}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* 3. Pagu vs Kontrak */}
+                          <td className="py-4 px-2.5 text-right align-middle">
+                            <div className="font-bold tabular-nums text-slate-900 text-[13px]">
+                              Rp {(road.budget?.paguRp / 1000000000).toFixed(2)} M
+                            </div>
+                            <div className="text-[10.5px] font-mono text-slate-400 tabular-nums mt-0.5">
+                              Kontrak: Rp {(road.budget?.contractValueRp / 1000000000).toFixed(2)} M
+                            </div>
+                          </td>
+
+                          {/* 4. Kontraktor & Status Verifikasi */}
+                          <td className="py-4 px-2.5 align-middle hidden sm:table-cell">
+                            <div className="font-medium text-slate-800 text-[12px] truncate" title={road.budget?.contractor}>
+                              {road.budget?.contractor || "Dalam Pengadaan"}
+                            </div>
+                            <div className="text-[10.5px] mt-0.5 flex items-center gap-1 font-sans">
+                              {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
+                                <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                                  <span>LPSE Terkonfirmasi</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-slate-400 font-medium">
+                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                  <span>Data Parsial</span>
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* 5. Status Respons Pemantauan Tenggat */}
+                          <td className="py-4 px-2.5 text-center align-middle">
+                            {isOverdue ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10.5px] font-semibold ring-1 ring-rose-200/50">
+                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                                <span>Lewat Tenggat</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1.5 text-slate-500 text-[11px] font-medium">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                <span>Terkendali</span>
+                              </span>
+                            )}
+                          </td>
+
+                          {/* 6. Aksi: Buka Detail Ruas */}
+                          <td className="py-4 px-3 text-right align-middle">
+                            <button
+                              onClick={() => setSelectedRoadForDetail(road)}
+                              className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-900 text-slate-700 hover:text-white font-semibold text-xs transition-all duration-150 cursor-pointer inline-flex items-center gap-1 group/btn active:scale-[0.96]"
+                            >
+                              <span>Detail</span>
+                              <ChevronRight className="w-3 h-3 text-slate-400 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-transform" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 text-xs text-slate-500 font-sans border-t border-slate-100">
+              {/* Counter */}
+              <div>
+                Menampilkan{" "}
+                <strong className="text-slate-900 font-semibold tabular-nums">
+                  {processedTableRoads.length === 0 ? 0 : (tablePage - 1) * (tablePageSize === "ALL" ? processedTableRoads.length : tablePageSize) + 1}
+                </strong>
+                {" - "}
+                <strong className="text-slate-900 font-semibold tabular-nums">
+                  {tablePageSize === "ALL" ? processedTableRoads.length : Math.min(tablePage * tablePageSize, processedTableRoads.length)}
+                </strong>
+                {" dari "}
+                <strong className="text-slate-900 font-semibold tabular-nums">
+                  {processedTableRoads.length}
+                </strong>{" "}
+                ruas
+              </div>
+
+              {/* Pagination Buttons & Page Size Selector */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Page size toggle */}
+                <div className="flex items-center gap-1 text-[11px] text-slate-400 mr-2">
+                  <span>Per hal:</span>
+                  {[6, 12, "ALL"].map((size) => (
                     <button
-                      key={num}
-                      onClick={() => setTablePage(num)}
-                      className={`w-7 h-7 rounded-lg text-xs font-bold cursor-pointer transition-colors tabular-nums ${
-                        tablePage === num
-                          ? "bg-[#c2410c] text-white"
-                          : "bg-slate-100/80 hover:bg-slate-200/70 text-slate-700"
+                      key={size}
+                      onClick={() => {
+                        setTablePageSize(size);
+                        setTablePage(1);
+                      }}
+                      className={`px-2 py-0.5 rounded-full cursor-pointer font-bold transition-colors ${
+                        tablePageSize === size
+                          ? "bg-slate-900 text-white shadow-2xs"
+                          : "bg-slate-100 hover:bg-slate-200/70 text-slate-600"
                       }`}
                     >
-                      {num}
+                      {size === "ALL" ? "Semua" : size}
                     </button>
                   ))}
-
-                  <button
-                    onClick={() => setTablePage((p) => Math.min(totalTablePages, p + 1))}
-                    disabled={tablePage === totalTablePages}
-                    className="px-2.5 py-1 rounded-lg bg-slate-100/80 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-semibold cursor-pointer transition-colors"
-                  >
-                    Berikutnya
-                  </button>
                 </div>
-              )}
-            </div>
-          </div>
 
+                {/* Prev & Next */}
+                {tablePageSize !== "ALL" && totalTablePages > 1 && (
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setTablePage((p) => Math.max(1, p - 1))}
+                      disabled={tablePage === 1}
+                      className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-semibold cursor-pointer transition-colors"
+                    >
+                      Sebelumnya
+                    </button>
+
+                    {/* Page numbers */}
+                    {Array.from({ length: totalTablePages }, (_, i) => i + 1).map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => setTablePage(num)}
+                        className={`w-7 h-7 rounded-full text-xs font-bold cursor-pointer transition-colors tabular-nums ${
+                          tablePage === num
+                            ? "bg-slate-900 text-white"
+                            : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() => setTablePage((p) => Math.min(totalTablePages, p + 1))}
+                      disabled={tablePage === totalTablePages}
+                      className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-semibold cursor-pointer transition-colors"
+                    >
+                      Berikutnya
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
         </div>
 
       </div>
