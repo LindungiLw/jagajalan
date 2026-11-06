@@ -51,15 +51,9 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
           {/* Header with Eyebrow & Button-in-Button CTA */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="space-y-1.5 max-w-2xl">
-              <div className="flex items-center gap-2">
-                <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
-                  Alur Kerja Sistem
-                </span>
-                <span className="h-3 w-px bg-slate-300" aria-hidden="true" />
-                <span className="text-xs font-mono font-medium text-slate-500">
-                  4 Tahap Penanganan
-                </span>
-              </div>
+              <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
+                Alur Kerja Sistem
+              </p>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Dari Foto Lapangan hingga Tindak Lanjut Dinas
               </h2>

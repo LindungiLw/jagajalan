@@ -70,15 +70,9 @@ export default function LegalBasisSection({ onNavigateTab }) {
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-5">
             <div className="space-y-1.5 max-w-2xl">
-              <div className="flex items-center gap-2">
-                <span className="rounded-[5px] px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] font-bold text-[#c2410c] bg-orange-50/90 border border-orange-200/60 inline-block font-mono">
-                  Dasar Regulasi
-                </span>
-                <span className="h-3 w-px bg-slate-300" aria-hidden="true" />
-                <span className="text-xs font-mono font-medium text-slate-500">
-                  4 Instrumen Yuridis Pelayanan Publik
-                </span>
-              </div>
+              <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
+                Dasar Regulasi
+              </p>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Landasan Hukum Keterbukaan &amp; Penanganan Jalan
               </h2>

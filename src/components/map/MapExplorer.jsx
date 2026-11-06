@@ -1076,34 +1076,20 @@ export default function MapExplorer({
           {/* Drawer Header */}
           <div className="px-4 py-3 border-b border-slate-100 shrink-0 bg-white">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
-                  currentRoad?.authority === "NASIONAL"
-                    ? "bg-blue-50 text-blue-700 border-blue-200"
-                    : currentRoad?.authority === "PROVINSI"
-                    ? "bg-purple-50 text-purple-700 border-purple-200"
-                    : currentRoad?.authority === "KOTA"
-                    ? "bg-teal-50 text-teal-700 border-teal-200"
-                    : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                }`}>
-                  {currentRoad?.authority === "NASIONAL"
-                    ? "JALAN NASIONAL • APBN"
-                    : currentRoad?.authority === "PROVINSI"
-                    ? "JALAN PROVINSI • APBD"
-                    : currentRoad?.authority === "KOTA"
-                    ? "JALAN KOTA • APBD"
-                    : "JALAN KABUPATEN • APBD"}
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-mono font-bold text-slate-900 tracking-tight">
+                  {currentReport?.ticketCode ? `TIKET #${currentReport.ticketCode}` : currentRoad?.code}
                 </span>
-
-                {currentReport?.ticketCode ? (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold tabular-nums bg-slate-100 text-slate-700 border border-slate-200">
-                    TIKET {currentReport.ticketCode}
-                  </span>
-                ) : currentRoad?.code ? (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold tabular-nums bg-slate-100 text-slate-700 border border-slate-200">
-                    {currentRoad.code}
-                  </span>
-                ) : null}
+                <span className="h-3 w-px bg-slate-200" aria-hidden="true" />
+                <span className="text-[11px] font-medium text-slate-500">
+                  {currentRoad?.authority === "NASIONAL"
+                    ? "Jalan Nasional (APBN)"
+                    : currentRoad?.authority === "PROVINSI"
+                    ? "Jalan Provinsi (APBD)"
+                    : currentRoad?.authority === "KOTA"
+                    ? "Jalan Kota (APBD)"
+                    : "Jalan Kabupaten (APBD)"}
+                </span>
               </div>
 
               <button

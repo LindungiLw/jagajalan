@@ -112,14 +112,9 @@ export default function OmbudsmanMonitorSection({
                 />
               </div>
               <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-[5px] text-[10px] font-semibold bg-rose-50/80 text-rose-800 ring-1 ring-rose-200/60">
-                    <span>Standar Layanan Publik &amp; Ombudsman RI</span>
-                  </span>
-                  <span className="text-[11px] text-slate-400 font-sans hidden sm:inline">
-                    UU No. 25/2009 jo. UU No. 37/2008
-                  </span>
-                </div>
+                <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-rose-800">
+                  Standar Layanan Publik &amp; Ombudsman RI
+                </p>
                 <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
                   Pemantauan Batas Waktu Tanggapan &amp; Draf Ombudsman
                 </h1>

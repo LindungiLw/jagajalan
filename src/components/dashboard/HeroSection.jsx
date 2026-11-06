@@ -1714,15 +1714,9 @@ export default function HeroSection({
             {/* Table Header: Eyebrow + Title + Button-in-Button CTA */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1.5 max-w-2xl">
-                <div className="flex items-center gap-2">
-                  <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
-                    Katalog Ruas &amp; LPSE
-                  </span>
-                  <span className="text-slate-300">•</span>
-                  <span className="text-xs font-mono font-medium text-slate-500 tabular-nums">
-                    {processedTableRoads.length} Ruas Terdata
-                  </span>
-                </div>
+                <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
+                  Katalog Ruas &amp; LPSE
+                </p>
                 <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                   Daftar Ruas Jalan, Wewenang Dinas &amp; Kontrak LPSE
                 </h2>
@@ -1844,7 +1838,7 @@ export default function HeroSection({
                             </button>
                             <div className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1.5 font-sans">
                               <span className="text-slate-600 font-medium">{road.district}</span>
-                              <span className="text-slate-300">•</span>
+                              <span className="text-slate-300">/</span>
                               <span className="font-mono text-slate-500 tabular-nums">{road.lengthKm} km</span>
                             </div>
                           </td>

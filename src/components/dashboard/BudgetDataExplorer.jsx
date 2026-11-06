@@ -963,15 +963,9 @@ export default function BudgetDataExplorer({
             <div className="space-y-3 pb-3 border-b border-slate-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.16em] font-bold text-[#c2410c] bg-orange-50 font-sans">
-                      Sinkronisasi LPSE &amp; SIRUP
-                    </span>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-xs font-mono font-medium text-slate-500 tabular-nums">
-                      {filteredPackages.length} Paket Audit
-                    </span>
-                  </div>
+                  <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
+                    Sinkronisasi LPSE &amp; SiRUP
+                  </p>
                   <h3 className="text-base sm:text-lg font-bold text-slate-950 font-heading tracking-tight mt-1">
                     Daftar Paket Pengadaan &amp; Audit Kontrak
                   </h3>
