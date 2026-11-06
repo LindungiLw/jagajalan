@@ -33,6 +33,8 @@ import {
   DollarSign,
   Activity,
   Scale,
+  Coins,
+  AlertCircle,
 } from "lucide-react";
 import {
   INDONESIA_REGIONS,
@@ -1070,363 +1072,234 @@ export default function MapExplorer({
         </span>
       </div>
 
-      {/* 5. Right Side Modern Executive Inspector Drawer */}
+      {/* 5. Modern Map Inspector Card (Clean, Simple, Anti-Puyeng Popup) */}
       {displayItem && (
-        <aside className="absolute top-3 right-3 bottom-3 w-full sm:w-[410px] lg:w-[430px] max-w-[calc(100vw-24px)] z-[500] bg-white/98 backdrop-blur-md rounded-[8px] shadow-2xl ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
-          {/* Drawer Header */}
-          <div className="px-4 py-3 border-b border-slate-100 shrink-0 bg-white">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-xs">
-                <span className="font-mono font-bold text-slate-900 tracking-tight">
-                  {currentReport?.ticketCode ? `TIKET #${currentReport.ticketCode}` : currentRoad?.code}
-                </span>
-                <span className="h-3 w-px bg-slate-200" aria-hidden="true" />
-                <span className="text-[11px] font-medium text-slate-500">
-                  {currentRoad?.authority === "NASIONAL"
-                    ? "Jalan Nasional (APBN)"
-                    : currentRoad?.authority === "PROVINSI"
-                    ? "Jalan Provinsi (APBD)"
-                    : currentRoad?.authority === "KOTA"
-                    ? "Jalan Kota (APBD)"
-                    : "Jalan Kabupaten (APBD)"}
-                </span>
-              </div>
-
-              <button
-                onClick={() => {
-                  setSelectedReport(null);
-                  setSelectedRoad(null);
-                }}
-                className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
-                title="Tutup Panel"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <h2 className="text-base font-bold font-heading text-slate-900 tracking-tight leading-snug line-clamp-1">
-              {currentReport ? currentReport.roadName : currentRoad.name}
-            </h2>
-            <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3 h-3 text-[#c2410c] shrink-0" />
-              <span className="truncate">
-                {currentReport ? currentReport.address : `${currentRoad.district || currentRoad.provinceName} • ${currentRoad.lengthKm || 0} KM`}
-              </span>
-            </p>
+        <aside
+          role="region"
+          aria-label="Detail Ruas Jalan"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-[380px] sm:w-[410px] max-w-[calc(100vw-24px)] max-h-[calc(100vh-28px)] z-[500] bg-white/98 backdrop-blur-md rounded-[16px] shadow-[0_16px_40px_-8px_rgba(15,23,42,0.18)] ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans"
+        >
+          {/* Subtle Warm Topographic Accent Curve (Header Corner Decor) */}
+          <div className="absolute -top-12 -right-12 w-32 h-32 pointer-events-none select-none opacity-20" aria-hidden="true">
+            <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-amber-500">
+              <circle cx="80" cy="20" r="60" stroke="currentColor" strokeWidth="12" />
+            </svg>
           </div>
 
-          {/* Drawer Body - Domain-Authentic Civic & Procurement Transparency */}
-          <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 text-xs text-slate-700 font-sans">
-            {/* 1. Bukti Lapangan & Analisis AI Kerusakan Jalan */}
-            {(currentReport?.photoUrl || currentReport?.hazardScore || currentRoad?.condition) && (
-              <div className="rounded-[6px] overflow-hidden border border-slate-200 bg-white shadow-2xs">
-                {currentReport?.photoUrl ? (
-                  <div className="relative w-full h-36 bg-slate-900 overflow-hidden">
-                    <img
-                      src={currentReport.photoUrl}
-                      alt="Foto Kerusakan Jalan"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-                    
-                    {/* Floating Badges */}
-                    <div className="absolute top-2 left-2 flex items-center gap-1.5 flex-wrap">
-                      {currentReport?.hazardScore && (
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-600 text-white shadow-xs flex items-center gap-1">
-                          <AlertTriangle className="w-3 h-3" />
-                          <span>AI Hazard: {currentReport.hazardScore} / 100</span>
-                        </span>
-                      )}
-                      {currentRoad?.condition && (
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold shadow-xs ${
-                            currentRoad.condition === "RUSAK_BERAT"
-                              ? "bg-rose-500 text-white"
-                              : currentRoad.condition === "RUSAK_SEDANG"
-                              ? "bg-amber-500 text-white"
-                              : "bg-emerald-600 text-white"
-                          }`}
-                        >
-                          {currentRoad.condition === "RUSAK_BERAT"
-                            ? "Rusak Berat"
-                            : currentRoad.condition === "RUSAK_SEDANG"
-                            ? "Rusak Sedang"
-                            : "Kondisi Mantap"}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-3 bg-gradient-to-r from-orange-50 to-amber-50 border-b border-orange-100 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
-                        <AlertTriangle className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-slate-900 text-xs">Status Fisik Ruas</div>
-                        <div className="text-[10px] text-slate-500">Hasil Pemindaian Geospasial</div>
-                      </div>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                      {currentRoad?.condition || "TERDATA"}
-                    </span>
-                  </div>
-                )}
-
-                {/* Headline & Dampak Lapangan */}
-                <div className="p-3 space-y-1.5 bg-white">
-                  <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 leading-snug">
-                    {currentReport?.problemDetails?.headline || currentReport?.categoryLabel || currentRoad?.problemDetails?.headline || "Kerusakan Lapisan Permukaan Jalan"}
-                  </h3>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">
-                    {currentReport?.problemDetails?.description || currentReport?.aiAnalysis || currentRoad?.problemDetails?.description || "Teridentifikasi deformasi permukaan dan lubang yang membutuhkan penanganan preservasi."}
-                  </p>
-                  {(currentReport?.problemDetails?.safetyImpact || currentRoad?.problemDetails?.safetyImpact) && (
-                    <div className="pt-1.5 border-t border-slate-100 flex items-start gap-1.5 text-[10.5px] text-rose-700 font-medium">
-                      <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-rose-600" />
-                      <span>{currentReport?.problemDetails?.safetyImpact || currentRoad?.problemDetails?.safetyImpact}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* 2. Status Akuntabilitas Respons (KemenPAN-RB & Ombudsman) */}
-            <div
-              className={`rounded-[6px] p-3.5 border space-y-2.5 transition-all shadow-2xs ${
-                currentReport?.isResponseOverdue
-                  ? "bg-rose-50/70 border-rose-200"
-                  : "bg-white border-slate-200/90"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-rose-600" />
-                  <span>Kepatuhan Batas Waktu Respons (SLA)</span>
-                </span>
-                <span
-                  className={`px-2 py-0.5 rounded-full text-[9.5px] font-bold border tabular-nums ${
-                    currentReport?.isResponseOverdue
-                      ? "bg-rose-100 text-rose-800 border-rose-300"
-                      : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                  }`}
-                >
-                  {currentReport?.isResponseOverdue ? "Terlambat Tanggapan" : "Sesuai Batas Waktu"}
-                </span>
+          {/* Card Header: Squircle Pin Badge + Road Name + Location + Close Button */}
+          <div className="p-3.5 sm:p-4 border-b border-slate-100 flex items-start justify-between gap-3 bg-white/90 relative z-10">
+            <div className="flex items-start gap-3 min-w-0">
+              {/* Squircle Road Icon Badge */}
+              <div className="w-11 h-11 rounded-[12px] bg-orange-50 border border-orange-200/70 p-2 flex items-center justify-center shrink-0 shadow-2xs">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icon/maps.png"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 object-contain"
+                />
               </div>
 
-              {/* SLA Multi-Step Horizontal Flow */}
-              <div className="grid grid-cols-3 gap-1.5 text-center pt-1">
-                <div className="p-2 rounded-[6px] bg-white border border-slate-200/80">
-                  <div className="text-[9.5px] text-slate-400">1. Laporan Masuk</div>
-                  <div className="font-bold text-slate-800 text-[11px] font-sans mt-0.5">
-                    {currentReport?.filedAt || "14 Okt 2026"}
-                  </div>
-                  <div className="text-[9px] text-emerald-600 font-bold mt-0.5">✓ Terverifikasi</div>
-                </div>
-
-                <div className="p-2 rounded-[6px] bg-white border border-slate-200/80">
-                  <div className="text-[9.5px] text-slate-400">2. Batas Tenggat</div>
-                  <div className="font-bold text-slate-800 text-[11px] font-sans mt-0.5">
-                    {currentReport?.deadlineAt || "28 Okt 2026"}
-                  </div>
-                  <div className="text-[9px] text-slate-500 font-medium mt-0.5">Tenggat Resmi</div>
-                </div>
-
-                <div
-                  className={`p-2 rounded-[6px] border ${
-                    currentReport?.isResponseOverdue
-                      ? "bg-rose-100/60 border-rose-300 text-rose-900"
-                      : "bg-emerald-50 border-emerald-200 text-emerald-900"
-                  }`}
-                >
-                  <div className="text-[9.5px] text-slate-500">3. Status Lapangan</div>
-                  <div className="font-bold text-[11px] font-sans mt-0.5">
-                    {currentReport?.isResponseOverdue
-                      ? `+${currentReport?.daysOverdue || 6} Hari Kerja`
-                      : "Dalam Proses"}
-                  </div>
-                  <div className={`text-[9px] font-bold mt-0.5 ${currentReport?.isResponseOverdue ? "text-rose-700" : "text-emerald-700"}`}>
-                    {currentReport?.isResponseOverdue ? "Macet / Lewat" : "Tepat Waktu"}
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-[10px] text-slate-500 leading-relaxed pt-0.5">
-                Berdasarkan <strong>UU No. 25/2009</strong> &amp; <strong>PermenPAN-RB No. 62/2018</strong>, instansi wajib memberikan kepastian tanggapan tindak lanjut. Keterlambatan ini memenuhi syarat rekomendasi Ombudsman RI.
-              </p>
-            </div>
-
-            {/* 3. Transparansi Anggaran & Tender LPSE */}
-            <div className="rounded-[6px] p-3.5 bg-white ring-1 ring-orange-200/60 space-y-3 shadow-2xs">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-[#c2410c]" />
-                  <span className="text-[11.5px] font-bold text-slate-900">Alokasi Anggaran &amp; LPSE</span>
-                </div>
-                <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-[4px] border border-slate-200 tabular-nums">
-                  TA {budgetData?.fiscalYear || "2026"} • {currentRoad?.authority === "NASIONAL" ? "APBN" : "APBD"}
-                </span>
-              </div>
-
-              {/* 2 Big Scoreboard Cards */}
-              <div className="grid grid-cols-2 gap-2 text-left">
-                <div className="p-2.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 space-y-0.5">
-                  <div className="text-[10px] text-slate-500 font-medium">Pagu Anggaran (HPS)</div>
-                  <div className="text-base sm:text-lg font-black text-slate-900 font-sans tabular-nums">
-                    {formatCurrencyCompact(paguRp)}
-                  </div>
-                  <div className="text-[9.5px] text-slate-400">Batas lelang SiRUP</div>
-                </div>
-
-                <div className="p-2.5 rounded-[6px] bg-[#c2410c] text-white space-y-0.5 shadow-2xs">
-                  <div className="text-[10px] text-orange-100 font-medium">Nilai Kontrak (SPK)</div>
-                  <div className="text-base sm:text-lg font-black text-white font-sans tabular-nums">
-                    {formatCurrencyCompact(contractValueRp)}
-                  </div>
-                  <div className="text-[9.5px] text-orange-100 font-bold flex items-center gap-0.5">
-                    <span>Hemat {formatCurrencyCompact(savingsRp)} ({savingsPct}%)</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Progres Pengerjaan Fisik vs Nilai Kontrak */}
-              <div className="space-y-2 pt-1 border-t border-slate-100">
-                <div className="flex items-center justify-between text-[10.5px]">
-                  <span className="font-semibold text-slate-700">Perbandingan Fisik vs Serapan SPK</span>
-                  <span className="text-[10px] font-bold text-slate-500 tabular-nums">
-                    Fisik {physicalProgressPct}% • SPK {contractCommitmentPct}%
+              {/* Title & Location Subtitle */}
+              <div className="min-w-0 space-y-0.5">
+                <h2 className="text-base sm:text-[17px] font-bold font-heading text-slate-900 tracking-tight leading-snug truncate">
+                  {currentReport ? currentReport.roadName : currentRoad.name}
+                </h2>
+                <p className="text-xs text-slate-500 flex items-center gap-1 truncate">
+                  <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+                  <span className="truncate">
+                    {currentReport?.address || `${currentRoad.district || currentRoad.provinceName} / ${currentRoad.lengthKm || 0} KM`}
                   </span>
-                </div>
-
-                <div className="space-y-1.5">
-                  {/* Fisik Bar */}
-                  <div>
-                    <div className="flex items-center justify-between text-[9.5px] text-slate-500 mb-0.5">
-                      <span>Realisasi Fisik Lapangan</span>
-                      <span className="font-bold text-slate-800 tabular-nums">{physicalProgressPct}%</span>
-                    </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                      <div
-                        className="h-full bg-[#c2410c] rounded-full transition-all duration-500"
-                        style={{ width: `${physicalProgressPct}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* SPK Bar */}
-                  <div>
-                    <div className="flex items-center justify-between text-[9.5px] text-slate-500 mb-0.5">
-                      <span>Penyerapan Anggaran Terikat SPK</span>
-                      <span className="font-bold text-slate-800 tabular-nums">{contractCommitmentPct}%</span>
-                    </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                      <div
-                        className="h-full bg-emerald-600 rounded-full transition-all duration-500"
-                        style={{ width: `${contractCommitmentPct}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Audit Anomaly Callout jika fisik tertinggal */}
-                {contractCommitmentPct - physicalProgressPct > 20 && (
-                  <div className="p-2 rounded-[6px] bg-amber-50 border border-amber-200 text-amber-900 text-[10px] flex items-start gap-1.5 leading-relaxed font-medium">
-                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                    <span>
-                      <strong>Potensi Deviasi Pekerjaan:</strong> Penyerapan dana kontrak ({contractCommitmentPct}%) berjalan lebih cepat daripada capaian fisik di lapangan ({physicalProgressPct}%).
-                    </span>
-                  </div>
-                )}
-
-                {/* Info Kontraktor */}
-                <div className="pt-1.5 flex items-center justify-between text-[10.5px] text-slate-600">
-                  <span className="text-slate-400">Pemenang Tender:</span>
-                  <span className="font-bold text-slate-900 truncate max-w-[210px]">
-                    {budgetData?.contractor || "PT Karya Deli Mandiri"}
-                  </span>
-                </div>
+                </p>
               </div>
             </div>
 
-            {/* 4. Instansi Penanggung Jawab Hukum (Wewenang Mutlak) */}
-            <div className="rounded-[6px] p-3.5 bg-slate-50 ring-1 ring-orange-200/50 space-y-2 shadow-2xs">
-              <div className="flex items-center justify-between text-[10.5px]">
-                <span className="font-bold uppercase tracking-wider flex items-center gap-1.5 text-slate-700">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/icon/hukum_icon.png"
-                    alt=""
-                    width={14}
-                    height={14}
-                    style={{ width: "14px", height: "14px" }}
-                    className="w-3.5 h-3.5 object-contain"
-                  />
-                  <span>Instansi Penanggung Jawab</span>
-                </span>
-                <span className="text-[9.5px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                  Wewenang Mutlak
-                </span>
-              </div>
-
-              <div className="font-extrabold text-slate-900 text-xs sm:text-[13px] leading-snug">
-                {currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}
-              </div>
-
-              <div className="space-y-1 pt-1 border-t border-slate-200/60 text-[10.5px]">
-                <div className="flex items-center justify-between text-slate-600">
-                  <span className="text-slate-400">Pimpinan / PIC:</span>
-                  <span className="font-bold text-slate-800 truncate max-w-[210px]">
-                    {currentReport?.leadership?.regionalHead || currentRoad?.leadership?.regionalHead || "Kepala Daerah"}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between text-slate-600">
-                  <span className="text-slate-400">Dasar Hukum:</span>
-                  <span
-                    className="font-medium text-slate-700 truncate max-w-[210px]"
-                    title={currentReport?.legalBasis || currentRoad?.officialSources?.authoritySource || "UU No. 2 Tahun 2022"}
-                  >
-                    {currentReport?.legalBasis || currentRoad?.officialSources?.authoritySource || "UU No. 2 Tahun 2022"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Action Footer */}
-          <div className="p-3 sm:p-3.5 border-t border-slate-100 space-y-2 bg-white shrink-0 font-sans">
+            {/* Close Button */}
             <button
               onClick={() => {
-                const targetRoad = (currentReport?.roadSegmentId && roads.find((r) => r.id === currentReport.roadSegmentId)) || currentRoad;
-                setSelectedRoadForDetailModal(targetRoad);
+                setSelectedReport(null);
+                setSelectedRoad(null);
               }}
-              className="w-full py-2 px-3.5 rounded-[6px] text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200/90 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+              className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer shrink-0 mt-0.5"
+              title="Tutup Pop-up"
             >
-              <Eye className="w-3.5 h-3.5 text-[#c2410c]" />
-              <span>Lihat Detail Lengkap Ruas</span>
+              <X className="w-4 h-4" />
             </button>
+          </div>
 
-            {/* Action 2: Report Damage */}
+          {/* Card Body - Scrollable if screen height is constrained */}
+          <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3 text-xs text-slate-700 relative z-10">
+            
+            {/* 1. Road Condition Photo Card */}
+            {(currentReport?.photoUrl || currentRoad?.photoUrl) && (
+              <div className="relative w-full h-40 sm:h-44 bg-slate-900 rounded-[10px] overflow-hidden shadow-2xs">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={currentReport?.photoUrl || currentRoad?.photoUrl}
+                  alt="Kondisi Fisik Ruas Jalan"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                
+                {/* Top-Left Status Pill */}
+                <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
+                  <span className="px-2.5 py-1 rounded-[6px] text-[11px] font-bold bg-[#c2410c] text-white shadow-xs flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span>{currentReport?.categoryLabel || "Kerusakan Jalan"}</span>
+                  </span>
+                </div>
+
+                {/* Top-Right Overdue Alert */}
+                {currentReport?.isResponseOverdue && (
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className="px-2.5 py-1 rounded-[6px] text-[10.5px] font-bold bg-rose-600 text-white shadow-xs flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      <span>Terlambat {currentReport.daysOverdue} Hari</span>
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 2. Key Data Row: Penanggung Jawab & Anggaran (2 Columns, matching reference image 1) */}
+            <div className="grid grid-cols-2 gap-2.5 p-3 rounded-[10px] bg-slate-50/80 border border-slate-200/70">
+              {/* Penanggung Jawab */}
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-9 h-9 rounded-[8px] bg-white border border-slate-200/80 flex items-center justify-center text-orange-700 shadow-2xs shrink-0">
+                  <Building2 className="w-4.5 h-4.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                    Penanggung Jawab
+                  </div>
+                  <div className="text-xs font-bold text-slate-900 truncate" title={currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}>
+                    {currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Anggaran */}
+              <div className="flex items-center gap-2.5 min-w-0 border-l border-slate-200/80 pl-2.5">
+                <div className="w-9 h-9 rounded-[8px] bg-white border border-slate-200/80 flex items-center justify-center text-amber-700 shadow-2xs shrink-0">
+                  <Coins className="w-4.5 h-4.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                    <span>Anggaran</span>
+                    <span className="font-mono text-[9px] bg-amber-100 text-amber-900 px-1 py-0.2 rounded font-bold">
+                      TA {budgetData?.fiscalYear || "2026"}
+                    </span>
+                  </div>
+                  <div className="text-xs font-bold font-mono text-slate-900 tabular-nums">
+                    {formatCurrencyCompact(contractValueRp || paguRp)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Ringkasan Kondisi & Capaian Pengawasan (matching reference image 1 & 4) */}
+            <div className="p-3 rounded-[10px] bg-slate-50/80 border border-slate-200/70 space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 text-orange-600" />
+                  <span>Ringkasan Pengawasan Ruas</span>
+                </span>
+                <span className="text-[11px] font-medium text-slate-500">
+                  {currentRoad?.authority === "NASIONAL" ? "APBN Pusat" : "APBD Daerah"}
+                </span>
+              </div>
+
+              {/* 3 Compact Metric Cards */}
+              <div className="grid grid-cols-3 gap-1.5 text-center">
+                <div className="p-2 rounded-[8px] bg-white border border-slate-200/70">
+                  <div className="text-[10px] text-slate-400">Realisasi Fisik</div>
+                  <div className="font-mono font-bold text-slate-900 text-xs tabular-nums mt-0.5">
+                    {physicalProgressPct}%
+                  </div>
+                </div>
+                <div className="p-2 rounded-[8px] bg-white border border-slate-200/70">
+                  <div className="text-[10px] text-slate-400">Serapan SPK</div>
+                  <div className="font-mono font-bold text-slate-900 text-xs tabular-nums mt-0.5">
+                    {contractCommitmentPct}%
+                  </div>
+                </div>
+                <div
+                  className={`p-2 rounded-[8px] border ${
+                    currentReport?.isResponseOverdue
+                      ? "bg-rose-50 border-rose-200 text-rose-800"
+                      : "bg-white border-slate-200/70 text-slate-900"
+                  }`}
+                >
+                  <div className="text-[10px] text-slate-400">Tenggat SLA</div>
+                  <div className="font-bold text-xs mt-0.5 truncate">
+                    {currentReport?.isResponseOverdue ? `+${currentReport.daysOverdue} Hari` : "Tepat Waktu"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual Progress Bar (Fisik vs Serapan) */}
+              <div className="space-y-1 pt-0.5">
+                <div className="flex items-center justify-between text-[10px] text-slate-500 font-sans">
+                  <span>Realisasi Pengerjaan Fisik</span>
+                  <span className="font-mono font-bold text-slate-800 tabular-nums">{physicalProgressPct}% / 100%</span>
+                </div>
+                <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden flex">
+                  <div
+                    className="h-full bg-[#c2410c] rounded-full transition-all duration-500"
+                    style={{ width: `${physicalProgressPct}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Description note if available */}
+            {(currentReport?.problemDetails?.headline || currentReport?.aiAnalysis) && (
+              <p className="text-[11px] text-slate-600 leading-relaxed font-sans px-1">
+                {currentReport?.problemDetails?.headline || currentReport?.aiAnalysis}
+              </p>
+            )}
+          </div>
+
+          {/* Card Action Buttons (Clear, High-Affordance CTAs) */}
+          <div className="p-3 sm:p-3.5 border-t border-slate-100 space-y-2 bg-white shrink-0 relative z-10 font-sans">
+            {/* Primary Action Button: Laporkan Kerusakan di Sini */}
             <button
               onClick={() => onOpenReportModal()}
-              className="w-full py-2 px-3.5 rounded-[6px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-[10px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-sm transition-all duration-150 flex items-center justify-between cursor-pointer active:scale-[0.99] group"
             >
-              <MapPin className="w-3.5 h-3.5" />
-              <span>Laporkan Kerusakan di Sini</span>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span>Laporkan Kerusakan di Sini</span>
+              </div>
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </button>
 
-            {/* Action 3: Ombudsman Draft (if overdue) */}
-            {currentReport?.isResponseOverdue && (
+            {/* Secondary Action Row: Detail Lengkap Ruas + Ombudsman */}
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => onOpenOmbudsmanDraft(currentReport)}
-                className="w-full py-1.5 px-3 rounded-[6px] text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                onClick={() => {
+                  const targetRoad = (currentReport?.roadSegmentId && roads.find((r) => r.id === currentReport.roadSegmentId)) || currentRoad;
+                  setSelectedRoadForDetailModal(targetRoad);
+                }}
+                className="flex-1 py-2 px-3 rounded-[8px] text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100/90 hover:bg-slate-200/90 border border-slate-200/80 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <FileCheck className="w-3.5 h-3.5 text-rose-600" />
-                <span>Unduh Draf Laporan Ombudsman RI</span>
+                <Eye className="w-3.5 h-3.5 text-[#c2410c]" />
+                <span>Lihat Detail Lengkap</span>
               </button>
-            )}
+
+              {currentReport?.isResponseOverdue && (
+                <button
+                  onClick={() => onOpenOmbudsmanDraft(currentReport)}
+                  className="py-2 px-3 rounded-[8px] text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  title="Unduh Draf Laporan Ombudsman RI"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Draf Ombudsman</span>
+                </button>
+              )}
+            </div>
           </div>
         </aside>
       )}
