@@ -101,11 +101,8 @@ export default function LegalBasisSection() {
 
                 {/* Functional Integration in JagaJalan */}
                 <div className="pt-3.5 border-t border-slate-200/50 flex items-center justify-between gap-2 text-[11px] font-medium text-slate-600">
-                  <span className="flex items-center gap-1.5 truncate">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
-                    <span className="truncate text-slate-800 font-semibold">{reg.feature}</span>
-                  </span>
-                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full ring-1 ring-emerald-200/60 shrink-0 flex items-center gap-1">
+                  <span className="truncate text-slate-800 font-semibold">{reg.feature}</span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-[5px] ring-1 ring-emerald-200/60 shrink-0 flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                     <span>Berlaku</span>
                   </span>

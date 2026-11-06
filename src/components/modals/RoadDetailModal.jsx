@@ -141,8 +141,7 @@ export default function RoadDetailModal({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <div className="text-[10px] font-bold text-rose-700 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-rose-600" />
+                    <div className="text-[10px] font-bold text-rose-700 flex items-center">
                       <span>Sebelum Penanganan / Kerusakan Awal</span>
                     </div>
                     <div className="h-36 rounded-[6px] overflow-hidden bg-slate-200">
@@ -151,8 +150,7 @@ export default function RoadDetailModal({
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <div className="text-[10px] font-bold text-emerald-800 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                    <div className="text-[10px] font-bold text-emerald-800 flex items-center">
                       <span>Kondisi Terkini / Hasil Penanganan</span>
                     </div>
                     <div className="h-36 rounded-[6px] overflow-hidden bg-slate-200">

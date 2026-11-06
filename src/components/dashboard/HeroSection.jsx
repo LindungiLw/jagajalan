@@ -290,8 +290,7 @@ export default function HeroSection({
         {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (ORANGE BRAND STRIP) */}
         <div className="bg-[#c2410c] text-white px-4 sm:px-5 py-2.5 rounded-[6px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <span className="text-white font-bold text-xs font-sans flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-white font-bold text-xs font-sans">
               Monitoring Infrastruktur Nasional:
             </span>
             <div className="flex items-center gap-1.5">
@@ -595,26 +594,26 @@ export default function HeroSection({
                   <div className="flex items-center justify-between gap-1 pt-0.5 text-[9.5px] font-sans">
                     {/* Left: Dynamic Color Legend */}
                     {selectedIndex === "kemantapan" && (
-                      <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-600" />Nasional</span>
-                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-purple-600" />Provinsi</span>
-                        <span className="flex items-center gap-1 text-orange-700 font-bold"><span className="w-1.5 h-1.5 rounded-full bg-orange-600" />Kab/Kota</span>
+                      <div className="flex items-center gap-3 font-medium text-slate-600">
+                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-xs bg-blue-600" />Nasional</span>
+                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-xs bg-purple-600" />Provinsi</span>
+                        <span className="flex items-center gap-1.5 text-orange-700 font-bold"><span className="w-2.5 h-1 rounded-xs bg-orange-600" />Kab/Kota</span>
                       </div>
                     )}
                     {selectedIndex === "ombudsman" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1 text-[#c2410c] font-bold"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Undue Delay (%)</span>
+                        <span className="flex items-center gap-1.5 text-[#c2410c] font-bold"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Undue Delay (%)</span>
                       </div>
                     )}
                     {selectedIndex === "pagu" && (
-                      <div className="flex items-center gap-2 font-medium">
-                        <span className="flex items-center gap-1 text-slate-600"><span className="w-1.5 h-1.5 rounded-full bg-slate-700" />Pagu</span>
-                        <span className="flex items-center gap-1 text-[#c2410c]"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Kontrak</span>
+                      <div className="flex items-center gap-3 font-medium">
+                        <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-1 rounded-xs bg-slate-700" />Pagu</span>
+                        <span className="flex items-center gap-1.5 text-[#c2410c]"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Kontrak</span>
                       </div>
                     )}
                     {selectedIndex === "inpres" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />Alokasi APBN</span>
+                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Alokasi APBN</span>
                       </div>
                     )}
 
@@ -1446,8 +1445,7 @@ export default function HeroSection({
                     <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Nasional
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
@@ -1455,8 +1453,7 @@ export default function HeroSection({
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Provinsi
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-purple-900 tabular-nums">
@@ -1464,8 +1461,7 @@ export default function HeroSection({
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-orange-700 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-orange-600" />
+                          <span className="text-[10px] text-orange-700 font-medium">
                             Kab/Kota
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-orange-900 tabular-nums">
@@ -1480,8 +1476,7 @@ export default function HeroSection({
                     <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-2 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Undue Delay ({selectedYear})
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
@@ -1489,8 +1484,7 @@ export default function HeroSection({
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Total Aduan Selesai
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">
@@ -1505,8 +1499,7 @@ export default function HeroSection({
                     <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Total Pagu
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
@@ -1514,8 +1507,7 @@ export default function HeroSection({
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Kontrak
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
@@ -1523,8 +1515,7 @@ export default function HeroSection({
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                          <span className="text-[10px] text-slate-500 font-medium">
                             Efisiensi
                           </span>
                           <div className="flex items-center gap-1">
@@ -1641,8 +1632,7 @@ export default function HeroSection({
                       <div className="text-[9px] text-slate-400 tabular-nums">23,6% Pagu</div>
                     </td>
                     <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                      <span className="inline-flex items-center text-[9.5px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-[5px] tabular-nums">
                         Aman (0)
                       </span>
                     </td>
@@ -1659,8 +1649,7 @@ export default function HeroSection({
                       <div className="text-[9px] text-slate-400 tabular-nums">43,9% Pagu</div>
                     </td>
                     <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                      <span className="inline-flex items-center text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-[5px] tabular-nums">
                         1 Tiket Eskalasi
                       </span>
                     </td>
@@ -1677,8 +1666,7 @@ export default function HeroSection({
                       <div className="text-[9px] text-slate-400 tabular-nums">32,5% Pagu</div>
                     </td>
                     <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                      <span className="inline-flex items-center text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-[5px] tabular-nums">
                         1 Tiket Eskalasi
                       </span>
                     </td>
@@ -1699,11 +1687,7 @@ export default function HeroSection({
 
             {/* SLA Alert Strip with Responsible Legal Context */}
             <div className="pt-2 text-[11px] text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 border-t border-slate-100 font-sans">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2 shrink-0">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
-                </span>
+              <div>
                 <span>2 laporan pilot telah melewati batas tenggat respons resmi.</span>
               </div>
               <button
@@ -1865,28 +1849,17 @@ export default function HeroSection({
                             </div>
                           </td>
 
-                          {/* 2. Status Wewenang (Editorial Clean Indicator) */}
+                          {/* 2. Status Wewenang (Editorial Clean Indicator - No Colored Dot) */}
                           <td className="py-4 px-2.5 align-middle">
-                            <div className="flex items-center gap-2">
-                              <span className={`w-2 h-2 rounded-full shrink-0 ${
-                                road.authority === "NASIONAL"
-                                  ? "bg-blue-600 ring-2 ring-blue-100"
-                                  : road.authority === "PROVINSI"
-                                  ? "bg-purple-600 ring-2 ring-purple-100"
-                                  : road.authority === "KOTA"
-                                  ? "bg-teal-600 ring-2 ring-teal-100"
-                                  : "bg-emerald-600 ring-2 ring-emerald-100"
-                              }`} />
-                              <span className="font-medium text-slate-700 text-[11.5px] truncate">
-                                {road.authority === "NASIONAL"
-                                  ? "Jalan Nasional"
-                                  : road.authority === "PROVINSI"
-                                  ? "Jalan Provinsi"
-                                  : road.authority === "KOTA"
-                                  ? "Jalan Kota"
-                                  : "Jalan Kabupaten"}
-                              </span>
-                            </div>
+                            <span className="font-semibold text-slate-800 text-[11.5px] truncate block">
+                              {road.authority === "NASIONAL"
+                                ? "Jalan Nasional"
+                                : road.authority === "PROVINSI"
+                                ? "Jalan Provinsi"
+                                : road.authority === "KOTA"
+                                ? "Jalan Kota"
+                                : "Jalan Kabupaten"}
+                            </span>
                           </td>
 
                           {/* 3. Pagu vs Kontrak */}
@@ -1922,13 +1895,11 @@ export default function HeroSection({
                           {/* 5. Status Respons Pemantauan Tenggat */}
                           <td className="py-4 px-2.5 text-center align-middle">
                             {isOverdue ? (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10.5px] font-semibold ring-1 ring-rose-200/50">
-                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-[5px] bg-rose-50 text-rose-700 text-[10.5px] font-semibold ring-1 ring-rose-200/50">
                                 <span>Lewat Tenggat</span>
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 text-slate-500 text-[11px] font-medium">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-[5px] bg-emerald-50/70 text-emerald-700 text-[10.5px] font-semibold ring-1 ring-emerald-200/50">
                                 <span>Terkendali</span>
                               </span>
                             )}

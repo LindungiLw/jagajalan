@@ -303,15 +303,15 @@ export default function AnnualProgressChart() {
               {/* Legend with official authority colors */}
               <div className="flex items-center gap-3.5 text-xs font-semibold">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shadow-2xs" />
+                  <span className="w-3 h-1 rounded-sm bg-blue-600" />
                   <span className="text-slate-700">Nasional</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-600 shadow-2xs" />
+                  <span className="w-3 h-1 rounded-sm bg-purple-600" />
                   <span className="text-slate-700">Provinsi</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-orange-600 shadow-2xs" />
+                  <span className="w-3 h-1 rounded-sm bg-orange-600" />
                   <span className="text-orange-700 font-bold">Kab/Kota (Daerah)</span>
                 </span>
               </div>

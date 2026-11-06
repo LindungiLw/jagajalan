@@ -125,8 +125,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
                 </div>
 
                 {/* Clean Bottom Outcome Line */}
-                <div className="pt-3.5 border-t border-slate-100 flex items-center gap-2 text-[11px] font-semibold text-slate-800">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                <div className="pt-3.5 border-t border-slate-100 text-[11px] font-semibold text-slate-800">
                   <span>{item.outcome}</span>
                 </div>
               </div>

@@ -191,9 +191,8 @@ export default function OfficerDashboard({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-extrabold text-sm text-slate-900">{currentOfficer?.name || "Aparatur Dinas Terverifikasi"}</span>
-              <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-sans font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Sesi Aktif Terotentikasi</span>
+              <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-sans font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                Sesi Aktif Terotentikasi
               </span>
               {currentOfficer?.authorityLevel && (
                 <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-sans font-bold uppercase tracking-wider border ${

@@ -1452,7 +1452,6 @@ export default function MapExplorer({
             <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 w-full overflow-hidden flex flex-col max-h-[88vh]">
               <div className="p-4 border-b border-orange-700/30 flex items-center justify-between bg-[#c2410c] text-white">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse" />
                   <h3 className="font-bold text-sm font-heading text-white">
                     Integrasi SIGI PU &amp; GeoAPI Geospasial
                   </h3>

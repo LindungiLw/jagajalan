@@ -137,7 +137,6 @@ export default function Navbar({
                     className={`w-4.5 h-4.5 object-contain shrink-0 ${isActive ? "invert brightness-0" : ""}`}
                   />
                   <span className="flex-1">{item.label}</span>
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </button>
               );
             })}

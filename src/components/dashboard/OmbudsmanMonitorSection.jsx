@@ -113,8 +113,7 @@ export default function OmbudsmanMonitorSection({
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50/80 text-rose-800 ring-1 ring-rose-200/60">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-[5px] text-[10px] font-semibold bg-rose-50/80 text-rose-800 ring-1 ring-rose-200/60">
                     <span>Standar Layanan Publik &amp; Ombudsman RI</span>
                   </span>
                   <span className="text-[11px] text-slate-400 font-sans hidden sm:inline">
@@ -442,17 +441,16 @@ export default function OmbudsmanMonitorSection({
 
                       {/* Status Badge */}
                       {isOverdue ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-rose-50 text-rose-700 ring-1 ring-rose-200/70 font-sans">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-[5px] text-[10.5px] font-bold bg-rose-50 text-rose-700 ring-1 ring-rose-200/70 font-sans">
                           <span>Lewat Tenggat (+{report.daysOverdue} Hari)</span>
                         </span>
                       ) : isCompleted ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-medium bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/70 font-sans">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[5px] text-[10.5px] font-medium bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/70 font-sans">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                           <span>Selesai Ditangani</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-medium bg-amber-50 text-amber-800 ring-1 ring-amber-200/70 font-sans">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[5px] text-[10.5px] font-medium bg-amber-50 text-amber-800 ring-1 ring-amber-200/70 font-sans">
                           <Clock className="w-3 h-3 text-amber-600" />
                           <span>Dalam Masa Tanggap</span>
                         </span>
@@ -603,17 +601,16 @@ export default function OmbudsmanMonitorSection({
                       </td>
                       <td className="py-3 px-3 text-center whitespace-nowrap">
                         {isOverdue ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 ring-1 ring-rose-200/60">
-                            <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-[5px] text-[10px] font-bold bg-rose-50 text-rose-700 ring-1 ring-rose-200/60">
                             <span>+{report.daysOverdue} Hari</span>
                           </span>
                         ) : isCompleted ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/60">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[5px] text-[10px] font-medium bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/60">
                             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                             <span>Selesai</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 ring-1 ring-amber-200/60">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[5px] text-[10px] font-medium bg-amber-50 text-amber-800 ring-1 ring-amber-200/60">
                             <Clock className="w-3 h-3 text-amber-600" />
                             <span>Berjalan</span>
                           </span>

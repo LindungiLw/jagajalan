@@ -191,9 +191,8 @@ export default function NationalRankingSection({ onSelectPilot }) {
                     </div>
 
                     {isPilot && (
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#c2410c] uppercase tracking-wider font-sans shrink-0">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] animate-pulse" />
-                        <span>Wilayah Pilot</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-[5px] text-[9.5px] font-bold text-[#c2410c] bg-orange-50 ring-1 ring-orange-200/60 uppercase tracking-wider font-sans shrink-0">
+                        Wilayah Pilot
                       </span>
                     )}
                   </div>
@@ -323,7 +322,9 @@ export default function NationalRankingSection({ onSelectPilot }) {
                         <div className="flex items-center gap-1.5">
                           <strong className="font-bold text-slate-900 text-xs sm:text-[13px]">{prov.name}</strong>
                           {isPilot && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" title="Wilayah Pilot Terverifikasi" />
+                            <span className="text-[9px] font-bold text-[#c2410c] bg-orange-50 px-1.5 py-0.2 rounded-[4px] ring-1 ring-orange-200/60 shrink-0">
+                              Pilot
+                            </span>
                           )}
                         </div>
                         <span className="text-[10px] text-slate-500 block">Ibukota: {prov.capital}</span>
