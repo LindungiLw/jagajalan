@@ -96,30 +96,31 @@ export default function Navbar({
             })}
           </nav>
 
-          {/* Right Action Area: Primary Citizen Action */}
+          {/* Right Action Area: Primary Citizen Action (High-End Button-in-Button) */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Primary Citizen Action: Solid Institutional Safety Orange */}
             <button
               onClick={onOpenReportModal}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] border border-[#9a3412]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-colors cursor-pointer whitespace-nowrap active:translate-y-px"
+              className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap font-sans"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/plus_icon.png"
-                alt=""
-                width={16}
-                height={16}
-                style={{ width: "16px", height: "16px" }}
-                className="w-4 h-4 object-contain shrink-0"
-              />
               <span>Laporkan Kerusakan</span>
+              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:scale-105 shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icon/plus_icon.png"
+                  alt=""
+                  width={14}
+                  height={14}
+                  style={{ width: "14px", height: "14px" }}
+                  className="w-3.5 h-3.5 object-contain invert brightness-0"
+                />
+              </span>
             </button>
 
             {/* Mobile Hamburger Button */}
             <div className="flex lg:hidden items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                 aria-label="Buka Menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

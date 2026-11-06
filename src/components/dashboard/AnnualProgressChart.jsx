@@ -164,29 +164,29 @@ export default function AnnualProgressChart() {
           </p>
         </div>
 
-        {/* 3 Metric Pills */}
-        <div className="flex items-center p-1 rounded-xl bg-slate-100/90 border border-slate-200/80 text-xs font-semibold shrink-0 shadow-2xs gap-1">
+        {/* 3 Metric Pills (High-End Floating Island) */}
+        <div className="flex items-center p-1 rounded-full bg-slate-100/80 ring-1 ring-slate-900/5 text-xs font-semibold shrink-0 gap-1 font-sans">
           <button
             onClick={() => setActiveMetric("road-condition")}
-            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
               activeMetric === "road-condition"
-                ? "bg-white text-slate-900 shadow-xs font-bold"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-white text-slate-950 shadow-2xs font-bold"
+                : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
             <Layers className="w-3.5 h-3.5 text-blue-600" />
             <span>Kemantapan Jalan</span>
-            <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full text-[10px] bg-blue-50 text-blue-700 font-bold">
+            <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 text-slate-700 font-bold">
               Gap 36%
             </span>
           </button>
 
           <button
             onClick={() => setActiveMetric("complaints")}
-            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
               activeMetric === "complaints"
-                ? "bg-white text-slate-900 shadow-xs font-bold"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-white text-slate-950 shadow-2xs font-bold"
+                : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
@@ -198,10 +198,10 @@ export default function AnnualProgressChart() {
 
           <button
             onClick={() => setActiveMetric("inpres")}
-            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
               activeMetric === "inpres"
-                ? "bg-white text-slate-900 shadow-xs font-bold"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-white text-slate-950 shadow-2xs font-bold"
+                : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
             <Coins className="w-3.5 h-3.5 text-orange-600" />
@@ -220,7 +220,7 @@ export default function AnnualProgressChart() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch animate-fade-in">
           
           {/* LEFT CARD (~67% width): 4 Open KPI Columns + Direct White Combo Chart + Clean Footer */}
-          <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-2xs p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-8 bg-white rounded-2xl ring-1 ring-slate-900/5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* 1. TOP 4 OPEN KPI COLUMNS (Executive SaaS Layout, No Truncation, Airy & Clean) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 pb-3 border-b border-slate-100">
@@ -626,7 +626,7 @@ export default function AnnualProgressChart() {
           </div>
 
           {/* RIGHT CARD (~33% width): Balanced Donut Chart & Rich Breakdown with Micro-Bars */}
-          <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 shadow-2xs p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-4 bg-white rounded-2xl ring-1 ring-slate-900/5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* Header */}
             <div>

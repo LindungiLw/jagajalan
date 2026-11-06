@@ -41,79 +41,78 @@ export default function LegalBasisSection() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-      <div className="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs space-y-5">
-        {/* Header - Civic Icon */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-          <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/hukum_icon.png"
-                alt="Landasan Hukum"
-                width={28}
-                height={28}
-                style={{ width: "28px", height: "28px" }}
-                className="w-7 h-7 object-contain"
-              />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
+      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+        <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
+          
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
+            <div className="space-y-1.5 max-w-2xl">
+              <div className="flex items-center gap-2">
+                <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-slate-500 bg-slate-100 inline-block font-sans">
+                  Instrumen Kebijakan Publik
+                </span>
+                <span className="text-slate-300">•</span>
+                <span className="text-xs font-mono font-medium text-slate-500">
+                  4 Instrumen Regulasi Aktif
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Payung Hukum Transparansi &amp; Pengawasan Publik
               </h2>
-              <p className="text-xs text-slate-500 max-w-2xl leading-relaxed font-sans">
-                Setiap data, hitung mundur SLA, dan laporan di JagaJalan berlandaskan instrumen perundang-undangan resmi Republik Indonesia untuk menjamin akuntabilitas dinas.
+              <p className="text-xs sm:text-[13px] text-slate-500 max-w-2xl leading-relaxed font-sans">
+                Setiap data, hitung mundur SLA, dan laporan di JagaJalan berlandaskan instrumen perundang-undangan resmi Republik Indonesia untuk menjamin kepatuhan dinas.
               </p>
             </div>
+
+            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 ring-1 ring-slate-900/5 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>Kepatuhan Hukum Terjamin</span>
+            </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>4 Instrumen Regulasi Aktif</span>
-          </div>
-        </div>
+          {/* 4 Cards Grid (Soft Structuralism) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {regulations.map((reg) => (
+              <div
+                key={reg.code}
+                className="p-5 rounded-2xl bg-slate-50/70 hover:bg-white ring-1 ring-slate-900/5 hover:shadow-xs transition-all duration-200 space-y-4 flex flex-col justify-between group"
+              >
+                <div className="space-y-3">
+                  {/* Code & Feature Badge */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-mono font-bold tracking-tight px-2.5 py-0.5 rounded-full bg-slate-900 text-white inline-block">
+                      {reg.code}
+                    </span>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/60 text-slate-700 font-sans">
+                      {reg.mandate}
+                    </span>
+                  </div>
 
-        {/* 4 Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-          {regulations.map((reg) => (
-            <div
-              key={reg.code}
-              className="p-4 sm:p-5 rounded-xl bg-slate-50/50 hover:bg-white border border-slate-200/90 hover:border-slate-300 transition-colors space-y-3.5 flex flex-col justify-between group"
-            >
-              <div className="space-y-2.5">
-                {/* Code & Feature Badge */}
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono font-bold tracking-tight px-2 py-0.5 rounded bg-slate-900 text-white inline-block">
-                    {reg.code}
-                  </span>
-                  <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded bg-orange-50 text-[#9a3412] border border-orange-200/80 font-sans">
-                    {reg.mandate}
-                  </span>
+                  {/* Title */}
+                  <h3 className="text-sm font-bold text-slate-950 leading-snug pt-0.5">
+                    {reg.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                    {reg.description}
+                  </p>
                 </div>
 
-                {/* Title */}
-                <h3 className="text-sm font-bold text-slate-900 leading-snug pt-0.5">
-                  {reg.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  {reg.description}
-                </p>
+                {/* Functional Integration in JagaJalan */}
+                <div className="pt-3.5 border-t border-slate-200/50 flex items-center justify-between gap-2 text-[11px] font-medium text-slate-600">
+                  <span className="flex items-center gap-1.5 truncate">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                    <span className="truncate text-slate-800 font-semibold">{reg.feature}</span>
+                  </span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full ring-1 ring-emerald-200/60 shrink-0 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    <span>Berlaku</span>
+                  </span>
+                </div>
               </div>
-
-              {/* Functional Integration in JagaJalan */}
-              <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between gap-2 text-[11px] font-medium text-slate-600">
-                <span className="flex items-center gap-1.5 truncate">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
-                  <span className="truncate">{reg.feature}</span>
-                </span>
-                <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/70 shrink-0 flex items-center gap-0.5">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  <span>Berlaku</span>
-                </span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

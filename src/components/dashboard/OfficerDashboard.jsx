@@ -350,7 +350,7 @@ export default function OfficerDashboard({
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-rose-700 font-sans">Keterlambatan (Overdue)</span>
+            <span className="text-[11px] font-bold uppercase text-rose-700 font-sans">Lewat Batas Respons</span>
             <Clock className="w-4 h-4 text-rose-600" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
@@ -427,7 +427,7 @@ export default function OfficerDashboard({
             className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-sans"
           >
             <option value="HAZARD">Prioritas Hazard Score AI (Tertinggi)</option>
-            <option value="SLA">Kritis Batas Waktu SLA (Terancam Overdue)</option>
+            <option value="SLA">Kritis Batas Waktu SLA (Terancam Lewat Tenggat)</option>
             <option value="UPVOTES">Dukungan Warga (Upvotes Terbanyak)</option>
             <option value="DATE">Laporan Terbaru</option>
           </select>
@@ -510,8 +510,8 @@ export default function OfficerDashboard({
 
                           {/* Status Badge */}
                           {isOverdue && (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                              OVERDUE +{report.daysOverdue} HARI KERJA
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                              LEWAT TENGGAT (+{report.daysOverdue} HARI)
                             </span>
                           )}
                           {isDone && (

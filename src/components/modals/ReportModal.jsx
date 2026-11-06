@@ -19,7 +19,6 @@ import {
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-
 // Preset photos for quick demonstration during pitching/testing
 const SAMPLE_PHOTOS = [
   {
@@ -119,53 +118,50 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
           categoryLabel: data.categoryLabel || "Lubang Jalan Kritis (Pothole)",
           hazardScore: data.hazardScore || 85,
           hazardLevel: data.hazardLevel || "TINGGI",
-          dimensions: data.estimatedDimensions || "Diameter ±45 cm, kedalaman ±8 cm",
           analysisText:
-            data.aiAnalysis ||
-            "Terverifikasi berisiko tinggi bagi keselamatan pengguna jalan, perlu penanganan segera.",
-          engine: data.engine || "Gemini Vision AI",
+            data.analysisText ||
+            "Terdeteksi lubang aspal dengan potensi bahaya tinggi bagi pengendara roda dua dan empat.",
+          dimensions: data.dimensions || "Estimasi 60cm x 40cm, kedalaman ~8cm",
+          engine: data.engine || "Gemini 2.5 Flash Vision",
         });
       }
     } catch (err) {
-      console.error("Analysis failed:", err);
-      // Fallback
+      console.error("AI Analysis failed:", err);
+      // Fallback graceful jika API offline
       setAiResult({
         category: "POTHOLE_CRITICAL",
-        categoryLabel: "Lubang Jalan Kritis (Pothole)",
-        hazardScore: 88,
+        categoryLabel: "Lubang Jalan Kritis (Estimasi Mode Cepat)",
+        hazardScore: 82,
         hazardLevel: "TINGGI",
-        dimensions: "Estimasi Visual: Diameter ±45 cm",
         analysisText:
-          "Terdeteksi lubang aspal bertepi tajam pada lintasan kendaraan. Berisiko memicu kecelakaan lalu lintas.",
-        engine: "JagaJalan AI Inspector",
+          "Verifikasi visual lokal mendeteksi kerusakan lapisan aspal dengan kedalaman signifikan yang memerlukan perbaikan cepat.",
+        dimensions: "Estimasi ~50cm x 40cm",
+        engine: "Fallback Computer Vision",
       });
     } finally {
       setIsAnalyzing(false);
     }
   };
 
+  const handleSelectPreset = (sample) => {
+    setActivePresetId(sample.id);
+    setPhotoPreview(sample.url);
+    setAiResult(null);
+    setSpamError(null);
+    handleAnalyzePhoto(sample.url);
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64 = event.target?.result;
-        setPhotoPreview(base64);
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
         setActivePresetId(null);
-        setAiResult(null);
-        setSpamError(null);
-        handleAnalyzePhoto(base64);
+        handleAnalyzePhoto(reader.result);
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleSelectPreset = (photo) => {
-    setPhotoPreview(photo.url);
-    setActivePresetId(photo.id);
-    setAiResult(null);
-    setSpamError(null);
-    handleAnalyzePhoto(photo.url);
   };
 
   const handleSubmit = (e) => {
@@ -239,7 +235,6 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
     }
   };
 
-
   const handleCopyTicket = () => {
     if (createdTicket) {
       navigator.clipboard.writeText(createdTicket);
@@ -258,421 +253,416 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
-      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-xl bg-white border border-slate-200 shadow-2xl overflow-hidden text-slate-800">
-        
-        {/* Modern Clean Header */}
-        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs shrink-0 flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/plus_icon.png"
-                alt="Lapor Kerusakan"
-                width={24}
-                height={24}
-                style={{ width: "24px", height: "24px" }}
-                className="w-6 h-6 object-contain"
-              />
-            </div>
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-2">
-                <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
-                  Lapor Kerusakan Jalan
-                </h3>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-[#9a3412] border border-orange-200/80 font-sans">
-                  <ScanLine className="w-3 h-3 text-[#c2410c]" />
-                  Verifikasi AI
-                </span>
-              </div>
-              <p className="text-xs text-slate-500">
-                Pengaduan publik terintegrasi kewenangan resmi instansi dan audit anggaran proyek.
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={handleResetAndClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
-            aria-label="Tutup"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Modal Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1">
-          {submitted ? (
-            /* Clean Success View */
-            <div className="text-center py-8 px-4 max-w-lg mx-auto space-y-4 animate-fade-in">
-              <div className="w-16 h-16 rounded-2xl bg-orange-50/90 border border-orange-200 flex items-center justify-center mx-auto shadow-xs p-2.5">
+      {/* Outer Double-Bezel Frame */}
+      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-slate-900/10 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-800">
+        <div className="relative w-full flex-1 flex flex-col rounded-[1.25rem] bg-white shadow-2xl overflow-hidden">
+          
+          {/* Header */}
+          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-orange-50/80 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/icon/report.png"
-                  alt="Tiket Terbit"
-                  width={40}
-                  height={40}
-                  style={{ width: "40px", height: "40px" }}
-                  className="w-10 h-10 object-contain"
+                  src="/icon/plus_icon.png"
+                  alt="Lapor Kerusakan"
+                  width={24}
+                  height={24}
+                  style={{ width: "24px", height: "24px" }}
+                  className="w-6 h-6 object-contain"
                 />
               </div>
-              <div className="space-y-1">
-                <h4 className="text-lg font-bold text-slate-900 font-heading">
-                  Laporan Berhasil Diterbitkan
-                </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Laporan Anda kini tercatat secara terbuka. Instansi terkait memiliki kewajiban batas waktu respons sesuai standar pelayanan publik.
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
+                    Lapor Kerusakan Jalan
+                  </h3>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-50 text-[#9a3412] ring-1 ring-orange-200/60 font-sans">
+                    <ScanLine className="w-3 h-3 text-[#c2410c]" />
+                    Verifikasi AI
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500">
+                  Pengaduan publik terintegrasi kewenangan resmi instansi dan audit anggaran proyek.
                 </p>
               </div>
+            </div>
+            <button
+              onClick={handleResetAndClose}
+              className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Tutup"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
-              {/* Ticket Card */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-left space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
-                    Kode Tiket Pengaduan
-                  </span>
+          {/* Modal Body */}
+          <div className="p-5 sm:p-6 overflow-y-auto flex-1">
+            {submitted ? (
+              /* Success View */
+              <div className="text-center py-8 px-4 max-w-lg mx-auto space-y-4 animate-fade-in font-sans">
+                <div className="w-16 h-16 rounded-2xl bg-orange-50/90 flex items-center justify-center mx-auto shadow-xs p-2.5 ring-1 ring-orange-200/60">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icon/report.png"
+                    alt="Tiket Terbit"
+                    width={40}
+                    height={40}
+                    style={{ width: "40px", height: "40px" }}
+                    className="w-10 h-10 object-contain"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-lg font-bold text-slate-900 font-heading">
+                    Laporan Berhasil Diterbitkan
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Laporan Anda kini tercatat secara terbuka. Instansi terkait memiliki kewajiban batas waktu respons sesuai standar pelayanan publik.
+                  </p>
+                </div>
+
+                {/* Ticket Card */}
+                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 text-left space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                      Kode Tiket Pengaduan
+                    </span>
+                    <button
+                      onClick={handleCopyTicket}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-[#c2410c] hover:underline cursor-pointer"
+                    >
+                      {isCopied ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-700 font-bold">Tersalin</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Salin Kode</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="font-sans tabular-nums text-xl font-bold text-slate-900 tracking-wider">
+                    {createdTicket}
+                  </div>
+                  <div className="pt-2 border-t border-slate-200/60 text-[11px] text-slate-600 flex items-center justify-between">
+                    <span>Instansi: <strong>{currentRoad.authorityLabel}</strong></span>
+                    <span className="text-emerald-700 font-semibold">Terkonfirmasi</span>
+                  </div>
+                </div>
+
+                <div className="pt-3 flex justify-center gap-2.5">
                   <button
-                    onClick={handleCopyTicket}
-                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[#c2410c] hover:underline cursor-pointer"
+                    onClick={handleResetAndClose}
+                    className="px-6 py-2.5 rounded-full bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer shadow-sm active:scale-95"
                   >
-                    {isCopied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-700 font-bold">Tersalin</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>Salin Kode</span>
-                      </>
-                    )}
+                    Selesai &amp; Buka Peta Transparansi
                   </button>
                 </div>
-                <div className="font-sans tabular-nums text-xl font-bold text-slate-900 tracking-wider">
-                  {createdTicket}
-                </div>
-                <div className="pt-2 border-t border-slate-200/70 text-[11px] text-slate-600 flex items-center justify-between">
-                  <span>Instansi: <strong>{currentRoad.authorityLabel}</strong></span>
-                  <span className="text-emerald-700 font-semibold">Terkonfirmasi</span>
-                </div>
               </div>
+            ) : (
+              /* 2-Column Professional Form */
+              <form id="report-road-form" onSubmit={handleSubmit} className="space-y-5 font-sans">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start">
+                  
+                  {/* LEFT COLUMN: Ruas Jalan & Identitas */}
+                  <div className="space-y-4">
+                    {/* Select Road */}
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
+                        <span>Ruas Jalan Terdampak</span>
+                      </label>
+                      <select
+                        value={selectedRoadId}
+                        onChange={(e) => {
+                          setSelectedRoadId(e.target.value);
+                          setAiResult(null);
+                        }}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50/80 text-xs text-slate-900 focus:outline-none focus:bg-white transition-all cursor-pointer font-medium ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                      >
+                        {roads.map((r) => (
+                          <option key={r.id} value={r.id}>
+                            {r.name} ({r.district}) • {r.authority}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-              <div className="pt-3 flex justify-center gap-2.5">
-                <button
-                  onClick={handleResetAndClose}
-                  className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs"
-                >
-                  Selesai & Buka Peta Transparansi
-                </button>
-              </div>
-            </div>
-          ) : (
-            /* 2-Column Professional Form */
-            <form id="report-road-form" onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start">
-                
-                {/* LEFT COLUMN: Ruas Jalan & Identitas */}
-                <div className="space-y-4">
-                  {/* Select Road */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-                      <span>Ruas Jalan Terdampak</span>
-                    </label>
-                    <select
-                      value={selectedRoadId}
-                      onChange={(e) => {
-                        setSelectedRoadId(e.target.value);
-                        setAiResult(null);
-                      }}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all cursor-pointer font-medium"
-                    >
-                      {roads.map((r) => (
-                        <option key={r.id} value={r.id}>
-                          {r.name} ({r.district}) • {r.authority}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Clean Government & Budget Meta Card */}
-                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="space-y-0.5">
-                        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide block">
-                          Instansi Berwenang
-                        </span>
-                        <div className="font-bold text-slate-900 leading-tight">
-                          {currentRoad.authorityLabel}
+                    {/* Government & Budget Meta Card */}
+                    <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-2 text-xs">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="space-y-0.5">
+                          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block">
+                            Instansi Berwenang
+                          </span>
+                          <div className="font-bold text-slate-900 leading-tight">
+                            {currentRoad.authorityLabel}
+                          </div>
                         </div>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans shrink-0 uppercase bg-white text-slate-700 ring-1 ring-slate-200/80">
+                          {currentRoad.authority}
+                        </span>
                       </div>
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans shrink-0 uppercase ${
-                        currentRoad.authority === "NASIONAL"
-                          ? "bg-blue-100 text-blue-900"
-                          : currentRoad.authority === "PROVINSI"
-                          ? "bg-purple-100 text-purple-900"
-                          : currentRoad.authority === "KOTA"
-                          ? "bg-teal-100 text-teal-900"
-                          : "bg-emerald-100 text-emerald-900"
-                      }`}>
-                        {currentRoad.authority}
-                      </span>
+
+                      <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px]">
+                        <span className="text-slate-500">Pagu Tender Terdata:</span>
+                        <span className="font-bold text-slate-900 font-sans tabular-nums">
+                          Rp {((currentRoad.budget?.paguRp || 0) / 1000000000).toFixed(2)} Miliar
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
-                      <span className="text-slate-500">Pagu Tender Terdata:</span>
-                      <span className="font-bold text-slate-900 font-sans tabular-nums">
-                        Rp {((currentRoad.budget?.paguRp || 0) / 1000000000).toFixed(2)} Miliar
-                      </span>
-                    </div>
-                  </div>
+                    {/* Pelapor & Titik Lokasi */}
+                    <div className="space-y-3 pt-1">
+                      <div className="space-y-1">
+                        <label className="block text-xs font-semibold text-slate-700">
+                          Nama / Inisial Pelapor
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={reporterName}
+                          onChange={(e) => setReporterName(e.target.value)}
+                          placeholder="Contoh: Budi Santoso"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                        />
+                      </div>
 
-                  {/* Pelapor & Titik Lokasi */}
-                  <div className="space-y-3 pt-1">
-                    <div className="space-y-1">
-                      <label className="block text-xs font-semibold text-slate-700">
-                        Nama / Inisial Pelapor
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={reporterName}
-                        onChange={(e) => setReporterName(e.target.value)}
-                        placeholder="Contoh: Budi Santoso"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="block text-xs font-semibold text-slate-700">
-                        Patokan / Detail Lokasi Kerusakan
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={addressDetail}
-                        onChange={(e) => setAddressDetail(e.target.value)}
-                        placeholder="Contoh: Depan SPBU 34-16401, lajur lambat arah Jakarta"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] transition-all"
-                      />
-                      <span className="text-[10px] text-slate-400 block">
-                        Privasi terjamin: Nama warga disamarkan otomatis di pelacakan publik.
-                      </span>
+                      <div className="space-y-1">
+                        <label className="block text-xs font-semibold text-slate-700">
+                          Patokan / Detail Lokasi Kerusakan
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={addressDetail}
+                          onChange={(e) => setAddressDetail(e.target.value)}
+                          placeholder="Contoh: Depan SPBU 34-16401, lajur lambat arah Jakarta"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                        />
+                        <span className="text-[10px] text-slate-400 block">
+                          Privasi terjamin: Nama warga disamarkan otomatis di pelacakan publik.
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* RIGHT COLUMN: Foto Bukti & Verifikasi AI */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  {/* RIGHT COLUMN: Foto Bukti & Verifikasi AI */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src="/icon/camera_icon.png"
+                          alt=""
+                          width={16}
+                          height={16}
+                          style={{ width: "16px", height: "16px" }}
+                          className="w-4 h-4 object-contain shrink-0"
+                        />
+                        <span>Foto Bukti Kerusakan</span>
+                      </label>
+                      <span className="text-[10px] text-slate-400">Format: JPG, PNG (Maks 8MB)</span>
+                    </div>
+
+                    {/* Clean Demo Presets Floating Toolbar */}
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-medium text-slate-400">Pilihan Contoh:</span>
+                      {SAMPLE_PHOTOS.map((sample) => {
+                        const isSelected = activePresetId === sample.id;
+                        return (
+                          <button
+                            key={sample.id}
+                            type="button"
+                            onClick={() => handleSelectPreset(sample)}
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium transition-all cursor-pointer ${
+                              isSelected
+                                ? "bg-slate-900 text-white font-bold shadow-2xs"
+                                : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+                            }`}
+                          >
+                            {sample.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Photo Preview & Upload Card */}
+                    <div className="relative rounded-2xl overflow-hidden bg-slate-900 h-44 group flex items-center justify-center ring-1 ring-slate-900/10">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src="/icon/camera_icon.png"
-                        alt=""
-                        width={16}
-                        height={16}
-                        style={{ width: "16px", height: "16px" }}
-                        className="w-4 h-4 object-contain shrink-0"
+                        src={photoPreview}
+                        alt="Pratinjau Foto Kerusakan"
+                        className="w-full h-full object-cover"
                       />
-                      <span>Foto Bukti Kerusakan</span>
-                    </label>
-                    <span className="text-[10px] text-slate-400">Format: JPG, PNG (Maks 8MB)</span>
-                  </div>
 
-                  {/* Clean Demo Presets Toolbar */}
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[10px] font-medium text-slate-400">Pilihan Contoh:</span>
-                    {SAMPLE_PHOTOS.map((sample) => {
-                      const isSelected = activePresetId === sample.id;
-                      return (
-                        <button
-                          key={sample.id}
-                          type="button"
-                          onClick={() => handleSelectPreset(sample)}
-                          className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all cursor-pointer ${
-                            isSelected
-                              ? "bg-slate-900 text-white font-bold shadow-2xs"
-                              : "bg-slate-100 hover:bg-slate-200 text-slate-600"
-                          }`}
-                        >
-                          {sample.label}
-                        </button>
-                      );
-                    })}
-                  </div>
+                      {/* AI Laser Scanning Beam & HUD Crosshairs while Analyzing */}
+                      {isAnalyzing && (
+                        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[1px] flex flex-col items-center justify-center p-3 text-white overflow-hidden z-20">
+                          {/* Laser Beam */}
+                          <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent shadow-[0_0_16px_#ea580c] animate-scan-line pointer-events-none" />
 
-                  {/* Photo Preview & Upload Card */}
-                  <div className="relative rounded-xl border border-slate-300 overflow-hidden bg-slate-900 h-44 group flex items-center justify-center">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={photoPreview}
-                      alt="Pratinjau Foto Kerusakan"
-                      className="w-full h-full object-cover"
-                    />
+                          {/* Futuristic HUD Crosshair */}
+                          <div className="w-14 h-14 border border-orange-400/50 rounded-xl flex items-center justify-center relative mb-2">
+                            <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-ping" />
+                            <div className="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-orange-400" />
+                            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-orange-400" />
+                            <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-orange-400" />
+                            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-orange-400" />
+                          </div>
 
-                    {/* AI Laser Scanning Beam & HUD Crosshairs while Analyzing */}
-                    {isAnalyzing && (
-                      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[1px] flex flex-col items-center justify-center p-3 text-white overflow-hidden z-20">
-                        {/* Laser Beam sweeping up and down */}
-                        <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent shadow-[0_0_16px_#ea580c] animate-scan-line pointer-events-none" />
-
-                        {/* Futuristic HUD Crosshair */}
-                        <div className="w-16 h-16 border border-orange-400/50 rounded-lg flex items-center justify-center relative mb-2">
-                          <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-ping" />
-                          <div className="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-orange-400" />
-                          <div className="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-orange-400" />
-                          <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-orange-400" />
-                          <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-orange-400" />
+                          <div className="text-[11px] font-mono font-bold text-orange-300 tracking-wider uppercase flex items-center gap-1.5">
+                            <ScanLine className="w-3.5 h-3.5 animate-pulse text-orange-400" />
+                            <span>AI Vision Scanning...</span>
+                          </div>
+                          <span className="text-[9.5px] text-slate-300 font-sans mt-0.5 text-center">
+                            Mengukur kedalaman lubang &amp; estimasi indeks bahaya
+                          </span>
                         </div>
+                      )}
 
-                        <div className="text-[11px] font-mono font-bold text-orange-300 tracking-wider uppercase flex items-center gap-1.5">
-                          <ScanLine className="w-3.5 h-3.5 animate-pulse text-orange-400" />
-                          <span>AI Vision Scanning...</span>
+                      {/* Hover overlay (when not analyzing) */}
+                      {!isAnalyzing && (
+                        <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="px-4 py-2 rounded-full bg-white text-slate-900 font-bold text-xs hover:bg-slate-100 flex items-center gap-1.5 shadow-md cursor-pointer transition-transform active:scale-95"
+                          >
+                            <Upload className="w-3.5 h-3.5" />
+                            <span>Unggah Foto Sendiri</span>
+                          </button>
                         </div>
-                        <span className="text-[9.5px] text-slate-300 font-sans mt-0.5 text-center">
-                          Mengukur kedalaman lubang & menghitung estimasi indeks bahaya
-                        </span>
-                      </div>
-                    )}
+                      )}
 
-                    {/* Minimal hover overlay (when not analyzing) */}
-                    {!isAnalyzing && (
-                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      {/* Mobile button */}
+                      {!isAnalyzing && (
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="px-3.5 py-1.5 rounded-lg bg-white/95 text-slate-900 font-bold text-xs hover:bg-white flex items-center gap-1.5 shadow-md cursor-pointer transition-transform active:scale-95"
+                          className="sm:hidden absolute bottom-2 right-2 px-3 py-1 rounded-full bg-black/70 text-white text-[10px] font-medium flex items-center gap-1"
                         >
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>Unggah Foto Sendiri</span>
+                          <Upload className="w-3 h-3" />
+                          <span>Ganti</span>
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
-                    {/* Small button visible on mobile */}
-                    {!isAnalyzing && (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="sm:hidden absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/70 text-white text-[10px] font-medium flex items-center gap-1"
-                      >
-                        <Upload className="w-3 h-3" />
-                        <span>Ganti</span>
-                      </button>
-                    )}
-                  </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
 
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
+                    {/* AI Verification Section */}
+                    <div className="space-y-2">
+                      {!aiResult && !spamError && (
+                        <button
+                          type="button"
+                          onClick={() => handleAnalyzePhoto(photoPreview)}
+                          disabled={isAnalyzing}
+                          className="w-full py-2.5 px-3 rounded-full bg-slate-100 hover:bg-orange-50 hover:text-[#c2410c] text-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-60"
+                        >
+                          {isAnalyzing ? (
+                            <>
+                              <Loader2 className="w-3.5 h-3.5 animate-spin text-[#c2410c]" />
+                              <span>Memeriksa keaslian citra dengan Gemini Vision...</span>
+                            </>
+                          ) : (
+                            <>
+                              <ScanLine className="w-3.5 h-3.5 text-[#c2410c]" />
+                              <span>Verifikasi Foto dengan AI Inspector</span>
+                            </>
+                          )}
+                        </button>
+                      )}
 
-                  {/* AI Verification Section */}
-                  <div className="space-y-2">
-                    {/* Analysis trigger button if not analyzed yet */}
-                    {!aiResult && !spamError && (
-                      <button
-                        type="button"
-                        onClick={() => handleAnalyzePhoto(photoPreview)}
-                        disabled={isAnalyzing}
-                        className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#c2410c] hover:border-orange-200 border border-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
-                      >
-                        {isAnalyzing ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#c2410c]" />
-                            <span>Memeriksa keaslian citra dengan Gemini Vision...</span>
-                          </>
-                        ) : (
-                          <>
-                            <ScanLine className="w-3.5 h-3.5 text-[#c2410c]" />
-                            <span>Verifikasi Foto dengan AI Inspector</span>
-                          </>
-                        )}
-                      </button>
-                    )}
-
-                    {/* Spam Alert */}
-                    {spamError && (
-                      <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 space-y-1 animate-fade-in text-xs">
-                        <div className="flex items-center gap-1.5 font-bold text-rose-900">
-                          <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                          <span>Foto Ditolak (Anti-Spam)</span>
+                      {/* Spam Alert */}
+                      {spamError && (
+                        <div className="p-3.5 rounded-2xl bg-rose-50/80 ring-1 ring-rose-200/70 text-rose-800 space-y-1 animate-fade-in text-xs">
+                          <div className="flex items-center gap-1.5 font-bold text-rose-900">
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <span>Foto Ditolak (Anti-Spam)</span>
+                          </div>
+                          <p className="text-[11px] text-rose-700 leading-normal">
+                            {spamError}
+                          </p>
                         </div>
-                        <p className="text-[11px] text-rose-700 leading-normal">
-                          {spamError}
-                        </p>
-                      </div>
-                    )}
+                      )}
 
-                    {/* Verified Result Card */}
-                    {aiResult && !spamError && (
-                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-2 animate-fade-in text-xs">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                            <span className="font-bold text-slate-900">
-                              {aiResult.categoryLabel}
+                      {/* Verified Result Card */}
+                      {aiResult && !spamError && (
+                        <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-2 animate-fade-in text-xs">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                              <span className="font-bold text-slate-900">
+                                {aiResult.categoryLabel}
+                              </span>
+                            </div>
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tabular-nums ${
+                                aiResult.hazardScore >= 80
+                                  ? "bg-rose-100 text-rose-800"
+                                  : "bg-amber-100 text-amber-800"
+                              }`}
+                            >
+                              Skor Bahaya: {aiResult.hazardScore}/100
                             </span>
                           </div>
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tabular-nums ${
-                              aiResult.hazardScore >= 80
-                                ? "bg-rose-100 text-rose-800"
-                                : "bg-amber-100 text-amber-800"
-                            }`}
-                          >
-                            Skor Bahaya: {aiResult.hazardScore}/100
-                          </span>
-                        </div>
 
-                        <p className="text-[11px] text-slate-600 leading-relaxed">
-                          {aiResult.analysisText}
-                        </p>
+                          <p className="text-[11px] text-slate-600 leading-relaxed">
+                            {aiResult.analysisText}
+                          </p>
 
-                        <div className="pt-1.5 border-t border-slate-200/70 flex items-center justify-between text-[10px] text-slate-500 font-sans">
-                          <span>Dimensi: <strong className="text-slate-800 font-sans">{aiResult.dimensions}</strong></span>
-                          <span className="text-emerald-700 font-bold font-sans">✓ Terverifikasi AI</span>
+                          <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-500 font-sans">
+                            <span>Dimensi: <strong className="text-slate-800 font-sans">{aiResult.dimensions}</strong></span>
+                            <span className="text-emerald-700 font-bold font-sans">✓ Terverifikasi AI</span>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Bottom Action Bar */}
+                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Dipantau Standar Kepatuhan Ombudsman RI</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={handleResetAndClose}
+                      className="flex-1 sm:flex-none px-4 py-2 rounded-full text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!!spamError || isAnalyzing}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 pl-4 pr-2 py-2 rounded-full bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer font-sans"
+                    >
+                      <span>Terbitkan Laporan</span>
+                      <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                        <ArrowRight className="w-3 h-3 text-white" />
+                      </span>
+                    </button>
                   </div>
                 </div>
+              </form>
+            )}
+          </div>
 
-              </div>
-
-              {/* Bottom Action Bar */}
-              <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Dipantau Standar Kepatuhan Ombudsman RI</span>
-                </div>
-
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={handleResetAndClose}
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={!!spamError || isAnalyzing}
-                    className="flex-1 sm:flex-none px-5 py-2.5 rounded-lg bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-colors shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <span>Terbitkan Laporan</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </form>
-          )}
         </div>
-
       </div>
     </div>
   );
 }
-

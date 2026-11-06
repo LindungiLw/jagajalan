@@ -218,11 +218,11 @@ export default function HeroSection({
           </h1>
         </div>
 
-        {/* 1. TOP UTILITY BAR: UNIFIED GLOBAL SEARCH & NATIONAL DATA SCOPE */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-2xs flex flex-col md:flex-row md:items-stretch overflow-hidden divide-y md:divide-y-0 md:divide-x divide-slate-200 text-xs transition-all">
+        {/* 1. TOP UTILITY BAR: UNIFIED GLOBAL SEARCH & NATIONAL DATA SCOPE (FLOATING ISLAND) */}
+        <div className="bg-slate-100/70 p-1.5 rounded-2xl ring-1 ring-slate-900/5 flex flex-col md:flex-row md:items-center gap-1.5 text-xs transition-all">
           
           {/* Segment 1: Wilayah Scope */}
-          <div className="px-3.5 py-2.5 flex items-center gap-2 font-sans text-slate-700 bg-slate-50/80 shrink-0">
+          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-white rounded-xl shadow-2xs shrink-0">
             <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
             <span className="text-[11.5px] font-semibold">
               Cakupan: <strong className="text-slate-900">Seluruh Indonesia (38 Provinsi)</strong>
@@ -230,17 +230,15 @@ export default function HeroSection({
           </div>
 
           {/* Segment 2: Official Verified Sources Indicator */}
-          <div className="hidden lg:flex items-center gap-2 px-3.5 py-2.5 text-[11px] font-sans text-slate-600 bg-slate-50/40 shrink-0 select-none">
-            <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/90 font-sans">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>BPS • LPSE • KemenPU • Ombudsman</span>
-            </span>
+          <div className="hidden lg:flex items-center gap-2 px-3.5 py-2 text-[11px] font-sans text-slate-600 bg-white/60 rounded-xl shrink-0 select-none">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span className="font-medium text-slate-700">BPS • LPSE • KemenPU • Ombudsman</span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-500 font-medium">Data Terverifikasi TA 2026</span>
+            <span className="text-slate-400 font-medium">Data Terverifikasi TA 2026</span>
           </div>
 
           {/* Segment 3: Spacious Global Search Input */}
-          <div className="relative flex-1 min-w-[280px] flex items-center bg-white group">
+          <div className="relative flex-1 min-w-[280px] flex items-center bg-white rounded-xl shadow-2xs group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon/search_icon.png"
@@ -248,19 +246,19 @@ export default function HeroSection({
               width={16}
               height={16}
               style={{ width: "16px", height: "16px" }}
-              className="w-4 h-4 object-contain absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              className="w-3.5 h-3.5 object-contain absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-60"
             />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari nama ruas jalan, kode laporan, paket pengadaan, atau kontraktor..."
-              className="w-full h-full pl-9 pr-8 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none focus:bg-slate-50/50 transition-all font-sans"
+              placeholder="Cari nama ruas jalan, kode laporan, paket pengadaan, kontraktor..."
+              className="w-full h-full pl-9 pr-8 py-2 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none transition-all font-sans"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200/80 hover:bg-orange-100 text-slate-500 hover:text-[#c2410c] flex items-center justify-center text-[10px] font-bold cursor-pointer transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-100 hover:bg-orange-100 text-slate-500 hover:text-[#c2410c] flex items-center justify-center text-[10px] font-bold cursor-pointer transition-colors"
                 title="Hapus pencarian"
               >
                 ✕
@@ -271,9 +269,9 @@ export default function HeroSection({
 
         {/* Instant Search Results Summary Pill if searching */}
         {searchResults.hasSearch && (
-          <div className="p-2.5 rounded-lg bg-orange-50/90 border border-orange-200/90 text-xs flex flex-wrap items-center justify-between gap-2 animate-fade-in font-medium">
+          <div className="p-3 rounded-2xl bg-orange-500/10 ring-1 ring-orange-500/20 text-xs flex flex-wrap items-center justify-between gap-2 animate-fade-in font-medium">
             <div className="flex items-center gap-3">
-              <span className="font-bold text-[#c2410c] font-sans uppercase">Hasil Pencarian:</span>
+              <span className="font-bold text-[#c2410c] font-sans uppercase tracking-wider text-[10.5px]">Hasil Pencarian:</span>
               <span className="text-slate-800">
                 <strong>{searchResults.matchedRoads.length}</strong> Ruas Jalan •{" "}
                 <strong>{searchResults.matchedPackages.length}</strong> Paket Pengadaan •{" "}
@@ -289,29 +287,30 @@ export default function HeroSection({
           </div>
         )}
 
-        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (Pure Crisp White Text on Brand Orange) */}
-        <div className="bg-[#c2410c] text-white px-4 py-2.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-2xs gap-3 font-semibold border border-[#9a3412]">
+        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (FLOATING PORCELAIN WITH SIGNAL ACCENT) */}
+        <div className="bg-slate-900 text-white px-4 sm:px-5 py-2.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <span className="text-white font-bold text-xs font-sans">
+            <span className="text-white/80 font-bold text-xs font-sans flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Monitoring Infrastruktur Nasional:
             </span>
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-black text-sm tabular-nums">38</strong>
-              <span className="text-white font-medium text-xs">Provinsi Terdata</span>
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">38</strong>
+              <span className="text-white/70 font-medium text-xs">Provinsi Terdata</span>
             </div>
-            <span className="hidden sm:inline-block w-px h-3.5 bg-white/40 self-center" aria-hidden="true" />
+            <span className="hidden sm:inline-block w-px h-3.5 bg-white/20 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-black text-sm tabular-nums">6</strong>
-              <span className="text-white font-medium text-xs">Paket Audit Pilot (Rp 35,80 M)</span>
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
+              <span className="text-white/70 font-medium text-xs">Paket Audit Pilot (Rp 35,80 M)</span>
             </div>
-            <span className="hidden sm:inline-block w-px h-3.5 bg-white/40 self-center" aria-hidden="true" />
+            <span className="hidden sm:inline-block w-px h-3.5 bg-white/20 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
-              <strong className="text-white font-sans font-black text-sm tabular-nums">2</strong>
-              <span className="text-white font-medium text-xs">Laporan Melewati Tenggat Respons</span>
+              <strong className="text-rose-400 font-sans font-bold text-sm tabular-nums">2</strong>
+              <span className="text-white/70 font-medium text-xs">Laporan Melewati Tenggat</span>
             </div>
           </div>
 
-          <span className="text-[11px] font-sans text-white/85 font-medium self-end sm:self-auto">
+          <span className="text-[11px] font-sans text-white/60 font-medium self-end sm:self-auto">
             Integrasi Geospasial &amp; LPSE Aktif
           </span>
         </div>
@@ -319,8 +318,9 @@ export default function HeroSection({
         {/* 3. DUAL-PANEL DATA MONITOR */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
-          {/* LEFT 7 COLS: IKHTISAR DATA & GRAFIK KEMANTAPAN JALAN (BPS SIRUSA 2020-2024) */}
-          <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200/80 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3.5">
+          {/* LEFT 7 COLS: IKHTISAR DATA & GRAFIK KEMANTAPAN JALAN (DOUBLE-BEZEL ARCHITECTURE) */}
+          <div className="lg:col-span-7 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+            <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3.5 h-full">
             
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
@@ -1561,10 +1561,12 @@ export default function HeroSection({
                 </div>
               </div>
             </div>
+            </div>
           </div>
 
-          {/* RIGHT 5 COLS: REKAPITULASI KORIDOR PILOT (CLEAN WITHOUT NESTED BORDERS) */}
-          <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/80 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3">
+          {/* RIGHT 5 COLS: REKAPITULASI KORIDOR PILOT (DOUBLE-BEZEL AGENCY TIER) */}
+          <div className="lg:col-span-5 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+            <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3 h-full">
             
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
@@ -1716,6 +1718,7 @@ export default function HeroSection({
                 <span>Periksa Opsi Eskalasi</span>
                 <ChevronRight className="w-3 h-3" />
               </button>
+            </div>
             </div>
           </div>
         </div>
