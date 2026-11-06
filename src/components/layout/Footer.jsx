@@ -13,7 +13,7 @@ export default function Footer({ onSelectTab }) {
   };
 
   return (
-    <footer className="bg-white border-t border-slate-200 mt-16 text-slate-600">
+    <footer className="bg-white border-t border-[#E6DFD5] mt-16 text-slate-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-slate-100">

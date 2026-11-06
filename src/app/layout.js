@@ -1,25 +1,11 @@
-import { Plus_Jakarta_Sans, Inter, Noto_Sans, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
-  weight: ["500", "600", "700", "800"],
-});
-
-const notoSans = Noto_Sans({
-  variable: "--font-noto",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -30,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "JagaJalan | Platform Transparansi Kewenangan Jalan, Anggaran Proyek, dan Tindak Lanjut Pengaduan",
-  description: "Membuka kotak hitam birokrasi jalan rusak: pemetaan wewenang otomatis, transparansi anggaran APBD/LPSE, dan kepastian tindak lanjut pengaduan berbasis data Ombudsman RI.",
+  description: "Pemetaan wewenang jalan nasional dan daerah, penelusuran kontrak lelang LPSE, serta pemantauan batas waktu tindak lanjut aduan warga.",
   keywords: ["JagaJalan", "transparansi publik", "jalan rusak", "APBD", "ombudsman", "open government data", "infrastruktur jalan"],
   authors: [{ name: "JagaJalan Initiative" }],
   icons: {
@@ -52,9 +38,9 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="id"
-      className={`${plusJakartaSans.variable} ${notoSans.variable} ${inter.variable} ${geistMono.variable} antialiased`}
+      className={`${plusJakartaSans.variable} ${geistMono.variable} antialiased`}
     >
-      <body className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col selection:bg-orange-100 selection:text-orange-900 font-sans">
+      <body className="min-h-screen bg-[#FAF7F2] text-[#1C1917] flex flex-col selection:bg-orange-100 selection:text-orange-900 font-sans">
         {children}
       </body>
     </html>

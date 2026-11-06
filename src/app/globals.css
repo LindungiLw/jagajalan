@@ -5,20 +5,21 @@
 
 @theme {
   --font-heading: var(--font-heading), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-sans: var(--font-noto), var(--font-sans), "Noto Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-noto: var(--font-noto), "Noto Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-heading), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --color-slate-50: #FAF8F5;
+  --color-slate-100: #F2ECE4;
 }
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #FAF7F2;
+  --foreground: #1C1917;
   --card-bg: #ffffff;
-  --card-border: #e2e8f0;
+  --card-border: #E6DFD5;
   --accent-orange: #ea580c;
   --accent-orange-hover: #c2410c;
   --accent-orange-light: #fff7ed;
-  --accent-slate: #0f172a;
+  --accent-slate: #1C1917;
   --authority-nasional: #2563eb;
   --authority-provinsi: #7c3aed;
   --authority-daerah: #0d9488;
@@ -31,12 +32,12 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.011em;
+  letter-spacing: -0.015em;
 }
 
 h1, h2, h3, h4, .font-heading {
   font-family: var(--font-heading);
-  letter-spacing: -0.022em;
+  letter-spacing: -0.028em;
 }
 
 /* Ensure tabular figures (monospaced digits) for tables, prices, and KPI percentages */

@@ -110,7 +110,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-orange-100 selection:text-orange-900 ${
+    <div className={`flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-orange-100 selection:text-orange-900 ${
       activeTab === "peta" ? "h-screen overflow-hidden" : "min-h-screen"
     }`}>
       {/* Global Navigation */}
