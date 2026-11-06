@@ -96,7 +96,7 @@ export default function OmbudsmanMonitorSection({
     <div className="py-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 font-sans text-slate-800 animate-fade-in">
       
       {/* 1. SIGNATURE HEADER (Double-Bezel Tray) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="bg-white rounded-[1.25rem] p-6 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div className="flex items-start gap-4">
@@ -131,7 +131,7 @@ export default function OmbudsmanMonitorSection({
             </div>
 
             {/* SLA Status Pill Tray */}
-            <div className="rounded-2xl bg-slate-50/80 p-3.5 text-xs shrink-0 lg:max-w-xs space-y-1.5 self-start lg:self-auto ring-1 ring-slate-900/5">
+            <div className="rounded-2xl bg-slate-50/80 p-3.5 text-xs shrink-0 lg:max-w-xs space-y-1.5 self-start lg:self-auto ring-1 ring-orange-200/40">
               <div className="flex items-center justify-between gap-3">
                 <span className="font-bold text-slate-900 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-rose-600" />
@@ -150,7 +150,7 @@ export default function OmbudsmanMonitorSection({
       </div>
 
       {/* 2. SIGNATURE 4-METRIC SCOREBOARD (Double-Bezel Architecture) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           {/* Metric 1: Total Reports */}
           <div className="p-4 sm:p-5 rounded-[1.25rem] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
@@ -243,7 +243,7 @@ export default function OmbudsmanMonitorSection({
       </div>
 
       {/* Benchmark Banner (Floating Pill Island) */}
-      <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50/90 ring-1 ring-slate-900/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-sans">
+      <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50/90 ring-1 ring-orange-200/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-sans">
         <div className="flex items-center gap-2.5 text-slate-700">
           <Scale className="w-4 h-4 text-[#c2410c] shrink-0" />
           <span>
@@ -254,7 +254,7 @@ export default function OmbudsmanMonitorSection({
       </div>
 
       {/* 3. FLOATING ISLAND CONTROLS: SEARCH, FILTER PILLS, SORT & VIEW TOGGLE */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-3.5">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
             {/* Search Box */}
@@ -338,7 +338,7 @@ export default function OmbudsmanMonitorSection({
                 onClick={() => setStatusFilter("ALL")}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                   statusFilter === "ALL"
-                    ? "bg-slate-900 text-white shadow-2xs font-bold"
+                    ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                     : "bg-slate-50 hover:bg-slate-100 text-slate-600 ring-1 ring-slate-200/60"
                 }`}
               >
@@ -391,7 +391,7 @@ export default function OmbudsmanMonitorSection({
 
       {/* 4. CONTENT DISPLAY (GRID OR TABLE) */}
       {filteredReports.length === 0 ? (
-        <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+        <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
           <div className="bg-white rounded-[1.25rem] p-10 text-center space-y-3 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]">
             <AlertCircle className="w-9 h-9 text-slate-400 mx-auto" />
             <h3 className="font-bold text-slate-800 text-sm">Tidak Ada Aduan yang Cocok</h3>
@@ -424,7 +424,7 @@ export default function OmbudsmanMonitorSection({
             return (
               <div
                 key={report.id}
-                className="rounded-[1.5rem] bg-slate-100/70 p-2 ring-1 ring-slate-900/5 group transition-all duration-200"
+                className="rounded-[1.5rem] bg-slate-100/70 p-2 ring-1 ring-orange-200/40 group transition-all duration-200"
               >
                 <div className="bg-white rounded-[1.125rem] p-5 flex flex-col justify-between h-full gap-4 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]">
                   {/* Top Section */}
@@ -568,7 +568,7 @@ export default function OmbudsmanMonitorSection({
         </div>
       ) : (
         /* ===== SIGNATURE TABLE VIEW (Zero Horizontal Scroll, Double-Bezel Tray) ===== */
-        <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+        <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
           <div className="bg-white rounded-[1.25rem] shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
             <table className="w-full text-left text-xs font-sans md:table-fixed">
               <thead className="bg-slate-50/70 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
@@ -689,7 +689,7 @@ export default function OmbudsmanMonitorSection({
       )}
 
       {/* 6. STREAMLINED 3-STEP ADVOCACY GUIDE (Double-Bezel Tray) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="bg-white rounded-[1.25rem] p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <Shield className="w-4 h-4 text-[#c2410c]" />

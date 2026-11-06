@@ -966,7 +966,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Right Column: Daftar Paket Pengadaan LPSE & SIRUP (DOUBLE-BEZEL AGENCY TIER) */}
-        <div className="lg:col-span-8 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+        <div className="lg:col-span-8 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
           <div className="bg-white rounded-[1.25rem] p-5 sm:p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
             
             {/* Header & Controls Toolbar */}
@@ -974,7 +974,7 @@ export default function BudgetDataExplorer({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.16em] font-bold text-slate-500 bg-slate-100 font-sans">
+                    <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.16em] font-bold text-[#c2410c] bg-orange-50 font-sans">
                       Sinkronisasi LPSE &amp; SIRUP
                     </span>
                     <span className="text-slate-300">•</span>
@@ -1011,7 +1011,7 @@ export default function BudgetDataExplorer({
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Cari kode paket, nama ruas, rekanan..."
-                    className="w-full pl-9 pr-7 py-2 rounded-full bg-slate-50/90 ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:bg-white transition-all font-sans"
+                    className="w-full pl-9 pr-7 py-2 rounded-full bg-slate-50/90 ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans"
                   />
                   {searchQuery && (
                     <button
@@ -1024,7 +1024,7 @@ export default function BudgetDataExplorer({
                 </div>
 
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-slate-900/5">
+                  <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-orange-200/40">
                     {[
                       { id: "ALL", label: "Semua" },
                       { id: "NASIONAL", label: "Nasional" },
@@ -1036,7 +1036,7 @@ export default function BudgetDataExplorer({
                         onClick={() => setSelectedAuthority(tab.id)}
                         className={`px-3 py-1 rounded-full text-xs transition-all cursor-pointer ${
                           selectedAuthority === tab.id
-                            ? "bg-slate-900 text-white font-bold shadow-2xs"
+                            ? "bg-[#c2410c] text-white font-bold shadow-2xs"
                             : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"
                         }`}
                       >
@@ -1049,7 +1049,7 @@ export default function BudgetDataExplorer({
                     onClick={() => setAnomalyFilterOnly(!anomalyFilterOnly)}
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                       anomalyFilterOnly
-                        ? "bg-amber-600 text-white shadow-2xs"
+                        ? "bg-[#c2410c] text-white shadow-2xs"
                         : "bg-amber-50 text-amber-800 hover:bg-amber-100/80"
                     }`}
                   >
@@ -1170,14 +1170,14 @@ export default function BudgetDataExplorer({
                             <div className="inline-flex items-center gap-1">
                               <button
                                 onClick={() => handleOpenDetailModal(pkg)}
-                                className="px-2.5 py-1 rounded-full text-xs font-semibold text-slate-700 hover:text-white bg-slate-100 hover:bg-slate-900 transition-all cursor-pointer active:scale-[0.96]"
+                                className="px-2.5 py-1 rounded-full text-xs font-semibold text-slate-700 hover:text-white bg-slate-100 hover:bg-[#c2410c] transition-all cursor-pointer active:scale-[0.96]"
                               >
                                 Detail
                               </button>
                               {onSelectRoadOnMap && pkg.roadId && (
                                 <button
                                   onClick={() => onSelectRoadOnMap(pkg.roadId)}
-                                  className="p-1 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
+                                  className="p-1 rounded-full text-slate-400 hover:text-[#c2410c] hover:bg-orange-50 transition-colors cursor-pointer"
                                   title="Lihat Ruas di Peta GIS"
                                 >
                                   <MapPin className="w-3.5 h-3.5" />
@@ -1223,7 +1223,7 @@ export default function BudgetDataExplorer({
                         onClick={() => setCurrentPage(pageNum)}
                         className={`w-7 h-7 rounded-full text-xs font-bold transition-all cursor-pointer tabular-nums ${
                           currentPage === pageNum
-                            ? "bg-slate-900 text-white shadow-2xs"
+                            ? "bg-[#c2410c] text-white shadow-2xs"
                             : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
                         }`}
                       >

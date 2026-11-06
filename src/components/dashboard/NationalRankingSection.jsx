@@ -54,7 +54,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
   return (
     <section id="papan-skor-nasional" className="pt-1 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
       {/* MODERN CONTROL BAR: SEARCH, ISLAND TABS, SORT, & VIEW SWITCHER (FLOATING PILL ISLAND) */}
-      <div className="bg-slate-100/70 p-2 sm:p-2.5 rounded-2xl ring-1 ring-slate-900/5 space-y-2.5 font-sans">
+      <div className="bg-slate-100/70 p-2 sm:p-2.5 rounded-2xl ring-1 ring-orange-200/50 space-y-2.5 font-sans">
         
         {/* Row 1: Search & Sort Controls */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
@@ -75,7 +75,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari provinsi atau ibukota (misal: Jawa Barat, Medan, Papua)..."
-              className="w-full pl-9 pr-7 py-2 rounded-full bg-white ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 transition-all"
+              className="w-full pl-9 pr-7 py-2 rounded-full bg-white ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
             />
             {searchQuery && (
               <button
@@ -110,7 +110,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 onClick={() => setViewMode("grid")}
                 className={`p-1.5 rounded-full transition-all cursor-pointer ${
                   viewMode === "grid"
-                    ? "bg-slate-900 text-white shadow-2xs font-bold"
+                    ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                     : "text-slate-400 hover:text-slate-900"
                 }`}
                 title="Tampilan Kartu Wilayah"
@@ -121,7 +121,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 onClick={() => setViewMode("table")}
                 className={`p-1.5 rounded-full transition-all cursor-pointer ${
                   viewMode === "table"
-                    ? "bg-slate-900 text-white shadow-2xs font-bold"
+                    ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                     : "text-slate-400 hover:text-slate-900"
                 }`}
                 title="Tampilan Tabel Leaderboard"
@@ -142,7 +142,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 onClick={() => setSelectedIsland(island.id)}
                 className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   selectedIsland === island.id
-                    ? "bg-slate-900 text-white shadow-xs"
+                    ? "bg-[#c2410c] text-white shadow-xs font-bold"
                     : "text-slate-600 hover:bg-white/80 hover:text-slate-900"
                 }`}
               >

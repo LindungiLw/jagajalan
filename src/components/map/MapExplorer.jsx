@@ -1449,16 +1449,16 @@ export default function MapExplorer({
       {sigiModalOpen && (
         <div className="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in font-sans">
           <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
+            <div className="p-4 border-b border-orange-700/30 flex items-center justify-between bg-[#c2410c] text-white">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                <h3 className="font-bold text-sm font-heading">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse" />
+                <h3 className="font-bold text-sm font-heading text-white">
                   Integrasi SIGI PU & GeoAPI Geospasial
                 </h3>
               </div>
               <button
                 onClick={() => setSigiModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1 rounded-lg text-orange-200 hover:text-white hover:bg-[#9a3412] transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1541,7 +1541,7 @@ export default function MapExplorer({
             <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
               <button
                 onClick={() => setSigiModalOpen(false)}
-                className="py-2 px-4 rounded-lg text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors cursor-pointer"
+                className="py-2 px-4 rounded-lg text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs"
               >
                 Tutup Informasi
               </button>

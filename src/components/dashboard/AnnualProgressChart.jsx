@@ -165,7 +165,7 @@ export default function AnnualProgressChart() {
         </div>
 
         {/* 3 Metric Pills (High-End Floating Island) */}
-        <div className="flex items-center p-1 rounded-full bg-slate-100/80 ring-1 ring-slate-900/5 text-xs font-semibold shrink-0 gap-1 font-sans">
+        <div className="flex items-center p-1 rounded-full bg-slate-100/80 ring-1 ring-orange-200/50 text-xs font-semibold shrink-0 gap-1 font-sans">
           <button
             onClick={() => setActiveMetric("road-condition")}
             className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
@@ -220,7 +220,7 @@ export default function AnnualProgressChart() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch animate-fade-in">
           
           {/* LEFT CARD (~67% width): 4 Open KPI Columns + Direct White Combo Chart + Clean Footer */}
-          <div className="lg:col-span-8 bg-white rounded-2xl ring-1 ring-slate-900/5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-8 bg-white rounded-2xl ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* 1. TOP 4 OPEN KPI COLUMNS (Executive SaaS Layout, No Truncation, Airy & Clean) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 pb-3 border-b border-slate-100">
@@ -320,7 +320,7 @@ export default function AnnualProgressChart() {
                       onClick={() => setSelectedYear(yr)}
                       className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
                         selectedYear === yr
-                          ? "bg-slate-900 text-white shadow-xs font-bold"
+                          ? "bg-[#c2410c] text-white shadow-xs font-bold"
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
@@ -626,7 +626,7 @@ export default function AnnualProgressChart() {
           </div>
 
           {/* RIGHT CARD (~33% width): Balanced Donut Chart & Rich Breakdown with Micro-Bars */}
-          <div className="lg:col-span-4 bg-white rounded-2xl ring-1 ring-slate-900/5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-4 bg-white rounded-2xl ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* Header */}
             <div>
@@ -760,7 +760,7 @@ export default function AnnualProgressChart() {
                   onClick={() => setSelectedYear(yr)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     selectedYear === yr
-                      ? "bg-slate-900 text-white shadow-xs"
+                      ? "bg-[#c2410c] text-white shadow-xs"
                       : "bg-white text-slate-600 border border-slate-200 hover:text-slate-900"
                   }`}
                 >
@@ -800,14 +800,14 @@ export default function AnnualProgressChart() {
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900 text-white flex flex-col justify-between">
+            <div className="p-4 rounded-xl bg-[#c2410c] text-white shadow-xs flex flex-col justify-between">
               <div>
-                <span className="text-[11px] font-semibold text-slate-300 block">Potensi Maladministrasi</span>
-                <div className="text-sm font-bold text-amber-300 flex items-center gap-1.5 mt-1">
-                  <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="text-[11px] font-semibold text-orange-100 block">Potensi Maladministrasi</span>
+                <div className="text-sm font-bold text-white flex items-center gap-1.5 mt-1">
+                  <ShieldAlert className="w-4 h-4 text-orange-200 shrink-0" />
                   <span>Pasal 1 UU 37/2008</span>
                 </div>
-                <p className="text-[10px] text-slate-300 mt-1">
+                <p className="text-[10px] text-orange-100 mt-1">
                   Dapat diekskalasi warga via JagaJalan.
                 </p>
               </div>
@@ -948,7 +948,7 @@ export default function AnnualProgressChart() {
             <div className="pt-3 border-t border-slate-100 flex justify-end">
               <button
                 onClick={() => setShowExplanationModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-colors cursor-pointer"
               >
                 Tutup Penjelasan
               </button>

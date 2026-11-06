@@ -44,7 +44,7 @@ export default function RoadDetailModal({
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
       {/* Outer Double-Bezel Frame */}
-      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-slate-900/10 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
+      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
         <div className="relative w-full flex-1 flex flex-col rounded-[1.25rem] bg-white shadow-2xl overflow-hidden">
           
           {/* 1. MODAL HEADER */}
@@ -106,7 +106,7 @@ export default function RoadDetailModal({
           <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-5 text-xs text-slate-700 font-sans">
             
             {/* A. Dasar Hukum Kewenangan Ruas (Legal SK) */}
-            <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-1.5">
+            <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-1.5">
               <div className="flex items-center gap-2 text-slate-900 font-bold">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -129,7 +129,7 @@ export default function RoadDetailModal({
 
             {/* A2. Foto Perbandingan Audit Sebelum vs Sesudah (Before vs After) */}
             {road?.photos?.beforeUrl && road?.photos?.afterUrl && (
-              <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-2.5">
+              <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -217,7 +217,7 @@ export default function RoadDetailModal({
               </div>
 
               {budget ? (
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-3.5">
+                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-3.5">
                   <div>
                     <div className="flex items-center justify-between gap-2 flex-wrap">
                       <span className="font-sans tabular-nums text-[11px] font-bold text-slate-500">
@@ -290,7 +290,7 @@ export default function RoadDetailModal({
                   )}
                 </div>
               ) : (
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 text-center text-slate-500">
+                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 text-center text-slate-500">
                   Belum ada paket pengadaan yang terkonfirmasi untuk ruas jalan ini.
                 </div>
               )}
@@ -329,7 +329,7 @@ export default function RoadDetailModal({
                         className={`p-3.5 rounded-2xl transition-colors ${
                           isOverdue
                             ? "bg-rose-50/60 ring-1 ring-rose-200/70"
-                            : "bg-slate-50/80 ring-1 ring-slate-900/5"
+                            : "bg-slate-50/80 ring-1 ring-orange-200/40"
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2 flex-wrap mb-1.5">
@@ -391,7 +391,7 @@ export default function RoadDetailModal({
                   })}
                 </div>
               ) : (
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 text-slate-500 text-center">
+                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 text-slate-500 text-center">
                   Belum ada tiket laporan kerusakan yang tercatat pada ruas ini.
                 </div>
               )}
@@ -434,7 +434,7 @@ export default function RoadDetailModal({
               )}
               <button
                 onClick={onClose}
-                className="px-5 py-2 rounded-full text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs active:scale-95"
+                className="px-5 py-2 rounded-full text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs active:scale-95"
               >
                 Tutup
               </button>

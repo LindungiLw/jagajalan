@@ -18,7 +18,7 @@ export default function MapShowcaseTeaser({
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
       {/* Outer Double-Bezel Architecture */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="relative rounded-[1.25rem] p-6 sm:p-8 bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
           
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
@@ -101,7 +101,7 @@ export default function MapShowcaseTeaser({
                     <button
                       key={road.id}
                       onClick={() => onSelectRoad && onSelectRoad(road.id)}
-                      className="w-full text-left p-3 rounded-xl bg-slate-50/70 hover:bg-slate-100/80 ring-1 ring-slate-900/5 hover:ring-slate-900/10 transition-all group cursor-pointer flex items-center justify-between gap-3 font-sans"
+                      className="w-full text-left p-3 rounded-xl bg-slate-50/70 hover:bg-orange-50/40 ring-1 ring-orange-200/40 hover:ring-orange-300 transition-all group cursor-pointer flex items-center justify-between gap-3 font-sans"
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">

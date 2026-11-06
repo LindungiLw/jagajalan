@@ -219,7 +219,7 @@ export default function HeroSection({
         </div>
 
         {/* 1. TOP UTILITY BAR: UNIFIED GLOBAL SEARCH & NATIONAL DATA SCOPE (FLOATING ISLAND) */}
-        <div className="bg-slate-100/70 p-1.5 rounded-2xl ring-1 ring-slate-900/5 flex flex-col md:flex-row md:items-center gap-1.5 text-xs transition-all">
+        <div className="bg-slate-100/70 p-1.5 rounded-2xl ring-1 ring-orange-200/50 flex flex-col md:flex-row md:items-center gap-1.5 text-xs transition-all">
           
           {/* Segment 1: Wilayah Scope */}
           <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-white rounded-xl shadow-2xs shrink-0">
@@ -287,30 +287,30 @@ export default function HeroSection({
           </div>
         )}
 
-        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (FLOATING PORCELAIN WITH SIGNAL ACCENT) */}
-        <div className="bg-slate-900 text-white px-4 sm:px-5 py-2.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
+        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (ORANGE BRAND STRIP) */}
+        <div className="bg-[#c2410c] text-white px-4 sm:px-5 py-2.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <span className="text-white/80 font-bold text-xs font-sans flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-white font-bold text-xs font-sans flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               Monitoring Infrastruktur Nasional:
             </span>
             <div className="flex items-center gap-1.5">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">38</strong>
-              <span className="text-white/70 font-medium text-xs">Provinsi Terdata</span>
+              <span className="text-white/90 font-medium text-xs">Provinsi Terdata</span>
             </div>
-            <span className="hidden sm:inline-block w-px h-3.5 bg-white/20 self-center" aria-hidden="true" />
+            <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
-              <span className="text-white/70 font-medium text-xs">Paket Audit Pilot (Rp 35,80 M)</span>
+              <span className="text-white/90 font-medium text-xs">Paket Audit Pilot (Rp 35,80 M)</span>
             </div>
-            <span className="hidden sm:inline-block w-px h-3.5 bg-white/20 self-center" aria-hidden="true" />
+            <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5">
-              <strong className="text-rose-400 font-sans font-bold text-sm tabular-nums">2</strong>
-              <span className="text-white/70 font-medium text-xs">Laporan Melewati Tenggat</span>
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">2</strong>
+              <span className="text-white/90 font-medium text-xs">Laporan Melewati Tenggat</span>
             </div>
           </div>
 
-          <span className="text-[11px] font-sans text-white/60 font-medium self-end sm:self-auto">
+          <span className="text-[11px] font-sans text-white/90 font-medium self-end sm:self-auto">
             Integrasi Geospasial &amp; LPSE Aktif
           </span>
         </div>
@@ -319,7 +319,7 @@ export default function HeroSection({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
           {/* LEFT 7 COLS: IKHTISAR DATA & GRAFIK KEMANTAPAN JALAN (DOUBLE-BEZEL ARCHITECTURE) */}
-          <div className="lg:col-span-7 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+          <div className="lg:col-span-7 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
             <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3.5 h-full">
             
             {/* Header: Title & View Links */}
@@ -349,14 +349,14 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("kemantapan")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
                     selectedIndex === "kemantapan"
-                      ? "bg-slate-900 text-white shadow-xs"
-                      : "bg-slate-50/80 text-slate-800 hover:bg-slate-100/80"
+                      ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
+                      : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "kemantapan"
-                        ? "bg-white/15"
+                        ? "bg-white/20"
                         : "bg-white shadow-2xs"
                     }`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -372,7 +372,7 @@ export default function HeroSection({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "kemantapan" ? "text-slate-300" : "text-slate-600"
+                          selectedIndex === "kemantapan" ? "text-white" : "text-slate-600"
                         }`}>
                           Jalan Kab/Kota (BPS)
                         </span>
@@ -381,9 +381,9 @@ export default function HeroSection({
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span>57,1%</span>
+                        <span className={selectedIndex === "kemantapan" ? "text-white" : "text-slate-900"}>57,1%</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "kemantapan" ? "text-slate-300" : "text-slate-500"
+                          selectedIndex === "kemantapan" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
                           Mantap
                         </span>
@@ -397,14 +397,14 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("ombudsman")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
                     selectedIndex === "ombudsman"
-                      ? "bg-slate-900 text-white shadow-xs"
-                      : "bg-slate-50/80 text-slate-800 hover:bg-slate-100/80"
+                      ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
+                      : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "ombudsman"
-                        ? "bg-white/15"
+                        ? "bg-white/20"
                         : "bg-white shadow-2xs"
                     }`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -420,7 +420,7 @@ export default function HeroSection({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "ombudsman" ? "text-slate-300" : "text-slate-600"
+                          selectedIndex === "ombudsman" ? "text-white" : "text-slate-600"
                         }`}>
                           Undue Delay (Ombudsman)
                         </span>
@@ -429,9 +429,9 @@ export default function HeroSection({
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span>33,86%</span>
+                        <span className={selectedIndex === "ombudsman" ? "text-white" : "text-slate-900"}>33,86%</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "ombudsman" ? "text-slate-300" : "text-slate-500"
+                          selectedIndex === "ombudsman" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
                           Laporan
                         </span>
@@ -445,14 +445,14 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("pagu")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
                     selectedIndex === "pagu"
-                      ? "bg-slate-900 text-white shadow-xs"
-                      : "bg-slate-50/80 text-slate-800 hover:bg-slate-100/80"
+                      ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
+                      : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "pagu"
-                        ? "bg-white/15"
+                        ? "bg-white/20"
                         : "bg-white shadow-2xs"
                     }`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -468,7 +468,7 @@ export default function HeroSection({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "pagu" ? "text-slate-300" : "text-slate-600"
+                          selectedIndex === "pagu" ? "text-white" : "text-slate-600"
                         }`}>
                           Pagu Pengadaan Pilot
                         </span>
@@ -477,9 +477,9 @@ export default function HeroSection({
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span>Rp 35,80</span>
+                        <span className={selectedIndex === "pagu" ? "text-white" : "text-slate-900"}>Rp 35,80</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "pagu" ? "text-slate-300" : "text-slate-500"
+                          selectedIndex === "pagu" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
                           Miliar
                         </span>
@@ -493,14 +493,14 @@ export default function HeroSection({
                   onClick={() => setSelectedIndex("inpres")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
                     selectedIndex === "inpres"
-                      ? "bg-slate-900 text-white shadow-xs"
-                      : "bg-slate-50/80 text-slate-800 hover:bg-slate-100/80"
+                      ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
+                      : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "inpres"
-                        ? "bg-white/15"
+                        ? "bg-white/20"
                         : "bg-white shadow-2xs"
                     }`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -516,7 +516,7 @@ export default function HeroSection({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
-                          selectedIndex === "inpres" ? "text-slate-300" : "text-slate-600"
+                          selectedIndex === "inpres" ? "text-white" : "text-slate-600"
                         }`}>
                           Inpres Jalan Daerah
                         </span>
@@ -525,9 +525,9 @@ export default function HeroSection({
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span>Rp 14,60</span>
+                        <span className={selectedIndex === "inpres" ? "text-white" : "text-slate-900"}>Rp 14,60</span>
                         <span className={`text-xs font-medium font-sans ${
-                          selectedIndex === "inpres" ? "text-slate-300" : "text-slate-500"
+                          selectedIndex === "inpres" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
                           Triliun
                         </span>
@@ -1565,7 +1565,7 @@ export default function HeroSection({
           </div>
 
           {/* RIGHT 5 COLS: REKAPITULASI KORIDOR PILOT (DOUBLE-BEZEL AGENCY TIER) */}
-          <div className="lg:col-span-5 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+          <div className="lg:col-span-5 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
             <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3 h-full">
             
             {/* Header: Title & View Links */}
@@ -1724,14 +1724,14 @@ export default function HeroSection({
         </div>
 
         {/* 4. ACTIVE DATA MONITORING TABLE: RUAS & ANGGARAN APBD / LPSE (DOUBLE-BEZEL AGENCY TIER) */}
-        <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+        <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
           <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-5">
             
             {/* Table Header: Eyebrow + Title + Button-in-Button CTA */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1.5 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-slate-500 bg-slate-100 inline-block font-sans">
+                  <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
                     Katalog Ruas &amp; LPSE
                   </span>
                   <span className="text-slate-300">•</span>
@@ -1751,10 +1751,10 @@ export default function HeroSection({
               <div className="shrink-0 self-start sm:self-auto">
                 <button
                   onClick={onExploreData}
-                  className="group inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer font-sans"
+                  className="group inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer font-sans"
                 >
                   <span>Penelusuran Anggaran Proyek</span>
-                  <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                  <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
                     <ChevronRight className="w-3.5 h-3.5 text-white" />
                   </span>
                 </button>
@@ -1764,7 +1764,7 @@ export default function HeroSection({
             {/* Table Controls: Floating Pill Filter Bar + Refined Search */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               {/* Floating Pill Filter Bar */}
-              <div className="flex items-center gap-1 flex-wrap bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-slate-900/5">
+              <div className="flex items-center gap-1 flex-wrap bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-orange-200/40">
                 {[
                   { id: "ALL", label: "Semua Ruas", count: roads.length },
                   { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter((r) => r.authority === "NASIONAL").length },
@@ -1778,13 +1778,13 @@ export default function HeroSection({
                     onClick={() => handleTableFilterChange(tab.id)}
                     className={`px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 text-xs ${
                       tableFilter === tab.id
-                        ? "bg-white text-slate-950 font-bold shadow-2xs"
-                        : "text-slate-600 hover:text-slate-900 font-medium hover:bg-white/50"
+                        ? "bg-[#c2410c] text-white font-bold shadow-2xs"
+                        : "text-slate-600 hover:text-slate-900 font-medium hover:bg-white/60"
                     }`}
                   >
                     <span>{tab.label}</span>
                     <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold tabular-nums ${
-                      tableFilter === tab.id ? "bg-slate-100 text-slate-900" : "bg-slate-200/60 text-slate-500"
+                      tableFilter === tab.id ? "bg-white/25 text-white" : "bg-slate-200/60 text-slate-500"
                     }`}>
                       {tab.count}
                     </span>
@@ -1808,7 +1808,7 @@ export default function HeroSection({
                   value={tableSearch}
                   onChange={handleTableSearchChange}
                   placeholder="Cari ruas, kota, rekanan..."
-                  className="w-full pl-9 pr-7 py-2 text-xs rounded-full bg-slate-50/90 focus:bg-white ring-1 ring-slate-200/80 focus:ring-2 focus:ring-slate-900/10 placeholder-slate-400 text-slate-900 focus:outline-none font-sans transition-all"
+                  className="w-full pl-9 pr-7 py-2 text-xs rounded-full bg-slate-50/90 focus:bg-white ring-1 ring-slate-200/80 focus:ring-2 focus:ring-orange-500/20 placeholder-slate-400 text-slate-900 focus:outline-none font-sans transition-all"
                 />
                 {tableSearch && (
                   <button
@@ -1938,7 +1938,7 @@ export default function HeroSection({
                           <td className="py-4 px-3 text-right align-middle">
                             <button
                               onClick={() => setSelectedRoadForDetail(road)}
-                              className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-900 text-slate-700 hover:text-white font-semibold text-xs transition-all duration-150 cursor-pointer inline-flex items-center gap-1 group/btn active:scale-[0.96]"
+                              className="px-3 py-1 rounded-full bg-slate-100 hover:bg-[#c2410c] text-slate-700 hover:text-white font-semibold text-xs transition-all duration-150 cursor-pointer inline-flex items-center gap-1 group/btn active:scale-[0.96]"
                             >
                               <span>Detail</span>
                               <ChevronRight className="w-3 h-3 text-slate-400 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-transform" />
@@ -1985,7 +1985,7 @@ export default function HeroSection({
                       }}
                       className={`px-2 py-0.5 rounded-full cursor-pointer font-bold transition-colors ${
                         tablePageSize === size
-                          ? "bg-slate-900 text-white shadow-2xs"
+                          ? "bg-[#c2410c] text-white shadow-2xs"
                           : "bg-slate-100 hover:bg-slate-200/70 text-slate-600"
                       }`}
                     >
@@ -2012,7 +2012,7 @@ export default function HeroSection({
                         onClick={() => setTablePage(num)}
                         className={`w-7 h-7 rounded-full text-xs font-bold cursor-pointer transition-colors tabular-nums ${
                           tablePage === num
-                            ? "bg-slate-900 text-white"
+                            ? "bg-[#c2410c] text-white"
                             : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
                         }`}
                       >

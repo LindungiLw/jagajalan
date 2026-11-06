@@ -370,7 +370,7 @@ export default function OfficerDashboard({
             onClick={() => setSelectedAuthority("ALL")}
             className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               selectedAuthority === "ALL"
-                ? "bg-slate-900 text-white font-bold shadow-2xs"
+                ? "bg-[#c2410c] text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >

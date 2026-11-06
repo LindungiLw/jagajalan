@@ -65,7 +65,7 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
-      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-slate-900/10 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
+      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
         <div className="relative w-full flex-1 flex flex-col rounded-[1.25rem] bg-white shadow-2xl overflow-hidden">
           {/* Modal Header */}
           <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-white">
@@ -112,7 +112,7 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
               </span>
             </div>
 
-            <pre className="whitespace-pre-wrap font-mono text-[11px] sm:text-xs text-slate-800 leading-relaxed bg-slate-50/80 p-5 rounded-2xl select-all max-h-[380px] overflow-y-auto ring-1 ring-slate-900/5">
+            <pre className="whitespace-pre-wrap font-mono text-[11px] sm:text-xs text-slate-800 leading-relaxed bg-slate-50/80 p-5 rounded-2xl select-all max-h-[380px] overflow-y-auto ring-1 ring-orange-200/40">
               {letterText}
             </pre>
           </div>

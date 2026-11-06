@@ -41,7 +41,7 @@ export default function LegalBasisSection() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-slate-900/5">
+      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
         <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
           
           {/* Header */}
@@ -64,7 +64,7 @@ export default function LegalBasisSection() {
               </p>
             </div>
 
-            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 ring-1 ring-slate-900/5 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans">
+            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 ring-1 ring-orange-200/40 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>Kepatuhan Hukum Terjamin</span>
             </div>
@@ -75,12 +75,12 @@ export default function LegalBasisSection() {
             {regulations.map((reg) => (
               <div
                 key={reg.code}
-                className="p-5 rounded-2xl bg-slate-50/70 hover:bg-white ring-1 ring-slate-900/5 hover:shadow-xs transition-all duration-200 space-y-4 flex flex-col justify-between group"
+                className="p-5 rounded-2xl bg-slate-50/70 hover:bg-white ring-1 ring-orange-200/40 hover:ring-orange-300 hover:bg-orange-50/20 hover:shadow-xs transition-all duration-200 space-y-4 flex flex-col justify-between group"
               >
                 <div className="space-y-3">
                   {/* Code & Feature Badge */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-mono font-bold tracking-tight px-2.5 py-0.5 rounded-full bg-slate-900 text-white inline-block">
+                    <span className="text-[11px] font-mono font-bold tracking-tight px-2.5 py-0.5 rounded-full bg-[#c2410c] text-white inline-block">
                       {reg.code}
                     </span>
                     <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/60 text-slate-700 font-sans">

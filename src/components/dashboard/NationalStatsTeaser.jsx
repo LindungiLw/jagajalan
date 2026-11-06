@@ -13,7 +13,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
       {/* Outer Double-Bezel Architecture */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-slate-900/5">
+      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="bg-white p-6 sm:p-8 rounded-[1.25rem] shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-slate-100 pb-5">
             <div className="max-w-2xl">
@@ -59,7 +59,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
               <div
                 key={prov.id}
                 onClick={onExploreNational}
-                className="p-5 rounded-2xl bg-slate-50/70 hover:bg-slate-100/80 ring-1 ring-slate-900/5 transition-all duration-200 cursor-pointer group flex flex-col justify-between font-sans"
+                className="p-5 rounded-2xl bg-slate-50/70 hover:bg-orange-50/40 ring-1 ring-orange-200/40 hover:ring-orange-300 transition-all duration-200 cursor-pointer group flex flex-col justify-between font-sans"
               >
                 <div>
                   <div className="flex items-center justify-between">

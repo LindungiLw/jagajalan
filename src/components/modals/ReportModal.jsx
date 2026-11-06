@@ -254,7 +254,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
       {/* Outer Double-Bezel Frame */}
-      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-slate-900/10 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-800">
+      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-800">
         <div className="relative w-full flex-1 flex flex-col rounded-[1.25rem] bg-white shadow-2xl overflow-hidden">
           
           {/* Header */}
@@ -321,7 +321,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 </div>
 
                 {/* Ticket Card */}
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 text-left space-y-2">
+                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 text-left space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                       Kode Tiket Pengaduan
@@ -355,7 +355,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 <div className="pt-3 flex justify-center gap-2.5">
                   <button
                     onClick={handleResetAndClose}
-                    className="px-6 py-2.5 rounded-full bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer shadow-sm active:scale-95"
+                    className="px-6 py-2.5 rounded-full bg-[#c2410c] text-white font-semibold text-xs hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs active:scale-95"
                   >
                     Selesai &amp; Buka Peta Transparansi
                   </button>
@@ -391,7 +391,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     </div>
 
                     {/* Government & Budget Meta Card */}
-                    <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-2 text-xs">
+                    <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2 text-xs">
                       <div className="flex items-start justify-between gap-2">
                         <div className="space-y-0.5">
                           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block">
@@ -479,7 +479,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                             onClick={() => handleSelectPreset(sample)}
                             className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium transition-all cursor-pointer ${
                               isSelected
-                                ? "bg-slate-900 text-white font-bold shadow-2xs"
+                                ? "bg-[#c2410c] text-white font-bold shadow-2xs"
                                 : "bg-slate-100 hover:bg-slate-200 text-slate-600"
                             }`}
                           >
@@ -490,7 +490,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     </div>
 
                     {/* Photo Preview & Upload Card */}
-                    <div className="relative rounded-2xl overflow-hidden bg-slate-900 h-44 group flex items-center justify-center ring-1 ring-slate-900/10">
+                    <div className="relative rounded-2xl overflow-hidden bg-slate-900 h-44 group flex items-center justify-center ring-1 ring-slate-200/60">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={photoPreview}
@@ -596,7 +596,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
                       {/* Verified Result Card */}
                       {aiResult && !spamError && (
-                        <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-slate-900/5 space-y-2 animate-fade-in text-xs">
+                        <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2 animate-fade-in text-xs">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5">
                               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
