@@ -45,8 +45,8 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 font-sans">
-      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
+      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+        <div className="bg-white rounded-[6px] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
           
           {/* Header with Eyebrow & Button-in-Button CTA */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
@@ -83,7 +83,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
           </div>
 
           {/* Clean Architectural 4-Column Pipeline (Zero Boxy Clutter) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 rounded-2xl overflow-hidden ring-1 ring-orange-200/40 bg-slate-50/20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 rounded-[6px] overflow-hidden ring-1 ring-orange-200/40 bg-slate-50/20">
             {steps.map((item) => (
               <div
                 key={item.step}
@@ -102,7 +102,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
 
                   {/* Icon + Title */}
                   <div className="flex items-center gap-3 pt-0.5">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 ring-1 ring-orange-200/40 p-2 shadow-2xs shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="w-10 h-10 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40 p-2 shadow-2xs shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.customIcon}

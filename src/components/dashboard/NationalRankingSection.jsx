@@ -54,7 +54,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
   return (
     <section id="papan-skor-nasional" className="pt-1 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
       {/* MODERN CONTROL BAR: SEARCH, ISLAND TABS, SORT, & VIEW SWITCHER (FLOATING PILL ISLAND) */}
-      <div className="bg-slate-100/70 p-2 sm:p-2.5 rounded-2xl ring-1 ring-orange-200/50 space-y-2.5 font-sans">
+      <div className="bg-slate-100/70 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50 space-y-2.5 font-sans">
         
         {/* Row 1: Search & Sort Controls */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
@@ -155,7 +155,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
       {/* 3. MAIN DATA DISPLAY (GRID CARDS OR LEADERBOARD TABLE) */}
       {filteredAndSortedProvinces.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200/90 p-8 text-center space-y-2">
+        <div className="bg-white rounded-[6px] border border-slate-200/90 p-8 text-center space-y-2">
           <p className="text-sm font-semibold text-slate-700">Tidak ada provinsi yang cocok dengan pencarian.</p>
           <p className="text-xs text-slate-400">Silakan ubah filter gugus pulau atau kata kunci pencarian Anda.</p>
         </div>
@@ -172,7 +172,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
             return (
               <div
                 key={prov.id}
-                className={`bg-white rounded-xl border p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
+                className={`bg-white rounded-[6px] border p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
                   isPilot
                     ? "border-orange-300/80 shadow-xs ring-1 ring-orange-200/50"
                     : "border-slate-200/80 hover:border-slate-300 hover:shadow-xs"
@@ -286,7 +286,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
         /* ------------------------------------------------------------- */
         /* VIEW 2: LEADERBOARD TABLE (High-Density, Bloomberg/IDX Style) */
         /* ------------------------------------------------------------- */
-        <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
+        <div className="bg-white rounded-[6px] border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>

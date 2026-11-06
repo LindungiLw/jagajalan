@@ -18,14 +18,14 @@ export default function MapShowcaseTeaser({
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
       {/* Outer Double-Bezel Architecture */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="relative rounded-[1.25rem] p-6 sm:p-8 bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
+      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+        <div className="relative rounded-[6px] p-6 sm:p-8 bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
           
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             {/* Left Column: Heading & Information */}
             <div className="max-w-2xl space-y-4">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-orange-50/80 p-2.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[6px] bg-orange-50/80 p-2.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/icon/maps.png"
@@ -49,25 +49,25 @@ export default function MapShowcaseTeaser({
 
               {/* Quick Metrics Badges (Soft Structuralism) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-                <div className="p-3.5 rounded-xl bg-slate-50/80 transition-all">
+                <div className="p-3.5 rounded-[6px] bg-slate-50/80 transition-all">
                   <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider font-sans">Ruas Terpetakan</div>
                   <div className="text-xl font-bold font-sans tabular-nums text-slate-900 mt-0.5">{roads.length} Ruas</div>
                   <div className="text-[10px] text-emerald-700 font-bold mt-0.5 font-sans">4 Status Wewenang</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50/80 transition-all">
+                <div className="p-3.5 rounded-[6px] bg-slate-50/80 transition-all">
                   <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider font-sans">Aduan Geotagged</div>
                   <div className="text-xl font-bold font-sans tabular-nums text-slate-900 mt-0.5">{reports.length} Titik</div>
                   <div className="text-[10px] text-orange-700 font-bold mt-0.5 font-sans">Verifikasi AI Vision</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50/80 transition-all">
+                <div className="p-3.5 rounded-[6px] bg-slate-50/80 transition-all">
                   <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider font-sans">Overdue SLA</div>
                   <div className="text-xl font-bold font-sans tabular-nums text-rose-600 mt-0.5">{overdueCount} Laporan</div>
                   <div className="text-[10px] text-rose-600/80 font-bold mt-0.5 font-sans">Lewat Batas Respons</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50/80 transition-all">
+                <div className="p-3.5 rounded-[6px] bg-slate-50/80 transition-all">
                   <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider font-sans">Anggaran Terlacak</div>
                   <div className="text-xl font-bold font-sans tabular-nums text-slate-900 mt-0.5">Rp 35,8 M</div>
                   <div className="text-[10px] text-slate-600 font-bold mt-0.5 font-sans">Cross-Match LPSE</div>
@@ -101,7 +101,7 @@ export default function MapShowcaseTeaser({
                     <button
                       key={road.id}
                       onClick={() => onSelectRoad && onSelectRoad(road.id)}
-                      className="w-full text-left p-3 rounded-xl bg-slate-50/70 hover:bg-orange-50/40 ring-1 ring-orange-200/40 hover:ring-orange-300 transition-all group cursor-pointer flex items-center justify-between gap-3 font-sans"
+                      className="w-full text-left p-3 rounded-[6px] bg-slate-50/70 hover:bg-orange-50/40 ring-1 ring-orange-200/40 hover:ring-orange-300 transition-all group cursor-pointer flex items-center justify-between gap-3 font-sans"
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">

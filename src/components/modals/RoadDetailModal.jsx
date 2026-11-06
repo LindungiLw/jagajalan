@@ -44,8 +44,8 @@ export default function RoadDetailModal({
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
       {/* Outer Double-Bezel Frame */}
-      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
-        <div className="relative w-full flex-1 flex flex-col rounded-[1.25rem] bg-white shadow-2xl overflow-hidden">
+      <div className="rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
+        <div className="relative w-full flex-1 flex flex-col rounded-[6px] bg-white shadow-2xl overflow-hidden">
           
           {/* 1. MODAL HEADER */}
           <div className="p-4 sm:p-5 border-b border-slate-100 flex items-start justify-between gap-3 bg-white">
@@ -95,7 +95,7 @@ export default function RoadDetailModal({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+              className="p-1.5 rounded-[6px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
               aria-label="Tutup Detail"
             >
               <X className="w-5 h-5" />
@@ -106,7 +106,7 @@ export default function RoadDetailModal({
           <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-5 text-xs text-slate-700 font-sans">
             
             {/* A. Dasar Hukum Kewenangan Ruas (Legal SK) */}
-            <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-1.5">
+            <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 space-y-1.5">
               <div className="flex items-center gap-2 text-slate-900 font-bold">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -129,7 +129,7 @@ export default function RoadDetailModal({
 
             {/* A2. Foto Perbandingan Audit Sebelum vs Sesudah (Before vs After) */}
             {road?.photos?.beforeUrl && road?.photos?.afterUrl && (
-              <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2.5">
+              <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -145,7 +145,7 @@ export default function RoadDetailModal({
                       <span className="w-2 h-2 rounded-full bg-rose-600" />
                       <span>Sebelum Penanganan / Kerusakan Awal</span>
                     </div>
-                    <div className="h-36 rounded-xl overflow-hidden bg-slate-200">
+                    <div className="h-36 rounded-[6px] overflow-hidden bg-slate-200">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={road.photos.beforeUrl} alt="Sebelum Penanganan" className="w-full h-full object-cover" />
                     </div>
@@ -155,7 +155,7 @@ export default function RoadDetailModal({
                       <span className="w-2 h-2 rounded-full bg-emerald-600" />
                       <span>Kondisi Terkini / Hasil Penanganan</span>
                     </div>
-                    <div className="h-36 rounded-xl overflow-hidden bg-slate-200">
+                    <div className="h-36 rounded-[6px] overflow-hidden bg-slate-200">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={road.photos.afterUrl} alt="Hasil Penanganan" className="w-full h-full object-cover" />
                     </div>
@@ -171,7 +171,7 @@ export default function RoadDetailModal({
 
             {/* A3. Isu Khas Perkotaan / Drainase & Galian Utilitas */}
             {(road?.urbanDrainageStatus || road?.utilityDigIssue) && (
-              <div className="p-4 rounded-2xl bg-amber-50/60 ring-1 ring-amber-200/60 space-y-2">
+              <div className="p-4 rounded-[6px] bg-amber-50/60 ring-1 ring-amber-200/60 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
                     <Building2 className="w-3.5 h-3.5 text-amber-700" />
@@ -217,7 +217,7 @@ export default function RoadDetailModal({
               </div>
 
               {budget ? (
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 space-y-3.5">
+                <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 space-y-3.5">
                   <div>
                     <div className="flex items-center justify-between gap-2 flex-wrap">
                       <span className="font-sans tabular-nums text-[11px] font-bold text-slate-500">
@@ -233,7 +233,7 @@ export default function RoadDetailModal({
                   </div>
 
                   {/* Financial Pagu vs Kontrak */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-white shadow-2xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-[6px] bg-white shadow-2xs">
                     <div>
                       <span className="text-[10px] text-slate-400 uppercase font-bold font-sans block">
                         Nilai Pagu Anggaran (HPS)
@@ -290,7 +290,7 @@ export default function RoadDetailModal({
                   )}
                 </div>
               ) : (
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 text-center text-slate-500">
+                <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 text-center text-slate-500">
                   Belum ada paket pengadaan yang terkonfirmasi untuk ruas jalan ini.
                 </div>
               )}
@@ -326,7 +326,7 @@ export default function RoadDetailModal({
                     return (
                       <div
                         key={report.id}
-                        className={`p-3.5 rounded-2xl transition-colors ${
+                        className={`p-3.5 rounded-[6px] transition-colors ${
                           isOverdue
                             ? "bg-rose-50/60 ring-1 ring-rose-200/70"
                             : "bg-slate-50/80 ring-1 ring-orange-200/40"
@@ -391,14 +391,14 @@ export default function RoadDetailModal({
                   })}
                 </div>
               ) : (
-                <div className="p-4 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 text-slate-500 text-center">
+                <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 text-slate-500 text-center">
                   Belum ada tiket laporan kerusakan yang tercatat pada ruas ini.
                 </div>
               )}
             </div>
 
             {/* Legal Notice Footer */}
-            <div className="p-3.5 rounded-2xl bg-amber-50/70 ring-1 ring-amber-200/60 text-[10px] text-amber-900 space-y-1">
+            <div className="p-3.5 rounded-[6px] bg-amber-50/70 ring-1 ring-amber-200/60 text-[10px] text-amber-900 space-y-1">
               <strong>Catatan Keterbukaan Publik:</strong>
               <p>
                 Penetapan status tenggat respons mengacu pada standar pemantauan respons pelayanan publik (UU No. 25/2009). Status ini mencatat keaktifan tindak lanjut tanggapan resmi instansi, bukan keputusan final maladministrasi. Eskalasi ke Ombudsman Republik Indonesia tetap melalui verifikasi bukti dan prosedur resmi.

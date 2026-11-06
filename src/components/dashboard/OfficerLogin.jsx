@@ -69,13 +69,13 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       </div>
 
       {/* Main Login Card (Double-Bezel Architecture) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[1.25rem] shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
+      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+        <div className="bg-white rounded-[6px] shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
           {/* Institutional Header Banner */}
           <div className="bg-white p-6 sm:p-7 border-b border-slate-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-orange-50/80 p-2.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
+                <div className="w-12 h-12 rounded-[6px] bg-orange-50/80 p-2.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/icon/profile.png"
@@ -106,7 +106,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
           <div className="p-6 sm:p-8 space-y-6">
             {/* Error Notification */}
             {errorMessage && (
-              <div className="p-3.5 rounded-2xl bg-rose-50/80 ring-1 ring-rose-200/70 text-rose-800 text-xs flex items-center gap-2.5 animate-shake">
+              <div className="p-3.5 rounded-[6px] bg-rose-50/80 ring-1 ring-rose-200/70 text-rose-800 text-xs flex items-center gap-2.5 animate-shake">
                 <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
                 <span>{errorMessage}</span>
               </div>
@@ -134,7 +134,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       placeholder="Contoh: 198503152010121002"
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans tabular-nums ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans tabular-nums ring-1 ring-slate-200/70 focus:ring-orange-500/30"
                     />
                   </div>
                 </div>
@@ -155,7 +155,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                      className="w-full pl-9 pr-10 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
                     />
                     <button
                       type="button"
@@ -168,7 +168,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                 </div>
 
                 {/* Security Hint */}
-                <div className="p-3.5 rounded-2xl bg-slate-50/80 ring-1 ring-orange-200/40 text-[11px] text-slate-600 flex items-start gap-2">
+                <div className="p-3.5 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 text-[11px] text-slate-600 flex items-start gap-2">
                   <KeyRound className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
                   <span>
                     Sistem diawasi secara digital. Setiap riwayat disposisi status dan unggahan bukti fisik akan tercatat pada <em>Audit Trail</em> berbasis NIP.
@@ -195,7 +195,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               </form>
 
               {/* Right 6 Cols: 1-Click Simulation Cards for Evaluator/Judges */}
-              <div className="lg:col-span-6 space-y-3.5 bg-slate-50/80 p-4 sm:p-5 rounded-2xl ring-1 ring-orange-200/40">
+              <div className="lg:col-span-6 space-y-3.5 bg-slate-50/80 p-4 sm:p-5 rounded-[6px] ring-1 ring-orange-200/40">
                 <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
                   <div className="flex items-center gap-1.5">
                     <UserCheck className="w-4 h-4 text-[#c2410c]" />
@@ -217,10 +217,10 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     <div
                       key={officer.id}
                       onClick={() => handleQuickLogin(officer)}
-                      className="p-3 rounded-xl bg-white ring-1 ring-orange-200/40 hover:ring-orange-300 hover:shadow-2xs transition-all cursor-pointer group flex items-start justify-between gap-3 font-sans"
+                      className="p-3 rounded-[6px] bg-white ring-1 ring-orange-200/40 hover:ring-orange-300 hover:shadow-2xs transition-all cursor-pointer group flex items-start justify-between gap-3 font-sans"
                     >
                       <div className="flex items-start gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 font-sans font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
+                        <div className="w-8 h-8 rounded-[6px] bg-slate-100 text-slate-800 font-sans font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
                           {officer.avatar}
                         </div>
                         <div>

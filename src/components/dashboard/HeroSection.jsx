@@ -219,10 +219,10 @@ export default function HeroSection({
         </div>
 
         {/* 1. TOP UTILITY BAR: UNIFIED GLOBAL SEARCH & NATIONAL DATA SCOPE (FLOATING ISLAND) */}
-        <div className="bg-slate-100/70 p-1.5 rounded-2xl ring-1 ring-orange-200/50 flex flex-col md:flex-row md:items-center gap-1.5 text-xs transition-all">
+        <div className="bg-slate-100/70 p-1.5 rounded-[8px] ring-1 ring-orange-200/50 flex flex-col md:flex-row md:items-center gap-1.5 text-xs transition-all">
           
           {/* Segment 1: Wilayah Scope */}
-          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-white rounded-xl shadow-2xs shrink-0">
+          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-white rounded-[6px] shadow-2xs shrink-0">
             <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
             <span className="text-[11.5px] font-semibold">
               Cakupan: <strong className="text-slate-900">Seluruh Indonesia (38 Provinsi)</strong>
@@ -230,7 +230,7 @@ export default function HeroSection({
           </div>
 
           {/* Segment 2: Official Verified Sources Indicator */}
-          <div className="hidden lg:flex items-center gap-2 px-3.5 py-2 text-[11px] font-sans text-slate-600 bg-white/60 rounded-xl shrink-0 select-none">
+          <div className="hidden lg:flex items-center gap-2 px-3.5 py-2 text-[11px] font-sans text-slate-600 bg-white/60 rounded-[6px] shrink-0 select-none">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span className="font-medium text-slate-700">BPS • LPSE • KemenPU • Ombudsman</span>
             <span className="text-slate-300">|</span>
@@ -238,7 +238,7 @@ export default function HeroSection({
           </div>
 
           {/* Segment 3: Spacious Global Search Input */}
-          <div className="relative flex-1 min-w-[280px] flex items-center bg-white rounded-xl shadow-2xs group">
+          <div className="relative flex-1 min-w-[280px] flex items-center bg-white rounded-[6px] shadow-2xs group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon/search_icon.png"
@@ -269,7 +269,7 @@ export default function HeroSection({
 
         {/* Instant Search Results Summary Pill if searching */}
         {searchResults.hasSearch && (
-          <div className="p-3 rounded-2xl bg-orange-500/10 ring-1 ring-orange-500/20 text-xs flex flex-wrap items-center justify-between gap-2 animate-fade-in font-medium">
+          <div className="p-3 rounded-[6px] bg-orange-500/10 ring-1 ring-orange-500/20 text-xs flex flex-wrap items-center justify-between gap-2 animate-fade-in font-medium">
             <div className="flex items-center gap-3">
               <span className="font-bold text-[#c2410c] font-sans uppercase tracking-wider text-[10.5px]">Hasil Pencarian:</span>
               <span className="text-slate-800">
@@ -288,7 +288,7 @@ export default function HeroSection({
         )}
 
         {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (ORANGE BRAND STRIP) */}
-        <div className="bg-[#c2410c] text-white px-4 sm:px-5 py-2.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
+        <div className="bg-[#c2410c] text-white px-4 sm:px-5 py-2.5 rounded-[6px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <span className="text-white font-bold text-xs font-sans flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
@@ -319,8 +319,8 @@ export default function HeroSection({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
           {/* LEFT 7 COLS: IKHTISAR DATA & GRAFIK KEMANTAPAN JALAN (DOUBLE-BEZEL ARCHITECTURE) */}
-          <div className="lg:col-span-7 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
-            <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3.5 h-full">
+          <div className="lg:col-span-7 bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+            <div className="bg-white rounded-[6px] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3.5 h-full">
             
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
@@ -347,14 +347,14 @@ export default function HeroSection({
                 {/* Index 1: Kemantapan Jalan (BPS) */}
                 <button
                   onClick={() => setSelectedIndex("kemantapan")}
-                  className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
+                  className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "kemantapan"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
                       : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "kemantapan"
                         ? "bg-white/20"
                         : "bg-white shadow-2xs"
@@ -395,14 +395,14 @@ export default function HeroSection({
                 {/* Index 2: Konteks Ombudsman */}
                 <button
                   onClick={() => setSelectedIndex("ombudsman")}
-                  className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
+                  className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "ombudsman"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
                       : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "ombudsman"
                         ? "bg-white/20"
                         : "bg-white shadow-2xs"
@@ -443,14 +443,14 @@ export default function HeroSection({
                 {/* Index 3: Pagu Paket Pilot LPSE */}
                 <button
                   onClick={() => setSelectedIndex("pagu")}
-                  className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
+                  className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "pagu"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
                       : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "pagu"
                         ? "bg-white/20"
                         : "bg-white shadow-2xs"
@@ -491,14 +491,14 @@ export default function HeroSection({
                 {/* Index 4: Alokasi Inpres Nasional */}
                 <button
                   onClick={() => setSelectedIndex("inpres")}
-                  className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group ${
+                  className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "inpres"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
                       : "bg-slate-50/80 text-slate-800 hover:bg-orange-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1.5 shrink-0 flex items-center justify-center transition-all ${
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] p-1.5 shrink-0 flex items-center justify-center transition-all ${
                       selectedIndex === "inpres"
                         ? "bg-white/20"
                         : "bg-white shadow-2xs"
@@ -538,7 +538,7 @@ export default function HeroSection({
               </div>
 
               {/* Chart Column: Dynamic Visual Monitor based on selectedIndex */}
-              <div className="sm:col-span-7 bg-slate-50/80 rounded-xl p-3.5 flex flex-col justify-between">
+              <div className="sm:col-span-7 bg-slate-50/80 rounded-[6px] p-3.5 flex flex-col justify-between">
                 {/* Chart Header: Structured 2-Tier Header (Never Wraps Awkwardly) */}
                 <div className="space-y-1.5 border-b border-slate-200/60 pb-2">
                   {/* Row 1: Title & Main Type Switcher (Garis / Batang) */}
@@ -1443,7 +1443,7 @@ export default function HeroSection({
                 {/* Unified Executive Metric Footnote Strip (Compact, Clean, Data Preserved) */}
                 <div className="mt-2.5 pt-2 border-t border-slate-200/60 font-sans">
                   {selectedIndex === "kemantapan" && (
-                    <div className="bg-white rounded-xl px-3.5 py-2.5 shadow-2xs">
+                    <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
@@ -1477,7 +1477,7 @@ export default function HeroSection({
                   )}
 
                   {selectedIndex === "ombudsman" && (
-                    <div className="bg-white rounded-xl px-3.5 py-2.5 shadow-2xs">
+                    <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-2 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
@@ -1502,7 +1502,7 @@ export default function HeroSection({
                   )}
 
                   {selectedIndex === "pagu" && (
-                    <div className="bg-white rounded-xl px-3.5 py-2.5 shadow-2xs">
+                    <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
@@ -1541,7 +1541,7 @@ export default function HeroSection({
                   )}
 
                   {selectedIndex === "inpres" && (
-                    <div className="bg-white rounded-xl px-3.5 py-2.5 shadow-2xs">
+                    <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">Tahap I (2023)</span>
@@ -1565,8 +1565,8 @@ export default function HeroSection({
           </div>
 
           {/* RIGHT 5 COLS: REKAPITULASI KORIDOR PILOT (DOUBLE-BEZEL AGENCY TIER) */}
-          <div className="lg:col-span-5 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
-            <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3 h-full">
+          <div className="lg:col-span-5 bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+            <div className="bg-white rounded-[6px] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3 h-full">
             
             {/* Header: Title & View Links */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
@@ -1589,7 +1589,7 @@ export default function HeroSection({
 
             {/* Executive KPI Micro Strip (Borderless Soft Tonal Surface) */}
             <div className="grid grid-cols-3 gap-2.5">
-              <div className="bg-slate-50/90 rounded-xl p-2.5 text-center">
+              <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
                   Ruas Pilot
                 </span>
@@ -1598,7 +1598,7 @@ export default function HeroSection({
                 </strong>
                 <span className="text-[9px] text-slate-400 font-sans block">1 Nas • 2 Prov • 3 Kota</span>
               </div>
-              <div className="bg-slate-50/90 rounded-xl p-2.5 text-center">
+              <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
                   Total Pagu
                 </span>
@@ -1607,7 +1607,7 @@ export default function HeroSection({
                 </strong>
                 <span className="text-[9px] text-slate-400 font-sans block">Kontrak: Rp 33,59 M</span>
               </div>
-              <div className="bg-rose-50/75 rounded-xl p-2.5 text-center">
+              <div className="bg-rose-50/75 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-rose-700 font-semibold font-sans block">
                   Lewat SLA
                 </span>
@@ -1724,8 +1724,8 @@ export default function HeroSection({
         </div>
 
         {/* 4. ACTIVE DATA MONITORING TABLE: RUAS & ANGGARAN APBD / LPSE (DOUBLE-BEZEL AGENCY TIER) */}
-        <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
-          <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-5">
+        <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+          <div className="bg-white rounded-[6px] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-5">
             
             {/* Table Header: Eyebrow + Title + Button-in-Button CTA */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">

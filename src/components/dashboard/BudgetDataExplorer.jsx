@@ -440,7 +440,7 @@ export default function BudgetDataExplorer({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Card 1: Total Pagu Anggaran (Orange theme) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-orange-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Total Pagu Anggaran (HPS)
@@ -458,7 +458,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 2: Realisasi Kontrak SPK (Blue theme) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-blue-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-blue-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Realisasi Kontrak (SPK)
@@ -479,7 +479,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 3: Efisiensi Lelang LPSE (Emerald theme) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-emerald-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-emerald-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Efisiensi Lelang LPSE
@@ -500,7 +500,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 4: Atensi Audit Proyek (Amber theme) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-amber-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-amber-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Atensi Audit &amp; Fisik
@@ -526,7 +526,7 @@ export default function BudgetDataExplorer({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Left Card: Perbandingan Pagu HPS vs Nilai Kontrak (Double Bar Chart) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
           {/* Card Header & 3 Top Metric Badges (100% Real Sesuai Data Aktif) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -704,7 +704,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Right Card: Tren Alokasi Anggaran Preservasi Jalan (Smooth Multi-Layer Area Chart) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
           {/* Card Header & 3 Top Metric Badges (100% Real Sesuai authorityBreakdown) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -911,7 +911,7 @@ export default function BudgetDataExplorer({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column: Capaian & Akuntabilitas Anggaran */}
-        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs">
+        <div className="lg:col-span-4 bg-white rounded-[6px] border border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs">
           <div>
             <div className="pb-3 border-b border-slate-100 flex items-center justify-between">
               <div>
@@ -966,8 +966,8 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Right Column: Daftar Paket Pengadaan LPSE & SIRUP (DOUBLE-BEZEL AGENCY TIER) */}
-        <div className="lg:col-span-8 bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
-          <div className="bg-white rounded-[1.25rem] p-5 sm:p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
+        <div className="lg:col-span-8 bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+          <div className="bg-white rounded-[6px] p-5 sm:p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
             
             {/* Header & Controls Toolbar */}
             <div className="space-y-3 pb-3 border-b border-slate-100">

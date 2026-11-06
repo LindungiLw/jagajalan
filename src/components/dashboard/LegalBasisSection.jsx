@@ -41,8 +41,8 @@ export default function LegalBasisSection() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[1.75rem] ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[1.25rem] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
+      <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+        <div className="bg-white rounded-[6px] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
           
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
@@ -75,7 +75,7 @@ export default function LegalBasisSection() {
             {regulations.map((reg) => (
               <div
                 key={reg.code}
-                className="p-5 rounded-2xl bg-slate-50/70 hover:bg-white ring-1 ring-orange-200/40 hover:ring-orange-300 hover:bg-orange-50/20 hover:shadow-xs transition-all duration-200 space-y-4 flex flex-col justify-between group"
+                className="p-5 rounded-[6px] bg-slate-50/70 hover:bg-white ring-1 ring-orange-200/40 hover:ring-orange-300 hover:bg-orange-50/20 hover:shadow-xs transition-all duration-200 space-y-4 flex flex-col justify-between group"
               >
                 <div className="space-y-3">
                   {/* Code & Feature Badge */}

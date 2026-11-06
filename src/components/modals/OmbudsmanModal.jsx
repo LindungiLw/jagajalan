@@ -65,12 +65,12 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
-      <div className="rounded-[1.75rem] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
-        <div className="relative w-full flex-1 flex flex-col rounded-[1.25rem] bg-white shadow-2xl overflow-hidden">
+      <div className="rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
+        <div className="relative w-full flex-1 flex flex-col rounded-[6px] bg-white shadow-2xl overflow-hidden">
           {/* Modal Header */}
           <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-white">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-orange-50/80 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
+              <div className="w-11 h-11 rounded-[6px] bg-orange-50/80 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/hukum_icon.png"
@@ -97,7 +97,7 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="p-1.5 rounded-[6px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -105,14 +105,14 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
 
           {/* Modal Body: Letter Paper */}
           <div className="p-5 sm:p-6 overflow-y-auto flex-1 text-xs text-slate-700 space-y-4">
-            <div className="p-3.5 rounded-xl bg-amber-50/70 ring-1 ring-amber-200/60 flex items-center gap-2.5 text-xs text-amber-900 font-sans">
+            <div className="p-3.5 rounded-[6px] bg-amber-50/70 ring-1 ring-amber-200/60 flex items-center gap-2.5 text-xs text-amber-900 font-sans">
               <AlertCircle className="w-4 h-4 shrink-0 text-amber-700" />
               <span>
                 Format surat ini disesuaikan dengan standar pelaporan formal pada <strong>Ombudsman Republik Indonesia</strong> atas dugaan Penundaan Berlarut (<em>Undue Delay</em>).
               </span>
             </div>
 
-            <pre className="whitespace-pre-wrap font-mono text-[11px] sm:text-xs text-slate-800 leading-relaxed bg-slate-50/80 p-5 rounded-2xl select-all max-h-[380px] overflow-y-auto ring-1 ring-orange-200/40">
+            <pre className="whitespace-pre-wrap font-mono text-[11px] sm:text-xs text-slate-800 leading-relaxed bg-slate-50/80 p-5 rounded-[6px] select-all max-h-[380px] overflow-y-auto ring-1 ring-orange-200/40">
               {letterText}
             </pre>
           </div>

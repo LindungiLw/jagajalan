@@ -220,7 +220,7 @@ export default function AnnualProgressChart() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch animate-fade-in">
           
           {/* LEFT CARD (~67% width): 4 Open KPI Columns + Direct White Combo Chart + Clean Footer */}
-          <div className="lg:col-span-8 bg-white rounded-2xl ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-8 bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* 1. TOP 4 OPEN KPI COLUMNS (Executive SaaS Layout, No Truncation, Airy & Clean) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 pb-3 border-b border-slate-100">
@@ -626,7 +626,7 @@ export default function AnnualProgressChart() {
           </div>
 
           {/* RIGHT CARD (~33% width): Balanced Donut Chart & Rich Breakdown with Micro-Bars */}
-          <div className="lg:col-span-4 bg-white rounded-2xl ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-4 bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* Header */}
             <div>
@@ -697,7 +697,7 @@ export default function AnnualProgressChart() {
                     key={item.key}
                     onMouseEnter={() => setHoveredSlice(item.key)}
                     onMouseLeave={() => setHoveredSlice(null)}
-                    className={`p-1.5 px-2.5 rounded-xl transition-all cursor-pointer ${
+                    className={`p-1.5 px-2.5 rounded-[6px] transition-all cursor-pointer ${
                       isHovered ? "bg-slate-50 ring-1 ring-slate-200" : "hover:bg-slate-50/60"
                     }`}
                   >
@@ -728,7 +728,7 @@ export default function AnnualProgressChart() {
             </div>
 
             {/* Explanatory Policy Callout Box */}
-            <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-950 flex items-start gap-2.5">
+            <div className="p-3.5 rounded-[6px] bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-950 flex items-start gap-2.5">
               <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
               <div className="leading-relaxed text-amber-900">
                 <strong className="text-amber-950">Akar Permasalahan Jalan Daerah:</strong>{" "}
@@ -741,7 +741,7 @@ export default function AnnualProgressChart() {
 
       {/* METRIC VIEW 2: ADUAN & MALADMINISTRASI (OMBUDSMAN RI) */}
       {activeMetric === "complaints" && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-5 animate-fade-in">
+        <div className="bg-white rounded-[6px] border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-5 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
@@ -758,7 +758,7 @@ export default function AnnualProgressChart() {
                 <button
                   key={yr}
                   onClick={() => setSelectedYear(yr)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-[6px] text-xs font-bold transition-all cursor-pointer ${
                     selectedYear === yr
                       ? "bg-[#c2410c] text-white shadow-xs"
                       : "bg-white text-slate-600 border border-slate-200 hover:text-slate-900"
@@ -772,7 +772,7 @@ export default function AnnualProgressChart() {
 
           {/* 4 Complaint Stat Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div className="p-4 rounded-[6px] bg-slate-50 border border-slate-200">
               <span className="text-[11px] font-semibold text-slate-500 block">Total Aduan ({selectedComplaintData.year})</span>
               <div className="text-2xl font-extrabold text-slate-900 font-sans tabular-nums mt-1">
                 {selectedComplaintData.totalComplaints.toLocaleString("id-ID")}
@@ -780,7 +780,7 @@ export default function AnnualProgressChart() {
               <span className="text-[10px] text-slate-400 block mt-0.5">Naik 164% sejak 2020</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+            <div className="p-4 rounded-[6px] bg-emerald-50/70 border border-emerald-200">
               <span className="text-[11px] font-semibold text-emerald-700 block">Tuntas Ditindaklanjuti</span>
               <div className="text-2xl font-extrabold text-emerald-800 font-sans tabular-nums mt-1">
                 {selectedComplaintData.resolved.toLocaleString("id-ID")}
@@ -790,7 +790,7 @@ export default function AnnualProgressChart() {
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-rose-50/70 border border-rose-200">
+            <div className="p-4 rounded-[6px] bg-rose-50/70 border border-rose-200">
               <span className="text-[11px] font-semibold text-rose-700 block">Melewati Tenggat Respons</span>
               <div className="text-2xl font-extrabold text-rose-800 font-sans tabular-nums mt-1">
                 {selectedComplaintData.overdue.toLocaleString("id-ID")}
@@ -800,7 +800,7 @@ export default function AnnualProgressChart() {
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#c2410c] text-white shadow-xs flex flex-col justify-between">
+            <div className="p-4 rounded-[6px] bg-[#c2410c] text-white shadow-xs flex flex-col justify-between">
               <div>
                 <span className="text-[11px] font-semibold text-orange-100 block">Potensi Maladministrasi</span>
                 <div className="text-sm font-bold text-white flex items-center gap-1.5 mt-1">
@@ -818,7 +818,7 @@ export default function AnnualProgressChart() {
 
       {/* METRIC VIEW 3: INTERVENSI ANGGARAN INPRES (IJD) */}
       {activeMetric === "inpres" && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4 animate-fade-in">
+        <div className="bg-white rounded-[6px] border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
@@ -837,7 +837,7 @@ export default function AnnualProgressChart() {
             {inpresBudgets.map((item) => (
               <div
                 key={item.year}
-                className="p-5 rounded-xl bg-slate-50 border border-slate-200 hover:border-blue-300 transition-all space-y-3"
+                className="p-5 rounded-[6px] bg-slate-50 border border-slate-200 hover:border-blue-300 transition-all space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -884,7 +884,7 @@ export default function AnnualProgressChart() {
       {/* METODOLOGI & REGULASI MODAL */}
       {showExplanationModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-[6px] max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-blue-600" />
@@ -894,7 +894,7 @@ export default function AnnualProgressChart() {
               </div>
               <button
                 onClick={() => setShowExplanationModal(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-1 rounded-[6px] text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -948,7 +948,7 @@ export default function AnnualProgressChart() {
             <div className="pt-3 border-t border-slate-100 flex justify-end">
               <button
                 onClick={() => setShowExplanationModal(false)}
-                className="px-4 py-2 rounded-xl bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-colors cursor-pointer"
               >
                 Tutup Penjelasan
               </button>

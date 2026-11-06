@@ -175,9 +175,9 @@ export default function OfficerDashboard({
   return (
     <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 animate-fade-in">
       {/* 1. Active Authenticated Session Bar */}
-      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-[6px] border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-[6px] bg-orange-50 border border-orange-200/80 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon/profile.png"
@@ -238,7 +238,7 @@ export default function OfficerDashboard({
       </div>
 
       {/* 2. Institutional Operation Notice */}
-      <div className="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div className="bg-white p-5 sm:p-6 rounded-[6px] border border-slate-200 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="space-y-1.5 max-w-3xl">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="px-2 py-0.5 rounded bg-orange-50 text-orange-800 border border-orange-200 font-sans text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
@@ -269,7 +269,7 @@ export default function OfficerDashboard({
 
       {/* Success Notification Banner */}
       {isSuccessToast && (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 flex items-center justify-between animate-fade-in shadow-2xs">
+        <div className="p-4 rounded-[6px] bg-emerald-50 border border-emerald-200 text-emerald-950 flex items-center justify-between animate-fade-in shadow-2xs">
           <div className="flex items-center gap-2.5 text-xs font-semibold font-sans">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>Pembaruan status &amp; dokumentasi bukti pengerjaan berhasil disinkronkan ke peta publik!</span>
@@ -283,7 +283,7 @@ export default function OfficerDashboard({
         {/* Counter 1: Butuh Verifikasi */}
         <div
           onClick={() => setSelectedStatusFilter("NEED_VERIFY")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[6px] border transition-all ${
             selectedStatusFilter === "NEED_VERIFY"
               ? "bg-amber-50 border-amber-400 ring-2 ring-amber-400/20"
               : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
@@ -303,7 +303,7 @@ export default function OfficerDashboard({
         {/* Counter 2: Dalam Penanganan */}
         <div
           onClick={() => setSelectedStatusFilter("IN_PROGRESS")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[6px] border transition-all ${
             selectedStatusFilter === "IN_PROGRESS"
               ? "bg-orange-50 border-orange-300 ring-2 ring-orange-300/30 text-orange-900"
               : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
@@ -323,7 +323,7 @@ export default function OfficerDashboard({
         {/* Counter 3: Selesai Diperbaiki (Emerald) */}
         <div
           onClick={() => setSelectedStatusFilter("COMPLETED")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[6px] border transition-all ${
             selectedStatusFilter === "COMPLETED"
               ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20"
               : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
@@ -343,7 +343,7 @@ export default function OfficerDashboard({
         {/* Counter 4: Overdue SLA */}
         <div
           onClick={() => setSelectedStatusFilter("OVERDUE")}
-          className={`cursor-pointer p-4 rounded-xl border transition-all ${
+          className={`cursor-pointer p-4 rounded-[6px] border transition-all ${
             selectedStatusFilter === "OVERDUE"
               ? "bg-rose-50 border-rose-400 ring-2 ring-rose-400/20"
               : "bg-white border-slate-200 hover:border-slate-300 shadow-2xs"
@@ -362,7 +362,7 @@ export default function OfficerDashboard({
       </div>
 
       {/* Filter Toolbar Card */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-4 rounded-[6px] border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Authority Selection */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
           <span className="text-slate-500 mr-1 hidden sm:inline">Instansi Anda:</span>
@@ -454,7 +454,7 @@ export default function OfficerDashboard({
         </div>
 
         {filteredReports.length === 0 ? (
-          <div className="bg-white p-10 rounded-xl border border-slate-200 text-center space-y-2">
+          <div className="bg-white p-10 rounded-[6px] border border-slate-200 text-center space-y-2">
             <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
             <h4 className="font-bold text-slate-900 text-sm">Tidak ada antrean dalam kategori ini</h4>
             <p className="text-xs text-slate-500">Semua laporan untuk filter ini telah diproses dengan baik.</p>
@@ -469,7 +469,7 @@ export default function OfficerDashboard({
               return (
                 <div
                   key={report.id}
-                  className={`bg-white p-5 rounded-xl border transition-all shadow-2xs ${
+                  className={`bg-white p-5 rounded-[6px] border transition-all shadow-2xs ${
                     isOverdue
                       ? "border-rose-300 border-l-4 border-l-rose-600"
                       : isDone
@@ -649,7 +649,7 @@ export default function OfficerDashboard({
       {/* Action Modal / Drawer for Officer */}
       {activeReportToEdit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-          <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-xl bg-white border border-slate-200 shadow-xl overflow-hidden">
+          <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-[6px] bg-white border border-slate-200 shadow-xl overflow-hidden">
             {/* Modal Header */}
             <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-white text-slate-900">
               <div className="flex items-center gap-3">
@@ -791,7 +791,7 @@ export default function OfficerDashboard({
                 </div>
 
                 {/* Side-by-side Before vs After Preview */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-[6px] bg-slate-50 border border-slate-200">
                   {/* Before */}
                   <div className="space-y-1">
                     <span className="text-[11px] font-bold text-slate-600">Foto Laporan Warga (BEFORE)</span>

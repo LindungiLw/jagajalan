@@ -96,11 +96,11 @@ export default function OmbudsmanMonitorSection({
     <div className="py-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 font-sans text-slate-800 animate-fade-in">
       
       {/* 1. SIGNATURE HEADER (Double-Bezel Tray) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[1.25rem] p-6 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
+      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+        <div className="bg-white rounded-[6px] p-6 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50/80 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
+              <div className="w-12 h-12 rounded-[6px] bg-orange-50/80 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/time.png"
@@ -131,7 +131,7 @@ export default function OmbudsmanMonitorSection({
             </div>
 
             {/* SLA Status Pill Tray */}
-            <div className="rounded-2xl bg-slate-50/80 p-3.5 text-xs shrink-0 lg:max-w-xs space-y-1.5 self-start lg:self-auto ring-1 ring-orange-200/40">
+            <div className="rounded-[6px] bg-slate-50/80 p-3.5 text-xs shrink-0 lg:max-w-xs space-y-1.5 self-start lg:self-auto ring-1 ring-orange-200/40">
               <div className="flex items-center justify-between gap-3">
                 <span className="font-bold text-slate-900 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-rose-600" />
@@ -150,15 +150,15 @@ export default function OmbudsmanMonitorSection({
       </div>
 
       {/* 2. SIGNATURE 4-METRIC SCOREBOARD (Double-Bezel Architecture) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           {/* Metric 1: Total Reports */}
-          <div className="p-4 sm:p-5 rounded-[1.25rem] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
+          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-slate-500 font-sans">
                 Total Aduan Terpantau
               </span>
-              <div className="w-7 h-7 rounded-xl bg-slate-50 flex items-center justify-center text-slate-700 ring-1 ring-slate-200/60">
+              <div className="w-7 h-7 rounded-[6px] bg-slate-50 flex items-center justify-center text-slate-700 ring-1 ring-slate-200/60">
                 <FileText className="w-4 h-4" />
               </div>
             </div>
@@ -173,12 +173,12 @@ export default function OmbudsmanMonitorSection({
           </div>
 
           {/* Metric 2: Overdue (Signal Color) */}
-          <div className="p-4 sm:p-5 rounded-[1.25rem] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2 ring-1 ring-rose-200/60">
+          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2 ring-1 ring-rose-200/60">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-rose-700 font-sans">
                 Melewati Tenggat Respons
               </span>
-              <div className="w-7 h-7 rounded-xl bg-rose-50 flex items-center justify-center p-1 ring-1 ring-rose-200/60">
+              <div className="w-7 h-7 rounded-[6px] bg-rose-50 flex items-center justify-center p-1 ring-1 ring-rose-200/60">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/warning_icon.png"
@@ -201,12 +201,12 @@ export default function OmbudsmanMonitorSection({
           </div>
 
           {/* Metric 3: In Progress */}
-          <div className="p-4 sm:p-5 rounded-[1.25rem] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
+          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-slate-500 font-sans">
                 Dalam Masa Tanggap
               </span>
-              <div className="w-7 h-7 rounded-xl bg-amber-50/80 flex items-center justify-center text-amber-700 ring-1 ring-amber-200/60">
+              <div className="w-7 h-7 rounded-[6px] bg-amber-50/80 flex items-center justify-center text-amber-700 ring-1 ring-amber-200/60">
                 <Clock className="w-4 h-4" />
               </div>
             </div>
@@ -221,12 +221,12 @@ export default function OmbudsmanMonitorSection({
           </div>
 
           {/* Metric 4: Resolved */}
-          <div className="p-4 sm:p-5 rounded-[1.25rem] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
+          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-slate-500 font-sans">
                 Tuntas Ditangani
               </span>
-              <div className="w-7 h-7 rounded-xl bg-emerald-50/80 flex items-center justify-center text-emerald-700 ring-1 ring-emerald-200/60">
+              <div className="w-7 h-7 rounded-[6px] bg-emerald-50/80 flex items-center justify-center text-emerald-700 ring-1 ring-emerald-200/60">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
             </div>
@@ -243,7 +243,7 @@ export default function OmbudsmanMonitorSection({
       </div>
 
       {/* Benchmark Banner (Floating Pill Island) */}
-      <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50/90 ring-1 ring-orange-200/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-sans">
+      <div className="p-3 sm:p-3.5 rounded-[6px] bg-slate-50/90 ring-1 ring-orange-200/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-sans">
         <div className="flex items-center gap-2.5 text-slate-700">
           <Scale className="w-4 h-4 text-[#c2410c] shrink-0" />
           <span>
@@ -254,8 +254,8 @@ export default function OmbudsmanMonitorSection({
       </div>
 
       {/* 3. FLOATING ISLAND CONTROLS: SEARCH, FILTER PILLS, SORT & VIEW TOGGLE */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-3.5">
+      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+        <div className="bg-white rounded-[6px] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-3.5">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
             {/* Search Box */}
             <div className="relative flex-1">
@@ -273,7 +273,7 @@ export default function OmbudsmanMonitorSection({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari kode tiket, nama jalan, atau dinas penanggung jawab..."
-                className="w-full pl-10 pr-8 py-2 rounded-xl bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                className="w-full pl-10 pr-8 py-2 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
               />
               {searchQuery && (
                 <button
@@ -288,7 +288,7 @@ export default function OmbudsmanMonitorSection({
             {/* Sort & View Mode Toggle */}
             <div className="flex items-center gap-2 shrink-0">
               {/* Sort Dropdown */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50/80 ring-1 ring-slate-200/70 text-xs">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-slate-50/80 ring-1 ring-slate-200/70 text-xs">
                 <ArrowUpDown className="w-3.5 h-3.5 text-slate-500" />
                 <select
                   value={sortBy}
@@ -302,10 +302,10 @@ export default function OmbudsmanMonitorSection({
               </div>
 
               {/* View Mode Toggle: Grid vs Table */}
-              <div className="flex items-center rounded-xl bg-slate-100/90 p-0.5 ring-1 ring-slate-200/70">
+              <div className="flex items-center rounded-[6px] bg-slate-100/90 p-0.5 ring-1 ring-slate-200/70">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-1.5 px-2.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+                  className={`p-1.5 px-2.5 rounded-[6px] text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
                     viewMode === "grid"
                       ? "bg-white text-slate-900 shadow-2xs font-bold"
                       : "text-slate-500 hover:text-slate-800"
@@ -317,7 +317,7 @@ export default function OmbudsmanMonitorSection({
                 </button>
                 <button
                   onClick={() => setViewMode("table")}
-                  className={`p-1.5 px-2.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+                  className={`p-1.5 px-2.5 rounded-[6px] text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
                     viewMode === "table"
                       ? "bg-white text-slate-900 shadow-2xs font-bold"
                       : "text-slate-500 hover:text-slate-800"
@@ -391,8 +391,8 @@ export default function OmbudsmanMonitorSection({
 
       {/* 4. CONTENT DISPLAY (GRID OR TABLE) */}
       {filteredReports.length === 0 ? (
-        <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-          <div className="bg-white rounded-[1.25rem] p-10 text-center space-y-3 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]">
+        <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+          <div className="bg-white rounded-[6px] p-10 text-center space-y-3 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]">
             <AlertCircle className="w-9 h-9 text-slate-400 mx-auto" />
             <h3 className="font-bold text-slate-800 text-sm">Tidak Ada Aduan yang Cocok</h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -403,7 +403,7 @@ export default function OmbudsmanMonitorSection({
                 setSearchQuery("");
                 setStatusFilter("ALL");
               }}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-colors"
+              className="px-4 py-2 rounded-[6px] text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-colors"
             >
               Reset Filter
             </button>
@@ -424,9 +424,9 @@ export default function OmbudsmanMonitorSection({
             return (
               <div
                 key={report.id}
-                className="rounded-[1.5rem] bg-slate-100/70 p-2 ring-1 ring-orange-200/40 group transition-all duration-200"
+                className="rounded-[8px] bg-slate-100/70 p-2 ring-1 ring-orange-200/40 group transition-all duration-200"
               >
-                <div className="bg-white rounded-[1.125rem] p-5 flex flex-col justify-between h-full gap-4 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]">
+                <div className="bg-white rounded-[6px] p-5 flex flex-col justify-between h-full gap-4 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]">
                   {/* Top Section */}
                   <div className="space-y-3">
                     {/* Ticket Header & Status Pill */}
@@ -471,7 +471,7 @@ export default function OmbudsmanMonitorSection({
                     </div>
 
                     {/* Damage Hazard Pill & Short Summary */}
-                    <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-slate-50/80 font-sans">
+                    <div className="flex items-center justify-between text-xs p-2.5 rounded-[6px] bg-slate-50/80 font-sans">
                       <span className="font-semibold text-slate-700 truncate">
                         {report.categoryLabel}
                       </span>
@@ -491,7 +491,7 @@ export default function OmbudsmanMonitorSection({
                     </div>
 
                     {/* Dual-Phase SLA Timeline Bar */}
-                    <div className="space-y-1.5 pt-1.5 p-3 rounded-xl bg-slate-50/80">
+                    <div className="space-y-1.5 pt-1.5 p-3 rounded-[6px] bg-slate-50/80">
                       <div className="flex items-center justify-between text-[11px] font-sans">
                         <span className="font-semibold text-slate-700 flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-orange-600 shrink-0" />
@@ -568,8 +568,8 @@ export default function OmbudsmanMonitorSection({
         </div>
       ) : (
         /* ===== SIGNATURE TABLE VIEW (Zero Horizontal Scroll, Double-Bezel Tray) ===== */
-        <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-          <div className="bg-white rounded-[1.25rem] shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
+        <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+          <div className="bg-white rounded-[6px] shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] overflow-hidden">
             <table className="w-full text-left text-xs font-sans md:table-fixed">
               <thead className="bg-slate-50/70 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
@@ -658,7 +658,7 @@ export default function OmbudsmanMonitorSection({
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1.5 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-[6px] border border-slate-200/80 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer"
             >
               Sebelumnya
             </button>
@@ -667,7 +667,7 @@ export default function OmbudsmanMonitorSection({
               <button
                 key={i + 1}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer tabular-nums ${
+                className={`w-8 h-8 rounded-[6px] text-xs font-bold transition-all cursor-pointer tabular-nums ${
                   currentPage === i + 1
                     ? "bg-[#c2410c] text-white shadow-2xs"
                     : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80"
@@ -680,7 +680,7 @@ export default function OmbudsmanMonitorSection({
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1.5 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-[6px] border border-slate-200/80 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer"
             >
               Berikutnya
             </button>
@@ -689,8 +689,8 @@ export default function OmbudsmanMonitorSection({
       )}
 
       {/* 6. STREAMLINED 3-STEP ADVOCACY GUIDE (Double-Bezel Tray) */}
-      <div className="rounded-[1.75rem] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[1.25rem] p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
+      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
+        <div className="bg-white rounded-[6px] p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <Shield className="w-4 h-4 text-[#c2410c]" />
             <h3 className="font-bold text-slate-900 text-sm font-heading">
@@ -699,7 +699,7 @@ export default function OmbudsmanMonitorSection({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-sans">
-            <div className="p-4 rounded-xl bg-slate-50/70 space-y-1.5">
+            <div className="p-4 rounded-[6px] bg-slate-50/70 space-y-1.5">
               <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase block">
                 LANGKAH 01
               </span>
@@ -709,7 +709,7 @@ export default function OmbudsmanMonitorSection({
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50/70 space-y-1.5">
+            <div className="p-4 rounded-[6px] bg-slate-50/70 space-y-1.5">
               <span className="text-[10px] font-bold text-amber-700 tracking-wider uppercase block">
                 LANGKAH 02
               </span>
@@ -719,7 +719,7 @@ export default function OmbudsmanMonitorSection({
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-rose-50/50 space-y-1.5 ring-1 ring-rose-200/50">
+            <div className="p-4 rounded-[6px] bg-rose-50/50 space-y-1.5 ring-1 ring-rose-200/50">
               <span className="text-[10px] font-bold text-rose-700 tracking-wider uppercase block">
                 LANGKAH 03
               </span>
