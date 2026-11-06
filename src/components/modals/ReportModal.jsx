@@ -282,7 +282,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Pengaduan publik terintegrasi kewenangan resmi instansi dan audit anggaran proyek.
+                  Pilih ruas jalan dan unggah foto kerusakan untuk diteruskan ke dinas penanggung jawab.
                 </p>
               </div>
             </div>
@@ -316,7 +316,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     Laporan Berhasil Diterbitkan
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Laporan Anda kini tercatat secara terbuka. Instansi terkait memiliki kewajiban batas waktu respons sesuai standar pelayanan publik.
+                    Laporan Anda telah diteruskan ke dinas penanggung jawab dengan batas waktu tanggapan resmi 14 hari kerja.
                   </p>
                 </div>
 

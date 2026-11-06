@@ -935,27 +935,27 @@ export default function AnnualProgressChart() {
 
                 <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
                   <h4 className="font-bold text-slate-900 text-sm mb-1">
-                    2. Mengapa Terjadi Jurang Ketimpangan Jalan Daerah (~36% - 38%)?
+                    2. Penyebab Selisih Kemantapan Jalan Daerah (36% – 38%)
                   </h4>
                   <p>
-                    Jalan nasional memiliki kemantapan tinggi (92.8% – 93.4%) karena didukung penuh oleh <strong>APBN Kementerian PUPR</strong> dan sistem pemeliharaan berkala teratur. Sebaliknya, jalan kabupaten/kota:
+                    Jalan nasional memiliki kemantapan tinggi (92,8% – 93,4%) karena dibiayai langsung oleh <strong>APBN Kementerian PUPR</strong> dengan jadwal pemeliharaan berkala rutin. Sebaliknya, jalan kabupaten/kota menghadapi dua kendala struktural:
                   </p>
                   <ul className="list-disc pl-5 mt-1.5 space-y-1">
                     <li>
-                      Memiliki bentang terpanjang di Indonesia (mencakup <strong>81.4%</strong> dari total ~549.000 km jalan se-Indonesia).
+                      Menanggung beban bentang jalan terpanjang di Indonesia (mencakup <strong>81,4%</strong> dari total 549.000 km jaringan jalan nasional).
                     </li>
                     <li>
-                      Keterbatasan ruang fiskal APBD dan PAD yang mayoritas terserap untuk belanja pegawai rutin, menyisakan porsi sangat kecil untuk perbaikan infrastruktur jalan.
+                      Kapasitas anggaran APBD daerah terbatas karena sebagian besar terserap untuk belanja operasional rutin.
                     </li>
                   </ul>
                 </div>
 
                 <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
                   <h4 className="font-bold text-slate-900 text-sm mb-1">
-                    3. Landasan Intervensi Inpres No. 3 Tahun 2023
+                    3. Dasar Intervensi Inpres No. 3 Tahun 2023
                   </h4>
                   <p>
-                    Melihat melebarnya jurang ketimpangan dan tingginya keluhan publik di media sosial, Presiden menerbitkan <strong>Instruksi Presiden No. 3 Tahun 2023</strong> yang memberikan kewenangan darurat kepada Kementerian PUPR untuk memperbaiki jalan-jalan daerah milik pemprov/pemkab yang rusak menggunakan anggaran APBN.
+                    Pemerintah pusat menerbitkan <strong>Instruksi Presiden No. 3 Tahun 2023</strong> agar Kementerian PUPR dapat langsung menggunakan dana APBN untuk memperbaiki ruas jalan milik pemerintah provinsi dan kabupaten/kota yang rusak berat.
                   </p>
                 </div>
               </div>

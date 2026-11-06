@@ -1472,7 +1472,7 @@ export default function MapExplorer({
                     <span>Geometri Berbasis Vektor Jalan Nyata</span>
                   </div>
                   <p className="text-[11px] text-orange-900">
-                    Seluruh garis jalan pada peta JagaJalan <strong>bukan digambar manual atau garis perkiraan lurus</strong>, melainkan memuat 100+ koordinat kurva fisik presisi tinggi yang melacak badan aspal jalan raya asli di satelit dan jaringan jalan nasional/daerah.
+                    Setiap ruas jalan pada peta JagaJalan memuat <strong>100+ titik koordinat polilin</strong> yang mengikuti lengkungan aspal jalan asli berdasarkan citra satelit dan jaringan jalan nasional/daerah.
                   </p>
                 </div>
 
