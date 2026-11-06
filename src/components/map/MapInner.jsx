@@ -326,7 +326,7 @@ export default function MapInner({
                 <Polyline
                   positions={polylinePositions}
                   pathOptions={{
-                    color: "#0f172a",
+                    color: "#ea580c",
                     weight: 10,
                     opacity: 0.35,
                     lineCap: "round",
@@ -439,7 +439,7 @@ export default function MapInner({
 
                   <button
                     onClick={() => onSelectRoad(road)}
-                    className={`w-full py-1.5 px-2 rounded-[5px] text-[10px] font-bold text-white ${popupBtnBg} text-center transition-colors cursor-pointer block`}
+                    className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
                   >
                     Buka Detail Lengkap di Panel →
                   </button>
@@ -493,7 +493,7 @@ export default function MapInner({
                   <p className="text-[10px] text-slate-500">{report.address}</p>
                 </div>
 
-                <div className="bg-slate-50 p-2 rounded-[4px] border border-slate-200 text-[10px] space-y-1">
+                <div className="bg-slate-50 p-2 rounded-[5px] border border-orange-200/50 text-[10px] space-y-1">
                   <div className="font-semibold text-slate-800 flex justify-between">
                     <span>Kategori:</span>
                     <span className="font-bold text-orange-700">{report.categoryLabel}</span>
@@ -505,7 +505,7 @@ export default function MapInner({
                 </div>
 
                 {report.matchingBudget && (
-                  <div className="text-[9px] text-slate-600 bg-orange-50/60 p-1.5 rounded-[4px] border border-orange-100">
+                  <div className="text-[9px] text-slate-600 bg-orange-50/60 p-1.5 rounded-[5px] border border-orange-100">
                     <span className="font-bold text-orange-900">Proyek Terhubung: </span>
                     {report.matchingBudget.packageName} (Rp {((report.matchingBudget.paguRp || 0) / 1000000000).toFixed(1)} M)
                   </div>
@@ -517,7 +517,7 @@ export default function MapInner({
 
                 <button
                   onClick={() => onSelectReport(report)}
-                  className="w-full py-1.5 px-2 rounded-[4px] text-[10px] font-bold text-white bg-orange-600 hover:bg-orange-700 text-center transition-colors cursor-pointer block"
+                  className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
                 >
                   Buka Detail Aduan di Panel →
                 </button>
@@ -549,7 +549,7 @@ export default function MapInner({
               <Tooltip sticky>
                 <div className="font-sans text-xs">
                   <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="bg-blue-600 text-white text-[9px] px-1 py-0.2 rounded font-sans tabular-nums font-bold">KM {ms.km}</span>
+                    <span className="bg-[#c2410c] text-white text-[9px] px-1 py-0.2 rounded-[4px] font-sans tabular-nums font-bold">KM {ms.km}</span>
                     <span>{ms.name}</span>
                   </div>
                   <div className="text-[10px] text-slate-500 font-medium">
@@ -561,7 +561,7 @@ export default function MapInner({
               <Popup className="jagajalan-leaflet-popup">
                 <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                    <span className="font-sans tabular-nums text-[9px] font-bold text-blue-800 bg-blue-100 px-1.5 py-0.5 rounded-[4px]">
+                    <span className="font-sans tabular-nums text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
                       PATOK KM {ms.km}
                     </span>
                     <span className="text-[9px] font-bold text-slate-500">{ms.status}</span>
@@ -571,14 +571,14 @@ export default function MapInner({
                     <p className="text-[10px] text-slate-500">{road.name}</p>
                     <p className="text-[9px] text-slate-600 mt-1 italic">"{ms.note}"</p>
                   </div>
-                  <div className="bg-slate-50 p-2 rounded-[4px] border border-slate-200 text-[9px] space-y-0.5">
+                  <div className="bg-slate-50 p-2 rounded-[5px] border border-orange-200/50 text-[9px] space-y-0.5">
                     <div className="text-slate-500">Penanggung Jawab:</div>
                     <div className="font-bold text-slate-800">{road.leadership?.regionalHead}</div>
                     <div className="text-slate-600">{road.leadership?.agency}</div>
                   </div>
                   <button
                     onClick={() => onSelectRoad(road)}
-                    className="w-full py-1.5 px-2 rounded-[4px] text-[10px] font-bold text-white bg-blue-600 hover:bg-blue-700 text-center transition-colors cursor-pointer block"
+                    className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
                   >
                     Buka Detail Koridor Nasional →
                   </button>
@@ -597,7 +597,7 @@ export default function MapInner({
           zIndexOffset={2000}
         >
           <Tooltip permanent direction="top" offset={[0, -18]}>
-            <div className="font-sans text-xs bg-teal-900 text-white px-2 py-1 rounded-[4px] shadow-lg font-bold">
+            <div className="font-sans text-xs bg-[#c2410c] text-white px-2.5 py-1 rounded-[6px] shadow-lg font-bold">
               🎯 Titik Terdeteksi: {detectedPoint.provinceName}
             </div>
           </Tooltip>

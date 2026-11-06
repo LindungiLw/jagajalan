@@ -165,48 +165,54 @@ export default function AnnualProgressChart() {
         </div>
 
         {/* 3 Metric Pills (High-End Floating Island) */}
-        <div className="flex items-center p-1 rounded-full bg-slate-100/80 ring-1 ring-orange-200/50 text-xs font-semibold shrink-0 gap-1 font-sans">
+        <div className="flex items-center p-1 rounded-[8px] bg-slate-100/80 ring-1 ring-orange-200/50 text-xs font-semibold shrink-0 gap-1 font-sans">
           <button
             onClick={() => setActiveMetric("road-condition")}
-            className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-1.5 ${
               activeMetric === "road-condition"
-                ? "bg-white text-slate-950 shadow-2xs font-bold"
+                ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
-            <Layers className="w-3.5 h-3.5 text-blue-600" />
+            <Layers className={`w-3.5 h-3.5 ${activeMetric === "road-condition" ? "text-white" : "text-[#c2410c]"}`} />
             <span>Kemantapan Jalan</span>
-            <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 text-slate-700 font-bold">
+            <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded-[4px] text-[10px] font-bold ${
+              activeMetric === "road-condition" ? "bg-white/20 text-white" : "bg-slate-200/80 text-slate-700"
+            }`}>
               Gap 36%
             </span>
           </button>
 
           <button
             onClick={() => setActiveMetric("complaints")}
-            className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-1.5 ${
               activeMetric === "complaints"
-                ? "bg-white text-slate-950 shadow-2xs font-bold"
+                ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
-            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+            <AlertTriangle className={`w-3.5 h-3.5 ${activeMetric === "complaints" ? "text-white" : "text-rose-600"}`} />
             <span>Aduan Publik</span>
-            <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full text-[10px] bg-rose-50 text-rose-700 font-bold">
+            <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded-[4px] text-[10px] font-bold ${
+              activeMetric === "complaints" ? "bg-white/20 text-white" : "bg-rose-50 text-rose-700"
+            }`}>
               16rb+
             </span>
           </button>
 
           <button
             onClick={() => setActiveMetric("inpres")}
-            className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-1.5 ${
               activeMetric === "inpres"
-                ? "bg-white text-slate-950 shadow-2xs font-bold"
+                ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
-            <Coins className="w-3.5 h-3.5 text-orange-600" />
+            <Coins className={`w-3.5 h-3.5 ${activeMetric === "inpres" ? "text-white" : "text-orange-600"}`} />
             <span>Intervensi IJD</span>
-            <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full text-[10px] bg-orange-50 text-orange-700 font-bold">
+            <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded-[4px] text-[10px] font-bold ${
+              activeMetric === "inpres" ? "bg-white/20 text-white" : "bg-orange-50 text-orange-700"
+            }`}>
               Rp 29.9T
             </span>
           </button>
@@ -313,12 +319,12 @@ export default function AnnualProgressChart() {
               {/* Unified Controls Group */}
               <div className="flex items-center gap-2">
                 {/* Year Selector Pills */}
-                <div className="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold font-sans">
+                <div className="flex items-center p-0.5 rounded-[6px] bg-slate-100 ring-1 ring-orange-200/50 text-xs font-bold font-sans">
                   {availableYears.map((yr) => (
                     <button
                       key={yr}
                       onClick={() => setSelectedYear(yr)}
-                      className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-[5px] transition-all cursor-pointer ${
                         selectedYear === yr
                           ? "bg-[#c2410c] text-white shadow-xs font-bold"
                           : "text-slate-600 hover:text-slate-900"
@@ -330,12 +336,12 @@ export default function AnnualProgressChart() {
                 </div>
 
                 {/* View Switcher: Combo vs Line */}
-                <div className="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold font-sans">
+                <div className="flex items-center p-0.5 rounded-[6px] bg-slate-100 ring-1 ring-orange-200/50 text-xs font-bold font-sans">
                   <button
                     onClick={() => setChartViewMode("combo")}
-                    className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-[5px] transition-all cursor-pointer ${
                       chartViewMode === "combo"
-                        ? "bg-white text-blue-600 shadow-xs"
+                        ? "bg-[#c2410c] text-white shadow-xs"
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                     title="Grafik Batang Daerah + Garis Tren Nasional"
@@ -344,9 +350,9 @@ export default function AnnualProgressChart() {
                   </button>
                   <button
                     onClick={() => setChartViewMode("line")}
-                    className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-[5px] transition-all cursor-pointer ${
                       chartViewMode === "line"
-                        ? "bg-white text-blue-600 shadow-xs"
+                        ? "bg-[#c2410c] text-white shadow-xs"
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                     title="Grafik Garis Tren Kontinu"
@@ -604,14 +610,14 @@ export default function AnnualProgressChart() {
             <div className="space-y-1.5 pt-1 border-t border-slate-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600">
                 <div className="flex items-center gap-2">
-                  <Info className="w-4 h-4 text-blue-600 shrink-0" />
+                  <Info className="w-4 h-4 text-[#c2410c] shrink-0" />
                   <span>
                     <strong>Kesimpulan {selectedRoadData.year}:</strong> Jurang kesenjangan kemantapan pusat vs daerah sebesar <strong>{selectedRoadData.gap}%</strong>.
                   </span>
                 </div>
                 <button
                   onClick={() => setShowExplanationModal(true)}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer flex items-center gap-1 shrink-0"
+                  className="text-xs font-bold text-[#c2410c] hover:text-[#9a3412] transition-colors cursor-pointer flex items-center gap-1 shrink-0"
                 >
                   <span>Lihat Metodologi BPS SIRUSA</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -741,7 +747,7 @@ export default function AnnualProgressChart() {
 
       {/* METRIC VIEW 2: ADUAN & MALADMINISTRASI (OMBUDSMAN RI) */}
       {activeMetric === "complaints" && (
-        <div className="bg-white rounded-[6px] border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-5 animate-fade-in">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-sm p-5 sm:p-6 space-y-5 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
@@ -761,7 +767,7 @@ export default function AnnualProgressChart() {
                   className={`px-2.5 py-1 rounded-[6px] text-xs font-bold transition-all cursor-pointer ${
                     selectedYear === yr
                       ? "bg-[#c2410c] text-white shadow-xs"
-                      : "bg-white text-slate-600 border border-slate-200 hover:text-slate-900"
+                      : "bg-white text-slate-600 ring-1 ring-orange-200/50 hover:text-slate-900"
                   }`}
                 >
                   {yr}
@@ -772,7 +778,7 @@ export default function AnnualProgressChart() {
 
           {/* 4 Complaint Stat Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-[6px] bg-slate-50 border border-slate-200">
+            <div className="p-4 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50">
               <span className="text-[11px] font-semibold text-slate-500 block">Total Aduan ({selectedComplaintData.year})</span>
               <div className="text-2xl font-extrabold text-slate-900 font-sans tabular-nums mt-1">
                 {selectedComplaintData.totalComplaints.toLocaleString("id-ID")}
@@ -818,7 +824,7 @@ export default function AnnualProgressChart() {
 
       {/* METRIC VIEW 3: INTERVENSI ANGGARAN INPRES (IJD) */}
       {activeMetric === "inpres" && (
-        <div className="bg-white rounded-[6px] border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4 animate-fade-in">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-sm p-5 sm:p-6 space-y-4 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
@@ -828,7 +834,7 @@ export default function AnnualProgressChart() {
                 Intervensi darurat pemerintah pusat untuk merehabilitasi jalan daerah rusak.
               </p>
             </div>
-            <span className="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold text-white bg-[#c2410c] px-3 py-1 rounded-[6px]">
               Total Realisasi: Rp 29,9 Triliun
             </span>
           </div>
@@ -837,7 +843,7 @@ export default function AnnualProgressChart() {
             {inpresBudgets.map((item) => (
               <div
                 key={item.year}
-                className="p-5 rounded-[6px] bg-slate-50 border border-slate-200 hover:border-blue-300 transition-all space-y-3"
+                className="p-5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 hover:ring-orange-300 transition-all space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -847,7 +853,7 @@ export default function AnnualProgressChart() {
                     <h4 className="text-base font-bold text-slate-900 mt-0.5">{item.note}</h4>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-extrabold text-blue-600 font-sans tabular-nums">
+                    <span className="text-2xl font-extrabold text-[#c2410c] font-sans tabular-nums">
                       Rp {item.budgetTrillion}
                     </span>
                     <span className="text-xs font-bold text-slate-500 ml-1">Triliun</span>
@@ -857,7 +863,7 @@ export default function AnnualProgressChart() {
                 <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden p-0.5">
                   <div
                     style={{ width: `${(item.budgetTrillion / 20) * 100}%` }}
-                    className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"
+                    className="h-full bg-[#c2410c] rounded-full"
                   />
                 </div>
 
@@ -881,77 +887,87 @@ export default function AnnualProgressChart() {
         </div>
       )}
 
-      {/* METODOLOGI & REGULASI MODAL */}
+      {/* METODOLOGI & REGULASI MODAL (Double-Bezel 5pt with Orange Header & White Text) */}
       {showExplanationModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white rounded-[6px] max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-blue-600" />
-                <h3 className="text-base font-bold text-slate-900">
-                  Metodologi BPS SIRUSA & Landasan Kebijakan
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowExplanationModal(false)}
-                className="p-1 rounded-[6px] text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4 text-xs text-slate-600 leading-relaxed">
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1">
-                  1. Standar Kemantapan Jalan (IRI BPS & Ditjen Bina Marga)
-                </h4>
-                <p>
-                  Berdasarkan publikasi <em>Statistik Transportasi Darat BPS (SIRUSA)</em>, kondisi jalan diklasifikasikan menggunakan indeks kerataan permukaan (<em>International Roughness Index / IRI</em>):
-                </p>
-                <ul className="list-disc pl-5 mt-1.5 space-y-1">
-                  <li>
-                    <strong>Jalan Mantap (Baik & Sedang):</strong> Nilai IRI &lt; 8 m/km, permukaan rata, siap dilalui kendaraan dengan kecepatan rencana tanpa risiko kerusakan struktural.
-                  </li>
-                  <li>
-                    <strong>Jalan Tidak Mantap (Rusak Ringan & Berat):</strong> Nilai IRI &ge; 8 m/km hingga &gt; 12 m/km, berlubang, retak buaya, ambles, atau kehilangan lapisan aspal dasar.
-                  </li>
-                </ul>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
+          <div className="max-w-2xl w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
+            <div className="bg-white rounded-[6px] w-full overflow-hidden ring-1 ring-orange-200/50 max-h-[88vh] flex flex-col">
+              {/* Orange Header with White Text */}
+              <div className="flex items-center justify-between bg-[#c2410c] text-white px-5 py-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-[6px] bg-white/15 flex items-center justify-center text-white shrink-0">
+                    <BookOpen className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase tracking-wider font-bold text-orange-100 block">
+                      Standar Rujukan Data Nasional
+                    </span>
+                    <h3 className="text-sm sm:text-base font-bold text-white">
+                      Metodologi BPS SIRUSA &amp; Landasan Kebijakan
+                    </h3>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowExplanationModal(false)}
+                  className="p-1.5 rounded-[6px] text-orange-100 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1">
-                  2. Mengapa Terjadi Jurang Ketimpangan Jalan Daerah (~36% - 38%)?
-                </h4>
-                <p>
-                  Jalan nasional memiliki kemantapan tinggi (92.8% – 93.4%) karena didukung penuh oleh <strong>APBN Kementerian PUPR</strong> dan sistem pemeliharaan berkala teratur. Sebaliknya, jalan kabupaten/kota:
-                </p>
-                <ul className="list-disc pl-5 mt-1.5 space-y-1">
-                  <li>
-                    Memiliki bentang terpanjang di Indonesia (mencakup <strong>81.4%</strong> dari total ~549.000 km jalan se-Indonesia).
-                  </li>
-                  <li>
-                    Keterbatasan ruang fiskal APBD dan PAD yang mayoritas terserap untuk belanja pegawai rutin, menyisakan porsi sangat kecil untuk perbaikan infrastruktur jalan.
-                  </li>
-                </ul>
+              <div className="p-5 sm:p-6 space-y-4 text-xs text-slate-600 leading-relaxed overflow-y-auto">
+                <div className="p-3.5 rounded-[6px] bg-orange-50/50 ring-1 ring-orange-200/50">
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">
+                    1. Standar Kemantapan Jalan (IRI BPS &amp; Ditjen Bina Marga)
+                  </h4>
+                  <p>
+                    Berdasarkan publikasi <em>Statistik Transportasi Darat BPS (SIRUSA)</em>, kondisi jalan diklasifikasikan menggunakan indeks kerataan permukaan (<em>International Roughness Index / IRI</em>):
+                  </p>
+                  <ul className="list-disc pl-5 mt-1.5 space-y-1">
+                    <li>
+                      <strong>Jalan Mantap (Baik &amp; Sedang):</strong> Nilai IRI &lt; 8 m/km, permukaan rata, siap dilalui kendaraan dengan kecepatan rencana tanpa risiko kerusakan struktural.
+                    </li>
+                    <li>
+                      <strong>Jalan Tidak Mantap (Rusak Ringan &amp; Berat):</strong> Nilai IRI &ge; 8 m/km hingga &gt; 12 m/km, berlubang, retak buaya, ambles, atau kehilangan lapisan aspal dasar.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">
+                    2. Mengapa Terjadi Jurang Ketimpangan Jalan Daerah (~36% - 38%)?
+                  </h4>
+                  <p>
+                    Jalan nasional memiliki kemantapan tinggi (92.8% – 93.4%) karena didukung penuh oleh <strong>APBN Kementerian PUPR</strong> dan sistem pemeliharaan berkala teratur. Sebaliknya, jalan kabupaten/kota:
+                  </p>
+                  <ul className="list-disc pl-5 mt-1.5 space-y-1">
+                    <li>
+                      Memiliki bentang terpanjang di Indonesia (mencakup <strong>81.4%</strong> dari total ~549.000 km jalan se-Indonesia).
+                    </li>
+                    <li>
+                      Keterbatasan ruang fiskal APBD dan PAD yang mayoritas terserap untuk belanja pegawai rutin, menyisakan porsi sangat kecil untuk perbaikan infrastruktur jalan.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
+                  <h4 className="font-bold text-slate-900 text-sm mb-1">
+                    3. Landasan Intervensi Inpres No. 3 Tahun 2023
+                  </h4>
+                  <p>
+                    Melihat melebarnya jurang ketimpangan dan tingginya keluhan publik di media sosial, Presiden menerbitkan <strong>Instruksi Presiden No. 3 Tahun 2023</strong> yang memberikan kewenangan darurat kepada Kementerian PUPR untuk memperbaiki jalan-jalan daerah milik pemprov/pemkab yang rusak menggunakan anggaran APBN.
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1">
-                  3. Landasan Intervensi Inpres No. 3 Tahun 2023
-                </h4>
-                <p>
-                  Melihat melebarnya jurang ketimpangan dan tingginya keluhan publik di media sosial, Presiden menerbitkan <strong>Instruksi Presiden No. 3 Tahun 2023</strong> yang memberikan kewenangan darurat kepada Kementerian PUPR untuk memperbaiki jalan-jalan daerah milik pemprov/pemkab yang rusak menggunakan anggaran APBN.
-                </p>
+              <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button
+                  onClick={() => setShowExplanationModal(false)}
+                  className="px-4 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-colors cursor-pointer"
+                >
+                  Tutup Penjelasan
+                </button>
               </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 flex justify-end">
-              <button
-                onClick={() => setShowExplanationModal(false)}
-                className="px-4 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-colors cursor-pointer"
-              >
-                Tutup Penjelasan
-              </button>
             </div>
           </div>
         </div>

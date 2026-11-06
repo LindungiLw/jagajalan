@@ -47,8 +47,8 @@ table, .tabular-nums, [data-metric] {
 /* Modern Civic Surface System */
 .dashboard-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem; /* 12px consistent institutional radius */
+  border: 1px solid #fed7aa;
+  border-radius: 6px; /* 5pt consistent institutional radius */
   box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -58,16 +58,16 @@ table, .tabular-nums, [data-metric] {
 }
 
 .dashboard-card-hover:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  border-color: #fdba74;
+  box-shadow: 0 4px 12px -2px rgba(194, 65, 12, 0.06);
 }
 
 .glass-panel {
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
   box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.05);
 }
 
@@ -107,15 +107,15 @@ table, .tabular-nums, [data-metric] {
 .leaflet-container {
   background: #f1f5f9 !important;
   font-family: inherit !important;
-  border-radius: 0.75rem !important;
+  border-radius: 6px !important;
   z-index: 10;
 }
 
 .leaflet-popup-content-wrapper {
   background: #ffffff !important;
   color: #0f172a !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 0.875rem !important;
+  border: 1px solid #fed7aa !important;
+  border-radius: 6px !important;
   box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
   padding: 0 !important;
   overflow: hidden;
@@ -123,6 +123,11 @@ table, .tabular-nums, [data-metric] {
 
 .leaflet-popup-tip {
   background: #ffffff !important;
+}
+
+.leaflet-tooltip {
+  border-radius: 6px !important;
+  border: 1px solid #fed7aa !important;
 }
 
 /* Focus Ring Accessibility */

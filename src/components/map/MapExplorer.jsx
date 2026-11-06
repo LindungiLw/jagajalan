@@ -431,16 +431,16 @@ export default function MapExplorer({
               <div
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute top-full left-0 mt-1.5 w-80 sm:w-96 rounded-[5px] bg-white shadow-2xl border border-slate-200 py-2 text-xs text-slate-700 z-[600] animate-fade-in font-sans max-h-96 flex flex-col"
+                className="absolute top-full left-0 mt-1.5 w-80 sm:w-96 rounded-[6px] bg-white shadow-2xl ring-1 ring-orange-200/60 py-2 text-xs text-slate-700 z-[600] animate-fade-in font-sans max-h-96 flex flex-col"
               >
                 {/* Tab Switcher: 38 Provinsi vs Pulau/Koridor */}
                 <div className="px-3 pb-2 border-b border-slate-100 flex items-center justify-between">
-                  <div className="flex bg-slate-100 p-0.5 rounded-[4px] text-[10.5px]">
+                  <div className="flex bg-slate-100 p-0.5 rounded-[5px] text-[10.5px]">
                     <button
                       onClick={() => setRegionTab("provinces")}
-                      className={`px-2.5 py-1 rounded-[3px] font-semibold transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-[4px] font-semibold transition-all cursor-pointer ${
                         regionTab === "provinces"
-                          ? "bg-white text-slate-900 shadow-2xs font-bold"
+                          ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                           : "text-slate-500 hover:text-slate-800"
                       }`}
                     >
@@ -448,9 +448,9 @@ export default function MapExplorer({
                     </button>
                     <button
                       onClick={() => setRegionTab("regions")}
-                      className={`px-2.5 py-1 rounded-[3px] font-semibold transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-[4px] font-semibold transition-all cursor-pointer ${
                         regionTab === "regions"
-                          ? "bg-white text-slate-900 shadow-2xs font-bold"
+                          ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                           : "text-slate-500 hover:text-slate-800"
                       }`}
                     >
@@ -550,7 +550,7 @@ export default function MapExplorer({
           <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
 
           {/* Search Bar */}
-          <div className="relative w-36 sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-lg border border-slate-200/60 font-sans transition-all shrink-0">
+          <div className="relative w-36 sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
             <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <input
               type="text"
@@ -562,7 +562,7 @@ export default function MapExplorer({
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="p-0.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 cursor-pointer"
+                className="p-0.5 rounded-[4px] text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -579,9 +579,9 @@ export default function MapExplorer({
                 setHighlightDropdownOpen(false);
                 setRegionDropdownOpen(false);
               }}
-              className={`h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
+              className={`h-9 px-3 rounded-[6px] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
                 authorityFilter !== "ALL"
-                  ? "bg-slate-100 text-slate-900 border border-slate-300/80 font-bold"
+                  ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80 font-bold"
                   : "text-slate-700 hover:bg-slate-100/80"
               }`}
             >
@@ -592,7 +592,7 @@ export default function MapExplorer({
 
             {/* Dropdown Options */}
             {statusDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1.5 w-64 rounded-[6px] bg-white shadow-xl border border-slate-200 p-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-0.5">
+              <div className="absolute top-full left-0 mt-1.5 w-64 rounded-[6px] bg-white shadow-xl ring-1 ring-orange-200/60 p-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-0.5">
                 <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Filter Berdasarkan Wewenang
                 </div>
@@ -601,12 +601,12 @@ export default function MapExplorer({
                     setAuthorityFilter("ALL");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
-                    authorityFilter === "ALL" ? "font-bold text-orange-950 bg-orange-50/80" : ""
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                    authorityFilter === "ALL" ? "font-bold text-[#c2410c] bg-orange-50/80" : ""
                   }`}
                 >
                   <span className="font-medium">Semua Wewenang</span>
-                  <span className="text-[10px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded font-sans tabular-nums">
+                  <span className="text-[10px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded-[4px] font-sans tabular-nums">
                     {roadCounts.ALL}
                   </span>
                 </button>
@@ -615,7 +615,7 @@ export default function MapExplorer({
                     setAuthorityFilter("NASIONAL");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     authorityFilter === "NASIONAL" ? "font-bold text-blue-900 bg-blue-50/70" : ""
                   }`}
                 >
@@ -623,7 +623,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Jalan Nasional</div>
                     <div className="text-[10px] text-slate-400">Kementerian PU</div>
                   </div>
-                  <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-1.5 py-0.5 rounded border border-blue-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-1.5 py-0.5 rounded-[4px] border border-blue-100 font-sans tabular-nums">
                     {roadCounts.NASIONAL}
                   </span>
                 </button>
@@ -632,7 +632,7 @@ export default function MapExplorer({
                     setAuthorityFilter("PROVINSI");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     authorityFilter === "PROVINSI" ? "font-bold text-purple-900 bg-purple-50/70" : ""
                   }`}
                 >
@@ -640,7 +640,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Jalan Provinsi</div>
                     <div className="text-[10px] text-slate-400">Dinas BMBK Pemprov</div>
                   </div>
-                  <span className="text-[10px] bg-purple-50 text-purple-700 font-bold px-1.5 py-0.5 rounded border border-purple-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-purple-50 text-purple-700 font-bold px-1.5 py-0.5 rounded-[4px] border border-purple-100 font-sans tabular-nums">
                     {roadCounts.PROVINSI}
                   </span>
                 </button>
@@ -649,7 +649,7 @@ export default function MapExplorer({
                     setAuthorityFilter("KOTA");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     authorityFilter === "KOTA" ? "font-bold text-teal-900 bg-teal-50/70" : ""
                   }`}
                 >
@@ -657,7 +657,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Jalan Kota</div>
                     <div className="text-[10px] text-slate-400">Dinas SDABMBK Pemkot</div>
                   </div>
-                  <span className="text-[10px] bg-teal-50 text-teal-700 font-bold px-1.5 py-0.5 rounded border border-teal-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-teal-50 text-teal-700 font-bold px-1.5 py-0.5 rounded-[4px] border border-teal-100 font-sans tabular-nums">
                     {roadCounts.KOTA}
                   </span>
                 </button>
@@ -666,7 +666,7 @@ export default function MapExplorer({
                     setAuthorityFilter("KABUPATEN");
                     setStatusDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     authorityFilter === "KABUPATEN" ? "font-bold text-emerald-900 bg-emerald-50/70" : ""
                   }`}
                 >
@@ -674,7 +674,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Jalan Kabupaten</div>
                     <div className="text-[10px] text-slate-400">Dinas PUPR Pemkab</div>
                   </div>
-                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded border border-emerald-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded-[4px] border border-emerald-100 font-sans tabular-nums">
                     {roadCounts.KABUPATEN}
                   </span>
                 </button>
@@ -692,9 +692,9 @@ export default function MapExplorer({
                 setStatusDropdownOpen(false);
                 setRegionDropdownOpen(false);
               }}
-              className={`h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
+              className={`h-9 px-3 rounded-[6px] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
                 highlightFilter !== "ALL"
-                  ? "bg-slate-100 text-slate-900 border border-slate-300/80 font-bold"
+                  ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80 font-bold"
                   : "text-slate-700 hover:bg-slate-100/80"
               }`}
             >
@@ -705,7 +705,7 @@ export default function MapExplorer({
 
             {/* Dropdown Options */}
             {highlightDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1.5 w-64 rounded-[6px] bg-white shadow-xl border border-slate-200 p-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-0.5">
+              <div className="absolute top-full left-0 mt-1.5 w-64 rounded-[6px] bg-white shadow-xl ring-1 ring-orange-200/60 p-1.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-0.5">
                 <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Sorotan Aduan &amp; Anggaran
                 </div>
@@ -714,8 +714,8 @@ export default function MapExplorer({
                     setHighlightFilter("ALL");
                     setHighlightDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
-                    highlightFilter === "ALL" ? "font-bold text-orange-950 bg-orange-50/80" : ""
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                    highlightFilter === "ALL" ? "font-bold text-[#c2410c] bg-orange-50/80" : ""
                   }`}
                 >
                   <span className="font-medium">Semua Kondisi Ruas</span>
@@ -725,7 +725,7 @@ export default function MapExplorer({
                     setHighlightFilter("OVERDUE");
                     setHighlightDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     highlightFilter === "OVERDUE" ? "font-bold text-rose-900 bg-rose-50/80" : ""
                   }`}
                 >
@@ -733,7 +733,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Overdue SLA</div>
                     <div className="text-[10px] text-slate-400">Melewati Batas Respons</div>
                   </div>
-                  <span className="text-[10px] bg-rose-50 text-rose-700 font-bold px-1.5 py-0.5 rounded border border-rose-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-rose-50 text-rose-700 font-bold px-1.5 py-0.5 rounded-[4px] border border-rose-100 font-sans tabular-nums">
                     {overdueRoadCount}
                   </span>
                 </button>
@@ -742,7 +742,7 @@ export default function MapExplorer({
                     setHighlightFilter("CRITICAL");
                     setHighlightDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     highlightFilter === "CRITICAL" ? "font-bold text-amber-900 bg-amber-50/80" : ""
                   }`}
                 >
@@ -750,7 +750,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Rusak Berat</div>
                     <div className="text-[10px] text-slate-400">AI Skor Kerusakan &gt;80</div>
                   </div>
-                  <span className="text-[10px] bg-amber-50 text-amber-800 font-bold px-1.5 py-0.5 rounded border border-amber-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-amber-50 text-amber-800 font-bold px-1.5 py-0.5 rounded-[4px] border border-amber-100 font-sans tabular-nums">
                     {criticalRoadCount}
                   </span>
                 </button>
@@ -759,7 +759,7 @@ export default function MapExplorer({
                     setHighlightFilter("BUDGET");
                     setHighlightDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-[5px] hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors ${
                     highlightFilter === "BUDGET" ? "font-bold text-emerald-900 bg-emerald-50/80" : ""
                   }`}
                 >
@@ -767,7 +767,7 @@ export default function MapExplorer({
                     <div className="font-medium text-slate-800">Paket Tender LPSE</div>
                     <div className="text-[10px] text-slate-400">Anggaran APBD/APBN Terdata</div>
                   </div>
-                  <span className="text-[10px] bg-emerald-50 text-emerald-800 font-bold px-1.5 py-0.5 rounded border border-emerald-100 font-sans tabular-nums">
+                  <span className="text-[10px] bg-emerald-50 text-emerald-800 font-bold px-1.5 py-0.5 rounded-[4px] border border-emerald-100 font-sans tabular-nums">
                     {budgetRoadCount}
                   </span>
                 </button>
@@ -784,7 +784,7 @@ export default function MapExplorer({
                 setSearchQuery("");
               }}
               title="Reset Semua Filter"
-              className="h-9 px-2.5 rounded-lg text-xs font-bold text-orange-700 hover:text-orange-950 bg-orange-50/80 hover:bg-orange-100 border border-orange-200/80 transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 font-sans"
+              className="h-9 px-2.5 rounded-[6px] text-xs font-bold text-orange-700 hover:text-orange-950 bg-orange-50/80 hover:bg-orange-100 border border-orange-200/80 transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 font-sans"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span className="hidden lg:inline">Reset</span>
@@ -797,9 +797,9 @@ export default function MapExplorer({
           <button
             onClick={() => setSigiModalOpen(true)}
             title="Klik untuk melihat arsitektur koneksi API SIGI PUPR & Satu Data PU"
-            className="hidden md:flex h-9 px-3 rounded-lg text-xs font-bold text-slate-700 items-center gap-1.5 hover:bg-slate-100/80 transition-colors cursor-pointer font-sans shrink-0 border border-transparent hover:border-slate-200/60"
+            className="hidden md:flex h-9 px-3 rounded-[6px] text-xs font-bold text-slate-700 items-center gap-1.5 hover:bg-orange-50/60 hover:text-[#c2410c] transition-colors cursor-pointer font-sans shrink-0 border border-transparent hover:border-orange-200/60"
           >
-            <Layers className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <Layers className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
             <span>SIGI PU</span>
           </button>
         </div>
@@ -807,8 +807,8 @@ export default function MapExplorer({
 
       {/* Floating Notice / Province Context Banner */}
       {floatingNotice && (
-        <div className="absolute top-18 left-4 z-[500] max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-[6px] shadow-xl border border-slate-200/90 p-3 flex items-start gap-2.5 animate-fade-in font-sans pointer-events-auto">
-          <div className="w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center shrink-0 mt-0.5">
+        <div className="absolute top-18 left-4 z-[500] max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-[6px] shadow-xl ring-1 ring-orange-200/60 p-3 flex items-start gap-2.5 animate-fade-in font-sans pointer-events-auto">
+          <div className="w-6 h-6 rounded-[5px] bg-[#c2410c] text-white flex items-center justify-center shrink-0 mt-0.5">
             <Globe className="w-3.5 h-3.5" />
           </div>
           <div className="space-y-0.5 flex-1 min-w-0">
@@ -917,18 +917,18 @@ export default function MapExplorer({
         )}
 
         {/* Zoom & Reset Location Controls */}
-        <div className="flex flex-col gap-1 bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-slate-200/90 p-1 pointer-events-auto w-fit">
+        <div className="flex flex-col gap-1 bg-white/95 backdrop-blur-md rounded-[6px] shadow-md ring-1 ring-orange-200/60 p-1 pointer-events-auto w-fit">
           <button
             onClick={() => mapInstance?.zoomIn()}
             title="Perbesar Peta"
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-[5px] flex items-center justify-center text-slate-700 hover:bg-orange-50 hover:text-[#c2410c] transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => mapInstance?.zoomOut()}
             title="Perkecil Peta"
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-[5px] flex items-center justify-center text-slate-700 hover:bg-orange-50 hover:text-[#c2410c] transition-colors cursor-pointer"
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
@@ -936,7 +936,7 @@ export default function MapExplorer({
           <button
             onClick={handleResetLocation}
             title="Pusatkan Kembali Peta"
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:text-[#c2410c] hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-[5px] flex items-center justify-center text-slate-700 hover:text-[#c2410c] hover:bg-orange-50 transition-colors cursor-pointer"
           >
             <Crosshair className="w-3.5 h-3.5" />
           </button>
@@ -944,7 +944,7 @@ export default function MapExplorer({
 
         {/* Bottom-Left Floating Legend */}
         <div className="hidden sm:block pointer-events-auto">
-          <div className="bg-white/95 backdrop-blur-md rounded-[6px] shadow-lg border border-slate-200/90 p-3 text-[11px] space-y-1.5 min-w-[205px]">
+          <div className="bg-white/95 backdrop-blur-md rounded-[6px] shadow-lg ring-1 ring-orange-200/60 p-3 text-[11px] space-y-1.5 min-w-[205px]">
             <div className="flex items-center justify-between pb-1 border-b border-slate-100">
               <span className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">
                 Kewenangan Ruas
@@ -955,7 +955,7 @@ export default function MapExplorer({
             {/* Nasional */}
             <button
               onClick={() => setAuthorityFilter(authorityFilter === "NASIONAL" ? "ALL" : "NASIONAL")}
-              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-[5px] text-[10.5px] transition-all cursor-pointer ${
                 authorityFilter === "NASIONAL"
                   ? "bg-blue-50 text-blue-900 font-bold border border-blue-200 shadow-2xs"
                   : "text-slate-700 hover:bg-slate-50 font-medium"
@@ -965,7 +965,7 @@ export default function MapExplorer({
                 <span className="w-3.5 h-1.5 rounded-[2px] bg-blue-600 shadow-2xs shrink-0" />
                 <span>Jalan Nasional (KemenPU)</span>
               </span>
-              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded-[4px] ${
                 authorityFilter === "NASIONAL" ? "bg-blue-100 text-blue-800" : "bg-slate-100 text-slate-600"
               }`}>
                 {roadCounts.NASIONAL}
@@ -975,7 +975,7 @@ export default function MapExplorer({
             {/* Provinsi */}
             <button
               onClick={() => setAuthorityFilter(authorityFilter === "PROVINSI" ? "ALL" : "PROVINSI")}
-              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-[5px] text-[10.5px] transition-all cursor-pointer ${
                 authorityFilter === "PROVINSI"
                   ? "bg-purple-50 text-purple-900 font-bold border border-purple-200 shadow-2xs"
                   : "text-slate-700 hover:bg-slate-50 font-medium"
@@ -985,7 +985,7 @@ export default function MapExplorer({
                 <span className="w-3.5 h-1.5 rounded-[2px] bg-purple-600 shadow-2xs shrink-0" />
                 <span>Jalan Provinsi (Pemprov)</span>
               </span>
-              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded-[4px] ${
                 authorityFilter === "PROVINSI" ? "bg-purple-100 text-purple-800" : "bg-slate-100 text-slate-600"
               }`}>
                 {roadCounts.PROVINSI}
@@ -995,7 +995,7 @@ export default function MapExplorer({
             {/* Kota */}
             <button
               onClick={() => setAuthorityFilter(authorityFilter === "KOTA" ? "ALL" : "KOTA")}
-              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-[5px] text-[10.5px] transition-all cursor-pointer ${
                 authorityFilter === "KOTA"
                   ? "bg-teal-50 text-teal-900 font-bold border border-teal-200 shadow-2xs"
                   : "text-slate-700 hover:bg-slate-50 font-medium"
@@ -1005,7 +1005,7 @@ export default function MapExplorer({
                 <span className="w-3.5 h-1.5 rounded-[2px] bg-teal-600 shadow-2xs shrink-0" />
                 <span>Jalan Kota (Pemkot)</span>
               </span>
-              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded-[4px] ${
                 authorityFilter === "KOTA" ? "bg-teal-100 text-teal-800" : "bg-slate-100 text-slate-600"
               }`}>
                 {roadCounts.KOTA}
@@ -1015,7 +1015,7 @@ export default function MapExplorer({
             {/* Kabupaten */}
             <button
               onClick={() => setAuthorityFilter(authorityFilter === "KABUPATEN" ? "ALL" : "KABUPATEN")}
-              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[10.5px] transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-[5px] text-[10.5px] transition-all cursor-pointer ${
                 authorityFilter === "KABUPATEN"
                   ? "bg-emerald-50 text-emerald-900 font-bold border border-emerald-200 shadow-2xs"
                   : "text-slate-700 hover:bg-slate-50 font-medium"
@@ -1025,7 +1025,7 @@ export default function MapExplorer({
                 <span className="w-3.5 h-1.5 rounded-[2px] bg-emerald-600 shadow-2xs shrink-0" />
                 <span>Jalan Kabupaten (Pemkab)</span>
               </span>
-              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded ${
+              <span className={`text-[10px] font-sans font-bold tabular-nums px-1.5 py-0.2 rounded-[4px] ${
                 authorityFilter === "KABUPATEN" ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600"
               }`}>
                 {roadCounts.KABUPATEN}
@@ -1047,7 +1047,7 @@ export default function MapExplorer({
       </div>
 
       {/* 4. Bottom-Center Floating Stats Card */}
-      <div className={`hidden md:flex absolute bottom-3 z-[480] bg-white/95 backdrop-blur-md rounded-[6px] shadow-md border border-slate-200/90 px-3 py-1.5 items-center gap-3 text-xs font-semibold text-slate-700 pointer-events-auto font-sans transition-all duration-300 ${
+      <div className={`hidden md:flex absolute bottom-3 z-[480] bg-white/95 backdrop-blur-md rounded-[6px] shadow-md ring-1 ring-orange-200/60 px-3 py-1.5 items-center gap-3 text-xs font-semibold text-slate-700 pointer-events-auto font-sans transition-all duration-300 ${
         displayItem
           ? "left-[210px] xl:left-1/2 xl:-translate-x-1/2"
           : "left-1/2 -translate-x-1/2"
@@ -1070,9 +1070,9 @@ export default function MapExplorer({
         </span>
       </div>
 
-      {/* 5. Right Side Modern Executive Inspector Drawer (Inspired by Analytical Cards Reference) */}
+      {/* 5. Right Side Modern Executive Inspector Drawer */}
       {displayItem && (
-        <aside className="absolute top-3 right-3 bottom-3 w-full sm:w-[410px] lg:w-[430px] max-w-[calc(100vw-24px)] z-[500] bg-white/98 backdrop-blur-md rounded-[8px] shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
+        <aside className="absolute top-3 right-3 bottom-3 w-full sm:w-[410px] lg:w-[430px] max-w-[calc(100vw-24px)] z-[500] bg-white/98 backdrop-blur-md rounded-[8px] shadow-2xl ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans">
           {/* Drawer Header */}
           <div className="px-4 py-3 border-b border-slate-100 shrink-0 bg-white">
             <div className="flex items-center justify-between mb-2">
@@ -1232,7 +1232,7 @@ export default function MapExplorer({
 
               {/* SLA Multi-Step Horizontal Flow */}
               <div className="grid grid-cols-3 gap-1.5 text-center pt-1">
-                <div className="p-2 rounded-lg bg-white border border-slate-200/80">
+                <div className="p-2 rounded-[6px] bg-white border border-slate-200/80">
                   <div className="text-[9.5px] text-slate-400">1. Laporan Masuk</div>
                   <div className="font-bold text-slate-800 text-[11px] font-sans mt-0.5">
                     {currentReport?.filedAt || "14 Okt 2026"}
@@ -1240,7 +1240,7 @@ export default function MapExplorer({
                   <div className="text-[9px] text-emerald-600 font-bold mt-0.5">✓ Terverifikasi</div>
                 </div>
 
-                <div className="p-2 rounded-lg bg-white border border-slate-200/80">
+                <div className="p-2 rounded-[6px] bg-white border border-slate-200/80">
                   <div className="text-[9.5px] text-slate-400">2. Batas Tenggat</div>
                   <div className="font-bold text-slate-800 text-[11px] font-sans mt-0.5">
                     {currentReport?.deadlineAt || "28 Okt 2026"}
@@ -1249,7 +1249,7 @@ export default function MapExplorer({
                 </div>
 
                 <div
-                  className={`p-2 rounded-lg border ${
+                  className={`p-2 rounded-[6px] border ${
                     currentReport?.isResponseOverdue
                       ? "bg-rose-100/60 border-rose-300 text-rose-900"
                       : "bg-emerald-50 border-emerald-200 text-emerald-900"
@@ -1273,20 +1273,20 @@ export default function MapExplorer({
             </div>
 
             {/* 3. Transparansi Anggaran & Tender LPSE */}
-            <div className="rounded-[6px] p-3.5 bg-white border border-slate-200/90 space-y-3 shadow-2xs">
+            <div className="rounded-[6px] p-3.5 bg-white ring-1 ring-orange-200/60 space-y-3 shadow-2xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-blue-600" />
+                  <Building2 className="w-3.5 h-3.5 text-[#c2410c]" />
                   <span className="text-[11.5px] font-bold text-slate-900">Alokasi Anggaran &amp; LPSE</span>
                 </div>
-                <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 tabular-nums">
+                <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-[4px] border border-slate-200 tabular-nums">
                   TA {budgetData?.fiscalYear || "2026"} • {currentRoad?.authority === "NASIONAL" ? "APBN" : "APBD"}
                 </span>
               </div>
 
               {/* 2 Big Scoreboard Cards */}
               <div className="grid grid-cols-2 gap-2 text-left">
-                <div className="p-2.5 rounded-[6px] bg-slate-50 border border-slate-200/80 space-y-0.5">
+                <div className="p-2.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 space-y-0.5">
                   <div className="text-[10px] text-slate-500 font-medium">Pagu Anggaran (HPS)</div>
                   <div className="text-base sm:text-lg font-black text-slate-900 font-sans tabular-nums">
                     {formatCurrencyCompact(paguRp)}
@@ -1294,12 +1294,12 @@ export default function MapExplorer({
                   <div className="text-[9.5px] text-slate-400">Batas lelang SiRUP</div>
                 </div>
 
-                <div className="p-2.5 rounded-[6px] bg-blue-50/60 border border-blue-200/80 space-y-0.5">
-                  <div className="text-[10px] text-blue-700 font-medium">Nilai Kontrak (SPK)</div>
-                  <div className="text-base sm:text-lg font-black text-blue-900 font-sans tabular-nums">
+                <div className="p-2.5 rounded-[6px] bg-[#c2410c] text-white space-y-0.5 shadow-2xs">
+                  <div className="text-[10px] text-orange-100 font-medium">Nilai Kontrak (SPK)</div>
+                  <div className="text-base sm:text-lg font-black text-white font-sans tabular-nums">
                     {formatCurrencyCompact(contractValueRp)}
                   </div>
-                  <div className="text-[9.5px] text-emerald-700 font-bold flex items-center gap-0.5">
+                  <div className="text-[9.5px] text-orange-100 font-bold flex items-center gap-0.5">
                     <span>Hemat {formatCurrencyCompact(savingsRp)} ({savingsPct}%)</span>
                   </div>
                 </div>
@@ -1323,7 +1323,7 @@ export default function MapExplorer({
                     </div>
                     <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                       <div
-                        className="h-full bg-blue-600 rounded-full transition-all duration-500"
+                        className="h-full bg-[#c2410c] rounded-full transition-all duration-500"
                         style={{ width: `${physicalProgressPct}%` }}
                       />
                     </div>
@@ -1346,7 +1346,7 @@ export default function MapExplorer({
 
                 {/* Audit Anomaly Callout jika fisik tertinggal */}
                 {contractCommitmentPct - physicalProgressPct > 20 && (
-                  <div className="p-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[10px] flex items-start gap-1.5 leading-relaxed font-medium">
+                  <div className="p-2 rounded-[6px] bg-amber-50 border border-amber-200 text-amber-900 text-[10px] flex items-start gap-1.5 leading-relaxed font-medium">
                     <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                     <span>
                       <strong>Potensi Deviasi Pekerjaan:</strong> Penyerapan dana kontrak ({contractCommitmentPct}%) berjalan lebih cepat daripada capaian fisik di lapangan ({physicalProgressPct}%).
@@ -1365,7 +1365,7 @@ export default function MapExplorer({
             </div>
 
             {/* 4. Instansi Penanggung Jawab Hukum (Wewenang Mutlak) */}
-            <div className="rounded-[6px] p-3.5 bg-slate-50 border border-slate-200/90 space-y-2 shadow-2xs">
+            <div className="rounded-[6px] p-3.5 bg-slate-50 ring-1 ring-orange-200/50 space-y-2 shadow-2xs">
               <div className="flex items-center justify-between text-[10.5px]">
                 <span className="font-bold uppercase tracking-wider flex items-center gap-1.5 text-slate-700">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1445,106 +1445,108 @@ export default function MapExplorer({
         </aside>
       )}
 
-      {/* 7. Modal Penjelasan Arsitektur SIGI PU & GeoAPI */}
+      {/* 7. Modal Penjelasan Arsitektur SIGI PU & GeoAPI (Double-Bezel 5pt with Orange Header & White Text) */}
       {sigiModalOpen && (
-        <div className="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in font-sans">
-          <div className="bg-white rounded-[8px] shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="p-4 border-b border-orange-700/30 flex items-center justify-between bg-[#c2410c] text-white">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse" />
-                <h3 className="font-bold text-sm font-heading text-white">
-                  Integrasi SIGI PU & GeoAPI Geospasial
-                </h3>
-              </div>
-              <button
-                onClick={() => setSigiModalOpen(false)}
-                className="p-1 rounded-lg text-orange-200 hover:text-white hover:bg-[#9a3412] transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
-              <div className="p-3 rounded-[6px] bg-orange-50 border border-orange-200/90 text-orange-950 space-y-1 shadow-2xs">
-                <div className="font-bold text-xs flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-orange-600" />
-                  <span>Geometri Berbasis Vektor Jalan Nyata</span>
+        <div className="fixed inset-0 z-[2000] bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in font-sans">
+          <div className="max-w-lg w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
+            <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 w-full overflow-hidden flex flex-col max-h-[88vh]">
+              <div className="p-4 border-b border-orange-700/30 flex items-center justify-between bg-[#c2410c] text-white">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse" />
+                  <h3 className="font-bold text-sm font-heading text-white">
+                    Integrasi SIGI PU &amp; GeoAPI Geospasial
+                  </h3>
                 </div>
-                <p className="text-[11px] text-orange-900">
-                  Seluruh garis jalan pada peta JagaJalan <strong>bukan digambar manual atau garis perkiraan lurus</strong>, melainkan memuat 100+ koordinat kurva fisik presisi tinggi yang melacak badan aspal jalan raya asli di satelit dan jaringan jalan nasional/daerah.
-                </p>
+                <button
+                  onClick={() => setSigiModalOpen(false)}
+                  className="p-1 rounded-[6px] text-orange-100 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-500">
-                  Layanan & Endpoint Resmi yang Terhubung:
-                </h4>
-
-                <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
-                  <div className="font-bold text-slate-900 flex items-center justify-between">
-                    <span>1. SIGI-PU ASTV2 (Pusdatin KemenPU)</span>
-                    <span className="text-[10px] text-orange-700 font-sans font-bold">WebGIS & MapServer</span>
+              <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
+                <div className="p-3 rounded-[6px] bg-orange-50 border border-orange-200/90 text-orange-950 space-y-1 shadow-2xs">
+                  <div className="font-bold text-xs flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-orange-600" />
+                    <span>Geometri Berbasis Vektor Jalan Nyata</span>
                   </div>
-                  <p className="text-[11px] text-slate-600">
-                    Menyediakan layer MapServer resmi WMS untuk Jalan Nasional (<code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">jalan_nasional.map</code>) dan Jalan Daerah (<code className="bg-slate-200 px-1 py-0.5 rounded text-[10px]">jalan_daerah.map</code>).
+                  <p className="text-[11px] text-orange-900">
+                    Seluruh garis jalan pada peta JagaJalan <strong>bukan digambar manual atau garis perkiraan lurus</strong>, melainkan memuat 100+ koordinat kurva fisik presisi tinggi yang melacak badan aspal jalan raya asli di satelit dan jaringan jalan nasional/daerah.
                   </p>
-                  <a
-                    href="https://sigi.pu.go.id/astv2/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[11px] text-[#c2410c] font-bold hover:underline inline-flex items-center gap-1 pt-0.5"
-                  >
-                    <span>Kunjungi sigi.pu.go.id/astv2</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
                 </div>
 
-                <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
-                  <div className="font-bold text-slate-900 flex items-center justify-between">
-                    <span>2. Satu Data Kementerian PU</span>
-                    <span className="text-[10px] text-blue-700 font-sans font-bold">Open Data Portal</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600">
-                    Portal keterbukaan data kementerian untuk rekapitulasi kondisi mantap jalan, kemantapan per provinsi, dan penetapan status hukum ruas jalan.
-                  </p>
-                  <a
-                    href="https://data.pu.go.id/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[11px] text-blue-700 font-bold hover:underline inline-flex items-center gap-1 pt-0.5"
-                  >
-                    <span>Kunjungi data.pu.go.id</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
+                <div className="space-y-2">
+                  <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-500">
+                    Layanan &amp; Endpoint Resmi yang Terhubung:
+                  </h4>
 
-                <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
-                  <div className="font-bold text-slate-900 flex items-center justify-between">
-                    <span>3. Endpoint API Mikro JagaJalan</span>
-                    <span className="text-[10px] text-emerald-700 font-sans font-bold">REST & GeoJSON API</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600">
-                    Dapat diakses secara terbuka melalui rute API internal aplikasi:
-                  </p>
-                  <div className="space-y-1 pt-0.5 font-mono text-[10.5px]">
-                    <div className="p-1.5 bg-white border border-slate-200 rounded-lg text-slate-800">
-                      GET /api/roads?format=json
+                  <div className="p-3 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40 space-y-1">
+                    <div className="font-bold text-slate-900 flex items-center justify-between">
+                      <span>1. SIGI-PU ASTV2 (Pusdatin KemenPU)</span>
+                      <span className="text-[10px] text-orange-700 font-sans font-bold">WebGIS &amp; MapServer</span>
                     </div>
-                    <div className="p-1.5 bg-white border border-slate-200 rounded-lg text-slate-800">
-                      GET /api/roads?format=geojson
+                    <p className="text-[11px] text-slate-600">
+                      Menyediakan layer MapServer resmi WMS untuk Jalan Nasional (<code className="bg-slate-200 px-1 py-0.5 rounded-[4px] text-[10px]">jalan_nasional.map</code>) dan Jalan Daerah (<code className="bg-slate-200 px-1 py-0.5 rounded-[4px] text-[10px]">jalan_daerah.map</code>).
+                    </p>
+                    <a
+                      href="https://sigi.pu.go.id/astv2/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] text-[#c2410c] font-bold hover:underline inline-flex items-center gap-1 pt-0.5"
+                    >
+                      <span>Kunjungi sigi.pu.go.id/astv2</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+
+                  <div className="p-3 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40 space-y-1">
+                    <div className="font-bold text-slate-900 flex items-center justify-between">
+                      <span>2. Satu Data Kementerian PU</span>
+                      <span className="text-[10px] text-[#c2410c] font-sans font-bold">Open Data Portal</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600">
+                      Portal keterbukaan data kementerian untuk rekapitulasi kondisi mantap jalan, kemantapan per provinsi, dan penetapan status hukum ruas jalan.
+                    </p>
+                    <a
+                      href="https://data.pu.go.id/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] text-[#c2410c] font-bold hover:underline inline-flex items-center gap-1 pt-0.5"
+                    >
+                      <span>Kunjungi data.pu.go.id</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+
+                  <div className="p-3 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40 space-y-1">
+                    <div className="font-bold text-slate-900 flex items-center justify-between">
+                      <span>3. Endpoint API Mikro JagaJalan</span>
+                      <span className="text-[10px] text-emerald-700 font-sans font-bold">REST &amp; GeoJSON API</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600">
+                      Dapat diakses secara terbuka melalui rute API internal aplikasi:
+                    </p>
+                    <div className="space-y-1 pt-0.5 font-mono text-[10.5px]">
+                      <div className="p-1.5 bg-white ring-1 ring-orange-200/50 rounded-[5px] text-slate-800">
+                        GET /api/roads?format=json
+                      </div>
+                      <div className="p-1.5 bg-white ring-1 ring-orange-200/50 rounded-[5px] text-slate-800">
+                        GET /api/roads?format=geojson
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
-              <button
-                onClick={() => setSigiModalOpen(false)}
-                className="py-2 px-4 rounded-lg text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs"
-              >
-                Tutup Informasi
-              </button>
+              <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                <button
+                  onClick={() => setSigiModalOpen(false)}
+                  className="py-2 px-4 rounded-[6px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs"
+                >
+                  Tutup Informasi
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -75,7 +75,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari provinsi atau ibukota (misal: Jawa Barat, Medan, Papua)..."
-              className="w-full pl-9 pr-7 py-2 rounded-full bg-white ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+              className="w-full pl-9 pr-7 py-2 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
             />
             {searchQuery && (
               <button
@@ -91,7 +91,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           <div className="flex items-center gap-2 justify-end">
             
             {/* Sort Selector */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white ring-1 ring-slate-200/80 text-xs text-slate-500 shrink-0">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-500 shrink-0">
               <span className="hidden sm:inline text-[11px] font-medium text-slate-400">Urutkan:</span>
               <select
                 value={sortBy}
@@ -105,10 +105,10 @@ export default function NationalRankingSection({ onSelectPilot }) {
             </div>
 
             {/* View Mode Toggle: Grid vs Table */}
-            <div className="flex items-center rounded-full ring-1 ring-slate-200/80 p-0.5 bg-white shrink-0">
+            <div className="flex items-center rounded-[6px] ring-1 ring-orange-200/50 p-0.5 bg-white shrink-0">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-full transition-all cursor-pointer ${
+                className={`p-1.5 rounded-[5px] transition-all cursor-pointer ${
                   viewMode === "grid"
                     ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                     : "text-slate-400 hover:text-slate-900"
@@ -119,7 +119,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               </button>
               <button
                 onClick={() => setViewMode("table")}
-                className={`p-1.5 rounded-full transition-all cursor-pointer ${
+                className={`p-1.5 rounded-[5px] transition-all cursor-pointer ${
                   viewMode === "table"
                     ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                     : "text-slate-400 hover:text-slate-900"
@@ -140,7 +140,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               <button
                 key={island.id}
                 onClick={() => setSelectedIsland(island.id)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-3 py-1 rounded-[6px] text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   selectedIsland === island.id
                     ? "bg-[#c2410c] text-white shadow-xs font-bold"
                     : "text-slate-600 hover:bg-white/80 hover:text-slate-900"
@@ -155,7 +155,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
       {/* 3. MAIN DATA DISPLAY (GRID CARDS OR LEADERBOARD TABLE) */}
       {filteredAndSortedProvinces.length === 0 ? (
-        <div className="bg-white rounded-[6px] border border-slate-200/90 p-8 text-center space-y-2">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-8 text-center space-y-2">
           <p className="text-sm font-semibold text-slate-700">Tidak ada provinsi yang cocok dengan pencarian.</p>
           <p className="text-xs text-slate-400">Silakan ubah filter gugus pulau atau kata kunci pencarian Anda.</p>
         </div>
@@ -172,10 +172,10 @@ export default function NationalRankingSection({ onSelectPilot }) {
             return (
               <div
                 key={prov.id}
-                className={`bg-white rounded-[6px] border p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
+                className={`bg-white rounded-[6px] p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
                   isPilot
-                    ? "border-orange-300/80 shadow-xs ring-1 ring-orange-200/50"
-                    : "border-slate-200/80 hover:border-slate-300 hover:shadow-xs"
+                    ? "ring-2 ring-orange-300 shadow-xs"
+                    : "ring-1 ring-orange-200/50 hover:ring-orange-300 hover:shadow-xs"
                 }`}
               >
                 {/* Header: Rank, Province Name, & Pilot Status */}
@@ -234,7 +234,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 </div>
 
                 {/* Integrated Financial Metric Strip (No Clunky Boxes!) */}
-                <div className="py-2.5 px-3 rounded-lg bg-slate-50/70 border border-slate-100 flex items-center justify-between text-center">
+                <div className="py-2.5 px-3 rounded-[6px] bg-slate-50/70 ring-1 ring-orange-200/40 flex items-center justify-between text-center">
                   <div className="flex-1 text-left">
                     <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider block">Total Aduan</span>
                     <strong className="text-sm font-bold text-slate-900 tabular-nums">
@@ -286,7 +286,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
         /* ------------------------------------------------------------- */
         /* VIEW 2: LEADERBOARD TABLE (High-Density, Bloomberg/IDX Style) */
         /* ------------------------------------------------------------- */
-        <div className="bg-white rounded-[6px] border border-slate-200/90 shadow-2xs overflow-hidden font-sans">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-2xs overflow-hidden font-sans">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>

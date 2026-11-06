@@ -432,7 +432,7 @@ export default function OmbudsmanMonitorSection({
                     {/* Ticket Header & Status Pill */}
                     <div className="flex items-center justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-sans tabular-nums text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800">
+                        <span className="font-sans tabular-nums text-xs font-bold px-2.5 py-1 rounded-[6px] bg-slate-100 text-slate-800">
                           #{report.ticketCode}
                         </span>
                         <span className="text-[11px] text-slate-400 font-sans">

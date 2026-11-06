@@ -120,7 +120,7 @@ export default function Navbar({
             <div className="flex lg:hidden items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="p-2 rounded-[6px] text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                 aria-label="Buka Menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -138,9 +138,9 @@ export default function Navbar({
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  className={`w-full text-left px-3 py-2.5 rounded-lg font-medium flex items-center gap-3 transition-colors ${
+                  className={`w-full text-left px-3 py-2.5 rounded-[6px] font-medium flex items-center gap-3 transition-colors ${
                     isActive
-                      ? "bg-orange-50/80 text-[#9a3412] font-semibold border border-orange-200/80"
+                      ? "bg-[#c2410c] text-white font-semibold"
                       : "text-slate-700 hover:bg-slate-100"
                   }`}
                 >
@@ -151,10 +151,10 @@ export default function Navbar({
                     width={20}
                     height={20}
                     style={{ width: "20px", height: "20px" }}
-                    className="w-5 h-5 object-contain shrink-0"
+                    className={`w-5 h-5 object-contain shrink-0 ${isActive ? "invert brightness-0" : ""}`}
                   />
                   <span className="flex-1">{item.label}</span>
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c]" />}
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </button>
               );
             })}

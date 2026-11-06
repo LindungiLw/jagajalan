@@ -1,23 +1,28 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import HeroSection from "@/components/dashboard/HeroSection";
-import NationalRankingSection from "@/components/dashboard/NationalRankingSection";
-import MapExplorer from "@/components/map/MapExplorer";
-import ReportModal from "@/components/modals/ReportModal";
-import OmbudsmanModal from "@/components/modals/OmbudsmanModal";
-import OfficerDashboard from "@/components/dashboard/OfficerDashboard";
-import OfficerLogin from "@/components/dashboard/OfficerLogin";
-import BudgetDataExplorer from "@/components/dashboard/BudgetDataExplorer";
-import AnnualProgressChart from "@/components/dashboard/AnnualProgressChart";
-import CivicWorkflowSection from "@/components/dashboard/CivicWorkflowSection";
-import LegalBasisSection from "@/components/dashboard/LegalBasisSection";
-import OmbudsmanMonitorSection from "@/components/dashboard/OmbudsmanMonitorSection";
-import { ROAD_SEGMENTS } from "@/data/roadsData";
-import { INITIAL_REPORTS } from "@/data/reportsData";
-import { getActiveOfficerSession, clearOfficerSession } from "@/data/officersData";
+import {
+  Navbar,
+  Footer,
+  HeroSection,
+  NationalRankingSection,
+  MapExplorer,
+  ReportModal,
+  OmbudsmanModal,
+  OfficerDashboard,
+  OfficerLogin,
+  BudgetDataExplorer,
+  AnnualProgressChart,
+  CivicWorkflowSection,
+  LegalBasisSection,
+  OmbudsmanMonitorSection,
+} from "@/components";
+import {
+  ROAD_SEGMENTS,
+  INITIAL_REPORTS,
+  getActiveOfficerSession,
+  clearOfficerSession,
+} from "@/data";
 
 export default function Home() {
   const [activeTab, setActiveTabState] = useState("beranda");

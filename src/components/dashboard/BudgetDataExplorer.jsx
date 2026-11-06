@@ -440,7 +440,7 @@ export default function BudgetDataExplorer({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Card 1: Total Pagu Anggaran (Orange theme) */}
-        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-orange-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Total Pagu Anggaran (HPS)
@@ -458,7 +458,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 2: Realisasi Kontrak SPK (Blue theme) */}
-        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-blue-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Realisasi Kontrak (SPK)
@@ -479,7 +479,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 3: Efisiensi Lelang LPSE (Emerald theme) */}
-        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-emerald-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Efisiensi Lelang LPSE
@@ -500,7 +500,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Card 4: Atensi Audit Proyek (Amber theme) */}
-        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-3 hover:border-amber-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
               Atensi Audit &amp; Fisik
@@ -526,7 +526,7 @@ export default function BudgetDataExplorer({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Left Card: Perbandingan Pagu HPS vs Nilai Kontrak (Double Bar Chart) */}
-        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-4 hover:ring-orange-300 transition-all shadow-2xs">
           {/* Card Header & 3 Top Metric Badges (100% Real Sesuai Data Aktif) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -539,7 +539,7 @@ export default function BudgetDataExplorer({
             <div className="grid grid-cols-3 gap-2 py-2 border-y border-slate-100 text-center">
               <div>
                 <div className="inline-flex items-center justify-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-slate-800 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />
                   <span className="text-sm sm:text-base font-bold text-slate-900 font-sans tabular-nums">
                     {formatRupiahShort(totalPagu)}
                   </span>
@@ -631,13 +631,13 @@ export default function BudgetDataExplorer({
                       />
                     )}
 
-                    {/* Bar 1: Pagu (Slate-800) */}
+                    {/* Bar 1: Pagu (Slate-500) */}
                     <rect
                       x={centerX - 13}
                       y={paguY}
                       width="11"
                       height={paguH}
-                      fill={isHovered ? "#0f172a" : "#334155"}
+                      fill={isHovered ? "#475569" : "#64748b"}
                       rx="2"
                       className="transition-colors duration-200"
                     />
@@ -669,21 +669,21 @@ export default function BudgetDataExplorer({
               })}
             </svg>
 
-            {/* Tooltip on Hover */}
+            {/* Tooltip on Hover (Orange Card with Pure White Text) */}
             {hoveredBarIndex !== null && (
               <div
-                className="absolute z-20 pointer-events-none bg-slate-900/95 text-white text-[11px] p-2 rounded-lg shadow-xl -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
+                className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
                 style={{ left: `${(40 + hoveredBarIndex * 76.66) / 5.2}%` }}
               >
                 <div className="font-bold text-white mb-0.5">
                   Tahun {HISTORICAL_BAR_DATA[hoveredBarIndex].year}
                 </div>
-                <div className="flex items-center gap-1.5 text-slate-300">
-                  <span className="w-2 h-2 rounded-full bg-slate-400" />
+                <div className="flex items-center gap-1.5 text-white">
+                  <span className="w-2 h-2 rounded-full bg-orange-200" />
                   <span>Pagu: {HISTORICAL_BAR_DATA[hoveredBarIndex].paguRp}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-orange-300">
-                  <span className="w-2 h-2 rounded-full bg-orange-400" />
+                <div className="flex items-center gap-1.5 text-white font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-white" />
                   <span>Kontrak: {HISTORICAL_BAR_DATA[hoveredBarIndex].kontrakRp}</span>
                 </div>
               </div>
@@ -693,7 +693,7 @@ export default function BudgetDataExplorer({
           {/* Chart Legend */}
           <div className="flex items-center justify-center gap-6 pt-1 text-xs text-slate-500">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-[#334155]" />
+              <span className="w-3 h-3 rounded bg-[#64748b]" />
               <span className="font-medium">Pagu HPS Resmi (Rp Triliun)</span>
             </div>
             <div className="flex items-center gap-2">
@@ -704,7 +704,7 @@ export default function BudgetDataExplorer({
         </div>
 
         {/* Right Card: Tren Alokasi Anggaran Preservasi Jalan (Smooth Multi-Layer Area Chart) */}
-        <div className="bg-white rounded-[6px] border border-slate-200 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-2xs">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-4 hover:ring-orange-300 transition-all shadow-2xs">
           {/* Card Header & 3 Top Metric Badges (100% Real Sesuai authorityBreakdown) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -871,21 +871,21 @@ export default function BudgetDataExplorer({
               })}
             </svg>
 
-            {/* Tooltip on Hover */}
+            {/* Tooltip on Hover (Orange Card with Pure White Text) */}
             {hoveredAreaIndex !== null && (
               <div
-                className="absolute z-20 pointer-events-none bg-slate-900/95 text-white text-[11px] p-2 rounded-lg shadow-xl -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
+                className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
                 style={{ left: `${(40 + hoveredAreaIndex * 76.66) / 5.2}%` }}
               >
                 <div className="font-bold text-white mb-0.5">
                   Tahun {areaPoints.years[hoveredAreaIndex]}
                 </div>
-                <div className="flex items-center gap-1.5 text-slate-300">
-                  <span className="w-2 h-2 rounded-full bg-slate-300" />
+                <div className="flex items-center gap-1.5 text-white">
+                  <span className="w-2 h-2 rounded-full bg-orange-200" />
                   <span>Alokasi Rencana: Rp {areaPoints.upperPts[hoveredAreaIndex].val} T</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-orange-300">
-                  <span className="w-2 h-2 rounded-full bg-orange-400" />
+                <div className="flex items-center gap-1.5 text-white font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-white" />
                   <span>Realisasi Fisik: Rp {areaPoints.lowerPts[hoveredAreaIndex].val} T</span>
                 </div>
               </div>
@@ -911,7 +911,7 @@ export default function BudgetDataExplorer({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column: Capaian & Akuntabilitas Anggaran */}
-        <div className="lg:col-span-4 bg-white rounded-[6px] border border-slate-200 p-5 space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs">
+        <div className="lg:col-span-4 bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 space-y-4 hover:ring-orange-300 transition-all flex flex-col justify-between shadow-2xs">
           <div>
             <div className="pb-3 border-b border-slate-100 flex items-center justify-between">
               <div>
@@ -987,8 +987,8 @@ export default function BudgetDataExplorer({
                   </h3>
                 </div>
 
-                {/* Sort Selector (Pill Styled) */}
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 ring-1 ring-slate-200/80 text-xs shrink-0 self-start sm:self-auto font-sans">
+                {/* Sort Selector (5pt Styled) */}
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 text-xs shrink-0 self-start sm:self-auto font-sans">
                   <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
                   <select
                     value={sortBy}
@@ -1011,7 +1011,7 @@ export default function BudgetDataExplorer({
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Cari kode paket, nama ruas, rekanan..."
-                    className="w-full pl-9 pr-7 py-2 rounded-full bg-slate-50/90 ring-1 ring-slate-200/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans"
+                    className="w-full pl-9 pr-7 py-2 rounded-[6px] bg-slate-50/90 ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans"
                   />
                   {searchQuery && (
                     <button
@@ -1024,7 +1024,7 @@ export default function BudgetDataExplorer({
                 </div>
 
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-full text-xs font-sans ring-1 ring-orange-200/40">
+                  <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-[6px] text-xs font-sans ring-1 ring-orange-200/40">
                     {[
                       { id: "ALL", label: "Semua" },
                       { id: "NASIONAL", label: "Nasional" },
@@ -1034,7 +1034,7 @@ export default function BudgetDataExplorer({
                       <button
                         key={tab.id}
                         onClick={() => setSelectedAuthority(tab.id)}
-                        className={`px-3 py-1 rounded-full text-xs transition-all cursor-pointer ${
+                        className={`px-3 py-1 rounded-[5px] text-xs transition-all cursor-pointer ${
                           selectedAuthority === tab.id
                             ? "bg-[#c2410c] text-white font-bold shadow-2xs"
                             : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-medium"
@@ -1047,10 +1047,10 @@ export default function BudgetDataExplorer({
 
                   <button
                     onClick={() => setAnomalyFilterOnly(!anomalyFilterOnly)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 rounded-[6px] text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                       anomalyFilterOnly
                         ? "bg-[#c2410c] text-white shadow-2xs"
-                        : "bg-amber-50 text-amber-800 hover:bg-amber-100/80"
+                        : "bg-amber-50 text-amber-800 hover:bg-amber-100/80 ring-1 ring-amber-200/60"
                     }`}
                   >
                     <AlertTriangle className="w-3 h-3" />
@@ -1170,14 +1170,14 @@ export default function BudgetDataExplorer({
                             <div className="inline-flex items-center gap-1">
                               <button
                                 onClick={() => handleOpenDetailModal(pkg)}
-                                className="px-2.5 py-1 rounded-full text-xs font-semibold text-slate-700 hover:text-white bg-slate-100 hover:bg-[#c2410c] transition-all cursor-pointer active:scale-[0.96]"
+                                className="px-2.5 py-1 rounded-[6px] text-xs font-semibold text-slate-700 hover:text-white bg-slate-100 hover:bg-[#c2410c] transition-all cursor-pointer active:scale-[0.96]"
                               >
                                 Detail
                               </button>
                               {onSelectRoadOnMap && pkg.roadId && (
                                 <button
                                   onClick={() => onSelectRoadOnMap(pkg.roadId)}
-                                  className="p-1 rounded-full text-slate-400 hover:text-[#c2410c] hover:bg-orange-50 transition-colors cursor-pointer"
+                                  className="p-1 rounded-[6px] text-slate-400 hover:text-[#c2410c] hover:bg-orange-50 transition-colors cursor-pointer"
                                   title="Lihat Ruas di Peta GIS"
                                 >
                                   <MapPin className="w-3.5 h-3.5" />
@@ -1205,7 +1205,7 @@ export default function BudgetDataExplorer({
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
+                    className="px-3 py-1 rounded-[6px] bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
                   >
                     Prev
                   </button>
@@ -1221,7 +1221,7 @@ export default function BudgetDataExplorer({
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`w-7 h-7 rounded-full text-xs font-bold transition-all cursor-pointer tabular-nums ${
+                        className={`w-7 h-7 rounded-[6px] text-xs font-bold transition-all cursor-pointer tabular-nums ${
                           currentPage === pageNum
                             ? "bg-[#c2410c] text-white shadow-2xs"
                             : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
@@ -1235,7 +1235,7 @@ export default function BudgetDataExplorer({
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
+                    className="px-3 py-1 rounded-[6px] bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none font-semibold text-slate-700 transition-colors cursor-pointer text-xs"
                   >
                     Next
                   </button>

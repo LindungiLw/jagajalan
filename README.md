@@ -328,7 +328,7 @@ jagajalan/
 │   │   │   ├── analyze-road/    # API Route: Google Gemini Vision AI Damage Inspector
 │   │   │   ├── procurement/     # API Route: Penelusuran Paket Pengadaan LPSE / SIRUP
 │   │   │   └── roads/           # API Route: Geodata Ruas Jalan (JSON & GeoJSON RFC 7946)
-│   │   ├── admin/               # Redirect routing untuk Portal Dinas
+│   │   ├── portaldinas/         # Redirect routing untuk Portal Dinas
 │   │   ├── globals.css          # Desain sistem & token tema Clean Light Dashboard
 │   │   ├── layout.js            # Metadata root & pembungkus font interaktif
 │   │   └── page.js              # Halaman utama orkestrator tab navigasi
@@ -377,8 +377,7 @@ jagajalan/
 │   ├── pipeline/                # Skrip pemrosesan geometri koordinat Open Data PU
 │   │   ├── data/                # Arsip data mentah geospasial
 │   │   └── README.md            # Dokumentasi metodologi pipeline data
-│   ├── seed-firestore-roads.mjs # Skrip seeding data jalan ke Firestore
-│   └── test-db.mjs              # Pengujian konektivitas basis data
+│   └── seed-firestore-roads.mjs # Skrip seeding data jalan ke Firestore
 ├── public/                      # Aset statis & identitas visual
 │   └── logo/                    # Varian logo resmi JagaJalan
 ├── .gitignore                   # Proteksi dependensi, cache, & env
