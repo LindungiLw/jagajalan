@@ -47,6 +47,7 @@ Desktop.ini
 # IDE & Editor configs
 .vscode/
 .idea/
+.agents/
 # Scratch scripts & temporary fetch outputs
 scratch/
 *_raw.json
