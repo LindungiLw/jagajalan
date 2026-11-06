@@ -4,14 +4,15 @@
 @import "leaflet/dist/leaflet.css";
 
 @theme {
-  --font-heading: var(--font-heading), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-sans: var(--font-heading), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-slate-50: #FAF8F5;
   --color-slate-100: #F2ECE4;
 }
 
 :root {
+  --font-heading: var(--font-sans);
   --background: #FAF7F2;
   --foreground: #1C1917;
   --card-bg: #ffffff;
@@ -107,7 +108,7 @@ table, .tabular-nums, [data-metric] {
 /* Leaflet Container Overrides for Clean Light Theme */
 .leaflet-container {
   background: #f1f5f9 !important;
-  font-family: inherit !important;
+  font-family: var(--font-sans) !important;
   border-radius: 6px !important;
   z-index: 10;
 }

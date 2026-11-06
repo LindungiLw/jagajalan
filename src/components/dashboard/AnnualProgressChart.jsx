@@ -411,7 +411,7 @@ export default function AnnualProgressChart() {
                       y={item.y + 3.5}
                       textAnchor="end"
                       fontSize="10"
-                      fontFamily="sans-serif"
+                      className="font-sans"
                       fill="#94a3b8"
                       fontWeight="600"
                     >
@@ -480,7 +480,7 @@ export default function AnnualProgressChart() {
                             y={p.yKabKota - 7.5}
                             textAnchor="middle"
                             fontSize="10"
-                            fontFamily="sans-serif"
+                            className="font-sans"
                             fontWeight="bold"
                             fill="#c2410c"
                           >
@@ -594,7 +594,7 @@ export default function AnnualProgressChart() {
                         y="214"
                         textAnchor="middle"
                         fontSize="11.5"
-                        fontFamily="sans-serif"
+                        className="font-sans"
                         fontWeight={isSelected ? "bold" : "600"}
                         fill={isSelected ? "#0f172a" : "#64748b"}
                       >
