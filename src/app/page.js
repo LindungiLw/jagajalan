@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import {
   Navbar,
   Footer,
+  SerpentineRoadBackground,
   HeroSection,
   NationalRankingSection,
   MapExplorer,
@@ -125,37 +126,42 @@ export default function Home() {
       {/* Main Tab Content */}
       <main className={`flex-1 flex flex-col ${activeTab === "peta" ? "min-h-0 overflow-hidden" : ""}`}>
         {activeTab === "beranda" && (
-          <div className="space-y-6 animate-fade-in pb-8">
-            {/* 1. Hero Section: Data Transparency & Live Ruas Inspector */}
-            <HeroSection
-              roads={roads}
-              reports={reports}
-              onExploreData={() => {
-                setActiveTab("data-anggaran");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              onOpenReport={() => setReportModalOpen(true)}
-              onExploreNational={() => {
-                setActiveTab("nasional");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              onOpenOfficerPortal={() => {
-                setActiveTab("dinas");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
-            />
+          <div className="space-y-6 animate-fade-in pb-8 relative">
+            {/* Serpentine Zig-Zag Road Background */}
+            <SerpentineRoadBackground />
 
-            {/* 2. Civic Workflow (How It Works): 4-Step Solution Flow */}
-            <CivicWorkflowSection onOpenReportModal={() => setReportModalOpen(true)} />
+            <div className="relative z-10 space-y-6">
+              {/* 1. Hero Section: Data Transparency & Live Ruas Inspector */}
+              <HeroSection
+                roads={roads}
+                reports={reports}
+                onExploreData={() => {
+                  setActiveTab("data-anggaran");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onOpenReport={() => setReportModalOpen(true)}
+                onExploreNational={() => {
+                  setActiveTab("nasional");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onOpenOfficerPortal={() => {
+                  setActiveTab("dinas");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
+              />
 
-            {/* 3. Legal Foundation & Public Transparency Basis */}
-            <LegalBasisSection
-              onNavigateTab={(tab) => {
-                setActiveTab(tab);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-            />
+              {/* 2. Civic Workflow (How It Works): 4-Step Solution Flow */}
+              <CivicWorkflowSection onOpenReportModal={() => setReportModalOpen(true)} />
+
+              {/* 3. Legal Foundation & Public Transparency Basis */}
+              <LegalBasisSection
+                onNavigateTab={(tab) => {
+                  setActiveTab(tab);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              />
+            </div>
           </div>
         )}
 

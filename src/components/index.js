@@ -6,6 +6,7 @@
 // Layout Components
 export { default as Navbar } from "./layout/Navbar";
 export { default as Footer } from "./layout/Footer";
+export { default as SerpentineRoadBackground } from "./layout/SerpentineRoadBackground";
 
 // Dashboard & Metrics Components
 export { default as HeroSection } from "./dashboard/HeroSection";

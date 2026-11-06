@@ -115,45 +115,47 @@ export default function Footer({ onSelectTab }) {
             </linearGradient>
           </defs>
 
-          {/* Outer Topography Contour Lines (Geospatial survey aesthetic) */}
+          {/* Outer Topography Contour Lines (Geospatial survey aesthetic - Zig-zag switchbacks) */}
           <path
-            d="M 520,0 C 580,180 720,260 680,420 C 640,530 560,570 540,600"
+            d="M 1000,0 C 880,80 240,80 180,200 C 120,320 1080,300 1020,430 C 960,540 360,520 400,600"
             stroke="#d97706"
             strokeWidth="1"
-            strokeDasharray="4 10"
+            strokeDasharray="4 12"
             strokeOpacity="0.08"
           />
           <path
-            d="M 880,0 C 940,180 1080,260 1040,420 C 1000,530 920,570 900,600"
+            d="M 1240,0 C 1120,80 480,80 420,200 C 360,320 1320,300 1260,430 C 1200,540 600,520 640,600"
             stroke="#d97706"
             strokeWidth="1"
-            strokeDasharray="4 10"
+            strokeDasharray="4 12"
             strokeOpacity="0.08"
           />
 
-          {/* Road Asphalt Ribbon (Filled polygon from top to bottom) */}
+          {/* Road Asphalt Ribbon (Zig-Zag Switchback Highway) */}
           <path
-            d="M 620,0 C 680,180 820,260 780,420 C 740,530 660,570 640,600 L 780,600 C 800,570 880,530 920,420 C 960,260 820,180 760,0 Z"
-            fill="url(#roadSurface)"
+            d="M 1120,0 C 1000,80 360,80 300,200 C 240,320 1200,300 1140,430 C 1080,540 480,520 520,600"
+            stroke="url(#roadSurface)"
+            strokeWidth="80"
+            strokeLinecap="round"
           />
 
           {/* Left Road Shoulder / Edge Line */}
           <path
-            d="M 620,0 C 680,180 820,260 780,420 C 740,530 660,570 640,600"
+            d="M 1080,0 C 960,80 320,80 260,200 C 200,320 1160,300 1100,430 C 1040,540 440,520 480,600"
             stroke="url(#roadEdgeGlow)"
             strokeWidth="1.75"
           />
 
           {/* Right Road Shoulder / Edge Line */}
           <path
-            d="M 760,0 C 820,180 960,260 920,420 C 880,530 800,570 780,600"
+            d="M 1160,0 C 1040,80 400,80 340,200 C 280,320 1240,300 1180,430 C 1120,540 520,520 560,600"
             stroke="url(#roadEdgeGlow)"
             strokeWidth="1.75"
           />
 
           {/* Left Lane Inner Dash Guide */}
           <path
-            d="M 655,0 C 715,180 855,260 815,420 C 775,530 695,570 675,600"
+            d="M 1100,0 C 980,80 340,80 280,200 C 220,320 1180,300 1120,430 C 1060,540 460,520 500,600"
             stroke="#d97706"
             strokeWidth="1.25"
             strokeDasharray="6 22"
@@ -163,7 +165,7 @@ export default function Footer({ onSelectTab }) {
 
           {/* Center Dividing Highway Line (Animated moving dashed line) */}
           <path
-            d="M 690,0 C 750,180 890,260 850,420 C 810,530 730,570 710,600"
+            d="M 1120,0 C 1000,80 360,80 300,200 C 240,320 1200,300 1140,430 C 1080,540 480,520 520,600"
             stroke="#c2410c"
             strokeWidth="2.5"
             strokeDasharray="14 18"
@@ -174,7 +176,7 @@ export default function Footer({ onSelectTab }) {
 
           {/* Right Lane Inner Dash Guide */}
           <path
-            d="M 725,0 C 785,180 925,260 885,420 C 845,530 765,570 745,600"
+            d="M 1140,0 C 1020,80 380,80 320,200 C 260,320 1220,300 1160,430 C 1100,540 500,520 540,600"
             stroke="#d97706"
             strokeWidth="1.25"
             strokeDasharray="6 22"
