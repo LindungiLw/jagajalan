@@ -1,118 +1,168 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, ShieldCheck, ArrowUpRight } from "lucide-react";
+import {
+  Scale,
+  FileText,
+  Clock,
+  Building2,
+  ArrowUpRight,
+  ShieldCheck,
+} from "lucide-react";
 
-export default function LegalBasisSection() {
+export default function LegalBasisSection({ onNavigateTab }) {
   const regulations = [
     {
       code: "UU No. 14 / 2008",
+      citation: "Pasal 7, 9, & 11",
       title: "Keterbukaan Informasi Publik",
-      mandate: "Hak Akses Rincian Anggaran",
+      mandate: "Akses Anggaran & Kontrak Lelang",
       description:
-        "Warga berhak mengakses dokumen pagu anggaran daerah, nilai kontrak lelang, serta nama kontraktor pelaksana pemeliharaan jalan.",
+        "Warga berhak mengetahui rincian pagu APBD, nilai lelang SiRUP, serta kontraktor pelaksana pemeliharaan berkala jalan.",
       feature: "Audit LPSE & SiRUP",
+      actionLabel: "Audit Anggaran",
+      targetTab: "data-anggaran",
+      icon: FileText,
     },
     {
       code: "UU No. 25 / 2009",
+      citation: "Pasal 15 & 36",
       title: "Pelayanan Publik",
-      mandate: "Kepastian Batas Waktu Respons",
+      mandate: "Kepastian Batas Waktu Layanan",
       description:
-        "Instansi penyelenggara wajib memberikan kepastian jadwal penanganan atas aduan warga dalam batas waktu layanan yang ditetapkan.",
-      feature: "Pemantauan Tenggat Respons",
+        "Instansi penyelenggara wajib menetapkan standar waktu respons penyelesaian aduan warga secara transparan dan terukur.",
+      feature: "Hitung Mundur SLA 14 Hari",
+      actionLabel: "Pantau di Peta",
+      targetTab: "peta",
+      icon: Clock,
     },
     {
       code: "UU No. 37 / 2008",
+      citation: "Pasal 7 & 8",
       title: "Ombudsman Republik Indonesia",
-      mandate: "Pengawasan Penundaan Berlarut",
+      mandate: "Penindakan Penundaan Berlarut",
       description:
-        "Ombudsman RI berwenang memeriksa dinas yang mengabaikan aduan masyarakat melewati batas waktu wajar (undue delay).",
-      feature: "Generator Draf Eskalasi",
+        "Ombudsman RI berwenang memeriksa dinas yang membiarkan aduan masyarakat melampaui batas waktu wajar (undue delay).",
+      feature: "Generator Draf Maladministrasi",
+      actionLabel: "Portal Ombudsman",
+      targetTab: "ombudsman",
+      icon: Scale,
     },
     {
       code: "Inpres No. 3 / 2023",
+      citation: "Diktum I & II",
       title: "Konektivitas Jalan Daerah (IJD)",
       mandate: "Intervensi Fiskal APBN",
       description:
-        "Pemerintah pusat menyalurkan dana APBN langsung untuk memperbaiki ruas jalan daerah yang rusak berat apabila APBD tidak mencukupi.",
-      feature: "Pelacakan Bantuan APBN",
+        "Landasan hukum bagi pemerintah pusat untuk menyalurkan dana APBN langsung menangani jalan daerah rusak berat saat APBD terbatas.",
+      feature: "Pelacakan Alokasi APBN",
+      actionLabel: "Pantau Ruas IJD",
+      targetTab: "nasional",
+      icon: Building2,
     },
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 font-sans">
       <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
         <div className="bg-white rounded-[6px] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
           
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-5">
             <div className="space-y-1.5 max-w-2xl">
               <div className="flex items-center gap-2">
-                <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
+                <span className="rounded-[5px] px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] font-bold text-[#c2410c] bg-orange-50/90 border border-orange-200/60 inline-block font-mono">
                   Dasar Regulasi
                 </span>
-                <span className="text-slate-300">•</span>
+                <span className="h-3 w-px bg-slate-300" aria-hidden="true" />
                 <span className="text-xs font-mono font-medium text-slate-500">
-                  4 Instrumen Hukum Aktif
+                  4 Instrumen Yuridis Pelayanan Publik
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Landasan Hukum Keterbukaan &amp; Penanganan Jalan
               </h2>
-              <p className="text-xs sm:text-[13px] text-slate-500 max-w-2xl leading-relaxed font-sans">
-                Seluruh indikator batas waktu tanggapan dan mekanisme eskalasi laporan di JagaJalan mengacu langsung pada regulasi pelayanan publik yang berlaku.
+              <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-sans">
+                Setiap indikator batas waktu respons, pencocokan lelang pengadaan, dan draf eskalasi di JagaJalan berakar langsung pada peraturan perundang-undangan Republik Indonesia.
               </p>
             </div>
 
-            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Rujukan Regulasi Resmi</span>
+            <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-slate-50 border border-slate-200/80 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+              <ShieldCheck className="w-4 h-4 text-orange-700" />
+              <span>Instrumen Yuridis Resmi</span>
             </div>
           </div>
 
-          {/* 4 Cards Grid (Soft Structuralism) */}
+          {/* 4 Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {regulations.map((reg) => (
-              <div
-                key={reg.code}
-                className="p-5 rounded-[6px] bg-slate-50/70 hover:bg-white ring-1 ring-orange-200/40 hover:ring-orange-300 hover:bg-orange-50/20 hover:shadow-xs transition-all duration-200 space-y-4 flex flex-col justify-between group"
-              >
-                <div className="space-y-3">
-                  {/* Code & Feature Badge */}
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-mono font-bold tracking-tight px-2.5 py-0.5 rounded-[6px] bg-[#c2410c] text-white inline-block">
-                      {reg.code}
-                    </span>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-[6px] bg-slate-200/60 text-slate-700 font-sans">
-                      {reg.mandate}
-                    </span>
+            {regulations.map((reg) => {
+              const IconComponent = reg.icon;
+              return (
+                <div
+                  key={reg.code}
+                  className="rounded-[6px] bg-slate-50/40 hover:bg-white border border-slate-200/80 hover:border-orange-300/80 p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_4px_16px_-4px_rgba(194,65,12,0.06)] group"
+                >
+                  <div className="space-y-3">
+                    {/* Top Row: Law Code & Citation */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200/70 tracking-tight">
+                        {reg.code}
+                      </span>
+                      <span className="text-[10px] font-mono font-medium text-slate-500 bg-white/80 border border-slate-200/60 px-2 py-0.5 rounded-[5px]">
+                        {reg.citation}
+                      </span>
+                    </div>
+
+                    {/* Title & Core Mandate */}
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-orange-950 transition-colors leading-snug">
+                        {reg.title}
+                      </h3>
+                      <p className="text-[11px] font-semibold text-orange-700/90 pt-0.5">
+                        {reg.mandate}
+                      </p>
+                    </div>
+
+                    {/* Citizen Right Description */}
+                    <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                      {reg.description}
+                    </p>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-sm font-bold text-slate-950 leading-snug pt-0.5">
-                    {reg.title}
-                  </h3>
+                  {/* Operational Integration in JagaJalan */}
+                  <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-[9.5px] uppercase tracking-wider font-semibold text-slate-400">
+                        Di JagaJalan
+                      </span>
+                      <span className="text-xs font-semibold text-slate-800 truncate" title={reg.feature}>
+                        {reg.feature}
+                      </span>
+                    </div>
 
-                  {/* Description */}
-                  <p className="text-xs text-slate-500 leading-relaxed font-sans">
-                    {reg.description}
-                  </p>
+                    {onNavigateTab ? (
+                      <button
+                        type="button"
+                        onClick={() => onNavigateTab(reg.targetTab)}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-orange-700 hover:text-white bg-orange-50 hover:bg-orange-600 px-2.5 py-1 rounded-[5px] border border-orange-200/60 hover:border-orange-600 transition-colors shrink-0 group/btn cursor-pointer"
+                        title={`Buka ${reg.actionLabel}`}
+                      >
+                        <span>{reg.actionLabel}</span>
+                        <ArrowUpRight className="w-3 h-3 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                      </button>
+                    ) : (
+                      <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 bg-white px-2 py-0.5 rounded-[5px] border border-slate-200/70 shrink-0">
+                        <IconComponent className="w-3 h-3 text-orange-700" />
+                        <span>Terintegrasi</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-
-                {/* Functional Integration in JagaJalan */}
-                <div className="pt-3.5 border-t border-slate-200/50 flex items-center justify-between gap-2 text-[11px] font-medium text-slate-600">
-                  <span className="truncate text-slate-800 font-semibold">{reg.feature}</span>
-                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-[5px] ring-1 ring-emerald-200/60 shrink-0 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                    <span>Berlaku</span>
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
     </section>
   );
 }
-

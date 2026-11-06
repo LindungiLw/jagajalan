@@ -55,7 +55,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
                 <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
                   Alur Kerja Sistem
                 </span>
-                <span className="text-slate-300">•</span>
+                <span className="h-3 w-px bg-slate-300" aria-hidden="true" />
                 <span className="text-xs font-mono font-medium text-slate-500">
                   4 Tahap Penanganan
                 </span>

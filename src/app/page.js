@@ -150,7 +150,12 @@ export default function Home() {
             <CivicWorkflowSection onOpenReportModal={() => setReportModalOpen(true)} />
 
             {/* 3. Legal Foundation & Public Transparency Basis */}
-            <LegalBasisSection />
+            <LegalBasisSection
+              onNavigateTab={(tab) => {
+                setActiveTab(tab);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            />
           </div>
         )}
 
