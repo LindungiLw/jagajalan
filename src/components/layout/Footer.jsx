@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Globe,
   Database,
@@ -11,6 +11,26 @@ import {
 } from "lucide-react";
 
 export default function Footer({ onSelectTab }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const footerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleNav = (tabId) => {
     if (onSelectTab) {
       onSelectTab(tabId);
@@ -45,20 +65,127 @@ export default function Footer({ onSelectTab }) {
   ];
 
   return (
-    <footer className="relative bg-[#FAF7F2] border-t border-[#E6DFD5] text-slate-600 font-sans mt-16 overflow-hidden">
-      {/* Decorative Organic Accent Rings (Circulo-inspired warm geometry) */}
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 pointer-events-none select-none opacity-40">
-        <svg viewBox="0 0 200 200" fill="none" className="w-full h-full text-amber-500">
-          <circle cx="50" cy="150" r="100" stroke="currentColor" strokeWidth="24" strokeLinecap="round" />
-        </svg>
-      </div>
-      <div className="absolute -top-28 -right-28 w-80 h-80 pointer-events-none select-none opacity-25">
-        <svg viewBox="0 0 200 200" fill="none" className="w-full h-full text-amber-400">
-          <circle cx="150" cy="50" r="115" stroke="currentColor" strokeWidth="32" strokeLinecap="round" />
+    <footer
+      ref={footerRef}
+      className="relative bg-[#FAF7F2] border-t border-[#E6DFD5] text-slate-600 font-sans mt-16 overflow-hidden select-none"
+    >
+      <style>{`
+        @keyframes highwayFlow {
+          0% {
+            stroke-dashoffset: 0;
+          }
+          100% {
+            stroke-dashoffset: -128;
+          }
+        }
+        .animate-highway-flow {
+          animation: highwayFlow 9s linear infinite;
+        }
+        .animate-highway-flow-slow {
+          animation: highwayFlow 15s linear infinite;
+        }
+      `}</style>
+
+      {/* BACKGROUND: Stylized Animated Road Ribbon Flowing Top-to-Bottom */}
+      <div
+        className={`absolute inset-0 pointer-events-none overflow-hidden transition-all duration-1000 ease-out ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 1440 600"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full"
+        >
+          <defs>
+            {/* Soft Asphalt Surface Gradient */}
+            <linearGradient id="roadSurface" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.03" />
+              <stop offset="50%" stopColor="#ea580c" stopOpacity="0.05" />
+              <stop offset="100%" stopColor="#d97706" stopOpacity="0.03" />
+            </linearGradient>
+
+            {/* Glowing Accent for Road Shoulder */}
+            <linearGradient id="roadEdgeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#c2410c" stopOpacity="0.08" />
+              <stop offset="50%" stopColor="#d97706" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.08" />
+            </linearGradient>
+          </defs>
+
+          {/* Outer Topography Contour Lines (Geospatial survey aesthetic) */}
+          <path
+            d="M 520,0 C 580,180 720,260 680,420 C 640,530 560,570 540,600"
+            stroke="#d97706"
+            strokeWidth="1"
+            strokeDasharray="4 10"
+            strokeOpacity="0.08"
+          />
+          <path
+            d="M 880,0 C 940,180 1080,260 1040,420 C 1000,530 920,570 900,600"
+            stroke="#d97706"
+            strokeWidth="1"
+            strokeDasharray="4 10"
+            strokeOpacity="0.08"
+          />
+
+          {/* Road Asphalt Ribbon (Filled polygon from top to bottom) */}
+          <path
+            d="M 620,0 C 680,180 820,260 780,420 C 740,530 660,570 640,600 L 780,600 C 800,570 880,530 920,420 C 960,260 820,180 760,0 Z"
+            fill="url(#roadSurface)"
+          />
+
+          {/* Left Road Shoulder / Edge Line */}
+          <path
+            d="M 620,0 C 680,180 820,260 780,420 C 740,530 660,570 640,600"
+            stroke="url(#roadEdgeGlow)"
+            strokeWidth="1.75"
+          />
+
+          {/* Right Road Shoulder / Edge Line */}
+          <path
+            d="M 760,0 C 820,180 960,260 920,420 C 880,530 800,570 780,600"
+            stroke="url(#roadEdgeGlow)"
+            strokeWidth="1.75"
+          />
+
+          {/* Left Lane Inner Dash Guide */}
+          <path
+            d="M 655,0 C 715,180 855,260 815,420 C 775,530 695,570 675,600"
+            stroke="#d97706"
+            strokeWidth="1.25"
+            strokeDasharray="6 22"
+            strokeOpacity="0.14"
+            className="animate-highway-flow-slow"
+          />
+
+          {/* Center Dividing Highway Line (Animated moving dashed line) */}
+          <path
+            d="M 690,0 C 750,180 890,260 850,420 C 810,530 730,570 710,600"
+            stroke="#c2410c"
+            strokeWidth="2.5"
+            strokeDasharray="14 18"
+            strokeOpacity="0.32"
+            strokeLinecap="round"
+            className="animate-highway-flow"
+          />
+
+          {/* Right Lane Inner Dash Guide */}
+          <path
+            d="M 725,0 C 785,180 925,260 885,420 C 845,530 765,570 745,600"
+            stroke="#d97706"
+            strokeWidth="1.25"
+            strokeDasharray="6 22"
+            strokeOpacity="0.14"
+            className="animate-highway-flow-slow"
+          />
         </svg>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+      {/* FOREGROUND CONTENT: Clean, High-Contrast Editorial Layout */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
         {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-[#E6DFD5]/80">
           
@@ -87,7 +214,7 @@ export default function Footer({ onSelectTab }) {
                 target="_blank"
                 rel="noreferrer"
                 title="Satu Data Kementerian PU"
-                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <Globe className="w-4 h-4" />
               </a>
@@ -96,7 +223,7 @@ export default function Footer({ onSelectTab }) {
                 target="_blank"
                 rel="noreferrer"
                 title="Portal Pengadaan LKPP Inaproc"
-                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <Database className="w-4 h-4" />
               </a>
@@ -105,14 +232,14 @@ export default function Footer({ onSelectTab }) {
                 target="_blank"
                 rel="noreferrer"
                 title="Ombudsman Republik Indonesia"
-                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <Scale className="w-4 h-4" />
               </a>
               <a
                 href="/portaldinas"
                 title="Portal Kerja Dinas (Aparatur)"
-                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <ShieldCheck className="w-4 h-4" />
               </a>
@@ -121,7 +248,7 @@ export default function Footer({ onSelectTab }) {
                 target="_blank"
                 rel="noreferrer"
                 title="Repositori Sumber Terbuka (Open Source)"
-                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
