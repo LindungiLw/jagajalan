@@ -8,38 +8,38 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
     {
       step: "01",
       customIcon: "/icon/camera_icon.png",
-      badge: "AI Vision",
-      title: "Klasifikasi Otomatis AI",
+      badge: "Integritas Data",
+      title: "Validasi Bukti & Anti-Spam",
       description:
-        "Menyaring foto tidak relevan dan mengestimasi tingkat keparahan kerusakan jalan secara instan.",
-      outcome: "Anti-Spam & Skor Bahaya",
+        "Memverifikasi keaslian dokumentasi foto kerusakan jalan dan mengukur estimasi keparahan fisik secara objektif.",
+      outcome: "Anti-Spam & Skor Bahaya Fisik",
     },
     {
       step: "02",
       customIcon: "/icon/maps.png",
       badge: "SK Geospasial",
-      title: "Kunci Wewenang Instansi",
+      title: "Kepastian Wewenang Dinas",
       description:
-        "Mencocokkan koordinat GPS dengan SK batas jalan resmi agar instansi tidak saling lempar tanggung jawab.",
-      outcome: "Kunci Pejabat & Dinas PIC",
+        "Mencocokkan koordinat presisi dengan SK status jalan resmi untuk mengunci instansi teknis penanggung jawab.",
+      outcome: "Kunci Dinas & Pejabat PIC",
     },
     {
       step: "03",
       customIcon: "/icon/financial.png",
       badge: "Audit LPSE",
-      title: "Penelusuran Anggaran",
+      title: "Penelusuran Tender & Pagu",
       description:
-        "Menyandingkan lokasi jalan dengan paket lelang LPSE untuk transparansi alokasi dana pemeliharaan.",
-      outcome: "Cross-Match Nilai Kontrak",
+        "Menyandingkan titik ruas dengan paket pengadaan SiRUP/LPSE untuk transparansi alokasi dana pemeliharaan berkala.",
+      outcome: "Uji Silang Nilai Kontrak Lelang",
     },
     {
       step: "04",
       customIcon: "/icon/time.png",
       badge: "UU No. 25/2009",
-      title: "SLA & Ombudsman RI",
+      title: "SLA & Advokasi Ombudsman",
       description:
-        "Memantau kepatuhan batas waktu respons dinas. Jika diabaikan, draf pengaduan maladministrasi siap diunduh.",
-      outcome: "Kepastian Hukum & Eskalasi",
+        "Memantau kepatuhan tenggat respons dinas. Menyiapkan draf formal pengaduan jika terjadi penundaan berlarut (undue delay).",
+      outcome: "Kepastian Hukum & Eksekusi",
     },
   ];
 

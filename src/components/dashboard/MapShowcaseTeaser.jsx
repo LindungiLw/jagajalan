@@ -44,7 +44,7 @@ export default function MapShowcaseTeaser({
               </div>
 
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
-                Jelajahi garis ruas jalan ber-SK resmi lintas 38 provinsi di Indonesia dan koridor percontohan Sumatera Utara. Buka kotak hitam birokrasi: identifikasi instansi penanggung jawab secara pasti, lacak posisi lubang aspal terverifikasi AI, dan bandingkan langsung dengan paket lelang di LPSE.
+                Jelajahi bentang ruas jalan berlandaskan SK penetapan resmi lintas 38 provinsi dan koridor percontohan. Dapatkan kepastian instansi teknis penanggung jawab, pantau titik kerusakan yang terverifikasi, dan sandingkan langsung dengan paket pengadaan lelang LPSE.
               </p>
 
               {/* Quick Metrics Badges (Soft Structuralism) */}

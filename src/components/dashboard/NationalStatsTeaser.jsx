@@ -32,10 +32,10 @@ export default function NationalStatsTeaser({ onExploreNational }) {
                     <span>Data BPS &amp; SP4N-LAPOR! • Skala Makro Nasional</span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-                    Peta Sebaran &amp; Ranking Kerusakan Jalan di 38 Provinsi
+                    Peta Komparasi &amp; Peringkat Kemantapan Jalan 38 Provinsi
                   </h2>
                   <p className="text-xs text-slate-500 leading-relaxed font-sans pt-0.5">
-                    Sebanyak <strong className="text-slate-800">{NATIONAL_STATS.nationalAverageDamaged}%</strong> jaringan jalan daerah di seluruh Indonesia tercatat dalam kondisi tidak mantap. Telusuri perbandingan rasio kerusakan, volume aduan masyarakat, dan alokasi dana Inpres per provinsi.
+                    Sebanyak <strong className="text-slate-800">{NATIONAL_STATS.nationalAverageDamaged}%</strong> bentang jalan daerah se-Indonesia tercatat dalam kondisi tidak mantap (BPS). Telusuri disparitas rasio kerusakan, volume aduan publik, dan kucuran intervensi fiskal Inpres per provinsi.
                   </p>
                 </div>
               </div>
@@ -46,7 +46,7 @@ export default function NationalStatsTeaser({ onExploreNational }) {
               onClick={onExploreNational}
               className="inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full text-xs sm:text-sm font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-sm hover:shadow-md transition-all cursor-pointer self-start lg:self-auto shrink-0 active:scale-[0.98] font-sans"
             >
-              <span>Buka Papan Skor Lengkap 38 Provinsi</span>
+              <span>Buka Papan Skor 38 Provinsi</span>
               <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                 <ArrowRight className="w-3.5 h-3.5 text-white" />
               </span>
