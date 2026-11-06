@@ -1731,7 +1731,7 @@ export default function HeroSection({
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1.5 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
+                  <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
                     Katalog Ruas &amp; LPSE
                   </span>
                   <span className="text-slate-300">•</span>
@@ -1740,10 +1740,10 @@ export default function HeroSection({
                   </span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
-                  Tabel Penelusuran Ruas &amp; Anggaran APBD
+                  Daftar Ruas Jalan, Wewenang Dinas &amp; Kontrak LPSE
                 </h2>
                 <p className="text-xs text-slate-500 font-sans leading-relaxed">
-                  Transparansi wewenang dinas, kepatuhan batas waktu respons resmi, serta pagu dan realisasi kontrak proyek pengadaan fisik jalan.
+                  Periksa instansi penanggung jawab setiap ruas jalan beserta nilai pagu, kontrak pemenang tender, dan status tanggapan aduan lapangan.
                 </p>
               </div>
 

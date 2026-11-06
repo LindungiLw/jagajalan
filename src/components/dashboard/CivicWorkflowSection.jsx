@@ -9,37 +9,37 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
       step: "01",
       customIcon: "/icon/camera_icon.png",
       badge: "Integritas Data",
-      title: "Validasi Bukti & Anti-Spam",
+      title: "Verifikasi Foto & Skor Bahaya",
       description:
-        "Memverifikasi keaslian dokumentasi foto kerusakan jalan dan mengukur estimasi keparahan fisik secara objektif.",
-      outcome: "Anti-Spam & Skor Bahaya Fisik",
+        "Memeriksa keaslian foto laporan warga dan menghitung estimasi kerusakan permukaan aspal pada lajur jalan.",
+      outcome: "Saring Duplikat & Skor Risiko",
     },
     {
       step: "02",
       customIcon: "/icon/maps.png",
       badge: "SK Geospasial",
-      title: "Kepastian Wewenang Dinas",
+      title: "Penentuan Dinas Penanggung Jawab",
       description:
-        "Mencocokkan koordinat presisi dengan SK status jalan resmi untuk mengunci instansi teknis penanggung jawab.",
-      outcome: "Kunci Dinas & Pejabat PIC",
+        "Mencocokkan titik GPS laporan dengan SK status jalan resmi agar laporan langsung masuk ke meja dinas yang berwenang.",
+      outcome: "Kunci Instansi & Pejabat PIC",
     },
     {
       step: "03",
       customIcon: "/icon/financial.png",
       badge: "Audit LPSE",
-      title: "Penelusuran Tender & Pagu",
+      title: "Pencocokan Paket Lelang LPSE",
       description:
-        "Menyandingkan titik ruas dengan paket pengadaan SiRUP/LPSE untuk transparansi alokasi dana pemeliharaan berkala.",
-      outcome: "Uji Silang Nilai Kontrak Lelang",
+        "Menghubungkan lokasi kerusakan dengan paket pemeliharaan SiRUP/LPSE untuk memeriksa pagu, nilai kontrak, dan rekanan.",
+      outcome: "Data Kontrak & Kontraktor",
     },
     {
       step: "04",
       customIcon: "/icon/time.png",
       badge: "UU No. 25/2009",
-      title: "SLA & Advokasi Ombudsman",
+      title: "Pantau Tenggat & Draf Ombudsman",
       description:
-        "Memantau kepatuhan tenggat respons dinas. Menyiapkan draf formal pengaduan jika terjadi penundaan berlarut (undue delay).",
-      outcome: "Kepastian Hukum & Eksekusi",
+        "Menghitung mundur batas waktu tanggapan 14 hari kerja dan menyiapkan surat pengaduan ke Ombudsman RI jika dinas terlambat merespons.",
+      outcome: "Draf Eskalasi Maladministrasi",
     },
   ];
 
@@ -52,19 +52,19 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="space-y-1.5 max-w-2xl">
               <div className="flex items-center gap-2">
-                <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
-                  SOP Standar Kepatuhan
+                <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
+                  Alur Kerja Sistem
                 </span>
                 <span className="text-slate-300">•</span>
                 <span className="text-xs font-mono font-medium text-slate-500">
-                  4 Tahapan Verifikasi
+                  4 Tahap Penanganan
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
-                Alur Verifikasi &amp; Akuntabilitas Tindak Lanjut
+                Dari Foto Lapangan hingga Tindak Lanjut Dinas
               </h2>
               <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans">
-                Empat tahapan sistem yang menjamin laporan jalan rusak terverifikasi secara geospasial, transparan secara anggaran, dan terikat batas waktu hukum resmi.
+                Setiap laporan yang masuk langsung dicocokkan dengan titik koordinat SK jalan, data kontrak pemeliharaan LPSE, serta batas waktu tanggapan dinas sesuai UU Pelayanan Publik.
               </p>
             </div>
 
@@ -72,10 +72,10 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
             <div className="shrink-0 self-start sm:self-auto">
               <button
                 onClick={onOpenReportModal}
-                className="group inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer font-sans"
+                className="group inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer font-sans"
               >
                 <span>Buat Laporan Baru</span>
-                <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                <span className="w-6 h-6 rounded-[4px] bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
                   <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </span>
               </button>

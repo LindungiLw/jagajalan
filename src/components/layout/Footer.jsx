@@ -31,10 +31,10 @@ export default function Footer({ onSelectTab }) {
               />
             </div>
             <p className="text-xs text-slate-500 leading-relaxed font-sans max-w-sm">
-              Platform transparansi kewenangan jalan, pengawasan anggaran lelang proyek, dan kepastian tindak lanjut pengaduan publik berbasis data geospasial resmi.
+              Portal pemantauan wewenang jalan nasional dan daerah, penelusuran kontrak pemeliharaan LPSE, serta pengawasan batas waktu tindak lanjut aduan warga.
             </p>
             <p className="text-[11px] text-slate-400 font-sans">
-              Sesuai amanat UU KIP No. 14/2008 & UU Pelayanan Publik No. 25/2009.
+              Mengacu pada UU KIP No. 14/2008, UU Pelayanan Publik No. 25/2009, dan UU Ombudsman No. 37/2008.
             </p>
           </div>
 

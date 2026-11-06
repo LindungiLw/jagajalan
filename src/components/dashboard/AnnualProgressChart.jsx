@@ -157,10 +157,10 @@ export default function AnnualProgressChart() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-            Tren Kemantapan Jalan &amp; Ketimpangan Daerah
+            Perbandingan Kemantapan Jalan Nasional vs Daerah
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Analisis historis jurang kemantapan jalan daerah vs nasional (BPS SIRUSA) dan distribusi bentang ruas se-Indonesia.
+            Data historis BPS SIRUSA (2020–2024) yang memperlihatkan selisih kondisi jalan kabupaten/kota dibanding jalan nasional beserta proporsi panjang ruasnya.
           </p>
         </div>
 

@@ -122,10 +122,10 @@ export default function OmbudsmanMonitorSection({
                   </span>
                 </div>
                 <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-                  Pusat Pemantauan SLA &amp; Eskalasi Ombudsman
+                  Pemantauan Batas Waktu Tanggapan &amp; Draf Ombudsman
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed font-sans">
-                  Menghitung mundur batas toleransi respons dinas. Laporan yang melewati batas tenggat resmi dapat langsung dieskalasi sebagai dugaan maladministrasi penundaan berlarut.
+                  Memantau sisa waktu tanggapan dinas atas setiap aduan jalan rusak. Jika melewati 14 hari kerja tanpa tindakan, warga dapat langsung mengunduh draf pengaduan ke Ombudsman RI.
                 </p>
               </div>
             </div>
@@ -137,12 +137,12 @@ export default function OmbudsmanMonitorSection({
                   <Clock className="w-3.5 h-3.5 text-rose-600" />
                   <span>Batas Respons Wajib</span>
                 </span>
-                <span className="font-bold text-rose-600 tabular-nums bg-rose-50 px-2 py-0.5 rounded-full text-[11px] ring-1 ring-rose-200/50">
+                <span className="font-bold text-rose-600 tabular-nums bg-rose-50 px-2 py-0.5 rounded-[6px] text-[11px] ring-1 ring-rose-200/50">
                   {counts.overdue} Terlambat
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 leading-normal">
-                Dinas berwenang wajib memberikan kepastian tindak lanjut dan jadwal penanganan resmi.
+                Sesuai UU No. 25/2009, dinas penyelenggara wajib menyampaikan jadwal penanganan resmi sebelum tenggat berakhir.
               </p>
             </div>
           </div>

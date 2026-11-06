@@ -18,8 +18,9 @@ export { default as CivicWorkflowSection } from "./dashboard/CivicWorkflowSectio
 export { default as LegalBasisSection } from "./dashboard/LegalBasisSection";
 export { default as OmbudsmanMonitorSection } from "./dashboard/OmbudsmanMonitorSection";
 
-// Geospatial & Map Components (MapInner is loaded via next/dynamic ssr:false inside MapExplorer)
+// Geospatial & Map Components
 export { default as MapExplorer } from "./map/MapExplorer";
+export { default as MapInner } from "./map/MapInner";
 
 // Modals & Civic Escalation
 export { default as ReportModal } from "./modals/ReportModal";

@@ -10,7 +10,7 @@ export default function LegalBasisSection() {
       title: "Keterbukaan Informasi Publik",
       mandate: "Hak Akses Rincian Anggaran",
       description:
-        "Menjamin hak setiap warga negara untuk mengetahui rencana kebijakan, pagu alokasi belanja daerah, dan rincian tender proyek jalan.",
+        "Warga berhak mengakses dokumen pagu anggaran daerah, nilai kontrak lelang, serta nama kontraktor pelaksana pemeliharaan jalan.",
       feature: "Audit LPSE & SiRUP",
     },
     {
@@ -18,7 +18,7 @@ export default function LegalBasisSection() {
       title: "Pelayanan Publik",
       mandate: "Kepastian Batas Waktu Respons",
       description:
-        "Mewajibkan dinas penyelenggara layanan memberikan kepastian waktu dan tanggapan formal. Keterlambatan dikenai sanksi administratif.",
+        "Instansi penyelenggara wajib memberikan kepastian jadwal penanganan atas aduan warga dalam batas waktu layanan yang ditetapkan.",
       feature: "Pemantauan Tenggat Respons",
     },
     {
@@ -26,7 +26,7 @@ export default function LegalBasisSection() {
       title: "Ombudsman Republik Indonesia",
       mandate: "Pengawasan Penundaan Berlarut",
       description:
-        "Memberikan wewenang pengawasan eksternal untuk menindak dugaan maladministrasi penundaan berlarut (undue delay) oleh dinas berwenang.",
+        "Ombudsman RI berwenang memeriksa dinas yang mengabaikan aduan masyarakat melewati batas waktu wajar (undue delay).",
       feature: "Generator Draf Eskalasi",
     },
     {
@@ -34,7 +34,7 @@ export default function LegalBasisSection() {
       title: "Konektivitas Jalan Daerah (IJD)",
       mandate: "Intervensi Fiskal APBN",
       description:
-        "Instruksi Presiden bagi percepatan penanganan jalan daerah yang rusak parah melalui kucuran anggaran intervensi darurat pemerintah pusat.",
+        "Pemerintah pusat menyalurkan dana APBN langsung untuk memperbaiki ruas jalan daerah yang rusak berat apabila APBD tidak mencukupi.",
       feature: "Pelacakan Bantuan APBN",
     },
   ];
@@ -48,25 +48,25 @@ export default function LegalBasisSection() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="space-y-1.5 max-w-2xl">
               <div className="flex items-center gap-2">
-                <span className="rounded-full px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-slate-500 bg-slate-100 inline-block font-sans">
-                  Instrumen Kebijakan Publik
+                <span className="rounded-[6px] px-2.5 py-0.5 text-[9.5px] uppercase tracking-[0.18em] font-bold text-[#c2410c] bg-orange-50 inline-block font-sans">
+                  Dasar Regulasi
                 </span>
                 <span className="text-slate-300">•</span>
                 <span className="text-xs font-mono font-medium text-slate-500">
-                  4 Instrumen Regulasi Aktif
+                  4 Instrumen Hukum Aktif
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
-                Payung Hukum Transparansi &amp; Pengawasan Publik
+                Landasan Hukum Keterbukaan &amp; Penanganan Jalan
               </h2>
               <p className="text-xs sm:text-[13px] text-slate-500 max-w-2xl leading-relaxed font-sans">
-                Setiap data, hitung mundur SLA, dan laporan di JagaJalan berlandaskan instrumen perundang-undangan resmi Republik Indonesia untuk menjamin kepatuhan dinas.
+                Seluruh indikator batas waktu tanggapan dan mekanisme eskalasi laporan di JagaJalan mengacu langsung pada regulasi pelayanan publik yang berlaku.
               </p>
             </div>
 
-            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 ring-1 ring-orange-200/40 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans">
+            <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Kepatuhan Hukum Terjamin</span>
+              <span>Rujukan Regulasi Resmi</span>
             </div>
           </div>
 
@@ -80,10 +80,10 @@ export default function LegalBasisSection() {
                 <div className="space-y-3">
                   {/* Code & Feature Badge */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-mono font-bold tracking-tight px-2.5 py-0.5 rounded-full bg-[#c2410c] text-white inline-block">
+                    <span className="text-[11px] font-mono font-bold tracking-tight px-2.5 py-0.5 rounded-[6px] bg-[#c2410c] text-white inline-block">
                       {reg.code}
                     </span>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/60 text-slate-700 font-sans">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-[6px] bg-slate-200/60 text-slate-700 font-sans">
                       {reg.mandate}
                     </span>
                   </div>

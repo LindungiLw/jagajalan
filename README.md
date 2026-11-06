@@ -38,39 +38,38 @@
 
 ## 1. Latar Belakang dan Urgensi Masalah
 
-Kerusakan jalan raya di Indonesia bukan sekadar persoalan teknis keausan aspal, melainkan cerminan tantangan transparansi tata kelola birokrasi, fragmentasi batas kewenangan, dan lemahnya keterbukaan penelusuran anggaran pemeliharaan. Berdasarkan data resmi nasional:
+Penanganan jalan rusak di Indonesia sering terhambat oleh tiga masalah tata kelola di luar faktor teknis keausan aspal: batas wewenang antardinas yang tumpang-tindih, data kontrak pemeliharaan LPSE yang terpisah dari peta jalan, serta lambatnya respons instansi daerah. Berdasarkan data resmi nasional:
 
-1. **Persoalan Tata Kelola Pelayanan Publik di Tingkat Daerah (Data Ombudsman RI 2025/2026)**
-   Laporan Tahunan Ombudsman Republik Indonesia (dipublikasikan Februari 2026) mencatat bahwa sepanjang tahun 2025, sebanyak **4.766 laporan masyarakat tertuju kepada Pemerintah Daerah** (Pemerintah Provinsi, Kabupaten, dan Kota). Dari total laporan nasional, substansi perhubungan dan infrastruktur menyumbang **622 laporan**, dengan bentuk dugaan maladministrasi tertinggi adalah **Penundaan Berlarut (*Undue Delay*) sebesar 21,25%**. Data ini menegaskan adanya kendala substantif pada kecepatan tanggapan dan akuntabilitas birokrasi pelayanan publik di tingkat daerah.
+1. **Tingginya Penundaan Tanggapan di Tingkat Daerah (Data Ombudsman RI 2025/2026)**
+   Laporan Tahunan Ombudsman Republik Indonesia (dipublikasikan Februari 2026) mencatat **4.766 laporan masyarakat yang ditujukan kepada Pemerintah Daerah** (Provinsi, Kabupaten, dan Kota) sepanjang tahun 2025. Sektor perhubungan dan infrastruktur menyumbang **622 laporan**, dengan bentuk dugaan maladministrasi tertinggi berupa **Penundaan Berlarut (*Undue Delay*) sebesar 21,25%**. Angka ini menunjukkan masih lambatnya tindak lanjut birokrasi daerah atas keluhan warga.
 
-2. **Disparitas Kemantapan Jalan Nasional vs Jalan Daerah**
-   Berdasarkan basis data Satu Data Kementerian Pekerjaan Umum, terdapat kesenjangan kemantapan infrastruktur yang signifikan antara jalan nasional dan jalan daerah:
-   - Jalan Nasional secara konsisten mencatat tingkat kemantapan di atas 90%.
-   - Sebaliknya, jalan provinsi serta jalan kabupaten/kota di berbagai wilayah memiliki proporsi jalan rusak ringan hingga rusak berat yang tinggi akibat keterbatasan kapasitas fiskal dan alokasi anggaran pemeliharaan rutin daerah.
-   - Kondisi disparitas ini menjadi latar belakang diterbitkannya **Instruksi Presiden (Inpres) No. 3 Tahun 2023 tentang Percepatan Peningkatan Konektivitas Jalan Daerah** dengan alokasi tahap pertama sebesar **Rp 14,6 Triliun pada Tahun Anggaran 2023** untuk mengintervensi perbaikan jalan daerah yang rusak.
+2. **Kesenjangan Kemantapan Jalan Nasional vs Jalan Daerah**
+   Data Satu Data Kementerian Pekerjaan Umum dan BPS SIRUSA menunjukkan ketimpangan kondisi fisik antara jalan nasional dan jalan daerah:
+   - Jalan Nasional memiliki tingkat kemantapan di atas 90% karena didukung pembiayaan rutin APBN.
+   - Sebaliknya, hampir 43% jalan kabupaten/kota mengalami rusak ringan hingga rusak berat akibat terbatasnya anggaran pemeliharaan APBD.
+   - Ketimpangan ini mendorong diterbitkannya **Instruksi Presiden (Inpres) No. 3 Tahun 2023 tentang Percepatan Peningkatan Konektivitas Jalan Daerah (IJD)** dengan kucuran dana APBN sebesar **Rp 14,6 Triliun (Tahap I/2023)** dan **Rp 15,3 Triliun (Tahap II/2024)** untuk memperbaiki jalan daerah yang rusak parah.
 
-3. **Fenomena "Saling Lempar Kewenangan" (*Blame-Shifting*)**
-   Masyarakat awam kesulitan membedakan status administrasi jalan yang dilalui setiap hari:
-   - Jalan Nasional: wewenang Kementerian Pekerjaan Umum melalui Balai Besar Pelaksanaan Jalan Nasional (BBPJN).
-   - Jalan Provinsi: wewenang Dinas Bina Marga Provinsi.
-   - Jalan Kota/Kabupaten: wewenang Dinas Pekerjaan Umum dan Penataan Ruang (PUPR) Daerah.
-   Ketiadaan integrasi data spasial terbuka menyebabkan dinas pemerintah kerap melempar tanggung jawab (*blame-shifting*) atau menyatakan bahwa ruas yang dikeluhkan warga bukan merupakan wewenang instansinya.
+3. **Kebingungan Warga atas Batas Wewenang Jalan (*Blame-Shifting*)**
+   Pengguna jalan umumnya tidak mengetahui instansi mana yang bertanggung jawab atas ruas jalan yang mereka lewati setiap hari:
+   - Jalan Nasional: tanggung jawab Kementerian Pekerjaan Umum melalui Balai Besar Pelaksanaan Jalan Nasional (BBPJN).
+   - Jalan Provinsi: tanggung jawab Dinas Bina Marga Provinsi.
+   - Jalan Kota/Kabupaten: tanggung jawab Dinas Pekerjaan Umum dan Penataan Ruang (PUPR) Kota/Kabupaten.
+   Karena peta batas SK jalan jarang dibuka ke publik, aduan warga sering salah alamat atau dilempar dari satu dinas ke dinas lain.
 
-4. **Ketiadaan Tautan Antara Titik Kerusakan dan Dokumen Tender Proyek APBD**
-   Selama ini, sistem penanganan jalan dan sistem keterbukaan anggaran pengadaan (LPSE/APBD) berjalan di ruang terpisah (*siloed systems*). Masyarakat tidak memiliki akses untuk mengetahui apakah ruas jalan yang rusak telah memiliki alokasi anggaran paket pemeliharaan berkala, siapa kontraktor yang memenangkan tender, berapa nilai kontraknya, atau mengapa pengerjaan fisiknya belum terealisasi di lapangan.
+4. **Terpisahnya Data Aduan Jalan dari Data Kontrak Lelang LPSE**
+   Selama ini, kanal pengaduan warga dan portal pengadaan proyek (SiRUP/LPSE) berjalan sendiri-sendiri. Warga tidak tahu apakah jalan berlubang di depan rumahnya sebenarnya sudah memiliki kontrak pemeliharaan aktif, siapa kontraktor pemenang tendernya, berapa nilai kontraknya, atau kapan masa pemeliharaan proyek tersebut berakhir.
 
-5. **Justifikasi Pemilihan Wilayah Pilot (Jawa Barat & Koridor Bodetabek)**
-   Provinsi Jawa Barat dan koridor aglomerasi Bodetabek (Bogor, Depok, Bekasi) dipilih sebagai wilayah percontohan (*pilot study*) berbasis pertimbangan data yang dapat diuji (*evidence-based justification*):
-   - Ketersediaan portal keterbukaan data anggaran dan LPSE yang matang melalui Portal Satu Data Jabar dan LPSE Jabar.
-   - Kelengkapan dokumen hukum penetapan status ruas jalan (Keputusan Menteri PU dan Keputusan Gubernur Jawa Barat).
-   - Kepadatan mobilitas komuter harian dengan beban tonase beragam, di mana jalan nasional, provinsi, dan kota saling bersinggungan secara langsung.
-   - Memungkinkan tim pengembang memverifikasi kebenaran ruas dan dokumen anggarannya secara akurat.
+5. **Alasan Pemilihan Wilayah Pilot (Jawa Barat, Bodetabek, & Sumatera Utara)**
+   Koridor Jawa Barat (Bodetabek: Bogor, Depok, Bekasi) dan Sumatera Utara dipilih sebagai lokasi pengujian awal berdasarkan kelengkapan data terbuka yang dapat diverifikasi:
+   - Ketersediaan data paket lelang pemeliharaan jalan pada LPSE Jawa Barat, LPSE Kota Depok, dan LPSE Sumatera Utara.
+   - Ketersediaan dokumen SK penetapan status jalan nasional, provinsi, dan kabupaten/kota.
+   - Tingginya volume lalu lintas harian yang mempertemukan ruas jalan nasional, provinsi, dan kabupaten/kota dalam satu koridor.
 
 ---
 
 ## 2. Posisi Inovasi dan Pembeda Utama (Diferensiasi)
 
-JagaJalan **bukan sekadar aplikasi pelaporan jalan rusak konvensional**. Pemerintah telah memiliki sistem seperti **Jalan Kita 2.0** (Kementerian PU) dan **SP4N-LAPOR!** (Kementerian PANRB). Kehadiran JagaJalan diposisikan sebagai **Lapisan Transparansi Terpadu (*Integrated Transparency Layer*)** yang menghubungkan tiga informasi krusial yang selama ini terpisah:
+Berbeda dari kanal pelaporan satu arah seperti **Jalan Kita 2.0** (Kementerian PU) atau **SP4N-LAPOR!** (Kementerian PANRB), JagaJalan menggabungkan tiga informasi yang sebelumnya terpisah ke dalam satu layar: **peta SK wewenang jalan**, **dokumen kontrak lelang LPSE**, dan **hitung mundur batas waktu tanggapan 14 hari kerja**.
 
 ### Tabel Perbandingan Sistem:
 
