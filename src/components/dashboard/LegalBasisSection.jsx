@@ -6,56 +6,44 @@ import {
   FileText,
   Clock,
   Building2,
-  ArrowUpRight,
+  ArrowRight,
   ShieldCheck,
 } from "lucide-react";
 
 export default function LegalBasisSection({ onNavigateTab }) {
   const regulations = [
     {
-      code: "UU No. 14 / 2008",
-      citation: "Pasal 7, 9, & 11",
-      title: "Keterbukaan Informasi Publik",
-      mandate: "Akses Anggaran & Kontrak Lelang",
-      description:
-        "Warga berhak mengetahui rincian pagu APBD, nilai lelang SiRUP, serta kontraktor pelaksana pemeliharaan berkala jalan.",
-      feature: "Audit LPSE & SiRUP",
-      actionLabel: "Audit Anggaran",
+      code: "UU 14/2008",
+      citation: "Pasal 7 & 11",
+      title: "Keterbukaan Anggaran",
+      summary: "Hak akses pagu APBD dan rincian pemenang tender LPSE.",
+      actionLabel: "Audit Data Lelang",
       targetTab: "data-anggaran",
       icon: FileText,
     },
     {
-      code: "UU No. 25 / 2009",
+      code: "UU 25/2009",
       citation: "Pasal 15 & 36",
-      title: "Pelayanan Publik",
-      mandate: "Kepastian Batas Waktu Layanan",
-      description:
-        "Instansi penyelenggara wajib menetapkan standar waktu respons penyelesaian aduan warga secara transparan dan terukur.",
-      feature: "Hitung Mundur SLA 14 Hari",
+      title: "Kepastian Tanggap",
+      summary: "Kewajiban dinas menindaklanjuti laporan dalam batas waktu resmi.",
       actionLabel: "Pantau di Peta",
       targetTab: "peta",
       icon: Clock,
     },
     {
-      code: "UU No. 37 / 2008",
+      code: "UU 37/2008",
       citation: "Pasal 7 & 8",
-      title: "Ombudsman Republik Indonesia",
-      mandate: "Penindakan Penundaan Berlarut",
-      description:
-        "Ombudsman RI berwenang memeriksa dinas yang membiarkan aduan masyarakat melampaui batas waktu wajar (undue delay).",
-      feature: "Generator Draf Maladministrasi",
-      actionLabel: "Portal Ombudsman",
+      title: "Eskalasi Ombudsman",
+      summary: "Kewenangan menindak kelalaian atau penundaan berlarut dinas.",
+      actionLabel: "Draf Ombudsman",
       targetTab: "ombudsman",
       icon: Scale,
     },
     {
-      code: "Inpres No. 3 / 2023",
+      code: "Inpres 3/2023",
       citation: "Diktum I & II",
-      title: "Konektivitas Jalan Daerah (IJD)",
-      mandate: "Intervensi Fiskal APBN",
-      description:
-        "Landasan hukum bagi pemerintah pusat untuk menyalurkan dana APBN langsung menangani jalan daerah rusak berat saat APBD terbatas.",
-      feature: "Pelacakan Alokasi APBN",
+      title: "Intervensi APBN",
+      summary: "Penyaluran dana pusat untuk perbaikan jalan daerah rusak berat.",
       actionLabel: "Pantau Ruas IJD",
       targetTab: "nasional",
       icon: Building2,
@@ -65,96 +53,77 @@ export default function LegalBasisSection({ onNavigateTab }) {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 font-sans">
       <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[6px] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-6">
+        <div className="bg-white rounded-[6px] p-5 sm:p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
           
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-5">
-            <div className="space-y-1.5 max-w-2xl">
+          {/* Header: Clean without boxed eyebrow */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="space-y-1 max-w-2xl">
               <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
                 Dasar Regulasi
               </p>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Landasan Hukum Keterbukaan &amp; Penanganan Jalan
               </h2>
-              <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-sans">
-                Setiap indikator batas waktu respons, pencocokan lelang pengadaan, dan draf eskalasi di JagaJalan berakar langsung pada peraturan perundang-undangan Republik Indonesia.
+              <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans">
+                Standar kepastian batas waktu respons dan audit lelang pengadaan mengacu langsung pada regulasi resmi Republik Indonesia.
               </p>
             </div>
 
-            <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-slate-50 border border-slate-200/80 text-xs font-semibold text-slate-700 shrink-0 self-start sm:self-auto font-sans shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+            <div className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 shrink-0 self-start sm:self-auto font-sans">
               <ShieldCheck className="w-4 h-4 text-orange-700" />
-              <span>Instrumen Yuridis Resmi</span>
+              <span>4 Instrumen Yuridis</span>
             </div>
           </div>
 
-          {/* 4 Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Connected Single Minimalist Strip (Zero Separate Cards, Zero Boxy Pills) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100 rounded-[6px] ring-1 ring-orange-200/40 bg-white overflow-hidden shadow-2xs">
             {regulations.map((reg) => {
               const IconComponent = reg.icon;
               return (
                 <div
                   key={reg.code}
-                  className="rounded-[6px] bg-slate-50/40 hover:bg-white border border-slate-200/80 hover:border-orange-300/80 p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_4px_16px_-4px_rgba(194,65,12,0.06)] group"
+                  onClick={() => onNavigateTab && onNavigateTab(reg.targetTab)}
+                  className="p-4 sm:p-5 hover:bg-orange-50/30 transition-colors flex flex-col justify-between space-y-3 group cursor-pointer"
                 >
-                  <div className="space-y-3">
-                    {/* Top Row: Law Code & Citation */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-[5px] bg-orange-50 text-orange-800 border border-orange-200/70 tracking-tight">
+                  <div className="space-y-2">
+                    {/* Inline Law Ref: Pure typography without boxy badges */}
+                    <div className="flex items-center gap-2 text-xs">
+                      <IconComponent className="w-3.5 h-3.5 text-orange-600 shrink-0 group-hover:scale-110 transition-transform" />
+                      <span className="font-mono font-bold text-slate-800 tracking-tight">
                         {reg.code}
                       </span>
-                      <span className="text-[10px] font-mono font-medium text-slate-500 bg-white/80 border border-slate-200/60 px-2 py-0.5 rounded-[5px]">
+                      <span className="text-slate-300">·</span>
+                      <span className="text-[11px] text-slate-400 font-sans">
                         {reg.citation}
                       </span>
                     </div>
 
-                    {/* Title & Core Mandate */}
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-orange-950 transition-colors leading-snug">
-                        {reg.title}
-                      </h3>
-                      <p className="text-[11px] font-semibold text-orange-700/90 pt-0.5">
-                        {reg.mandate}
-                      </p>
-                    </div>
+                    {/* Title */}
+                    <h3 className="text-sm font-bold text-slate-900 group-hover:text-orange-950 transition-colors">
+                      {reg.title}
+                    </h3>
 
-                    {/* Citizen Right Description */}
-                    <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                      {reg.description}
+                    {/* Minimal 1-Line Description */}
+                    <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                      {reg.summary}
                     </p>
                   </div>
 
-                  {/* Operational Integration in JagaJalan */}
-                  <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between gap-2">
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-[9.5px] uppercase tracking-wider font-semibold text-slate-400">
-                        Di JagaJalan
-                      </span>
-                      <span className="text-xs font-semibold text-slate-800 truncate" title={reg.feature}>
-                        {reg.feature}
-                      </span>
-                    </div>
-
-                    {onNavigateTab ? (
-                      <button
-                        type="button"
-                        onClick={() => onNavigateTab(reg.targetTab)}
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-orange-700 hover:text-white bg-orange-50 hover:bg-orange-600 px-2.5 py-1 rounded-[5px] border border-orange-200/60 hover:border-orange-600 transition-colors shrink-0 group/btn cursor-pointer"
-                        title={`Buka ${reg.actionLabel}`}
-                      >
-                        <span>{reg.actionLabel}</span>
-                        <ArrowUpRight className="w-3 h-3 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                      </button>
-                    ) : (
-                      <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 bg-white px-2 py-0.5 rounded-[5px] border border-slate-200/70 shrink-0">
-                        <IconComponent className="w-3 h-3 text-orange-700" />
-                        <span>Terintegrasi</span>
-                      </div>
-                    )}
+                  {/* Clean Action Link */}
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-orange-700 group-hover:text-orange-800 transition-colors">
+                      <span>{reg.actionLabel}</span>
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      Aktif
+                    </span>
                   </div>
                 </div>
               );
             })}
           </div>
+
         </div>
       </div>
     </section>
