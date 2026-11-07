@@ -37,13 +37,13 @@ Dengan ini bermaksud menyampaikan Laporan Pengaduan Maladministrasi terhadap:
 
 POKOK PERMASALAHAN & KRONOLOGI:
 1. Bahwa pada tanggal ${new Date(report.reportDate).toLocaleDateString("id-ID")}, telah dilaporkan kondisi kerusakan jalan berstatus "${report.categoryLabel}" dengan estimasi rekomendasi bahaya keselamatan AI ${report.hazardScore}/100.
-2. Berdasarkan UU No. 25 Tahun 2009 tentang Pelayanan Publik dan pedoman penanganan pengaduan Ombudsman RI, instansi penyelenggara pelayanan publik wajib memberikan kepastian tanggapan resmi dan jadwal tindak lanjut atas aduan masyarakat sesuai batas waktu standar pelayanan publik.
-3. Bahwa hingga surat ini diterbitkan (${todayStr}), laporan pengaduan ini telah melewati batas waktu tanggapan resmi selama ${report.daysOverdue || 4} hari kerja tanpa adanya tanggapan maupun penanganan fisik di lapangan dari instansi terlapor.
-4. Ketiadaan respons dan pembiaran kondisi jalan ini terindikasi memenuhi unsur dugaan Maladministrasi: "Penundaan Berlarut" (Undue Delay) sesuai Pasal 1 angka 3 UU No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia.
+2. Bahwa laporan pengaduan tersebut telah disampaikan kepada pihak ${report.authorityLabel}. Berdasarkan ketentuan yuridis Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik, penyelenggara wajib menyampaikan jadwal penanganan dan/atau tanggapan kepada pengadu dalam jangka waktu paling lambat 14 (empat belas) hari kerja sejak pengaduan diterima oleh penyelenggara.
+3. Bahwa hingga surat ini diterbitkan (${todayStr}), pengaduan tersebut telah melampaui batas waktu tanggapan acuan selama ${report.daysOverdue || 4} hari kerja tanpa adanya tanggapan resmi, kepastian jadwal, maupun tindakan penanganan fisik di lapangan dari pihak instansi terlapor.
+4. Ketiadaan tanggapan dan pembiaran kondisi jalan ini terindikasi memenuhi unsur dugaan Maladministrasi: "Penundaan Berlarut" (Undue Delay) sesuai Pasal 1 angka 3 serta memenuhi kriteria pelaporan Pasal 24 UU No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia (setelah diupayakan penyelesaian langsung terlebih dahulu kepada instansi bersangkutan namun tidak diselesaikan dalam jangka waktu yang patut).
 
 TUNTUTAN:
 Memohon kepada Ombudsman Republik Indonesia untuk:
-1. Memeriksa dan memanggil pihak ${report.authorityLabel} atas dugaan penundaan berlarut perbaikan ruas ${report.roadName}.
+1. Memeriksa dan memanggil pihak ${report.authorityLabel} atas dugaan penundaan berlarut tindak lanjut perbaikan ruas ${report.roadName}.
 2. Mendorong transparansi realisasi paket anggaran terkait agar tidak terjadi penyimpangan alokasi pemeliharaan jalan.
 3. Menerbitkan Rekomendasi/Tindakan Korektif agar jalan tersebut segera diperbaiki demi menjamin keselamatan jiwa masyarakat.
 
@@ -84,14 +84,14 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-bold text-slate-900 text-base font-heading">
-                    Draf Pengaduan Maladministrasi Ombudsman RI
+                    Complaint Guidance: Draf Pengaduan Ombudsman RI
                   </h3>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200/60 font-sans">
-                    UU No. 25/2009
+                    Pasal 44 UU 25/2009
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 font-sans">
-                  Dokumen advokasi resmi berbasis bukti digital geotagged dan rekam jejak tenggat respons
+                  Panduan administratif &amp; draf advokasi warga berbasis bukti digital dan tenggat waktu resmi
                 </p>
               </div>
             </div>
@@ -105,10 +105,10 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
 
           {/* Modal Body: Letter Paper */}
           <div className="p-5 sm:p-6 overflow-y-auto flex-1 text-xs text-slate-700 space-y-4">
-            <div className="p-3.5 rounded-[6px] bg-amber-50/70 ring-1 ring-amber-200/60 flex items-center gap-2.5 text-xs text-amber-900 font-sans">
-              <AlertCircle className="w-4 h-4 shrink-0 text-amber-700" />
+            <div className="p-3.5 rounded-[6px] bg-amber-50/70 ring-1 ring-amber-200/60 flex items-start gap-2.5 text-xs text-amber-950 font-sans leading-relaxed">
+              <AlertCircle className="w-4 h-4 shrink-0 text-amber-700 mt-0.5" />
               <span>
-                Format surat ini disesuaikan dengan standar pelaporan formal pada <strong>Ombudsman Republik Indonesia</strong> atas dugaan Penundaan Berlarut (<em>Undue Delay</em>).
+                <strong>Prasyarat Formil Pelaporan (UU 37/2008 &amp; UU 25/2009):</strong> Sebelum mengajukan laporan ke Ombudsman RI, pengadu wajib telah menyampaikan pengaduan langsung kepada instansi terkait terlebih dahulu. Batas waktu tanggap resmi 14 hari kerja dihitung <em>sejak pengaduan diterima oleh penyelenggara</em> (Pasal 44 ayat 2 UU 25/2009). Draf ini disiapkan untuk membantu advokasi mandiri apabila instansi mengabaikan aduan melampaui batas waktu tersebut.
               </span>
             </div>
 

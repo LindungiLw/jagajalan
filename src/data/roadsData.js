@@ -103,9 +103,9 @@ export const PROVINCIAL_NETWORK_STATS = {
   totalNationalKmIndonesia: 47017.0,
   totalKabupatenKotaKmIndonesia: 445000.0,
   totalProvinces: 38,
-  activeCuratedProvincialCorridors: 20,
+  activeCuratedProvincialCorridors: 24,
   activeCuratedNationalCorridors: 21,
-  activeCuratedCityRegencyCorridors: 32,
+  activeCuratedCityRegencyCorridors: 40,
   activeCuratedPilotRoads: 6,
   dataSource: "PUSDATIN SIGI Kementerian PU x BPS Statistik Transportasi Darat x SK Walikota & SK Bupati Se-Indonesia",
 };
@@ -609,18 +609,19 @@ export const INDONESIA_PROVINCES = [
 ];
 
 
-// Deteksi Wilayah & Kewenangan Berdasarkan Koordinat Geospasial Indonesia
+// Deteksi Wilayah & Kewenangan Berdasarkan Koordinat Geospasial Indonesia (38 Provinsi & 4 Tingkat Wewenang)
 export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
   if (typeof lat !== "number" || typeof lng !== "number") return null;
 
-  // 1. Cari jalan nasional / ruas terdekat (Euclidean approx)
+  // 1. Cari ruas terdekat (dengan prioritas spesifisitas Kota/Kabupaten/Provinsi jika sangat dekat)
   let closestRoad = null;
   let minDistanceKm = Infinity;
+  let closestLocalRoad = null;
+  let minLocalDistKm = Infinity;
 
   for (const road of roads) {
     if (!road.coordinates || road.coordinates.length === 0) continue;
     for (const [rLat, rLng] of road.coordinates) {
-      // 1 deg lat ~ 111 km, 1 deg lng ~ 111 * cos(lat)
       const dLat = (lat - rLat) * 111;
       const dLng = (lng - rLng) * 111 * Math.cos((lat * Math.PI) / 180);
       const dist = Math.sqrt(dLat * dLat + dLng * dLng);
@@ -628,149 +629,73 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
         minDistanceKm = dist;
         closestRoad = road;
       }
+      if (road.authority !== "NASIONAL" && dist < minLocalDistKm) {
+        minLocalDistKm = dist;
+        closestLocalRoad = road;
+      }
     }
   }
 
-  // 2. Identifikasi Pulau & Provinsi Berdasarkan Bounding Koordinat
-  let detectedProvince = "Indonesia";
-  let detectedIsland = "Nasional";
-  let governorName = "Gubernur Provinsi Terkait";
-  let provincialAgency = "Dinas Bina Marga & Penataan Ruang Provinsi";
+  // Jika titik klik berada sangat dekat (<= 5 km) dengan ruas Kota/Kabupaten/Provinsi yang terdata, prioritaskan ruas lokal tersebut
+  if (closestLocalRoad && minLocalDistKm <= 5.0) {
+    closestRoad = closestLocalRoad;
+    minDistanceKm = minLocalDistKm;
+  }
 
-  if (lat >= -6.0 && lat <= 6.0 && lng >= 95.0 && lng <= 106.0) {
-    detectedIsland = "Sumatera";
-    if (lat >= 1.5 && lat <= 4.5 && lng >= 97.0 && lng <= 100.5) {
-      detectedProvince = "Sumatera Utara";
-      governorName = "Dr. Drs. A. Fatoni, M.Si. (Pj. Gubernur Sumut)";
-      provincialAgency = "Dinas PUPR Provinsi Sumatera Utara";
-    } else if (lat >= 2.0 && lng <= 98.3) {
-      detectedProvince = "Aceh";
-      governorName = "Dr. H. Safrizal ZA, M.Si. (Pj. Gubernur Aceh)";
-      provincialAgency = "Dinas PUPR Pemerintah Aceh";
-    } else if (lat >= -1.2 && lat <= 2.5 && lng >= 100.0 && lng <= 103.8) {
-      detectedProvince = "Riau";
-      governorName = "Dr. Rahman Hadi, M.Si. (Pj. Gubernur Riau)";
-      provincialAgency = "Dinas PUPR Provinsi Riau";
-    } else if (lat >= -3.5 && lat <= 0.9 && lng >= 98.6 && lng <= 101.9) {
-      detectedProvince = "Sumatera Barat";
-      governorName = "H. Mahyeldi Ansharullah, S.P. (Gubernur Sumbar)";
-      provincialAgency = "Dinas Bina Marga, Cipta Karya & Tata Ruang Sumbar";
-    } else if (lat >= -4.9 && lat <= -1.6 && lng >= 102.1 && lng <= 106.2) {
-      detectedProvince = "Sumatera Selatan";
-      governorName = "Elen Setiadi, S.H., M.S.E. (Pj. Gubernur Sumsel)";
-      provincialAgency = "Dinas PUBM-TR Provinsi Sumatera Selatan";
-    } else if (lat >= -6.0 && lat <= -3.7 && lng >= 103.5 && lng <= 106.0) {
-      detectedProvince = "Lampung";
-      governorName = "Dr. Drs. Samsudin, S.H., M.H., M.Pd. (Pj. Gubernur Lampung)";
-      provincialAgency = "Dinas Bina Marga & Bina Konstruksi Provinsi Lampung";
+  // 2. Identifikasi Pulau & Provinsi dari Katalog 38 Provinsi Resmi (INDONESIA_PROVINCES)
+  let matchedProvinceObj = null;
+
+  // Cek spesifik untuk Kalimantan (5 Provinsi: Kalbar, Kalteng, Kalsel, Kaltim, Kaltara)
+  if (lat >= -4.5 && lat <= 4.6 && lng >= 108.5 && lng <= 119.2) {
+    if (lat >= 2.25 && lng >= 114.5) {
+      matchedProvinceObj = INDONESIA_PROVINCES.find((p) => p.id === "kalimantan_utara");
+    } else if (lng <= 112.4 && lat >= -3.1) {
+      matchedProvinceObj = INDONESIA_PROVINCES.find((p) => p.id === "kalimantan_barat");
+    } else if (lat <= -2.1 && lng >= 114.35 && lng <= 116.6) {
+      matchedProvinceObj = INDONESIA_PROVINCES.find((p) => p.id === "kalimantan_selatan");
+    } else if (lng >= 115.4 && lat >= -2.4 && lat < 2.25) {
+      matchedProvinceObj = INDONESIA_PROVINCES.find((p) => p.id === "kalimantan_timur");
     } else {
-      detectedProvince = "Sumatera";
-    }
-  } else if (lat >= -9.0 && lat <= -5.5 && lng >= 105.0 && lng <= 115.0) {
-    detectedIsland = "Jawa";
-    if (lat >= -6.37 && lat <= -6.08 && lng >= 106.68 && lng <= 106.98) {
-      detectedProvince = "DKI Jakarta";
-      governorName = "Teguh Setyabudi, M.Pd. (Pj. Gubernur DKI Jakarta)";
-      provincialAgency = "Dinas Bina Marga Provinsi DKI Jakarta";
-    } else if (lat >= -7.8 && lat <= -5.9 && lng >= 106.3 && lng <= 108.8) {
-      detectedProvince = "Jawa Barat";
-      governorName = "Bey Triadi Machmudin, S.E., M.T. (Pj. Gubernur Jawa Barat)";
-      provincialAgency = "Dinas Bina Marga & Penataan Ruang (DBMPR) Prov. Jawa Barat";
-    } else if (lat >= -8.2 && lat <= -6.4 && lng >= 108.5 && lng <= 111.6) {
-      detectedProvince = "Jawa Tengah";
-      governorName = "Komjen Pol (Purn) Drs. Nana Sudjana, M.M. (Pj. Gubernur Jateng)";
-      provincialAgency = "Dinas Pekerjaan Umum Bina Marga & Cipta Karya Jawa Tengah";
-    } else if (lat >= -8.2 && lat <= -7.5 && lng >= 110.0 && lng <= 110.8) {
-      detectedProvince = "DI Yogyakarta";
-      governorName = "Sri Sultan Hamengku Buwono X (Gubernur DIY)";
-      provincialAgency = "Dinas PUPESDM Daerah Istimewa Yogyakarta";
-    } else if (lat >= -8.8 && lat <= -6.7 && lng >= 110.9 && lng <= 114.6) {
-      detectedProvince = "Jawa Timur";
-      governorName = "Adhy Karyono, A.Ks., M.A.P. (Pj. Gubernur Jawa Timur)";
-      provincialAgency = "Dinas Pekerjaan Umum Bina Marga Provinsi Jawa Timur";
-    } else if (lat >= -7.0 && lat <= -5.8 && lng >= 105.5 && lng <= 106.5) {
-      detectedProvince = "Banten";
-      governorName = "Al Muktabar (Pj. Gubernur Banten)";
-      provincialAgency = "Dinas Pekerjaan Umum & Penataan Ruang Provinsi Banten";
-    } else {
-      detectedProvince = "Jawa";
-    }
-  } else if (lat >= -9.2 && lat <= -8.0 && lng >= 114.4 && lng <= 125.5) {
-    detectedIsland = "Bali & Nusa Tenggara";
-    if (lng <= 115.7) {
-      detectedProvince = "Bali";
-      governorName = "Sang Made Mahendra Jaya (Pj. Gubernur Bali)";
-      provincialAgency = "Dinas PUPR Provinsi Bali";
-    } else if (lng <= 119.5) {
-      detectedProvince = "Nusa Tenggara Barat";
-      governorName = "Hassanudin (Pj. Gubernur NTB)";
-      provincialAgency = "Dinas PUPR Provinsi Nusa Tenggara Barat";
-    } else {
-      detectedProvince = "Nusa Tenggara Timur";
-      governorName = "Andriko Noto Susanto (Pj. Gubernur NTT)";
-      provincialAgency = "Dinas PUPR Provinsi Nusa Tenggara Timur";
-    }
-  } else if (lat >= -4.5 && lat <= 4.5 && lng >= 108.5 && lng <= 119.2) {
-    detectedIsland = "Kalimantan";
-    if (lat >= -2.0 && lat <= 2.0 && lng >= 115.5 && lng <= 119.0) {
-      detectedProvince = "Kalimantan Timur (Kawasan Mitra IKN)";
-      governorName = "Akmal Malik (Pj. Gubernur Kaltim)";
-      provincialAgency = "Dinas PUPR & Pera Provinsi Kalimantan Timur";
-    } else if (lng <= 114.0 && lat >= -3.0) {
-      detectedProvince = "Kalimantan Barat";
-      governorName = "Harisson (Pj. Gubernur Kalbar)";
-      provincialAgency = "Dinas PUPR Provinsi Kalimantan Barat";
-    } else if (lat <= -2.5 && lng >= 114.0) {
-      detectedProvince = "Kalimantan Selatan";
-      governorName = "H. Sahbirin Noor (Gubernur Kalsel)";
-      provincialAgency = "Dinas PUPR Provinsi Kalimantan Selatan";
-    } else {
-      detectedProvince = "Kalimantan Tengah";
-      governorName = "H. Sugianto Sabran (Gubernur Kalteng)";
-      provincialAgency = "Dinas PUPR Provinsi Kalimantan Tengah";
-    }
-  } else if (lat >= -6.0 && lat <= 2.0 && lng >= 118.5 && lng <= 126.0) {
-    detectedIsland = "Sulawesi";
-    if (lat <= -3.5) {
-      detectedProvince = "Sulawesi Selatan";
-      governorName = "Prof. Zudan Arif Fakrulloh (Pj. Gubernur Sulsel)";
-      provincialAgency = "Dinas Bina Marga & Bina Konstruksi Sulsel";
-    } else if (lat >= 0.5) {
-      detectedProvince = "Sulawesi Utara";
-      governorName = "Olly Dondokambey, S.E. (Gubernur Sulut)";
-      provincialAgency = "Dinas Pekerjaan Umum & Penataan Ruang Sulut";
-    } else {
-      detectedProvince = "Sulawesi Tengah";
-      governorName = "H. Rusdy Mastura (Gubernur Sulteng)";
-      provincialAgency = "Dinas Bina Marga & Penataan Ruang Sulteng";
-    }
-  } else if (lat >= -11.0 && lat <= 2.0 && lng >= 126.0 && lng <= 141.0) {
-    detectedIsland = "Maluku & Papua";
-    if (lng <= 134.0) {
-      detectedProvince = "Maluku";
-      governorName = "Sadali Ie (Pj. Gubernur Maluku)";
-      provincialAgency = "Dinas PUPR Provinsi Maluku";
-    } else if (lat >= -3.0 && lng >= 138.0) {
-      detectedProvince = "Papua";
-      governorName = "Ramses Limbong (Pj. Gubernur Papua)";
-      provincialAgency = "Dinas PUPR Provinsi Papua";
-    } else if (lat <= -3.0 && lng >= 138.0) {
-      detectedProvince = "Papua Pegunungan / Selatan";
-      governorName = "Velix Vernando Wanggai (Pj. Gubernur)";
-      provincialAgency = "Dinas PUPR Provinsi Terkait";
-    } else {
-      detectedProvince = "Papua Barat";
-      governorName = "Ali Baham Temongmere (Pj. Gubernur Papua Barat)";
-      provincialAgency = "Dinas PUPR Provinsi Papua Barat";
+      matchedProvinceObj = INDONESIA_PROVINCES.find((p) => p.id === "kalimantan_tengah");
     }
   }
+
+  // Jika belum terpetakan oleh poligon Kalimantan, cari provinsi terdekat dari 38 provinsi di INDONESIA_PROVINCES
+  if (!matchedProvinceObj) {
+    let bestProvDist = Infinity;
+    for (const prov of INDONESIA_PROVINCES) {
+      if (!prov.center) continue;
+      const dLat = (lat - prov.center[0]) * 111;
+      const dLng = (lng - prov.center[1]) * 111 * Math.cos((lat * Math.PI) / 180);
+      const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+      if (dist < bestProvDist) {
+        bestProvDist = dist;
+        matchedProvinceObj = prov;
+      }
+    }
+  }
+
+  const regionIslandMap = {
+    sumatera: "Sumatera",
+    jawa: "Jawa",
+    bali_nusra: "Bali & Nusa Tenggara",
+    kalimantan: "Kalimantan",
+    sulawesi: "Sulawesi",
+    maluku_papua: "Maluku & Papua",
+  };
+
+  const detectedProvince = matchedProvinceObj?.name || "Indonesia";
+  const detectedIsland = regionIslandMap[matchedProvinceObj?.region] || "Nasional";
+  const governorName = matchedProvinceObj?.governor || "Gubernur Provinsi Terkait";
+  const provincialAgency = matchedProvinceObj?.agency || "Dinas Bina Marga & Penataan Ruang Provinsi";
+  const provincialSk = matchedProvinceObj?.skNumber || `SK Gubernur ${detectedProvince} tentang Status Jalan Provinsi`;
 
   // 3. Klasifikasi Kewenangan Berdasarkan Ruas Terdekat & Proksimitas
-  let authority = "KOTA_KAB";
+  let authority = "KABUPATEN";
   let authorityLabel = `Pemerintah Kabupaten / Kota Setempat (${detectedProvince})`;
-  let legalBasis = `Peraturan Bupati / Walikota tentang Penetapan Status Ruas Jalan di ${detectedProvince}`;
-  let regionalHead = "Bupati / Walikota Daerah Setempat";
-  let agency = "Dinas Pekerjaan Umum & Penataan Ruang (PUPR) Kab/Kota";
+  let legalBasis = `Peraturan Bupati / Walikota tentang Penetapan Status Ruas Jalan di Provinsi ${detectedProvince}`;
+  let regionalHead = `Bupati / Walikota di Wilayah ${detectedProvince}`;
+  let agency = `Dinas Pekerjaan Umum & Penataan Ruang (PUPR) Kab/Kota di ${detectedProvince}`;
 
   if (minDistanceKm <= 15.0 && closestRoad) {
     if (closestRoad.authority === "KOTA") {
@@ -788,7 +713,7 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
     } else if (closestRoad.authority === "PROVINSI") {
       authority = "PROVINSI";
       authorityLabel = closestRoad.authorityLabel || `Pemerintah Provinsi ${detectedProvince}`;
-      legalBasis = closestRoad.legalBasis || `Surat Keputusan Gubernur ${detectedProvince} tentang Penetapan Ruas Jalan Provinsi`;
+      legalBasis = closestRoad.legalBasis || provincialSk;
       regionalHead = closestRoad.leadership?.regionalHead || governorName;
       agency = closestRoad.leadership?.agency || provincialAgency;
     } else {
@@ -801,7 +726,7 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
   } else if (minDistanceKm <= 35.0) {
     authority = "PROVINSI";
     authorityLabel = `Pemerintah Provinsi ${detectedProvince}`;
-    legalBasis = `Surat Keputusan Gubernur ${detectedProvince} tentang Penetapan Ruas Jalan Provinsi`;
+    legalBasis = provincialSk;
     regionalHead = governorName;
     agency = provincialAgency;
   }

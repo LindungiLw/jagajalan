@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Polyline, Popup, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
@@ -229,12 +229,17 @@ function MapController({ center, zoom = 11.5, onMapReady }) {
   return null;
 }
 
-// Click anywhere on map to detect jurisdiction & responsible official
-function MapClickHandler({ onMapClick }) {
-  useMapEvents({
+// Click anywhere on map to detect jurisdiction & responsible official + track zoom level
+function MapClickHandler({ onMapClick, onZoomChange }) {
+  const map = useMapEvents({
     click(e) {
       if (onMapClick) {
         onMapClick([e.latlng.lat, e.latlng.lng]);
+      }
+    },
+    zoomend() {
+      if (onZoomChange) {
+        onZoomChange(map.getZoom());
       }
     },
   });
@@ -254,6 +259,18 @@ export default function MapInner({
   mapZoom = 11.5,
   onMapReady,
 }) {
+  const [currentZoom, setCurrentZoom] = useState(mapZoom);
+
+  // Urutkan layer agar Jalan Provinsi, Kabupaten, dan Kota selalu di-render di atas Jalan Nasional
+  const sortedRoads = useMemo(() => {
+    const rank = { NASIONAL: 1, PROVINSI: 2, KABUPATEN: 3, KOTA_KAB: 3, KOTA: 4 };
+    return [...roads].sort((a, b) => {
+      if (selectedRoad?.id === a.id) return 1;
+      if (selectedRoad?.id === b.id) return -1;
+      return (rank[a.authority] || 1) - (rank[b.authority] || 1);
+    });
+  }, [roads, selectedRoad?.id]);
+
   return (
     <MapContainer
       center={mapCenter || [3.5952, 98.6722]}
@@ -264,7 +281,7 @@ export default function MapInner({
       style={{ width: "100%", height: "100%" }}
     >
       <MapController center={mapCenter} zoom={mapZoom} onMapReady={onMapReady} />
-      <MapClickHandler onMapClick={onMapClick} />
+      <MapClickHandler onMapClick={onMapClick} onZoomChange={setCurrentZoom} />
 
       {/* CartoDB Positron / OSM Clean Light Tile Layer */}
       <TileLayer
@@ -273,7 +290,7 @@ export default function MapInner({
       />
 
       {/* Road Segment Polylines */}
-      {roads.map((road) => {
+      {sortedRoads.map((road) => {
         // Distinct, high-contrast, user-friendly palette matching the platform design
         let color = "#0d9488"; // Kota: Ocean Teal
         let hoverColor = "#0f766e";
@@ -303,6 +320,7 @@ export default function MapInner({
         }
 
         const isSelected = selectedRoad?.id === road.id;
+        const isRegionalOrLocal = road.authority !== "NASIONAL";
         const polylinePositions = getPolylinePositions(road.coordinates);
 
         return (
@@ -319,6 +337,21 @@ export default function MapInner({
                 click: () => onSelectRoad(road),
               }}
             />
+
+            {/* Subtle white contrast casing for Provincial, Kabupaten & Kota roads so they pop against National lines */}
+            {!isSelected && isRegionalOrLocal && (
+              <Polyline
+                positions={polylinePositions}
+                pathOptions={{
+                  color: "#ffffff",
+                  weight: 7,
+                  opacity: 0.85,
+                  lineCap: "round",
+                  lineJoin: "round",
+                }}
+                interactive={false}
+              />
+            )}
 
             {/* Selected High-Contrast Glow / Outline Casing */}
             {isSelected && (
@@ -351,8 +384,8 @@ export default function MapInner({
               positions={polylinePositions}
               pathOptions={{
                 color: color,
-                weight: isSelected ? 5.5 : 4.5,
-                opacity: isSelected ? 1 : 0.9,
+                weight: isSelected ? 5.5 : isRegionalOrLocal ? 4.8 : 4.2,
+                opacity: isSelected ? 1 : 0.92,
                 lineCap: "round",
                 lineJoin: "round",
               }}
@@ -527,10 +560,11 @@ export default function MapInner({
         );
       })}
 
-      {/* Key Milestone Boundary Points along National Highways */}
+      {/* Key Milestone Boundary Points along Highways (Shown on selected road or when zoomed in >= 8 to prevent cluttering city/provincial layers) */}
       {roads.map((road) => {
         if (!road.milestones || road.milestones.length === 0) return null;
         const isRoadSelected = selectedRoad?.id === road.id;
+        if (!isRoadSelected && currentZoom < 8) return null;
 
         return road.milestones.map((ms, idx) => {
           if (!ms || !ms.coords || !Array.isArray(ms.coords) || ms.coords.length < 2) return null;

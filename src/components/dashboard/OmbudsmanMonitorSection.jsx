@@ -105,7 +105,7 @@ export default function OmbudsmanMonitorSection({
             Lacak Laporan &amp; Batas Waktu Tanggapan
           </h1>
           <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans max-w-2xl">
-            Pantau linimasa respons dan estimasi batas waktu tanggap acuan (14 hari kerja) dinas penanggung jawab serta advokasi draf pengaduan Ombudsman RI jika terjadi penundaan berlarut.
+            Pantau linimasa respons dan estimasi batas waktu tanggap acuan (14 hari kerja sejak laporan diterima dinas sesuai Pasal 44 UU 25/2009) serta manfaatkan Complaint Guidance &amp; Draft Generator jika terjadi penundaan berlarut.
           </p>
         </div>
 
@@ -723,9 +723,9 @@ export default function OmbudsmanMonitorSection({
               <span className="text-[10px] font-bold text-rose-700 tracking-wider uppercase block">
                 LANGKAH 03
               </span>
-              <strong className="text-rose-950 block text-xs font-bold">Draf Laporan Ombudsman (UU 37/2008)</strong>
+              <strong className="text-rose-950 block text-xs font-bold">Complaint Guidance &amp; Draft Generator (UU 37/2008)</strong>
               <p className="text-[11px] text-rose-900/80 leading-relaxed">
-                Jika diabaikan, warga dapat men-generate draf resmi pengaduan maladministrasi untuk diserahkan ke Ombudsman RI.
+                Jika aduan tidak ditanggapi melampaui batas waktu acuan, warga dapat menyusun draf resmi pengaduan maladministrasi untuk disampaikan ke Ombudsman RI.
               </p>
             </div>
           </div>
