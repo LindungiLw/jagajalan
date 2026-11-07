@@ -111,9 +111,12 @@ export default function Home() {
   };
 
   return (
-    <div className={`flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-orange-100 selection:text-orange-900 ${
-      activeTab === "peta" ? "h-screen overflow-hidden" : "min-h-screen"
+    <div className={`relative flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-orange-100 selection:text-orange-900 ${
+      activeTab === "peta" ? "h-screen overflow-hidden" : "min-h-screen overflow-x-hidden"
     }`}>
+      {/* Global Continuous Serpentine Road Background on Beranda (flows seamlessly from Hero into Footer) */}
+      {activeTab === "beranda" && <SerpentineRoadBackground />}
+
       {/* Global Navigation */}
       <Navbar
         activeTab={activeTab}
@@ -124,12 +127,9 @@ export default function Home() {
       />
 
       {/* Main Tab Content */}
-      <main className={`flex-1 flex flex-col ${activeTab === "peta" ? "min-h-0 overflow-hidden" : ""}`}>
+      <main className={`relative z-10 flex-1 flex flex-col ${activeTab === "peta" ? "min-h-0 overflow-hidden" : ""}`}>
         {activeTab === "beranda" && (
-          <div className="space-y-6 animate-fade-in pb-8 relative">
-            {/* Serpentine Zig-Zag Road Background */}
-            <SerpentineRoadBackground />
-
+          <div className="space-y-6 animate-fade-in pb-4 relative">
             <div className="relative z-10 space-y-6">
               {/* 1. Hero Section: Data Transparency & Live Ruas Inspector */}
               <HeroSection
@@ -252,7 +252,7 @@ export default function Home() {
       />
 
       {/* Global Footer (shown on all pages except full-screen GIS map) */}
-      {activeTab !== "peta" && <Footer onSelectTab={setActiveTab} />}
+      {activeTab !== "peta" && <Footer onSelectTab={setActiveTab} activeTab={activeTab} />}
     </div>
   );
 }
