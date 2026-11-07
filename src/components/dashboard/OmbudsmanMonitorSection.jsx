@@ -95,61 +95,45 @@ export default function OmbudsmanMonitorSection({
   return (
     <div className="py-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 font-sans text-slate-800 animate-fade-in">
       
-      {/* 1. SIGNATURE HEADER (Double-Bezel Tray) */}
-      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[6px] p-6 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-[6px] bg-orange-50/80 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/icon/time.png"
-                  alt="Pengawasan Ombudsman"
-                  width={32}
-                  height={32}
-                  style={{ width: "32px", height: "32px" }}
-                  className="w-8 h-8 object-contain"
-                />
-              </div>
-              <div className="space-y-1">
-                <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-rose-800">
-                  Standar Layanan Publik &amp; Ombudsman RI
-                </p>
-                <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-                  Pemantauan Batas Waktu Tanggapan &amp; Draf Ombudsman
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed font-sans">
-                  Memantau sisa waktu tanggapan dinas atas setiap aduan jalan rusak. Jika melewati 14 hari kerja tanpa tindakan, warga dapat langsung mengunduh draf pengaduan ke Ombudsman RI.
-                </p>
-              </div>
-            </div>
-
-            {/* SLA Status Pill Tray */}
-            <div className="rounded-[6px] bg-slate-50/80 p-3.5 text-xs shrink-0 lg:max-w-xs space-y-1.5 self-start lg:self-auto ring-1 ring-orange-200/40">
-              <div className="flex items-center justify-between gap-3">
-                <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-rose-600" />
-                  <span>Batas Respons Wajib</span>
-                </span>
-                <span className="font-bold text-rose-600 tabular-nums bg-rose-50 px-2 py-0.5 rounded-[6px] text-[11px] ring-1 ring-rose-200/50">
-                  {counts.overdue} Terlambat
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 leading-normal">
-                Sesuai UU No. 25/2009, dinas penyelenggara wajib menyampaikan jadwal penanganan resmi sebelum tenggat berakhir.
-              </p>
-            </div>
-          </div>
+      {/* 1. Page Header (Clean, High-Density & Minimalist) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-1">
+        <div className="space-y-1">
+          <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-rose-800">
+            Pengawasan Pelayanan Publik
+          </p>
+          <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
+            Lacak Laporan &amp; Batas Waktu Tanggapan
+          </h1>
+          <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans max-w-2xl">
+            Pantau kepatuhan tenggat respons 14 hari kerja dinas penanggung jawab (UU No. 25/2009) serta advokasi draf pengaduan Ombudsman RI.
+          </p>
         </div>
+
+        {counts.overdue > 0 && (
+          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-rose-50 border border-rose-200/70 text-xs font-semibold text-rose-700">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              <span>{counts.overdue} Aduan Melewati Batas SLA</span>
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* 2. SIGNATURE 4-METRIC SCOREBOARD (Double-Bezel Architecture) */}
+      {/* 2. SIGNATURE 4-METRIC SCOREBOARD (Interactive Click-to-Filter) */}
       <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           {/* Metric 1: Total Reports */}
-          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
+          <button
+            type="button"
+            onClick={() => setStatusFilter("ALL")}
+            className={`p-4 sm:p-5 rounded-[6px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 group ${
+              statusFilter === "ALL"
+                ? "ring-2 ring-orange-600 shadow-sm"
+                : "hover:bg-slate-50/70 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]"
+            }`}
+          >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-slate-500 font-sans">
+              <span className="text-[11px] font-semibold text-slate-500 font-sans group-hover:text-slate-800 transition-colors">
                 Total Aduan Terpantau
               </span>
               <div className="w-7 h-7 rounded-[6px] bg-slate-50 flex items-center justify-center text-slate-700 ring-1 ring-slate-200/60">
@@ -164,10 +148,18 @@ export default function OmbudsmanMonitorSection({
                 Laporan warga terdaftar resmi
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Metric 2: Overdue (Signal Color) */}
-          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2 ring-1 ring-rose-200/60">
+          <button
+            type="button"
+            onClick={() => setStatusFilter("OVERDUE")}
+            className={`p-4 sm:p-5 rounded-[6px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 group ${
+              statusFilter === "OVERDUE"
+                ? "ring-2 ring-rose-600 shadow-sm"
+                : "ring-1 ring-rose-200/60 hover:bg-rose-50/30 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]"
+            }`}
+          >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-rose-700 font-sans">
                 Melewati Tenggat Respons
@@ -192,12 +184,20 @@ export default function OmbudsmanMonitorSection({
                 Syarat advokasi Ombudsman aktif
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Metric 3: In Progress */}
-          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
+          <button
+            type="button"
+            onClick={() => setStatusFilter("DALAM_PENGERJAAN")}
+            className={`p-4 sm:p-5 rounded-[6px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 group ${
+              statusFilter === "DALAM_PENGERJAAN"
+                ? "ring-2 ring-amber-600 shadow-sm"
+                : "hover:bg-amber-50/30 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]"
+            }`}
+          >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-slate-500 font-sans">
+              <span className="text-[11px] font-semibold text-slate-500 font-sans group-hover:text-slate-800 transition-colors">
                 Dalam Masa Tanggap
               </span>
               <div className="w-7 h-7 rounded-[6px] bg-amber-50/80 flex items-center justify-center text-amber-700 ring-1 ring-amber-200/60">
@@ -212,12 +212,20 @@ export default function OmbudsmanMonitorSection({
                 Masih dalam batas wajar dinas
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Metric 4: Resolved */}
-          <div className="p-4 sm:p-5 rounded-[6px] bg-white shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-2">
+          <button
+            type="button"
+            onClick={() => setStatusFilter("SELESAI")}
+            className={`p-4 sm:p-5 rounded-[6px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 group ${
+              statusFilter === "SELESAI"
+                ? "ring-2 ring-emerald-600 shadow-sm"
+                : "hover:bg-emerald-50/30 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)]"
+            }`}
+          >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-slate-500 font-sans">
+              <span className="text-[11px] font-semibold text-slate-500 font-sans group-hover:text-slate-800 transition-colors">
                 Tuntas Ditangani
               </span>
               <div className="w-7 h-7 rounded-[6px] bg-emerald-50/80 flex items-center justify-center text-emerald-700 ring-1 ring-emerald-200/60">
@@ -232,7 +240,7 @@ export default function OmbudsmanMonitorSection({
                 Perbaikan lapangan selesai
               </p>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 
