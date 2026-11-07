@@ -279,51 +279,208 @@ export default function MapExplorer({
     }, 7000);
   };
 
-  const handleMapClick = (coords) => {
+  const handleMapClick = async (coords) => {
     const [lat, lng] = coords;
     const result = detectJurisdictionByCoordinates(lat, lng, roads);
-    if (result) {
-      setDetectedPoint(result);
-      setSelectedReport(null);
+    if (!result) return;
 
-      const detectedRoadEntity = {
-        id: `detected-${Date.now()}`,
-        isDetectedPoint: true,
-        name: result.authority === "NASIONAL" && result.nearestRoad
+    const clickId = `detected-${Date.now()}`;
+    setDetectedPoint(result);
+    setSelectedReport(null);
+
+    const initialRoadEntity = {
+      id: clickId,
+      isDetectedPoint: true,
+      name:
+        result.authority === "NASIONAL" && result.nearestRoad
           ? `Dekat ${result.nearestRoad.name}`
-          : `Titik Geospasial [${lat.toFixed(3)}, ${lng.toFixed(3)}]`,
-        code: result.authority === "NASIONAL" ? (result.nearestRoad?.code || "RUAS-NAS-DETEKSI") : "JALAN-DAERAH-DETEKSI",
-        authority: result.authority,
-        authorityLabel: result.authorityLabel,
-        legalBasis: result.legalBasis,
-        district: result.district,
-        provinceName: result.provinceName,
-        lengthKm: result.distanceToNearestNationalKm,
-        pavementType: "Hasil Analisis Spasial JagaJalan",
-        condition: "TERDATA",
-        center: [lat, lng],
-        coordinates: [[lat, lng]],
-        leadership: result.leadership,
-        problemDetails: {
-          headline: `Kewenangan Penyelenggara: ${result.authorityLabel}`,
-          description: `Titik koordinat [${lat.toFixed(4)}, ${lng.toFixed(4)}] berada di wilayah ${result.provinceName}. ${
-            result.authority === "NASIONAL"
-              ? `Berada ~${result.distanceToNearestNationalKm} KM dari koridor Jalan Nasional (${result.nearestRoad?.name || "Arteri Primer"}). Tanggung jawab pemeliharaan berada di bawah ${result.leadership.regionalHead}.`
-              : `Kewenangan pemeliharaan berada di bawah ${result.leadership.regionalHead} (${result.leadership.agency}).`
-          }`,
-          rootCause: "Penetapan batas jurisdiksi berbasis SK Menteri PUPR No. 1688/2022 & Perda Daerah.",
-          safetyImpact: "Pastikan laporan aduan masyarakat dan pengawasan anggaran ditujukan ke instansi yang tepat."
-        },
-        officialSources: {
-          authoritySource: result.legalBasis,
-          budgetSource: "Pusdatin SIGI PU & Data Daerah",
-          fieldDataSource: "Analisis Geospasial Instan JagaJalan",
-          transparencyUrl: "https://sigi.pu.go.id"
+          : `Mendeteksi Ruas Jalan [${lat.toFixed(4)}, ${lng.toFixed(4)}]...`,
+      code:
+        result.authority === "NASIONAL"
+          ? result.nearestRoad?.code || "RUAS-NAS-DETEKSI"
+          : "RUAS-OSM-DETEKSI",
+      authority: result.authority,
+      authorityLabel: result.authorityLabel,
+      legalBasis: result.legalBasis,
+      district: result.district,
+      provinceName: result.provinceName,
+      lengthKm: result.distanceToNearestNationalKm,
+      pavementType: "Analisis Geospasial OpenStreetMap & SIGI PU",
+      condition: "TERDATA",
+      center: [lat, lng],
+      coordinates: [[lat, lng]],
+      leadership: result.leadership,
+      problemDetails: {
+        headline: `Kewenangan Penyelenggara: ${result.authorityLabel}`,
+        description: `Titik koordinat [${lat.toFixed(4)}, ${lng.toFixed(4)}] berada di wilayah ${result.provinceName}. Kewenangan pemeliharaan berada di bawah ${result.leadership.regionalHead} (${result.leadership.agency}).`,
+        rootCause: "Penetapan batas jurisdiksi berbasis UU No. 2 Tahun 2022 tentang Jalan, SK Menteri PUPR, & SK Kepala Daerah.",
+        safetyImpact: "Pastikan laporan aduan masyarakat dan pengawasan anggaran ditujukan ke penyelenggara jalan yang tepat.",
+      },
+      officialSources: {
+        authoritySource: result.legalBasis,
+        budgetSource: "Pusdatin SIGI PU & Data Daerah",
+        fieldDataSource: "OpenStreetMap Live Road Geometry & JagaJalan GIS",
+        transparencyUrl: "https://sigi.pu.go.id",
+      },
+    };
+
+    setSelectedRoad(initialRoadEntity);
+    setActiveTab("kewenangan");
+
+    // Live OpenStreetMap Road Snapping & Classification (Nominal + Overpass Geometry)
+    try {
+      const overpassQuery = `[out:json][timeout:6];way(around:75,${lat},${lng})["highway"];out body geom;`;
+      const [nomRes, ovpRes] = await Promise.allSettled([
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=17&accept-language=id`,
+          { headers: { "Accept-Language": "id" } }
+        ).then((r) => (r.ok ? r.json() : null)),
+        fetch(
+          `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`
+        ).then((r) => (r.ok ? r.json() : null)),
+      ]);
+
+      const nomData = nomRes.status === "fulfilled" ? nomRes.value : null;
+      const ovpData = ovpRes.status === "fulfilled" ? ovpRes.value : null;
+
+      let snappedGeometry = null;
+      let snappedCenter = [lat, lng];
+      let osmHighwayTag = nomData?.type || "";
+      let osmRoadName = nomData?.address?.road || nomData?.name || "";
+
+      if (ovpData?.elements?.length > 0) {
+        // Pick the closest way to clicked point
+        let bestWay = ovpData.elements[0];
+        let bestDist = Infinity;
+        for (const el of ovpData.elements) {
+          if (!el.geometry || el.geometry.length < 2) continue;
+          for (const pt of el.geometry) {
+            const d = Math.hypot((pt.lat - lat) * 111, (pt.lon - lng) * 111);
+            if (d < bestDist) {
+              bestDist = d;
+              bestWay = el;
+            }
+          }
         }
+        if (bestWay?.geometry?.length >= 2) {
+          snappedGeometry = bestWay.geometry.map((pt) => [
+            Number(pt.lat.toFixed(5)),
+            Number(pt.lon.toFixed(5)),
+          ]);
+          const midIdx = Math.floor(snappedGeometry.length / 2);
+          snappedCenter = snappedGeometry[midIdx];
+          if (bestWay.tags?.highway) osmHighwayTag = bestWay.tags.highway;
+          if (bestWay.tags?.name) osmRoadName = bestWay.tags.name;
+        }
+      }
+
+      const addr = nomData?.address || {};
+      const villageOrSuburb = addr.village || addr.suburb || addr.neighbourhood || addr.hamlet || "";
+      const subdistrict = addr.municipality || addr.city_district || addr.town || "";
+      const cityOrRegency = addr.city || addr.county || addr.regency || "";
+      const stateName = addr.state || result.provinceName;
+      const isKotamadya = Boolean(addr.city && !addr.county) || cityOrRegency.toLowerCase().startsWith("kota ");
+
+      // Klasifikasi Fungsi & Kewenangan Jalan sesuai UU No. 2 Tahun 2022 tentang Jalan
+      let resolvedAuth = result.authority;
+      let resolvedAuthLabel = result.authorityLabel;
+      let resolvedClassDesc = "Jalan Daerah (Kolektor / Lokal)";
+      let resolvedLegalBasis = result.legalBasis;
+      let resolvedAgency = result.leadership?.agency;
+      let resolvedHead = result.leadership?.regionalHead;
+
+      if (osmHighwayTag === "trunk" || osmHighwayTag === "trunk_link" || osmHighwayTag === "motorway") {
+        resolvedAuth = "NASIONAL";
+        resolvedAuthLabel = `Jalan Nasional — Arteri Primer (Kementerian PU / BPJN ${stateName})`;
+        resolvedClassDesc = "Jalan Nasional (Arteri Primer — Penghubung Antar-Ibu Kota Provinsi)";
+        resolvedLegalBasis = "Kepmen PUPR No. 1688/KPTS/M/2022 tentang Penetapan Ruas Jalan Nasional";
+        resolvedHead = "Menteri Pekerjaan Umum RI";
+        resolvedAgency = `Balai Pelaksanaan Jalan Nasional (BPJN) Wilayah ${stateName}`;
+      } else if (osmHighwayTag === "primary" || osmHighwayTag === "primary_link") {
+        resolvedAuth = "PROVINSI";
+        resolvedAuthLabel = `Jalan Provinsi — Kolektor Primer (${stateName})`;
+        resolvedClassDesc = "Jalan Provinsi (Kolektor Primer — Penghubung Ibu Kota Provinsi dengan Kabupaten/Kota)";
+      } else if (osmHighwayTag === "secondary" || osmHighwayTag === "tertiary" || osmHighwayTag === "secondary_link" || osmHighwayTag === "tertiary_link") {
+        resolvedAuth = isKotamadya ? "KOTA" : "KABUPATEN";
+        const daerahName = cityOrRegency || `Daerah di ${stateName}`;
+        resolvedAuthLabel = isKotamadya
+          ? `Jalan Kota — Kolektor/Lokal Sekunder (Pemkot ${daerahName})`
+          : `Jalan Kabupaten — Kolektor/Lokal Primer (Pemkab ${daerahName})`;
+        resolvedClassDesc = isKotamadya
+          ? `Jalan Kota (${daerahName})`
+          : `Jalan Kabupaten (${daerahName})`;
+        resolvedLegalBasis = `SK ${isKotamadya ? "Walikota" : "Bupati"} ${daerahName} tentang Penetapan Status Ruas Jalan ${isKotamadya ? "Kota" : "Kabupaten"}`;
+        resolvedHead = `${isKotamadya ? "Walikota" : "Bupati"} ${daerahName}`;
+        resolvedAgency = `Dinas Pekerjaan Umum dan Penataan Ruang (PUPR) ${daerahName}`;
+      } else if (
+        osmHighwayTag === "residential" ||
+        osmHighwayTag === "unclassified" ||
+        osmHighwayTag === "living_street" ||
+        osmHighwayTag === "service" ||
+        osmHighwayTag === "track"
+      ) {
+        resolvedAuth = isKotamadya ? "KOTA" : "KABUPATEN";
+        const daerahName = cityOrRegency || stateName;
+        const desaLabel = villageOrSuburb ? `Desa/Kel. ${villageOrSuburb}` : "Kawasan Permukiman";
+        resolvedAuthLabel = `Jalan Desa / Lingkungan Permukiman (${desaLabel}, ${daerahName})`;
+        resolvedClassDesc = `Jalan Lingkungan / Jalan Desa (${osmHighwayTag === "residential" ? "Jalan Permukiman Warga" : "Jalan Desa / Penghubung Lokal"})`;
+        resolvedLegalBasis = `UU No. 2 Tahun 2022 Pasal 9 & Peraturan ${isKotamadya ? "Walikota" : "Bupati"} ${daerahName} tentang Jalan Desa/Lingkungan`;
+        resolvedHead = `Pemerintah ${desaLabel} & ${isKotamadya ? "Walikota" : "Bupati"} ${daerahName}`;
+        resolvedAgency = `Dinas Perkim / Dinas PUPR ${daerahName} & Pemerintah Desa/Kelurahan Setempat`;
+      }
+
+      const displayRoadName = osmRoadName
+        ? `${osmRoadName}${villageOrSuburb ? ` (${villageOrSuburb})` : ""}`
+        : `Ruas ${resolvedClassDesc} ${villageOrSuburb || cityOrRegency || `[${lat.toFixed(4)}, ${lng.toFixed(4)}]`}`;
+
+      const districtFull = [villageOrSuburb, subdistrict, cityOrRegency, stateName]
+        .filter(Boolean)
+        .join(", ");
+
+      const enrichedPoint = {
+        ...result,
+        coordinates: snappedCenter,
+        streetGeometry: snappedGeometry,
+        streetName: displayRoadName,
+        roadClassLabel: resolvedClassDesc,
+        osmHighwayTag,
+        authority: resolvedAuth,
+        authorityLabel: resolvedAuthLabel,
+        legalBasis: resolvedLegalBasis,
+        district: districtFull || result.district,
+        provinceName: stateName,
+        leadership: {
+          ...result.leadership,
+          regionalHead: resolvedHead,
+          agency: resolvedAgency,
+        },
       };
 
-      setSelectedRoad(detectedRoadEntity);
-      setActiveTab("kewenangan");
+      setDetectedPoint(enrichedPoint);
+      setSelectedRoad((prev) => {
+        if (!prev || prev.id !== clickId) return prev;
+        return {
+          ...prev,
+          name: displayRoadName,
+          code: osmHighwayTag ? `OSM-${osmHighwayTag.toUpperCase()}` : prev.code,
+          authority: resolvedAuth,
+          authorityLabel: resolvedAuthLabel,
+          legalBasis: resolvedLegalBasis,
+          district: districtFull || prev.district,
+          provinceName: stateName,
+          pavementType: `${resolvedClassDesc} (Data Spasial OpenStreetMap)`,
+          coordinates: snappedGeometry || prev.coordinates,
+          leadership: enrichedPoint.leadership,
+          problemDetails: {
+            headline: `${resolvedClassDesc} — ${resolvedAuthLabel}`,
+            description: `${displayRoadName} berada di ${districtFull || stateName}. Berdasarkan klasifikasi jaringan jalan (highway=${osmHighwayTag || "local"}) dan UU No. 2 Tahun 2022 tentang Jalan, ruas ini termasuk kategori ${resolvedClassDesc} di bawah tanggung jawab ${resolvedHead} (${resolvedAgency}).`,
+            rootCause: `Klasifikasi fungsi jalan: ${resolvedClassDesc}. Dasar hukum: ${resolvedLegalBasis}.`,
+            safetyImpact: "Klik tombol Laporkan Kerusakan untuk mengirim aduan masyarakat pada ruas jalan ini.",
+          },
+        };
+      });
+    } catch {
+      // Fallback remains the synchronous detectJurisdictionByCoordinates result
     }
   };
 

@@ -623,7 +623,33 @@ export default function MapInner({
         });
       })}
 
-      {/* Detected Location Click Marker */}
+      {/* Detected Location Click Marker & Live Snapped Street Polyline */}
+      {detectedPoint && detectedPoint.streetGeometry && detectedPoint.streetGeometry.length >= 2 && (
+        <>
+          <Polyline
+            positions={detectedPoint.streetGeometry}
+            pathOptions={{
+              color: "#ffffff",
+              weight: 10,
+              opacity: 0.9,
+              lineCap: "round",
+              lineJoin: "round",
+            }}
+            interactive={false}
+          />
+          <Polyline
+            positions={detectedPoint.streetGeometry}
+            pathOptions={{
+              color: "#ea580c",
+              weight: 6,
+              opacity: 0.95,
+              lineCap: "round",
+              lineJoin: "round",
+            }}
+          />
+        </>
+      )}
+
       {detectedPoint && detectedPoint.coordinates && (
         <Marker
           position={detectedPoint.coordinates}
@@ -632,22 +658,25 @@ export default function MapInner({
         >
           <Tooltip permanent direction="top" offset={[0, -18]}>
             <div className="font-sans text-xs bg-[#c2410c] text-white px-2.5 py-1 rounded-[6px] shadow-lg font-bold">
-              🎯 Titik Terdeteksi: {detectedPoint.provinceName}
+              🎯 {detectedPoint.streetName || `Titik Terdeteksi: ${detectedPoint.provinceName}`}
             </div>
           </Tooltip>
           <Popup className="jagajalan-leaflet-popup" autoPan>
-            <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
+            <div className="p-1 space-y-2 font-sans max-w-[270px] text-xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                <span className="font-bold text-[9px] text-teal-800 bg-teal-100 px-1.5 py-0.5 rounded-[4px]">
-                  DETEKSI GEOSPASIAL
+                <span className="font-bold text-[9px] text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
+                  {detectedPoint.roadClassLabel || "DETEKSI GEOSPASIAL"}
                 </span>
                 <span className="text-[9px] font-sans tabular-nums font-bold text-slate-400">
-                  {detectedPoint.coordinates[0].toFixed(3)}, {detectedPoint.coordinates[1].toFixed(3)}
+                  {detectedPoint.coordinates[0].toFixed(4)}, {detectedPoint.coordinates[1].toFixed(4)}
                 </span>
               </div>
               <div>
-                <h4 className="font-bold text-slate-900">{detectedPoint.provinceName} ({detectedPoint.island})</h4>
-                <p className="text-[10px] text-teal-700 font-bold">{detectedPoint.authorityLabel}</p>
+                <h4 className="font-bold text-slate-900">
+                  {detectedPoint.streetName || `${detectedPoint.provinceName} (${detectedPoint.island})`}
+                </h4>
+                <p className="text-[10px] text-slate-500 mt-0.5">{detectedPoint.district}</p>
+                <p className="text-[10px] text-teal-700 font-bold mt-0.5">{detectedPoint.authorityLabel}</p>
               </div>
               <div className="bg-slate-50 p-2 rounded-[4px] border border-slate-200 text-[9.5px] space-y-1">
                 <div>
@@ -658,11 +687,10 @@ export default function MapInner({
                   <span className="text-slate-500">Instansi: </span>
                   <span className="font-medium text-slate-800">{detectedPoint.leadership?.agency}</span>
                 </div>
-                {detectedPoint.nearestRoad && (
-                  <div className="pt-1 border-t border-slate-200/80 text-[8.5px] text-slate-600">
-                    Koridor Nasional Terdekat: <span className="font-semibold">{detectedPoint.nearestRoad.name}</span> (~{detectedPoint.distanceToNearestNationalKm} km)
-                  </div>
-                )}
+                <div>
+                  <span className="text-slate-500">Dasar Hukum: </span>
+                  <span className="font-medium text-slate-700">{detectedPoint.legalBasis}</span>
+                </div>
               </div>
             </div>
           </Popup>
