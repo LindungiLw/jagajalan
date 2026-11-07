@@ -919,17 +919,23 @@ export default function AnnualProgressChart() {
 
                 <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
                   <h4 className="font-bold text-slate-900 text-sm mb-1">
-                    2. Penyebab Selisih Kemantapan Jalan Daerah (36% – 38%)
+                    2. Definisi &amp; Metodologi Indikator Kesenjangan Kemantapan (36,3%)
                   </h4>
                   <p>
-                    Jalan nasional memiliki kemantapan tinggi (92,8% – 93,4%) karena dibiayai langsung oleh <strong>APBN Kementerian PUPR</strong> dengan jadwal pemeliharaan berkala rutin. Sebaliknya, jalan kabupaten/kota menghadapi dua kendala struktural:
+                    Indikator disparitas kemantapan pada dashboard dihitung secara transparan dengan rujukan resmi:
                   </p>
                   <ul className="list-disc pl-5 mt-1.5 space-y-1">
                     <li>
-                      Menanggung beban bentang jalan terpanjang di Indonesia (mencakup <strong>81,4%</strong> dari total 549.000 km jaringan jalan nasional).
+                      <strong>Sumber Data:</strong> Publikasi resmi <em>Statistik Transportasi Darat (BPS SIRUSA 2020–2024)</em> dan Dokumen Rancangan Akhir Rencana Strategis Kementerian Pekerjaan Umum 2025–2029.
                     </li>
                     <li>
-                      Kapasitas anggaran APBD daerah terbatas karena sebagian besar terserap untuk belanja operasional rutin.
+                      <strong>Periode &amp; Cakupan:</strong> Rangkaian data tahunan 2020 s.d. 2024 yang mencakup seluruh jaringan jalan umum non-tol di 38 provinsi di Indonesia (~538.102 Km).
+                    </li>
+                    <li>
+                      <strong>Definisi &amp; Formula Perhitungan:</strong> Selisih poin persentase kemantapan agregat jalan nasional (kondisi baik + sedang: <strong>93,4%</strong>) dikurangi tingkat kemantapan jalan kabupaten/kota (kondisi baik + sedang: <strong>57,1%</strong>). Selisihnya menghasilkan <strong>jurang kesenjangan 36,3%</strong>.
+                    </li>
+                    <li>
+                      <strong>Akar Masalah Struktural:</strong> Pemerintah Kabupaten &amp; Kota menanggung beban bentang terpanjang di Indonesia (<strong>81,4%</strong> dari total bentang nasional) dengan kapasitas Pendapatan Asli Daerah (PAD) yang terbatas untuk preservasi berkala.
                     </li>
                   </ul>
                 </div>

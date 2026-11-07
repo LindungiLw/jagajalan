@@ -41,8 +41,8 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
       badge: "UU No. 25/2009",
       title: "Pantau Tenggat & Draf Ombudsman",
       description:
-        "Menghitung mundur batas waktu tanggapan 14 hari kerja dan menyiapkan surat pengaduan ke Ombudsman RI jika dinas terlambat merespons.",
-      outcome: "Draf Eskalasi Maladministrasi",
+        "Menghitung mundur estimasi batas waktu tanggap acuan (14 hari kerja) dan menyiapkan draf advokasi ke Ombudsman RI jika dinas terindikasi melakukan penundaan berlarut.",
+      outcome: "Draf Advokasi Ombudsman RI",
     },
   ];
 

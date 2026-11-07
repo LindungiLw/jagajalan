@@ -105,7 +105,7 @@ export default function OmbudsmanMonitorSection({
             Lacak Laporan &amp; Batas Waktu Tanggapan
           </h1>
           <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans max-w-2xl">
-            Pantau kepatuhan tenggat respons 14 hari kerja dinas penanggung jawab (UU No. 25/2009) serta advokasi draf pengaduan Ombudsman RI.
+            Pantau linimasa respons dan estimasi batas waktu tanggap acuan (14 hari kerja) dinas penanggung jawab serta advokasi draf pengaduan Ombudsman RI jika terjadi penundaan berlarut.
           </p>
         </div>
 
@@ -113,7 +113,7 @@ export default function OmbudsmanMonitorSection({
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-rose-50 border border-rose-200/70 text-xs font-semibold text-rose-700">
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-              <span>{counts.overdue} Aduan Melewati Batas SLA</span>
+              <span>{counts.overdue} Aduan Melewati Waktu Acuan</span>
             </span>
           </div>
         )}
