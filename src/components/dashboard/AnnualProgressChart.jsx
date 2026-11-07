@@ -18,6 +18,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   PieChart as PieIcon,
+  Scale,
 } from "lucide-react";
 import { ANNUAL_HISTORICAL_DATA } from "@/data/provincesData";
 
