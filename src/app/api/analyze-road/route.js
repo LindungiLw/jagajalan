@@ -107,8 +107,8 @@ Lakukan 4 langkah evaluasi:
 
 Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
 
-        // Attempt Gemini 2.5 Flash first, then 1.5 Flash fallback
-        const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+        // Active production models: Gemini 2.5 Flash (supported by Google AI for Developers)
+        const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
         let apiResponse = null;
         let lastError = null;
 
