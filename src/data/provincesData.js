@@ -69,7 +69,7 @@ export const PROVINCES_DATA = [
     complaintRank: 1, // Peringkat 1 Aduan Terbanyak Nasional (kepadatan mobilitas & penduduk 50+ juta)
     inpresAllocationMiliar: 1240,
     overdueComplaints: 1140,
-    activePilot: true, // Wilayah Deep-Dive Pilot Project
+    activePilot: false,
     capital: "Bandung",
     statusSummary: "Provinsi dengan volume keluhan jalan rusak terbanyak di Indonesia akibat beban truk angkutan berat (ODOL) dan mobilitas harian 50+ juta jiwa.",
   },
@@ -85,9 +85,9 @@ export const PROVINCES_DATA = [
     complaintRank: 2,
     inpresAllocationMiliar: 1450,
     overdueComplaints: 820,
-    activePilot: false,
+    activePilot: true, // Wilayah Percontohan Nasional (Deep-Dive Pilot Project Kota Medan & Sekitarnya)
     capital: "Medan",
-    statusSummary: "Salah satu provinsi dengan bentang jalan daerah rusak terpanjang di luar Jawa, menjadi prioritas utama intervensi Inpres Jalan Daerah.",
+    statusSummary: "Wilayah percontohan transparansi jalan JagaJalan dengan bentang jalan daerah rusak terpanjang di luar Jawa, didukung data spasial dan kontrak pemeliharaan terverifikasi.",
   },
   {
     id: "lampung",
@@ -149,7 +149,7 @@ export const PROVINCES_DATA = [
     complaintRank: 6,
     inpresAllocationMiliar: 450,
     overdueComplaints: 280,
-    activePilot: true,
+    activePilot: false,
     capital: "Jakarta",
     statusSummary: "Tingkat kemantapan relatif baik namun memiliki frekuensi aduan galian utilitas dan jalan ambles akibat beban komuter tertinggi.",
   },

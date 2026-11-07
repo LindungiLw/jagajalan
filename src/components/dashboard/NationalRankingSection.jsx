@@ -7,12 +7,18 @@ import {
   Search,
   ArrowUpRight,
   Info,
-  SlidersHorizontal,
   LayoutGrid,
   Table as TableIcon,
   ChevronRight,
   ShieldCheck,
   TrendingUp,
+  X,
+  MapPin,
+  FileText,
+  Coins,
+  ExternalLink,
+  AlertTriangle,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function NationalRankingSection({ onSelectPilot }) {
@@ -20,6 +26,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("complaints"); // "complaints" | "damaged" | "inpres"
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "table"
+  const [selectedProvince, setSelectedProvince] = useState(null);
 
   const islands = [
     { id: "ALL", label: "Semua Wilayah" },
@@ -52,9 +59,9 @@ export default function NationalRankingSection({ onSelectPilot }) {
   }, [selectedIsland, searchQuery, sortBy]);
 
   return (
-    <section id="papan-skor-nasional" className="pt-1 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-      {/* MODERN CONTROL BAR: SEARCH, ISLAND TABS, SORT, & VIEW SWITCHER (FLOATING PILL ISLAND) */}
-      <div className="bg-slate-100/70 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50 space-y-2.5 font-sans">
+    <section id="papan-skor-nasional" className="pt-1 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 font-sans">
+      {/* 1. MODERN CONTROL BAR: SEARCH, ISLAND TABS, SORT, & VIEW SWITCHER */}
+      <div className="bg-slate-100/70 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50 space-y-2.5">
         
         {/* Row 1: Search & Sort Controls */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
@@ -74,7 +81,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari provinsi atau ibukota (misal: Jawa Barat, Medan, Papua)..."
+              placeholder="Cari provinsi atau ibukota (misal: Sumatera Utara, Medan, Jawa)..."
               className="w-full pl-9 pr-7 py-2 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
             />
             {searchQuery && (
@@ -99,32 +106,34 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 className="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer"
               >
                 <option value="complaints">Volume Aduan Terbanyak</option>
-                <option value="damaged">Jalan Rusak Tertinggi (% Non-Mantap)</option>
+                <option value="damaged">Persentase Jalan Rusak Tertinggi</option>
                 <option value="inpres">Alokasi Inpres IJD Terbesar</option>
               </select>
             </div>
 
-            {/* View Mode Toggle: Grid vs Table */}
-            <div className="flex items-center rounded-[6px] ring-1 ring-orange-200/50 p-0.5 bg-white shrink-0">
+            {/* View Mode Toggle (Grid vs Table) */}
+            <div className="flex items-center bg-white p-0.5 rounded-[6px] ring-1 ring-orange-200/50 shrink-0">
               <button
+                type="button"
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-[5px] transition-all cursor-pointer ${
+                title="Tampilan Kartu Ringkas"
+                className={`p-1.5 rounded-[5px] transition-colors cursor-pointer ${
                   viewMode === "grid"
-                    ? "bg-[#c2410c] text-white shadow-2xs font-bold"
-                    : "text-slate-400 hover:text-slate-900"
+                    ? "bg-[#c2410c] text-white shadow-2xs"
+                    : "text-slate-400 hover:text-slate-700 hover:bg-slate-50"
                 }`}
-                title="Tampilan Kartu Wilayah"
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
               </button>
               <button
+                type="button"
                 onClick={() => setViewMode("table")}
-                className={`p-1.5 rounded-[5px] transition-all cursor-pointer ${
+                title="Tampilan Tabel Padat"
+                className={`p-1.5 rounded-[5px] transition-colors cursor-pointer ${
                   viewMode === "table"
-                    ? "bg-[#c2410c] text-white shadow-2xs font-bold"
-                    : "text-slate-400 hover:text-slate-900"
+                    ? "bg-[#c2410c] text-white shadow-2xs"
+                    : "text-slate-400 hover:text-slate-700 hover:bg-slate-50"
                 }`}
-                title="Tampilan Tabel Leaderboard"
               >
                 <TableIcon className="w-3.5 h-3.5" />
               </button>
@@ -132,18 +141,20 @@ export default function NationalRankingSection({ onSelectPilot }) {
           </div>
         </div>
 
-        {/* Row 2: Segmented Island Tabs */}
-        <div className="flex items-center gap-1 overflow-x-auto pt-1 border-t border-slate-200/60 text-xs font-sans">
-          <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400 mr-2 shrink-0">Gugus Pulau:</span>
-          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+        {/* Row 2: Island Pill Filters */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 pt-1 scrollbar-none text-xs">
+          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider shrink-0 mr-1 hidden sm:inline">
+            Gugus Pulau:
+          </span>
+          <div className="flex items-center gap-1 flex-nowrap">
             {islands.map((island) => (
               <button
                 key={island.id}
                 onClick={() => setSelectedIsland(island.id)}
-                className={`px-3 py-1 rounded-[6px] text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-3 py-1 rounded-[5px] text-xs font-semibold transition-all shrink-0 cursor-pointer ${
                   selectedIsland === island.id
-                    ? "bg-[#c2410c] text-white shadow-xs font-bold"
-                    : "text-slate-600 hover:bg-white/80 hover:text-slate-900"
+                    ? "bg-[#c2410c] text-white shadow-2xs"
+                    : "bg-white text-slate-600 ring-1 ring-orange-200/40 hover:bg-orange-50/50 hover:text-[#c2410c]"
                 }`}
               >
                 {island.label}
@@ -153,7 +164,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
         </div>
       </div>
 
-      {/* 3. MAIN DATA DISPLAY (GRID CARDS OR LEADERBOARD TABLE) */}
+      {/* 2. MAIN DATA DISPLAY (COMPACT GLANCEABLE CARDS OR TABLE) */}
       {filteredAndSortedProvinces.length === 0 ? (
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-8 text-center space-y-2">
           <p className="text-sm font-semibold text-slate-700">Tidak ada provinsi yang cocok dengan pencarian.</p>
@@ -162,9 +173,9 @@ export default function NationalRankingSection({ onSelectPilot }) {
       ) : viewMode === "grid" ? (
         
         /* ------------------------------------------------------------- */
-        /* VIEW 1: MODERN FLUID CARDS (Clean, Elegant, Zero Box-in-Box)  */
+        /* VIEW 1: COMPACT GLANCEABLE CARDS (Clean, Fast, Zero Slop)    */
         /* ------------------------------------------------------------- */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 font-sans">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {filteredAndSortedProvinces.map((prov) => {
             const isPilot = prov.activePilot;
             const mantapPct = (100 - prov.damagedPercentage).toFixed(1);
@@ -172,108 +183,105 @@ export default function NationalRankingSection({ onSelectPilot }) {
             return (
               <div
                 key={prov.id}
-                className={`bg-white rounded-[6px] p-4.5 transition-all flex flex-col justify-between gap-3.5 ${
+                onClick={() => setSelectedProvince(prov)}
+                className={`bg-white rounded-[6px] p-4 transition-all flex flex-col justify-between gap-3 cursor-pointer group ${
                   isPilot
-                    ? "ring-2 ring-orange-300 shadow-xs"
+                    ? "ring-2 ring-orange-400/80 shadow-xs bg-orange-50/10 hover:ring-orange-500"
                     : "ring-1 ring-orange-200/50 hover:ring-orange-300 hover:shadow-xs"
                 }`}
               >
                 {/* Header: Rank, Province Name, & Pilot Status */}
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-baseline gap-2">
+                    <div className="flex items-baseline gap-2 truncate">
                       <span className="text-xs font-bold font-sans tabular-nums text-slate-400 tracking-wider">
                         #{String(prov.complaintRank).padStart(2, "0")}
                       </span>
-                      <h3 className="font-bold text-slate-900 text-base font-heading tracking-tight leading-snug">
+                      <h3 className="font-bold text-slate-900 text-sm sm:text-base font-heading tracking-tight leading-snug group-hover:text-[#c2410c] transition-colors truncate">
                         {prov.name}
                       </h3>
                     </div>
 
-                    {isPilot && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-[5px] text-[9.5px] font-bold text-[#c2410c] bg-orange-50 ring-1 ring-orange-200/60 uppercase tracking-wider font-sans shrink-0">
+                    {isPilot ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[9.5px] font-bold text-[#c2410c] bg-orange-50 ring-1 ring-orange-200/70 uppercase tracking-wider shrink-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] animate-pulse" />
                         Wilayah Pilot
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-slate-400 font-medium shrink-0">
+                        {prov.island}
                       </span>
                     )}
                   </div>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Ibukota: <strong className="font-medium text-slate-700">{prov.capital}</strong> • {prov.island}
+                    Ibukota: <strong className="font-medium text-slate-700">{prov.capital}</strong>
                   </p>
                 </div>
 
                 {/* Kemantapan Jalan (BPS) with Sleek Progress Line */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 text-[11px]">Rasio Jalan Non-Mantap (BPS):</span>
-                    <span className={`font-bold tabular-nums text-xs ${
-                      prov.damagedPercentage > 45 ? "text-rose-600" : prov.damagedPercentage > 35 ? "text-[#c2410c]" : "text-amber-600"
-                    }`}>
-                      {prov.damagedPercentage}%
+                    <span className="text-slate-500 text-[11px]">Kemantapan Jalan:</span>
+                    <span className="font-bold tabular-nums text-xs text-slate-800">
+                      {mantapPct}% Mantap
                     </span>
                   </div>
                   
-                  {/* Thin Elegant Progress Line */}
-                  <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                  {/* Thin Dual-Tone Progress Line */}
+                  <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         prov.damagedPercentage > 45
-                          ? "bg-rose-500"
+                          ? "bg-amber-600"
                           : prov.damagedPercentage > 35
                           ? "bg-[#c2410c]"
-                          : "bg-amber-500"
+                          : "bg-emerald-600"
                       }`}
-                      style={{ width: `${Math.min(prov.damagedPercentage, 100)}%` }}
+                      style={{ width: `${Math.max(10, 100 - prov.damagedPercentage)}%` }}
                     />
                   </div>
 
                   <div className="flex items-center justify-between text-[10px] text-slate-400 tabular-nums">
-                    <span>Kemantapan: <strong className="text-slate-600 font-semibold">{mantapPct}%</strong></span>
+                    <span>Non-Mantap: <strong className={prov.damagedPercentage > 45 ? "text-rose-600 font-semibold" : "text-slate-600 font-semibold"}>{prov.damagedPercentage}%</strong></span>
                     <span>Total: {(prov.totalRoadKm).toLocaleString("id-ID")} Km</span>
                   </div>
                 </div>
 
-                {/* Integrated Financial Metric Strip (No Clunky Boxes!) */}
-                <div className="py-2.5 px-3 rounded-[6px] bg-slate-50/70 ring-1 ring-orange-200/40 flex items-center justify-between text-center">
-                  <div className="flex-1 text-left">
-                    <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider block">Total Aduan</span>
-                    <strong className="text-sm font-bold text-slate-900 tabular-nums">
+                {/* 2 Core Financial & Public Metrics (Clean, Non-Clunky) */}
+                <div className="grid grid-cols-2 gap-2 py-2 px-2.5 rounded-[5px] bg-slate-50/70 ring-1 ring-orange-200/40 text-xs">
+                  <div>
+                    <span className="text-[9.5px] text-slate-400 font-semibold uppercase tracking-wider block">Total Aduan</span>
+                    <strong className="text-xs sm:text-[13px] font-bold text-slate-900 tabular-nums">
                       {prov.totalComplaints.toLocaleString("id-ID")}
                     </strong>
                   </div>
-                  <div className="h-6 w-px bg-slate-200/60 mx-2" />
-                  <div className="flex-1 text-left">
-                    <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider block">Lewat Batas</span>
-                    <strong className="text-sm font-bold text-rose-600 tabular-nums">
-                      {prov.overdueComplaints.toLocaleString("id-ID")}
-                    </strong>
-                  </div>
-                  <div className="h-6 w-px bg-slate-200/60 mx-2" />
-                  <div className="flex-1 text-right">
-                    <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider block">Inpres IJD</span>
-                    <strong className="text-sm font-bold text-emerald-800 tabular-nums">
+                  <div className="border-l border-slate-200/60 pl-2">
+                    <span className="text-[9.5px] text-slate-400 font-semibold uppercase tracking-wider block">Inpres IJD</span>
+                    <strong className="text-xs sm:text-[13px] font-bold text-emerald-800 tabular-nums">
                       Rp {prov.inpresAllocationMiliar} M
                     </strong>
                   </div>
                 </div>
 
-                {/* Status Context Summary */}
-                <p className="text-[11px] text-slate-600 leading-relaxed line-clamp-2">
-                  {prov.statusSummary}
-                </p>
-
                 {/* Footer Action */}
-                <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                   <span className="text-[10px] text-slate-400">Kode BPS: {prov.code}</span>
                   {isPilot ? (
                     <button
-                      onClick={onSelectPilot}
-                      className="text-[#c2410c] hover:text-[#9a3412] hover:underline font-bold text-xs inline-flex items-center gap-1 cursor-pointer transition-colors"
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onSelectPilot) onSelectPilot();
+                      }}
+                      className="text-[#c2410c] hover:text-[#9a3412] font-bold text-xs inline-flex items-center gap-1 cursor-pointer transition-colors"
                     >
-                      <span>Buka Peta Pilot Jabar</span>
+                      <span>Buka Peta Medan</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
                   ) : (
-                    <span className="text-[11px] text-slate-400 font-medium">Data Agregat BPS</span>
+                    <span className="text-[11px] text-slate-500 font-medium group-hover:text-[#c2410c] transition-colors inline-flex items-center gap-0.5">
+                      Lihat Rincian <ChevronRight className="w-3 h-3" />
+                    </span>
                   )}
                 </div>
               </div>
@@ -285,7 +293,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
         /* ------------------------------------------------------------- */
         /* VIEW 2: LEADERBOARD TABLE (High-Density, Bloomberg/IDX Style) */
         /* ------------------------------------------------------------- */
-        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-2xs overflow-hidden font-sans">
+        <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
@@ -293,10 +301,10 @@ export default function NationalRankingSection({ onSelectPilot }) {
                   <th className="py-2.5 px-3 font-bold text-center w-12">Rank</th>
                   <th className="py-2.5 px-3 font-bold">Provinsi &amp; Ibukota</th>
                   <th className="py-2.5 px-3 font-bold">Pulau</th>
-                  <th className="py-2.5 px-3 font-bold text-right">Total Panjang (Km)</th>
-                  <th className="py-2.5 px-3 font-bold text-center">Rasio Rusak (BPS)</th>
+                  <th className="py-2.5 px-3 font-bold text-right">Total Panjang</th>
+                  <th className="py-2.5 px-3 font-bold text-center">Kemantapan</th>
                   <th className="py-2.5 px-3 font-bold text-right">Total Aduan</th>
-                  <th className="py-2.5 px-3 font-bold text-right">Lewat Batas Respons</th>
+                  <th className="py-2.5 px-3 font-bold text-right">Lewat Batas</th>
                   <th className="py-2.5 px-3 font-bold text-right">Alokasi Inpres</th>
                   <th className="py-2.5 px-3 font-bold text-center">Aksi</th>
                 </tr>
@@ -304,11 +312,13 @@ export default function NationalRankingSection({ onSelectPilot }) {
               <tbody className="divide-y divide-slate-100">
                 {filteredAndSortedProvinces.map((prov) => {
                   const isPilot = prov.activePilot;
+                  const mantapPct = (100 - prov.damagedPercentage).toFixed(1);
 
                   return (
                     <tr
                       key={prov.id}
-                      className={`hover:bg-slate-50/80 transition-colors ${
+                      onClick={() => setSelectedProvince(prov)}
+                      className={`hover:bg-slate-50/80 transition-colors cursor-pointer ${
                         isPilot ? "bg-orange-50/30" : ""
                       }`}
                     >
@@ -340,23 +350,14 @@ export default function NationalRankingSection({ onSelectPilot }) {
                         {(prov.totalRoadKm).toLocaleString("id-ID")} Km
                       </td>
 
-                      {/* Rasio Kerusakan Jalan */}
+                      {/* Rasio Kemantapan Jalan */}
                       <td className="py-2.5 px-3 text-center">
-                        <div className="inline-flex items-center gap-1.5">
-                          <div className="w-12 h-1.5 rounded-full bg-slate-100 overflow-hidden hidden sm:block">
-                            <div
-                              className={`h-full ${
-                                prov.damagedPercentage > 45 ? "bg-rose-500" : "bg-[#c2410c]"
-                              }`}
-                              style={{ width: `${Math.min(prov.damagedPercentage, 100)}%` }}
-                            />
-                          </div>
-                          <span className={`font-bold tabular-nums text-xs ${
-                            prov.damagedPercentage > 45 ? "text-rose-600" : "text-slate-800"
-                          }`}>
-                            {prov.damagedPercentage}%
-                          </span>
-                        </div>
+                        <span className="font-bold tabular-nums text-xs text-slate-800">
+                          {mantapPct}%
+                        </span>
+                        <span className="text-[10px] text-slate-400 block tabular-nums">
+                          Rusak: {prov.damagedPercentage}%
+                        </span>
                       </td>
 
                       {/* Total Aduan */}
@@ -364,7 +365,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                         {prov.totalComplaints.toLocaleString("id-ID")}
                       </td>
 
-                      {/* Overdue SLA */}
+                      {/* Overdue */}
                       <td className="py-2.5 px-3 text-right tabular-nums text-rose-600 font-bold">
                         {prov.overdueComplaints.toLocaleString("id-ID")}
                       </td>
@@ -378,14 +379,27 @@ export default function NationalRankingSection({ onSelectPilot }) {
                       <td className="py-2.5 px-3 text-center">
                         {isPilot ? (
                           <button
-                            onClick={onSelectPilot}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (onSelectPilot) onSelectPilot();
+                            }}
                             className="text-[#c2410c] hover:underline font-bold text-[11px] inline-flex items-center gap-0.5 cursor-pointer"
                           >
-                            <span>Buka Peta</span>
-                            <ChevronRight className="w-3.5 h-3.5" />
+                            <span>Peta Medan</span>
+                            <ArrowUpRight className="w-3 h-3" />
                           </button>
                         ) : (
-                          <span className="text-[10px] text-slate-400">BPS</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProvince(prov);
+                            }}
+                            className="text-slate-500 hover:text-[#c2410c] text-[11px] font-medium cursor-pointer"
+                          >
+                            Detail
+                          </button>
                         )}
                       </td>
                     </tr>
@@ -398,7 +412,199 @@ export default function NationalRankingSection({ onSelectPilot }) {
           {/* Table Summary Footer */}
           <div className="p-3 bg-slate-50/70 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
             <span>Menampilkan <strong>{filteredAndSortedProvinces.length}</strong> dari 38 Provinsi se-Indonesia</span>
-            <span className="text-[11px] text-slate-400">Sumber: BPS Sirusa 2024 &amp; Inpres No. 3/2023 (Tahap I)</span>
+            <span className="text-[11px] text-slate-400">Sumber: BPS SIRUSA 2024 &amp; Inpres No. 3/2023 (Tahap I)</span>
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* 3. MODAL DETAIL PROVINSI (INTERACTIVE MASTER-DETAIL DRAWER)    */}
+      {/* ------------------------------------------------------------- */}
+      {selectedProvince && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
+          <div className="max-w-xl w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
+            <div className="bg-white rounded-[6px] w-full overflow-hidden ring-1 ring-orange-200/50 max-h-[90vh] flex flex-col">
+              
+              {/* Header Modal */}
+              <div className="flex items-center justify-between bg-[#c2410c] text-white px-5 py-4">
+                <div className="flex items-center gap-2.5 truncate">
+                  <div className="w-8 h-8 rounded-[6px] bg-white/15 flex items-center justify-center text-white shrink-0">
+                    <MapPin className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="truncate">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base font-bold text-white truncate">
+                        {selectedProvince.name}
+                      </h3>
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-white/20 text-orange-100 shrink-0">
+                        Rank #{selectedProvince.complaintRank}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-orange-100 block truncate">
+                      Ibukota: {selectedProvince.capital} • Wilayah {selectedProvince.island} • Kode BPS: {selectedProvince.code}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProvince(null)}
+                  className="p-1.5 rounded-[6px] text-orange-100 hover:text-white hover:bg-white/15 transition-colors cursor-pointer shrink-0"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body Content */}
+              <div className="p-5 sm:p-6 space-y-4 text-xs text-slate-600 leading-relaxed overflow-y-auto">
+                
+                {/* 1. Status Summary Callout */}
+                <div className="p-3.5 rounded-[6px] bg-orange-50/40 ring-1 ring-orange-200/50 text-slate-800">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-4 h-4 text-[#c2410c] shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 block font-semibold mb-0.5">
+                        Karakteristik &amp; Dinamika Wilayah (BPS):
+                      </strong>
+                      <p className="text-xs text-slate-700 leading-relaxed font-sans">
+                        {selectedProvince.statusSummary}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Key Metrics Grid */}
+                <div>
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 font-sans">
+                    Ringkasan Statistik Infrastruktur (BPS SIRUSA)
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
+                      <span className="text-[10px] text-slate-400 block font-medium">Total Panjang Jalan</span>
+                      <strong className="text-sm font-bold text-slate-900 tabular-nums">
+                        {selectedProvince.totalRoadKm.toLocaleString("id-ID")} Km
+                      </strong>
+                    </div>
+
+                    <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
+                      <span className="text-[10px] text-slate-400 block font-medium">Kondisi Mantap (BPS)</span>
+                      <strong className="text-sm font-bold text-emerald-800 tabular-nums">
+                        {(100 - selectedProvince.damagedPercentage).toFixed(1)}%
+                      </strong>
+                      <span className="text-[10px] text-slate-400 block">Baik &amp; Sedang</span>
+                    </div>
+
+                    <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
+                      <span className="text-[10px] text-slate-400 block font-medium">Rasio Belum Mantap</span>
+                      <strong className={`text-sm font-bold tabular-nums ${
+                        selectedProvince.damagedPercentage > 45 ? "text-rose-600" : "text-amber-700"
+                      }`}>
+                        {selectedProvince.damagedPercentage}%
+                      </strong>
+                      <span className="text-[10px] text-slate-400 block">Rusak Ringan/Berat</span>
+                    </div>
+
+                    <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
+                      <span className="text-[10px] text-slate-400 block font-medium">Total Aduan Publik</span>
+                      <strong className="text-sm font-bold text-slate-900 tabular-nums">
+                        {selectedProvince.totalComplaints.toLocaleString("id-ID")}
+                      </strong>
+                    </div>
+
+                    <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
+                      <span className="text-[10px] text-slate-400 block font-medium">Lewat Waktu Acuan</span>
+                      <strong className="text-sm font-bold text-rose-600 tabular-nums">
+                        {selectedProvince.overdueComplaints.toLocaleString("id-ID")}
+                      </strong>
+                    </div>
+
+                    <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
+                      <span className="text-[10px] text-slate-400 block font-medium">Alokasi Inpres IJD</span>
+                      <strong className="text-sm font-bold text-emerald-800 tabular-nums">
+                        Rp {selectedProvince.inpresAllocationMiliar} M
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Visual Breakdown Progress Bar */}
+                <div className="p-3 rounded-[6px] bg-slate-50/80 border border-slate-200/70 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-sans">
+                    <span className="text-slate-600 font-medium">Proporsi Kemantapan Fisik Jalan:</span>
+                    <span className="font-bold text-slate-900">
+                      {(100 - selectedProvince.damagedPercentage).toFixed(1)}% Mantap
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-rose-200 overflow-hidden flex">
+                    <div
+                      className="h-full bg-emerald-600 rounded-full"
+                      style={{ width: `${100 - selectedProvince.damagedPercentage}%` }}
+                      title={`Mantap: ${(100 - selectedProvince.damagedPercentage).toFixed(1)}%`}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 font-sans">
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                      Mantap (Baik &amp; Sedang)
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-rose-300" />
+                      Belum Mantap (Rusak Ringan &amp; Berat)
+                    </span>
+                  </div>
+                </div>
+
+                {/* 4. Pilot Area Guidance */}
+                {selectedProvince.activePilot ? (
+                  <div className="p-3.5 rounded-[6px] bg-amber-50/60 ring-1 ring-amber-300/80 text-amber-900 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-[#c2410c] shrink-0" />
+                      <strong className="text-xs font-bold text-slate-900">
+                        Wilayah Percontohan Nasional (Deep-Dive Pilot Project)
+                      </strong>
+                    </div>
+                    <p className="text-[11.5px] text-slate-700 leading-relaxed font-sans">
+                      Provinsi Sumatera Utara (khususnya Kota Medan dan sekitarnya) telah terintegrasi penuh dengan <strong>peta geospasial mikro GIS</strong>, sebaran titik foto kerusakan jalan berkoordinat, klasifikasi AI, serta transparansi kontrak pemeliharaan berkala SiRUP/LPSE.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-slate-400 italic font-sans">
+                    * Catatan: Data mikro ruas jalan berkoordinat dan titik laporan berfoto saat ini difokuskan pada Wilayah Percontohan (Sumatera Utara / Kota Medan). Wilayah ini menyajikan data agregasi resmi BPS SIRUSA.
+                  </p>
+                )}
+              </div>
+
+              {/* Modal Footer Actions */}
+              <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                <span className="text-[11px] text-slate-400 font-sans hidden sm:inline">
+                  Sumber: BPS SIRUSA &amp; Inpres No. 3/2023
+                </span>
+
+                <div className="flex items-center gap-2 justify-end w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProvince(null)}
+                    className="px-3.5 py-1.5 rounded-[6px] border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    Tutup
+                  </button>
+
+                  {selectedProvince.activePilot && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedProvince(null);
+                        if (onSelectPilot) onSelectPilot();
+                      }}
+                      className="px-4 py-1.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-colors cursor-pointer inline-flex items-center gap-1 shadow-2xs"
+                    >
+                      <span>Buka Peta Medan</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       )}
