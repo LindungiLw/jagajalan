@@ -59,7 +59,7 @@ const NATIONAL_ROAD_COMPOSITION = [
 
 export default function AnnualProgressChart() {
   const [activeMetric, setActiveMetric] = useState("road-condition"); // 'road-condition' | 'complaints' | 'inpres'
-  const [chartViewMode, setChartViewMode] = useState("combo"); // 'combo' (bars + lines) | 'line'
+  const [chartViewMode, setChartViewMode] = useState("line"); // 'line' (clean disparity lines, default) | 'combo'
   const [selectedYear, setSelectedYear] = useState(2024);
   const [hoveredSlice, setHoveredSlice] = useState(null);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
@@ -160,61 +160,49 @@ export default function AnnualProgressChart() {
             Perbandingan Kemantapan Jalan Nasional vs Daerah
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Data historis BPS SIRUSA (2020–2024) yang memperlihatkan selisih kondisi jalan kabupaten/kota dibanding jalan nasional beserta proporsi panjang ruasnya.
+            Data historis BPS SIRUSA (2020–2024) memperlihatkan disparitas kualitas jalan kabupaten/kota dibanding jalan nasional.
           </p>
         </div>
 
-        {/* 3 Metric Pills (High-End Floating Island) */}
+        {/* 3 Metric Tabs (Clean Segmented Control, No Clunky Dual Badges) */}
         <div className="flex items-center p-1 rounded-[8px] bg-slate-100/80 ring-1 ring-orange-200/50 text-xs font-semibold shrink-0 gap-1 font-sans">
           <button
+            type="button"
             onClick={() => setActiveMetric("road-condition")}
-            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-2 ${
               activeMetric === "road-condition"
                 ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
-            <Layers className={`w-3.5 h-3.5 ${activeMetric === "road-condition" ? "text-white" : "text-[#c2410c]"}`} />
+            <Layers className="w-3.5 h-3.5" />
             <span>Kemantapan Jalan</span>
-            <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded-[4px] text-[10px] font-bold ${
-              activeMetric === "road-condition" ? "bg-white/20 text-white" : "bg-slate-200/80 text-slate-700"
-            }`}>
-              Gap 36%
-            </span>
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveMetric("complaints")}
-            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-2 ${
               activeMetric === "complaints"
                 ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
-            <AlertTriangle className={`w-3.5 h-3.5 ${activeMetric === "complaints" ? "text-white" : "text-rose-600"}`} />
+            <AlertTriangle className="w-3.5 h-3.5" />
             <span>Aduan Publik</span>
-            <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded-[4px] text-[10px] font-bold ${
-              activeMetric === "complaints" ? "bg-white/20 text-white" : "bg-rose-50 text-rose-700"
-            }`}>
-              16rb+
-            </span>
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveMetric("inpres")}
-            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-[6px] transition-all cursor-pointer flex items-center gap-2 ${
               activeMetric === "inpres"
                 ? "bg-[#c2410c] text-white shadow-2xs font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             }`}
           >
-            <Coins className={`w-3.5 h-3.5 ${activeMetric === "inpres" ? "text-white" : "text-orange-600"}`} />
-            <span>Intervensi IJD</span>
-            <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded-[4px] text-[10px] font-bold ${
-              activeMetric === "inpres" ? "bg-white/20 text-white" : "bg-orange-50 text-orange-700"
-            }`}>
-              Rp 29.9T
-            </span>
+            <Coins className="w-3.5 h-3.5" />
+            <span>Intervensi IJD (APBN)</span>
           </button>
         </div>
       </div>
@@ -228,7 +216,7 @@ export default function AnnualProgressChart() {
           {/* LEFT CARD (~67% width): 4 Open KPI Columns + Direct White Combo Chart + Clean Footer */}
           <div className="lg:col-span-8 bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
-            {/* 1. TOP 4 OPEN KPI COLUMNS (Executive SaaS Layout, No Truncation, Airy & Clean) */}
+            {/* 1. TOP 4 OPEN KPI COLUMNS (Executive Layout, Scannable & Consistent) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 pb-3 border-b border-slate-100">
               {/* Column 1: Jalan Nasional */}
               <div className="px-2.5 sm:px-3 py-1.5 flex flex-col justify-between">
@@ -243,7 +231,7 @@ export default function AnnualProgressChart() {
                   {selectedRoadData.nasional}%
                 </div>
                 <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  KemenPUPR (APBN)
+                  KemenPUPR (APBN) · Mantap
                 </span>
               </div>
 
@@ -251,8 +239,8 @@ export default function AnnualProgressChart() {
               <div className="px-2.5 sm:px-3 py-1.5 flex flex-col justify-between">
                 <div className="h-6 flex items-center justify-between gap-1 mb-1">
                   <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jalan Provinsi</span>
-                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    <ArrowUpRight className="w-2.5 h-2.5 text-emerald-600" />
+                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
+                    <ArrowUpRight className="w-2.5 h-2.5 text-purple-600" />
                     +3.0%
                   </span>
                 </div>
@@ -260,7 +248,7 @@ export default function AnnualProgressChart() {
                   {selectedRoadData.provinsi}%
                 </div>
                 <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  Pemprov (Kondisi Sedang)
+                  Pemprov (APBD) · Sedang
                 </span>
               </div>
 
@@ -269,14 +257,14 @@ export default function AnnualProgressChart() {
                 <div className="h-6 flex items-center justify-between gap-1 mb-1">
                   <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jalan Kab/Kota</span>
                   <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    <span className="text-rose-500 font-bold">*</span> 42.9% Rusak
+                    42.9% Rusak
                   </span>
                 </div>
                 <div className="text-3xl font-black text-orange-600 font-sans tabular-nums tracking-tight">
                   {selectedRoadData.kabupatenKota}%
                 </div>
                 <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  Pemkab / Pemkot
+                  Pemkab/Pemkot · Kritis
                 </span>
               </div>
 
@@ -285,7 +273,6 @@ export default function AnnualProgressChart() {
                 <div className="h-6 flex items-center justify-between gap-1 mb-1">
                   <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jurang Ketimpangan</span>
                   <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    <AlertTriangle className="w-2.5 h-2.5 text-rose-500" />
                     Kesenjangan
                   </span>
                 </div>
@@ -335,35 +322,35 @@ export default function AnnualProgressChart() {
                   ))}
                 </div>
 
-                {/* View Switcher: Combo vs Line */}
+                {/* View Switcher: Line vs Combo */}
                 <div className="flex items-center p-0.5 rounded-[6px] bg-slate-100 ring-1 ring-orange-200/50 text-xs font-bold font-sans">
-                  <button
-                    onClick={() => setChartViewMode("combo")}
-                    className={`px-2.5 py-1 rounded-[5px] transition-all cursor-pointer ${
-                      chartViewMode === "combo"
-                        ? "bg-[#c2410c] text-white shadow-xs"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                    title="Grafik Batang Daerah + Garis Tren Nasional"
-                  >
-                    Kombinasi
-                  </button>
                   <button
                     onClick={() => setChartViewMode("line")}
                     className={`px-2.5 py-1 rounded-[5px] transition-all cursor-pointer ${
                       chartViewMode === "line"
-                        ? "bg-[#c2410c] text-white shadow-xs"
+                        ? "bg-[#c2410c] text-white shadow-xs font-bold"
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                     title="Grafik Garis Tren Kontinu"
                   >
-                    Garis
+                    Garis Tren
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode("combo")}
+                    className={`px-2.5 py-1 rounded-[5px] transition-all cursor-pointer ${
+                      chartViewMode === "combo"
+                        ? "bg-[#c2410c] text-white shadow-xs font-bold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                    title="Grafik Batang Komposisi Disparitas"
+                  >
+                    Batang
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* 3. MAIN SVG CHART (Clean on White, No Box-in-a-Box, Wide Margins) */}
+            {/* 3. MAIN SVG CHART (Clean, High Precision, Zero Collision) */}
             <div className="py-2 relative select-none">
               <svg
                 viewBox="0 0 660 230"
@@ -375,6 +362,12 @@ export default function AnnualProgressChart() {
                   <linearGradient id="nasionalAreaGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#2563eb" stopOpacity="0.08" />
                     <stop offset="100%" stopColor="#2563eb" stopOpacity="0.01" />
+                  </linearGradient>
+
+                  {/* Gradient for Disparity Gap Area */}
+                  <linearGradient id="disparityBandGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#2563eb" stopOpacity="0.12" />
+                    <stop offset="100%" stopColor="#ea580c" stopOpacity="0.15" />
                   </linearGradient>
 
                   {/* Gradient for bar columns */}
@@ -430,19 +423,15 @@ export default function AnnualProgressChart() {
                   strokeWidth="1.2"
                 />
 
-                {/* COMBO MODE: Tall Elegant Bars for Kab/Kota + Lines for Nasional & Provinsi */}
+                {/* Shaded Disparity Band (The Gap between Nasional & Kab/Kota) */}
+                <path d={disparityAreaPath} fill="url(#disparityBandGrad)" />
+
+                {/* COMBO / BAR MODE: Clean Bars without awkward colliding pill badges */}
                 {chartViewMode === "combo" && (
                   <>
-                    {/* Area under Nasional Curve */}
-                    <path
-                      d={`${pathNasional} L ${linePoints[linePoints.length - 1].x} 195 L ${linePoints[0].x} 195 Z`}
-                      fill="url(#nasionalAreaGrad)"
-                    />
-
-                    {/* Vertical Bars for Kab/Kota (Rising to ~57% height) */}
                     {linePoints.map((p) => {
                       const isSelected = p.year === selectedYear;
-                      const barWidth = 46;
+                      const barWidth = 44;
                       const barHeight = 195 - p.yKabKota;
                       return (
                         <g
@@ -456,30 +445,18 @@ export default function AnnualProgressChart() {
                             y={p.yKabKota}
                             width={barWidth}
                             height={barHeight}
-                            rx="8"
+                            rx="6"
                             fill="url(#barColumnGrad)"
-                            opacity={isSelected ? 1 : 0.85}
-                            filter={isSelected ? "url(#cleanDrop)" : undefined}
+                            opacity={isSelected ? 1 : 0.75}
                             className="transition-all"
                           />
 
-                          {/* Floating Percentage Badge on top of bar */}
-                          <rect
-                            x={p.x - 23}
-                            y={p.yKabKota - 20}
-                            width="46"
-                            height="18"
-                            rx="9"
-                            fill="#ffffff"
-                            stroke="#ea580c"
-                            strokeWidth="1.2"
-                            filter="url(#cleanDrop)"
-                          />
+                          {/* Direct Clean Percentage Label (No floating pill box that collides with lines) */}
                           <text
                             x={p.x}
-                            y={p.yKabKota - 7.5}
+                            y={p.yKabKota - 6}
                             textAnchor="middle"
-                            fontSize="10"
+                            fontSize="10.5"
                             className="font-sans"
                             fontWeight="bold"
                             fill="#c2410c"
@@ -492,13 +469,8 @@ export default function AnnualProgressChart() {
                   </>
                 )}
 
-                {/* LINE MODE: Disparity Area between Nasional & Kab/Kota */}
-                {chartViewMode === "line" && (
-                  <path d={disparityAreaPath} fill="url(#nasionalAreaGrad)" />
-                )}
-
-                {/* Smooth Continuous Curves */}
-                {/* Line 1: Jalan Nasional (Biru) */}
+                {/* Smooth Continuous Curves (All 3 Tiers of Governance) */}
+                {/* Line 1: Jalan Nasional (Biru APBN) */}
                 <path
                   d={pathNasional}
                   fill="none"
@@ -508,27 +480,26 @@ export default function AnnualProgressChart() {
                   strokeLinejoin="round"
                 />
 
-                {/* Line 2: Jalan Provinsi (Ungu) */}
+                {/* Line 2: Jalan Provinsi (Ungu APBD) */}
                 <path
                   d={pathProvinsi}
                   fill="none"
                   stroke="#9333ea"
-                  strokeWidth="2.8"
+                  strokeWidth="2.6"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
 
-                {/* Line 3: Jalan Kab/Kota (In Line Mode) */}
-                {chartViewMode === "line" && (
-                  <path
-                    d={pathKabKota}
-                    fill="none"
-                    stroke="#ea580c"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                )}
+                {/* Line 3: Jalan Kab/Kota (Oranye Daerah) */}
+                <path
+                  d={pathKabKota}
+                  fill="none"
+                  stroke="#ea580c"
+                  strokeWidth={chartViewMode === "line" ? "3.2" : "1.8"}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={chartViewMode === "combo" ? "4 4" : undefined}
+                />
 
                 {/* Interactive Points & X-Axis Year Markers */}
                 {linePoints.map((p) => {
@@ -539,7 +510,7 @@ export default function AnnualProgressChart() {
                       className="cursor-pointer group"
                       onClick={() => setSelectedYear(p.year)}
                     >
-                      {/* Vertical Indicator on Selected Year */}
+                      {/* Vertical Indicator Line on Selected Year */}
                       {isSelected && (
                         <line
                           x1={p.x}
@@ -547,9 +518,9 @@ export default function AnnualProgressChart() {
                           x2={p.x}
                           y2="195"
                           stroke="#0f172a"
-                          strokeWidth="1.5"
+                          strokeWidth="1.2"
                           strokeDasharray="3 3"
-                          opacity="0.4"
+                          opacity="0.35"
                         />
                       )}
 
@@ -568,25 +539,23 @@ export default function AnnualProgressChart() {
                       <circle
                         cx={p.x}
                         cy={p.yProvinsi}
-                        r={isSelected ? 5.5 : 4}
+                        r={isSelected ? 5.5 : 3.5}
                         fill="#9333ea"
                         stroke="#ffffff"
                         strokeWidth="2"
                         filter={isSelected ? "url(#cleanDrop)" : undefined}
                       />
 
-                      {/* Dot: Jalan Kab/Kota (in Line mode) */}
-                      {chartViewMode === "line" && (
-                        <circle
-                          cx={p.x}
-                          cy={p.yKabKota}
-                          r={isSelected ? 7 : 5}
-                          fill="#ea580c"
-                          stroke="#ffffff"
-                          strokeWidth="2.5"
-                          filter={isSelected ? "url(#cleanDrop)" : undefined}
-                        />
-                      )}
+                      {/* Dot: Jalan Kab/Kota */}
+                      <circle
+                        cx={p.x}
+                        cy={p.yKabKota}
+                        r={isSelected ? 6.5 : 4.5}
+                        fill="#ea580c"
+                        stroke="#ffffff"
+                        strokeWidth="2.5"
+                        filter={isSelected ? "url(#cleanDrop)" : undefined}
+                      />
 
                       {/* X-Axis Year Button */}
                       <text
@@ -612,14 +581,14 @@ export default function AnnualProgressChart() {
                 <div className="flex items-center gap-2">
                   <Info className="w-4 h-4 text-[#c2410c] shrink-0" />
                   <span>
-                    <strong>Kesimpulan {selectedRoadData.year}:</strong> Jurang kesenjangan kemantapan pusat vs daerah sebesar <strong>{selectedRoadData.gap}%</strong>.
+                    <strong>Analisis {selectedRoadData.year}:</strong> Kesenjangan kemantapan antara jalan pusat dan jalan daerah tercatat sebesar <strong>{selectedRoadData.gap}%</strong>.
                   </span>
                 </div>
                 <button
                   onClick={() => setShowExplanationModal(true)}
                   className="text-xs font-bold text-[#c2410c] hover:text-[#9a3412] transition-colors cursor-pointer flex items-center gap-1 shrink-0"
                 >
-                  <span>Lihat Metodologi BPS SIRUSA</span>
+                  <span>Metodologi BPS SIRUSA</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -631,7 +600,7 @@ export default function AnnualProgressChart() {
             </div>
           </div>
 
-          {/* RIGHT CARD (~33% width): Balanced Donut Chart & Rich Breakdown with Micro-Bars */}
+          {/* RIGHT CARD (~33% width): Balanced Donut Chart & Rich Breakdown with Proportional Track */}
           <div className="lg:col-span-4 bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* Header */}
@@ -644,11 +613,11 @@ export default function AnnualProgressChart() {
                 Proporsi Panjang Jalan Indonesia
               </h3>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Distribusi ~549.000 Km berdasarkan status kewenangan (BPS).
+                Distribusi total ~549.000 Km berdasarkan kewenangan (BPS).
               </p>
             </div>
 
-            {/* Centered Donut Visual */}
+            {/* Centered Donut Visual (Refined, Slender Ring) */}
             <div className="relative flex items-center justify-center py-1">
               <svg viewBox="0 0 130 130" className="w-36 h-36 -rotate-90 select-none">
                 {/* Background Ring */}
@@ -658,7 +627,7 @@ export default function AnnualProgressChart() {
                   r={donutRadius}
                   fill="transparent"
                   stroke="#f1f5f9"
-                  strokeWidth="15"
+                  strokeWidth="11"
                 />
 
                 {/* Slices for the 4 authorities */}
@@ -672,7 +641,7 @@ export default function AnnualProgressChart() {
                       r={donutRadius}
                       fill="transparent"
                       stroke={slice.color}
-                      strokeWidth={isHovered ? 18 : 15}
+                      strokeWidth={isHovered ? 14 : 11}
                       strokeDasharray={`${slice.strokeDash} ${donutCircumference - slice.strokeDash}`}
                       strokeDashoffset={slice.strokeOffset}
                       strokeLinecap="round"
@@ -686,16 +655,30 @@ export default function AnnualProgressChart() {
 
               {/* Centered Donut Text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span className="text-[11px] text-slate-400 font-medium">Total Ruas</span>
-                <span className="text-xl font-extrabold text-slate-900 font-sans tabular-nums leading-tight">
-                  549rb
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Total Ruas</span>
+                <span className="text-xl font-black text-slate-900 font-sans tabular-nums leading-tight">
+                  549.000
                 </span>
-                <span className="text-[9.5px] text-slate-500 font-semibold">Kilometer</span>
+                <span className="text-[10px] text-slate-500 font-medium">Kilometer</span>
+              </div>
+            </div>
+
+            {/* Proportional Stacked Segment Track */}
+            <div className="space-y-1.5 pt-1">
+              <div className="flex h-2.5 w-full rounded-full overflow-hidden bg-slate-100 ring-1 ring-slate-200/50">
+                <div style={{ width: "57.6%" }} className="bg-[#059669] h-full" title="Jalan Kabupaten: 57.6%" />
+                <div style={{ width: "23.8%" }} className="bg-[#0d9488] h-full" title="Jalan Kota: 23.8%" />
+                <div style={{ width: "9.9%" }} className="bg-[#9333ea] h-full" title="Jalan Provinsi: 9.9%" />
+                <div style={{ width: "8.7%" }} className="bg-[#2563eb] h-full" title="Jalan Nasional: 8.7%" />
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5">
+                <span>Daerah (Kab+Kota): <strong>81.4%</strong></span>
+                <span>Pusat: <strong>8.7%</strong></span>
               </div>
             </div>
 
             {/* Rich Legend with Micro Progress Bars */}
-            <div className="space-y-2 pt-1 border-t border-slate-100">
+            <div className="space-y-1.5 pt-1 border-t border-slate-100">
               {NATIONAL_ROAD_COMPOSITION.map((item) => {
                 const isHovered = hoveredSlice === item.key;
                 return (
@@ -733,12 +716,12 @@ export default function AnnualProgressChart() {
               })}
             </div>
 
-            {/* Explanatory Policy Callout Box */}
-            <div className="p-3.5 rounded-[6px] bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-950 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-              <div className="leading-relaxed text-amber-900">
-                <strong className="text-amber-950">Akar Permasalahan Jalan Daerah:</strong>{" "}
-                Sebesar <strong>81.4% (446.900 Km)</strong> jalan di Indonesia berada di bawah wewenang Pemerintah Kabupaten &amp; Kota dengan kapasitas fiskal PAD yang terbatas. Ketimpangan beban bentang inilah yang memicu terbitnya <strong>Inpres No. 3/2023</strong>.
+            {/* Dignified Institutional Policy Callout Box */}
+            <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200/80 text-xs text-slate-700 flex items-start gap-2.5 leading-relaxed font-sans shadow-2xs">
+              <Scale className="w-4 h-4 text-[#c2410c] shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-slate-900 font-semibold">Akar Masalah Kesenjangan Fiskal:</strong>{" "}
+                Sebesar <strong className="text-slate-900">81.4% (446.900 Km)</strong> ruas jalan di Indonesia berada di bawah wewenang Pemerintah Kabupaten &amp; Kota dengan keterbatasan kapasitas PAD. Beban bentang yang timpang inilah yang melatarbelakangi terbitnya <strong>Inpres No. 3/2023 (Intervensi Fiskal APBN)</strong>.
               </div>
             </div>
           </div>
