@@ -19,7 +19,9 @@ import {
   ExternalLink,
   AlertTriangle,
   CheckCircle2,
+  FileSpreadsheet,
 } from "lucide-react";
+import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
 export default function NationalRankingSection({ onSelectPilot }) {
   const [selectedIsland, setSelectedIsland] = useState("ALL");
@@ -58,6 +60,108 @@ export default function NationalRankingSection({ onSelectPilot }) {
     });
   }, [selectedIsland, searchQuery, sortBy]);
 
+  const provinceExportColumns = useMemo(
+    () => [
+      {
+        header: "Rank",
+        align: "center",
+        mono: true,
+        accessor: (prov) => `#${String(prov.complaintRank).padStart(2, "0")}`,
+      },
+      { header: "Kode BPS", key: "code", align: "center", mono: true },
+      { header: "Provinsi", key: "name" },
+      { header: "Ibukota", key: "capital" },
+      { header: "Gugus Pulau", key: "island" },
+      {
+        header: "Total Panjang Jalan (KM)",
+        type: "number",
+        align: "right",
+        accessor: (prov) => Number(prov.totalRoadKm || 0).toLocaleString("id-ID"),
+      },
+      {
+        header: "Kemantapan (%)",
+        type: "number",
+        align: "right",
+        accessor: (prov) => `${(100 - prov.damagedPercentage).toFixed(1)}%`,
+      },
+      {
+        header: "Non-Mantap / Rusak (%)",
+        type: "number",
+        align: "right",
+        accessor: (prov) => `${prov.damagedPercentage}%`,
+      },
+      {
+        header: "Total Aduan",
+        type: "number",
+        align: "right",
+        accessor: (prov) => Number(prov.totalComplaints || 0).toLocaleString("id-ID"),
+      },
+      {
+        header: "Lewat Batas",
+        type: "number",
+        align: "right",
+        accessor: (prov) => Number(prov.overdueComplaints || 0).toLocaleString("id-ID"),
+      },
+      {
+        header: "Alokasi Inpres IJD (Rp Miliar)",
+        type: "currency",
+        align: "right",
+        accessor: (prov) => `Rp ${prov.inpresAllocationMiliar} M`,
+      },
+    ],
+    []
+  );
+
+  const handleExportProvincesExcel = () => {
+    exportToExcel({
+      filename: "Laporan_Transparansi_38_Provinsi_JagaJalan",
+      sheetName: "Data 38 Provinsi",
+      title: "LAPORAN TRANSPARANSI KEMANTAPAN JALAN & INPRES IJD 38 PROVINSI — JAGAJALAN",
+      subtitle: `Wilayah: ${selectedIsland === "ALL" ? "Seluruh Indonesia (38 Provinsi)" : selectedIsland} • Sumber: BPS SIRUSA & Kementerian PU`,
+      summaryMetrics: [
+        { label: "Cakupan Provinsi", value: `${filteredAndSortedProvinces.length} Provinsi` },
+        { label: "Total Jaringan Jalan", value: NATIONAL_STATS?.totalNationalRoadKm || "548.420 KM" },
+        { label: "Alokasi Inpres IJD", value: "Rp 29,9 Triliun (Tahap I & II)" },
+        { label: "Sumber Data Resmi", value: "BPS SIRUSA & Satu Data PU" },
+      ],
+      columns: provinceExportColumns,
+      rows: filteredAndSortedProvinces,
+    });
+  };
+
+  const handleExportProvincesPDF = () => {
+    exportToPDF({
+      title: "Laporan Transparansi Kondisi Jalan & Alokasi Inpres 38 Provinsi",
+      subtitle: `Komparasi Kemantapan Jalan Daerah, Volume Aduan Publik, dan Dana Inpres No. 3/2023 (${selectedIsland === "ALL" ? "Seluruh Indonesia" : selectedIsland})`,
+      documentCode: "JGJ-NAS-38PROV",
+      orientation: "landscape",
+      summaryMetrics: [
+        {
+          label: "Provinsi Terdata",
+          value: `${filteredAndSortedProvinces.length} Provinsi`,
+          sub: "Basis Data Agregat Nasional",
+        },
+        {
+          label: "Dana Inpres Jalan Daerah",
+          value: "Rp 29,9 Triliun",
+          sub: "Inpres No. 3 Tahun 2023",
+        },
+        {
+          label: "Aduan Pemda (Ombudsman)",
+          value: "4.766 Laporan",
+          sub: "Substansi Infrastruktur Tertinggi",
+        },
+        {
+          label: "Rujukan Data",
+          value: "BPS & KemenPU",
+          sub: "Publikasi Statistik Resmi",
+        },
+      ],
+      columns: provinceExportColumns,
+      rows: filteredAndSortedProvinces,
+    });
+  };
+
   return (
     <section id="papan-skor-nasional" className="pt-1 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 font-sans">
       {/* 1. MODERN CONTROL BAR: SEARCH, ISLAND TABS, SORT, & VIEW SWITCHER */}
@@ -94,8 +198,27 @@ export default function NationalRankingSection({ onSelectPilot }) {
             )}
           </div>
 
-          {/* Right Controls: Sort Dropdown & View Mode Switcher */}
-          <div className="flex items-center gap-2 justify-end">
+          {/* Right Controls: Export Buttons, Sort Dropdown & View Mode Switcher */}
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            <button
+              type="button"
+              onClick={handleExportProvincesExcel}
+              title="Unduh Data 38 Provinsi dalam format Microsoft Excel (.xls)"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80 text-xs font-bold transition-colors cursor-pointer shrink-0"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
+              <span>Unduh Excel</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleExportProvincesPDF}
+              title="Unduh Laporan Transparansi 38 Provinsi dalam format PDF"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-orange-50 hover:bg-orange-100 text-[#9a3412] ring-1 ring-orange-200/80 text-xs font-bold transition-colors cursor-pointer shrink-0"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#c2410c]" />
+              <span>Unduh PDF</span>
+            </button>
             
             {/* Sort Selector */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-500 shrink-0">
@@ -203,8 +326,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                     </div>
 
                     {isPilot ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[9.5px] font-bold text-[#c2410c] bg-orange-50 ring-1 ring-orange-200/70 uppercase tracking-wider shrink-0">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] animate-pulse" />
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-[4px] text-[9.5px] font-bold text-[#c2410c] bg-orange-50 ring-1 ring-orange-200/70 uppercase tracking-wider shrink-0">
                         Wilayah Pilot
                       </span>
                     ) : (

@@ -19,7 +19,9 @@ import {
   ArrowRight,
   FileCheck2,
   DownloadCloud,
+  FileSpreadsheet,
 } from "lucide-react";
+import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
 export default function OmbudsmanMonitorSection({
   reports = [],
@@ -92,6 +94,106 @@ export default function OmbudsmanMonitorSection({
     return filteredReports.slice(start, start + pageSize);
   }, [filteredReports, currentPage, pageSize]);
 
+  const reportExportColumns = useMemo(
+    () => [
+      { header: "Kode Tiket", key: "ticketCode", mono: true },
+      {
+        header: "Tanggal Lapor",
+        mono: true,
+        accessor: (rep) =>
+          rep.reportDate ? new Date(rep.reportDate).toLocaleDateString("id-ID") : "-",
+      },
+      { header: "Ruas Jalan", key: "roadName" },
+      { header: "Alamat / Titik Lokasi", key: "address" },
+      {
+        header: "Koordinat GIS (Lat, Lng)",
+        mono: true,
+        accessor: (rep) =>
+          Array.isArray(rep.coordinates)
+            ? `${Number(rep.coordinates[0]).toFixed(5)}, ${Number(rep.coordinates[1]).toFixed(5)}`
+            : "-",
+      },
+      { header: "Kewenangan", key: "authority" },
+      { header: "Instansi Penanggung Jawab", key: "authorityLabel" },
+      { header: "Kategori Kerusakan", key: "categoryLabel" },
+      {
+        header: "Indeks Bahaya AI",
+        align: "center",
+        mono: true,
+        accessor: (rep) => `${rep.hazardScore || 0}/100`,
+      },
+      {
+        header: "Status Tindak Lanjut",
+        accessor: (rep) =>
+          rep.status === "OVERDUE"
+            ? `Melewati Tenggat (+${rep.daysOverdue || 1} Hari)`
+            : rep.status === "SELESAI"
+            ? "Penanganan Selesai"
+            : "Dalam Penanganan / Verifikasi",
+      },
+      {
+        header: "Pagu Proyek Terkait",
+        align: "right",
+        mono: true,
+        accessor: (rep) =>
+          rep.matchingBudget?.paguRp
+            ? `Rp ${(Number(rep.matchingBudget.paguRp) / 1e9).toFixed(2)} M`
+            : "-",
+      },
+    ],
+    []
+  );
+
+  const handleExportReportsExcel = () => {
+    exportToExcel({
+      filename: "Laporan_Aduan_Warga_GIS_JagaJalan",
+      sheetName: "Aduan Warga GIS",
+      title: "LAPORAN TRANSPARANSI ADUAN WARGA & TINDAK LANJUT DINAS (GIS) — JAGAJALAN",
+      subtitle: `Filter Status: ${statusFilter} • Total ${filteredReports.length} Titik Laporan Terdata`,
+      summaryMetrics: [
+        { label: "Total Aduan Terpantau", value: `${counts.all} Laporan` },
+        { label: "Melewati Tenggat Respons", value: `${counts.overdue} Laporan` },
+        { label: "Dalam Masa Tanggap", value: `${counts.inProgress} Laporan` },
+        { label: "Tuntas Ditangani", value: `${counts.resolved} Laporan` },
+      ],
+      columns: reportExportColumns,
+      rows: filteredReports,
+    });
+  };
+
+  const handleExportReportsPDF = () => {
+    exportToPDF({
+      title: "Laporan Transparansi Pengaduan Warga & Tindak Lanjut Pelayanan Publik",
+      subtitle: `Pemetaan Titik Kerusakan Jalan (GIS) & Kepatuhan Tanggapan Instansi Penyelenggara Jalan (${statusFilter})`,
+      documentCode: "JGJ-SLA-GIS",
+      orientation: "landscape",
+      summaryMetrics: [
+        {
+          label: "Total Aduan Terdata",
+          value: `${counts.all} Laporan`,
+          sub: "Terpetakan pada Layer GIS",
+        },
+        {
+          label: "Melewati Tenggat Respons",
+          value: `${counts.overdue} Laporan`,
+          sub: "Memenuhi Syarat Advokasi Ombudsman",
+        },
+        {
+          label: "Dalam Masa Tanggap",
+          value: `${counts.inProgress} Laporan`,
+          sub: "Dalam Proses Verifikasi / Pengerjaan",
+        },
+        {
+          label: "Tuntas Diperbaiki",
+          value: `${counts.resolved} Laporan`,
+          sub: "Dokumentasi Fisik Terverifikasi",
+        },
+      ],
+      columns: reportExportColumns,
+      rows: filteredReports,
+    });
+  };
+
   return (
     <div className="py-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 font-sans text-slate-800 animate-fade-in">
       
@@ -109,14 +211,34 @@ export default function OmbudsmanMonitorSection({
           </p>
         </div>
 
-        {counts.overdue > 0 && (
-          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+        <div className="flex items-center gap-2 flex-wrap self-start sm:self-auto shrink-0">
+          <button
+            type="button"
+            onClick={handleExportReportsExcel}
+            title="Unduh Rekapitulasi Laporan Warga & Koordinat GIS dalam format Microsoft Excel (.xls)"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80 text-xs font-bold transition-colors cursor-pointer"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Unduh Excel</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportReportsPDF}
+            title="Unduh Laporan Pengawasan Pengaduan Warga dalam format PDF"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-orange-50 hover:bg-orange-100 text-[#9a3412] ring-1 ring-orange-200/80 text-xs font-bold transition-colors cursor-pointer"
+          >
+            <FileText className="w-3.5 h-3.5 text-[#c2410c]" />
+            <span>Unduh PDF</span>
+          </button>
+
+          {counts.overdue > 0 && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-rose-50 border border-rose-200/70 text-xs font-semibold text-rose-700">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
               <span>{counts.overdue} Aduan Melewati Waktu Acuan</span>
             </span>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* 2. SIGNATURE 4-METRIC SCOREBOARD (Interactive Click-to-Filter) */}
@@ -355,7 +477,6 @@ export default function OmbudsmanMonitorSection({
                     : "bg-slate-50 hover:bg-rose-50/60 text-slate-700 ring-1 ring-slate-200/60"
                 }`}
               >
-                <span className={`w-1.5 h-1.5 rounded-full ${statusFilter === "OVERDUE" ? "bg-white" : "bg-rose-500"}`} />
                 <span>Melewati Tenggat ({counts.overdue})</span>
               </button>
 
@@ -367,7 +488,6 @@ export default function OmbudsmanMonitorSection({
                     : "bg-slate-50 hover:bg-amber-50/60 text-slate-700 ring-1 ring-slate-200/60"
                 }`}
               >
-                <span className={`w-1.5 h-1.5 rounded-full ${statusFilter === "DALAM_PENGERJAAN" ? "bg-white" : "bg-amber-500"}`} />
                 <span>Dalam Tanggapan ({counts.inProgress})</span>
               </button>
 
@@ -379,7 +499,6 @@ export default function OmbudsmanMonitorSection({
                     : "bg-slate-50 hover:bg-emerald-50/60 text-slate-700 ring-1 ring-slate-200/60"
                 }`}
               >
-                <span className={`w-1.5 h-1.5 rounded-full ${statusFilter === "SELESAI" ? "bg-white" : "bg-emerald-600"}`} />
                 <span>Selesai ({counts.resolved})</span>
               </button>
             </div>

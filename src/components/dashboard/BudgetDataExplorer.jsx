@@ -24,8 +24,12 @@ import {
   ArrowUpDown,
   FileCheck2,
   PieChart,
+  Download,
+  FileSpreadsheet,
+  FileText,
 } from "lucide-react";
 import RoadDetailModal from "@/components/modals/RoadDetailModal";
+import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
 // Helper format Rupiah singkat
 function formatRupiahShort(amount) {
@@ -432,6 +436,100 @@ export default function BudgetDataExplorer({
 
   const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+
+  const budgetExportColumns = useMemo(
+    () => [
+      { header: "No", align: "center", mono: true, accessor: (_, idx) => idx + 1 },
+      { header: "Kode Paket LPSE", key: "packageId", mono: true },
+      { header: "Ruas Jalan", accessor: (row) => row.roadName || row.name },
+      { header: "Nama Paket Pekerjaan", key: "name" },
+      { header: "Kewenangan", key: "authority" },
+      {
+        header: "Pagu HPS (Rp)",
+        type: "currency",
+        align: "right",
+        accessor: (row) => Number(row.paguRp || 0).toLocaleString("id-ID"),
+      },
+      {
+        header: "Nilai Kontrak SPK (Rp)",
+        type: "currency",
+        align: "right",
+        accessor: (row) => Number(row.contractValueRp || 0).toLocaleString("id-ID"),
+      },
+      {
+        header: "Efisiensi Lelang (Rp)",
+        type: "currency",
+        align: "right",
+        accessor: (row) => Number(row.calculations?.efficiencyRp || 0).toLocaleString("id-ID"),
+      },
+      {
+        header: "Hemat (%)",
+        type: "number",
+        align: "right",
+        accessor: (row) => `${row.calculations?.efficiencyPct || 0}%`,
+      },
+      { header: "Kontraktor Pelaksana", accessor: (row) => row.contractor || "Dalam Pengadaan" },
+      {
+        header: "Progres Fisik",
+        align: "center",
+        mono: true,
+        accessor: (row) => `${row.progressPct || 0}%`,
+      },
+      { header: "Status Audit", accessor: (row) => row.audit?.statusLabel || "Sesuai Standar" },
+      { header: "Dasar Hukum SK", accessor: (row) => row.legalBasis || "-" },
+    ],
+    []
+  );
+
+  const handleExportBudgetExcel = () => {
+    exportToExcel({
+      filename: "Laporan_Audit_Anggaran_LPSE_JagaJalan",
+      sheetName: "Audit Anggaran LPSE",
+      title: "LAPORAN TRANSPARANSI ANGGARAN & AUDIT KONTRAK LPSE — JAGAJALAN",
+      subtitle: `Filter Kewenangan: ${selectedAuthority} • Total ${filteredPackages.length} Paket Pengadaan Terverifikasi`,
+      summaryMetrics: [
+        { label: "Total Pagu Anggaran (HPS)", value: formatRupiahShort(totalPagu) },
+        { label: "Realisasi Kontrak (SPK)", value: formatRupiahShort(totalContract) },
+        { label: "Efisiensi Lelang LPSE", value: `${formatRupiahShort(totalEfficiency)} (${efficiencyPercent}%)` },
+        { label: "Atensi Audit & Fisik", value: `${anomalyCount} Paket` },
+      ],
+      columns: budgetExportColumns,
+      rows: filteredPackages,
+    });
+  };
+
+  const handleExportBudgetPDF = () => {
+    exportToPDF({
+      title: "Laporan Transparansi Anggaran & Audit Kontrak LPSE",
+      subtitle: `Rekapitulasi Paket Pengadaan Jalan (${selectedAuthority}) — SiRUP LKPP & Kementerian PU`,
+      documentCode: "JGJ-LPSE-AUDIT",
+      orientation: "landscape",
+      summaryMetrics: [
+        {
+          label: "Total Pagu Anggaran (HPS)",
+          value: formatRupiahShort(totalPagu),
+          sub: `${filteredPackages.length} Paket Terverifikasi`,
+        },
+        {
+          label: "Realisasi Kontrak (SPK)",
+          value: formatRupiahShort(totalContract),
+          sub: `${((totalContract / (totalPagu || 1)) * 100).toFixed(1)}% Serapan SPK`,
+        },
+        {
+          label: "Efisiensi Lelang LPSE",
+          value: formatRupiahShort(totalEfficiency),
+          sub: `Penghematan ${efficiencyPercent}% dari Pagu`,
+        },
+        {
+          label: "Atensi Audit Proyek",
+          value: `${anomalyCount} Paket`,
+          sub: "Deviasi Fisik / Tender Minim (<1%)",
+        },
+      ],
+      columns: budgetExportColumns,
+      rows: filteredPackages,
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4 animate-fade-in text-slate-800">
@@ -971,18 +1069,40 @@ export default function BudgetDataExplorer({
                   </h3>
                 </div>
 
-                {/* Sort Selector (5pt Styled) */}
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 text-xs shrink-0 self-start sm:self-auto font-sans">
-                  <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-transparent text-slate-700 font-medium focus:outline-none cursor-pointer"
+                {/* Export (Excel / PDF) & Sort Controls */}
+                <div className="flex items-center gap-2 flex-wrap self-start sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={handleExportBudgetExcel}
+                    title="Unduh Data Anggaran & Kontrak LPSE dalam format Microsoft Excel (.xls)"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80 text-xs font-bold transition-colors cursor-pointer font-sans"
                   >
-                    <option value="value-desc">Nilai Anggaran Tertinggi</option>
-                    <option value="efficiency-desc">Efisiensi Hemat Tertinggi</option>
-                    <option value="progress-desc">Progres Fisik Tertinggi</option>
-                  </select>
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>Unduh Excel</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleExportBudgetPDF}
+                    title="Unduh Laporan Audit Anggaran dalam format PDF siap cetak"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-orange-50 hover:bg-orange-100 text-[#9a3412] ring-1 ring-orange-200/80 text-xs font-bold transition-colors cursor-pointer font-sans"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-[#c2410c]" />
+                    <span>Unduh PDF</span>
+                  </button>
+
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 text-xs shrink-0 font-sans">
+                    <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="bg-transparent text-slate-700 font-medium focus:outline-none cursor-pointer"
+                    >
+                      <option value="value-desc">Nilai Anggaran Tertinggi</option>
+                      <option value="efficiency-desc">Efisiensi Hemat Tertinggi</option>
+                      <option value="progress-desc">Progres Fisik Tertinggi</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -1101,7 +1221,7 @@ export default function BudgetDataExplorer({
                           {/* Kewenangan (Minimalist Indicator) */}
                           <td className="py-3.5 px-2 align-middle">
                             <div className="flex items-center gap-1.5">
-                              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${authColor}`} />
+                              <span className={`w-2.5 h-1.5 rounded-[2px] shrink-0 ${authColor}`} />
                               <span className="font-medium text-slate-700 text-[11.5px] truncate">
                                 {authLabel}
                               </span>

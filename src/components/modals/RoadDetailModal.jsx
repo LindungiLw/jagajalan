@@ -8,7 +8,10 @@ import {
   Building2,
   CheckCircle2,
   ArrowRight,
+  FileSpreadsheet,
+  FileText,
 } from "lucide-react";
+import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
 export default function RoadDetailModal({
   isOpen,
@@ -24,6 +27,101 @@ export default function RoadDetailModal({
   const roadReports = reports.filter((r) => r.roadSegmentId === road.id);
   const overdueReports = roadReports.filter((r) => r.status === "OVERDUE");
   const budget = road.budget;
+
+  const roadAuditRows = [
+    {
+      section: "Identitas & Kewenangan Ruas",
+      field: "Nama & Kode Ruas",
+      value: `${road.name} (${road.code || road.id})`,
+      note: road.district || "-",
+    },
+    {
+      section: "Identitas & Kewenangan Ruas",
+      field: "Penyelenggara Berwenang",
+      value: `${road.authorityLabel} (${road.authority})`,
+      note: road.legalBasis || "-",
+    },
+    {
+      section: "Spesifikasi Teknis",
+      field: "Bentang & Tipe Perkerasan",
+      value: `${road.lengthKm || 0} KM • ${road.pavementType || "-"}`,
+      note: `Kondisi: ${road.condition || "TERDATA"}`,
+    },
+    {
+      section: "Audit Anggaran LPSE",
+      field: "Paket Pekerjaan",
+      value: budget?.name || "Belum Terhubung Paket Lelang",
+      note: budget?.packageId ? `ID: ${budget.packageId} (TA ${budget.fiscalYear || "2026"})` : "-",
+    },
+    {
+      section: "Audit Anggaran LPSE",
+      field: "Pagu HPS vs Nilai Kontrak SPK",
+      value: budget
+        ? `Pagu: Rp ${((budget.paguRp || 0) / 1e9).toFixed(2)} M | Kontrak: Rp ${((budget.contractValueRp || 0) / 1e9).toFixed(2)} M`
+        : "-",
+      note: budget?.contractor ? `Pelaksana: ${budget.contractor}` : "-",
+    },
+    ...roadReports.map((rep) => ({
+      section: "Aduan Warga (GIS)",
+      field: `Tiket ${rep.ticketCode}`,
+      value: `${rep.categoryLabel} (Indeks Bahaya: ${rep.hazardScore}/100)`,
+      note: `${rep.address} • Status: ${rep.status}`,
+    })),
+  ];
+
+  const roadAuditColumns = [
+    { header: "Kategori Audit", key: "section" },
+    { header: "Parameter / Indikator", key: "field" },
+    { header: "Data Terverifikasi", key: "value" },
+    { header: "Keterangan & Dasar Rujukan", key: "note" },
+  ];
+
+  const handleExportRoadExcel = () => {
+    exportToExcel({
+      filename: `Audit_Ruas_${(road.code || road.id || "Jalan").replace(/[^a-zA-Z0-9_-]/g, "_")}`,
+      sheetName: "Audit Ruas Jalan",
+      title: `LEMBAR AUDIT TRANSPARANSI RUAS JALAN — ${road.name.toUpperCase()}`,
+      subtitle: `${road.authorityLabel} • Dasar Hukum: ${road.legalBasis}`,
+      summaryMetrics: [
+        { label: "Kode & Bentang Ruas", value: `${road.code || road.id} (${road.lengthKm || 0} KM)` },
+        { label: "Kewenangan", value: road.authority },
+        {
+          label: "Pagu Paket LPSE",
+          value: budget?.paguRp ? `Rp ${(budget.paguRp / 1e9).toFixed(2)} Miliar` : "Belum Terdata",
+        },
+        { label: "Laporan Warga Terdata", value: `${roadReports.length} Tiket` },
+      ],
+      columns: roadAuditColumns,
+      rows: roadAuditRows,
+    });
+  };
+
+  const handleExportRoadPDF = () => {
+    exportToPDF({
+      title: `Lembar Audit Transparansi Ruas: ${road.name}`,
+      subtitle: `${road.district} • Penyelenggara: ${road.authorityLabel}`,
+      documentCode: `JGJ-RUAS-${road.code || road.id}`,
+      orientation: "portrait",
+      summaryMetrics: [
+        { label: "Kode Ruas", value: road.code || road.id, sub: `Bentang ${road.lengthKm || 0} KM` },
+        { label: "Status Kewenangan", value: road.authority, sub: road.pavementType || "Perkerasan Jalan" },
+        {
+          label: "Nilai Kontrak LPSE",
+          value: budget?.contractValueRp
+            ? `Rp ${(budget.contractValueRp / 1e9).toFixed(2)} M`
+            : "N/A",
+          sub: budget?.contractor || "Rekanan Pengadaan",
+        },
+        {
+          label: "Aduan Warga (GIS)",
+          value: `${roadReports.length} Laporan`,
+          sub: `${overdueReports.length} Melewati Tenggat`,
+        },
+      ],
+      columns: roadAuditColumns,
+      rows: roadAuditRows,
+    });
+  };
 
   const authorityBadge =
     road.authority === "NASIONAL"
@@ -405,16 +503,42 @@ export default function RoadDetailModal({
           </div>
 
           {/* 3. MODAL FOOTER */}
-          <div className="p-3.5 sm:p-4 border-t border-slate-100 bg-white flex items-center justify-between gap-3">
-            <div className="text-slate-500 text-[11px]">
-              Ruas ID: <strong className="font-sans tabular-nums font-bold text-slate-800">{road.id}</strong>
+          <div className="p-3.5 sm:p-4 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={handleExportRoadExcel}
+                className="px-3 py-1.5 rounded-[6px] text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 ring-1 ring-emerald-200/80 transition-colors cursor-pointer inline-flex items-center gap-1.5"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
+                <span>Unduh Excel</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleExportRoadPDF}
+                className="px-3 py-1.5 rounded-[6px] text-xs font-bold text-[#9a3412] bg-orange-50 hover:bg-orange-100 ring-1 ring-orange-200/80 transition-colors cursor-pointer inline-flex items-center gap-1.5"
+              >
+                <FileText className="w-3.5 h-3.5 text-[#c2410c]" />
+                <span>Unduh Audit PDF</span>
+              </button>
             </div>
             <div className="flex items-center gap-2">
               {onOpenReportModal && (
                 <button
                   onClick={() => {
                     onClose();
-                    onOpenReportModal();
+                    onOpenReportModal({
+                      coordinates: road.center,
+                      roadSegmentId: road.id,
+                      roadName: road.name,
+                      district: road.district,
+                      authority: road.authority,
+                      authorityLabel: road.authorityLabel,
+                      legalBasis: road.legalBasis,
+                      leadership: road.leadership,
+                      budget: road.budget,
+                      source: "ROAD_DETAIL_MODAL",
+                    });
                   }}
                   className="px-4 py-2 rounded-[6px] text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer flex items-center gap-2"
                 >

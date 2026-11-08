@@ -501,6 +501,7 @@ Pengembangan JagaJalan telah menyelesaikan seluruh fitur inti prototipe web fung
 | **Live Street-Snapping OSM** | **Selesai (100%)** | Deteksi geometri dan klasifikasi fungsi jalan secara langsung saat warga mengklik ruas jalan mana pun di peta dasar OpenStreetMap. |
 | **Integrasi Aduan Real-Time & GIS Mapping** | **Selesai (100%)** | Pin titik kerusakan langsung dari peta interaktif (*Click-to-Report GIS*), sinkronisasi real-time antar-sesi via `/api/reports` & `BroadcastChannel`, serta ekspor layer GeoJSON (`/api/reports?format=geojson`). |
 | **Data Anggaran & Audit LPSE** | **Selesai (100%)** | Komparasi pagu anggaran HPS, nilai kontrak tender, identitas penyedia jasa, efisiensi penawaran, dan *match confidence*. |
+| **Ekspor Laporan Transparansi (PDF & Excel)** | **Selesai (100%)** | Fitur unduh laporan transparansi anggaran LPSE, statistik 38 provinsi, rekapitulasi aduan GIS, dan audit teknis ruas jalan dalam format **Microsoft Excel (`.xls`)** dan **PDF** siap cetak untuk analisis mandiri. |
 | **Statistik Nasional 38 Provinsi** | **Selesai (100%)** | Papan skor kemantapan jalan teragregasi dari data resmi BPS (SIRUSA) dan publikasi kementerian terkait dengan filter kepulauan. |
 | **Pelaporan Kerusakan Warga** | **Selesai (100%)** | Formulir aduan publik berbasis koordinat *geotagged*, unggah foto, dan penerbitan kode tiket pelacakan unik. |
 | **Pemeriksaan Awal AI Vision** | **Selesai (100%)** | Integrasi Google Gemini 2.5 Flash untuk pengenalan tipe kerusakan tampak dan rekomendasi skor prioritas awal (*decision support*). |
