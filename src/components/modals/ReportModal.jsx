@@ -513,7 +513,7 @@ export default function ReportModal({
                     Titik Kerusakan Terpetakan di Peta GIS
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Laporan Anda telah ditayangkan secara real-time pada layer peta interaktif JagaJalan dengan batas waktu tanggapan resmi 14 hari kerja (Pasal 44 ayat (2) UU 25/2009).
+                    Laporan Anda telah ditayangkan secara real-time pada layer peta interaktif JagaJalan dan diteruskan langsung ke dinas penyelenggara jalan yang berwenang.
                   </p>
                 </div>
 
@@ -949,7 +949,7 @@ export default function ReportModal({
                 <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Tenggat Tanggapan 14 Hari Kerja (Pasal 44 ayat (2) UU 25/2009)</span>
+                    <span>Terintegrasi Real-Time dengan Peta Interaktif GIS &amp; Portal Dinas</span>
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto">

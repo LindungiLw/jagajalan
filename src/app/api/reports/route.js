@@ -122,7 +122,7 @@ export async function GET(request) {
           totalFeatures: reports.length,
           liveCustomReportsCount: state.customReports.length,
           layerName: "JagaJalan Real-Time Citizen Damage Reports (GIS Layer)",
-          legalReference: "Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik",
+          spatialStandard: "RFC 7946 GeoJSON Point FeatureCollection (WGS84)",
         },
         features: reports
           .filter(
@@ -182,7 +182,7 @@ export async function GET(request) {
         gisSync: {
           mode: "REALTIME_BIDIRECTIONAL_GIS",
           geojsonEndpoint: "/api/reports?format=geojson",
-          slaBasis: "14 Hari Kerja (Pasal 44 ayat (2) UU No. 25 Tahun 2009)",
+          authorityClassification: "UU No. 2 Tahun 2022 tentang Jalan & SK Penetapan Ruas",
         },
         data: reports,
       },
