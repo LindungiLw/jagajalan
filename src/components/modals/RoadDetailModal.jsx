@@ -130,6 +130,8 @@ export default function RoadDetailModal({
       ? { label: "Jalan Provinsi (APBD Provinsi)", color: "bg-purple-50 text-purple-700 ring-1 ring-purple-200/60" }
       : road.authority === "KOTA"
       ? { label: "Jalan Kota (APBD Kota)", color: "bg-teal-50 text-teal-700 ring-1 ring-teal-200/60" }
+      : road.authority === "DESA"
+      ? { label: "Jalan Desa (APBDes / Dana Desa)", color: "bg-amber-50 text-amber-800 ring-1 ring-amber-200/60" }
       : { label: "Jalan Kabupaten (APBD Kab / IJD)", color: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/60" };
 
   const matchBadge =

@@ -195,7 +195,7 @@ export async function GET(request) {
 
     // 3. Filter berdasarkan parameter query
     if (authority !== "ALL") {
-      if (authority === "KOTA_KAB" || authority === "KOTA" || authority === "KABUPATEN") {
+      if (authority === "KOTA_KAB") {
         auditedPackages = auditedPackages.filter(
           (pkg) =>
             pkg.road.authority === "KOTA_KAB" ||

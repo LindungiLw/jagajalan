@@ -73,7 +73,7 @@ export async function GET(request) {
     }
 
     if (authority !== "ALL") {
-      if (authority === "KOTA_KAB" || authority === "KOTA" || authority === "KABUPATEN") {
+      if (authority === "KOTA_KAB") {
         filtered = filtered.filter(
           (r) =>
             r.authority === "KOTA_KAB" ||

@@ -6,6 +6,7 @@ import sumutRoads from "./sumutRoadsData.json";
 import nationalHighways from "./nationalHighwaysData.json";
 import provincialRoads from "./provincialRoadsData.json";
 import cityRegencyRoads from "./cityRegencyRoadsData.json";
+import villageRoads from "./villageRoadsData.json";
 
 // 1. Data Koridor Ruas Percontohan Sumatera Utara (Medan, Simalungun, Karo, Asahan)
 export const SUMATERA_UTARA_ROADS = sumutRoads;
@@ -19,12 +20,16 @@ export const PROVINCIAL_ROADS_INDONESIA = provincialRoads;
 // 4. Data Koridor Jalan Kota & Kabupaten Strategis Seluruh Indonesia (SK Walikota & SK Bupati)
 export const CITY_REGENCY_ROADS_INDONESIA = cityRegencyRoads;
 
-// 5. Gabungan Seluruh Ruas Terdata JagaJalan
+// 5. Data Koridor Jalan Desa / Nagari / Kampung Strategis Lintas Pulau (UU No. 2 Tahun 2022 Pasal 9 & Dana Desa)
+export const VILLAGE_ROADS_INDONESIA = villageRoads;
+
+// 6. Gabungan Seluruh Ruas Terdata JagaJalan (5 Tingkat Kewenangan UU No. 2/2022)
 export const ALL_ROADS = [
   ...SUMATERA_UTARA_ROADS,
   ...NATIONAL_HIGHWAYS_INDONESIA,
   ...PROVINCIAL_ROADS_INDONESIA,
   ...CITY_REGENCY_ROADS_INDONESIA,
+  ...VILLAGE_ROADS_INDONESIA,
 ];
 
 // Default Active Segments: ALL_ROADS
@@ -102,12 +107,14 @@ export const PROVINCIAL_NETWORK_STATS = {
   totalProvincialKmIndonesia: 54544.75,
   totalNationalKmIndonesia: 47017.0,
   totalKabupatenKotaKmIndonesia: 445000.0,
+  totalVillageKmIndonesia: 316000.0,
   totalProvinces: 38,
-  activeCuratedProvincialCorridors: 24,
-  activeCuratedNationalCorridors: 21,
-  activeCuratedCityRegencyCorridors: 40,
-  activeCuratedPilotRoads: 6,
-  dataSource: "PUSDATIN SIGI Kementerian PU x BPS Statistik Transportasi Darat x SK Walikota & SK Bupati Se-Indonesia",
+  activeCuratedProvincialCorridors: 26,
+  activeCuratedNationalCorridors: 29,
+  activeCuratedCityRegencyCorridors: 56,
+  activeCuratedVillageCorridors: 15,
+  activeCuratedPilotRoads: 7,
+  dataSource: "PUSDATIN SIGI Kementerian PU x BPS Statistik Transportasi Darat x Kemendesa PDTT (Dana Desa) x SK Kepala Daerah 38 Provinsi",
 };
 
 // Katalog 38 Provinsi Indonesia dengan Data Kewenangan Jalan Provinsi Resmi
@@ -698,7 +705,13 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
   let agency = `Dinas Pekerjaan Umum & Penataan Ruang (PUPR) Kab/Kota di ${detectedProvince}`;
 
   if (minDistanceKm <= 15.0 && closestRoad) {
-    if (closestRoad.authority === "KOTA") {
+    if (closestRoad.authority === "DESA") {
+      authority = "DESA";
+      authorityLabel = closestRoad.authorityLabel || `Pemerintah Desa Setempat (${detectedProvince})`;
+      legalBasis = closestRoad.legalBasis || `UU No. 2 Tahun 2022 Pasal 9 tentang Jalan Desa & Perbup Setempat`;
+      regionalHead = closestRoad.leadership?.regionalHead || "Kepala Desa & Bupati Setempat";
+      agency = closestRoad.leadership?.agency || "Pemerintah Desa & Dinas PMD/PUPR Kabupaten";
+    } else if (closestRoad.authority === "KOTA") {
       authority = "KOTA";
       authorityLabel = closestRoad.authorityLabel || `Pemerintah ${closestRoad.district || "Kota"}`;
       legalBasis = closestRoad.legalBasis || `Peraturan Walikota tentang Penetapan Ruas Jalan Kota`;

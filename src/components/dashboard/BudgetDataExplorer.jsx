@@ -1134,6 +1134,7 @@ export default function BudgetDataExplorer({
                       { id: "NASIONAL", label: "Nasional" },
                       { id: "PROVINSI", label: "Provinsi" },
                       { id: "KOTA_KAB", label: "Kab/Kota" },
+                      { id: "DESA", label: "Desa" },
                     ].map((tab) => (
                       <button
                         key={tab.id}
@@ -1191,12 +1192,22 @@ export default function BudgetDataExplorer({
                           ? "bg-blue-600"
                           : pkg.authority === "PROVINSI"
                           ? "bg-purple-600"
+                          : pkg.authority === "KABUPATEN"
+                          ? "bg-emerald-600"
+                          : pkg.authority === "DESA"
+                          ? "bg-amber-600"
                           : "bg-teal-600";
                       const authLabel =
                         pkg.authority === "NASIONAL"
                           ? "Nasional"
                           : pkg.authority === "PROVINSI"
                           ? "Provinsi"
+                          : pkg.authority === "KABUPATEN"
+                          ? "Kabupaten"
+                          : pkg.authority === "KOTA"
+                          ? "Kota"
+                          : pkg.authority === "DESA"
+                          ? "Desa"
                           : "Kab/Kota";
 
                       return (

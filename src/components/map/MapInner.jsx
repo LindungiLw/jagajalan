@@ -234,7 +234,7 @@ function MapController({ center, zoom = 11.5, onMapReady }) {
 }
 
 // Click anywhere on map to detect jurisdiction & responsible official + track zoom level
-function MapClickHandler({ onMapClick, onZoomChange }) {
+function MapClickHandler({ onMapClick, onZoomChange, onViewportChange }) {
   const map = useMapEvents({
     click(e) {
       if (onMapClick) {
@@ -242,8 +242,19 @@ function MapClickHandler({ onMapClick, onZoomChange }) {
       }
     },
     zoomend() {
+      const z = map.getZoom();
       if (onZoomChange) {
-        onZoomChange(map.getZoom());
+        onZoomChange(z);
+      }
+      if (onViewportChange) {
+        const c = map.getCenter();
+        onViewportChange({ center: [c.lat, c.lng], zoom: z });
+      }
+    },
+    moveend() {
+      if (onViewportChange) {
+        const c = map.getCenter();
+        onViewportChange({ center: [c.lat, c.lng], zoom: map.getZoom() });
       }
     },
   });
@@ -252,6 +263,7 @@ function MapClickHandler({ onMapClick, onZoomChange }) {
 
 export default function MapInner({
   roads,
+  liveViewportRoads = [],
   reports,
   selectedRoad,
   selectedReport,
@@ -260,6 +272,7 @@ export default function MapInner({
   onSelectReport,
   onMapClick,
   onReportAtPoint,
+  onViewportChange,
   showReportsLayer = true,
   mapCenter,
   mapZoom = 11.5,
@@ -267,15 +280,23 @@ export default function MapInner({
 }) {
   const [currentZoom, setCurrentZoom] = useState(mapZoom);
 
-  // Urutkan layer agar Jalan Provinsi, Kabupaten, dan Kota selalu di-render di atas Jalan Nasional
+  // Urutkan layer agar Jalan Provinsi, Kabupaten, Kota, dan Desa selalu di-render di atas Jalan Nasional
   const sortedRoads = useMemo(() => {
-    const rank = { NASIONAL: 1, PROVINSI: 2, KABUPATEN: 3, KOTA_KAB: 3, KOTA: 4 };
-    return [...roads].sort((a, b) => {
+    const rank = { NASIONAL: 1, PROVINSI: 2, KABUPATEN: 3, KOTA_KAB: 3, KOTA: 4, DESA: 5 };
+    const seen = new Set();
+    const combined = [];
+    for (const r of [...roads, ...(liveViewportRoads || [])]) {
+      if (r && r.id && !seen.has(r.id)) {
+        seen.add(r.id);
+        combined.push(r);
+      }
+    }
+    return combined.sort((a, b) => {
       if (selectedRoad?.id === a.id) return 1;
       if (selectedRoad?.id === b.id) return -1;
       return (rank[a.authority] || 1) - (rank[b.authority] || 1);
     });
-  }, [roads, selectedRoad?.id]);
+  }, [roads, liveViewportRoads, selectedRoad?.id]);
 
   return (
     <MapContainer
@@ -287,7 +308,11 @@ export default function MapInner({
       style={{ width: "100%", height: "100%" }}
     >
       <MapController center={mapCenter} zoom={mapZoom} onMapReady={onMapReady} />
-      <MapClickHandler onMapClick={onMapClick} onZoomChange={setCurrentZoom} />
+      <MapClickHandler
+        onMapClick={onMapClick}
+        onZoomChange={setCurrentZoom}
+        onViewportChange={onViewportChange}
+      />
 
       {/* CartoDB Positron / OSM Clean Light Tile Layer */}
       <TileLayer
@@ -297,7 +322,7 @@ export default function MapInner({
 
       {/* Road Segment Polylines */}
       {sortedRoads.map((road) => {
-        // Distinct, high-contrast, user-friendly palette matching the platform design
+        // Distinct, high-contrast, user-friendly palette matching the platform design (5-Tier UU 2/2022)
         let color = "#0d9488"; // Kota: Ocean Teal
         let hoverColor = "#0f766e";
         let badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
@@ -323,6 +348,11 @@ export default function MapInner({
           hoverColor = "#0f766e";
           badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
           popupBtnBg = "bg-teal-600 hover:bg-teal-700";
+        } else if (road.authority === "DESA") {
+          color = "#d97706"; // Desa: Warm Amber-Gold (Dana Desa / Pemdes UU 6/2014)
+          hoverColor = "#b45309";
+          badgeBg = "bg-amber-50 text-amber-800 border-amber-200";
+          popupBtnBg = "bg-amber-600 hover:bg-amber-700";
         }
 
         const isSelected = selectedRoad?.id === road.id;
