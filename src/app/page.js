@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Navbar,
   Footer,
@@ -25,14 +25,30 @@ import {
   clearOfficerSession,
 } from "@/data";
 
+function mergeReportsById(...reportLists) {
+  const seen = new Set();
+  const merged = [];
+  for (const list of reportLists) {
+    if (!Array.isArray(list)) continue;
+    for (const item of list) {
+      if (!item || !item.id || seen.has(item.id)) continue;
+      seen.add(item.id);
+      merged.push(item);
+    }
+  }
+  return merged;
+}
+
 export default function Home() {
   const [activeTab, setActiveTabState] = useState("beranda");
   const [roads, setRoads] = useState(ROAD_SEGMENTS);
   const [reports, setReports] = useState(INITIAL_REPORTS);
   const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [reportInitialLocation, setReportInitialLocation] = useState(null);
   const [ombudsmanModalOpen, setOmbudsmanModalOpen] = useState(false);
   const [selectedOmbudsmanReport, setSelectedOmbudsmanReport] = useState(null);
   const [focusedRoadId, setFocusedRoadId] = useState(null);
+  const [focusedReportId, setFocusedReportId] = useState(null);
   const [officerSession, setOfficerSession] = useState(null);
 
   const setActiveTab = (tab) => {
@@ -44,7 +60,40 @@ export default function Home() {
     }
   };
 
-  // Restore existing officer session & tab on mount
+  const syncReportsFromBackend = useCallback(async () => {
+    let localCustom = [];
+    if (typeof window !== "undefined") {
+      try {
+        const raw = window.localStorage.getItem("jagajalan_custom_reports_v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) localCustom = parsed;
+        }
+      } catch {
+        // Ignore localStorage parse error
+      }
+    }
+
+    try {
+      const res = await fetch("/api/reports", { cache: "no-store" });
+      if (res.ok) {
+        const payload = await res.json();
+        if (Array.isArray(payload?.data)) {
+          setReports((prev) =>
+            mergeReportsById(localCustom, payload.data, prev, INITIAL_REPORTS)
+          );
+          return;
+        }
+      }
+    } catch {
+      // Fallback to local + initial reports if API unreachable
+    }
+
+    if (localCustom.length > 0) {
+      setReports((prev) => mergeReportsById(localCustom, prev, INITIAL_REPORTS));
+    }
+  }, []);
+
   useEffect(() => {
     const session = getActiveOfficerSession();
     if (session) {
@@ -64,7 +113,30 @@ export default function Home() {
         setActiveTabState(hash);
       }
     }
-  }, []);
+
+    syncReportsFromBackend();
+    const intervalId = setInterval(syncReportsFromBackend, 10000);
+
+    let bc = null;
+    if (typeof window !== "undefined" && "BroadcastChannel" in window) {
+      bc = new BroadcastChannel("jagajalan_live_reports");
+      bc.onmessage = (event) => {
+        const msg = event.data;
+        if (msg?.type === "NEW_REPORT" && msg.report) {
+          setReports((prev) => mergeReportsById([msg.report], prev));
+        } else if (msg?.type === "UPDATE_REPORT" && msg.id) {
+          setReports((prev) =>
+            prev.map((rep) => (rep.id === msg.id ? { ...rep, ...msg.updatedFields } : rep))
+          );
+        }
+      };
+    }
+
+    return () => {
+      clearInterval(intervalId);
+      if (bc) bc.close();
+    };
+  }, [syncReportsFromBackend]);
 
   const handleOfficerLogin = (officer) => {
     setOfficerSession(officer);
@@ -75,23 +147,78 @@ export default function Home() {
     setOfficerSession(null);
   };
 
+  const handleOpenReportModal = (locationPayload = null) => {
+    if (locationPayload && typeof locationPayload === "object" && !locationPayload.nativeEvent) {
+      setReportInitialLocation(locationPayload);
+    } else {
+      setReportInitialLocation(null);
+    }
+    setReportModalOpen(true);
+  };
+
   const handleAddNewReport = (newReport) => {
-    setReports((prev) => [newReport, ...prev]);
+    setReports((prev) => mergeReportsById([newReport], prev));
+    setFocusedReportId(newReport.id);
     setRoads((prevRoads) =>
       prevRoads.map((road) =>
         road.id === newReport.roadSegmentId
-          ? { ...road, activeReportsCount: road.activeReportsCount + 1 }
+          ? { ...road, activeReportsCount: (road.activeReportsCount || 0) + 1 }
           : road
       )
     );
   };
 
-  const handleUpdateReport = (reportId, updatedFields) => {
+  const handleViewReportOnMap = (report) => {
+    if (report?.id) {
+      setFocusedReportId(report.id);
+    }
+    if (report?.roadSegmentId) {
+      setFocusedRoadId(report.roadSegmentId);
+    }
+    setActiveTab("peta");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleUpdateReport = async (reportId, updatedFields) => {
     setReports((prevReports) =>
       prevReports.map((report) =>
         report.id === reportId ? { ...report, ...updatedFields } : report
       )
     );
+
+    try {
+      if (typeof window !== "undefined") {
+        const raw = window.localStorage.getItem("jagajalan_custom_reports_v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            const updatedLocal = parsed.map((rep) =>
+              rep.id === reportId ? { ...rep, ...updatedFields } : rep
+            );
+            window.localStorage.setItem("jagajalan_custom_reports_v1", JSON.stringify(updatedLocal));
+          }
+        }
+        if ("BroadcastChannel" in window) {
+          const bc = new BroadcastChannel("jagajalan_live_reports");
+          bc.postMessage({ type: "UPDATE_REPORT", id: reportId, updatedFields });
+          bc.close();
+        }
+      }
+    } catch {
+      // Ignore storage errors
+    }
+
+    try {
+      await fetch("/api/reports", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: reportId, ...updatedFields }),
+      });
+    } catch {
+      // Ignore network errors if offline
+    }
   };
 
   const handleOpenOmbudsmanDraft = (report) => {
@@ -121,7 +248,7 @@ export default function Home() {
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenReportModal={() => setReportModalOpen(true)}
+        onOpenReportModal={() => handleOpenReportModal(null)}
         officerSession={officerSession}
         onLogoutOfficer={handleOfficerLogout}
       />
@@ -139,7 +266,7 @@ export default function Home() {
                   setActiveTab("data-anggaran");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                onOpenReport={() => setReportModalOpen(true)}
+                onOpenReport={() => handleOpenReportModal(null)}
                 onExploreNational={() => {
                   setActiveTab("nasional");
                   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -152,7 +279,7 @@ export default function Home() {
               />
 
               {/* 2. Civic Workflow (How It Works): 4-Step Solution Flow */}
-              <CivicWorkflowSection onOpenReportModal={() => setReportModalOpen(true)} />
+              <CivicWorkflowSection onOpenReportModal={() => handleOpenReportModal(null)} />
 
               {/* 3. Legal Foundation & Public Transparency Basis */}
               <LegalBasisSection
@@ -171,8 +298,9 @@ export default function Home() {
               roads={roads}
               reports={reports}
               onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
-              onOpenReportModal={() => setReportModalOpen(true)}
+              onOpenReportModal={handleOpenReportModal}
               focusedRoadId={focusedRoadId}
+              focusedReportId={focusedReportId}
             />
           </div>
         )}
@@ -183,7 +311,7 @@ export default function Home() {
               roads={roads}
               reports={reports}
               onSelectRoadOnMap={handleSelectRoadOnMap}
-              onOpenReportModal={() => setReportModalOpen(true)}
+              onOpenReportModal={() => handleOpenReportModal(null)}
             />
           </div>
         )}
@@ -237,9 +365,14 @@ export default function Home() {
       {/* Global Modals */}
       <ReportModal
         isOpen={reportModalOpen}
-        onClose={() => setReportModalOpen(false)}
+        onClose={() => {
+          setReportModalOpen(false);
+          setReportInitialLocation(null);
+        }}
         roads={roads}
+        initialLocation={reportInitialLocation}
         onNewReportAdded={handleAddNewReport}
+        onViewReportOnMap={handleViewReportOnMap}
       />
 
       <OmbudsmanModal

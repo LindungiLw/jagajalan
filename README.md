@@ -499,6 +499,7 @@ Pengembangan JagaJalan telah menyelesaikan seluruh fitur inti prototipe web fung
 | **Peta Transparansi Geospasial** | **Selesai (100%)** | Peta interaktif Leaflet.js dengan klasifikasi visual multi-kewenangan (Nasional, Provinsi, Kabupaten/Kota), detail regulasi SK, dan *zoom controller*. |
 | **Deteksi Kewenangan 4 Tingkat** | **Selesai (100%)** | Analisis spasial koordinat instan untuk mengenali status jalan di seluruh 38 provinsi di Indonesia. |
 | **Live Street-Snapping OSM** | **Selesai (100%)** | Deteksi geometri dan klasifikasi fungsi jalan secara langsung saat warga mengklik ruas jalan mana pun di peta dasar OpenStreetMap. |
+| **Integrasi Aduan Real-Time & GIS Mapping** | **Selesai (100%)** | Pin titik kerusakan langsung dari peta interaktif (*Click-to-Report GIS*), sinkronisasi real-time antar-sesi via `/api/reports` & `BroadcastChannel`, serta ekspor layer GeoJSON (`/api/reports?format=geojson`). |
 | **Data Anggaran & Audit LPSE** | **Selesai (100%)** | Komparasi pagu anggaran HPS, nilai kontrak tender, identitas penyedia jasa, efisiensi penawaran, dan *match confidence*. |
 | **Statistik Nasional 38 Provinsi** | **Selesai (100%)** | Papan skor kemantapan jalan teragregasi dari data resmi BPS (SIRUSA) dan publikasi kementerian terkait dengan filter kepulauan. |
 | **Pelaporan Kerusakan Warga** | **Selesai (100%)** | Formulir aduan publik berbasis koordinat *geotagged*, unggah foto, dan penerbitan kode tiket pelacakan unik. |

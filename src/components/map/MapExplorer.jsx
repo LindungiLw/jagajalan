@@ -70,6 +70,7 @@ export default function MapExplorer({
   onOpenOmbudsmanDraft,
   onOpenReportModal,
   focusedRoadId,
+  focusedReportId,
 }) {
   const [selectedRoad, setSelectedRoad] = useState(roads[2] || roads[0]); // Default to Katamso Medan (ruas-su-03)
   const [selectedReport, setSelectedReport] = useState(reports[0] || null); // Default to JGJ-MDN-001
@@ -81,6 +82,9 @@ export default function MapExplorer({
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   const [highlightDropdownOpen, setHighlightDropdownOpen] = useState(false);
   const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
+  const [reportsFeedOpen, setReportsFeedOpen] = useState(false);
+  const [showReportsLayer, setShowReportsLayer] = useState(true);
+  const [pinReportMode, setPinReportMode] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState("all");
   const [selectedProvinceId, setSelectedProvinceId] = useState(null);
   const [regionTab, setRegionTab] = useState("provinces"); // "provinces" | "regions"
@@ -103,6 +107,26 @@ export default function MapExplorer({
         const relatedReport = reports.find((r) => r.roadSegmentId === targetRoad.id);
         setSelectedReport(relatedReport || null);
         setMapCenter(targetRoad.center);
+        setMapZoom(13);
+      }
+    }
+  }
+
+  // Synchronize when focusedReportId changes (e.g. newly submitted real-time citizen report)
+  const [prevFocusedReportId, setPrevFocusedReportId] = useState(focusedReportId);
+  if (focusedReportId !== prevFocusedReportId) {
+    setPrevFocusedReportId(focusedReportId);
+    if (focusedReportId) {
+      const targetReport = reports.find((r) => r.id === focusedReportId);
+      if (targetReport) {
+        setSelectedReport(targetReport);
+        setShowReportsLayer(true);
+        const parentRoad = roads.find((r) => r.id === targetReport.roadSegmentId);
+        if (parentRoad) setSelectedRoad(parentRoad);
+        if (Array.isArray(targetReport.coordinates) && targetReport.coordinates.length >= 2) {
+          setMapCenter(targetReport.coordinates);
+          setMapZoom(15);
+        }
       }
     }
   }
@@ -217,7 +241,52 @@ export default function MapExplorer({
     setSelectedReport(report);
     const parentRoad = roads.find((r) => r.id === report.roadSegmentId);
     if (parentRoad) setSelectedRoad(parentRoad);
-    setMapCenter(report.coordinates);
+    if (Array.isArray(report.coordinates) && report.coordinates.length >= 2) {
+      setMapCenter(report.coordinates);
+      mapInstance?.flyTo(report.coordinates, Math.max(mapInstance.getZoom(), 14), { duration: 1.0 });
+    }
+  };
+
+  const handleOpenReportFromPoint = (pointData) => {
+    if (!pointData) {
+      onOpenReportModal();
+      return;
+    }
+    const coords =
+      pointData.coordinates ||
+      detectedPoint?.coordinates ||
+      currentReport?.coordinates ||
+      currentRoad?.center || [-6.2088, 106.8456];
+    const matchedRoadId =
+      pointData.roadSegmentId ||
+      pointData.nearestRoad?.id ||
+      (currentRoad && !currentRoad.isDetectedPoint ? currentRoad.id : roads[0]?.id);
+    const roadTitle =
+      pointData.streetName ||
+      pointData.roadName ||
+      pointData.name ||
+      currentRoad?.name ||
+      "Ruas Jalan Terdeteksi GIS";
+
+    onOpenReportModal({
+      coordinates: coords,
+      roadSegmentId: matchedRoadId,
+      roadName: roadTitle,
+      district: pointData.district || currentRoad?.district || "Indonesia",
+      authority: pointData.authority || currentRoad?.authority || "KABUPATEN",
+      authorityLabel:
+        pointData.authorityLabel ||
+        currentRoad?.authorityLabel ||
+        "Dinas PUPR Penyelenggara Jalan",
+      legalBasis:
+        pointData.legalBasis ||
+        currentRoad?.legalBasis ||
+        "UU No. 2 Tahun 2022 tentang Jalan",
+      leadership: pointData.leadership || currentRoad?.leadership,
+      budget: pointData.budget || currentRoad?.budget,
+      address: `${roadTitle}${pointData.district ? `, ${pointData.district}` : ""} [${Number(coords[0]).toFixed(5)}, ${Number(coords[1]).toFixed(5)}]`,
+      source: pointData.source || "GIS_MAP_PIN",
+    });
   };
 
   const handleSelectRegion = (region) => {
@@ -479,8 +548,23 @@ export default function MapExplorer({
           },
         };
       });
+
+      if (pinReportMode) {
+        setPinReportMode(false);
+        handleOpenReportFromPoint({
+          ...enrichedPoint,
+          source: "GIS_PIN_MODE",
+        });
+      }
     } catch {
-      // Fallback remains the synchronous detectJurisdictionByCoordinates result
+      if (pinReportMode) {
+        setPinReportMode(false);
+        handleOpenReportFromPoint({
+          ...result,
+          coordinates: [lat, lng],
+          source: "GIS_PIN_MODE",
+        });
+      }
     }
   };
 
@@ -537,7 +621,7 @@ export default function MapExplorer({
   return (
     <section className="relative w-full h-full min-h-0 bg-slate-100 overflow-hidden font-sans">
       {/* 1. Underlying Map Canvas */}
-      <div className="absolute inset-0 z-0">
+      <div className={`absolute inset-0 z-0 ${pinReportMode ? "cursor-crosshair" : ""}`}>
         <MapInner
           roads={filteredRoads}
           reports={filteredReports}
@@ -547,6 +631,8 @@ export default function MapExplorer({
           onSelectRoad={handleSelectRoad}
           onSelectReport={handleSelectReport}
           onMapClick={handleMapClick}
+          onReportAtPoint={handleOpenReportFromPoint}
+          showReportsLayer={showReportsLayer}
           mapCenter={mapCenter}
           mapZoom={mapZoom}
           onMapReady={setMapInstance}
@@ -554,13 +640,14 @@ export default function MapExplorer({
       </div>
 
       {/* Click-away backdrop for floating dropdowns */}
-      {(regionDropdownOpen || statusDropdownOpen || highlightDropdownOpen) && (
+      {(regionDropdownOpen || statusDropdownOpen || highlightDropdownOpen || reportsFeedOpen) && (
         <div
           className="fixed inset-0 z-[490]"
           onClick={() => {
             setRegionDropdownOpen(false);
             setStatusDropdownOpen(false);
             setHighlightDropdownOpen(false);
+            setReportsFeedOpen(false);
           }}
         />
       )}
@@ -950,6 +1037,149 @@ export default function MapExplorer({
             </button>
           )}
 
+          <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
+
+          {/* Real-Time Citizen Reports GIS Feed & Layer Control */}
+          <div className="relative inline-block font-sans shrink-0">
+            <button
+              onClick={() => {
+                setReportsFeedOpen(!reportsFeedOpen);
+                setRegionDropdownOpen(false);
+                setStatusDropdownOpen(false);
+                setHighlightDropdownOpen(false);
+              }}
+              title="Daftar & Layer Laporan Warga Real-Time (GIS)"
+              className={`h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
+                reportsFeedOpen
+                  ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80"
+                  : "text-slate-700 hover:bg-slate-100/80"
+              }`}
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+              <span className="hidden sm:inline">Aduan GIS</span>
+              <span className="px-1.5 py-0.2 rounded-[4px] bg-orange-100 text-[#9a3412] font-mono tabular-nums text-[10px] font-bold">
+                {filteredReports.length}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            </button>
+
+            {reportsFeedOpen && (
+              <div
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute top-full right-0 sm:left-0 mt-1.5 w-80 sm:w-96 rounded-[6px] bg-white shadow-2xl ring-1 ring-orange-200/60 p-2.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-2"
+              >
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <div>
+                    <div className="font-bold text-slate-900">Titik Aduan Warga (Real-Time GIS)</div>
+                    <div className="text-[10px] text-slate-400">
+                      Klik laporan untuk melompat ke titik koordinat kerusakan
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowReportsLayer(!showReportsLayer)}
+                    className={`px-2 py-1 rounded-[4px] text-[10px] font-bold cursor-pointer transition-colors ${
+                      showReportsLayer
+                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        : "bg-slate-100 text-slate-500 border border-slate-200"
+                    }`}
+                  >
+                    {showReportsLayer ? "Layer Aktif" : "Layer Nonaktif"}
+                  </button>
+                </div>
+
+                <div className="max-h-64 overflow-y-auto divide-y divide-slate-100">
+                  {filteredReports.map((rep) => (
+                    <button
+                      key={rep.id}
+                      type="button"
+                      onClick={() => {
+                        handleSelectReport(rep);
+                        setReportsFeedOpen(false);
+                      }}
+                      className={`w-full text-left py-2 px-2 rounded-[5px] hover:bg-orange-50/50 transition-colors flex items-start justify-between gap-2 cursor-pointer ${
+                        selectedReport?.id === rep.id ? "bg-orange-50/80" : ""
+                      }`}
+                    >
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-mono tabular-nums text-[10px] font-bold text-[#c2410c]">
+                            {rep.ticketCode}
+                          </span>
+                          {rep.isLiveCitizenReport && (
+                            <span className="px-1.5 py-0.2 rounded text-[8.5px] font-bold bg-orange-100 text-[#9a3412]">
+                              BARU
+                            </span>
+                          )}
+                          <span className="text-[9.5px] font-semibold text-slate-400 uppercase">
+                            {rep.authority}
+                          </span>
+                        </div>
+                        <div className="font-bold text-slate-900 truncate">{rep.roadName}</div>
+                        <div className="text-[10px] text-slate-500 truncate">{rep.address}</div>
+                      </div>
+                      <div className="text-right shrink-0 space-y-0.5">
+                        <span
+                          className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-mono tabular-nums font-bold ${
+                            rep.status === "OVERDUE"
+                              ? "bg-rose-50 text-rose-700 border border-rose-200"
+                              : "bg-amber-50 text-amber-800 border border-amber-200"
+                          }`}
+                        >
+                          AI {rep.hazardScore}/100
+                        </span>
+                        <div className="text-[9px] font-mono tabular-nums text-slate-400">
+                          {Number(rep.coordinates?.[0] || 0).toFixed(3)}, {Number(rep.coordinates?.[1] || 0).toFixed(3)}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <a
+                    href="/api/reports?format=geojson"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] font-mono font-bold text-[#c2410c] hover:underline inline-flex items-center gap-1"
+                  >
+                    <span>GeoJSON API</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setReportsFeedOpen(false);
+                      setPinReportMode(true);
+                    }}
+                    className="px-2.5 py-1.5 rounded-[5px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-[10.5px] font-bold cursor-pointer transition-colors inline-flex items-center gap-1"
+                  >
+                    <Crosshair className="w-3 h-3" />
+                    <span>Pin Titik Baru di Peta</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Interactive Pin-to-Report GIS Button */}
+          <button
+            type="button"
+            onClick={() => setPinReportMode(!pinReportMode)}
+            title="Klik titik jalan mana pun di peta untuk langsung melaporkan kerusakan beserta koordinat GIS"
+            className={`h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 ${
+              pinReportMode
+                ? "bg-[#c2410c] text-white shadow-sm ring-2 ring-orange-300"
+                : "bg-orange-50 hover:bg-orange-100 text-[#c2410c] border border-orange-200/80"
+            }`}
+          >
+            <Crosshair className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden md:inline">
+              {pinReportMode ? "Klik Titik Jalan..." : "Pin & Lapor"}
+            </span>
+          </button>
+
           <div className="w-px h-4 bg-slate-200/90 hidden md:block shrink-0" />
 
           {/* SIGI PU & GeoAPI Live Status Pill */}
@@ -962,6 +1192,25 @@ export default function MapExplorer({
             <span>SIGI PU</span>
           </button>
         </div>
+
+        {/* Active Pin-to-Report Mode Instruction Banner */}
+        {pinReportMode && (
+          <div className="w-fit max-w-lg bg-[#c2410c] text-white rounded-[6px] shadow-lg px-3.5 py-2 text-xs flex items-center justify-between gap-3 animate-fade-in">
+            <div className="flex items-center gap-2">
+              <Crosshair className="w-4 h-4 shrink-0" />
+              <span>
+                <strong>Mode Pin Titik Kerusakan Aktif:</strong> Klik ruas jalan mana saja di peta untuk mengunci koordinat GIS dan membuka formulir laporan warga.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPinReportMode(false)}
+              className="px-2 py-0.5 rounded bg-white/15 hover:bg-white/25 text-[10.5px] font-bold cursor-pointer shrink-0"
+            >
+              Batal
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Floating Notice / Province Context Banner */}
@@ -1417,18 +1666,80 @@ export default function MapExplorer({
                 {currentReport?.problemDetails?.headline || currentReport?.aiAnalysis}
               </p>
             )}
+
+            {/* GIS Coordinates & Active Citizen Reports on this Road */}
+            <div className="p-2.5 rounded-[10px] bg-slate-50/90 border border-slate-200/70 space-y-2">
+              <div className="flex items-center justify-between text-[10.5px]">
+                <span className="font-semibold text-slate-500">Titik Koordinat GIS:</span>
+                <span className="font-mono tabular-nums font-bold text-slate-900">
+                  {Number(
+                    (currentReport?.coordinates || detectedPoint?.coordinates || currentRoad?.center)?.[0] || 0
+                  ).toFixed(5)}
+                  ,{" "}
+                  {Number(
+                    (currentReport?.coordinates || detectedPoint?.coordinates || currentRoad?.center)?.[1] || 0
+                  ).toFixed(5)}
+                </span>
+              </div>
+
+              {roadReports.length > 0 && (
+                <div className="pt-1.5 border-t border-slate-200/60 space-y-1">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Titik Laporan Warga pada Koridor Ini ({roadReports.length})
+                  </div>
+                  <div className="space-y-1 max-h-24 overflow-y-auto">
+                    {roadReports.map((rep) => (
+                      <button
+                        key={rep.id}
+                        type="button"
+                        onClick={() => handleSelectReport(rep)}
+                        className={`w-full text-left px-2 py-1 rounded-[6px] text-[10.5px] flex items-center justify-between gap-2 cursor-pointer transition-colors ${
+                          currentReport?.id === rep.id
+                            ? "bg-orange-100/80 text-[#9a3412] font-bold"
+                            : "bg-white hover:bg-slate-100 text-slate-700"
+                        }`}
+                      >
+                        <span className="truncate">
+                          <strong className="font-mono tabular-nums">{rep.ticketCode}</strong> • {rep.categoryLabel}
+                        </span>
+                        <span className="font-mono tabular-nums text-[9.5px] text-slate-500 shrink-0">
+                          {Number(rep.coordinates?.[0] || 0).toFixed(3)}, {Number(rep.coordinates?.[1] || 0).toFixed(3)}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Card Action Buttons (Clear, High-Affordance CTAs) */}
           <div className="p-3 sm:p-3.5 border-t border-slate-100 space-y-2 bg-white shrink-0 relative z-10 font-sans">
             {/* Primary Action Button: Laporkan Kerusakan di Sini */}
             <button
-              onClick={() => onOpenReportModal()}
+              onClick={() =>
+                handleOpenReportFromPoint(
+                  currentRoad?.isDetectedPoint && detectedPoint
+                    ? { ...detectedPoint, source: "GIS_INSPECTOR_DETECTED" }
+                    : {
+                        coordinates: currentReport?.coordinates || currentRoad?.center,
+                        roadSegmentId: currentRoad?.id,
+                        roadName: currentRoad?.name,
+                        district: currentRoad?.district,
+                        authority: currentRoad?.authority,
+                        authorityLabel: currentRoad?.authorityLabel,
+                        legalBasis: currentRoad?.legalBasis,
+                        leadership: currentRoad?.leadership,
+                        budget: currentRoad?.budget,
+                        source: "GIS_INSPECTOR_CARD",
+                      }
+                )
+              }
               className="w-full py-2.5 px-4 rounded-[10px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-sm transition-all duration-150 flex items-center justify-between cursor-pointer active:scale-[0.99] group"
             >
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Laporkan Kerusakan di Sini</span>
+                <span>Laporkan Kerusakan di Titik Ini</span>
               </div>
               <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </button>
@@ -1544,10 +1855,10 @@ export default function MapExplorer({
                     </p>
                     <div className="space-y-1 pt-0.5 font-mono text-[10.5px]">
                       <div className="p-1.5 bg-white ring-1 ring-orange-200/50 rounded-[5px] text-slate-800">
-                        GET /api/roads?format=json
+                        GET /api/roads?format=geojson
                       </div>
                       <div className="p-1.5 bg-white ring-1 ring-orange-200/50 rounded-[5px] text-slate-800">
-                        GET /api/roads?format=geojson
+                        GET /api/reports?format=geojson
                       </div>
                     </div>
                   </div>

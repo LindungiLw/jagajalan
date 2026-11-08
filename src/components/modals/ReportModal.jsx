@@ -1,25 +1,25 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   X,
   MapPin,
   CheckCircle2,
-  Building2,
   ArrowRight,
   ShieldCheck,
   Loader2,
   Upload,
   AlertTriangle,
   ScanLine,
-  FileText,
   Copy,
   Check,
+  Crosshair,
+  Navigation,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { detectJurisdictionByCoordinates } from "@/data/roadsData";
 
-// Preset photos for quick demonstration during pitching/testing
 const SAMPLE_PHOTOS = [
   {
     id: "pothole",
@@ -47,26 +47,177 @@ const SAMPLE_PHOTOS = [
   },
 ];
 
-export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAdded }) {
-  const [selectedRoadId, setSelectedRoadId] = useState(roads[0]?.id || "");
+function getRoadMidpoint(road) {
+  if (Array.isArray(road?.coordinates) && road.coordinates.length > 0) {
+    const mid = road.coordinates[Math.floor(road.coordinates.length / 2)];
+    if (Array.isArray(mid) && mid.length >= 2) {
+      return [Number(mid[0].toFixed(5)), Number(mid[1].toFixed(5))];
+    }
+  }
+  if (Array.isArray(road?.center) && road.center.length >= 2) {
+    return [Number(road.center[0].toFixed(5)), Number(road.center[1].toFixed(5))];
+  }
+  return [-6.2088, 106.8456];
+}
+
+export default function ReportModal({
+  isOpen,
+  onClose,
+  roads = [],
+  onNewReportAdded,
+  initialLocation = null,
+  onViewReportOnMap,
+}) {
+  const defaultRoad = roads[0] || {};
+  const defaultCoords = getRoadMidpoint(defaultRoad);
+
+  const [selectedRoadId, setSelectedRoadId] = useState(defaultRoad.id || "");
+  const [usePinnedLocation, setUsePinnedLocation] = useState(Boolean(initialLocation));
+  const [latInput, setLatInput] = useState(String(defaultCoords[0]));
+  const [lngInput, setLngInput] = useState(String(defaultCoords[1]));
+  const [coordinateSource, setCoordinateSource] = useState("ROAD_CORRIDOR");
+  const [isLocatingGps, setIsLocatingGps] = useState(false);
+  const [gpsStatusMsg, setGpsStatusMsg] = useState("");
   const [reporterName, setReporterName] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [photoPreview, setPhotoPreview] = useState(SAMPLE_PHOTOS[0].url);
   const [activePresetId, setActivePresetId] = useState(SAMPLE_PHOTOS[0].id);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
   const [aiResult, setAiResult] = useState(null);
   const [spamError, setSpamError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [createdTicket, setCreatedTicket] = useState(null);
+  const [createdReportObj, setCreatedReportObj] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
 
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    if (initialLocation && Array.isArray(initialLocation.coordinates)) {
+      const [lat, lng] = initialLocation.coordinates;
+      setLatInput(Number(lat).toFixed(5));
+      setLngInput(Number(lng).toFixed(5));
+      setUsePinnedLocation(true);
+      setCoordinateSource(initialLocation.source || "GIS_MAP_PIN");
+      if (initialLocation.roadSegmentId && roads.some((r) => r.id === initialLocation.roadSegmentId)) {
+        setSelectedRoadId(initialLocation.roadSegmentId);
+      }
+      if (initialLocation.address) {
+        setAddressDetail(initialLocation.address);
+      } else if (initialLocation.roadName) {
+        setAddressDetail(`Titik pada ${initialLocation.roadName}, ${initialLocation.district || ""}`);
+      }
+    } else {
+      setUsePinnedLocation(false);
+      setCoordinateSource("ROAD_CORRIDOR");
+      const targetRoad = roads.find((r) => r.id === selectedRoadId) || roads[0];
+      if (targetRoad) {
+        const [lat, lng] = getRoadMidpoint(targetRoad);
+        setLatInput(String(lat));
+        setLngInput(String(lng));
+      }
+    }
+  }, [isOpen, initialLocation, roads]);
+
   if (!isOpen) return null;
 
-  const currentRoad = roads.find((r) => r.id === selectedRoadId) || roads[0] || {};
+  const baseRoad = roads.find((r) => r.id === selectedRoadId) || roads[0] || {};
+  const parsedLat = Number.parseFloat(latInput);
+  const parsedLng = Number.parseFloat(lngInput);
+  const validLat = !Number.isNaN(parsedLat) ? parsedLat : defaultCoords[0];
+  const validLng = !Number.isNaN(parsedLng) ? parsedLng : defaultCoords[1];
 
-  // Convert image URL / File to base64 and analyze with Gemini Vision API
+  const currentRoad =
+    usePinnedLocation && initialLocation
+      ? {
+          ...baseRoad,
+          id: initialLocation.roadSegmentId || baseRoad.id || "ruas-gis-live",
+          name: initialLocation.roadName || baseRoad.name || "Ruas Jalan Terdeteksi GIS",
+          district: initialLocation.district || baseRoad.district || "Indonesia",
+          authority: initialLocation.authority || baseRoad.authority || "KABUPATEN",
+          authorityLabel:
+            initialLocation.authorityLabel ||
+            baseRoad.authorityLabel ||
+            "Dinas PUPR Penyelenggara Jalan",
+          legalBasis:
+            initialLocation.legalBasis ||
+            baseRoad.legalBasis ||
+            "UU No. 2 Tahun 2022 tentang Jalan",
+          leadership: initialLocation.leadership || baseRoad.leadership,
+          budget: initialLocation.budget || baseRoad.budget,
+        }
+      : baseRoad;
+
+  const handleRoadSelectChange = (newRoadId) => {
+    setSelectedRoadId(newRoadId);
+    setUsePinnedLocation(false);
+    setCoordinateSource("ROAD_CORRIDOR");
+    setAiResult(null);
+    const chosen = roads.find((r) => r.id === newRoadId);
+    if (chosen) {
+      const [lat, lng] = getRoadMidpoint(chosen);
+      setLatInput(String(lat));
+      setLngInput(String(lng));
+    }
+  };
+
+  const handleUseCurrentGps = () => {
+    if (typeof window === "undefined" || !("geolocation" in navigator)) {
+      setGpsStatusMsg("Peramban tidak mendukung fitur geolokasi GPS.");
+      return;
+    }
+    setIsLocatingGps(true);
+    setGpsStatusMsg("Mendeteksi titik koordinat GPS perangkat...");
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = Number(pos.coords.latitude.toFixed(5));
+        const lng = Number(pos.coords.longitude.toFixed(5));
+        setLatInput(String(lat));
+        setLngInput(String(lng));
+        setCoordinateSource("DEVICE_GPS");
+
+        const detected = detectJurisdictionByCoordinates(lat, lng, roads);
+        if (detected?.nearestRoad?.id) {
+          setSelectedRoadId(detected.nearestRoad.id);
+        }
+
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=17&accept-language=id`
+          );
+          if (res.ok) {
+            const nom = await res.json();
+            const roadLabel = nom?.address?.road || nom?.name || "";
+            const areaLabel =
+              nom?.address?.village ||
+              nom?.address?.suburb ||
+              nom?.address?.city ||
+              nom?.address?.county ||
+              "";
+            if (roadLabel || areaLabel) {
+              setAddressDetail(
+                [roadLabel, areaLabel].filter(Boolean).join(", ") +
+                  ` (Koordinat GPS ${lat}, ${lng})`
+              );
+            }
+          }
+        } catch {
+          // Ignore reverse geocode failure on GPS
+        }
+
+        setGpsStatusMsg(`Titik GPS terkunci: ${lat}, ${lng}`);
+        setIsLocatingGps(false);
+      },
+      () => {
+        setGpsStatusMsg("Gagal mengakses GPS. Pastikan izin lokasi diaktifkan atau pilih titik di peta.");
+        setIsLocatingGps(false);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
+
   const handleAnalyzePhoto = async (targetPhotoUrl = photoPreview) => {
     setIsAnalyzing(true);
     setSpamError(null);
@@ -95,7 +246,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           imageBase64: imageBase64,
-          roadContext: `${currentRoad.name || "Jalan Publik"}, ${currentRoad.district || ""}`,
+          roadContext: `${currentRoad.name || "Jalan Publik"}, ${currentRoad.district || ""} [${validLat.toFixed(4)}, ${validLng.toFixed(4)}]`,
         }),
       });
 
@@ -120,23 +271,22 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
           hazardLevel: data.hazardLevel || "TINGGI",
           analysisText:
             data.analysisText ||
-            "Terdeteksi lubang aspal dengan potensi bahaya tinggi bagi pengendara roda dua dan empat.",
+            "Pemeriksaan awal foto mendeteksi lubang aspal dengan indikasi bahaya tinggi bagi pengendara.",
           dimensions: data.dimensions || "Estimasi 60cm x 40cm, kedalaman ~8cm",
           engine: data.engine || "Gemini 2.5 Flash Vision",
         });
       }
     } catch (err) {
       console.error("AI Analysis failed:", err);
-      // Fallback graceful jika API offline
       setAiResult({
         category: "POTHOLE_CRITICAL",
-        categoryLabel: "Lubang Jalan Kritis (Estimasi Mode Cepat)",
+        categoryLabel: "Lubang Jalan Kritis (Pemeriksaan Awal)",
         hazardScore: 82,
         hazardLevel: "TINGGI",
         analysisText:
-          "Verifikasi visual lokal mendeteksi kerusakan lapisan aspal dengan kedalaman signifikan yang memerlukan perbaikan cepat.",
+          "Pemeriksaan awal visual mendeteksi indikasi kerusakan lapisan aspal yang memerlukan peninjauan teknis petugas lapangan.",
         dimensions: "Estimasi ~50cm x 40cm",
-        engine: "Fallback Computer Vision",
+        engine: "Gemini 2.5 Flash (Fallback)",
       });
     } finally {
       setIsAnalyzing(false);
@@ -164,7 +314,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (spamError) {
@@ -172,12 +322,16 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
       return;
     }
 
+    setIsSubmitting(true);
+
     const authCode = (currentRoad.authority || "NAS").substring(0, 3).toUpperCase();
     const newTicketCode = `JGJ-${authCode}-${Math.floor(100 + Math.random() * 900)}`;
 
     const maskedName = reporterName.trim()
       ? `${reporterName.trim().charAt(0)}*** (Warga Terverifikasi)`
       : "W*** (Warga Pelapor)";
+
+    const exactCoords = [Number(validLat.toFixed(6)), Number(validLng.toFixed(6))];
 
     const newReport = {
       id: `REP-${Date.now()}`,
@@ -188,18 +342,18 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
       authority: currentRoad.authority,
       authorityLabel: currentRoad.authorityLabel,
       legalBasis: currentRoad.legalBasis,
-      coordinates: [
-        currentRoad.center?.[0] || -6.3985 + (Math.random() - 0.5) * 0.005,
-        currentRoad.center?.[1] || 106.7892 + (Math.random() - 0.5) * 0.005,
-      ],
-      address: addressDetail.trim() || `Sekitar ruas ${currentRoad.name}`,
+      coordinates: exactCoords,
+      coordinateSource,
+      address:
+        addressDetail.trim() ||
+        `Titik GIS [${exactCoords[0].toFixed(4)}, ${exactCoords[1].toFixed(4)}] — ${currentRoad.name}`,
       damageCategory: aiResult ? aiResult.category : "POTHOLE_CRITICAL",
       categoryLabel: aiResult ? aiResult.categoryLabel : "Lubang Jalan Kritis (Pothole)",
       hazardScore: aiResult ? aiResult.hazardScore : 88,
       hazardLevel: aiResult ? aiResult.hazardLevel : "TINGGI",
       aiAnalysis: aiResult
         ? aiResult.analysisText
-        : "Estimasi AI: Kerusakan aspal terindikasi membahayakan keselamatan pengguna jalan.",
+        : "Pemeriksaan awal foto: Kerusakan perkerasan aspal terindikasi membahayakan keselamatan pengguna jalan.",
       photoUrl: photoPreview,
       reporterName: maskedName,
       reportDate: new Date().toISOString(),
@@ -210,24 +364,66 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
       daysOverdue: 0,
       upvotes: 1,
       userConfirmed: true,
+      isLiveCitizenReport: true,
+      leadership: currentRoad.leadership,
       matchingBudget: currentRoad.budget,
       updates: [
         {
           date: new Date().toISOString(),
-          officer: "Sistem AI JagaJalan",
-          note: `Laporan resmi terdaftar. Verifikasi citra oleh ${aiResult?.engine || "AI Vision"}. Disposisi: ${currentRoad.authorityLabel}.`,
+          officer: "Sistem Geospasial JagaJalan",
+          note: `Titik laporan [${exactCoords[0].toFixed(5)}, ${exactCoords[1].toFixed(5)}] terpetakan secara real-time di layer GIS. Pemeriksaan awal foto oleh ${
+            aiResult?.engine || "Gemini 2.5 Flash"
+          }. Disposisi: ${currentRoad.authorityLabel}.`,
         },
       ],
     };
 
-    onNewReportAdded(newReport);
-    setCreatedTicket(newTicketCode);
-    setSubmitted(true);
+    let persistedReport = newReport;
+    try {
+      const response = await fetch("/api/reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReport),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        if (result?.report) {
+          persistedReport = result.report;
+        }
+      }
+    } catch {
+      // Fallback to local state if offline
+    }
 
-    // Asinkronus: Sinkronisasi ke Cloud Firestore koleksi 'reports' jika terkonfigurasi
+    try {
+      if (typeof window !== "undefined") {
+        const raw = window.localStorage.getItem("jagajalan_custom_reports_v1");
+        const existing = raw ? JSON.parse(raw) : [];
+        const updated = [
+          persistedReport,
+          ...existing.filter((r) => r.id !== persistedReport.id),
+        ].slice(0, 50);
+        window.localStorage.setItem("jagajalan_custom_reports_v1", JSON.stringify(updated));
+
+        if ("BroadcastChannel" in window) {
+          const bc = new BroadcastChannel("jagajalan_live_reports");
+          bc.postMessage({ type: "NEW_REPORT", report: persistedReport });
+          bc.close();
+        }
+      }
+    } catch {
+      // Ignore storage quota errors
+    }
+
+    onNewReportAdded(persistedReport);
+    setCreatedTicket(persistedReport.ticketCode);
+    setCreatedReportObj(persistedReport);
+    setSubmitted(true);
+    setIsSubmitting(false);
+
     if (db) {
       addDoc(collection(db, "reports"), {
-        ...newReport,
+        ...persistedReport,
         syncedToCloudAt: new Date().toISOString(),
       }).catch((err) => {
         console.warn("Sinkronisasi laporan ke Cloud Firestore dilewati:", err.message);
@@ -248,12 +444,20 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
     setAiResult(null);
     setSpamError(null);
     setIsCopied(false);
+    setGpsStatusMsg("");
     onClose();
+  };
+
+  const handleFlyToCreatedReport = () => {
+    const target = createdReportObj;
+    handleResetAndClose();
+    if (target && onViewReportOnMap) {
+      onViewReportOnMap(target);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
-      {/* Outer Double-Bezel Frame */}
       <div className="rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/50 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-800">
         <div className="relative w-full flex-1 flex flex-col rounded-[6px] bg-white shadow-2xl overflow-hidden">
           
@@ -272,17 +476,11 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 />
               </div>
               <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
-                    Lapor Kerusakan Jalan
-                  </h3>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-50 text-[#9a3412] ring-1 ring-orange-200/60 font-sans">
-                    <ScanLine className="w-3 h-3 text-[#c2410c]" />
-                    Verifikasi AI
-                  </span>
-                </div>
+                <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
+                  Lapor &amp; Petakan Titik Kerusakan Jalan (GIS)
+                </h3>
                 <p className="text-xs text-slate-500">
-                  Pilih ruas jalan dan unggah foto kerusakan untuk diteruskan ke dinas penanggung jawab.
+                  Koordinat titik kerusakan disinkronkan secara real-time ke peta interaktif GIS dan dinas penanggung jawab.
                 </p>
               </div>
             </div>
@@ -298,8 +496,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
           {/* Modal Body */}
           <div className="p-5 sm:p-6 overflow-y-auto flex-1">
             {submitted ? (
-              /* Success View */
-              <div className="text-center py-8 px-4 max-w-lg mx-auto space-y-4 animate-fade-in font-sans">
+              <div className="text-center py-6 px-4 max-w-lg mx-auto space-y-4 animate-fade-in font-sans">
                 <div className="w-16 h-16 rounded-[6px] bg-orange-50/90 flex items-center justify-center mx-auto shadow-xs p-2.5 ring-1 ring-orange-200/60">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -313,15 +510,15 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 </div>
                 <div className="space-y-1">
                   <h4 className="text-lg font-bold text-slate-900 font-heading">
-                    Laporan Berhasil Diterbitkan
+                    Titik Kerusakan Terpetakan di Peta GIS
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Laporan Anda telah diteruskan ke dinas penanggung jawab dengan batas waktu tanggapan resmi 14 hari kerja.
+                    Laporan Anda telah ditayangkan secara real-time pada layer peta interaktif JagaJalan dengan batas waktu tanggapan resmi 14 hari kerja (Pasal 44 ayat (2) UU 25/2009).
                   </p>
                 </div>
 
-                {/* Ticket Card */}
-                <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 text-left space-y-2">
+                {/* Ticket & GIS Coordinate Card */}
+                <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 text-left space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                       Kode Tiket Pengaduan
@@ -343,55 +540,184 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                       )}
                     </button>
                   </div>
-                  <div className="font-sans tabular-nums text-xl font-bold text-slate-900 tracking-wider">
+                  <div className="font-mono tabular-nums text-xl font-bold text-slate-900 tracking-wider">
                     {createdTicket}
                   </div>
-                  <div className="pt-2 border-t border-slate-200/60 text-[11px] text-slate-600 flex items-center justify-between">
-                    <span>Instansi: <strong>{currentRoad.authorityLabel}</strong></span>
-                    <span className="text-emerald-700 font-semibold">Terkonfirmasi</span>
+                  <div className="pt-2 border-t border-slate-200/60 space-y-1 text-[11px] text-slate-600">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Koordinat Peta GIS:</span>
+                      <span className="font-mono tabular-nums font-bold text-slate-900">
+                        {createdReportObj?.coordinates?.[0]?.toFixed(5)}, {createdReportObj?.coordinates?.[1]?.toFixed(5)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Ruas Jalan:</span>
+                      <span className="font-semibold text-slate-900 truncate max-w-[260px]">
+                        {createdReportObj?.roadName || currentRoad.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Instansi Disposisi:</span>
+                      <span className="font-semibold text-emerald-700 truncate max-w-[260px]">
+                        {currentRoad.authorityLabel}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="pt-3 flex justify-center gap-2.5">
+                <div className="pt-2 flex flex-col sm:flex-row justify-center gap-2.5">
+                  {onViewReportOnMap && (
+                    <button
+                      type="button"
+                      onClick={handleFlyToCreatedReport}
+                      className="px-5 py-2.5 rounded-[6px] bg-[#c2410c] text-white font-bold text-xs hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs active:scale-95 inline-flex items-center justify-center gap-2"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Lihat Titik Laporan di Peta GIS</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                   <button
+                    type="button"
                     onClick={handleResetAndClose}
-                    className="px-6 py-2.5 rounded-[6px] bg-[#c2410c] text-white font-semibold text-xs hover:bg-[#9a3412] transition-colors cursor-pointer shadow-xs active:scale-95"
+                    className="px-5 py-2.5 rounded-[6px] bg-slate-100 text-slate-700 font-semibold text-xs hover:bg-slate-200 transition-colors cursor-pointer"
                   >
-                    Selesai &amp; Buka Peta Transparansi
+                    Tutup Jendela
                   </button>
                 </div>
               </div>
             ) : (
-              /* 2-Column Professional Form */
               <form id="report-road-form" onSubmit={handleSubmit} className="space-y-5 font-sans">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start">
                   
-                  {/* LEFT COLUMN: Ruas Jalan & Identitas */}
-                  <div className="space-y-4">
-                    {/* Select Road */}
-                    <div className="space-y-1.5">
-                      <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-                        <span>Ruas Jalan Terdampak</span>
-                      </label>
-                      <select
-                        value={selectedRoadId}
-                        onChange={(e) => {
-                          setSelectedRoadId(e.target.value);
-                          setAiResult(null);
-                        }}
-                        className="w-full px-3.5 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 focus:outline-none focus:bg-white transition-all cursor-pointer font-medium ring-1 ring-orange-200/50 focus:ring-orange-500/30"
-                      >
-                        {roads.map((r) => (
-                          <option key={r.id} value={r.id}>
-                            {r.name} ({r.district}) • {r.authority}
-                          </option>
-                        ))}
-                      </select>
+                  {/* LEFT COLUMN: Titik Koordinat GIS, Ruas Jalan & Identitas */}
+                  <div className="space-y-3.5">
+                    {/* Pinned GIS Point Notice or Road Selector */}
+                    {usePinnedLocation && initialLocation ? (
+                      <div className="p-3.5 rounded-[6px] bg-orange-50/70 ring-1 ring-orange-200/80 space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10.5px] font-bold text-[#9a3412] uppercase tracking-wider flex items-center gap-1.5">
+                            <Crosshair className="w-3.5 h-3.5 text-[#c2410c]" />
+                            <span>Titik Peta GIS Terkunci</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setUsePinnedLocation(false)}
+                            className="text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                          >
+                            Ganti Ruas Manual
+                          </button>
+                        </div>
+                        <div className="text-xs font-bold text-slate-900 leading-snug">
+                          {currentRoad.name}
+                        </div>
+                        <div className="text-[11px] text-slate-600">
+                          {currentRoad.district}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
+                            <span>Ruas Jalan Terdampak</span>
+                          </label>
+                          {initialLocation && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setUsePinnedLocation(true);
+                                if (Array.isArray(initialLocation.coordinates)) {
+                                  setLatInput(Number(initialLocation.coordinates[0]).toFixed(5));
+                                  setLngInput(Number(initialLocation.coordinates[1]).toFixed(5));
+                                }
+                              }}
+                              className="text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                            >
+                              Gunakan Titik Klik Peta
+                            </button>
+                          )}
+                        </div>
+                        <select
+                          value={selectedRoadId}
+                          onChange={(e) => handleRoadSelectChange(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 focus:outline-none focus:bg-white transition-all cursor-pointer font-medium ring-1 ring-orange-200/50 focus:ring-orange-500/30"
+                        >
+                          {roads.map((r) => (
+                            <option key={r.id} value={r.id}>
+                              {r.name} ({r.district}) • {r.authority}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Interactive GIS Coordinates Box */}
+                    <div className="p-3.5 rounded-[6px] bg-slate-50/90 ring-1 ring-slate-200/90 space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                          <Navigation className="w-3 h-3 text-[#c2410c]" />
+                          <span>Koordinat Geospasial (GIS)</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleUseCurrentGps}
+                          disabled={isLocatingGps}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-[4px] bg-white hover:bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/70 text-[10px] font-bold transition-colors cursor-pointer disabled:opacity-50"
+                        >
+                          {isLocatingGps ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <Crosshair className="w-3 h-3" />
+                          )}
+                          <span>Titik GPS Saya</span>
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-0.5">
+                            Latitude (Garis Lintang)
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            required
+                            value={latInput}
+                            onChange={(e) => {
+                              setLatInput(e.target.value);
+                              setCoordinateSource("MANUAL_COORDINATE");
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-orange-500/50"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-0.5">
+                            Longitude (Garis Bujur)
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            required
+                            value={lngInput}
+                            onChange={(e) => {
+                              setLngInput(e.target.value);
+                              setCoordinateSource("MANUAL_COORDINATE");
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-orange-500/50"
+                          />
+                        </div>
+                      </div>
+
+                      {gpsStatusMsg && (
+                        <div className="text-[10px] font-medium text-[#9a3412] bg-orange-50/80 px-2 py-1 rounded-[4px]">
+                          {gpsStatusMsg}
+                        </div>
+                      )}
                     </div>
 
                     {/* Government & Budget Meta Card */}
-                    <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2 text-xs">
+                    <div className="p-3.5 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2 text-xs">
                       <div className="flex items-start justify-between gap-2">
                         <div className="space-y-0.5">
                           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block">
@@ -408,14 +734,14 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
 
                       <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px]">
                         <span className="text-slate-500">Pagu Tender Terdata:</span>
-                        <span className="font-bold text-slate-900 font-sans tabular-nums">
+                        <span className="font-bold text-slate-900 font-mono tabular-nums">
                           Rp {((currentRoad.budget?.paguRp || 0) / 1000000000).toFixed(2)} Miliar
                         </span>
                       </div>
                     </div>
 
                     {/* Pelapor & Titik Lokasi */}
-                    <div className="space-y-3 pt-1">
+                    <div className="space-y-2.5">
                       <div className="space-y-1">
                         <label className="block text-xs font-semibold text-slate-700">
                           Nama / Inisial Pelapor
@@ -426,7 +752,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           value={reporterName}
                           onChange={(e) => setReporterName(e.target.value)}
                           placeholder="Contoh: Budi Santoso"
-                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all ring-1 ring-orange-200/50 focus:ring-orange-500/30"
+                          className="w-full px-3.5 py-2 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all ring-1 ring-orange-200/50 focus:ring-orange-500/30"
                         />
                       </div>
 
@@ -439,20 +765,20 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           required
                           value={addressDetail}
                           onChange={(e) => setAddressDetail(e.target.value)}
-                          placeholder="Contoh: Depan SPBU 34-16401, lajur lambat arah Jakarta"
-                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all ring-1 ring-orange-200/50 focus:ring-orange-500/30"
+                          placeholder="Contoh: Depan SPBU 34-16401, lajur kiri arah pusat kota"
+                          className="w-full px-3.5 py-2 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all ring-1 ring-orange-200/50 focus:ring-orange-500/30"
                         />
                         <span className="text-[10px] text-slate-400 block">
-                          Privasi terjamin: Nama warga disamarkan otomatis di pelacakan publik.
+                          Privasi terjamin: Identitas pelapor disamarkan otomatis pada peta publik.
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* RIGHT COLUMN: Foto Bukti & Verifikasi AI */}
+                  {/* RIGHT COLUMN: Foto Bukti & Pemeriksaan Awal AI */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src="/icon/camera_icon.png"
@@ -498,32 +824,24 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         className="w-full h-full object-cover"
                       />
 
-                      {/* AI Laser Scanning Beam & HUD Crosshairs while Analyzing */}
                       {isAnalyzing && (
                         <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[1px] flex flex-col items-center justify-center p-3 text-white overflow-hidden z-20">
-                          {/* Laser Beam */}
                           <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent shadow-[0_0_16px_#ea580c] animate-scan-line pointer-events-none" />
 
-                          {/* Futuristic HUD Crosshair */}
-                          <div className="w-14 h-14 border border-orange-400/50 rounded-[6px] flex items-center justify-center relative mb-2">
-                            <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-ping" />
-                            <div className="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-orange-400" />
-                            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-orange-400" />
-                            <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-orange-400" />
-                            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-orange-400" />
+                          <div className="w-12 h-12 border border-orange-400/60 rounded-[6px] flex items-center justify-center relative mb-2">
+                            <Crosshair className="w-5 h-5 text-orange-400 animate-spin" />
                           </div>
 
                           <div className="text-[11px] font-mono font-bold text-orange-300 tracking-wider uppercase flex items-center gap-1.5">
                             <ScanLine className="w-3.5 h-3.5 animate-pulse text-orange-400" />
-                            <span>AI Vision Scanning...</span>
+                            <span>Pemeriksaan Awal Gemini 2.5 Flash...</span>
                           </div>
                           <span className="text-[9.5px] text-slate-300 font-sans mt-0.5 text-center">
-                            Mengukur kedalaman lubang &amp; estimasi indeks bahaya
+                            Mengevaluasi indikasi kerusakan visual &amp; saringan anti-spam
                           </span>
                         </div>
                       )}
 
-                      {/* Hover overlay (when not analyzing) */}
                       {!isAnalyzing && (
                         <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                           <button
@@ -537,7 +855,6 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         </div>
                       )}
 
-                      {/* Mobile button */}
                       {!isAnalyzing && (
                         <button
                           type="button"
@@ -558,7 +875,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                       className="hidden"
                     />
 
-                    {/* AI Verification Section */}
+                    {/* AI Initial Triage Section */}
                     <div className="space-y-2">
                       {!aiResult && !spamError && (
                         <button
@@ -570,23 +887,22 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           {isAnalyzing ? (
                             <>
                               <Loader2 className="w-3.5 h-3.5 animate-spin text-[#c2410c]" />
-                              <span>Memeriksa keaslian citra dengan Gemini Vision...</span>
+                              <span>Memeriksa foto dengan Gemini 2.5 Flash...</span>
                             </>
                           ) : (
                             <>
                               <ScanLine className="w-3.5 h-3.5 text-[#c2410c]" />
-                              <span>Verifikasi Foto dengan AI Inspector</span>
+                              <span>Periksa Awal Foto dengan AI Inspector</span>
                             </>
                           )}
                         </button>
                       )}
 
-                      {/* Spam Alert */}
                       {spamError && (
                         <div className="p-3.5 rounded-[6px] bg-rose-50/80 ring-1 ring-rose-200/70 text-rose-800 space-y-1 animate-fade-in text-xs">
                           <div className="flex items-center gap-1.5 font-bold text-rose-900">
                             <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                            <span>Foto Ditolak (Anti-Spam)</span>
+                            <span>Foto Ditolak (Saringan Anti-Spam)</span>
                           </div>
                           <p className="text-[11px] text-rose-700 leading-normal">
                             {spamError}
@@ -594,7 +910,6 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                         </div>
                       )}
 
-                      {/* Verified Result Card */}
                       {aiResult && !spamError && (
                         <div className="p-4 rounded-[6px] bg-slate-50/80 ring-1 ring-orange-200/40 space-y-2 animate-fade-in text-xs">
                           <div className="flex items-center justify-between">
@@ -605,13 +920,13 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                               </span>
                             </div>
                             <span
-                              className={`px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold font-sans tabular-nums ${
+                              className={`px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold font-mono tabular-nums ${
                                 aiResult.hazardScore >= 80
                                   ? "bg-rose-100 text-rose-800"
                                   : "bg-amber-100 text-amber-800"
                               }`}
                             >
-                              Skor Bahaya: {aiResult.hazardScore}/100
+                              Indeks Bahaya: {aiResult.hazardScore}/100
                             </span>
                           </div>
 
@@ -620,8 +935,8 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                           </p>
 
                           <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-500 font-sans">
-                            <span>Dimensi: <strong className="text-slate-800 font-sans">{aiResult.dimensions}</strong></span>
-                            <span className="text-emerald-700 font-bold font-sans">✓ Terverifikasi AI</span>
+                            <span>Estimasi Visual: <strong className="text-slate-800">{aiResult.dimensions}</strong></span>
+                            <span className="text-emerald-700 font-bold">✓ Lolos Pemeriksaan Awal</span>
                           </div>
                         </div>
                       )}
@@ -634,7 +949,7 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                 <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Dipantau Standar Kepatuhan Ombudsman RI</span>
+                    <span>Tenggat Tanggapan 14 Hari Kerja (Pasal 44 ayat (2) UU 25/2009)</span>
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -647,10 +962,10 @@ export default function ReportModal({ isOpen, onClose, roads = [], onNewReportAd
                     </button>
                     <button
                       type="submit"
-                      disabled={!!spamError || isAnalyzing}
+                      disabled={!!spamError || isAnalyzing || isSubmitting}
                       className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 pl-4 pr-2 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer font-sans"
                     >
-                      <span>Terbitkan Laporan</span>
+                      <span>{isSubmitting ? "Menyimpan ke Peta GIS..." : "Terbitkan ke Peta GIS"}</span>
                       <span className="w-5 h-5 rounded-[4px] bg-white/20 flex items-center justify-center shrink-0">
                         <ArrowRight className="w-3 h-3 text-white" />
                       </span>

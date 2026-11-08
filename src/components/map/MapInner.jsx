@@ -117,7 +117,7 @@ const getPolylinePositions = (coords) => {
 };
 
 // Create custom orange marker icon matching the high-fidelity UI design
-const createReportIcon = (category, isOverdue, isSelected) => {
+const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport = false) => {
   let bgColor = "#ea580c"; // Safety Orange
   if (isOverdue) bgColor = "#dc2626"; // Crimson Red for Overdue
   else if (category === "SUBSIDENCE") bgColor = "#d97706";
@@ -186,7 +186,11 @@ const createReportIcon = (category, isOverdue, isSelected) => {
         justify-content: center;
         cursor: pointer;
       ">
-        ${isOverdue ? `<span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background-color: ${bgColor}; opacity: 0.35; animation: ping 1.8s infinite;"></span>` : ""}
+        ${
+          isOverdue || isLiveCitizenReport
+            ? `<span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background-color: ${bgColor}; opacity: 0.38; animation: ping 1.6s infinite;"></span>`
+            : ""
+        }
         <div style="
           width: 24px;
           height: 24px;
@@ -255,6 +259,8 @@ export default function MapInner({
   onSelectRoad,
   onSelectReport,
   onMapClick,
+  onReportAtPoint,
+  showReportsLayer = true,
   mapCenter,
   mapZoom = 11.5,
   onMapReady,
@@ -397,7 +403,7 @@ export default function MapInner({
                 <div className="font-sans text-xs p-0.5">
                   <div className="flex items-center gap-1.5 font-bold text-slate-900">
                     <span
-                      className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs"
+                      className="w-3 h-1.5 rounded-[2px] shrink-0 shadow-2xs"
                       style={{ backgroundColor: color }}
                     />
                     <span>{road.name}</span>
@@ -422,7 +428,7 @@ export default function MapInner({
                     <span className={`px-2 py-0.5 rounded-[5px] text-[9px] font-bold border ${badgeBg}`}>
                       {road.authority}
                     </span>
-                    <span className="text-[10px] font-sans tabular-nums text-slate-400 font-bold">{road.code}</span>
+                    <span className="text-[10px] font-mono tabular-nums text-slate-400 font-bold">{road.code}</span>
                   </div>
 
                   <div>
@@ -451,7 +457,7 @@ export default function MapInner({
                     <div className="bg-slate-50 rounded-[5px] p-2 border border-slate-200/80 space-y-0.5">
                       <div className="text-[10px] font-bold text-slate-800 flex items-center justify-between">
                         <span>🏗️ Proyek:</span>
-                        <span className="text-orange-700 font-black">
+                        <span className="text-orange-700 font-mono tabular-nums font-black">
                           Rp {((road.budget.paguRp || 0) / 1000000000).toFixed(1)} M
                         </span>
                       </div>
@@ -470,12 +476,35 @@ export default function MapInner({
                     <span className="text-emerald-700 font-bold">✓ Terverifikasi</span>
                   </div>
 
-                  <button
-                    onClick={() => onSelectRoad(road)}
-                    className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
-                  >
-                    Buka Detail Lengkap di Panel →
-                  </button>
+                  <div className="space-y-1">
+                    {onReportAtPoint && (
+                      <button
+                        onClick={() =>
+                          onReportAtPoint({
+                            coordinates: road.center,
+                            roadSegmentId: road.id,
+                            streetName: road.name,
+                            district: road.district,
+                            authority: road.authority,
+                            authorityLabel: road.authorityLabel,
+                            legalBasis: road.legalBasis,
+                            leadership: road.leadership,
+                            budget: road.budget,
+                            source: "GIS_ROAD_POPUP",
+                          })
+                        }
+                        className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
+                      >
+                        Laporkan Kerusakan di Ruas Ini →
+                      </button>
+                    )}
+                    <button
+                      onClick={() => onSelectRoad(road)}
+                      className="w-full py-1 px-2 rounded-[6px] text-[9.5px] font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 text-center transition-colors cursor-pointer block"
+                    >
+                      Buka Detail Lengkap di Panel
+                    </button>
+                  </div>
                 </div>
               </Popup>
             </Polyline>
@@ -483,82 +512,108 @@ export default function MapInner({
         );
       })}
 
-      {/* Citizen Report Markers */}
-      {reports.map((report) => {
-        const isOverdue = report.status === "OVERDUE";
-        const isSelected = selectedReport?.id === report.id;
-        const icon = createReportIcon(report.damageCategory, isOverdue, isSelected);
+      {/* Citizen Report Markers (Real-Time GIS Layer) */}
+      {showReportsLayer &&
+        reports.map((report) => {
+          if (!Array.isArray(report.coordinates) || report.coordinates.length < 2) return null;
+          const isOverdue = report.status === "OVERDUE";
+          const isSelected = selectedReport?.id === report.id;
+          const icon = createReportIcon(
+            report.damageCategory,
+            isOverdue,
+            isSelected,
+            Boolean(report.isLiveCitizenReport)
+          );
 
-        return (
-          <Marker
-            key={report.id}
-            position={report.coordinates}
-            icon={icon}
-            zIndexOffset={isSelected ? 1000 : 1}
-            eventHandlers={{
-              click: () => onSelectReport(report),
-            }}
-          >
-            <Tooltip sticky>
-              <div className="font-sans text-xs">
-                <div className="font-bold text-slate-900">{report.ticketCode} • {report.roadName}</div>
-                <div className="text-[10px] text-slate-500">
-                  {report.categoryLabel} • Skor Bahaya: {report.hazardScore}/100
-                </div>
-              </div>
-            </Tooltip>
-
-            <Popup className="jagajalan-leaflet-popup">
-              <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                  <span className="font-sans tabular-nums text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
-                    {report.ticketCode}
-                  </span>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${
-                    isOverdue ? "bg-rose-100 text-rose-800" : "bg-emerald-100 text-emerald-800"
-                  }`}>
-                    {isOverdue ? "Melewati Tenggat Respons" : "Dalam Pengerjaan"}
-                  </span>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-slate-900">{report.roadName}</h4>
-                  <p className="text-[10px] text-slate-500">{report.address}</p>
-                </div>
-
-                <div className="bg-slate-50 p-2 rounded-[5px] border border-orange-200/50 text-[10px] space-y-1">
-                  <div className="font-semibold text-slate-800 flex justify-between">
-                    <span>Kategori:</span>
-                    <span className="font-bold text-orange-700">{report.categoryLabel}</span>
+          return (
+            <Marker
+              key={report.id}
+              position={report.coordinates}
+              icon={icon}
+              zIndexOffset={isSelected ? 1000 : report.isLiveCitizenReport ? 400 : 1}
+              eventHandlers={{
+                click: () => onSelectReport(report),
+              }}
+            >
+              <Tooltip sticky>
+                <div className="font-sans text-xs">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <span className="font-mono tabular-nums">{report.ticketCode}</span>
+                    <span>• {report.roadName}</span>
+                    {report.isLiveCitizenReport && (
+                      <span className="px-1.5 py-0.2 rounded text-[8.5px] font-bold bg-orange-100 text-[#9a3412]">
+                        BARU
+                      </span>
+                    )}
                   </div>
-                  <div className="font-semibold text-slate-800 flex justify-between">
-                    <span>Estimasi Bahaya AI:</span>
-                    <span className="font-bold text-rose-600">{report.hazardScore}/100 ({report.hazardLevel})</span>
+                  <div className="text-[10px] text-slate-500">
+                    {report.categoryLabel} • Indeks Bahaya: <span className="font-mono tabular-nums font-bold">{report.hazardScore}/100</span>
                   </div>
                 </div>
+              </Tooltip>
 
-                {report.matchingBudget && (
-                  <div className="text-[9px] text-slate-600 bg-orange-50/60 p-1.5 rounded-[5px] border border-orange-100">
-                    <span className="font-bold text-orange-900">Proyek Terhubung: </span>
-                    {report.matchingBudget.packageName} (Rp {((report.matchingBudget.paguRp || 0) / 1000000000).toFixed(1)} M)
+              <Popup className="jagajalan-leaflet-popup">
+                <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                    <span className="font-mono tabular-nums text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
+                      {report.ticketCode}
+                    </span>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${
+                      isOverdue
+                        ? "bg-rose-100 text-rose-800"
+                        : report.isLiveCitizenReport
+                        ? "bg-orange-100 text-[#9a3412]"
+                        : "bg-emerald-100 text-emerald-800"
+                    }`}>
+                      {isOverdue
+                        ? "Melewati Tenggat Respons"
+                        : report.isLiveCitizenReport
+                        ? "Laporan Warga Real-Time"
+                        : "Dalam Pengerjaan"}
+                    </span>
                   </div>
-                )}
 
-                <div className="text-[8.5px] text-slate-400 border-t border-slate-100 pt-1">
-                  Dasar Hukum: {report.legalBasis}
+                  <div>
+                    <h4 className="font-bold text-slate-900">{report.roadName}</h4>
+                    <p className="text-[10px] text-slate-500">{report.address}</p>
+                    <p className="text-[9.5px] font-mono tabular-nums text-slate-400 mt-0.5">
+                      GIS: {Number(report.coordinates[0]).toFixed(5)}, {Number(report.coordinates[1]).toFixed(5)}
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-50 p-2 rounded-[5px] border border-orange-200/50 text-[10px] space-y-1">
+                    <div className="font-semibold text-slate-800 flex justify-between">
+                      <span>Kategori:</span>
+                      <span className="font-bold text-orange-700">{report.categoryLabel}</span>
+                    </div>
+                    <div className="font-semibold text-slate-800 flex justify-between">
+                      <span>Indeks Bahaya:</span>
+                      <span className="font-mono tabular-nums font-bold text-rose-600">{report.hazardScore}/100 ({report.hazardLevel})</span>
+                    </div>
+                  </div>
+
+                  {report.matchingBudget && (
+                    <div className="text-[9px] text-slate-600 bg-orange-50/60 p-1.5 rounded-[5px] border border-orange-100">
+                      <span className="font-bold text-orange-900">Proyek Terhubung: </span>
+                      {report.matchingBudget.packageName || report.matchingBudget.name} (Rp {((report.matchingBudget.paguRp || 0) / 1000000000).toFixed(1)} M)
+                    </div>
+                  )}
+
+                  <div className="text-[8.5px] text-slate-400 border-t border-slate-100 pt-1">
+                    Dasar Hukum: {report.legalBasis}
+                  </div>
+
+                  <button
+                    onClick={() => onSelectReport(report)}
+                    className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
+                  >
+                    Buka Detail Aduan di Panel →
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => onSelectReport(report)}
-                  className="w-full py-1.5 px-2 rounded-[6px] text-[10px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block"
-                >
-                  Buka Detail Aduan di Panel →
-                </button>
-              </div>
-            </Popup>
-          </Marker>
-        );
-      })}
+              </Popup>
+            </Marker>
+          );
+        })}
 
       {/* Key Milestone Boundary Points along Highways (Shown on selected road or when zoomed in >= 8 to prevent cluttering city/provincial layers) */}
       {roads.map((road) => {
@@ -692,6 +747,14 @@ export default function MapInner({
                   <span className="font-medium text-slate-700">{detectedPoint.legalBasis}</span>
                 </div>
               </div>
+              {onReportAtPoint && (
+                <button
+                  onClick={() => onReportAtPoint(detectedPoint)}
+                  className="w-full py-1.5 px-2.5 rounded-[6px] text-[10.5px] font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] text-center transition-colors cursor-pointer block shadow-2xs"
+                >
+                  Laporkan Kerusakan di Titik Ini →
+                </button>
+              )}
             </div>
           </Popup>
         </Marker>
