@@ -27,50 +27,35 @@ import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
 export default function OmbudsmanMonitorSection({
   reports = [],
+  subscribedTickets = [],
   onOpenOmbudsmanDraft,
   onSelectRoadOnMap,
   onSubscribeTicketNotification,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL"); // "ALL" | "OVERDUE" | "DALAM_PENGERJAAN" | "SELESAI"
-  const [viewMode, setViewMode] = useState("grid"); // "grid" | "table"
-  const [sortBy, setSortBy] = useState("urgency"); // "urgency" | "newest" | "hazard-desc"
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [viewMode, setViewMode] = useState("grid");
+  const [sortBy, setSortBy] = useState("urgency");
   const [currentPage, setCurrentPage] = useState(1);
-  const [subscribedTickets, setSubscribedTickets] = useState([]);
   const pageSize = 6;
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const raw = window.localStorage.getItem("jagajalan_subscribed_tickets_v1");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) setSubscribedTickets(parsed);
-        }
-      } catch {
-        // Ignore storage errors
-      }
-    }
-  }, []);
 
   const handleToggleTicketSubscription = (report) => {
     const code = report?.ticketCode;
     if (!code) return;
-    setSubscribedTickets((prev) => {
-      const exists = prev.includes(code);
-      const next = exists ? prev.filter((t) => t !== code) : [code, ...prev];
-      if (typeof window !== "undefined") {
-        try {
-          window.localStorage.setItem("jagajalan_subscribed_tickets_v1", JSON.stringify(next));
-        } catch {
-          // Ignore storage errors
-        }
+    const exists = subscribedTickets.includes(code);
+    const next = exists
+      ? subscribedTickets.filter((t) => t !== code)
+      : [code, ...subscribedTickets];
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.setItem("jagajalan_subscribed_tickets_v1", JSON.stringify(next));
+      } catch {
+        // Ignore storage errors
       }
-      if (!exists && onSubscribeTicketNotification) {
-        onSubscribeTicketNotification(report);
-      }
-      return next;
-    });
+    }
+    if (onSubscribeTicketNotification) {
+      onSubscribeTicketNotification(exists ? null : report, next);
+    }
   };
 
   // Counts

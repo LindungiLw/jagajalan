@@ -110,6 +110,10 @@ export default function Home() {
     buildInitialSeedNotifications(INITIAL_REPORTS)
   );
   const [readNotificationIds, setReadNotificationIds] = useState([]);
+  const [subscribedTickets, setSubscribedTickets] = useState([
+    "JGJ-MDN-001",
+    "JGJ-SML-002",
+  ]);
   const [activeToast, setActiveToast] = useState(null);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportInitialLocation, setReportInitialLocation] = useState(null);
@@ -228,6 +232,11 @@ export default function Home() {
           const parsedRead = JSON.parse(rawRead);
           if (Array.isArray(parsedRead)) setReadNotificationIds(parsedRead);
         }
+        const rawSubs = window.localStorage.getItem("jagajalan_subscribed_tickets_v1");
+        if (rawSubs) {
+          const parsedSubs = JSON.parse(rawSubs);
+          if (Array.isArray(parsedSubs)) setSubscribedTickets(parsedSubs);
+        }
       } catch {
         // Ignore parse error
       }
@@ -344,6 +353,20 @@ export default function Home() {
   const handleAddNewReport = (newReport) => {
     setReports((prev) => mergeReportsById([newReport], prev));
     setFocusedReportId(newReport.id);
+    if (newReport?.ticketCode && newReport.notifyOnUpdate !== false) {
+      setSubscribedTickets((prev) => {
+        if (prev.includes(newReport.ticketCode)) return prev;
+        const next = [newReport.ticketCode, ...prev];
+        if (typeof window !== "undefined") {
+          try {
+            window.localStorage.setItem("jagajalan_subscribed_tickets_v1", JSON.stringify(next));
+          } catch {
+            // Ignore storage error
+          }
+        }
+        return next;
+      });
+    }
     setRoads((prevRoads) =>
       prevRoads.map((road) =>
         road.id === newReport.roadSegmentId
@@ -465,7 +488,10 @@ export default function Home() {
     }
   };
 
-  const handleSubscribeTicketNotification = (report) => {
+  const handleSubscribeTicketNotification = (report, nextSubscribedList) => {
+    if (Array.isArray(nextSubscribedList)) {
+      setSubscribedTickets(nextSubscribedList);
+    }
     if (!report) return;
     if (
       typeof window !== "undefined" &&
@@ -526,6 +552,7 @@ export default function Home() {
         notifications={notifications}
         unreadCount={unreadCount}
         readNotificationIds={readNotificationIds}
+        subscribedTickets={subscribedTickets}
         onMarkAllRead={handleMarkAllNotificationsRead}
         onSelectNotification={handleSelectNotification}
       />
@@ -604,6 +631,7 @@ export default function Home() {
           <div className="py-2 animate-fade-in flex-1">
             <OmbudsmanMonitorSection
               reports={reports}
+              subscribedTickets={subscribedTickets}
               onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
               onSelectRoadOnMap={handleSelectRoadOnMap}
               onSubscribeTicketNotification={handleSubscribeTicketNotification}
