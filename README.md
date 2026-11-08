@@ -59,11 +59,10 @@ Penanganan jalan rusak di Indonesia sering terhambat oleh tiga masalah tata kelo
 4. **Terpisahnya Data Aduan Jalan dari Data Kontrak Lelang LPSE**
    Selama ini, kanal pengaduan warga dan portal pengadaan proyek (SiRUP/LPSE) berjalan sendiri-sendiri. Warga tidak tahu apakah jalan berlubang di depan rumahnya sebenarnya sudah memiliki kontrak pemeliharaan aktif, siapa kontraktor pemenang tendernya, berapa nilai kontraknya, atau kapan masa pemeliharaan proyek tersebut berakhir.
 
-5. **Alasan Pemilihan Wilayah Pilot (Jawa Barat, Bodetabek, & Sumatera Utara)**
-   Koridor Jawa Barat (Bodetabek: Bogor, Depok, Bekasi) dan Sumatera Utara dipilih sebagai lokasi pengujian awal berdasarkan kelengkapan data terbuka yang dapat diverifikasi:
-   - Ketersediaan data paket lelang pemeliharaan jalan pada LPSE Jawa Barat, LPSE Kota Depok, dan LPSE Sumatera Utara.
-   - Ketersediaan dokumen SK penetapan status jalan nasional, provinsi, dan kabupaten/kota.
-   - Tingginya volume lalu lintas harian yang mempertemukan ruas jalan nasional, provinsi, dan kabupaten/kota dalam satu koridor.
+5. **Penerapan Arsitektur Dua Tingkat (*Two-Tier Data Architecture*)**
+   JagaJalan menerapkan pendekatan data dua tingkat untuk menjaga keseimbangan antara gambaran makro dan penelusuran mikro:
+   - *Tingkat Makro:* Dashboard nasional menyajikan data agregat kondisi dan kemantapan jalan dari 38 provinsi di Indonesia yang bersumber dari BPS (SIRUSA) dan publikasi resmi Kementerian Pekerjaan Umum, serta informasi anggaran yang relevan.
+   - *Tingkat Mikro:* Penelusuran mendalam terhadap ruas jalan, lokasi kerusakan, batas kewenangan instansi, dokumen SK penetapan status jalan, paket pengadaan lelang LPSE, dan laporan masyarakat pada wilayah percontohan Sumatera Utara (Kota Medan dan sekitarnya) serta koridor arteri strategis nasional antarpulau.
 
 ---
 
@@ -110,25 +109,25 @@ Masyarakat dapat memantau perjalanan laporan secara terbuka dan kronologis:
 
 ## 4. Fitur Pendukung: AI Vision & Pemantauan SLA Ombudsman RI
 
-### A. AI Vision Sebagai Pendukung Keputusan (Decision Support)
-Modul Computer Vision cerdas berfungsi sebagai alat bantu estimasi prioritas (*decision support tool*), bukan pengukuran fisik pasti tingkat laboratorium tanpa kalibrasi alat:
-- **Klasifikasi Kategori Kerusakan**: Mengidentifikasi tipe kerusakan aspal visual (Lubang/Pothole, Penurunan Permukaan/Subsidence, Retak Buaya/Alligator Cracking).
-- **Deteksi Spam & Duplikasi**: Membantu dinas menyaring foto yang tidak relevan atau mendeteksi foto duplikat pada titik lokasi yang sama.
-- **Rekomendasi Skor Bahaya (*Hazard Score* Skala 1-100)**: Dihitung berdasarkan kombinasi jenis kerusakan visual, estimasi dimensi terhadap lebar jalan, dan posisi kerusakan pada lajur lalu lintas kendaraan.
+### A. AI Vision Sebagai Pemeriksaan Awal Foto (Multimodal Initial Triage)
+Modul Computer Vision berbasis model aktif Google Gemini 2.5 Flash berfungsi sebagai alat bantu pemeriksaan awal foto (*decision support tool*) dan pengelompokan laporan, bukan penentu resmi keabsahan laporan atau alat ukur laboratorium tanpa kalibrasi teknis:
+- **Pemeriksaan Indikasi Kerusakan**: Mengidentifikasi tipe indikasi visual permukaan aspal (Lubang/Pothole, Penurunan Permukaan/Amblas, Retak Buaya/Alligator Cracking).
+- **Penyaringan Relevansi Awal**: Membantu aparatur dinas menyaring foto yang tidak relevan dengan infrastruktur jalan atau mendeteksi kemiripan visual laporan pada titik lokasi yang berdekatan.
+- **Estimasi Prioritas Awal (*Hazard Score* Skala 1-100)**: Menghasilkan rekomendasi skor prioritas awal berdasarkan tipe kerusakan tampak, perkiraan sebaran relatif terhadap jalur lalu lintas, dan potensi risiko bagi keselamatan pengguna jalan.
 
-### B. Pemantauan Batas Waktu Tanggapan & Generator Draf Ombudsman RI
-- **Penafsiran Hukum yang Akurat**: Berdasarkan UU No. 25 Tahun 2009 tentang Pelayanan Publik dan ketentuan tata kelola Ombudsman RI, masyarakat yang melayangkan pengaduan pelayanan publik berhak memperoleh kepastian tindak lanjut. Apabila pengaduan tidak memperoleh tanggapan resmi dalam kurun waktu **14 hari kerja**, masyarakat memiliki hak prosedural untuk mengajukan laporan dugaan maladministrasi penundaan berlarut (*undue delay*) kepada Ombudsman RI.
-- **Generator Draf Resmi**: Apabila indikator pemantauan melewati 14 hari kerja tanpa tanggapan instansi (*status: Keterlambatan Tanggapan*), sistem menyediakan fitur 1-klik untuk men-generate draf surat formal laporan ke Ombudsman RI. Draf ini memuat nomor tiket, koordinat geotagged, analisis AI, riwayat paket anggaran, serta dasar hukum yang dapat diperiksa, diunduh, dan diajukan warga secara mandiri ke kanal resmi Ombudsman RI.
+### B. Pemantauan Tanggapan Pelayanan Publik & Complaint Guidance Generator
+- **Kesesuaian dengan Regulasi Pelayanan Publik**: Berdasarkan Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik, penyelenggara pelayanan publik wajib memberikan tanggapan atas pengaduan paling lambat 14 (empat belas) hari kerja sejak pengaduan diterima secara resmi. JagaJalan menyajikan hitung mundur batas waktu ini sebagai acuan pemantauan publik setelah laporan diteruskan ke instansi terkait.
+- **Complaint Guidance & Draft Generator**: Apabila laporan telah diteruskan kepada instansi penyelenggara namun melewati batas waktu 14 hari kerja tanpa tanggapan atau kepastian tindak lanjut (*indikasi penundaan berlarut / undue delay*), sistem menyediakan panduan pelaporan dan draf formal pengaduan ke Ombudsman RI. Draf ini merangkum data nomor tiket, tanggal penerusan, titik koordinat, foto dokumentasi, dan dasar regulasi yang dapat diunduh warga untuk diajukan secara mandiri melalui kanal resmi Ombudsman Republik Indonesia sesuai ketentuan yang berlaku.
 
 ### C. Dashboard Komparatif Regional 38 Provinsi
-Menyajikan visualisasi data makro agregat 38 provinsi di Indonesia (bersumber dari publikasi resmi BPS dan SP4N-LAPOR!) yang dilengkapi filter wilayah pulau guna memberikan konteks perbandingan kebijakan publik nasional.
+Menyajikan visualisasi data makro agregat 38 provinsi di Indonesia (bersumber dari publikasi resmi BPS dan kementerian terkait) yang dilengkapi filter wilayah pulau guna memberikan konteks perbandingan kebijakan publik dan kemantapan jalan secara nasional.
 
-### D. Panel Detail Ruas (Live Inspector): Audit Deviasi & Kepatuhan Hukum
-Panel inspektur interaktif pada peta transparansi menyajikan audit terpadu per segmen jalan:
-- **Bukti Lapangan & Indikator Bahaya AI**: Foto riil kondisi lapangan dengan *AI Hazard Score* (skala 1-100), estimasi tipe kerusakan, serta proyeksi kerugian keselamatan pemudik/pengendara roda dua.
-- **Tracker Timeline Kepatuhan SLA 14 Hari**: Pelacakan kronologis 3 tahap transparan (*Laporan Masuk ➔ Batas Tanggapan 14 Hari ➔ Status Lapangan*) berlandaskan mandat UU No. 25/2009 dan PermenPAN-RB No. 62/2018.
-- **Scoreboard Finansial & Deviasi Progres**: Komparasi Pagu HPS, Nilai Kontrak SPK, efisiensi tender LPSE, serta meter pembanding progres fisik lapangan vs serapan komitmen SPK untuk mendeteksi potensi deviasi audit.
-- **Kepastian Yuridis Penyelenggara**: Penguncian instansi penanggung jawab mutlak (*Wewenang Mutlak*), pimpinan instansi (PIC), dan nomor regulasi hukum penetapan ruas jalan.
+### D. Panel Detail Ruas (Live Inspector): Transparansi Proyek & Kepatuhan
+Panel inspektur interaktif pada peta transparansi menyajikan informasi terpadu per segmen jalan:
+- **Bukti Lapangan & Indikator AI**: Foto riil kondisi lapangan dengan indikasi tipe kerusakan dan rekomendasi prioritas pemeriksaan.
+- **Kronologi Tanggapan Pelayanan**: Pelacakan kronologis tahapan (*Laporan Masuk ➔ Verifikasi Awal ➔ Disposisi Penyelenggara ➔ Pembaruan Penanganan Fisik*) berlandaskan transparansi pelayanan publik.
+- **Informasi Paket Pengadaan**: Menampilkan nama paket pekerjaan, pagu anggaran, nilai kontrak SPK hasil lelang SiRUP/LPSE, nama penyedia jasa/kontraktor, dan persentase progres fisik percontohan.
+- **Kepastian Yuridis Penyelenggara**: Penguncian instansi penanggung jawab resmi (Kementerian PU / Pemprov / Pemkab / Pemkot), pimpinan instansi penanggung jawab, serta nomor regulasi SK penetapan status ruas jalan.
 
 ---
 
@@ -303,7 +302,7 @@ Model data dirancang dengan normalisasi relasional yang memisahkan relasi paket 
 |                      REST API & SERVERLESS ROUTES (src/app/api/)                  |
 |  - /api/roads: Standar RFC 7946 GeoJSON & metadata wewenang SIGI PU               |
 |  - /api/procurement: Sinkronisasi paket lelang LPSE & SIRUP LKPP                  |
-|  - /api/analyze-road: Endpoint serverless Google Gemini 1.5 Pro / Flash Vision    |
+|  - /api/analyze-road: Endpoint serverless Google Gemini 2.5 Flash Vision          |
 +────────────────────────────────────────┬──────────────────────────────────────────+
                                          │
                                          ▼
@@ -390,48 +389,191 @@ jagajalan/
 
 ## 10. Spesifikasi Tumpukan Teknologi (Tech Stack)
 
-- **Frontend & Serverless Framework**: Next.js 16 (App Router Architecture, React 19)
-- **Architecture Pattern**: Layered Clean Architecture (Presentation Layer ➔ Service Layer ➔ API Route Handlers ➔ Data Repositories)
-- **Styling Engine**: Tailwind CSS v4 (Sistem Desain Slate Minimalis & Safety Orange)
-- **Geospatial Engine**: Leaflet.js dan React-Leaflet (GeoJSON RFC 7946 Standard)
-- **Map Tile Provider**: OpenStreetMap Standard Light Layer (Lisensi Terbuka, Bebas Watermark)
-- **AI Computer Vision**: Google Gemini 1.5 Vision Model (Automated Distress Classification & Hazard Scoring)
-- **Data Engineering / ETL**: Python 3.12 Geodata Scripts (Ekstraksi kurva dan boundary koridor PU)
-- **Database / Cloud Sync**: Firebase Firestore & In-Memory JSON Structured Cache
-- **Iconography**: Lucide React
-- **Build Engine**: Next.js Webpack / Turbopack
+Pengembangan platform JagaJalan mengombinasikan pustaka web modern, mesin geospasial, dan kecerdasan buatan multimodal:
+
+### A. Kerangka Kerja Frontend & Antarmuka
+- **Framework Utama**: Next.js 16 (App Router Architecture, React 19)
+- **Pola Arsitektur**: *Layered Clean Architecture* (Presentation Layer ➔ Service Layer ➔ Serverless Route Handlers ➔ Data Repositories)
+- **Styling Engine**: Tailwind CSS v4 (Palet warna identitas: *Warm Paper Cream*, *Deep Slate*, dan aksen *Safety Orange*)
+- **Tipografi**: Plus Jakarta Sans (antarmuka publik) & Geist Mono (data teknis kode tiket, koordinat, dan anggaran)
+- **Ikonografi**: Lucide React
+- **Komponen Pemetaan Web**: React-Leaflet & Leaflet.js
+
+### B. Teknologi Geospasial & Pemetaan (GIS)
+- **Lapisan Peta Dasar**: OpenStreetMap Standard Light Layer (Tile Server publik, lisensi terbuka)
+- **Format Data Spasial**: GeoJSON (Standar RFC 7946)
+- **Mesin Kurva Geometri Jalan**: OSRM (*Open Source Routing Machine*) untuk pengambilan koordinat lekukan jalan asli (*road-snapped coordinates*)
+- **Live Street-Snapping**: Integrasi Overpass API (ekstraksi geometri ruas jalan aktif) dan OpenStreetMap Nominatim (geocoding & penamaan jalan lokal saat diklik)
+
+### C. Kecerdasan Buatan (AI Multimodal)
+- **Model Multimodal**: Google Gemini 2.5 Flash API (`gemini-2.5-flash` melalui Google AI for Developers)
+- **Peran Sistem**: Pendukung pemeriksaan awal foto (*multimodal initial triage*) untuk mengidentifikasi indikasi tipe kerusakan permukaan aspal dan rekomendasi prioritas pemeriksaan.
+- **Mekanisme Cadangan**: *Heuristic Fallback Engine* untuk memastikan sistem tetap responsif apabila kuota atau kunci API tidak terpasang.
+
+### D. Manajemen Data & Penyimpanan
+- **Data Repositori Master**: In-Memory Structured JSON Repositories (Data 38 Provinsi, Data Ruas Percontohan Sumatera Utara, Master Koridor Nasional & Provinsi)
+- **Penyimpanan Cloud (Opsional)**: Firebase Firestore untuk sinkronisasi aduan daring antar-perangkat secara *real-time*
+- **Skrip Rekayasa Data**: Python 3.12 (Pembersihan, validasi, dan penyesuaian kurva geospasial)
 
 ---
 
-## 11. Sumber Data Resmi dan Dasar Regulasi Hukum
+## 11. Panduan Instalasi dan Menjalankan Sistem (How to Run)
+
+Ikuti langkah-langkah berikut untuk mengunduh, mengonfigurasi, dan menjalankan platform JagaJalan di lingkungan lokal:
+
+### 1. Prasyarat Sistem
+- **Node.js**: Versi `18.17.0` atau yang lebih baru (disarankan Node.js `20.x` LTS)
+- **Manajer Paket**: `npm` (bawaan Node.js) atau `pnpm`
+- **Git**: Terpasang pada komputer Anda
+
+### 2. Kloning Repositori
+```bash
+# Kloning repositori publik JagaJalan
+git clone https://github.com/LindungiLw/jagajalan.git
+
+# Masuk ke direktori proyek
+cd jagajalan
+```
+
+### 3. Instalasi Dependensi
+```bash
+# Menginstal seluruh paket dependensi
+npm install
+```
+
+### 4. Konfigurasi Variabel Lingkungan (*Environment Variables*)
+Buat berkas `.env.local` pada akar proyek `jagajalan/` (dapat menyalin dari contoh di bawah):
+
+```env
+# Kunci API Google Gemini (Opsional - untuk live multimodal triage Gemini 2.5 Flash)
+# Jika dikosongkan, sistem otomatis menggunakan engine cerdas berbasis heuristik bawaan
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Konfigurasi Firebase (Opsional - untuk sinkronisasi cloud real-time)
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+```
+
+### 5. Menjalankan Server Pengembangan Lokal
+```bash
+npm run dev
+```
+Setelah server aktif, buka peramban (*browser*) dan akses:
+```
+http://localhost:3000
+```
+
+### 6. Membangun Bundel Produksi (*Production Build*)
+Untuk menguji performa dan kompilasi versi produksi:
+```bash
+# Membangun aplikasi produksi
+npm run build
+
+# Menjalankan server produksi
+npm run start
+```
+
+### 7. Akun Simulasi Portal Dinas (Untuk Pengujian & Penjurian)
+Untuk mencoba fitur **Portal Dinas** sebagai aparatur penanggung jawab jalan, Anda dapat masuk melalui menu navigasi **Portal Dinas** (`/portaldinas`) menggunakan akun simulasi yang telah terdaftar dalam sistem:
+
+| Peran Instansi | Identitas Petugas (NIP Simulasi) | Kata Sandi | Wilayah Kewenangan |
+| :--- | :--- | :--- | :--- |
+| **Balai Besar Pelaksanaan Jalan Nasional (BBPJN)** | `198503152010011002` (Budi Santoso, S.T.) | `admin123` | Jalan Nasional (Sumatera Utara) |
+| **Dinas PUPR Provinsi Sumatera Utara** | `197908222005021004` (Ir. Rahmat Hidayat) | `admin123` | Jalan Provinsi (Sumatera Utara) |
+| **Dinas SDABMBK Kota Medan** | `198811042012121001` (Ahmad Faisal, S.T.) | `admin123` | Jalan Kota (Kota Medan) |
+
+---
+
+## 12. Status Progres dan Rencana Pengembangan (Progress & Roadmap)
+
+Pengembangan JagaJalan telah menyelesaikan seluruh fitur inti prototipe web fungsional yang siap diuji dan dipresentasikan:
+
+### A. Matriks Kesiapan Fitur Prototipe
+
+| Modul Fitur | Status Kesiapan | Keterangan Implementasi |
+| :--- | :---: | :--- |
+| **Peta Transparansi Geospasial** | **Selesai (100%)** | Peta interaktif Leaflet.js dengan klasifikasi visual multi-kewenangan (Nasional, Provinsi, Kabupaten/Kota), detail regulasi SK, dan *zoom controller*. |
+| **Deteksi Kewenangan 4 Tingkat** | **Selesai (100%)** | Analisis spasial koordinat instan untuk mengenali status jalan di seluruh 38 provinsi di Indonesia. |
+| **Live Street-Snapping OSM** | **Selesai (100%)** | Deteksi geometri dan klasifikasi fungsi jalan secara langsung saat warga mengklik ruas jalan mana pun di peta dasar OpenStreetMap. |
+| **Data Anggaran & Audit LPSE** | **Selesai (100%)** | Komparasi pagu anggaran HPS, nilai kontrak tender, identitas penyedia jasa, efisiensi penawaran, dan *match confidence*. |
+| **Statistik Nasional 38 Provinsi** | **Selesai (100%)** | Papan skor kemantapan jalan teragregasi dari data resmi BPS (SIRUSA) dan publikasi kementerian terkait dengan filter kepulauan. |
+| **Pelaporan Kerusakan Warga** | **Selesai (100%)** | Formulir aduan publik berbasis koordinat *geotagged*, unggah foto, dan penerbitan kode tiket pelacakan unik. |
+| **Pemeriksaan Awal AI Vision** | **Selesai (100%)** | Integrasi Google Gemini 2.5 Flash untuk pengenalan tipe kerusakan tampak dan rekomendasi skor prioritas awal (*decision support*). |
+| **Pelacakan Tiket & SLA 14 Hari** | **Selesai (100%)** | Timeline kronologis transparansi tanggapan berlandaskan Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik. |
+| **Complaint Guidance & Draft Generator** | **Selesai (100%)** | Generator draf surat formal ke Ombudsman RI untuk aduan yang melewati batas waktu tanggapan resmi. |
+| **Portal Dinas (Aparatur)** | **Selesai (100%)** | Panel simulasi kerja aparatur dinas untuk verifikasi berkas, pembaruan status pengerjaan, dan pengunggahan bukti dokumentasi fisik. |
+
+### B. Tahapan Pengembangan (Alur Kerja Kompetisi)
+
+```mermaid
+flowchart LR
+    A["1. Riset & Data Gathering"] --> B["2. Ideasi & Arsitektur"]
+    B --> C["3. Desain UI/UX"]
+    C --> D["4. Validasi Konsep & Regulasi"]
+    D --> E["5. Pengembangan Prototipe"]
+```
+
+1. **Tahap 1: Riset Masalah dan Pengumpulan Data (*Research & Data Gathering*)** [SELESAI]
+   - Mengumpulkan data statistik kondisi jalan dari BPS melalui SIRUSA serta publikasi resmi Kementerian Pekerjaan Umum mencakup 38 provinsi.
+   - Mengumpulkan dokumen penetapan status jalan dan informasi lelang tender SiRUP/LPSE pada wilayah percontohan Sumatera Utara (Kota Medan dan sekitarnya).
+   - Mengkaji Laporan Tahunan Ombudsman Republik Indonesia mengenai aduan maladministrasi pelayanan publik penundaan berlarut (*undue delay*).
+2. **Tahap 2: Ideasi dan Perancangan Arsitektur Sistem (*Ideation & System Architecture*)** [SELESAI]
+   - Merancang konsep **Arsitektur Data Dua Tingkat (*Two-Tier Data Architecture*)**: Tingkat Makro (agregat nasional 38 provinsi) dan Tingkat Mikro (penelusuran mendalam wilayah percontohan).
+   - Merancang integrasi data antara ruas jalan, status kewenangan SK, informasi tender LPSE, dan laporan aduan masyarakat.
+   - Menetapkan batas waktu acuan tanggapan sesuai Pasal 44 UU 25/2009 serta posisi AI sebagai pendukung pemeriksaan awal foto (*initial triage*).
+3. **Tahap 3: Perancangan Desain UI/UX (*UI/UX Design & Information Architecture*)** [SELESAI]
+   - Menerapkan pendekatan *Content-First Design* dengan identitas visual *Warm Paper Cream* (`#FAF7F2`), *Deep Slate*, dan aksen *Safety Orange* (`#C2410C`).
+   - Menyusun tata letak responsif untuk desktop dan perangkat seluler dengan radius sudut 6px yang konsisten.
+4. **Tahap 4: Validasi Konsep dan Kelengkapan Data (*Validation*)** [SELESAI]
+   - Memvalidasi konsistensi rujukan data, nomor regulasi SK, dan data paket lelang dengan dokumen resmi LPSE/SiRUP.
+   - Menghilangkan klaim berlebihan dan memastikan batas kewenangan diposisikan sebagai alat transparansi publik, bukan pengganti saluran hukum instansi pemerintah.
+5. **Tahap 5: Pengembangan Prototipe dan Pengujian (*Prototyping & Testing*)** [SELESAI]
+   - Mengimplementasikan seluruh komponen pada Next.js 16 dan React 19.
+   - Membangun kurva jalan presisi tinggi (*road-snapped*) menggunakan OSRM dan integrasi Overpass API untuk penelusuran jalan lokal.
+   - Menguji alur pengguna dari pelaporan warga, verifikasi dinas, hingga penerbitan draf panduan Ombudsman RI.
+
+### C. Rencana Pengembangan Masa Depan (*Roadmap*)
+- **Integrasi API Nasional SP4N-LAPOR!**: Menghubungkan sistem secara langsung ke portal aduan nasional melalui kanal webhooks resmi kementerian.
+- **Automated Open Data Scraper (LPSE Inaproc)**: Sinkronisasi paket lelang secara berkala via API LKPP.
+- **Peta Partisipasi Warga Multi-Wilayah**: Memperluas cakupan penelusuran mikro ke provinsi dan kota percontohan lainnya di Indonesia.
+
+---
+
+## 13. Sumber Data Resmi dan Dasar Regulasi Hukum
 
 1. **Laporan Tahunan Ombudsman Republik Indonesia (2025/2026)**: Statistik pengaduan maladministrasi instansi pemerintah daerah, substansi perhubungan/infrastruktur, dan prevalensi penundaan berlarut (*undue delay*).
-2. **Satu Data Kementerian Pekerjaan Umum & SIGI ASTv2**: Basis data panjang jalan, tingkat kemantapan jalan nasional, dan data penanganan Inpres Jalan Daerah (IJD).
-3. **Badan Pusat Statistik (BPS)**: Statistik Transportasi Darat Indonesia dan agregat kemantapan jalan provinsi.
-4. **Portal Satu Data Jawa Barat & LPSE Jabar**: Data pengadaan paket tender pemeliharaan berkala jalan APBD/LPSE dan realisasi fisik.
-5. **Keputusan Menteri PUPR & Keputusan Kepala Daerah**: Dokumen penetapan status dan nomor kode ruas jalan.
-6. **Undang-Undang No. 2 Tahun 2022**: Perubahan Kedua atas UU No. 38/2004 tentang Jalan (penegasan tanggung jawab negara dan intervensi perbaikan jalan daerah).
-7. **Instruksi Presiden (Inpres) No. 3 Tahun 2023**: Percepatan Peningkatan Konektivitas Jalan Daerah (IJD) melalui alokasi dana fiskal APBN.
-8. **Undang-Undang No. 22 Tahun 2009 (UU LLAJ)**: Khususnya Pasal 24 mengenai kewajiban hukum penyelenggara jalan untuk segera dan patut memperbaiki jalan yang rusak.
-9. **Undang-Undang No. 25 Tahun 2009 tentang Pelayanan Publik**: Dasar penentuan batas waktu tanggapan pelayanan publik (Response SLA 14 hari kerja).
+2. **Satu Data Kementerian Pekerjaan Umum & SIGI PU**: Basis data panjang jalan, tingkat kemantapan jalan nasional, dan data penanganan Inpres Jalan Daerah (IJD).
+3. **Badan Pusat Statistik (BPS)**: Publikasi Statistik Transportasi Darat Indonesia dan data agregat kondisi jalan nasional melalui portal SIRUSA.
+4. **Layanan Pengadaan Secara Elektronik (LPSE) & SiRUP LKPP**: Rincian nama paket pekerjaan pemeliharaan jalan, pagu anggaran HPS, nilai kontrak lelang, dan pemenang tender.
+5. **Surat Keputusan Menteri PUPR & Keputusan Kepala Daerah**: Dokumen penetapan status dan nomor kode ruas jalan (SK Menteri PUPR No. 1688/2022, SK Gubernur, dan SK Walikota/Bupati).
+6. **Undang-Undang No. 2 Tahun 2022 tentang Jalan**: Perubahan Kedua atas UU No. 38/2004 tentang Jalan (penegasan tanggung jawab penyelenggara jalan dan intervensi konektivitas jalan daerah).
+7. **Instruksi Presiden (Inpres) No. 3 Tahun 2023**: Percepatan Peningkatan Konektivitas Jalan Daerah (IJD) melalui pembiayaan APBN.
+8. **Undang-Undang No. 22 Tahun 2009 tentang Lalu Lintas dan Angkutan Jalan (LLAJ)**: Khususnya Pasal 24 mengenai kewajiban hukum penyelenggara jalan untuk segera dan patut memperbaiki jalan yang rusak.
+9. **Undang-Undang No. 25 Tahun 2009 tentang Pelayanan Publik**: Khususnya Pasal 44 ayat (2) mengenai batas waktu pemberian tanggapan atas pengaduan masyarakat oleh penyelenggara pelayanan publik (14 hari kerja).
 10. **Undang-Undang No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia**: Landasan hak hukum masyarakat untuk melaporkan dugaan maladministrasi penundaan berlarut (*undue delay*).
-11. **Peraturan Menteri PANRB No. 62 Tahun 2018**: Pedoman Sistem Pengelolaan Pengaduan Pelayanan Publik Nasional (SP4N).
+11. **Undang-Undang No. 14 Tahun 2008 tentang Keterbukaan Informasi Publik (KIP)**: Hak masyarakat atas akses informasi anggaran proyek infrastruktur publik.
+12. **Peraturan Menteri PANRB No. 62 Tahun 2018**: Pedoman Sistem Pengelolaan Pengaduan Pelayanan Publik Nasional (SP4N).
 
 ---
 
-## 12. Identitas Pengembang
+## 14. Identitas Pengembang
 
 - **Nama Tim**: COMEL Team
-- **Kompetisi**: Multimedia In Action (MIA) 2026 - Web In Action (WIA)
+- **Kompetisi**: Multimedia In Action (MIA) 2026 — Cabang Lomba: Web In Action (WIA)
 - **Penyelenggara**: KSM Multimedia UPN Veteran Jakarta
+- **Tema Karya**: *Designing Digital Futures – Powering Public Transparency*
 - **Tahun**: 2026
 
 ---
 
-## 13. Lisensi (License)
+## 15. Lisensi (License)
 
 Seluruh kode sumber, basis data sampel, dan spesifikasi arsitektur proyek JagaJalan didistribusikan secara terbuka di bawah naungan **MIT License**.
 
-Hak Cipta (c) 2026 COMEL Team - Cabang Lomba Web In Action (WIA), Multimedia In Action (MIA) 2026, KSM Multimedia UPN Veteran Jakarta.
+Hak Cipta (c) 2026 COMEL Team — Cabang Lomba Web In Action (WIA), Multimedia In Action (MIA) 2026, KSM Multimedia UPN Veteran Jakarta.
 
 Teks lengkap ketentuan lisensi dapat diakses secara langsung pada berkas [LICENSE](file:///d:/Lomba/MIA/COMEL%20Team/Projects/jagajalan/LICENSE).
