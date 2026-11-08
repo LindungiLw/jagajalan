@@ -94,6 +94,8 @@ export default function MapExplorer({
   const [floatingNotice, setFloatingNotice] = useState(null);
   const [detectedPoint, setDetectedPoint] = useState(null);
   const [sigiModalOpen, setSigiModalOpen] = useState(false);
+  const [showSigiNationalWms, setShowSigiNationalWms] = useState(false);
+  const [showSigiRegionalWms, setShowSigiRegionalWms] = useState(false);
   const [mapCenter, setMapCenter] = useState([-2.5489, 118.0149]); // Center of Indonesia (Seluruh Indonesia)
   const [mapZoom, setMapZoom] = useState(5);
   const [mapInstance, setMapInstance] = useState(null);
@@ -860,6 +862,8 @@ export default function MapExplorer({
           onMapClick={handleMapClick}
           onReportAtPoint={handleOpenReportFromPoint}
           showReportsLayer={showReportsLayer}
+          showSigiNationalWms={showSigiNationalWms}
+          showSigiRegionalWms={showSigiRegionalWms}
           mapCenter={mapCenter}
           mapZoom={mapZoom}
           onMapReady={setMapInstance}
@@ -1443,11 +1447,24 @@ export default function MapExplorer({
           {/* SIGI PU & GeoAPI Live Status Pill */}
           <button
             onClick={() => setSigiModalOpen(true)}
-            title="Klik untuk melihat arsitektur koneksi API SIGI PUPR & Satu Data PU"
-            className="hidden md:flex h-9 px-3 rounded-[6px] text-xs font-bold text-slate-700 items-center gap-1.5 hover:bg-orange-50/60 hover:text-[#c2410c] transition-colors cursor-pointer font-sans shrink-0 border border-transparent hover:border-orange-200/60"
+            title="Integrasi Resmi SIGI PU ASTV2: 3.306 Ruas Jalan Nasional & WMS MapServer"
+            className={`hidden md:flex h-9 px-3 rounded-[6px] text-xs font-bold items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 border ${
+              showSigiNationalWms || showSigiRegionalWms
+                ? "bg-blue-50 text-blue-900 border-blue-300 shadow-2xs"
+                : "text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] border-transparent hover:border-orange-200/60"
+            }`}
           >
-            <Layers className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+            <Layers className={`w-3.5 h-3.5 ${showSigiNationalWms ? "text-blue-600" : "text-[#c2410c]"} shrink-0`} />
             <span>SIGI PU</span>
+            {showSigiNationalWms ? (
+              <span className="text-[9px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-blue-600 text-white font-bold">
+                3.306 WMS ON
+              </span>
+            ) : (
+              <span className="text-[9.5px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 font-semibold">
+                3.306 Ruas
+              </span>
+            )}
           </button>
         </div>
 
@@ -2095,14 +2112,100 @@ export default function MapExplorer({
                 </button>
               </div>
 
-              <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
+              <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed font-sans">
+                {/* 3.306 WMS Toggle Controls Card */}
+                <div className="p-3.5 rounded-[8px] bg-blue-50/70 border border-blue-200/90 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-xs text-blue-950 flex items-center gap-1.5">
+                        <Layers className="w-4 h-4 text-blue-700" />
+                        <span>Streaming Layer WMS Resmi Kementerian PU</span>
+                      </div>
+                      <p className="text-[11px] text-blue-800/90 mt-0.5">
+                        Aktifkan overlay peta resmi Pusdatin SIGI-PU (MapServer WMS) langsung di atas peta JagaJalan.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-1 border-t border-blue-200/60">
+                    {/* Toggle 1: 3.306 Ruas Jalan Nasional */}
+                    <div className="flex items-center justify-between p-2 rounded-[6px] bg-white border border-blue-200">
+                      <div>
+                        <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                          <span>3.306 Ruas Jalan Nasional</span>
+                          <span className="font-mono text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-800">
+                            SK 1688/2022
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          Total 47.017 KM koridor arteri primer &amp; kolektor primer-1
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const nextVal = !showSigiNationalWms;
+                          setShowSigiNationalWms(nextVal);
+                          if (nextVal) {
+                            setFloatingNotice({
+                              title: "Layer WMS SIGI PU Aktif",
+                              desc: "Menampilkan streaming 3.306 ruas Jalan Nasional (47.017 KM) dari MapServer resmi Kementerian PU.",
+                              type: "success",
+                            });
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-[5px] text-xs font-bold transition-all cursor-pointer ${
+                          showSigiNationalWms
+                            ? "bg-blue-600 text-white shadow-2xs"
+                            : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
+                        }`}
+                      >
+                        {showSigiNationalWms ? "Aktif (ON)" : "Aktifkan"}
+                      </button>
+                    </div>
+
+                    {/* Toggle 2: Jaringan Jalan Daerah */}
+                    <div className="flex items-center justify-between p-2 rounded-[6px] bg-white border border-blue-200">
+                      <div>
+                        <div className="font-bold text-slate-900 text-xs">
+                          Jaringan Jalan Daerah (Provinsi &amp; Kabupaten)
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          Layer WMS jalan daerah dari MapServer sigi.pu.go.id
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const nextVal = !showSigiRegionalWms;
+                          setShowSigiRegionalWms(nextVal);
+                          if (nextVal) {
+                            setFloatingNotice({
+                              title: "Layer Jalan Daerah Aktif",
+                              desc: "Menampilkan streaming WMS jalan daerah dari Pusdatin Kementerian PU.",
+                              type: "success",
+                            });
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-[5px] text-xs font-bold transition-all cursor-pointer ${
+                          showSigiRegionalWms
+                            ? "bg-purple-600 text-white shadow-2xs"
+                            : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
+                        }`}
+                      >
+                        {showSigiRegionalWms ? "Aktif (ON)" : "Aktifkan"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="p-3 rounded-[6px] bg-orange-50 border border-orange-200/90 text-orange-950 space-y-1 shadow-2xs">
                   <div className="font-bold text-xs flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-orange-600" />
-                    <span>Geometri Berbasis Vektor Jalan Nyata</span>
+                    <span>Makna Angka 3.306 Ruas Jalan Nasional:</span>
                   </div>
-                  <p className="text-[11px] text-orange-900">
-                    Setiap ruas jalan pada peta JagaJalan memuat <strong>100+ titik koordinat polilin</strong> yang mengikuti lengkungan aspal jalan asli berdasarkan citra satelit dan jaringan jalan nasional/daerah.
+                  <p className="text-[11px] text-orange-900 leading-relaxed">
+                    Sesuai data resmi Kementerian PU pada portal <strong>sigi.pu.go.id/astv2</strong>, angka <strong>3.306</strong> merepresentasikan seluruh nomor SK ruas Jalan Nasional di Indonesia berdasarkan <strong>Keputusan Menteri PUPR No. 1688/KPTS/M/2022</strong>. Ruas ini membentang sepanjang <strong>47.017,42 KM</strong> di 38 provinsi.
                   </p>
                 </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, Popup, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, WMSTileLayer, Marker, Polyline, Popup, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
 // Create custom milestone marker for key KM boundaries along National Highways
@@ -274,6 +274,8 @@ export default function MapInner({
   onReportAtPoint,
   onViewportChange,
   showReportsLayer = true,
+  showSigiNationalWms = false,
+  showSigiRegionalWms = false,
   mapCenter,
   mapZoom = 11.5,
   onMapReady,
@@ -319,6 +321,30 @@ export default function MapInner({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      {/* Official Pusdatin Kementerian PU (SIGI ASTV2) WMS Layer: 3.306 Ruas Jalan Nasional */}
+      {showSigiNationalWms && (
+        <WMSTileLayer
+          url="https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_nasional.map"
+          layers="jalan_nasional"
+          format="image/png"
+          transparent={true}
+          version="1.3.0"
+          opacity={0.88}
+        />
+      )}
+
+      {/* Official Pusdatin Kementerian PU (SIGI ASTV2) WMS Layer: Jaringan Jalan Daerah */}
+      {showSigiRegionalWms && (
+        <WMSTileLayer
+          url="https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_daerah.map"
+          layers="jalan_daerah"
+          format="image/png"
+          transparent={true}
+          version="1.3.0"
+          opacity={0.82}
+        />
+      )}
 
       {/* Road Segment Polylines */}
       {sortedRoads.map((road) => {
