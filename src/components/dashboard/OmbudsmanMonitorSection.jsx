@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Shield,
   FileText,
@@ -20,6 +20,8 @@ import {
   FileCheck2,
   DownloadCloud,
   FileSpreadsheet,
+  Bell,
+  BellRing,
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
@@ -27,13 +29,49 @@ export default function OmbudsmanMonitorSection({
   reports = [],
   onOpenOmbudsmanDraft,
   onSelectRoadOnMap,
+  onSubscribeTicketNotification,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL"); // "ALL" | "OVERDUE" | "DALAM_PENGERJAAN" | "SELESAI"
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "table"
   const [sortBy, setSortBy] = useState("urgency"); // "urgency" | "newest" | "hazard-desc"
   const [currentPage, setCurrentPage] = useState(1);
+  const [subscribedTickets, setSubscribedTickets] = useState([]);
   const pageSize = 6;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = window.localStorage.getItem("jagajalan_subscribed_tickets_v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) setSubscribedTickets(parsed);
+        }
+      } catch {
+        // Ignore storage errors
+      }
+    }
+  }, []);
+
+  const handleToggleTicketSubscription = (report) => {
+    const code = report?.ticketCode;
+    if (!code) return;
+    setSubscribedTickets((prev) => {
+      const exists = prev.includes(code);
+      const next = exists ? prev.filter((t) => t !== code) : [code, ...prev];
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem("jagajalan_subscribed_tickets_v1", JSON.stringify(next));
+        } catch {
+          // Ignore storage errors
+        }
+      }
+      if (!exists && onSubscribeTicketNotification) {
+        onSubscribeTicketNotification(report);
+      }
+      return next;
+    });
+  };
 
   // Counts
   const counts = useMemo(() => {
@@ -656,14 +694,39 @@ export default function OmbudsmanMonitorSection({
                   </div>
 
                   {/* Card Action Footer with Button-in-Button */}
-                  <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
-                    <button
-                      onClick={() => onSelectRoadOnMap && onSelectRoadOnMap(report.roadSegmentId)}
-                      className="text-slate-600 hover:text-slate-900 font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors font-sans"
-                    >
-                      <span>Cek di Peta GIS</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-                    </button>
+                  <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-100 flex-wrap">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => onSelectRoadOnMap && onSelectRoadOnMap(report.roadSegmentId)}
+                        className="text-slate-600 hover:text-slate-900 font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors font-sans"
+                      >
+                        <span>Cek di Peta GIS</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleToggleTicketSubscription(report)}
+                        title="Aktifkan/nonaktifkan notifikasi otomatis perubahan status tiket ini"
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-[5px] text-[11px] font-semibold transition-colors cursor-pointer ${
+                          subscribedTickets.includes(report.ticketCode)
+                            ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80 font-bold"
+                            : "bg-slate-50 hover:bg-slate-100 text-slate-600 ring-1 ring-slate-200/70"
+                        }`}
+                      >
+                        {subscribedTickets.includes(report.ticketCode) ? (
+                          <>
+                            <BellRing className="w-3 h-3 text-[#c2410c]" />
+                            <span>Notifikasi Aktif</span>
+                          </>
+                        ) : (
+                          <>
+                            <Bell className="w-3 h-3 text-slate-500" />
+                            <span>Pantau Notifikasi</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
 
                     {isOverdue ? (
                       <button

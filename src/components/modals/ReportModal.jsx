@@ -15,6 +15,7 @@ import {
   Check,
   Crosshair,
   Navigation,
+  BellRing,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
@@ -79,6 +80,8 @@ export default function ReportModal({
   const [isLocatingGps, setIsLocatingGps] = useState(false);
   const [gpsStatusMsg, setGpsStatusMsg] = useState("");
   const [reporterName, setReporterName] = useState("");
+  const [notificationContact, setNotificationContact] = useState("");
+  const [notifyOnUpdate, setNotifyOnUpdate] = useState(true);
   const [addressDetail, setAddressDetail] = useState("");
   const [photoPreview, setPhotoPreview] = useState(SAMPLE_PHOTOS[0].url);
   const [activePresetId, setActivePresetId] = useState(SAMPLE_PHOTOS[0].id);
@@ -356,6 +359,8 @@ export default function ReportModal({
         : "Pemeriksaan awal foto: Kerusakan perkerasan aspal terindikasi membahayakan keselamatan pengguna jalan.",
       photoUrl: photoPreview,
       reporterName: maskedName,
+      notificationContact: notificationContact.trim(),
+      notifyOnUpdate,
       reportDate: new Date().toISOString(),
       targetResponseDeadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
       status: "MENUNGGU_VERIFIKASI",
@@ -404,6 +409,17 @@ export default function ReportModal({
           ...existing.filter((r) => r.id !== persistedReport.id),
         ].slice(0, 50);
         window.localStorage.setItem("jagajalan_custom_reports_v1", JSON.stringify(updated));
+
+        if (notifyOnUpdate) {
+          const subRaw = window.localStorage.getItem("jagajalan_subscribed_tickets_v1");
+          const subs = subRaw ? JSON.parse(subRaw) : [];
+          if (Array.isArray(subs) && !subs.includes(persistedReport.ticketCode)) {
+            window.localStorage.setItem(
+              "jagajalan_subscribed_tickets_v1",
+              JSON.stringify([persistedReport.ticketCode, ...subs])
+            );
+          }
+        }
 
         if ("BroadcastChannel" in window) {
           const bc = new BroadcastChannel("jagajalan_live_reports");
@@ -560,6 +576,19 @@ export default function ReportModal({
                       <span className="text-slate-500">Instansi Disposisi:</span>
                       <span className="font-semibold text-emerald-700 truncate max-w-[260px]">
                         {currentRoad.authorityLabel}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Notifikasi Otomatis:</span>
+                      <span className="font-semibold text-[#c2410c] inline-flex items-center gap-1">
+                        <BellRing className="w-3 h-3" />
+                        <span>
+                          {notifyOnUpdate
+                            ? notificationContact.trim()
+                              ? `Aktif (${notificationContact.trim()})`
+                              : "Aktif di Pusat Notifikasi"
+                            : "Nonaktif"}
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -771,6 +800,30 @@ export default function ReportModal({
                         <span className="text-[10px] text-slate-400 block">
                           Privasi terjamin: Identitas pelapor disamarkan otomatis pada peta publik.
                         </span>
+                      </div>
+
+                      <div className="p-3 rounded-[6px] bg-orange-50/50 ring-1 ring-orange-200/60 space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <label className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
+                            <BellRing className="w-3.5 h-3.5 text-[#c2410c]" />
+                            <span>Notifikasi Otomatis Status Laporan</span>
+                          </label>
+                          <input
+                            type="checkbox"
+                            checked={notifyOnUpdate}
+                            onChange={(e) => setNotifyOnUpdate(e.target.checked)}
+                            className="accent-[#c2410c] w-3.5 h-3.5 cursor-pointer"
+                          />
+                        </div>
+                        {notifyOnUpdate && (
+                          <input
+                            type="text"
+                            value={notificationContact}
+                            onChange={(e) => setNotificationContact(e.target.value)}
+                            placeholder="Opsional: WhatsApp / Email untuk pengingat status tiket"
+                            className="w-full px-3 py-1.5 rounded-[5px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none ring-1 ring-orange-200/70 focus:ring-orange-500/40"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

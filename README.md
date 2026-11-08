@@ -508,6 +508,8 @@ Pengembangan JagaJalan telah menyelesaikan seluruh fitur inti prototipe web fung
 | **Pelacakan Tiket & SLA 14 Hari** | **Selesai (100%)** | Timeline kronologis transparansi tanggapan berlandaskan Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik. |
 | **Complaint Guidance & Draft Generator** | **Selesai (100%)** | Generator draf surat formal ke Ombudsman RI untuk aduan yang melewati batas waktu tanggapan resmi. |
 | **Portal Dinas (Aparatur)** | **Selesai (100%)** | Panel simulasi kerja aparatur dinas untuk verifikasi berkas, pembaruan status pengerjaan, dan pengunggahan bukti dokumentasi fisik. |
+| **Optimasi Skalabilitas Basis Data** | **Selesai (100%)** | *In-Memory Multi-Index Engine* (`O(1)` partisi kode tiket, wewenang, & ruas), *Spatial Grid & Bounding-Box Indexing* (`?bbox=`), serta *Pagination* (`?page=&limit=`) pada `/api/reports` dan `/api/roads`. |
+| **Sistem Notifikasi Otomatis Status Laporan** | **Selesai (100%)** | *Pusat Notifikasi Status Laporan* (`Navbar`), *Live Notification Toast*, langganan pengingat status per tiket, serta pemicu otomatis saat tiket terbit atau diperbarui dinas. |
 
 ### B. Tahapan Pengembangan (Alur Kerja Kompetisi)
 

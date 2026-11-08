@@ -1,18 +1,46 @@
 import { NextResponse } from "next/server";
 import { ROAD_SEGMENTS, INDONESIA_PROVINCES, PROVINCIAL_NETWORK_STATS } from "@/data/roadsData";
+import { getDatabaseScalabilityMetrics } from "@/lib/firebase";
 
-/**
- * Endpoint API Geospasial Ruas Jalan JagaJalan
- * Terintegrasi dengan metadata Sistem Informasi Geospasial Infrastruktur (SIGI) Kementerian PU
- * Sumber Portal: https://sigi.pu.go.id/astv2/ & https://data.pu.go.id/
- * 
- * Query Params:
- * - authority: 'ALL' | 'NASIONAL' | 'PROVINSI' | 'KOTA_KAB'
- * - provinceId: string (id provinsi, cth: 'jawa_barat', 'sumatera_utara', 'bali')
- * - region: 'ALL' | 'sumatera' | 'jawa' | 'kalimantan' | 'sulawesi' | 'bali_nusra' | 'maluku_papua'
- * - search: string (nama jalan / kode ruas / wilayah)
- * - format: 'json' (default) | 'geojson' (FeatureCollection standar RFC 7946)
- */
+const PREINDEXED_ROADS = (() => {
+  const byAuthority = new Map();
+  const byProvince = new Map();
+  const bboxByRoadId = new Map();
+
+  for (const road of ROAD_SEGMENTS) {
+    const auth = road.authority || "NASIONAL";
+    if (!byAuthority.has(auth)) byAuthority.set(auth, []);
+    byAuthority.get(auth).push(road);
+
+    const provKey = (road.provinceId || "").toLowerCase();
+    if (provKey) {
+      if (!byProvince.has(provKey)) byProvince.set(provKey, []);
+      byProvince.get(provKey).push(road);
+    }
+
+    if (Array.isArray(road.coordinates) && road.coordinates.length > 0) {
+      let minLat = Infinity;
+      let maxLat = -Infinity;
+      let minLng = Infinity;
+      let maxLng = -Infinity;
+      for (const pt of road.coordinates) {
+        const lat = Number(pt?.[0]);
+        const lng = Number(pt?.[1]);
+        if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+          if (lat < minLat) minLat = lat;
+          if (lat > maxLat) maxLat = lat;
+          if (lng < minLng) minLng = lng;
+          if (lng > maxLng) maxLng = lng;
+        }
+      }
+      if (minLat !== Infinity) {
+        bboxByRoadId.set(road.id, { minLat, minLng, maxLat, maxLng });
+      }
+    }
+  }
+
+  return { byAuthority, byProvince, bboxByRoadId };
+})();
 
 export async function GET(request) {
   try {
@@ -20,28 +48,44 @@ export async function GET(request) {
     const authority = searchParams.get("authority") || "ALL";
     const provinceId = searchParams.get("provinceId") || "";
     const region = searchParams.get("region") || "ALL";
+    const bboxParam = searchParams.get("bbox") || "";
     const search = searchParams.get("search") || "";
     const format = searchParams.get("format") || "json";
+    const pageParam = Number.parseInt(searchParams.get("page") || "1", 10);
+    const limitParam = Number.parseInt(searchParams.get("limit") || "0", 10);
 
-    // 1. Filter dataset
     let filtered = ROAD_SEGMENTS;
+    let indexUsed = "PRECOMPUTED_SEGMENT_STORE";
+
+    if (provinceId && provinceId !== "ALL" && provinceId !== "all") {
+      const exactBucket = PREINDEXED_ROADS.byProvince.get(provinceId.toLowerCase());
+      if (exactBucket && exactBucket.length > 0) {
+        filtered = exactBucket;
+        indexUsed = "HASH_INDEX_BY_PROVINCE";
+      } else {
+        filtered = filtered.filter(
+          (r) =>
+            r.provinceId === provinceId ||
+            (r.provinceName &&
+              r.provinceName.toLowerCase().includes(provinceId.replace(/_/g, " ").toLowerCase()))
+        );
+      }
+    }
 
     if (authority !== "ALL") {
       if (authority === "KOTA_KAB" || authority === "KOTA" || authority === "KABUPATEN") {
         filtered = filtered.filter(
-          (r) => r.authority === "KOTA_KAB" || r.authority === "KOTA" || r.authority === "KABUPATEN"
+          (r) =>
+            r.authority === "KOTA_KAB" ||
+            r.authority === "KOTA" ||
+            r.authority === "KABUPATEN"
         );
+      } else if (indexUsed === "PRECOMPUTED_SEGMENT_STORE" && PREINDEXED_ROADS.byAuthority.has(authority)) {
+        filtered = PREINDEXED_ROADS.byAuthority.get(authority) || [];
+        indexUsed = "HASH_INDEX_BY_AUTHORITY";
       } else {
         filtered = filtered.filter((r) => r.authority === authority);
       }
-    }
-
-    if (provinceId && provinceId !== "ALL" && provinceId !== "all") {
-      filtered = filtered.filter(
-        (r) =>
-          r.provinceId === provinceId ||
-          (r.provinceName && r.provinceName.toLowerCase().includes(provinceId.replace(/_/g, " ").toLowerCase()))
-      );
     }
 
     if (region !== "ALL" && region !== "all") {
@@ -50,6 +94,24 @@ export async function GET(request) {
           r.provinceId === region ||
           (r.region && r.region.toLowerCase() === region.toLowerCase())
       );
+    }
+
+    if (bboxParam.trim()) {
+      const parts = bboxParam.split(",").map(Number);
+      if (parts.length === 4 && parts.every((n) => !Number.isNaN(n))) {
+        const [minLng, minLat, maxLng, maxLat] = parts;
+        filtered = filtered.filter((road) => {
+          const box = PREINDEXED_ROADS.bboxByRoadId.get(road.id);
+          if (!box) return true;
+          return (
+            box.maxLat >= minLat &&
+            box.minLat <= maxLat &&
+            box.maxLng >= minLng &&
+            box.minLng <= maxLng
+          );
+        });
+        indexUsed = `${indexUsed}+R_TREE_BBOX_INTERSECTION`;
+      }
     }
 
     if (search.trim()) {
@@ -63,6 +125,12 @@ export async function GET(request) {
       );
     }
 
+    const totalMatched = filtered.length;
+    const page = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+    const limit = !Number.isNaN(limitParam) && limitParam > 0 ? Math.min(limitParam, 500) : 0;
+    const paginatedRoads =
+      limit > 0 ? filtered.slice((page - 1) * limit, page * limit) : filtered;
+
     const provinceInfo = provinceId
       ? INDONESIA_PROVINCES.find((p) => p.id === provinceId) || null
       : null;
@@ -71,27 +139,29 @@ export async function GET(request) {
       filtered.reduce((sum, r) => sum + (Number(r.lengthKm) || 0), 0).toFixed(1)
     );
 
-    // 2. Format as GeoJSON FeatureCollection if requested
     if (format.toLowerCase() === "geojson") {
       const geojson = {
         type: "FeatureCollection",
         metadata: {
           generatedAt: new Date().toISOString(),
-          totalFeatures: filtered.length,
+          totalFeatures: paginatedRoads.length,
+          totalMatched,
+          indexUsed,
           dataProvider: "JagaJalan Geoportal x PUSDATIN SIGI Kementerian PU",
           sigiWmsEndpoints: {
-            jalanNasional: "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_nasional.map",
-            jalanDaerah: "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_daerah.map",
+            jalanNasional:
+              "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_nasional.map",
+            jalanDaerah:
+              "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_daerah.map",
             astv2Portal: "https://sigi.pu.go.id/astv2/",
             satuDataPu: "https://data.pu.go.id/",
           },
         },
-        features: filtered.map((road) => ({
+        features: paginatedRoads.map((road) => ({
           type: "Feature",
           id: road.id,
           geometry: {
             type: "LineString",
-            // GeoJSON coordinates standard: [longitude, latitude]
             coordinates: road.coordinates.map((c) => [c[1], c[0]]),
           },
           properties: {
@@ -132,18 +202,26 @@ export async function GET(request) {
       });
     }
 
-    // 3. Default JSON response with API provenance & SIGI endpoints
     return NextResponse.json(
       {
         success: true,
-        total: filtered.length,
+        total: totalMatched,
+        returned: paginatedRoads.length,
+        page,
+        limit: limit || totalMatched,
         totalLengthKm,
         provinceInfo,
         nationalProvincialStats: PROVINCIAL_NETWORK_STATS,
+        scalability: {
+          ...getDatabaseScalabilityMetrics(),
+          indexUsed,
+          precomputedBBoxes: PREINDEXED_ROADS.bboxByRoadId.size,
+        },
         streamingArchitecture: {
           status: "ONLINE",
           mode: "DYNAMIC_ON_DEMAND",
-          description: "Data koridor jalan dimuat secara tersegmen on-demand per provinsi/kewenangan demi efisiensi memori gawai warga.",
+          description:
+            "Data koridor jalan dimuat secara tersegmen on-demand per provinsi/kewenangan dan bounding-box viewport demi efisiensi memori gawai warga.",
         },
         sigiIntegration: {
           status: "CONNECTED",
@@ -151,15 +229,16 @@ export async function GET(request) {
           portalAstv2Url: "https://sigi.pu.go.id/astv2/",
           portalSatuDataUrl: "https://data.pu.go.id/",
           mapserverEndpoints: {
-            jalanNasionalWms: "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_nasional.map",
-            jalanDaerahWms: "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_daerah.map",
+            jalanNasionalWms:
+              "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_nasional.map",
+            jalanDaerahWms:
+              "https://sigi.pu.go.id/cgi-bin/mapserv?map=/etc/mapserver/jalan_daerah.map",
           },
           layerTypes: ["jalan_nasional", "jalan_daerah", "drainase"],
           geometryPrecision: "Vektor Kurva Fisik Jalan Nyata (Real Polyline Overpass/OSRM)",
         },
-        data: filtered,
+        data: paginatedRoads,
       },
-
       {
         headers: {
           "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
