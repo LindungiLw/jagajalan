@@ -57,9 +57,6 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Dari Foto Lapangan hingga Tindak Lanjut Dinas
               </h2>
-              <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans">
-                Setiap laporan yang masuk langsung dicocokkan dengan titik koordinat SK jalan, data kontrak pemeliharaan LPSE, serta batas waktu tanggapan dinas sesuai UU Pelayanan Publik.
-              </p>
             </div>
 
             {/* Right Header Actions: View Toggle + CTA */}

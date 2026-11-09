@@ -61,9 +61,6 @@ export default function LegalBasisSection({ onNavigateTab }) {
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Landasan Hukum Keterbukaan &amp; Penanganan Jalan
               </h2>
-              <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed font-sans">
-                Standar kepastian batas waktu respons dan audit lelang pengadaan mengacu langsung pada regulasi resmi Republik Indonesia.
-              </p>
             </div>
 
             <div className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 shrink-0 self-start sm:self-auto font-sans">
