@@ -25,6 +25,19 @@ import { INITIAL_REPORTS } from "@/data/reportsData";
 import { ANNUAL_HISTORICAL_DATA, NATIONAL_STATS } from "@/data/provincesData";
 import RoadDetailModal from "@/components/modals/RoadDetailModal";
 
+function getPaginationItems(current, total) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (current <= 3) {
+    return [1, 2, 3, 4, "...", total];
+  }
+  if (current >= total - 2) {
+    return [1, "...", total - 3, total - 2, total - 1, total];
+  }
+  return [1, "...", current - 1, current, current + 1, "...", total];
+}
+
 export default function HeroSection({
   roads = ROAD_SEGMENTS,
   reports = INITIAL_REPORTS,
@@ -1720,9 +1733,6 @@ export default function HeroSection({
                 <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                   Daftar Ruas Jalan, Wewenang Dinas &amp; Kontrak LPSE
                 </h2>
-                <p className="text-xs text-slate-500 font-sans leading-relaxed">
-                  Periksa instansi penanggung jawab setiap ruas jalan beserta nilai pagu, kontrak pemenang tender, dan status tanggapan aduan lapangan.
-                </p>
               </div>
 
               {/* Island Button-in-Button CTA */}
@@ -1744,28 +1754,23 @@ export default function HeroSection({
               {/* Filter Bar */}
               <div className="flex items-center gap-1 flex-wrap bg-slate-100/80 p-1 rounded-[6px] text-xs font-sans ring-1 ring-orange-200/40">
                 {[
-                  { id: "ALL", label: "Semua Ruas", count: roads.length },
-                  { id: "NASIONAL", label: "Jalan Nasional", count: roads.filter((r) => r.authority === "NASIONAL").length },
-                  { id: "PROVINSI", label: "Jalan Provinsi", count: roads.filter((r) => r.authority === "PROVINSI").length },
-                  { id: "KOTA", label: "Jalan Kota", count: roads.filter((r) => r.authority === "KOTA").length },
-                  { id: "KABUPATEN", label: "Jalan Kabupaten", count: roads.filter((r) => r.authority === "KABUPATEN").length },
-                  { id: "SUMUT", label: "Pilot Sumut", count: roads.filter((r) => r.district?.includes("Medan") || r.district?.includes("Simalungun") || r.district?.includes("Karo") || r.district?.includes("Asahan") || r.code?.includes("SMT")).length },
+                  { id: "ALL", label: "Semua Ruas" },
+                  { id: "NASIONAL", label: "Jalan Nasional" },
+                  { id: "PROVINSI", label: "Jalan Provinsi" },
+                  { id: "KOTA", label: "Jalan Kota" },
+                  { id: "KABUPATEN", label: "Jalan Kabupaten" },
+                  { id: "SUMUT", label: "Pilot Sumut" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => handleTableFilterChange(tab.id)}
-                    className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                    className={`px-3 py-1.5 rounded-[5px] transition-all cursor-pointer whitespace-nowrap text-xs ${
                       tableFilter === tab.id
                         ? "bg-[#c2410c] text-white font-bold shadow-2xs"
                         : "text-slate-600 hover:text-slate-900 font-medium hover:bg-white/60"
                     }`}
                   >
                     <span>{tab.label}</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-[4px] font-semibold tabular-nums ${
-                      tableFilter === tab.id ? "bg-white/25 text-white" : "bg-slate-200/60 text-slate-500"
-                    }`}>
-                      {tab.count}
-                    </span>
                   </button>
                 ))}
               </div>
@@ -1918,28 +1923,28 @@ export default function HeroSection({
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 text-xs text-slate-500 font-sans border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3.5 text-xs text-slate-500 font-sans border-t border-slate-100">
               {/* Counter */}
-              <div>
+              <div className="text-slate-500">
                 Menampilkan{" "}
-                <strong className="text-slate-900 font-semibold tabular-nums">
+                <span className="text-slate-900 font-semibold tabular-nums">
                   {processedTableRoads.length === 0 ? 0 : (tablePage - 1) * (tablePageSize === "ALL" ? processedTableRoads.length : tablePageSize) + 1}
-                </strong>
-                {" - "}
-                <strong className="text-slate-900 font-semibold tabular-nums">
+                </span>
+                {" – "}
+                <span className="text-slate-900 font-semibold tabular-nums">
                   {tablePageSize === "ALL" ? processedTableRoads.length : Math.min(tablePage * tablePageSize, processedTableRoads.length)}
-                </strong>
+                </span>
                 {" dari "}
-                <strong className="text-slate-900 font-semibold tabular-nums">
+                <span className="text-slate-900 font-semibold tabular-nums">
                   {processedTableRoads.length}
-                </strong>{" "}
+                </span>{" "}
                 ruas
               </div>
 
               {/* Pagination Buttons & Page Size Selector */}
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap justify-between sm:justify-end">
                 {/* Page size toggle */}
-                <div className="flex items-center gap-1 text-[11px] text-slate-400 mr-2">
+                <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
                   <span>Per hal:</span>
                   {[6, 12, "ALL"].map((size) => (
                     <button
@@ -1948,7 +1953,7 @@ export default function HeroSection({
                         setTablePageSize(size);
                         setTablePage(1);
                       }}
-                      className={`px-2 py-0.5 rounded-[5px] cursor-pointer font-bold transition-colors ${
+                      className={`px-2 py-0.5 rounded-[4px] cursor-pointer font-bold transition-colors ${
                         tablePageSize === size
                           ? "bg-[#c2410c] text-white shadow-2xs"
                           : "bg-slate-100 hover:bg-slate-200/70 text-slate-600"
@@ -1959,38 +1964,52 @@ export default function HeroSection({
                   ))}
                 </div>
 
+                {tablePageSize !== "ALL" && totalTablePages > 1 && (
+                  <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+                )}
+
                 {/* Prev & Next */}
                 {tablePageSize !== "ALL" && totalTablePages > 1 && (
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => setTablePage((p) => Math.max(1, p - 1))}
                       disabled={tablePage === 1}
-                      className="px-3 py-1 rounded-[6px] bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-semibold cursor-pointer transition-colors"
+                      className="h-7 px-2.5 rounded-[5px] bg-slate-100 hover:bg-slate-200/70 disabled:opacity-30 disabled:pointer-events-none text-slate-700 font-semibold text-xs cursor-pointer transition-colors inline-flex items-center gap-1"
+                      title="Halaman Sebelumnya"
                     >
-                      Sebelumnya
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Sebelumnya</span>
                     </button>
 
-                    {/* Page numbers */}
-                    {Array.from({ length: totalTablePages }, (_, i) => i + 1).map((num) => (
-                      <button
-                        key={num}
-                        onClick={() => setTablePage(num)}
-                        className={`w-7 h-7 rounded-[6px] text-xs font-bold cursor-pointer transition-colors tabular-nums ${
-                          tablePage === num
-                            ? "bg-[#c2410c] text-white"
-                            : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
-                        }`}
-                      >
-                        {num}
-                      </button>
-                    ))}
+                    {/* Page numbers with ellipsis */}
+                    {getPaginationItems(tablePage, totalTablePages).map((item, idx) =>
+                      item === "..." ? (
+                        <span key={`dots-${idx}`} className="w-6 text-center text-slate-400 font-bold select-none text-xs">
+                          ...
+                        </span>
+                      ) : (
+                        <button
+                          key={item}
+                          onClick={() => setTablePage(item)}
+                          className={`w-7 h-7 rounded-[5px] text-xs font-bold cursor-pointer transition-colors tabular-nums ${
+                            tablePage === item
+                              ? "bg-[#c2410c] text-white shadow-2xs"
+                              : "bg-slate-100 hover:bg-slate-200/70 text-slate-700"
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      )
+                    )}
 
                     <button
                       onClick={() => setTablePage((p) => Math.min(totalTablePages, p + 1))}
                       disabled={tablePage === totalTablePages}
-                      className="px-3 py-1 rounded-[6px] bg-slate-100 hover:bg-slate-200/70 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-semibold cursor-pointer transition-colors"
+                      className="h-7 px-2.5 rounded-[5px] bg-slate-100 hover:bg-slate-200/70 disabled:opacity-30 disabled:pointer-events-none text-slate-700 font-semibold text-xs cursor-pointer transition-colors inline-flex items-center gap-1"
+                      title="Halaman Berikutnya"
                     >
-                      Berikutnya
+                      <span className="hidden sm:inline">Berikutnya</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 )}

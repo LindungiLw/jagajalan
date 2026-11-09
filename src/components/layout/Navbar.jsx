@@ -126,7 +126,11 @@ export default function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none">
+    <header
+      className={`z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none transition-all ${
+        activeTab === "peta" ? "absolute top-0 inset-x-0" : "sticky top-0"
+      }`}
+    >
       <div className="w-full max-w-4xl mx-auto pointer-events-auto relative">
         <div className="flex items-center justify-between h-13 px-4 sm:px-5 rounded-full bg-white/95 backdrop-blur-md border border-[#E6DFD5] ring-1 ring-orange-200/40 shadow-[0_6px_28px_-6px_rgba(28,25,23,0.08)]">
           {/* Brand Identity */}

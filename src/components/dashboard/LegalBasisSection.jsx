@@ -58,9 +58,6 @@ export default function LegalBasisSection({ onNavigateTab }) {
           {/* Header: Clean without boxed eyebrow */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-100 pb-4">
             <div className="space-y-1 max-w-2xl">
-              <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
-                Dasar Regulasi
-              </p>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Landasan Hukum Keterbukaan &amp; Penanganan Jalan
               </h2>

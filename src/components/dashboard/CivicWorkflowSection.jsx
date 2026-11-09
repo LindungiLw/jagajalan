@@ -54,9 +54,6 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
           {/* Header with Eyebrow, View Switcher & Action CTA */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="space-y-1.5 max-w-2xl">
-              <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
-                Alur Kerja Sistem
-              </p>
               <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                 Dari Foto Lapangan hingga Tindak Lanjut Dinas
               </h2>

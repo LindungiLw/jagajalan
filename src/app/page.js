@@ -559,7 +559,7 @@ export default function Home() {
 
       <main
         className={`relative z-10 flex-1 flex flex-col ${
-          activeTab === "peta" ? "min-h-0 overflow-hidden" : ""
+          activeTab === "peta" ? "h-full min-h-0 overflow-hidden" : ""
         }`}
       >
         {activeTab === "beranda" && (

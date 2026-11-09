@@ -883,10 +883,10 @@ export default function MapExplorer({
         />
       )}
 
-      {/* 2. Top-Left Unified GIS Command Toolbar */}
-      <div className="absolute top-3 left-3 z-[500] flex flex-col gap-1.5 max-w-[calc(100vw-24px)] pointer-events-auto font-sans">
-        {/* Main Floating Control Bar */}
-        <div className="w-fit max-w-full flex items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-md rounded-[8px] shadow-md border border-slate-200/90">
+      {/* 2. Top-Left Unified GIS Command Toolbar (Compact 2-Tier Modular HUD) */}
+      <div className="absolute top-18 sm:top-20 left-3 sm:left-4 z-[450] flex flex-col gap-2 max-w-[calc(100vw-24px)] pointer-events-auto font-sans">
+        {/* Tier 1: Search & Lokasi Utama (Scope & Search) */}
+        <div className="w-fit max-w-full flex items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-md rounded-[10px] shadow-md border border-slate-200/90">
           {/* Interactive Region & Province Dropdown */}
           <div className="relative inline-block font-sans shrink-0">
             <button
@@ -1048,6 +1048,26 @@ export default function MapExplorer({
 
           <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
 
+          {/* Interactive Pin-to-Report GIS Button */}
+          <button
+            type="button"
+            onClick={() => setPinReportMode(!pinReportMode)}
+            title="Klik titik jalan mana pun di peta untuk langsung melaporkan kerusakan beserta koordinat GIS"
+            className={`h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 ${
+              pinReportMode
+                ? "bg-[#c2410c] text-white shadow-sm ring-2 ring-orange-300"
+                : "bg-orange-50 hover:bg-orange-100 text-[#c2410c] border border-orange-200/80"
+            }`}
+          >
+            <Crosshair className="w-3.5 h-3.5 shrink-0" />
+            <span>
+              {pinReportMode ? "Klik Titik..." : "Pin & Lapor"}
+            </span>
+          </button>
+        </div>
+
+        {/* Tier 2: Filter & Layer Chips (Secondary Quick Filter Row) */}
+        <div className="w-fit max-w-[calc(100vw-32px)] flex items-center gap-1.5 p-1 bg-white/90 backdrop-blur-md rounded-[8px] shadow-sm border border-slate-200/80 overflow-x-auto no-scrollbar">
           {/* Status / Wewenang Jalan Filter Dropdown */}
           <div className="relative inline-block font-sans shrink-0">
             <button
@@ -1056,7 +1076,7 @@ export default function MapExplorer({
                 setHighlightDropdownOpen(false);
                 setRegionDropdownOpen(false);
               }}
-              className={`h-9 px-3 rounded-[6px] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
+              className={`h-8 px-2.5 rounded-[5px] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
                 authorityFilter !== "ALL"
                   ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80 font-bold"
                   : "text-slate-700 hover:bg-slate-100/80"
@@ -1186,7 +1206,7 @@ export default function MapExplorer({
                 setStatusDropdownOpen(false);
                 setRegionDropdownOpen(false);
               }}
-              className={`h-9 px-3 rounded-[6px] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
+              className={`h-8 px-2.5 rounded-[5px] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
                 highlightFilter !== "ALL"
                   ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80 font-bold"
                   : "text-slate-700 hover:bg-slate-100/80"
@@ -1278,14 +1298,14 @@ export default function MapExplorer({
                 setSearchQuery("");
               }}
               title="Reset Semua Filter"
-              className="h-9 px-2.5 rounded-[6px] text-xs font-bold text-orange-700 hover:text-orange-950 bg-orange-50/80 hover:bg-orange-100 border border-orange-200/80 transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 font-sans"
+              className="h-8 px-2.5 rounded-[5px] text-xs font-bold text-orange-700 hover:text-orange-950 bg-orange-50/80 hover:bg-orange-100 border border-orange-200/80 transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 font-sans"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span className="hidden lg:inline">Reset</span>
             </button>
           )}
 
-          <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
+          <div className="w-px h-3.5 bg-slate-200/90 hidden sm:block shrink-0" />
 
           {/* Real-Time Citizen Reports GIS Feed & Layer Control */}
           <div className="relative inline-block font-sans shrink-0">
@@ -1297,7 +1317,7 @@ export default function MapExplorer({
                 setHighlightDropdownOpen(false);
               }}
               title="Daftar & Layer Laporan Warga Real-Time (GIS)"
-              className={`h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
+              className={`h-8 px-2.5 rounded-[5px] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
                 reportsFeedOpen
                   ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80"
                   : "text-slate-700 hover:bg-slate-100/80"
@@ -1411,58 +1431,41 @@ export default function MapExplorer({
             )}
           </div>
 
-          {/* Interactive Pin-to-Report GIS Button */}
-          <button
-            type="button"
-            onClick={() => setPinReportMode(!pinReportMode)}
-            title="Klik titik jalan mana pun di peta untuk langsung melaporkan kerusakan beserta koordinat GIS"
-            className={`h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 ${
-              pinReportMode
-                ? "bg-[#c2410c] text-white shadow-sm ring-2 ring-orange-300"
-                : "bg-orange-50 hover:bg-orange-100 text-[#c2410c] border border-orange-200/80"
-            }`}
-          >
-            <Crosshair className="w-3.5 h-3.5 shrink-0" />
-            <span className="hidden md:inline">
-              {pinReportMode ? "Klik Titik Jalan..." : "Pin & Lapor"}
-            </span>
-          </button>
-
           {/* Live OSM Viewport Street Scanner for any City / Village */}
           <button
             type="button"
             onClick={handleScanViewportRoads}
             disabled={isScanningViewport}
             title="Pindai dan petakan seluruh ruas jalan lokal (Kota, Kabupaten, & Desa) di area tampilan peta saat ini"
-            className="h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200/80 disabled:opacity-60"
+            className="h-8 px-2.5 rounded-[5px] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 bg-slate-50 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border border-slate-200/70 hover:border-amber-200/80 disabled:opacity-60"
           >
             <Activity className={`w-3.5 h-3.5 text-amber-700 shrink-0 ${isScanningViewport ? "animate-spin" : ""}`} />
-            <span className="hidden lg:inline">
-              {isScanningViewport ? "Memindai..." : "Pindai Jalan Area"}
+            <span className="hidden sm:inline">
+              {isScanningViewport ? "Memindai..." : "Pindai Area"}
             </span>
           </button>
 
-          <div className="w-px h-4 bg-slate-200/90 hidden md:block shrink-0" />
+          <div className="w-px h-3.5 bg-slate-200/90 hidden sm:block shrink-0" />
 
           {/* SIGI PU & GeoAPI Live Status Pill */}
           <button
             onClick={() => setSigiModalOpen(true)}
             title="Integrasi Resmi SIGI PU ASTV2: 3.306 Ruas Jalan Nasional & WMS MapServer"
-            className={`hidden md:flex h-9 px-3 rounded-[6px] text-xs font-bold items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 border ${
+            className={`h-8 px-2.5 rounded-[5px] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 border ${
               showSigiNationalWms || showSigiRegionalWms
-                ? "bg-blue-50 text-blue-900 border-blue-300 shadow-2xs"
-                : "text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] border-transparent hover:border-orange-200/60"
+                ? "bg-blue-50 text-blue-900 border-blue-300 shadow-2xs font-bold"
+                : "text-slate-700 hover:bg-orange-50/60 hover:text-[#c2410c] border-slate-200/70 hover:border-orange-200/60"
             }`}
           >
             <Layers className={`w-3.5 h-3.5 ${showSigiNationalWms ? "text-blue-600" : "text-[#c2410c]"} shrink-0`} />
             <span>SIGI PU</span>
             {showSigiNationalWms ? (
               <span className="text-[9px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-blue-600 text-white font-bold">
-                3.306 WMS ON
+                WMS ON
               </span>
             ) : (
-              <span className="text-[9.5px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 font-semibold">
-                3.306 Ruas
+              <span className="text-[9px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 font-semibold">
+                3.3k
               </span>
             )}
           </button>
@@ -1490,7 +1493,7 @@ export default function MapExplorer({
 
       {/* Floating Notice / Province Context Banner */}
       {floatingNotice && (
-        <div className="absolute top-18 left-4 z-[500] max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-[6px] shadow-xl ring-1 ring-orange-200/60 p-3 flex items-start gap-2.5 animate-fade-in font-sans pointer-events-auto">
+        <div className="absolute top-38 sm:top-40 left-3 sm:left-4 z-[450] max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-[6px] shadow-xl ring-1 ring-orange-200/60 p-3 flex items-start gap-2.5 animate-fade-in font-sans pointer-events-auto">
           <div className="w-6 h-6 rounded-[5px] bg-[#c2410c] text-white flex items-center justify-center shrink-0 mt-0.5">
             <Globe className="w-3.5 h-3.5" />
           </div>
@@ -1800,7 +1803,7 @@ export default function MapExplorer({
         <aside
           role="region"
           aria-label="Detail Ruas Jalan"
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-[380px] sm:w-[410px] max-w-[calc(100vw-24px)] max-h-[calc(100vh-28px)] z-[500] bg-white/98 backdrop-blur-md rounded-[16px] shadow-[0_16px_40px_-8px_rgba(15,23,42,0.18)] ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans"
+          className="absolute top-18 sm:top-20 right-3 sm:right-4 w-[380px] sm:w-[410px] max-w-[calc(100vw-24px)] max-h-[calc(100vh-92px)] z-[480] bg-white/98 backdrop-blur-md rounded-[16px] shadow-[0_16px_40px_-8px_rgba(15,23,42,0.18)] ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans"
         >
           {/* Subtle Warm Topographic Accent Curve (Header Corner Decor) */}
           <div className="absolute -top-12 -right-12 w-32 h-32 pointer-events-none select-none opacity-20" aria-hidden="true">
