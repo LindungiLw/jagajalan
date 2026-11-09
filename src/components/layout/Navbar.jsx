@@ -147,9 +147,14 @@ export default function Navbar({
               style={{ width: "26px", height: "26px", maxWidth: "26px", maxHeight: "26px" }}
               className="w-[26px] h-[26px] object-contain shrink-0"
             />
-            <span className="font-heading font-bold text-[15px] tracking-[-0.03em] text-[#1C1917]">
-              JagaJalan
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo/logo-name.png"
+              alt="JagaJalan"
+              height={18}
+              style={{ height: "18px", width: "auto" }}
+              className="h-[18px] w-auto object-contain shrink-0"
+            />
           </div>
 
           {/* Primary Navigation Links */}
