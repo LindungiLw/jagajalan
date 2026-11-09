@@ -119,34 +119,41 @@ export default function OmbudsmanMonitorSection({
 
   const reportExportColumns = useMemo(
     () => [
-      { header: "Kode Tiket", key: "ticketCode", mono: true },
+      { header: "Kode Tiket", key: "ticketCode", mono: true, align: "center", width: 120 },
       {
         header: "Tanggal Lapor",
         mono: true,
+        align: "center",
+        width: 110,
         accessor: (rep) =>
           rep.reportDate ? new Date(rep.reportDate).toLocaleDateString("id-ID") : "-",
       },
-      { header: "Ruas Jalan", key: "roadName" },
-      { header: "Alamat / Titik Lokasi", key: "address" },
+      { header: "Ruas Jalan", key: "roadName", width: 230 },
+      { header: "Alamat / Titik Lokasi", key: "address", width: 280 },
       {
         header: "Koordinat GIS (Lat, Lng)",
         mono: true,
+        align: "center",
+        width: 175,
         accessor: (rep) =>
           Array.isArray(rep.coordinates)
             ? `${Number(rep.coordinates[0]).toFixed(5)}, ${Number(rep.coordinates[1]).toFixed(5)}`
             : "-",
       },
-      { header: "Kewenangan", key: "authority" },
-      { header: "Instansi Penanggung Jawab", key: "authorityLabel" },
-      { header: "Kategori Kerusakan", key: "categoryLabel" },
+      { header: "Kewenangan", key: "authority", align: "center", width: 120 },
+      { header: "Instansi Penanggung Jawab", key: "authorityLabel", width: 270 },
+      { header: "Kategori Kerusakan", key: "categoryLabel", width: 220 },
       {
         header: "Indeks Bahaya AI",
         align: "center",
         mono: true,
+        width: 120,
         accessor: (rep) => `${rep.hazardScore || 0}/100`,
       },
       {
         header: "Status Tindak Lanjut",
+        align: "center",
+        width: 190,
         accessor: (rep) =>
           rep.status === "OVERDUE"
             ? `Melewati Tenggat (+${rep.daysOverdue || 1} Hari)`
@@ -158,6 +165,8 @@ export default function OmbudsmanMonitorSection({
         header: "Pagu Proyek Terkait",
         align: "right",
         mono: true,
+        type: "currency",
+        width: 150,
         accessor: (rep) =>
           rep.matchingBudget?.paguRp
             ? `Rp ${(Number(rep.matchingBudget.paguRp) / 1e9).toFixed(2)} M`

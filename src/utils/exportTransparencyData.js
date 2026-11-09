@@ -47,62 +47,173 @@ export function exportToExcel({
   const colCount = Math.max(columns.length, 4);
   const generatedAt = formatReadableDate();
 
-  const summaryRowsHtml =
-    summaryMetrics.length > 0
-      ? `
-      <tr><td colspan="${colCount}" style="height: 8px;"></td></tr>
+  // Smart Column Width Calculation to prevent squishing/clipping in Excel
+  const columnWidths = columns.map((col) => {
+    if (col.width && typeof col.width === "number") return col.width;
+    let maxLen = (col.header || "").length;
+    for (let i = 0; i < Math.min(rows.length, 25); i++) {
+      const row = rows[i];
+      const val = typeof col.accessor === "function" ? col.accessor(row, i) : row[col.key];
+      if (val !== null && val !== undefined) {
+        maxLen = Math.max(maxLen, String(val).length);
+      }
+    }
+
+    const h = (col.header || "").toLowerCase();
+    if (h.includes("no") && maxLen <= 4) return 50;
+    if (h.includes("kode") || col.key === "ticketCode" || col.key === "packageId") return 110;
+    if (h.includes("tanggal") || h.includes("date")) return 110;
+    if (h.includes("koordinat") || h.includes("gis")) return 160;
+    if (h.includes("kewenangan") || col.key === "authority") return 115;
+    if (h.includes("status")) return 180;
+    if (h.includes("indeks") || h.includes("bahaya") || h.includes("skor")) return 115;
+    if (h.includes("pagu") || h.includes("kontrak") || h.includes("biaya") || col.type === "currency") return 145;
+    if (h.includes("efisiensi") || h.includes("hemat") || h.includes("progres")) return 115;
+    if (h.includes("alamat") || h.includes("lokasi")) return 270;
+    if (h.includes("instansi") || h.includes("penanggung jawab")) return 260;
+    if (h.includes("kategori") || h.includes("kerusakan")) return 210;
+    if (h.includes("ruas") || h.includes("nama jalan")) return 220;
+    if (h.includes("paket")) return 250;
+    if (h.includes("kontraktor") || h.includes("rekanan")) return 210;
+
+    return Math.min(320, Math.max(90, Math.round(maxLen * 8 + 25)));
+  });
+
+  const colgroupHtml = `
+    <colgroup>
+      ${columnWidths
+        .map(
+          (w) => `<col width="${w}" style="mso-width-source:userset;mso-width-alt:${Math.round(w * 36.5)};width:${w}pt;">`
+        )
+        .join("")}
+    </colgroup>
+  `;
+
+  // Summary Metrics Cards: Distributed evenly across the FULL width (sum of colspans === colCount)
+  let summaryRowsHtml = "";
+  if (summaryMetrics.length > 0) {
+    const numMetrics = summaryMetrics.length;
+    const baseSpan = Math.floor(colCount / numMetrics);
+    let remainder = colCount % numMetrics;
+    const metricSpans = summaryMetrics.map(() => {
+      let span = baseSpan;
+      if (remainder > 0) {
+        span += 1;
+        remainder -= 1;
+      }
+      return Math.max(1, span);
+    });
+
+    summaryRowsHtml = `
+      <tr><td colspan="${colCount}" style="height: 10px;"></td></tr>
       <tr>
         ${summaryMetrics
           .map(
-            (m) => `
-          <td colspan="${Math.max(1, Math.floor(colCount / summaryMetrics.length))}" style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 8px 10px; font-family: Arial, sans-serif;">
-            <div style="font-size: 9pt; color: #9a3412; font-weight: bold; text-transform: uppercase;">${escapeHtml(m.label)}</div>
-            <div style="font-size: 12pt; color: #0f172a; font-weight: bold; margin-top: 2px;">${escapeHtml(m.value)}</div>
+            (m, idx) => `
+          <td colspan="${metricSpans[idx]}" style="background-color: #fffbeb; border: 1.5px solid #fcd34d; padding: 10px 12px; font-family: 'Segoe UI', Arial, sans-serif; text-align: center; vertical-align: middle;">
+            <div style="font-size: 8.5pt; color: #92400e; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">${escapeHtml(
+              m.label
+            )}</div>
+            <div style="font-size: 13pt; color: #78350f; font-weight: 800; margin-top: 3px; font-family: 'Segoe UI', Arial, sans-serif;">${escapeHtml(
+              m.value
+            )}</div>
+            ${
+              m.sub
+                ? `<div style="font-size: 8pt; color: #a16207; margin-top: 2px;">${escapeHtml(
+                    m.sub
+                  )}</div>`
+                : ""
+            }
           </td>
         `
           )
           .join("")}
       </tr>
-      <tr><td colspan="${colCount}" style="height: 10px;"></td></tr>
-    `
-      : `<tr><td colspan="${colCount}" style="height: 8px;"></td></tr>`;
+      <tr><td colspan="${colCount}" style="height: 12px;"></td></tr>
+    `;
+  } else {
+    summaryRowsHtml = `<tr><td colspan="${colCount}" style="height: 10px;"></td></tr>`;
+  }
 
+  // Table Headers with Clean Institutional Safety Orange & Bold Center/Aligned Text
   const tableHeaderHtml = `
-    <tr>
+    <tr style="height: 32pt;">
       ${columns
-        .map(
-          (col) => `
-        <th style="background-color: #c2410c; color: #ffffff; font-weight: bold; font-family: Arial, sans-serif; font-size: 9.5pt; padding: 8px 10px; border: 1px solid #9a3412; text-align: ${
-          col.align || "left"
-        };">
-          ${escapeHtml(col.header)}
-        </th>
-      `
-        )
+        .map((col) => {
+          const align = col.align || (col.mono || col.type === "number" || col.type === "currency" ? "center" : "left");
+          return `
+            <th style="background-color: #c2410c; color: #ffffff; font-weight: bold; font-family: 'Segoe UI', Arial, sans-serif; font-size: 9.5pt; padding: 8px 10px; border: 1px solid #9a3412; text-align: ${align}; vertical-align: middle; height: 32pt; white-space: normal;">
+              ${escapeHtml(col.header)}
+            </th>
+          `;
+        })
         .join("")}
     </tr>
   `;
 
+  // Table Data Rows with Alternate Zebra, Semantic Status Badges, and Proper Formatting
   const tableBodyHtml = rows
     .map((row, rowIdx) => {
-      const bg = rowIdx % 2 === 0 ? "#ffffff" : "#f8fafc";
+      const isEven = rowIdx % 2 === 0;
+      const baseBg = isEven ? "#ffffff" : "#f8fafc";
       return `
-        <tr>
+        <tr style="height: 24pt;">
           ${columns
             .map((col) => {
-              const rawVal = typeof col.accessor === "function" ? col.accessor(row, rowIdx) : row[col.key];
+              const rawVal =
+                typeof col.accessor === "function" ? col.accessor(row, rowIdx) : row[col.key];
+              const strVal = rawVal !== null && rawVal !== undefined ? String(rawVal) : "-";
               const isNum = col.type === "number" || col.type === "currency";
-              const numStyle =
+
+              // Format text in Excel: '@' for text/codes (preserves leading zeros), numbers for amounts
+              const numFormat =
                 col.type === "currency"
                   ? "mso-number-format:'\\#\\,\\#\\#0';"
                   : col.type === "number"
                   ? "mso-number-format:'0\\.00';"
                   : "mso-number-format:'\\@';";
+
+              // Determine cell alignment
+              const align =
+                col.align ||
+                (col.type === "currency"
+                  ? "right"
+                  : col.mono || col.type === "number" || col.key === "authority"
+                  ? "center"
+                  : "left");
+
+              // Status highlight styling if this is a status column
+              let cellBg = baseBg;
+              let cellColor = "#0f172a";
+              let fontWeight = "normal";
+
+              if (col.key === "status" || col.header?.toLowerCase().includes("status")) {
+                if (strVal.includes("Melewati") || strVal.includes("OVERDUE") || strVal.includes("Terlambat")) {
+                  cellBg = "#fef2f2";
+                  cellColor = "#b91c1c";
+                  fontWeight = "bold";
+                } else if (strVal.includes("Selesai") || strVal.includes("Tuntas") || strVal.includes("Mantap")) {
+                  cellBg = "#f0fdf4";
+                  cellColor = "#15803d";
+                  fontWeight = "bold";
+                } else if (strVal.includes("Dalam") || strVal.includes("Proses") || strVal.includes("Verifikasi")) {
+                  cellBg = "#fffbeb";
+                  cellColor = "#b45309";
+                  fontWeight = "bold";
+                }
+              } else if (col.key === "ticketCode" || col.key === "packageId") {
+                cellBg = isEven ? "#fff7ed" : "#ffedd5";
+                cellColor = "#9a3412";
+                fontWeight = "bold";
+              }
+
+              const fontFam = col.mono
+                ? "font-family: 'Consolas', 'Courier New', monospace; font-size: 8.5pt;"
+                : "font-family: 'Segoe UI', Arial, sans-serif; font-size: 9pt;";
+
               return `
-                <td style="background-color: ${bg}; font-family: Arial, sans-serif; font-size: 9pt; padding: 6px 10px; border: 1px solid #cbd5e1; color: #0f172a; text-align: ${
-                col.align || (isNum ? "right" : "left")
-              }; ${numStyle}">
-                  ${escapeHtml(rawVal ?? "-")}
+                <td style="background-color: ${cellBg}; ${fontFam} color: ${cellColor}; font-weight: ${fontWeight}; padding: 7px 10px; border: 1px solid #cbd5e1; text-align: ${align}; vertical-align: middle; ${numFormat}">
+                  ${escapeHtml(strVal)}
                 </td>
               `;
             })
@@ -133,23 +244,28 @@ export function exportToExcel({
       </head>
       <body>
         <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
-          <tr>
-            <td colspan="${colCount}" style="background-color: #0f172a; color: #ffffff; font-family: Arial, sans-serif; font-size: 13pt; font-weight: bold; padding: 12px 14px;">
+          ${colgroupHtml}
+          <!-- Row 1: Document Title (Centered, Royal Navy Header) -->
+          <tr style="height: 42pt;">
+            <td colspan="${colCount}" style="background-color: #0f172a; color: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 14pt; font-weight: bold; text-align: center; vertical-align: middle; padding: 14px 16px; border: 1px solid #0f172a; letter-spacing: 0.3px;">
               ${escapeHtml(title)}
             </td>
           </tr>
-          <tr>
-            <td colspan="${colCount}" style="background-color: #1e293b; color: #fdba74; font-family: Arial, sans-serif; font-size: 9.5pt; padding: 6px 14px;">
+          <!-- Row 2: Subtitle & Generation Timestamp (Centered, Deep Slate with Warm Amber Accent) -->
+          <tr style="height: 24pt;">
+            <td colspan="${colCount}" style="background-color: #1e293b; color: #fed7aa; font-family: 'Segoe UI', Arial, sans-serif; font-size: 9.5pt; font-weight: 500; text-align: center; vertical-align: middle; padding: 7px 16px; border-bottom: 2.5px solid #c2410c;">
               ${escapeHtml(subtitle)} • Waktu Unduh: ${escapeHtml(generatedAt)} WIB
             </td>
           </tr>
           ${summaryRowsHtml}
           ${tableHeaderHtml}
           ${tableBodyHtml}
-          <tr><td colspan="${colCount}" style="height: 8px;"></td></tr>
+          <tr><td colspan="${colCount}" style="height: 12px;"></td></tr>
+          <!-- Row Footer: Open Government Transparency Legal Reference -->
           <tr>
-            <td colspan="${colCount}" style="font-family: Arial, sans-serif; font-size: 8.5pt; color: #475569; padding: 6px 4px;">
-              Sumber Data Terbuka: Platform JagaJalan (Kementerian PU Satu Data, BPS SIRUSA, LKPP LPSE/SiRUP, &amp; Ombudsman RI) — Berdasarkan UU No. 14 Tahun 2008 tentang Keterbukaan Informasi Publik.
+            <td colspan="${colCount}" style="background-color: #f8fafc; border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 8.5pt; color: #475569; padding: 10px 14px; text-align: center; vertical-align: middle; line-height: 1.5;">
+              <strong>JagaJalan — Ekosistem Partisipatif Transparansi Infrastruktur Jalan &amp; Anggaran Publik</strong><br/>
+              Sumber Data Terbuka: Kementerian PU Satu Data, BPS SIRUSA, LKPP LPSE/SiRUP, dan Ombudsman RI — Berdasarkan UU No. 14 Tahun 2008 tentang Keterbukaan Informasi Publik (KIP) &amp; UU No. 2 Tahun 2022 tentang Jalan.
             </td>
           </tr>
         </table>

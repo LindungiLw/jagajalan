@@ -439,44 +439,49 @@ export default function BudgetDataExplorer({
 
   const budgetExportColumns = useMemo(
     () => [
-      { header: "No", align: "center", mono: true, accessor: (_, idx) => idx + 1 },
-      { header: "Kode Paket LPSE", key: "packageId", mono: true },
-      { header: "Ruas Jalan", accessor: (row) => row.roadName || row.name },
-      { header: "Nama Paket Pekerjaan", key: "name" },
-      { header: "Kewenangan", key: "authority" },
+      { header: "No", align: "center", mono: true, width: 50, accessor: (_, idx) => idx + 1 },
+      { header: "Kode Paket LPSE", key: "packageId", mono: true, align: "center", width: 140 },
+      { header: "Ruas Jalan", width: 230, accessor: (row) => row.roadName || row.name },
+      { header: "Nama Paket Pekerjaan", key: "name", width: 280 },
+      { header: "Kewenangan", key: "authority", align: "center", width: 120 },
       {
         header: "Pagu HPS (Rp)",
         type: "currency",
         align: "right",
+        width: 145,
         accessor: (row) => Number(row.paguRp || 0).toLocaleString("id-ID"),
       },
       {
         header: "Nilai Kontrak SPK (Rp)",
         type: "currency",
         align: "right",
+        width: 155,
         accessor: (row) => Number(row.contractValueRp || 0).toLocaleString("id-ID"),
       },
       {
         header: "Efisiensi Lelang (Rp)",
         type: "currency",
         align: "right",
+        width: 145,
         accessor: (row) => Number(row.calculations?.efficiencyRp || 0).toLocaleString("id-ID"),
       },
       {
         header: "Hemat (%)",
         type: "number",
         align: "right",
+        width: 95,
         accessor: (row) => `${row.calculations?.efficiencyPct || 0}%`,
       },
-      { header: "Kontraktor Pelaksana", accessor: (row) => row.contractor || "Dalam Pengadaan" },
+      { header: "Kontraktor Pelaksana", width: 220, accessor: (row) => row.contractor || "Dalam Pengadaan" },
       {
         header: "Progres Fisik",
         align: "center",
         mono: true,
+        width: 105,
         accessor: (row) => `${row.progressPct || 0}%`,
       },
-      { header: "Status Audit", accessor: (row) => row.audit?.statusLabel || "Sesuai Standar" },
-      { header: "Dasar Hukum SK", accessor: (row) => row.legalBasis || "-" },
+      { header: "Status Audit", align: "center", width: 160, accessor: (row) => row.audit?.statusLabel || "Sesuai Standar" },
+      { header: "Dasar Hukum SK", width: 240, accessor: (row) => row.legalBasis || "-" },
     ],
     []
   );
