@@ -16,12 +16,75 @@ import {
   MapPin,
   FileText,
   Coins,
+  Banknote,
   ExternalLink,
   AlertTriangle,
   CheckCircle2,
   FileSpreadsheet,
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
+
+/**
+ * Komponen Circular Donut Meter Kemantapan Jalan Daerah
+ * Menampilkan ring sirkular dual-tone: busur hijau (Jalan Mantap) & busur oranye (Non-Mantap)
+ * dengan persentase tebal di tengah dan label 'Mantap'.
+ */
+function ProvinceKemantapanDonut({ mantapPct = 50 }) {
+  const safeMantap = Math.min(100, Math.max(0, Number(mantapPct) || 0));
+  const safeDamaged = Math.max(0, 100 - safeMantap);
+
+  // Geometry
+  const r = 32;
+  const cx = 42;
+  const cy = 42;
+  const strokeWidth = 8;
+  const C = 2 * Math.PI * r; // ~201.06
+
+  const mantapLen = (safeMantap / 100) * C;
+  const damagedLen = C - mantapLen;
+
+  return (
+    <div className="relative w-20 h-20 sm:w-22 sm:h-22 flex items-center justify-center shrink-0 select-none">
+      <svg viewBox="0 0 84 84" className="w-20 h-20 sm:w-22 sm:h-22 -rotate-90">
+        {/* Arc 1: Mantap (Emerald green: #059669) */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke="#059669"
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${mantapLen} ${C - mantapLen}`}
+          strokeDashoffset="0"
+          strokeLinecap="butt"
+          className="transition-all duration-500"
+        />
+        {/* Arc 2: Non-Mantap (Orange / Coral: #ea580c) */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke="#ea580c"
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${damagedLen} ${C - damagedLen}`}
+          strokeDashoffset={-mantapLen}
+          strokeLinecap="butt"
+          className="transition-all duration-500"
+        />
+      </svg>
+      {/* Center text: 65,4% + Mantap */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+        <span className="text-[13px] sm:text-[14px] font-black text-emerald-800 font-sans tracking-tight leading-none">
+          {safeMantap.toFixed(1).replace(".", ",")}%
+        </span>
+        <span className="text-[9px] font-semibold text-slate-700 font-sans mt-0.5 leading-none">
+          Mantap
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function NationalRankingSection({ onSelectPilot }) {
   const [selectedIsland, setSelectedIsland] = useState("ALL");
@@ -303,98 +366,129 @@ export default function NationalRankingSection({ onSelectPilot }) {
       ) : viewMode === "grid" ? (
         
         /* ------------------------------------------------------------- */
-        /* VIEW 1: COMPACT GLANCEABLE CARDS (Clean, Fast, Zero Slop)    */
+        /* VIEW 1: SIGNATURE STATISTIC CARDS (Dual-Arc Donut & Metrics)  */
         /* ------------------------------------------------------------- */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredAndSortedProvinces.map((prov) => {
             const isPilot = prov.activePilot;
             const mantapPct = (100 - prov.damagedPercentage).toFixed(1);
+            const damagedKm = prov.damagedKm || Math.round((prov.damagedPercentage / 100) * prov.totalRoadKm);
+            const mantapKm = Math.max(0, prov.totalRoadKm - damagedKm);
 
             return (
               <div
                 key={prov.id}
                 onClick={() => setSelectedProvince(prov)}
-                className={`bg-white rounded-[6px] p-4 transition-all flex flex-col justify-between gap-3 cursor-pointer group ${
+                className={`bg-white rounded-[14px] p-4 sm:p-5 transition-all flex flex-col justify-between gap-4 cursor-pointer group shadow-[0_2px_12px_-4px_rgba(15,23,42,0.04)] border ${
                   isPilot
-                    ? "ring-2 ring-orange-400/80 shadow-xs bg-orange-50/10 hover:ring-orange-500"
-                    : "ring-1 ring-orange-200/50 hover:ring-orange-300 hover:shadow-xs"
+                    ? "border-orange-400 ring-2 ring-orange-200/60 bg-gradient-to-b from-orange-50/15 to-white hover:border-orange-500 hover:shadow-md"
+                    : "border-slate-200/80 hover:border-orange-300 hover:shadow-md"
                 }`}
               >
-                {/* Header: Rank, Province Name, & Pilot Status */}
-                <div>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-baseline gap-2 truncate">
-                      <span className="text-xs font-bold font-sans tabular-nums text-slate-400 tracking-wider">
+                {/* 1. Top Header: Rank, Province Name, Ibukota & Pill Badge */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-[6px] bg-[#0f172a] text-white text-xs font-bold font-mono tabular-nums shadow-2xs">
                         #{String(prov.complaintRank).padStart(2, "0")}
                       </span>
-                      <h3 className="font-bold text-slate-900 text-sm sm:text-base font-heading tracking-tight leading-snug group-hover:text-[#c2410c] transition-colors truncate">
+                      <h3 className="font-bold text-slate-900 text-base sm:text-lg font-heading tracking-tight leading-snug group-hover:text-[#c2410c] transition-colors truncate">
                         {prov.name}
                       </h3>
                     </div>
-
-                    {isPilot ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-[4px] text-[9.5px] font-bold text-[#c2410c] bg-orange-50 ring-1 ring-orange-200/70 uppercase tracking-wider shrink-0">
-                        Wilayah Pilot
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-sans pl-0.5">
+                      <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+                      <span>
+                        Ibukota: <strong className="font-medium text-slate-700">{prov.capital}</strong>
                       </span>
-                    ) : (
-                      <span className="text-[10px] text-slate-400 font-medium shrink-0">
-                        {prov.island}
-                      </span>
-                    )}
+                    </div>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    Ibukota: <strong className="font-medium text-slate-700">{prov.capital}</strong>
-                  </p>
-                </div>
 
-                {/* Kemantapan Jalan (BPS) with Sleek Progress Line */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 text-[11px]">Kemantapan Jalan:</span>
-                    <span className="font-bold tabular-nums text-xs text-slate-800">
-                      {mantapPct}% Mantap
+                  {/* Island & BPS Code Badge Pill */}
+                  <div className="shrink-0">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold text-[#8a5b28] bg-[#fbf5ea] border border-[#ebd8bd] shadow-2xs">
+                      Pulau {prov.island} • BPS: {prov.code}
                     </span>
                   </div>
-                  
-                  {/* Thin Dual-Tone Progress Line */}
-                  <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        prov.damagedPercentage > 45
-                          ? "bg-amber-600"
-                          : prov.damagedPercentage > 35
-                          ? "bg-[#c2410c]"
-                          : "bg-emerald-600"
-                      }`}
-                      style={{ width: `${Math.max(10, 100 - prov.damagedPercentage)}%` }}
-                    />
-                  </div>
+                </div>
 
-                  <div className="flex items-center justify-between text-[10px] text-slate-400 tabular-nums">
-                    <span>Non-Mantap: <strong className={prov.damagedPercentage > 45 ? "text-rose-600 font-semibold" : "text-slate-600 font-semibold"}>{prov.damagedPercentage}%</strong></span>
-                    <span>Total: {(prov.totalRoadKm).toLocaleString("id-ID")} Km</span>
+                {/* 2. Middle Section: Box Kemantapan Jalan (Warm Neutral Sand Box with Donut) */}
+                <div className="bg-[#f5f2eb] rounded-xl p-3 sm:p-3.5 border border-[#e5dfd3] flex items-center gap-3 sm:gap-4 select-none">
+                  {/* Left: Dual-Arc Donut Meter */}
+                  <ProvinceKemantapanDonut mantapPct={mantapPct} />
+
+                  {/* Right: Breakdown & Total Km */}
+                  <div className="flex-1 min-w-0 space-y-1.5">
+                    {/* Mantap Stat */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 font-sans">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#059669] shrink-0" />
+                        <span>Mantap: {mantapPct.replace(".", ",")}%</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 font-medium pl-4 tabular-nums">
+                        {mantapKm.toLocaleString("id-ID")} Km
+                      </p>
+                    </div>
+
+                    {/* Non-Mantap Stat */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 font-sans">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#ea580c] shrink-0" />
+                        <span>Non-Mantap: {Number(prov.damagedPercentage).toFixed(1).replace(".", ",")}%</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 font-medium pl-4 tabular-nums">
+                        {damagedKm.toLocaleString("id-ID")} Km
+                      </p>
+                    </div>
+
+                    {/* Total Panjang Pill */}
+                    <div className="pt-0.5">
+                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#e6ded2] text-[#5c5446] text-[10.5px] font-semibold font-sans tabular-nums">
+                        Total Panjang: {Number(prov.totalRoadKm).toLocaleString("id-ID")} Km
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                {/* 2 Core Financial & Public Metrics (Clean, Non-Clunky) */}
-                <div className="grid grid-cols-2 gap-2 py-2 px-2.5 rounded-[5px] bg-slate-50/70 ring-1 ring-orange-200/40 text-xs">
-                  <div>
-                    <span className="text-[9.5px] text-slate-400 font-semibold uppercase tracking-wider block">Total Aduan</span>
-                    <strong className="text-xs sm:text-[13px] font-bold text-slate-900 tabular-nums">
-                      {prov.totalComplaints.toLocaleString("id-ID")}
-                    </strong>
+                {/* 3. Lower Section: 2 Core Financial & Public Metrics */}
+                <div className="grid grid-cols-2 gap-2.5">
+                  {/* Box 1: Total Aduan */}
+                  <div className="bg-[#faf8f5] rounded-xl p-2.5 sm:p-3 border border-[#ede7de] flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-lg bg-[#fae8dc] text-[#c2410c] flex items-center justify-center shrink-0">
+                      <FileText className="w-5 h-5 text-[#c2410c]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[9.5px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-sans">
+                        TOTAL ADUAN
+                      </span>
+                      <strong className="text-base sm:text-lg font-black text-slate-900 tabular-nums block leading-tight font-sans">
+                        {Number(prov.totalComplaints).toLocaleString("id-ID")}
+                      </strong>
+                    </div>
                   </div>
-                  <div className="border-l border-slate-200/60 pl-2">
-                    <span className="text-[9.5px] text-slate-400 font-semibold uppercase tracking-wider block">Inpres IJD</span>
-                    <strong className="text-xs sm:text-[13px] font-bold text-emerald-800 tabular-nums">
-                      Rp {prov.inpresAllocationMiliar} M
-                    </strong>
+
+                  {/* Box 2: Inpres IJD */}
+                  <div className="bg-[#f0fbf6] rounded-xl p-2.5 sm:p-3 border border-[#daf2e4] flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-lg bg-[#d1fae5] text-[#059669] flex items-center justify-center shrink-0">
+                      <Banknote className="w-5 h-5 text-[#059669]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[9.5px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-sans">
+                        INPRES IJD
+                      </span>
+                      <strong className="text-base sm:text-lg font-black text-[#059669] tabular-nums block leading-tight font-sans">
+                        Rp {Number(prov.inpresAllocationMiliar).toLocaleString("id-ID")} M
+                      </strong>
+                    </div>
                   </div>
                 </div>
 
-                {/* Footer Action */}
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-[10px] text-slate-400">Kode BPS: {prov.code}</span>
+                {/* 4. Footer: Verification Note & Action CTA */}
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs font-sans">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    Data Terverifikasi BPS &amp; KemenPU
+                  </span>
+
                   {isPilot ? (
                     <button
                       type="button"
@@ -402,15 +496,23 @@ export default function NationalRankingSection({ onSelectPilot }) {
                         e.stopPropagation();
                         if (onSelectPilot) onSelectPilot();
                       }}
-                      className="text-[#c2410c] hover:text-[#9a3412] font-bold text-xs inline-flex items-center gap-1 cursor-pointer transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.98]"
                     >
                       <span>Buka Peta Medan</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
                   ) : (
-                    <span className="text-[11px] text-slate-500 font-medium group-hover:text-[#c2410c] transition-colors inline-flex items-center gap-0.5">
-                      Lihat Rincian <ChevronRight className="w-3 h-3" />
-                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProvince(prov);
+                      }}
+                      className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+                    >
+                      <span>Lihat Rincian</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
                   )}
                 </div>
               </div>
