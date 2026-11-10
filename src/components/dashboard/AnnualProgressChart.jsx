@@ -81,6 +81,29 @@ export default function AnnualProgressChart() {
     complaintTrends.find((d) => d.year === selectedYear) ||
     complaintTrends[complaintTrends.length - 1];
 
+  // Dynamic progress delta calculation vs baseline 2020 (consistent across all cards)
+  const baseRoadData = roadConditionTrends[0]; // 2020
+  const calculateTrend = (currentVal, baseVal) => {
+    if (selectedYear === 2020 || baseVal === undefined || baseVal === null) {
+      return { diff: 0, formatted: "Basis 2020", isUp: false, isDown: false, isNeutral: true };
+    }
+    const diff = Number((currentVal - baseVal).toFixed(1));
+    const isUp = diff > 0;
+    const isDown = diff < 0;
+    return {
+      diff,
+      formatted: `${diff > 0 ? "+" : ""}${diff}%`,
+      isUp,
+      isDown,
+      isNeutral: diff === 0,
+    };
+  };
+
+  const nasionalDelta = calculateTrend(selectedRoadData.nasional, baseRoadData.nasional);
+  const provinsiDelta = calculateTrend(selectedRoadData.provinsi, baseRoadData.provinsi);
+  const kabKotaDelta = calculateTrend(selectedRoadData.kabupatenKota, baseRoadData.kabupatenKota);
+  const gapDelta = calculateTrend(selectedRoadData.gap, baseRoadData.gap);
+
   // SVG Coordinates for Line Chart (viewBox: 0 0 660 230, scale 0% to 100%)
   // Baseline 0% is at y = 195, 100% is at y = 25. Total height = 170px.
   // Data points horizontally: x = 105 to 585 (480px width across 4 intervals -> 120px step)
@@ -223,72 +246,106 @@ export default function AnnualProgressChart() {
           {/* LEFT CARD (~67% width): 4 Open KPI Columns + Direct White Combo Chart + Clean Footer */}
           <div className="lg:col-span-8 bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
-            {/* 1. TOP 4 OPEN KPI COLUMNS (Executive Layout, Scannable & Consistent) */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 pb-3 border-b border-slate-100">
-              {/* Column 1: Jalan Nasional */}
-              <div className="px-2.5 sm:px-3 py-1.5 flex flex-col justify-between">
-                <div className="h-6 flex items-center justify-between gap-1 mb-1">
-                  <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jalan Nasional</span>
-                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    <ArrowUpRight className="w-2.5 h-2.5 text-emerald-600" />
-                    +2.2%
+            {/* 1. TOP 4 OPEN KPI CARDS (Executive Layout with Clean Borders & Consistent Badges) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 pb-4 border-b border-slate-100">
+              {/* Card 1: Jalan Nasional */}
+              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-blue-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="h-6 flex items-center justify-between gap-1">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jalan Nasional</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+                    nasionalDelta.isUp
+                      ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
+                      : nasionalDelta.isDown
+                      ? "text-rose-700 bg-rose-50 border-rose-200/80"
+                      : "text-slate-600 bg-slate-100 border-slate-200/80"
+                  }`}>
+                    {nasionalDelta.isUp && <ArrowUpRight className="w-2.5 h-2.5 text-emerald-600" />}
+                    {nasionalDelta.isDown && <ArrowDownRight className="w-2.5 h-2.5 text-rose-600" />}
+                    {nasionalDelta.formatted}
                   </span>
                 </div>
-                <div className="text-3xl font-black text-blue-600 font-sans tabular-nums tracking-tight">
+                <div className="text-2xl sm:text-3xl font-black text-blue-600 font-sans tabular-nums tracking-tight">
                   {selectedRoadData.nasional}%
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  KemenPUPR (APBN) · Mantap
-                </span>
+                <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10.5px] text-slate-500 font-medium truncate">
+                  <span className="truncate">KemenPUPR (APBN)</span>
+                  <span className="font-semibold text-blue-700 shrink-0">Mantap</span>
+                </div>
               </div>
 
-              {/* Column 2: Jalan Provinsi */}
-              <div className="px-2.5 sm:px-3 py-1.5 flex flex-col justify-between">
-                <div className="h-6 flex items-center justify-between gap-1 mb-1">
-                  <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jalan Provinsi</span>
-                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    <ArrowUpRight className="w-2.5 h-2.5 text-purple-600" />
-                    +3.0%
+              {/* Card 2: Jalan Provinsi */}
+              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-purple-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="h-6 flex items-center justify-between gap-1">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jalan Provinsi</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+                    provinsiDelta.isUp
+                      ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
+                      : provinsiDelta.isDown
+                      ? "text-rose-700 bg-rose-50 border-rose-200/80"
+                      : "text-slate-600 bg-slate-100 border-slate-200/80"
+                  }`}>
+                    {provinsiDelta.isUp && <ArrowUpRight className="w-2.5 h-2.5 text-emerald-600" />}
+                    {provinsiDelta.isDown && <ArrowDownRight className="w-2.5 h-2.5 text-rose-600" />}
+                    {provinsiDelta.formatted}
                   </span>
                 </div>
-                <div className="text-3xl font-black text-purple-600 font-sans tabular-nums tracking-tight">
+                <div className="text-2xl sm:text-3xl font-black text-purple-600 font-sans tabular-nums tracking-tight">
                   {selectedRoadData.provinsi}%
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  Pemprov (APBD) · Sedang
-                </span>
+                <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10.5px] text-slate-500 font-medium truncate">
+                  <span className="truncate">Pemprov (APBD)</span>
+                  <span className="font-semibold text-purple-700 shrink-0">Sedang</span>
+                </div>
               </div>
 
-              {/* Column 3: Jalan Kab/Kota */}
-              <div className="px-2.5 sm:px-3 py-1.5 flex flex-col justify-between">
-                <div className="h-6 flex items-center justify-between gap-1 mb-1">
-                  <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jalan Kab/Kota</span>
-                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    42.9% Rusak
+              {/* Card 3: Jalan Kab/Kota */}
+              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-orange-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="h-6 flex items-center justify-between gap-1">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jalan Kab/Kota</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+                    kabKotaDelta.isUp
+                      ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
+                      : kabKotaDelta.isDown
+                      ? "text-rose-700 bg-rose-50 border-rose-200/80"
+                      : "text-slate-600 bg-slate-100 border-slate-200/80"
+                  }`}>
+                    {kabKotaDelta.isUp && <ArrowUpRight className="w-2.5 h-2.5 text-emerald-600" />}
+                    {kabKotaDelta.isDown && <ArrowDownRight className="w-2.5 h-2.5 text-rose-600" />}
+                    {kabKotaDelta.formatted}
                   </span>
                 </div>
-                <div className="text-3xl font-black text-orange-600 font-sans tabular-nums tracking-tight">
+                <div className="text-2xl sm:text-3xl font-black text-orange-600 font-sans tabular-nums tracking-tight">
                   {selectedRoadData.kabupatenKota}%
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  Pemkab/Pemkot · Kritis
-                </span>
+                <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10.5px] text-slate-500 font-medium truncate">
+                  <span className="truncate">Pemkab/Pemkot</span>
+                  <span className="font-semibold text-orange-700 shrink-0">Kritis</span>
+                </div>
               </div>
 
-              {/* Column 4: Jurang Ketimpangan */}
-              <div className="px-2.5 sm:px-3 py-1.5 flex flex-col justify-between">
-                <div className="h-6 flex items-center justify-between gap-1 mb-1">
-                  <span className="text-[11px] sm:text-xs font-semibold text-slate-500 whitespace-nowrap">Jurang Ketimpangan</span>
-                  <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-                    Kesenjangan
+              {/* Card 4: Jurang Ketimpangan */}
+              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-slate-400 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="h-6 flex items-center justify-between gap-1">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jurang Ketimpangan</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+                    gapDelta.isDown
+                      ? "text-rose-700 bg-rose-50 border-rose-200/80"
+                      : gapDelta.isUp
+                      ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
+                      : "text-slate-600 bg-slate-100 border-slate-200/80"
+                  }`}>
+                    {gapDelta.isDown && <ArrowDownRight className="w-2.5 h-2.5 text-rose-600" />}
+                    {gapDelta.isUp && <ArrowUpRight className="w-2.5 h-2.5 text-emerald-600" />}
+                    {gapDelta.formatted}
                   </span>
                 </div>
-                <div className="text-3xl font-black text-slate-900 font-sans tabular-nums tracking-tight">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-sans tabular-nums tracking-tight">
                   Δ {selectedRoadData.gap}%
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium block mt-1 truncate">
-                  Selisih Pusat vs Daerah
-                </span>
+                <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10.5px] text-slate-500 font-medium truncate">
+                  <span className="truncate">Selisih Pusat vs Daerah</span>
+                  <span className="font-semibold text-slate-700 shrink-0">Kesenjangan</span>
+                </div>
               </div>
             </div>
 
