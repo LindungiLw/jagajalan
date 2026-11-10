@@ -26,6 +26,9 @@ import {
   Building2,
   RefreshCw,
   SlidersHorizontal,
+  ArrowLeft,
+  Edit3,
+  SwitchCamera,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
@@ -35,7 +38,7 @@ import { detectJurisdictionByCoordinates } from "@/data/roadsData";
 const MiniGisPicker = dynamic(() => import("./MiniGisPickerInner"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full min-h-[170px] bg-slate-100 flex flex-col items-center justify-center gap-1.5 text-slate-400">
+    <div className="w-full h-full min-h-[190px] bg-slate-100 flex flex-col items-center justify-center gap-1.5 text-slate-400">
       <Loader2 className="w-5 h-5 animate-spin text-[#c2410c]" />
       <span className="text-[11px] font-medium text-slate-500">Memuat peta GIS...</span>
     </div>
@@ -69,6 +72,9 @@ export default function ReportModal({
     setMounted(true);
   }, []);
 
+  // Wizard Stepper State: 1 = Lokasi & Pelapor, 2 = Foto & Cek AI
+  const [currentStep, setCurrentStep] = useState(1);
+
   const defaultRoad = roads[0] || {};
   const defaultCoords = getRoadMidpoint(defaultRoad);
 
@@ -93,6 +99,14 @@ export default function ReportModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiResult, setAiResult] = useState(null);
   const [spamError, setSpamError] = useState(null);
+
+  // Live Camera Viewfinder State
+  const [isLiveCameraActive, setIsLiveCameraActive] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState("environment"); // 'environment' | 'user'
+  const [liveCameraError, setLiveCameraError] = useState(null);
+  const [isStartingCamera, setIsStartingCamera] = useState(false);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
 
   // Success view states
   const [submitted, setSubmitted] = useState(false);
@@ -342,7 +356,7 @@ export default function ReportModal({
       if (data.isValidRoadImage === false) {
         setSpamError(
           data.rejectionReason ||
-            "Foto ini belum menampilkan kerusakan jalan publik yang sah. Yuk ambil foto kondisi aspal atau jalan yang ingin dilaporkan."
+            "Foto yang diunggah belum menampilkan kerusakan jalan publik yang sah. Yuk ambil foto kondisi aspal atau jalan yang ingin dilaporkan."
         );
         setAiResult(null);
       } else {
@@ -417,12 +431,159 @@ export default function ReportModal({
     }
   };
 
+  // Clean up camera stream on unmount
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        try {
+          streamRef.current.getTracks().forEach((track) => track.stop());
+        } catch {}
+        streamRef.current = null;
+      }
+    };
+  }, []);
+
+  // Sync video element srcObject when camera becomes active
+  useEffect(() => {
+    if (isLiveCameraActive && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch((err) => {
+        console.warn("Video play error:", err);
+      });
+    }
+  }, [isLiveCameraActive]);
+
+  const handleStopLiveCamera = () => {
+    if (streamRef.current) {
+      try {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      } catch (e) {
+        console.warn("Error stopping camera track:", e);
+      }
+      streamRef.current = null;
+    }
+    setIsLiveCameraActive(false);
+    setIsStartingCamera(false);
+  };
+
+  const handleStartLiveCamera = async (facing = cameraFacingMode) => {
+    setLiveCameraError(null);
+    setIsStartingCamera(true);
+
+    if (
+      typeof window === "undefined" ||
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ) {
+      setIsStartingCamera(false);
+      if (cameraInputRef.current) {
+        cameraInputRef.current.click();
+      } else {
+        setLiveCameraError("Peramban Anda belum mendukung akses kamera langsung.");
+      }
+      return;
+    }
+
+    if (streamRef.current) {
+      try {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+      } catch {}
+      streamRef.current = null;
+    }
+
+    try {
+      let stream = null;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: facing },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+          audio: false,
+        });
+      } catch (facingErr) {
+        console.warn("Facing constraint failed, fallback to basic video:", facingErr);
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+      }
+
+      streamRef.current = stream;
+      setCameraFacingMode(facing);
+      setIsLiveCameraActive(true);
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(() => {});
+      }
+    } catch (err) {
+      console.error("Camera access error:", err);
+      let errMsg = "Tidak dapat mengakses kamera. Pastikan izin kamera telah diaktifkan.";
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        errMsg = "Izin akses kamera ditolak. Silakan berikan izin kamera di setelan browser atau gunakan unggah galeri.";
+      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        errMsg = "Kamera tidak ditemukan pada perangkat Anda. Silakan pilih foto dari galeri.";
+      }
+      setLiveCameraError(errMsg);
+      setIsLiveCameraActive(false);
+    } finally {
+      setIsStartingCamera(false);
+    }
+  };
+
+  const handleToggleCameraFacing = () => {
+    const nextMode = cameraFacingMode === "environment" ? "user" : "environment";
+    handleStartLiveCamera(nextMode);
+  };
+
+  const handleCaptureLivePhoto = () => {
+    if (!videoRef.current) return;
+    const video = videoRef.current;
+    const vw = video.videoWidth || 1280;
+    const vh = video.videoHeight || 720;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = vw;
+    canvas.height = vh;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    if (cameraFacingMode === "user") {
+      ctx.translate(vw, 0);
+      ctx.scale(-1, 1);
+    }
+    ctx.drawImage(video, 0, 0, vw, vh);
+
+    const base64Data = canvas.toDataURL("image/jpeg", 0.88);
+    handleStopLiveCamera();
+    setPhotoPreview(base64Data);
+    setSpamError(null);
+    handleAnalyzePhoto(base64Data);
+  };
+
   const handleClearPhoto = () => {
+    handleStopLiveCamera();
     setPhotoPreview(null);
     setAiResult(null);
     setSpamError(null);
     if (cameraInputRef.current) cameraInputRef.current.value = "";
     if (galleryInputRef.current) galleryInputRef.current.value = "";
+  };
+
+  // Step 1 Validation & Proceed to Step 2
+  const handleProceedToStep2 = (e) => {
+    if (e) e.preventDefault();
+    if (!reporterName.trim()) {
+      alert("Harap masukkan nama atau inisial Anda sebagai pelapor.");
+      return;
+    }
+    if (!addressDetail.trim()) {
+      alert("Harap masukkan patokan atau detail lokasi kerusakan jalan.");
+      return;
+    }
+    setCurrentStep(2);
   };
 
   const handleSubmit = async (e) => {
@@ -434,7 +595,7 @@ export default function ReportModal({
     }
 
     if (spamError) {
-      alert("Foto belum sesuai ketentuan. Harap gunakan foto kerusakan jalan yang valid.");
+      alert("Foto belum sesuai kriteria. Harap gunakan foto kerusakan jalan yang sah.");
       return;
     }
 
@@ -567,7 +728,9 @@ export default function ReportModal({
   };
 
   const handleResetAndClose = () => {
+    handleStopLiveCamera();
     setSubmitted(false);
+    setCurrentStep(1);
     setPhotoPreview(null);
     setAiResult(null);
     setSpamError(null);
@@ -587,7 +750,7 @@ export default function ReportModal({
 
   const modalContent = (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-fade-in font-sans">
-      <div className="rounded-[10px] bg-slate-100/95 p-2 sm:p-3 ring-1 ring-orange-200/60 w-full max-w-4xl md:max-w-5xl lg:max-w-6xl max-h-[94vh] flex flex-col overflow-hidden text-slate-800 shadow-2xl">
+      <div className="rounded-[10px] bg-slate-100/95 p-2 sm:p-3 ring-1 ring-orange-200/60 w-full max-w-4xl md:max-w-5xl lg:max-w-5xl max-h-[94vh] flex flex-col overflow-hidden text-slate-800 shadow-2xl">
         <div className="relative w-full flex-1 flex flex-col rounded-[8px] bg-white shadow-xl overflow-hidden">
           
           {/* Header */}
@@ -619,9 +782,78 @@ export default function ReportModal({
             </button>
           </div>
 
+          {/* Stepper Progress Bar (Only shown before submission) */}
+          {!submitted && (
+            <div className="px-5 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-center gap-3 sm:gap-6 shrink-0">
+              {/* Step 1 Indicator */}
+              <button
+                type="button"
+                onClick={() => {
+                  handleStopLiveCamera();
+                  setCurrentStep(1);
+                }}
+                className={`inline-flex items-center gap-2 text-xs font-bold transition-colors cursor-pointer ${
+                  currentStep === 1
+                    ? "text-[#c2410c]"
+                    : "text-slate-500 hover:text-slate-900"
+                }`}
+              >
+                <span
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all ${
+                    currentStep === 1
+                      ? "bg-[#c2410c] text-white shadow-xs"
+                      : currentStep > 1
+                      ? "bg-emerald-600 text-white"
+                      : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {currentStep > 1 ? <Check className="w-3.5 h-3.5" /> : "1"}
+                </span>
+                <span>1. Titik Lokasi &amp; Pelapor</span>
+              </button>
+
+              {/* Progress Track */}
+              <div className="w-10 sm:w-16 h-0.5 bg-slate-200 shrink-0 relative overflow-hidden rounded-full">
+                <div
+                  className={`absolute inset-0 bg-[#c2410c] transition-all duration-300 ${
+                    currentStep === 2 ? "w-full" : "w-0"
+                  }`}
+                />
+              </div>
+
+              {/* Step 2 Indicator */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (reporterName.trim() && addressDetail.trim()) {
+                    setCurrentStep(2);
+                  }
+                }}
+                disabled={!reporterName.trim() || !addressDetail.trim()}
+                className={`inline-flex items-center gap-2 text-xs font-bold transition-colors ${
+                  currentStep === 2
+                    ? "text-[#c2410c]"
+                    : "text-slate-400 disabled:opacity-60 disabled:cursor-not-allowed"
+                }`}
+              >
+                <span
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all ${
+                    currentStep === 2
+                      ? "bg-[#c2410c] text-white shadow-xs ring-2 ring-orange-200"
+                      : "bg-slate-200 text-slate-500"
+                  }`}
+                >
+                  2
+                </span>
+                <span>2. Foto Bukti &amp; Cek AI</span>
+              </button>
+            </div>
+          )}
+
           {/* Modal Body */}
           <div className="p-4 sm:p-5 overflow-y-auto flex-1">
             {submitted ? (
+              /* SUCCESS CONFIRMATION VIEW */
               <div className="text-center py-6 px-4 max-w-lg mx-auto space-y-4 animate-fade-in font-sans">
                 <div className="w-16 h-16 rounded-[10px] bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-xs ring-1 ring-emerald-200">
                   <CheckCircle2 className="w-9 h-9" />
@@ -717,129 +949,130 @@ export default function ReportModal({
                   </button>
                 </div>
               </div>
-            ) : (
-              <form id="report-road-form" onSubmit={handleSubmit} className="space-y-5 font-sans">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7 items-start">
+            ) : currentStep === 1 ? (
+              /* STEP 1: LOKASI GEOSPASIAL & IDENTITAS PELAPOR */
+              <form onSubmit={handleProceedToStep2} className="space-y-4 font-sans animate-fade-in">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 items-start">
                   
-                  {/* LEFT COLUMN: Mini Interactive GIS Map & Road Information */}
-                  <div className="space-y-4">
-                    
-                    {/* 1. MINI INTERACTIVE GIS MAP CONTAINER */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-                          <span>Peta Geospasial Titik Kerusakan</span>
-                        </span>
-                        <span className="text-[10.5px] text-slate-400">
-                          Klik / geser pin untuk atur titik
-                        </span>
-                      </div>
-
-                      {/* Mini Map Canvas with Floating Controls */}
-                      <div className="relative rounded-[8px] overflow-hidden ring-1 ring-slate-300 shadow-xs bg-slate-100 h-48 sm:h-52 group">
-                        <MiniGisPicker
-                          lat={validLat}
-                          lng={validLng}
-                          onLocationChange={handleMiniMapLocationChange}
-                        />
-
-                        {/* Top Action Overlay: Kunci GPS */}
-                        <div className="absolute top-2.5 right-2.5 pointer-events-none z-10">
-                          <button
-                            type="button"
-                            onClick={handleUseCurrentGps}
-                            disabled={isLocatingGps}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-[10.5px] font-bold transition-all shadow-md cursor-pointer disabled:opacity-60 pointer-events-auto active:scale-95"
-                            title="Kunci titik GPS saya secara presisi"
-                          >
-                            {isLocatingGps ? (
-                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            ) : (
-                              <Crosshair className="w-3.5 h-3.5" />
-                            )}
-                            <span>{isLocatingGps ? "Mencari GPS..." : "Kunci GPS Saya"}</span>
-                          </button>
-                        </div>
-
-                        {/* Bottom Coordinates Overlay */}
-                        <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between pointer-events-none z-10">
-                          <div className="px-2.5 py-1 rounded-[5px] bg-slate-900/90 backdrop-blur-xs text-white text-[10.5px] font-mono tabular-nums pointer-events-auto flex items-center gap-1.5 shadow-xs">
-                            <Navigation className="w-3 h-3 text-orange-400" />
-                            <span>{validLat.toFixed(5)}, {validLng.toFixed(5)}</span>
-                          </div>
-
-                          {showManualCoords ? (
-                            <button
-                              type="button"
-                              onClick={() => setShowManualCoords(false)}
-                              className="px-2.5 py-1 rounded-[5px] bg-white/95 text-[#c2410c] text-[10px] font-bold pointer-events-auto shadow-xs hover:bg-white cursor-pointer"
-                            >
-                              Tutup Koordinat
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => setShowManualCoords(true)}
-                              className="px-2.5 py-1 rounded-[5px] bg-white/90 hover:bg-white text-slate-700 text-[10px] font-semibold pointer-events-auto shadow-xs cursor-pointer flex items-center gap-1.5"
-                            >
-                              <SlidersHorizontal className="w-3 h-3 text-[#c2410c]" />
-                              <span>Ubah Angka</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Expandable Manual Lat/Lng Fields if user wants precise manual survey */}
-                      {showManualCoords && (
-                        <div className="p-3 rounded-[7px] bg-slate-50 ring-1 ring-slate-200 grid grid-cols-2 gap-2.5 animate-fade-in text-[11px]">
-                          <div>
-                            <label className="block font-semibold text-slate-600 mb-1">
-                              Latitude (Lintang)
-                            </label>
-                            <input
-                              type="number"
-                              step="any"
-                              required
-                              value={latInput}
-                              onChange={(e) => {
-                                setLatInput(e.target.value);
-                                setCoordinateSource("MANUAL_COORDINATE");
-                              }}
-                              className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
-                            />
-                          </div>
-                          <div>
-                            <label className="block font-semibold text-slate-600 mb-1">
-                              Longitude (Bujur)
-                            </label>
-                            <input
-                              type="number"
-                              step="any"
-                              required
-                              value={lngInput}
-                              onChange={(e) => {
-                                setLngInput(e.target.value);
-                                setCoordinateSource("MANUAL_COORDINATE");
-                              }}
-                              className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {gpsStatusMsg && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-[6px] bg-emerald-50 text-emerald-900 text-[11px] font-medium ring-1 ring-emerald-200/80 animate-fade-in">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          <span className="leading-snug">{gpsStatusMsg}</span>
-                        </div>
-                      )}
+                  {/* Left Column of Step 1: Interactive Mini GIS Map */}
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
+                        <span>Tentukan Titik Kerusakan di Peta</span>
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        Klik / geser pin untuk atur titik
+                      </span>
                     </div>
 
-                    {/* 2. RUAS JALAN & INSTANSI PENANGGUNG JAWAB */}
-                    <div className="p-3.5 sm:p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3.5">
+                    {/* Mini Map Canvas with Floating Controls */}
+                    <div className="relative rounded-[8px] overflow-hidden ring-1 ring-slate-300 shadow-xs bg-slate-100 h-52 sm:h-60 group">
+                      <MiniGisPicker
+                        lat={validLat}
+                        lng={validLng}
+                        onLocationChange={handleMiniMapLocationChange}
+                      />
+
+                      {/* Top Action Overlay: Kunci GPS */}
+                      <div className="absolute top-2.5 right-2.5 pointer-events-none z-10">
+                        <button
+                          type="button"
+                          onClick={handleUseCurrentGps}
+                          disabled={isLocatingGps}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-[10.5px] font-bold transition-all shadow-md cursor-pointer disabled:opacity-60 pointer-events-auto active:scale-95"
+                          title="Kunci titik GPS saya secara presisi"
+                        >
+                          {isLocatingGps ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Crosshair className="w-3.5 h-3.5" />
+                          )}
+                          <span>{isLocatingGps ? "Mencari GPS..." : "Kunci GPS Saya"}</span>
+                        </button>
+                      </div>
+
+                      {/* Bottom Coordinates Overlay */}
+                      <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between pointer-events-none z-10">
+                        <div className="px-2.5 py-1 rounded-[5px] bg-slate-900/90 backdrop-blur-xs text-white text-[10.5px] font-mono tabular-nums pointer-events-auto flex items-center gap-1.5 shadow-xs">
+                          <Navigation className="w-3 h-3 text-orange-400" />
+                          <span>{validLat.toFixed(5)}, {validLng.toFixed(5)}</span>
+                        </div>
+
+                        {showManualCoords ? (
+                          <button
+                            type="button"
+                            onClick={() => setShowManualCoords(false)}
+                            className="px-2.5 py-1 rounded-[5px] bg-white/95 text-[#c2410c] text-[10px] font-bold pointer-events-auto shadow-xs hover:bg-white cursor-pointer"
+                          >
+                            Tutup Koordinat
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setShowManualCoords(true)}
+                            className="px-2.5 py-1 rounded-[5px] bg-white/90 hover:bg-white text-slate-700 text-[10px] font-semibold pointer-events-auto shadow-xs cursor-pointer flex items-center gap-1.5"
+                          >
+                            <SlidersHorizontal className="w-3 h-3 text-[#c2410c]" />
+                            <span>Ubah Angka</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Expandable Manual Lat/Lng Fields */}
+                    {showManualCoords && (
+                      <div className="p-3 rounded-[7px] bg-slate-50 ring-1 ring-slate-200 grid grid-cols-2 gap-2.5 animate-fade-in text-[11px]">
+                        <div>
+                          <label className="block font-semibold text-slate-600 mb-1">
+                            Latitude (Lintang)
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            required
+                            value={latInput}
+                            onChange={(e) => {
+                              setLatInput(e.target.value);
+                              setCoordinateSource("MANUAL_COORDINATE");
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-semibold text-slate-600 mb-1">
+                            Longitude (Bujur)
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            required
+                            value={lngInput}
+                            onChange={(e) => {
+                              setLngInput(e.target.value);
+                              setCoordinateSource("MANUAL_COORDINATE");
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {gpsStatusMsg && (
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-[6px] bg-emerald-50 text-emerald-900 text-[11px] font-medium ring-1 ring-emerald-200/80 animate-fade-in">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span className="leading-snug">{gpsStatusMsg}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Column of Step 1: Road Details, Authority, Reporter Details */}
+                  <div className="space-y-3.5">
+                    
+                    {/* Road Selector Card */}
+                    <div className="p-3.5 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3">
                       <div className="relative" ref={roadPickerRef}>
-                        <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center justify-between mb-1">
                           <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                             Ruas Jalan Terdata
                           </label>
@@ -935,7 +1168,7 @@ export default function ReportModal({
                             </div>
 
                             {/* Road List */}
-                            <div className="max-h-48 overflow-y-auto divide-y divide-slate-100 rounded-[6px] border border-slate-100 bg-slate-50/30">
+                            <div className="max-h-44 overflow-y-auto divide-y divide-slate-100 rounded-[6px] border border-slate-100 bg-slate-50/30">
                               {filteredRoads.length === 0 ? (
                                 <div className="py-5 px-3 text-center space-y-1">
                                   <p className="text-xs font-semibold text-slate-600">Tidak ada ruas jalan yang cocok</p>
@@ -991,24 +1224,24 @@ export default function ReportModal({
                         )}
                       </div>
 
-                      {/* Authority & Budget Summary Bar - Full Natural Wrap */}
-                      <div className="p-3 rounded-[7px] bg-white ring-1 ring-slate-200/80 space-y-1.5">
+                      {/* Authority & Budget Summary Bar */}
+                      <div className="p-2.5 rounded-[7px] bg-white ring-1 ring-slate-200/80 space-y-1">
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1.5">
                             <Building2 className="w-3.5 h-3.5 text-slate-400" />
                             <span>Instansi Penanggung Jawab</span>
                           </span>
-                          <span className="font-mono tabular-nums text-[10.5px] font-bold text-[#c2410c] bg-orange-50/80 px-2 py-0.5 rounded-[4px] ring-1 ring-orange-200/50 shrink-0">
+                          <span className="font-mono tabular-nums text-[10px] font-bold text-[#c2410c] bg-orange-50/80 px-2 py-0.5 rounded-[4px] ring-1 ring-orange-200/50 shrink-0">
                             Pagu: Rp {((currentRoad.budget?.paguRp || 0) / 1000000000).toFixed(2)} M
                           </span>
                         </div>
-                        <div className="font-semibold text-slate-900 text-xs sm:text-[12.5px] leading-relaxed">
+                        <div className="font-semibold text-slate-900 text-xs leading-relaxed">
                           {currentRoad.authorityLabel}
                         </div>
                       </div>
 
                       {/* Patokan Detail Lokasi */}
-                      <div className="space-y-1.5">
+                      <div className="space-y-1">
                         <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                           Patokan / Detail Lokasi Lapangan
                         </label>
@@ -1018,277 +1251,14 @@ export default function ReportModal({
                           value={addressDetail}
                           onChange={(e) => setAddressDetail(e.target.value)}
                           placeholder="Contoh: Depan SPBU 34-16401, lajur kiri arah pusat kota"
-                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
+                          className="w-full px-3 py-2 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
                         />
                       </div>
                     </div>
 
-                  </div>
-
-                  {/* RIGHT COLUMN: Camera Capture / Upload Dropzone & AI Inspector */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                        <Camera className="w-4 h-4 text-[#c2410c]" />
-                        <span>Foto Bukti Kerusakan Jalan</span>
-                      </label>
-                      <span className="text-[10px] text-slate-400">JPG, PNG, HEIC (Maks 10MB)</span>
-                    </div>
-
-                    {/* Hidden Inputs for Camera and File Picker */}
-                    <input
-                      ref={cameraInputRef}
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      onChange={(e) => handleProcessFile(e.target.files?.[0])}
-                      className="hidden"
-                    />
-                    <input
-                      ref={galleryInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleProcessFile(e.target.files?.[0])}
-                      className="hidden"
-                    />
-
-                    {/* PHOTO INPUT DROPZONE / PREVIEW AREA */}
-                    {!photoPreview ? (
-                      /* Clean Dropzone with direct Camera and Gallery actions */
-                      <div
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                        className={`rounded-[8px] border-2 border-dashed transition-all p-5 text-center flex flex-col items-center justify-center min-h-[190px] ${
-                          isDragging
-                            ? "border-[#c2410c] bg-orange-50/60 ring-4 ring-orange-200/50"
-                            : "border-slate-300 hover:border-orange-300 bg-slate-50/70 hover:bg-slate-50"
-                        }`}
-                      >
-                        <div className="w-11 h-11 rounded-full bg-orange-100/80 text-[#c2410c] flex items-center justify-center mb-2.5 ring-1 ring-orange-200/70 shadow-2xs">
-                          <ImageIcon className="w-5 h-5" />
-                        </div>
-                        
-                        <h4 className="text-xs sm:text-sm font-bold text-slate-900 mb-1">
-                          Ambil Foto Langsung atau Unggah Berkas
-                        </h4>
-                        <p className="text-[11px] text-slate-500 max-w-xs mb-3.5 leading-relaxed">
-                          Sertakan foto kondisi jalan yang jelas agar laporan dapat segera dicek dan diteruskan ke dinas.
-                        </p>
-
-                        {/* Dual Action Buttons: Direct Camera vs Gallery */}
-                        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
-                          <button
-                            type="button"
-                            onClick={() => cameraInputRef.current?.click()}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
-                          >
-                            <Camera className="w-3.5 h-3.5" />
-                            <span>Buka Kamera</span>
-                          </button>
-                          
-                          <button
-                            type="button"
-                            onClick={() => galleryInputRef.current?.click()}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[6px] bg-white hover:bg-slate-100 text-slate-700 ring-1 ring-slate-300 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
-                          >
-                            <Upload className="w-3.5 h-3.5 text-slate-500" />
-                            <span>Pilih dari Galeri / Berkas</span>
-                          </button>
-                        </div>
-
-                        <span className="text-[10px] text-slate-400 mt-2.5">
-                          atau seret dan lepas (drag &amp; drop) foto ke kotak ini
-                        </span>
-                      </div>
-                    ) : (
-                      /* Photo Preview Card with live AI Scanning & Actions */
-                      <div className="space-y-3">
-                        <div
-                          className={`relative rounded-[8px] overflow-hidden bg-slate-900 h-48 sm:h-52 group shadow-sm flex items-center justify-center transition-all ${
-                            spamError
-                              ? "ring-2 ring-rose-400/80 shadow-rose-100/50"
-                              : "ring-1 ring-slate-200"
-                          }`}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={photoPreview}
-                            alt="Foto Bukti Kerusakan"
-                            className="w-full h-full object-cover"
-                          />
-
-                          {/* Scanning Overlay when checking image */}
-                          {isAnalyzing && (
-                            <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-[2px] flex flex-col items-center justify-center p-3 text-white overflow-hidden z-20">
-                              <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent shadow-[0_0_16px_#ea580c] animate-scan-line pointer-events-none" />
-
-                              <div className="w-12 h-12 border border-orange-400/80 rounded-[8px] flex items-center justify-center relative mb-2">
-                                <Crosshair className="w-6 h-6 text-orange-400 animate-spin" />
-                              </div>
-
-                              <div className="text-[11.5px] font-bold text-orange-300 tracking-wider flex items-center gap-1.5">
-                                <ScanLine className="w-4 h-4 animate-pulse text-orange-400" />
-                                <span>Ayo kita cek kondisi jalannya...</span>
-                              </div>
-                              <span className="text-[10px] text-slate-300 font-sans mt-0.5 text-center">
-                                Mengecek tingkat kerusakan dan kelayakan foto
-                              </span>
-                            </div>
-                          )}
-
-                          {/* Top Action Overlay: Retake / Delete */}
-                          {!isAnalyzing && (
-                            <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
-                              <button
-                                type="button"
-                                onClick={() => cameraInputRef.current?.click()}
-                                className="px-3 py-1.5 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
-                                title="Ambil foto ulang dengan kamera"
-                              >
-                                <Camera className="w-3.5 h-3.5" />
-                                <span>Foto Ulang</span>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => galleryInputRef.current?.click()}
-                                className="px-3 py-1.5 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
-                                title="Pilih foto lain dari galeri"
-                              >
-                                <Upload className="w-3.5 h-3.5" />
-                                <span>Galeri</span>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={handleClearPhoto}
-                                className="p-1.5 rounded-[5px] bg-rose-600/90 hover:bg-rose-700 text-white backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
-                                title="Hapus foto"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          )}
-
-                          {/* Bottom Tag: dynamic according to verification status */}
-                          {spamError ? (
-                            <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-rose-950/90 text-rose-200 text-[10px] font-semibold backdrop-blur-sm flex items-center gap-1.5 shadow-xs ring-1 ring-rose-500/50 animate-fade-in">
-                              <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                              <span>Bukan Foto Kerusakan Jalan</span>
-                            </div>
-                          ) : (
-                            <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-sm flex items-center gap-1.5 shadow-xs">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                              <span>Foto Berhasil Dimuat</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Inspector Results Card */}
-                        <div className="space-y-2.5">
-                          {spamError && (
-                            <div className="p-4 rounded-[8px] bg-rose-50/90 ring-1 ring-rose-200 text-rose-900 space-y-3 animate-fade-in shadow-2xs">
-                              <div className="flex items-center justify-between gap-2 border-b border-rose-200/70 pb-2">
-                                <div className="flex items-center gap-2 font-bold text-xs sm:text-[13px] text-rose-900">
-                                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
-                                  <span>Foto Belum Sesuai Kriteria</span>
-                                </div>
-                                <span className="px-2 py-0.5 rounded-[4px] bg-rose-100 text-rose-800 text-[10px] font-bold uppercase tracking-wider shrink-0">
-                                  Verifikasi Ditolak
-                                </span>
-                              </div>
-
-                              <div className="space-y-1.5 text-xs">
-                                <p className="text-[11.5px] text-rose-900 leading-relaxed font-medium">
-                                  {spamError}
-                                </p>
-                                <p className="text-[10.5px] text-rose-700/90 leading-normal">
-                                  💡 <strong>Saran:</strong> Mohon lampirkan foto yang memperlihatkan kondisi fisik permukaan jalan raya (aspal berlubang, retak buaya, jalan amblas, atau tebing labil).
-                                </p>
-                              </div>
-
-                              {/* Direct Action Buttons: Retake vs Re-select */}
-                              <div className="pt-1 flex flex-wrap items-center gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => cameraInputRef.current?.click()}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-rose-700 hover:bg-rose-800 text-white text-[11px] font-bold transition-all shadow-xs cursor-pointer active:scale-95"
-                                >
-                                  <Camera className="w-3.5 h-3.5" />
-                                  <span>Buka Kamera Lagi</span>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => galleryInputRef.current?.click()}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-white hover:bg-rose-50 text-rose-900 ring-1 ring-rose-300 text-[11px] font-semibold transition-all shadow-2xs cursor-pointer active:scale-95"
-                                >
-                                  <Upload className="w-3.5 h-3.5 text-rose-700" />
-                                  <span>Pilih dari Galeri</span>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={handleClearPhoto}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[5px] text-rose-700 hover:bg-rose-100/80 text-[11px] font-semibold transition-colors cursor-pointer ml-auto"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                  <span>Hapus</span>
-                                </button>
-                              </div>
-                            </div>
-                          )}
-
-                          {aiResult && !spamError && (
-                            <div className="p-3.5 sm:p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200 space-y-2.5 animate-fade-in text-xs">
-                              <div className="flex items-center justify-between gap-2">
-                                <div className="flex items-center gap-2">
-                                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                  <span className="font-bold text-slate-900 text-xs sm:text-[13px]">
-                                    {aiResult.categoryLabel}
-                                  </span>
-                                </div>
-                                <span
-                                  className={`px-2.5 py-1 rounded-[4px] text-[10.5px] font-bold font-mono tabular-nums shrink-0 ${
-                                    aiResult.hazardScore >= 80
-                                      ? "bg-rose-100 text-rose-800"
-                                      : "bg-amber-100 text-amber-800"
-                                  }`}
-                                >
-                                  Skor Bahaya: {aiResult.hazardScore}/100
-                                </span>
-                              </div>
-
-                              <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                                {aiResult.analysisText}
-                              </p>
-
-                              <div className="pt-2 border-t border-slate-200/70 flex items-center justify-between text-[10.5px] text-slate-500 font-sans">
-                                <span>Dimensi: <strong className="text-slate-800">{aiResult.dimensions}</strong></span>
-                                <span className="text-emerald-700 font-bold flex items-center gap-1">
-                                  <Check className="w-3.5 h-3.5" />
-                                  <span>Pemeriksaan Selesai</span>
-                                </span>
-                              </div>
-                            </div>
-                          )}
-
-                          {!aiResult && !spamError && !isAnalyzing && (
-                            <button
-                              type="button"
-                              onClick={() => handleAnalyzePhoto(photoPreview)}
-                              className="w-full py-2.5 px-3 rounded-[6px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ring-1 ring-slate-200 shadow-2xs"
-                            >
-                              <RefreshCw className="w-3.5 h-3.5 text-[#c2410c]" />
-                              <span>Ayo Cek Ulang Foto</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* IDENTITAS PELAPOR & NOTIFIKASI TIKET */}
-                    <div className="p-3.5 sm:p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3.5">
-                      <div className="space-y-1.5">
+                    {/* Reporter Name & Notification Details */}
+                    <div className="p-3.5 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3">
+                      <div className="space-y-1">
                         <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                           Nama / Inisial Pelapor
                         </label>
@@ -1298,16 +1268,16 @@ export default function ReportModal({
                           value={reporterName}
                           onChange={(e) => setReporterName(e.target.value)}
                           placeholder="Contoh: Budi Santoso atau B.S."
-                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
+                          className="w-full px-3 py-2 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
                         />
                         <span className="text-[10px] text-slate-400 block pt-0.5">
                           Identitas pelapor disamarkan otomatis pada peta publik.
                         </span>
                       </div>
 
-                      <div className="p-3 rounded-[6px] bg-white ring-1 ring-slate-200/80 space-y-2">
+                      <div className="p-2.5 rounded-[6px] bg-white ring-1 ring-slate-200/80 space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5 cursor-pointer">
+                          <label className="text-[10.5px] font-bold text-slate-800 flex items-center gap-1.5 cursor-pointer">
                             <BellRing className="w-3.5 h-3.5 text-[#c2410c]" />
                             <span>Kirim Notifikasi Status Penanganan</span>
                           </label>
@@ -1315,7 +1285,7 @@ export default function ReportModal({
                             type="checkbox"
                             checked={notifyOnUpdate}
                             onChange={(e) => setNotifyOnUpdate(e.target.checked)}
-                            className="accent-[#c2410c] w-4 h-4 cursor-pointer"
+                            className="accent-[#c2410c] w-3.5 h-3.5 cursor-pointer"
                           />
                         </div>
                         {notifyOnUpdate && (
@@ -1324,7 +1294,7 @@ export default function ReportModal({
                             value={notificationContact}
                             onChange={(e) => setNotificationContact(e.target.value)}
                             placeholder="WhatsApp / Email pengingat tiket (Opsional)"
-                            className="w-full px-3 py-2 rounded-[5px] bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 mt-1"
+                            className="w-full px-2.5 py-1.5 rounded-[4px] bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 mt-1"
                           />
                         )}
                       </div>
@@ -1334,8 +1304,8 @@ export default function ReportModal({
 
                 </div>
 
-                {/* Bottom Action Bar */}
-                <div className="pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                {/* Bottom Action Bar of Step 1 */}
+                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
                   <div className="text-[10.5px] text-slate-500 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
                     <span>Terintegrasi Real-Time dengan Peta GIS &amp; Pengaduan Terbuka (UU 25/2009)</span>
@@ -1345,14 +1315,437 @@ export default function ReportModal({
                     <button
                       type="button"
                       onClick={handleResetAndClose}
-                      className="flex-1 sm:flex-none px-4 py-2 rounded-[6px] text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                      className="flex-1 sm:flex-none px-4 py-2.5 rounded-[6px] text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer font-sans"
+                    >
+                      <span>Lanjut: Foto Bukti &amp; Cek AI</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </form>
+            ) : (
+              /* STEP 2: FOTO BUKTI KERUSAKAN & PEMERIKSAAN AI (CLEAN, FOCUSED FULL-WIDTH) */
+              <form onSubmit={handleSubmit} className="space-y-4 font-sans animate-fade-in max-w-3xl mx-auto">
+                
+                {/* Step 1 Location Summary Banner */}
+                <div className="p-3 rounded-[8px] bg-orange-50/70 ring-1 ring-orange-200/80 flex items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-[5px] bg-[#c2410c] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                      <MapPin className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold text-slate-900 truncate">
+                        {currentRoad.name}
+                      </div>
+                      <div className="flex items-center gap-2 text-[10.5px] text-slate-600 truncate mt-0.5">
+                        <span className="truncate">{currentRoad.authorityLabel}</span>
+                        <span>•</span>
+                        <span className="font-mono tabular-nums text-slate-700 font-semibold">
+                          GIS: {validLat.toFixed(4)}, {validLng.toFixed(4)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleStopLiveCamera();
+                      setCurrentStep(1);
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[5px] bg-white hover:bg-orange-100/60 text-[#c2410c] text-[10.5px] font-bold ring-1 ring-orange-200/80 shrink-0 cursor-pointer shadow-2xs transition-colors"
+                  >
+                    <Edit3 className="w-3 h-3" />
+                    <span>Ubah Lokasi</span>
+                  </button>
+                </div>
+
+                {/* Hidden Inputs for Camera and File Picker (Fallback) */}
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={(e) => handleProcessFile(e.target.files?.[0])}
+                  className="hidden"
+                />
+                <input
+                  ref={galleryInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleProcessFile(e.target.files?.[0])}
+                  className="hidden"
+                />
+
+                {/* PHOTO INPUT: LIVE CAMERA / DROPZONE / PREVIEW AREA */}
+                {isLiveCameraActive ? (
+                  /* LIVE CAMERA VIEWFINDER OVERLAY */
+                  <div className="relative rounded-[10px] overflow-hidden bg-slate-950 h-72 sm:h-84 shadow-xl ring-2 ring-[#c2410c] flex flex-col items-center justify-between animate-fade-in group">
+                    {/* Live Video Feed */}
+                    <video
+                      ref={videoRef}
+                      playsInline
+                      autoPlay
+                      muted
+                      className={`w-full h-full object-cover ${
+                        cameraFacingMode === "user" ? "scale-x-[-1]" : ""
+                      }`}
+                    />
+
+                    {/* Top HUD Bar */}
+                    <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between z-20">
+                      <div className="px-2.5 py-1 rounded-[5px] bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold flex items-center gap-1.5 shadow-xs ring-1 ring-white/10">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                        <span>Kamera Langsung Aktif</span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={handleToggleCameraFacing}
+                          className="px-2.5 py-1 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[11px] font-semibold flex items-center gap-1.5 backdrop-blur-sm shadow-xs cursor-pointer transition-colors ring-1 ring-white/10"
+                          title="Putar Kamera Depan / Belakang"
+                        >
+                          <SwitchCamera className="w-3.5 h-3.5 text-orange-400" />
+                          <span className="hidden sm:inline">Putar Kamera</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleStopLiveCamera}
+                          className="p-1 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white backdrop-blur-sm shadow-xs cursor-pointer transition-colors ring-1 ring-white/10"
+                          title="Tutup Kamera"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Target Viewfinder Framing Overlay */}
+                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center p-6 z-10">
+                      <div className="w-56 h-36 sm:w-72 sm:h-44 border border-white/35 rounded-lg relative flex items-center justify-center">
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-400 -mt-0.5 -ml-0.5" />
+                        <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-orange-400 -mt-0.5 -mr-0.5" />
+                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-orange-400 -mb-0.5 -ml-0.5" />
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-400 -mb-0.5 -mr-0.5" />
+                        <span className="text-[10.5px] font-medium text-white/90 drop-shadow px-2 py-0.5 rounded bg-black/40 backdrop-blur-xs">
+                          Arahkan ke Kerusakan Jalan
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bottom Capture Controls */}
+                    <div className="absolute bottom-3.5 inset-x-0 flex items-center justify-center gap-4 z-20">
+                      <button
+                        type="button"
+                        onClick={handleCaptureLivePhoto}
+                        className="w-14 h-14 rounded-full bg-white p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center ring-4 ring-[#c2410c] cursor-pointer"
+                        title="Jepret Foto Sekarang"
+                      >
+                        <div className="w-11 h-11 rounded-full bg-[#c2410c] hover:bg-[#9a3412] flex items-center justify-center transition-colors">
+                          <Camera className="w-5 h-5 text-white" />
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                ) : !photoPreview ? (
+                  /* Clean Dropzone with direct Camera and Gallery actions */
+                  <div className="space-y-3">
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`rounded-[10px] border-2 border-dashed transition-all p-7 text-center flex flex-col items-center justify-center min-h-[240px] ${
+                        isDragging
+                          ? "border-[#c2410c] bg-orange-50/60 ring-4 ring-orange-200/50"
+                          : "border-slate-300 hover:border-orange-300 bg-slate-50/70 hover:bg-slate-50"
+                      }`}
+                    >
+                      <div className="w-14 h-14 rounded-full bg-orange-100/90 text-[#c2410c] flex items-center justify-center mb-3 ring-1 ring-orange-200 shadow-xs">
+                        <ImageIcon className="w-7 h-7" />
+                      </div>
+                      
+                      <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1">
+                        Ambil Foto Langsung atau Unggah Berkas
+                      </h4>
+                      <p className="text-xs text-slate-500 max-w-md mb-4 leading-relaxed">
+                        Sertakan foto kondisi jalan yang jelas agar laporan dapat segera dicek secara otomatis oleh sistem JagaJalan dan diteruskan ke dinas.
+                      </p>
+
+                      {/* Dual Action Buttons: Direct Camera vs Gallery */}
+                      <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+                        <button
+                          type="button"
+                          onClick={() => handleStartLiveCamera()}
+                          disabled={isStartingCamera}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
+                        >
+                          {isStartingCamera ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Camera className="w-4 h-4" />
+                          )}
+                          <span>{isStartingCamera ? "Menyiapkan Kamera..." : "Buka Kamera Langsung"}</span>
+                        </button>
+                        
+                        <button
+                          type="button"
+                          onClick={() => galleryInputRef.current?.click()}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-white hover:bg-slate-100 text-slate-700 ring-1 ring-slate-300 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
+                        >
+                          <Upload className="w-4 h-4 text-slate-500" />
+                          <span>Pilih dari Galeri / Berkas</span>
+                        </button>
+                      </div>
+
+                      <span className="text-[10.5px] text-slate-400 mt-3">
+                        Format: JPG, PNG, HEIC (Maks 10MB) • Mendukung seret &amp; lepas (drag &amp; drop)
+                      </span>
+                    </div>
+
+                    {/* Camera Permission / Device Error Notification */}
+                    {liveCameraError && (
+                      <div className="p-3.5 rounded-[7px] bg-rose-50 ring-1 ring-rose-200 text-rose-900 text-xs flex items-start gap-2.5 animate-fade-in shadow-2xs">
+                        <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                        <div className="flex-1 space-y-1">
+                          <p className="font-semibold leading-snug">{liveCameraError}</p>
+                          <div className="flex flex-wrap items-center gap-2 text-[11px] pt-1">
+                            <button
+                              type="button"
+                              onClick={() => cameraInputRef.current?.click()}
+                              className="font-bold text-rose-800 hover:underline cursor-pointer"
+                            >
+                              Gunakan Kamera Bawaan Perangkat
+                            </button>
+                            <span className="text-rose-300">•</span>
+                            <button
+                              type="button"
+                              onClick={() => galleryInputRef.current?.click()}
+                              className="font-bold text-rose-800 hover:underline cursor-pointer"
+                            >
+                              Pilih dari Galeri Foto
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  /* Photo Preview Card with live AI Scanning & Actions */
+                  <div className="space-y-3">
+                    <div
+                      className={`relative rounded-[8px] overflow-hidden bg-slate-900 h-56 sm:h-64 group shadow-sm flex items-center justify-center transition-all ${
+                        spamError
+                          ? "ring-2 ring-rose-400/80 shadow-rose-100/50"
+                          : "ring-1 ring-slate-200"
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={photoPreview}
+                        alt="Foto Bukti Kerusakan"
+                        className="w-full h-full object-cover"
+                      />
+
+                      {/* Scanning Overlay when checking image */}
+                      {isAnalyzing && (
+                        <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-[2px] flex flex-col items-center justify-center p-3 text-white overflow-hidden z-20">
+                          <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent shadow-[0_0_16px_#ea580c] animate-scan-line pointer-events-none" />
+
+                          <div className="w-12 h-12 border border-orange-400/80 rounded-[8px] flex items-center justify-center relative mb-2">
+                            <Crosshair className="w-6 h-6 text-orange-400 animate-spin" />
+                          </div>
+
+                          <div className="text-xs font-bold text-orange-300 tracking-wider flex items-center gap-1.5">
+                            <ScanLine className="w-4 h-4 animate-pulse text-orange-400" />
+                            <span>Ayo kita cek kondisi jalannya...</span>
+                          </div>
+                          <span className="text-[10px] text-slate-300 font-sans mt-0.5 text-center">
+                            Mengecek tingkat kerusakan dan kelayakan foto secara otomatis
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Top Action Overlay: Retake / Delete */}
+                      {!isAnalyzing && (
+                        <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
+                          <button
+                            type="button"
+                            onClick={() => handleStartLiveCamera()}
+                            className="px-3 py-1.5 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
+                            title="Buka kamera langsung untuk foto ulang"
+                          >
+                            <Camera className="w-3.5 h-3.5" />
+                            <span>Foto Ulang</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => galleryInputRef.current?.click()}
+                            className="px-3 py-1.5 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
+                            title="Pilih foto lain dari galeri"
+                          >
+                            <Upload className="w-3.5 h-3.5" />
+                            <span>Galeri</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleClearPhoto}
+                            className="p-1.5 rounded-[5px] bg-rose-600/90 hover:bg-rose-700 text-white backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
+                            title="Hapus foto"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Bottom Tag */}
+                      {spamError ? (
+                        <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-rose-950/90 text-rose-200 text-[10.5px] font-semibold backdrop-blur-sm flex items-center gap-1.5 shadow-xs ring-1 ring-rose-500/50 animate-fade-in">
+                          <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                          <span>Bukan Foto Kerusakan Jalan</span>
+                        </div>
+                      ) : (
+                        <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-slate-900/85 text-white text-[10.5px] font-medium backdrop-blur-sm flex items-center gap-1.5 shadow-xs">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span>Foto Berhasil Dimuat</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Inspector Results Card */}
+                    <div className="space-y-2.5">
+                      {spamError && (
+                        <div className="p-4 rounded-[8px] bg-rose-50/90 ring-1 ring-rose-200 text-rose-900 space-y-3 animate-fade-in shadow-2xs">
+                          <div className="flex items-center justify-between gap-2 border-b border-rose-200/70 pb-2">
+                            <div className="flex items-center gap-2 font-bold text-xs sm:text-[13px] text-rose-900">
+                              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                              <span>Foto Belum Sesuai Kriteria</span>
+                            </div>
+                            <span className="px-2 py-0.5 rounded-[4px] bg-rose-100 text-rose-800 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                              Verifikasi Ditolak
+                            </span>
+                          </div>
+
+                          <div className="space-y-1.5 text-xs">
+                            <p className="text-[11.5px] text-rose-900 leading-relaxed font-medium">
+                              {spamError}
+                            </p>
+                            <p className="text-[10.5px] text-rose-700/90 leading-normal">
+                              💡 <strong>Saran:</strong> Mohon lampirkan foto yang memperlihatkan kondisi fisik permukaan jalan raya (aspal berlubang, retak buaya, jalan amblas, atau tebing labil).
+                            </p>
+                          </div>
+
+                          {/* Action Buttons for Rejection */}
+                          <div className="pt-1 flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleStartLiveCamera()}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[5px] bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                            >
+                              <Camera className="w-3.5 h-3.5" />
+                              <span>Buka Kamera Lagi</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => galleryInputRef.current?.click()}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[5px] bg-white hover:bg-rose-50 text-rose-900 ring-1 ring-rose-300 text-xs font-semibold transition-all shadow-2xs cursor-pointer active:scale-95"
+                            >
+                              <Upload className="w-3.5 h-3.5 text-rose-700" />
+                              <span>Pilih dari Galeri</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={handleClearPhoto}
+                              className="inline-flex items-center gap-1 px-3 py-2 rounded-[5px] text-rose-700 hover:bg-rose-100/80 text-xs font-semibold transition-colors cursor-pointer ml-auto"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>Hapus</span>
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {aiResult && !spamError && (
+                        <div className="p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200 space-y-2.5 animate-fade-in text-xs">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                              <span className="font-bold text-slate-900 text-xs sm:text-[13px]">
+                                {aiResult.categoryLabel}
+                              </span>
+                            </div>
+                            <span
+                              className={`px-2.5 py-1 rounded-[4px] text-[10.5px] font-bold font-mono tabular-nums shrink-0 ${
+                                aiResult.hazardScore >= 80
+                                  ? "bg-rose-100 text-rose-800"
+                                  : "bg-amber-100 text-amber-800"
+                              }`}
+                            >
+                              Skor Bahaya: {aiResult.hazardScore}/100
+                            </span>
+                          </div>
+
+                          <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                            {aiResult.analysisText}
+                          </p>
+
+                          <div className="pt-2 border-t border-slate-200/70 flex items-center justify-between text-[10.5px] text-slate-500 font-sans">
+                            <span>Dimensi: <strong className="text-slate-800">{aiResult.dimensions}</strong></span>
+                            <span className="text-emerald-700 font-bold flex items-center gap-1">
+                              <Check className="w-3.5 h-3.5" />
+                              <span>Pemeriksaan Selesai</span>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {!aiResult && !spamError && !isAnalyzing && (
+                        <button
+                          type="button"
+                          onClick={() => handleAnalyzePhoto(photoPreview)}
+                          className="w-full py-2.5 px-3 rounded-[6px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ring-1 ring-slate-200 shadow-2xs"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5 text-[#c2410c]" />
+                          <span>Ayo Cek Ulang Foto</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Bottom Action Bar of Step 2 */}
+                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleStopLiveCamera();
+                      setCurrentStep(1);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-[6px] text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Kembali Ubah Lokasi</span>
+                  </button>
+
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={handleResetAndClose}
+                      className="px-4 py-2.5 rounded-[6px] text-slate-700 hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
                     >
                       Batal
                     </button>
                     <button
                       type="submit"
                       disabled={!photoPreview || !!spamError || isAnalyzing || isSubmitting}
-                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 pl-4 pr-2.5 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer font-sans"
+                      className="inline-flex items-center justify-center gap-2 pl-4 pr-3 py-2.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer font-sans"
                       title={!photoPreview ? "Harap sertakan foto bukti kerusakan jalan terlebih dahulu" : ""}
                     >
                       <span>
@@ -1368,6 +1761,7 @@ export default function ReportModal({
                     </button>
                   </div>
                 </div>
+
               </form>
             )}
           </div>
