@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   ShieldAlert,
   HardHat,
@@ -50,12 +51,17 @@ export default function OfficerDashboard({
   currentOfficer,
   onLogout,
 }) {
+  const [mounted, setMounted] = useState(false);
   const [selectedAuthority, setSelectedAuthority] = useState(
     currentOfficer?.authorityLevel || "ALL"
   );
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("HAZARD"); // HAZARD | SLA | UPVOTES | DATE
   const [activeReportToEdit, setActiveReportToEdit] = useState(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Form states in action modal
   const [targetStatus, setTargetStatus] = useState("DALAM_PENGERJAAN");
@@ -645,9 +651,9 @@ export default function OfficerDashboard({
         )}
       </div>
 
-      {/* Action Modal / Drawer for Officer (Double-Bezel 5pt with Orange Header & White Text) */}
-      {activeReportToEdit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
+      {/* Action Modal / Drawer for Officer (PORTALED TO ROOT BODY Z-[2000]) */}
+      {mounted && activeReportToEdit && typeof document !== "undefined" && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
           <div className="w-full max-w-2xl rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
             <div className="relative w-full max-h-[88vh] flex flex-col rounded-[6px] bg-white ring-1 ring-orange-200/50 overflow-hidden">
               {/* Modal Header (Orange with White Text) */}
@@ -851,7 +857,8 @@ export default function OfficerDashboard({
               </form>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

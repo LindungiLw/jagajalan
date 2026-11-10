@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   TrendingUp,
   BarChart3,
@@ -59,11 +60,16 @@ const NATIONAL_ROAD_COMPOSITION = [
 ];
 
 export default function AnnualProgressChart() {
+  const [mounted, setMounted] = useState(false);
   const [activeMetric, setActiveMetric] = useState("road-condition"); // 'road-condition' | 'complaints' | 'inpres'
   const [chartViewMode, setChartViewMode] = useState("line"); // 'line' (clean disparity lines, default) | 'combo'
   const [selectedYear, setSelectedYear] = useState(2024);
   const [hoveredSlice, setHoveredSlice] = useState(null);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
@@ -871,9 +877,9 @@ export default function AnnualProgressChart() {
         </div>
       )}
 
-      {/* METODOLOGI & REGULASI MODAL (Double-Bezel 5pt with Orange Header & White Text) */}
-      {showExplanationModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
+      {/* METODOLOGI & REGULASI MODAL (PORTALED TO ROOT BODY Z-[2000]) */}
+      {mounted && showExplanationModal && typeof document !== "undefined" && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
           <div className="max-w-2xl w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
             <div className="bg-white rounded-[6px] w-full overflow-hidden ring-1 ring-orange-200/50 max-h-[88vh] flex flex-col">
               {/* Orange Header with White Text */}
@@ -960,7 +966,8 @@ export default function AnnualProgressChart() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );

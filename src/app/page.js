@@ -558,7 +558,7 @@ export default function Home() {
       />
 
       <main
-        className={`relative z-10 flex-1 flex flex-col ${
+        className={`relative flex-1 flex flex-col ${
           activeTab === "peta" ? "h-full min-h-0 overflow-hidden" : ""
         }`}
       >
@@ -733,7 +733,9 @@ export default function Home() {
         </div>
       )}
 
-      {/* Global Modals */}
+      {activeTab !== "peta" && <Footer onSelectTab={setActiveTab} activeTab={activeTab} />}
+
+      {/* Global Modals (Rendered at Root with Z-[2000]) */}
       <ReportModal
         isOpen={reportModalOpen}
         onClose={() => {
@@ -754,8 +756,6 @@ export default function Home() {
         }}
         report={selectedOmbudsmanReport}
       />
-
-      {activeTab !== "peta" && <Footer onSelectTab={setActiveTab} activeTab={activeTab} />}
     </div>
   );
 }

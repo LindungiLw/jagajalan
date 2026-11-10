@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { PROVINCES_DATA, NATIONAL_STATS } from "@/data/provincesData";
 import {
   BarChart3,
@@ -87,11 +88,16 @@ function ProvinceKemantapanDonut({ mantapPct = 50 }) {
 }
 
 export default function NationalRankingSection({ onSelectPilot }) {
+  const [mounted, setMounted] = useState(false);
   const [selectedIsland, setSelectedIsland] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("complaints"); // "complaints" | "damaged" | "inpres"
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "table"
   const [selectedProvince, setSelectedProvince] = useState(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const islands = [
     { id: "ALL", label: "Semua Wilayah" },
@@ -649,10 +655,10 @@ export default function NationalRankingSection({ onSelectPilot }) {
       )}
 
       {/* ------------------------------------------------------------- */}
-      {/* 3. MODAL DETAIL PROVINSI (INTERACTIVE MASTER-DETAIL DRAWER)    */}
+      {/* 3. MODAL DETAIL PROVINSI (PORTALED TO ROOT BODY Z-[2000])     */}
       {/* ------------------------------------------------------------- */}
-      {selectedProvince && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
+      {mounted && selectedProvince && typeof document !== "undefined" && createPortal(
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
           <div className="max-w-xl w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
             <div className="bg-white rounded-[6px] w-full overflow-hidden ring-1 ring-orange-200/50 max-h-[90vh] flex flex-col">
               
@@ -837,7 +843,8 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
