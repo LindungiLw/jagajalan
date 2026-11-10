@@ -15,43 +15,43 @@ const DATA_RESOURCES = [
     name: "Kementerian PU",
     role: "SK Ruas & Kewenangan Jalan",
     tag: "Kemen PU RI",
-    icon: "/icon/jalan.png",
+    icon: "/partners/pu.svg",
     href: "https://data.pu.go.id",
   },
   {
-    name: "LKPP Inaproc",
+    name: "LKPP INAPROC",
     role: "Katalog Tender & Kontrak LPSE",
     tag: "Pengadaan LPSE",
-    icon: "/icon/financial.png",
+    icon: "/partners/lkpp.svg",
     href: "https://inaproc.id",
   },
   {
     name: "Ombudsman RI",
     role: "Standar Batas Waktu Tanggap SLA",
     tag: "UU 25/2009",
-    icon: "/icon/hukum_icon.png",
+    icon: "/partners/ombudsman.svg",
     href: "https://ombudsman.go.id",
   },
   {
     name: "Satu Data Indonesia",
     role: "Interoperabilitas Geospasial",
     tag: "Portal SDI",
-    icon: "/icon/maps.png",
+    icon: "/partners/sdi.png",
     href: "https://data.go.id",
   },
   {
-    name: "BPS SiRUSA",
+    name: "BPS RI (SiRUSA)",
     role: "Statistik Kondisi Kemantapan Jalan",
     tag: "Statistik Jalan",
-    icon: "/icon/statistik_icon.png",
+    icon: "/partners/bps.svg",
     href: "https://sirusa.bps.go.id",
   },
   {
-    name: "Open Data Daerah",
+    name: "SIPD Kemendagri",
     role: "Alokasi Pagu Anggaran APBD Pemda",
     tag: "Fiskal Daerah",
-    icon: "/icon/report.png",
-    href: "https://opendata.jabarprov.go.id",
+    icon: "/partners/kemendagri.svg",
+    href: "https://sipd.kemendagri.go.id",
   },
 ];
 
@@ -267,15 +267,15 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
                 title={`${item.name} - ${item.role}`}
                 className="group shrink-0 mx-2 px-3 py-2 rounded-[7px] bg-white hover:bg-orange-50/70 border border-[#E6DFD5] hover:border-orange-300 ring-1 ring-slate-100 hover:ring-orange-200/70 shadow-2xs transition-all duration-200 flex items-center gap-2.5 cursor-pointer select-none"
               >
-                <div className="w-8 h-8 rounded-[5px] bg-slate-50 group-hover:bg-white ring-1 ring-slate-200/60 p-1 flex items-center justify-center shrink-0 transition-colors">
+                <div className="w-9 h-9 rounded-[6px] bg-white group-hover:bg-orange-50/50 ring-1 ring-slate-200/80 p-1 flex items-center justify-center shrink-0 shadow-2xs transition-colors">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={item.icon}
                     alt={item.name}
-                    width={20}
-                    height={20}
-                    style={{ width: "20px", height: "20px" }}
-                    className="w-5 h-5 object-contain shrink-0"
+                    width={24}
+                    height={24}
+                    style={{ width: "24px", height: "24px" }}
+                    className="w-6 h-6 object-contain shrink-0"
                   />
                 </div>
                 <div className="text-left">

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xml:space="preserve"
+   width="467.10394"
+   height="528.89832"
+   style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+   viewBox="0 0 467103.94 529108.99"
+   version="1.1"
+   id="svg15"
+   sodipodi:docname="Logo_of_the_Ministry_of_Public_Works_and_Housing_of_the_Republic_of_Indonesia.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"><metadata
+   id="metadata19"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1366"
+   inkscape:window-height="705"
+   id="namedview17"
+   showgrid="false"
+   inkscape:snap-bbox="true"
+   inkscape:bbox-paths="true"
+   inkscape:bbox-nodes="true"
+   inkscape:snap-bbox-edge-midpoints="true"
+   inkscape:snap-bbox-midpoints="true"
+   inkscape:object-paths="true"
+   inkscape:snap-intersection-paths="true"
+   inkscape:snap-smooth-nodes="true"
+   inkscape:snap-midpoints="true"
+   inkscape:snap-object-midpoints="true"
+   inkscape:snap-center="true"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0"
+   inkscape:zoom="0.71995077"
+   inkscape:cx="194.73099"
+   inkscape:cy="264.77494"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg15" />
+ <defs
+   id="defs4">
+  <style
+   type="text/css"
+   id="style2">
+   <![CDATA[
+    .fil0 {fill:#25185A}
+    .fil1 {fill:#FAD605}
+   ]]>
+  </style>
+ 
+  
+  
+ 
+   
+   
+   
+  </defs>
+ <g
+   id="g855"
+   transform="translate(-33614.553,-34742)"><polygon
+     class="fil1"
+     points="16507,581777 16507,18462 518493,18462 518493,581777 "
+     id="polygon9"
+     transform="matrix(0.93088254,0,0,0.93927731,18141.921,17401.062)" /><path
+     class="fil0"
+     d="m 33508,563850 h 24656 v -11335 c 0,-64729 51286,-117890 114550,-117890 63264,0 114550,53161 114550,117890 0,3824 -183,7605 -533,11335 H 500798 V 388844 h -26799 v 2838 c 355,3336 543,6724 543,10157 0,51208 -40573,92720 -90621,92720 -50049,0 -90621,-41512 -90621,-92720 V 34742 H 104250 v 35632 c 82344,0 149096,68298 149096,152549 0,84251 -66753,152549 -149096,152549 H 33509 v 188379 z"
+     id="path11" /></g>
+</svg>
