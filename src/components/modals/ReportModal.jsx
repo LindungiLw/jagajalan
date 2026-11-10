@@ -185,6 +185,42 @@ export default function ReportModal({
     }
   }, [isOpen, initialLocation, roads, selectedRoadId]);
 
+  // Clean up camera stream on unmount
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        try {
+          streamRef.current.getTracks().forEach((track) => track.stop());
+        } catch {}
+        streamRef.current = null;
+      }
+    };
+  }, []);
+
+  // Stop camera stream whenever modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      if (streamRef.current) {
+        try {
+          streamRef.current.getTracks().forEach((track) => track.stop());
+        } catch {}
+        streamRef.current = null;
+      }
+      setIsLiveCameraActive(false);
+      setIsStartingCamera(false);
+    }
+  }, [isOpen]);
+
+  // Sync video element srcObject when camera becomes active
+  useEffect(() => {
+    if (isLiveCameraActive && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch((err) => {
+        console.warn("Video play error:", err);
+      });
+    }
+  }, [isLiveCameraActive]);
+
   if (!isOpen || !mounted) return null;
 
   const baseRoad = roads.find((r) => r.id === selectedRoadId) || roads[0] || {};
@@ -430,28 +466,6 @@ export default function ReportModal({
       handleProcessFile(file);
     }
   };
-
-  // Clean up camera stream on unmount
-  useEffect(() => {
-    return () => {
-      if (streamRef.current) {
-        try {
-          streamRef.current.getTracks().forEach((track) => track.stop());
-        } catch {}
-        streamRef.current = null;
-      }
-    };
-  }, []);
-
-  // Sync video element srcObject when camera becomes active
-  useEffect(() => {
-    if (isLiveCameraActive && videoRef.current && streamRef.current) {
-      videoRef.current.srcObject = streamRef.current;
-      videoRef.current.play().catch((err) => {
-        console.warn("Video play error:", err);
-      });
-    }
-  }, [isLiveCameraActive]);
 
   const handleStopLiveCamera = () => {
     if (streamRef.current) {
