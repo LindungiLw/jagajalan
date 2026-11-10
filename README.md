@@ -1,6 +1,9 @@
 <div align="center">
 
-  <img src="public/logo/full-logo.png" alt="JagaJalan Official Logo" width="340" />
+  <p align="center">
+    <img src="public/logo/logo.png" alt="Logo JagaJalan" width="72" style="vertical-align: middle; margin-right: 10px;" />
+    <img src="public/logo/logo-name.png" alt="JagaJalan Wordmark" width="210" style="vertical-align: middle;" />
+  </p>
 
   <br />
   <br />
@@ -151,15 +154,13 @@ Panel inspektur interaktif pada peta transparansi menyajikan informasi terpadu p
 ## 6. Desain Sistem, Identitas Visual, dan Pemisahan Warna
 
 ### A. Identitas Visual dan Filosofi Logo
-Logo resmi JagaJalan tersimpan dalam direktori `public/logo/` dan dirancang khusus dalam 3 format aset:
+Logo resmi JagaJalan tersimpan dalam direktori `public/logo/` dan dirancang khusus dalam format modular:
 1. **`logo.png` (Simbol Ikon Utama)**:
    - **Siluet Jalan Beraspal ('J')**: Bentuk dasar huruf 'J' yang distilisasi menyerupai penampang lajur jalan raya beraspal, dilengkapi marka garis putih putus-putus (*road lane marking*) sebagai representasi fokus domain infrastruktur jalan.
    - **Pin Koordinat Geospasial**: Ornamen penanda lokasi di ujung atas huruf 'J' menyimbolkan presisi data geospasial (*geotagged accuracy*) dan penentuan batas kewenangan administratif per ruas jalan.
    - **Garis Luar Safety Orange**: Membingkai lambang dengan warna standar keselamatan kerja jalan raya untuk menegaskan proteksi, kewaspadaan, dan transparansi publik.
-2. **`logo-name.png` (Tipografi Logotype)**:
-   - Tipografi modern dan kokoh bertuliskan "JagaJalan" yang mengedepankan keterbacaan (*legibility*), kredibilitas institusional, dan ketegasan integritas publik.
-3. **`full-logo.png` (Kombinasi Penuh Simbol & Logotype)**:
-   - Komposisi lockup resmi yang memadukan simbol ikon 'J' dan nama JagaJalan secara seimbang untuk keperluan publikasi resmi, header dokumen, dan presentasi.
+2. **`logo-name.png` (Tipografi Logotype / Wordmark)**:
+   - Tipografi modern dan kokoh bertuliskan "JagaJalan" yang mengedepankan keterbacaan (*legibility*), kredibilitas institusional, dan ketegasan integritas publik. Ditampilkan berdampingan dengan `logo.png` pada Navbar, Footer, serta kop dokumen resmi.
 
 ### B. Sistem Warna Status Kewenangan Jalan
 Untuk menghindari bias interpretasi data, JagaJalan memisahkan secara tegas antara sistem warna status kewenangan jalan dengan sistem warna status laporan pengaduan:

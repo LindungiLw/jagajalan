@@ -199,15 +199,26 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
           
           {/* Column 1: Brand & Mission (lg:col-span-4) */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center">
+            <div
+              className="flex items-center gap-2.5 cursor-pointer select-none group transition-opacity hover:opacity-90 w-fit"
+              onClick={() => handleNav("beranda")}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/logo/full-logo.png"
+                src="/logo/logo.png"
+                alt="Logo JagaJalan"
+                width={30}
+                height={30}
+                style={{ width: "30px", height: "30px", maxWidth: "30px", maxHeight: "30px" }}
+                className="w-[30px] h-[30px] object-contain shrink-0"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo/logo-name.png"
                 alt="JagaJalan"
-                height={34}
-                style={{ height: "34px", width: "auto", maxHeight: "34px" }}
-                className="h-8.5 w-auto object-contain cursor-pointer transition-opacity hover:opacity-90"
-                onClick={() => handleNav("beranda")}
+                height={20}
+                style={{ height: "20px", width: "auto" }}
+                className="h-5 w-auto object-contain shrink-0"
               />
             </div>
             
