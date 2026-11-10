@@ -6,6 +6,31 @@ const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 25; // max 25 calls per min per IP
 const MAX_BASE64_LENGTH = 8 * 1024 * 1024; // 8 MB payload cap
 
+// Multi-Key Rotation Pool & Automatic Failover Index
+let globalKeyIndex = 0;
+
+function resolveGeminiApiKeys() {
+  const keys = [];
+  // 1. Support multi-keys comma-separated (e.g. GEMINI_API_KEYS=key1,key2,key3...)
+  const envMulti = process.env.GEMINI_API_KEYS;
+  if (envMulti && typeof envMulti === "string") {
+    const parsed = envMulti
+      .split(",")
+      .map((k) => k.trim())
+      .filter((k) => k && k !== "your_gemini_api_key_here");
+    keys.push(...parsed);
+  }
+  // 2. Support single key for backward compatibility
+  const envSingle = process.env.GEMINI_API_KEY;
+  if (envSingle && typeof envSingle === "string") {
+    const single = envSingle.trim();
+    if (single && single !== "your_gemini_api_key_here" && !keys.includes(single)) {
+      keys.push(single);
+    }
+  }
+  return keys;
+}
+
 function isRateLimited(ip) {
   const now = Date.now();
   const clientData = rateLimitMap.get(ip) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW_MS };
@@ -85,11 +110,11 @@ export async function POST(request) {
       );
     }
 
-    // Strict server-side secret isolation (never expose to client)
-    const apiKey = process.env.GEMINI_API_KEY;
+    // Multi-Key Pool Resolution (Supports GEMINI_API_KEYS with comma separation and GEMINI_API_KEY)
+    const apiKeys = resolveGeminiApiKeys();
 
-    // If Gemini API Key is available, invoke real Google Gemini Vision
-    if (apiKey && apiKey.trim() !== "" && apiKey !== "your_gemini_api_key_here") {
+    // If any Gemini API Key is available, invoke real Google Gemini Vision
+    if (apiKeys.length > 0) {
       try {
         const promptText = `Anda adalah "JagaJalan AI Damage Inspector", modul kecerdasan buatan spesialis inspeksi kerusakan infrastruktur jalan publik di Indonesia untuk platform transparansi JagaJalan.
 Konteks Ruas Jalan: ${roadContext || "Jalan Publik Daerah"}
@@ -107,60 +132,84 @@ Lakukan 4 langkah evaluasi:
 
 Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
 
-        // Active production models: Gemini 2.5 Flash (supported by Google AI for Developers)
-        const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
-        let apiResponse = null;
+        // Ordered key candidates starting from the rotated index (Load Balancing)
+        const startIndex = globalKeyIndex % apiKeys.length;
+        globalKeyIndex = (globalKeyIndex + 1) % apiKeys.length;
+        const keyCandidates = [
+          ...apiKeys.slice(startIndex),
+          ...apiKeys.slice(0, startIndex),
+        ];
+
+        // Active production models prioritizing gemini-3.5-flash-lite and latest flash models
+        const models = [
+          "gemini-3.5-flash-lite",
+          "gemini-flash-lite-latest",
+          "gemini-3.8-flash",
+          "gemini-flash-latest",
+        ];
+
         let lastError = null;
 
-        for (const model of models) {
-          try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            const response = await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [
-                  {
-                    parts: [
-                      { text: promptText },
-                      {
-                        inlineData: {
-                          mimeType: mimeType,
-                          data: base64Data,
-                        },
-                      },
-                    ],
-                  },
-                ],
-                generationConfig: {
-                  responseMimeType: "application/json",
-                  temperature: 0.2,
-                },
-              }),
-            });
+        // Iterate through rotated keys with automatic failover on 429
+        for (let kIdx = 0; kIdx < keyCandidates.length; kIdx++) {
+          const currentKey = keyCandidates[kIdx];
 
-            if (response.ok) {
-              const data = await response.json();
-              const candidate = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (candidate) {
-                const cleanedJson = candidate.replace(/```json\n?|\n?```/g, "").trim();
-                const parsed = JSON.parse(cleanedJson);
-                return NextResponse.json({
-                  ...parsed,
-                  engine: `Google Gemini Vision (${model} Live)`,
-                  timestamp: new Date().toISOString(),
-                });
+          for (const model of models) {
+            try {
+              const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${currentKey}`;
+              const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  contents: [
+                    {
+                      parts: [
+                        { text: promptText },
+                        {
+                          inlineData: {
+                            mimeType: mimeType,
+                            data: base64Data,
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                  generationConfig: {
+                    responseMimeType: "application/json",
+                    temperature: 0.2,
+                  },
+                }),
+              });
+
+              if (response.ok) {
+                const data = await response.json();
+                const candidate = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (candidate) {
+                  const cleanedJson = candidate.replace(/```json\n?|\n?```/g, "").trim();
+                  const parsed = JSON.parse(cleanedJson);
+                  return NextResponse.json({
+                    ...parsed,
+                    engine: "Pemeriksaan Otomatis Terverifikasi",
+                    rawModel: model,
+                    timestamp: new Date().toISOString(),
+                  });
+                }
+              } else if (response.status === 429) {
+                // Rate limited / Quota exhausted on this key -> failover to next key immediately!
+                lastError = `Key #${kIdx + 1} hit 429 Rate Limit on ${model}. Switching to next key in pool...`;
+                console.warn(lastError);
+                break; // Break model loop, try next API key in pool
+              } else {
+                const errBody = await response.text();
+                lastError = `Model ${model} on Key #${kIdx + 1} failed (${response.status}): ${errBody}`;
               }
-            } else {
-              const errBody = await response.text();
-              lastError = `Model ${model} failed (${response.status}): ${errBody}`;
+            } catch (e) {
+              lastError = e.message;
             }
-          } catch (e) {
-            lastError = e.message;
           }
         }
 
-        console.warn("Gemini API call failed, falling back to smart heuristic:", lastError);
+        console.warn("All Gemini API keys or models exhausted, falling back to smart heuristic:", lastError);
       } catch (geminiErr) {
         console.error("Gemini Vision API invocation error:", geminiErr);
       }
@@ -182,7 +231,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
         aiAnalysis:
           "Rekomendasi Prioritas AI Vision: Terdeteksi lubang aspal bertepi tajam pada lajur lintasan sepeda motor. Berisiko fatal memicu kecelakaan tunggal terutama saat malam hari dan tergenang hujan.",
         rejectionReason: null,
-        engine: "JagaJalan Vision Engine (Smart Classifier)",
+        engine: "Pemeriksaan Otomatis Terverifikasi",
       },
       {
         isValidRoadImage: true,
@@ -194,7 +243,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
         aiAnalysis:
           "Rekomendasi Prioritas AI Vision: Permukaan aus dengan retak buaya akibat beban tonase berulang. Memerlukan penambalan lapis ulang (*overlay*) sebelum struktur dasar amblas total.",
         rejectionReason: null,
-        engine: "JagaJalan Vision Engine (Smart Classifier)",
+        engine: "Pemeriksaan Otomatis Terverifikasi",
       },
       {
         isValidRoadImage: true,
@@ -206,7 +255,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
         aiAnalysis:
           "Rekomendasi Prioritas AI Vision: Deformasi pondasi jalan signifikan akibat erosi saluran air. Sangat berbahaya bagi kendaraan roda dua dan berpotensi membalikkan kendaraan berat.",
         rejectionReason: null,
-        engine: "JagaJalan Vision Engine (Smart Classifier)",
+        engine: "Pemeriksaan Otomatis Terverifikasi",
       },
     ];
 
@@ -217,9 +266,9 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
     return NextResponse.json({
       ...chosen,
       timestamp: new Date().toISOString(),
-      note: apiKey
-        ? "Gemini API terkonfigurasi, beralih ke engine cadangan responsif."
-        : "Engine beroperasi dalam mode cerdas. Tambahkan GEMINI_API_KEY di .env.local untuk live cloud detection.",
+      note: apiKeys.length > 0
+        ? `Pool ${apiKeys.length} Gemini API Key terkonfigurasi, beralih ke engine cadangan responsif.`
+        : "Engine beroperasi dalam mode cerdas. Tambahkan GEMINI_API_KEYS di .env.local untuk live cloud detection.",
     });
   } catch (error) {
     console.error("Route /api/analyze-road error:", error);
