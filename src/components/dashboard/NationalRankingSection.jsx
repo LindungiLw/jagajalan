@@ -692,7 +692,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                       </strong>
                     </div>
                     <p className="text-[11.5px] text-slate-700 leading-relaxed font-sans">
-                      Provinsi Sumatera Utara (khususnya Kota Medan dan sekitarnya) telah terintegrasi penuh dengan <strong>peta geospasial mikro GIS</strong>, sebaran titik foto kerusakan jalan berkoordinat, klasifikasi AI, serta transparansi kontrak pemeliharaan berkala SiRUP/LPSE.
+                      Provinsi Sumatera Utara (khususnya Kota Medan dan sekitarnya) telah terintegrasi penuh dengan <strong>peta pemetaan lokasi mikro GIS</strong>, sebaran titik foto kerusakan jalan berkoordinat, klasifikasi AI, serta transparansi kontrak pemeliharaan berkala SiRUP/LPSE.
                     </p>
                   </div>
                 ) : (

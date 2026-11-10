@@ -403,7 +403,7 @@ export default function OmbudsmanMonitorSection({
         <div className="flex items-center gap-2.5 text-slate-700">
           <Scale className="w-4 h-4 text-[#c2410c] shrink-0" />
           <span>
-            <strong>Fakta Maladministrasi Nasional:</strong> Sebanyak <strong>33,8%</strong> aduan publik bersumber dari <em>penundaan berlarut (undue delay)</em> oleh aparatur penyelenggara pelayanan.
+            <strong>Fakta Maladministrasi Nasional:</strong> Sebanyak <strong>33,8%</strong> aduan publik bersumber dari <em>penundaan penanganan (undue delay)</em> oleh aparatur penyelenggara pelayanan.
           </span>
         </div>
         <span className="text-[11px] text-slate-400 shrink-0 font-medium">Sumber: Laporan Tahunan Ombudsman RI</span>
@@ -670,7 +670,7 @@ export default function OmbudsmanMonitorSection({
                           {isOverdue && (
                             <div
                               className="h-full w-[35%] bg-gradient-to-r from-rose-500 to-red-600 rounded-r-full animate-pulse"
-                              title="Fase 2: Pelanggaran Maladministrasi Penundaan Berlarut (Undue Delay)"
+                              title="Fase 2: Pelanggaran Maladministrasi Penundaan Penanganan (Undue Delay)"
                             />
                           )}
                         </div>
@@ -753,7 +753,7 @@ export default function OmbudsmanMonitorSection({
                   <th className="py-3 px-4 md:w-[35%]">Tiket &amp; Ruas Jalan</th>
                   <th className="py-3 px-3 md:w-[25%] hidden sm:table-cell">Wewenang Dinas</th>
                   <th className="py-3 px-3 md:w-[15%] hidden md:table-cell">Kerusakan</th>
-                  <th className="py-3 px-3 text-center md:w-[12%]">Status SLA</th>
+                  <th className="py-3 px-3 text-center md:w-[12%]">Status Batas Waktu Respons</th>
                   <th className="py-3 px-4 text-right md:w-[13%]">Tindakan</th>
                 </tr>
               </thead>
@@ -870,7 +870,7 @@ export default function OmbudsmanMonitorSection({
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <Shield className="w-4 h-4 text-[#c2410c]" />
             <h3 className="font-bold text-slate-900 text-sm font-heading">
-              Alur Penegakan Maladministrasi (Undue Delay)
+              Alur Penegakan Maladministrasi: Penundaan Penanganan (Undue Delay)
             </h3>
           </div>
 

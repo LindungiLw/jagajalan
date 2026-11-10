@@ -20,7 +20,7 @@ export default function CivicWorkflowSection({ onOpenReportModal }) {
     {
       step: "02",
       customIcon: "/icon/maps.png",
-      badge: "SK Geospasial",
+      badge: "Data Lokasi & SK",
       title: "Penentuan Dinas Penanggung Jawab",
       description:
         "Mencocokkan titik GPS laporan dengan SK status jalan resmi agar laporan langsung masuk ke meja dinas yang berwenang.",

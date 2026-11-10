@@ -895,7 +895,7 @@ export default function ReportModal({
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                           <Navigation className="w-3 h-3 text-[#c2410c]" />
-                          <span>Koordinat Geospasial (GIS)</span>
+                          <span>Titik Lokasi Kerusakan (GIS)</span>
                         </span>
                         <button
                           type="button"

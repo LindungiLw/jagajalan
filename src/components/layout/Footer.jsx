@@ -87,7 +87,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
 
   const navLinks = [
     { label: "Ringkasan Beranda", tab: "beranda" },
-    { label: "Peta Geospasial Interaktif", tab: "peta" },
+    { label: "Peta Lokasi Interaktif", tab: "peta" },
     { label: "Audit Anggaran & LPSE", tab: "data-anggaran" },
     { label: "Pantau SLA Ombudsman", tab: "ombudsman" },
     { label: "Peringkat 38 Provinsi", tab: "nasional" },
@@ -104,7 +104,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
   const legalLinks = [
     { label: "UU KIP No. 14 / 2008", subtitle: "Keterbukaan Informasi", tab: "beranda" },
     { label: "UU Pelayanan Publik 25 / 2009", subtitle: "Kepastian Tenggat Waktu", tab: "peta" },
-    { label: "UU Ombudsman No. 37 / 2008", subtitle: "Pengawasan Undue Delay", tab: "ombudsman" },
+    { label: "UU Ombudsman No. 37 / 2008", subtitle: "Pengawasan Penundaan Penanganan", tab: "ombudsman" },
     { label: "Inpres No. 3 / 2023 (IJD)", subtitle: "Intervensi Fiskal APBN", tab: "nasional" },
     { label: "UU Jalan No. 2 / 2022", subtitle: "Wewenang Penyelenggara", tab: "beranda" },
   ];
@@ -247,7 +247,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
             </span>
           </div>
           <span className="text-[10.5px] text-slate-500">
-            Pencocokan data geospasial SK jalan, audit lelang pengadaan, dan kepatuhan regulasi publik
+            Pencocokan data pemetaan SK jalan, audit lelang pengadaan, dan kepatuhan regulasi publik
           </span>
         </div>
 
@@ -331,7 +331,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
             </div>
             
             <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed max-w-sm font-sans">
-              Mewujudkan transparansi jalan raya dengan pencocokan geospasial SK wewenang, audit kontrak lelang LPSE, dan penegakan batas waktu pelayanan publik.
+              Mewujudkan transparansi jalan raya dengan pencocokan data pemetaan SK wewenang, audit kontrak lelang LPSE, dan penegakan batas waktu pelayanan publik.
             </p>
 
             {/* Civic & Ecosystem Icon Connectors */}

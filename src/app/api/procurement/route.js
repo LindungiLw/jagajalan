@@ -153,7 +153,7 @@ export async function GET(request) {
 
     // 1. Coba koneksi upstream jika token/gateway disediakan di environment Vercel
     let liveGatewayStatus = "SIMULATED_VERIFIED";
-    let liveSyncMessage = "Menggunakan data terverifikasi DIPA Kementerian PU & LPSE TA 2026.";
+    let liveSyncMessage = "Menggunakan data yang telah diperiksa dari DIPA Kementerian PU & LPSE TA 2026.";
 
     const inaprocToken = process.env.INAPROC_API_TOKEN;
     const inaprocUrl = process.env.INAPROC_API_URL || "https://data.inaproc.id/portal";
@@ -179,11 +179,11 @@ export async function GET(request) {
           liveSyncMessage = "Terhubung langsung dengan Gateway INAPROC LKPP Pusat secara real-time.";
         } else {
           liveGatewayStatus = "HYBRID_FALLBACK";
-          liveSyncMessage = `Gateway eksternal status ${upstreamRes.status}. Beralih ke cadangan terverifikasi JagaJalan.`;
+          liveSyncMessage = `Gateway eksternal status ${upstreamRes.status}. Beralih ke cadangan yang telah diperiksa JagaJalan.`;
         }
       } catch (err) {
         liveGatewayStatus = "HYBRID_FALLBACK";
-        liveSyncMessage = `Gateway LKPP timeout/WAF limit (${err.name}). Cadangan data terverifikasi diaktifkan.`;
+        liveSyncMessage = `Gateway LKPP timeout/WAF limit (${err.name}). Cadangan data yang telah diperiksa diaktifkan.`;
       }
     }
 

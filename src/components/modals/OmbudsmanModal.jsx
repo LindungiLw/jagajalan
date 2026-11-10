@@ -14,7 +14,7 @@ export default function OmbudsmanModal({ isOpen, onClose, report }) {
     year: "numeric",
   });
 
-  const letterText = `HAL: LAPORAN PENGADUAN DUGAAN MALADMINISTRASI PENUNDAAN BERLARUT (UNDUE DELAY)
+  const letterText = `HAL: LAPORAN PENGADUAN DUGAAN MALADMINISTRASI PENUNDAAN PENANGANAN (UNDUE DELAY)
 DAN PENELANTARAN INFRASTRUKTUR JALAN PUBLIK
 
 Kepada Yth.
@@ -39,7 +39,7 @@ POKOK PERMASALAHAN & KRONOLOGI:
 1. Bahwa pada tanggal ${new Date(report.reportDate).toLocaleDateString("id-ID")}, telah dilaporkan kondisi kerusakan jalan berstatus "${report.categoryLabel}" dengan estimasi rekomendasi bahaya keselamatan AI ${report.hazardScore}/100.
 2. Bahwa laporan pengaduan tersebut telah disampaikan kepada pihak ${report.authorityLabel}. Berdasarkan ketentuan yuridis Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik, penyelenggara wajib menyampaikan jadwal penanganan dan/atau tanggapan kepada pengadu dalam jangka waktu paling lambat 14 (empat belas) hari kerja sejak pengaduan diterima oleh penyelenggara.
 3. Bahwa hingga surat ini diterbitkan (${todayStr}), pengaduan tersebut telah melampaui batas waktu tanggapan acuan selama ${report.daysOverdue || 4} hari kerja tanpa adanya tanggapan resmi, kepastian jadwal, maupun tindakan penanganan fisik di lapangan dari pihak instansi terlapor.
-4. Ketiadaan tanggapan dan pembiaran kondisi jalan ini terindikasi memenuhi unsur dugaan Maladministrasi: "Penundaan Berlarut" (Undue Delay) sesuai Pasal 1 angka 3 serta memenuhi kriteria pelaporan Pasal 24 UU No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia (setelah diupayakan penyelesaian langsung terlebih dahulu kepada instansi bersangkutan namun tidak diselesaikan dalam jangka waktu yang patut).
+4. Ketiadaan tanggapan dan pembiaran kondisi jalan ini terindikasi memenuhi unsur dugaan Maladministrasi: "Penundaan Penanganan" (Undue Delay) sesuai Pasal 1 angka 3 serta memenuhi kriteria pelaporan Pasal 24 UU No. 37 Tahun 2008 tentang Ombudsman Republik Indonesia (setelah diupayakan penyelesaian langsung terlebih dahulu kepada instansi bersangkutan namun tidak diselesaikan dalam jangka waktu yang patut).
 
 TUNTUTAN:
 Memohon kepada Ombudsman Republik Indonesia untuk:

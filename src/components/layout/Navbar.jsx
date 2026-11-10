@@ -98,10 +98,19 @@ export default function Navbar({
   // Auto-hide & Auto-reveal Navigation State
   const [isVisible, setIsVisible] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
+  const isVisibleRef = useRef(true);
   const idleTimerRef = useRef(null);
   const isHoveredRef = useRef(false);
   const notifOpenRef = useRef(false);
   const mobileMenuOpenRef = useRef(false);
+  const lastScrollYRef = useRef(0);
+
+  const setNavbarVisibility = (visible) => {
+    if (isVisibleRef.current !== visible) {
+      isVisibleRef.current = visible;
+      setIsVisible(visible);
+    }
+  };
 
   useEffect(() => {
     isHoveredRef.current = isHovered;
@@ -110,73 +119,121 @@ export default function Navbar({
   useEffect(() => {
     notifOpenRef.current = notifOpen;
     if (notifOpen) {
-      setIsVisible(true);
+      setNavbarVisibility(true);
     }
   }, [notifOpen]);
 
   useEffect(() => {
     mobileMenuOpenRef.current = mobileMenuOpen;
     if (mobileMenuOpen) {
-      setIsVisible(true);
+      setNavbarVisibility(true);
     }
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    const TOP_HERO_THRESHOLD = 120;
-    const IDLE_TIMEOUT_MS = 2500; // Sembunyi halus setelah 2.5 detik idle saat di luar hero
+    const HERO_THRESHOLD = 400; // Batas area hero section
+    const IDLE_DELAY_MS = 2500; // 2.5 detik idle sebelum sembunyi otomatis
 
-    const resetIdleTimer = () => {
+    // Fungsi jadwal sembunyi jika berada di luar hero section
+    const scheduleHide = () => {
       if (idleTimerRef.current) {
         clearTimeout(idleTimerRef.current);
         idleTimerRef.current = null;
       }
 
-      // Tetap tampil penuh jika di area hero atau saat drawer/menu/hover aktif
+      // Jangan sembunyikan jika masih di dalam hero section, sedang hover navbar, atau drawer terbuka
       if (
-        (typeof window !== "undefined" && window.scrollY <= TOP_HERO_THRESHOLD) ||
+        (typeof window !== "undefined" && window.scrollY < HERO_THRESHOLD) ||
         isHoveredRef.current ||
         notifOpenRef.current ||
         mobileMenuOpenRef.current
       ) {
-        setIsVisible(true);
+        setNavbarVisibility(true);
         return;
       }
 
-      // Jika di luar hero dan ada aksi (scroll/gerak mouse), munculkan lalu aktifkan idle timer
-      setIsVisible(true);
       idleTimerRef.current = setTimeout(() => {
         if (
           typeof window !== "undefined" &&
-          window.scrollY > TOP_HERO_THRESHOLD &&
+          window.scrollY >= HERO_THRESHOLD &&
           !isHoveredRef.current &&
           !notifOpenRef.current &&
           !mobileMenuOpenRef.current
         ) {
-          setIsVisible(false);
+          setNavbarVisibility(false);
         }
-      }, IDLE_TIMEOUT_MS);
+      }, IDLE_DELAY_MS);
     };
 
     const handleScroll = () => {
-      resetIdleTimer();
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollYRef.current;
+      lastScrollYRef.current = currentScrollY;
+
+      // 1. Di dalam Hero Section (paling atas): selalu tampil
+      if (currentScrollY < HERO_THRESHOLD) {
+        if (idleTimerRef.current) {
+          clearTimeout(idleTimerRef.current);
+          idleTimerRef.current = null;
+        }
+        setNavbarVisibility(true);
+        return;
+      }
+
+      // 2. Di luar Hero Section & scroll ke BAWAH (> 6px): sembunyikan langsung
+      if (delta > 6) {
+        if (!isHoveredRef.current && !notifOpenRef.current && !mobileMenuOpenRef.current) {
+          if (idleTimerRef.current) {
+            clearTimeout(idleTimerRef.current);
+            idleTimerRef.current = null;
+          }
+          setNavbarVisibility(false);
+        }
+        return;
+      }
+
+      // 3. Di luar Hero Section & scroll ke ATAS (<-6px): langsung munculkan & pasang idle timer
+      if (delta < -6) {
+        setNavbarVisibility(true);
+        scheduleHide();
+      }
     };
 
-    const handleMouseMove = () => {
-      resetIdleTimer();
+    const handleMouseMove = (e) => {
+      // Jika kursor mendekati area navbar atas (<= 90px): selalu tampilkan
+      if (e.clientY <= 90) {
+        setNavbarVisibility(true);
+        if (idleTimerRef.current) {
+          clearTimeout(idleTimerRef.current);
+          idleTimerRef.current = null;
+        }
+        return;
+      }
+
+      // Di luar hero section: jika ada pergerakan kursor mouse, munculkan navbar
+      if (typeof window !== "undefined" && window.scrollY >= HERO_THRESHOLD) {
+        setNavbarVisibility(true);
+        scheduleHide();
+      }
     };
 
-    const handleTouchStart = () => {
-      resetIdleTimer();
+    const handleClickOrTouch = () => {
+      if (typeof window !== "undefined" && window.scrollY >= HERO_THRESHOLD) {
+        setNavbarVisibility(true);
+        scheduleHide();
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("mousedown", handleClickOrTouch, { passive: true });
+    window.addEventListener("touchstart", handleClickOrTouch, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("mousedown", handleClickOrTouch);
+      window.removeEventListener("touchstart", handleClickOrTouch);
       if (idleTimerRef.current) {
         clearTimeout(idleTimerRef.current);
       }
@@ -212,49 +269,49 @@ export default function Navbar({
     setActiveTab(tabId);
     setMobileMenuOpen(false);
     setNotifOpen(false);
-    setIsVisible(true);
+    setNavbarVisibility(true);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   return (
-    <header
-      onMouseEnter={() => {
-        setIsHovered(true);
-        setIsVisible(true);
-        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      }}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        if (
-          typeof window !== "undefined" &&
-          window.scrollY > 120 &&
-          !notifOpenRef.current &&
-          !mobileMenuOpenRef.current
-        ) {
-          if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-          idleTimerRef.current = setTimeout(() => {
-            if (
-              typeof window !== "undefined" &&
-              window.scrollY > 120 &&
-              !isHoveredRef.current &&
-              !notifOpenRef.current &&
-              !mobileMenuOpenRef.current
-            ) {
-              setIsVisible(false);
-            }
-          }, 2500);
-        }
-      }}
-      className={`z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-in-out ${
-        activeTab === "peta" ? "absolute top-0 inset-x-0" : "sticky top-0"
-      } ${
-        isVisible
-          ? "translate-y-0 opacity-100"
-          : "-translate-y-12 opacity-0 pointer-events-none"
-      }`}
-    >
+    <>
+      {activeTab !== "peta" && (
+        <div className="h-16 shrink-0 pointer-events-none" aria-hidden="true" />
+      )}
+      <header
+        onMouseEnter={() => {
+          isHoveredRef.current = true;
+          setIsHovered(true);
+          setNavbarVisibility(true);
+          if (idleTimerRef.current) {
+            clearTimeout(idleTimerRef.current);
+            idleTimerRef.current = null;
+          }
+        }}
+        onMouseLeave={() => {
+          isHoveredRef.current = false;
+          setIsHovered(false);
+          if (!notifOpenRef.current && !mobileMenuOpenRef.current) {
+            if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+            idleTimerRef.current = setTimeout(() => {
+              if (
+                !isHoveredRef.current &&
+                !notifOpenRef.current &&
+                !mobileMenuOpenRef.current
+              ) {
+                setNavbarVisibility(false);
+              }
+            }, 2000);
+          }
+        }}
+        className={`fixed top-0 inset-x-0 z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-in-out ${
+          isVisible
+            ? "translate-y-0 opacity-100"
+            : "-translate-y-full opacity-0 pointer-events-none"
+        }`}
+      >
       <div
         className={`w-full max-w-4xl mx-auto relative transition-all duration-300 ${
           isVisible ? "pointer-events-auto" : "pointer-events-none"
@@ -607,5 +664,6 @@ export default function Navbar({
         )}
       </div>
     </header>
+  </>
   );
 }

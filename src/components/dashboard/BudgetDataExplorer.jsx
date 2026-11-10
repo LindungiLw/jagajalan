@@ -493,7 +493,7 @@ export default function BudgetDataExplorer({
       title: "LAPORAN TRANSPARANSI ANGGARAN & AUDIT KONTRAK LPSE — JAGAJALAN",
       subtitle: `Filter Kewenangan: ${selectedAuthority} • Total ${filteredPackages.length} Paket Pengadaan Terverifikasi`,
       summaryMetrics: [
-        { label: "Total Pagu Anggaran (HPS)", value: formatRupiahShort(totalPagu) },
+        { label: "Total Anggaran (Pagu HPS)", value: formatRupiahShort(totalPagu) },
         { label: "Realisasi Kontrak (SPK)", value: formatRupiahShort(totalContract) },
         { label: "Efisiensi Lelang LPSE", value: `${formatRupiahShort(totalEfficiency)} (${efficiencyPercent}%)` },
         { label: "Atensi Audit & Fisik", value: `${anomalyCount} Paket` },
@@ -511,7 +511,7 @@ export default function BudgetDataExplorer({
       orientation: "landscape",
       summaryMetrics: [
         {
-          label: "Total Pagu Anggaran (HPS)",
+          label: "Total Anggaran (Pagu HPS)",
           value: formatRupiahShort(totalPagu),
           sub: `${filteredPackages.length} Paket Terverifikasi`,
         },
@@ -546,7 +546,7 @@ export default function BudgetDataExplorer({
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
-              Total Pagu Anggaran (HPS)
+              Total Anggaran (Pagu HPS)
             </span>
             <div className="text-2xl sm:text-[27px] font-bold text-slate-900 tracking-tight font-sans tabular-nums mt-1">
               {formatRupiahShort(totalPagu)}

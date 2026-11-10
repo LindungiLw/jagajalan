@@ -223,7 +223,7 @@ export default function HeroSection({
   };
 
   return (
-    <section className="pt-3 pb-6 text-slate-800">
+    <section id="beranda-hero" className="pt-3 pb-6 text-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3.5">
         
         {/* HERO UTAMA: CENTERED HEADER */}
@@ -237,19 +237,19 @@ export default function HeroSection({
         <div className="bg-slate-100/70 p-1.5 rounded-[8px] ring-1 ring-orange-200/50 flex flex-col md:flex-row md:items-center gap-1.5 text-xs transition-all">
           
           {/* Segment 1: Wilayah Scope */}
-          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-white rounded-[6px] shadow-2xs shrink-0">
+          <div className="px-3.5 py-2 flex items-center gap-2 font-sans text-slate-700 bg-white rounded-[6px] shadow-2xs shrink-0" title="Cakupan statistik kemantapan jalan 38 provinsi BPS dan percontohan koridor ruas daerah">
             <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
             <span className="text-[11.5px] font-semibold">
-              Cakupan: <strong className="text-slate-900">Seluruh Indonesia (38 Provinsi)</strong>
+              Cakupan: <strong className="text-slate-900">Statistik 38 Provinsi &amp; Koridor Pilot</strong>
             </span>
           </div>
 
           {/* Segment 2: Official Verified Sources Indicator */}
           <div className="hidden lg:flex items-center gap-2 px-3.5 py-2 text-[11px] font-sans text-slate-600 bg-white/60 rounded-[6px] shrink-0 select-none">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span className="font-medium text-slate-700">BPS • LPSE • KemenPU • Ombudsman</span>
+            <span className="font-medium text-slate-700">BPS • LPSE • Kemen PU • Ombudsman</span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-400 font-medium">Data Terverifikasi TA 2026</span>
+            <span className="text-slate-500 font-medium">Data Historis 2020–2024 &amp; Pengadaan TA 2026</span>
           </div>
 
           {/* Segment 3: Spacious Global Search Input with Active Submit */}
@@ -348,26 +348,26 @@ export default function HeroSection({
         <div className="bg-[#c2410c] text-white px-4 sm:px-5 py-2.5 rounded-[6px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <span className="text-white font-bold text-xs font-sans">
-              Monitoring Infrastruktur Nasional:
+              Ringkasan Nasional:
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5" title="Cakupan statistik kemantapan jalan nasional menurut publikasi resmi BPS">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">38</strong>
-              <span className="text-white/90 font-medium text-xs">Provinsi Terdata</span>
+              <span className="text-white/90 font-medium text-xs">Provinsi (Statistik BPS)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5" title="Data percontohan komparasi transparansi pagu lelang vs nilai kontrak penyedia">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
-              <span className="text-white/90 font-medium text-xs">Paket Audit Pilot (Rp 35,80 M)</span>
+              <span className="text-white/90 font-medium text-xs">Paket Pengadaan Pilot (Rp 35,80 M)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5" title="Tiket aduan terdata yang melampaui batas waktu pemantauan internal SLA JagaJalan (+6 hari acuan)">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">2</strong>
-              <span className="text-white/90 font-medium text-xs">Laporan Melewati Tenggat</span>
+              <span className="text-white/90 font-medium text-xs">Laporan Lewat Batas Pantau SLA</span>
             </div>
           </div>
 
-          <span className="text-[11px] font-sans text-white/90 font-medium self-end sm:self-auto">
-            Integrasi Geospasial &amp; LPSE Aktif
+          <span className="text-[11px] font-sans text-white/90 font-medium self-end sm:self-auto" title="Koleksi data pemetaan koordinat ruas jalan dan arsip paket pengadaan LPSE tersedia di platform">
+            Data Pemetaan &amp; LPSE Tersedia
           </span>
         </div>
 
@@ -612,14 +612,14 @@ export default function HeroSection({
                           selectedIndex === "kemantapan"
                             ? "Tingkat Kemantapan Jalan (Nasional, Provinsi, Kab/Kota)"
                             : selectedIndex === "ombudsman"
-                            ? "Tren Penundaan Berlarut (Undue Delay SLA)"
+                            ? "Tren Penundaan Penanganan (Undue Delay)"
                             : selectedIndex === "pagu"
                             ? "Pagu Pengadaan vs Nilai Kontrak LPSE"
                             : "Alokasi Inpres Jalan Daerah (IJD Tahap I & II)"
                         }
                       >
                         {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan"}
-                        {selectedIndex === "ombudsman" && "Tren Penundaan Berlarut"}
+                        {selectedIndex === "ombudsman" && "Tren Penundaan Penanganan"}
                         {selectedIndex === "pagu" && (
                           budgetTimeScale === "bulanan"
                             ? "Realisasi Pagu vs Kontrak Bulanan"
@@ -670,7 +670,7 @@ export default function HeroSection({
                     )}
                     {selectedIndex === "ombudsman" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1.5 text-[#c2410c] font-bold"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Undue Delay (%)</span>
+                        <span className="flex items-center gap-1.5 text-[#c2410c] font-bold"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Penundaan Penanganan (%)</span>
                       </div>
                     )}
                     {selectedIndex === "pagu" && (
@@ -1537,6 +1537,13 @@ export default function HeroSection({
                           </strong>
                         </div>
                       </div>
+                      <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
+                        <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-slate-800">Sumber &amp; Metodologi BPS SiRUSA (2020–2024):</strong>{" "}
+                          Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, bersumber dari publikasi resmi Statistik Transportasi Darat BPS RI.
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -1545,7 +1552,7 @@ export default function HeroSection({
                       <div className="grid grid-cols-2 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Undue Delay ({selectedYear})
+                            Penundaan Penanganan ({selectedYear})
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
                             {currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Aduan)
@@ -1560,6 +1567,13 @@ export default function HeroSection({
                           </strong>
                         </div>
                       </div>
+                      <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
+                        <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-slate-800">Definisi &amp; Sumber Ombudsman RI (2020–2024):</strong>{" "}
+                          Rasio penundaan penanganan (<em>undue delay</em>) merupakan persentase aduan masyarakat di Laporan Tahunan Ombudsman RI terkait keluhan batas waktu layanan publik bidang infrastruktur yang melampaui standar kepatutan UU 25/2009.
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -1568,7 +1582,7 @@ export default function HeroSection({
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Total Pagu
+                            Total Anggaran
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
                             Rp 35,80 M
@@ -1596,6 +1610,13 @@ export default function HeroSection({
                           </div>
                         </div>
                       </div>
+                      <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
+                        <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-slate-800">Ruang Lingkup Data LPSE Pilot:</strong>{" "}
+                          Komparasi 6 paket pengadaan percontohan (bukan audit resmi BPK). Pagu bersumber dari rencana umum pengadaan SiRUP LKPP dan nilai kontrak riil dari pengumuman pemenang lelang SPSE daerah percontohan (TA 2026).
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -1615,6 +1636,13 @@ export default function HeroSection({
                           <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">5.992 KM</strong>
                         </div>
                       </div>
+                      <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
+                        <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-slate-800">Dasar Alokasi Inpres No. 3/2023 (IJD):</strong>{" "}
+                          Intervensi fiskal APBN percepatan konektivitas jalan daerah Tahap I (2023: Rp 14,60 T) dan Tahap II (2024: Rp 15,30 T) yang diadministrasikan Kementerian PU dan Kemenkeu RI.
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1631,7 +1659,7 @@ export default function HeroSection({
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div>
                 <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight block">
-                  Rekapitulasi Koridor Pilot
+                  Ringkasan Ruas Percontohan
                 </h2>
                 <span className="text-[10px] text-slate-500 font-sans">
                   Klasifikasi kewenangan ruas terdata (Bukan peringkat kinerja)
@@ -1659,7 +1687,7 @@ export default function HeroSection({
               </div>
               <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
-                  Total Pagu
+                  Total Anggaran
                 </span>
                 <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
                   Rp 35,80 M
@@ -1668,7 +1696,7 @@ export default function HeroSection({
               </div>
               <div className="bg-rose-50/75 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-rose-700 font-semibold font-sans block">
-                  Lewat SLA
+                  Lewat Batas Waktu
                 </span>
                 <strong className="text-base sm:text-lg font-bold text-rose-600 tabular-nums font-sans block mt-0.5">
                   2 Tiket
@@ -1685,7 +1713,7 @@ export default function HeroSection({
                     <th className="py-2 px-2.5">Klasifikasi Wewenang</th>
                     <th className="py-2 px-2 text-center">Ruas</th>
                     <th className="py-2 px-2.5 text-right">Pagu Pengadaan</th>
-                    <th className="py-2 px-2.5 text-right">Status SLA</th>
+                    <th className="py-2 px-2.5 text-right">Status Batas Waktu Respons</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-sans text-xs">
@@ -1756,7 +1784,7 @@ export default function HeroSection({
             {/* SLA Alert Strip with Responsible Legal Context */}
             <div className="pt-2 text-[11px] text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 border-t border-slate-100 font-sans">
               <div>
-                <span>2 laporan pilot telah melewati batas tenggat respons resmi.</span>
+                <span>2 laporan terdata telah melewati batas waktu pemantauan internal SLA JagaJalan (+6 hari acuan).</span>
               </div>
               <button
                 onClick={() => {
@@ -1783,7 +1811,7 @@ export default function HeroSection({
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1.5 max-w-2xl">
                 <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
-                  Katalog Ruas &amp; LPSE
+                  Daftar Ruas Jalan &amp; LPSE
                 </p>
                 <h2 className="text-xl sm:text-2xl font-bold font-heading text-slate-950 tracking-tight">
                   Daftar Ruas Jalan, Wewenang Dinas &amp; Kontrak LPSE

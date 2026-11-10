@@ -72,7 +72,7 @@ export default function RoadDetailModal({
   const roadAuditColumns = [
     { header: "Kategori Audit", key: "section", width: 170 },
     { header: "Parameter / Indikator", key: "field", width: 230 },
-    { header: "Data Terverifikasi", key: "value", width: 320 },
+    { header: "Data yang Telah Diperiksa", key: "value", width: 320 },
     { header: "Keterangan & Dasar Rujukan", key: "note", width: 280 },
   ];
 

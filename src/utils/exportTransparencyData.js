@@ -538,7 +538,7 @@ export function exportToPDF({
         <div class="footer-note">
           <div style="max-width: 72%;">${escapeHtml(legalNote)}</div>
           <div style="text-align: right; font-weight: 700; color: #0f172a;">
-            Terverifikasi Sistem Geospasial &amp; Audit Terbuka JagaJalan
+            Diperiksa Sistem Pemetaan &amp; Audit Terbuka JagaJalan
           </div>
         </div>
 
