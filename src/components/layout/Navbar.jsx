@@ -95,6 +95,94 @@ export default function Navbar({
   const [notifScope, setNotifScope] = useState("personal");
   const notifContainerRef = useRef(null);
 
+  // Auto-hide & Auto-reveal Navigation State
+  const [isVisible, setIsVisible] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const idleTimerRef = useRef(null);
+  const isHoveredRef = useRef(false);
+  const notifOpenRef = useRef(false);
+  const mobileMenuOpenRef = useRef(false);
+
+  useEffect(() => {
+    isHoveredRef.current = isHovered;
+  }, [isHovered]);
+
+  useEffect(() => {
+    notifOpenRef.current = notifOpen;
+    if (notifOpen) {
+      setIsVisible(true);
+    }
+  }, [notifOpen]);
+
+  useEffect(() => {
+    mobileMenuOpenRef.current = mobileMenuOpen;
+    if (mobileMenuOpen) {
+      setIsVisible(true);
+    }
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    const TOP_HERO_THRESHOLD = 120;
+    const IDLE_TIMEOUT_MS = 2500; // Sembunyi halus setelah 2.5 detik idle saat di luar hero
+
+    const resetIdleTimer = () => {
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = null;
+      }
+
+      // Tetap tampil penuh jika di area hero atau saat drawer/menu/hover aktif
+      if (
+        (typeof window !== "undefined" && window.scrollY <= TOP_HERO_THRESHOLD) ||
+        isHoveredRef.current ||
+        notifOpenRef.current ||
+        mobileMenuOpenRef.current
+      ) {
+        setIsVisible(true);
+        return;
+      }
+
+      // Jika di luar hero dan ada aksi (scroll/gerak mouse), munculkan lalu aktifkan idle timer
+      setIsVisible(true);
+      idleTimerRef.current = setTimeout(() => {
+        if (
+          typeof window !== "undefined" &&
+          window.scrollY > TOP_HERO_THRESHOLD &&
+          !isHoveredRef.current &&
+          !notifOpenRef.current &&
+          !mobileMenuOpenRef.current
+        ) {
+          setIsVisible(false);
+        }
+      }, IDLE_TIMEOUT_MS);
+    };
+
+    const handleScroll = () => {
+      resetIdleTimer();
+    };
+
+    const handleMouseMove = () => {
+      resetIdleTimer();
+    };
+
+    const handleTouchStart = () => {
+      resetIdleTimer();
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchstart", handleTouchStart);
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (notifContainerRef.current && !notifContainerRef.current.contains(e.target)) {
@@ -124,6 +212,7 @@ export default function Navbar({
     setActiveTab(tabId);
     setMobileMenuOpen(false);
     setNotifOpen(false);
+    setIsVisible(true);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -131,11 +220,46 @@ export default function Navbar({
 
   return (
     <header
-      className={`z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none transition-all ${
+      onMouseEnter={() => {
+        setIsHovered(true);
+        setIsVisible(true);
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        if (
+          typeof window !== "undefined" &&
+          window.scrollY > 120 &&
+          !notifOpenRef.current &&
+          !mobileMenuOpenRef.current
+        ) {
+          if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+          idleTimerRef.current = setTimeout(() => {
+            if (
+              typeof window !== "undefined" &&
+              window.scrollY > 120 &&
+              !isHoveredRef.current &&
+              !notifOpenRef.current &&
+              !mobileMenuOpenRef.current
+            ) {
+              setIsVisible(false);
+            }
+          }, 2500);
+        }
+      }}
+      className={`z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-in-out ${
         activeTab === "peta" ? "absolute top-0 inset-x-0" : "sticky top-0"
+      } ${
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "-translate-y-12 opacity-0 pointer-events-none"
       }`}
     >
-      <div className="w-full max-w-4xl mx-auto pointer-events-auto relative">
+      <div
+        className={`w-full max-w-4xl mx-auto relative transition-all duration-300 ${
+          isVisible ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
         <div className="flex items-center justify-between h-13 px-4 sm:px-5 rounded-full bg-white/95 backdrop-blur-md border border-[#E6DFD5] ring-1 ring-orange-200/40 shadow-[0_6px_28px_-6px_rgba(28,25,23,0.08)]">
           {/* Brand Identity */}
           <div
