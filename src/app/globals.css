@@ -175,3 +175,23 @@ table, .tabular-nums, [data-metric] {
   animation: softPulseGlow 3s ease-in-out infinite;
 }
 
+/* Infinite Marquee for Open Data Partners / Resources */
+@keyframes infiniteMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: infiniteMarquee 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+

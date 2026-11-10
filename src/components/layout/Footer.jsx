@@ -10,6 +10,51 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+const DATA_RESOURCES = [
+  {
+    name: "Kementerian PU",
+    role: "SK Ruas & Kewenangan Jalan",
+    tag: "Kemen PU RI",
+    icon: "/icon/jalan.png",
+    href: "https://data.pu.go.id",
+  },
+  {
+    name: "LKPP Inaproc",
+    role: "Katalog Tender & Kontrak LPSE",
+    tag: "Pengadaan LPSE",
+    icon: "/icon/financial.png",
+    href: "https://inaproc.id",
+  },
+  {
+    name: "Ombudsman RI",
+    role: "Standar Batas Waktu Tanggap SLA",
+    tag: "UU 25/2009",
+    icon: "/icon/hukum_icon.png",
+    href: "https://ombudsman.go.id",
+  },
+  {
+    name: "Satu Data Indonesia",
+    role: "Interoperabilitas Geospasial",
+    tag: "Portal SDI",
+    icon: "/icon/maps.png",
+    href: "https://data.go.id",
+  },
+  {
+    name: "BPS SiRUSA",
+    role: "Statistik Kondisi Kemantapan Jalan",
+    tag: "Statistik Jalan",
+    icon: "/icon/statistik_icon.png",
+    href: "https://sirusa.bps.go.id",
+  },
+  {
+    name: "Open Data Daerah",
+    role: "Alokasi Pagu Anggaran APBD Pemda",
+    tag: "Fiskal Daerah",
+    icon: "/icon/report.png",
+    href: "https://opendata.jabarprov.go.id",
+  },
+];
+
 export default function Footer({ onSelectTab, activeTab = "beranda" }) {
   const [isVisible, setIsVisible] = useState(false);
   const footerRef = useRef(null);
@@ -191,6 +236,69 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
           </svg>
         </div>
       )}
+
+      {/* OPEN DATA SOURCES MARQUEE STRIP */}
+      <div className="relative z-10 border-b border-[#E6DFD5]/90 bg-white/70 backdrop-blur-xs py-3.5 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider font-heading">
+              Integrasi Sumber Data Terbuka Resmi RI
+            </span>
+          </div>
+          <span className="text-[10.5px] text-slate-500">
+            Pencocokan data geospasial SK jalan, audit lelang pengadaan, dan kepatuhan regulasi publik
+          </span>
+        </div>
+
+        {/* Infinite Running Marquee Track */}
+        <div className="relative w-full overflow-hidden py-1">
+          {/* Gradient Masks on Left & Right to fade in/out smoothly */}
+          <div className="absolute left-0 inset-y-0 w-12 sm:w-24 bg-gradient-to-r from-[#FAF7F2] via-[#FAF7F2]/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 inset-y-0 w-12 sm:w-24 bg-gradient-to-l from-[#FAF7F2] via-[#FAF7F2]/80 to-transparent z-10 pointer-events-none" />
+
+          <div className="animate-marquee flex items-center">
+            {[...DATA_RESOURCES, ...DATA_RESOURCES].map((item, idx) => (
+              <a
+                key={`${item.name}-${idx}`}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                title={`${item.name} - ${item.role}`}
+                className="group shrink-0 mx-2 px-3 py-2 rounded-[7px] bg-white hover:bg-orange-50/70 border border-[#E6DFD5] hover:border-orange-300 ring-1 ring-slate-100 hover:ring-orange-200/70 shadow-2xs transition-all duration-200 flex items-center gap-2.5 cursor-pointer select-none"
+              >
+                <div className="w-8 h-8 rounded-[5px] bg-slate-50 group-hover:bg-white ring-1 ring-slate-200/60 p-1 flex items-center justify-center shrink-0 transition-colors">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    width={20}
+                    height={20}
+                    style={{ width: "20px", height: "20px" }}
+                    className="w-5 h-5 object-contain shrink-0"
+                  />
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-[#c2410c] transition-colors leading-tight">
+                      {item.name}
+                    </span>
+                    <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-slate-100 group-hover:bg-orange-100 text-slate-600 group-hover:text-[#c2410c] transition-colors">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
+                    {item.role}
+                  </p>
+                </div>
+                <span className="text-slate-300 group-hover:text-[#c2410c] text-xs transition-colors shrink-0 ml-0.5">
+                  ↗
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* FOREGROUND CONTENT: Clean, High-Contrast Editorial Layout */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
