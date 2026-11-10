@@ -418,7 +418,7 @@ export default function HeroSection({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/icon/jalan.png"
-                        alt="Jalan Kab/Kota"
+                        alt="Kemantapan Jalan"
                         width={28}
                         height={28}
                         style={{ width: "28px", height: "28px" }}
@@ -430,7 +430,7 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "kemantapan" ? "text-white" : "text-slate-600"
                         }`}>
-                          Jalan Kab/Kota (BPS)
+                          Kemantapan Jalan (BPS)
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "kemantapan" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
@@ -441,7 +441,7 @@ export default function HeroSection({
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "kemantapan" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Mantap
+                          Mantap Kab/Kota
                         </span>
                       </div>
                     </div>
@@ -466,7 +466,7 @@ export default function HeroSection({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/icon/warning_icon.png"
-                        alt="Undue Delay"
+                        alt="Penundaan Berlarut"
                         width={28}
                         height={28}
                         style={{ width: "28px", height: "28px" }}
@@ -478,7 +478,7 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "ombudsman" ? "text-white" : "text-slate-600"
                         }`}>
-                          Undue Delay (Ombudsman)
+                          Penundaan Berlarut (SLA)
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "ombudsman" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
@@ -489,7 +489,7 @@ export default function HeroSection({
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "ombudsman" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Laporan
+                          Aduan Lambat
                         </span>
                       </div>
                     </div>
@@ -526,7 +526,7 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "pagu" ? "text-white" : "text-slate-600"
                         }`}>
-                          Pagu Pengadaan Pilot
+                          Pagu &amp; Kontrak LPSE
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "pagu" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
@@ -537,7 +537,7 @@ export default function HeroSection({
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "pagu" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Miliar
+                          Miliar Pagu
                         </span>
                       </div>
                     </div>
@@ -574,18 +574,18 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "inpres" ? "text-white" : "text-slate-600"
                         }`}>
-                          Inpres Jalan Daerah
+                          Inpres Jalan Daerah (IJD)
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "inpres" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "inpres" ? "text-white" : "text-slate-900"}>Rp 14,60</span>
+                        <span className={selectedIndex === "inpres" ? "text-white" : "text-slate-900"}>Rp 29,90</span>
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "inpres" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Triliun
+                          Triliun Total
                         </span>
                       </div>
                     </div>
@@ -607,14 +607,14 @@ export default function HeroSection({
                         {selectedIndex === "inpres" && "KEMENPUPR (INPRES NO. 3/2023)"}
                       </span>
                       <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight truncate block">
-                        {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan"}
+                        {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan Nasional & Daerah"}
                         {selectedIndex === "ombudsman" && "Tren Penundaan Berlarut (Undue Delay)"}
                         {selectedIndex === "pagu" && (
                           budgetTimeScale === "bulanan"
                             ? "Tren Realisasi Pagu vs Kontrak Bulanan"
                             : "Komparasi Pagu vs Nilai Kontrak Pilot"
                         )}
-                        {selectedIndex === "inpres" && "Alokasi Inpres Jalan Daerah (IJD)"}
+                        {selectedIndex === "inpres" && "Alokasi Inpres Jalan Daerah (IJD Tahap I & II)"}
                       </strong>
                     </div>
 
