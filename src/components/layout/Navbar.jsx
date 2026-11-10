@@ -43,33 +43,37 @@ function formatRelativeTime(isoDate) {
 function getStatusBadgeMeta(item) {
   if (item.status === "SELESAI") {
     return {
-      label: "Selesai Diperbaiki",
+      label: "Selesai",
       badgeClass: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/70",
-      iconWrapClass: "bg-emerald-50 text-emerald-700 ring-emerald-200/70",
-      Icon: CheckCircle2,
+      iconWrapClass: "bg-emerald-50/90 ring-emerald-200/80",
+      customIcon: "/icon/jalan.png",
+      alt: "Selesai",
     };
   }
   if (item.status === "OVERDUE") {
     return {
-      label: "Lewat Tenggat Respons",
+      label: "Lewat Tenggat",
       badgeClass: "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70",
-      iconWrapClass: "bg-rose-50 text-rose-700 ring-rose-200/70",
-      Icon: AlertTriangle,
+      iconWrapClass: "bg-rose-50/90 ring-rose-200/80",
+      customIcon: "/icon/warning_icon.png",
+      alt: "Peringatan Lewat Tenggat",
     };
   }
   if (item.type === "REPORT_CREATED") {
     return {
-      label: "Tiket Terdaftar GIS",
+      label: "Terdaftar GIS",
       badgeClass: "bg-orange-50 text-[#9a3412] ring-1 ring-orange-200/70",
-      iconWrapClass: "bg-orange-50 text-[#c2410c] ring-orange-200/70",
-      Icon: MapPin,
+      iconWrapClass: "bg-orange-50/90 ring-orange-200/80",
+      customIcon: "/icon/maps.png",
+      alt: "Titik GIS",
     };
   }
   return {
-    label: "Dalam Pengerjaan",
+    label: "Dalam Proses",
     badgeClass: "bg-amber-50 text-amber-800 ring-1 ring-amber-200/70",
-    iconWrapClass: "bg-amber-50 text-amber-700 ring-amber-200/70",
-    Icon: Clock,
+    iconWrapClass: "bg-amber-50/90 ring-amber-200/80",
+    customIcon: "/icon/time.png",
+    alt: "Dalam Pengerjaan",
   };
 }
 
@@ -204,44 +208,54 @@ export default function Navbar({
               </button>
 
               {notifOpen && (
-                <div className="absolute right-0 mt-3 w-[345px] sm:w-[415px] rounded-[10px] bg-[#F2ECE4]/95 p-1.5 ring-1 ring-[#E6DFD5] shadow-[0_20px_48px_-12px_rgba(28,25,23,0.18)] z-50 animate-fade-in font-sans">
-                  <div className="bg-white rounded-[7px] ring-1 ring-slate-200/60 overflow-hidden flex flex-col max-h-[480px]">
+                <div className="absolute right-0 mt-3 w-[340px] sm:w-[390px] rounded-[10px] bg-[#F2ECE4]/95 p-1.5 ring-1 ring-[#E6DFD5] shadow-[0_20px_48px_-12px_rgba(28,25,23,0.18)] z-50 animate-fade-in font-sans">
+                  <div className="bg-white rounded-[7px] ring-1 ring-slate-200/60 overflow-hidden flex flex-col max-h-[460px]">
                     {/* Drawer Header */}
-                    <div className="px-4 pt-3.5 pb-3 border-b border-slate-100 space-y-2.5 bg-white">
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
+                    <div className="px-3.5 pt-3 pb-2.5 border-b border-slate-100 space-y-2 bg-white">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
                           <h3 className="text-xs font-bold text-slate-900 font-heading tracking-tight">
-                            Notifikasi Status Pelaporan
+                            Notifikasi
                           </h3>
-                          <p className="text-[11px] text-slate-500 mt-0.5">
-                            Pembaruan otomatis tahapan verifikasi dan perbaikan fisik dinas.
-                          </p>
+                          {unreadCount > 0 && (
+                            <span className="px-1.5 py-0.2 rounded-full bg-orange-100 text-[#c2410c] font-mono text-[10px] font-bold">
+                              {unreadCount} baru
+                            </span>
+                          )}
                         </div>
                         {unreadCount > 0 && onMarkAllRead && (
                           <button
                             type="button"
                             onClick={onMarkAllRead}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[5px] bg-slate-50 hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] ring-1 ring-slate-200/80 hover:ring-orange-200 text-[10px] font-semibold transition-colors cursor-pointer shrink-0"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-slate-50 hover:bg-orange-50 text-slate-600 hover:text-[#c2410c] ring-1 ring-slate-200/80 text-[10px] font-semibold transition-colors cursor-pointer"
                           >
                             <CheckCheck className="w-3 h-3" />
-                            <span>Tandai Dibaca</span>
+                            <span>Tandai dibaca</span>
                           </button>
                         )}
                       </div>
 
-                      {/* Two-Scope Segmented Switcher: Tiket Dipantau vs Semua Publik */}
-                      <div className="grid grid-cols-2 gap-1 p-1 rounded-[6px] bg-slate-100/90 ring-1 ring-slate-200/60">
+                      {/* Segmented Switcher: Dipantau vs Semua Publik */}
+                      <div className="grid grid-cols-2 gap-1 p-0.5 rounded-[6px] bg-slate-100/90 ring-1 ring-slate-200/50">
                         <button
                           type="button"
                           onClick={() => setNotifScope("personal")}
-                          className={`py-1.5 px-2.5 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                          className={`py-1 px-2 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                             notifScope === "personal"
                               ? "bg-white text-slate-900 shadow-2xs font-bold"
                               : "text-slate-600 hover:text-slate-900"
                           }`}
                         >
-                          <BookmarkCheck className="w-3.5 h-3.5 text-[#c2410c]" />
-                          <span>Tiket Dipantau</span>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src="/icon/report.png"
+                            alt=""
+                            width={14}
+                            height={14}
+                            style={{ width: "14px", height: "14px" }}
+                            className="w-3.5 h-3.5 object-contain shrink-0"
+                          />
+                          <span>Dipantau</span>
                           <span
                             className={`px-1.5 py-0.2 rounded-[4px] font-mono tabular-nums text-[10px] ${
                               notifScope === "personal"
@@ -256,13 +270,21 @@ export default function Navbar({
                         <button
                           type="button"
                           onClick={() => setNotifScope("public")}
-                          className={`py-1.5 px-2.5 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                          className={`py-1 px-2 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                             notifScope === "public"
                               ? "bg-white text-slate-900 shadow-2xs font-bold"
                               : "text-slate-600 hover:text-slate-900"
                           }`}
                         >
-                          <Globe className="w-3.5 h-3.5 text-slate-500" />
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src="/icon/maps.png"
+                            alt=""
+                            width={14}
+                            height={14}
+                            style={{ width: "14px", height: "14px" }}
+                            className="w-3.5 h-3.5 object-contain shrink-0"
+                          />
                           <span>Semua Publik</span>
                           <span
                             className={`px-1.5 py-0.2 rounded-[4px] font-mono tabular-nums text-[10px] ${
@@ -277,37 +299,33 @@ export default function Navbar({
                       </div>
                     </div>
 
-                    {/* Scope Context Subbar */}
-                    <div className="px-4 py-1.5 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between text-[10.5px] text-slate-500">
-                      <span>
-                        {notifScope === "personal"
-                          ? "Menampilkan tiket laporan Anda & tiket yang Anda pantau"
-                          : "Umpan terbuka seluruh pembaruan status penanganan jalan"}
-                      </span>
-                      {notifScope === "personal" && personalUnreadCount > 0 && (
-                        <span className="font-mono tabular-nums font-bold text-[#c2410c]">
-                          {personalUnreadCount} baru
-                        </span>
-                      )}
-                    </div>
-
                     {/* Notification List */}
                     <div className="divide-y divide-slate-100 overflow-y-auto flex-1">
                       {displayedNotifications.length === 0 ? (
-                        <div className="p-7 text-center space-y-2">
-                          <BookmarkCheck className="w-6 h-6 text-slate-300 mx-auto" />
-                          <div className="text-xs font-bold text-slate-800">
-                            Belum Ada Tiket yang Dipantau
+                        <div className="p-6 text-center space-y-2">
+                          <div className="w-9 h-9 rounded-[8px] bg-orange-50/80 ring-1 ring-orange-200/50 flex items-center justify-center mx-auto p-1.5">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src="/icon/report.png"
+                              alt="Lacak Tiket"
+                              width={24}
+                              height={24}
+                              style={{ width: "24px", height: "24px" }}
+                              className="w-6 h-6 object-contain"
+                            />
                           </div>
-                          <p className="text-[11px] text-slate-500 leading-relaxed max-w-[260px] mx-auto">
-                            Buat laporan baru atau tekan tombol <strong>Pantau Notifikasi</strong> pada kartu aduan di menu Lacak Laporan.
-                          </p>
+                          <div className="text-xs font-semibold text-slate-700">
+                            Belum ada tiket dipantau
+                          </div>
                           <button
                             type="button"
-                            onClick={() => handleTabClick("ombudsman")}
-                            className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-[#c2410c] text-white text-[11px] font-bold hover:bg-[#9a3412] transition-colors cursor-pointer"
+                            onClick={() => {
+                              setNotifOpen(false);
+                              handleTabClick("ombudsman");
+                            }}
+                            className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
                           >
-                            <span>Pilih Tiket di Lacak Laporan</span>
+                            <span>Buka Lacak Laporan</span>
                             <ArrowRight className="w-3 h-3" />
                           </button>
                         </div>
@@ -315,7 +333,7 @@ export default function Navbar({
                         displayedNotifications.slice(0, 12).map((item) => {
                           const isUnread = !readNotificationIds.includes(item.id);
                           const isTracked = subscribedTickets.includes(item.ticketCode);
-                          const { label, badgeClass, iconWrapClass, Icon } =
+                          const { label, badgeClass, iconWrapClass, customIcon, alt } =
                             getStatusBadgeMeta(item);
 
                           return (
@@ -326,31 +344,39 @@ export default function Navbar({
                                 setNotifOpen(false);
                                 if (onSelectNotification) onSelectNotification(item);
                               }}
-                              className={`w-full text-left px-4 py-3 transition-colors cursor-pointer flex items-start gap-3 ${
+                              className={`w-full text-left px-3.5 py-2.5 transition-colors cursor-pointer flex items-start gap-2.5 ${
                                 isUnread
-                                  ? "bg-orange-50/30 hover:bg-orange-50/60"
-                                  : "bg-white hover:bg-slate-50/80"
+                                  ? "bg-orange-50/40 hover:bg-orange-50/70"
+                                  : "bg-white hover:bg-slate-50"
                               }`}
                             >
                               <div
-                                className={`mt-0.5 w-7 h-7 rounded-[5px] flex items-center justify-center shrink-0 ring-1 ${iconWrapClass}`}
+                                className={`mt-0.5 w-7 h-7 rounded-[6px] flex items-center justify-center shrink-0 ring-1 ${iconWrapClass} p-1 shadow-2xs`}
                               >
-                                <Icon className="w-3.5 h-3.5" />
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={customIcon}
+                                  alt={alt || "Status"}
+                                  width={18}
+                                  height={18}
+                                  style={{ width: "18px", height: "18px" }}
+                                  className="w-[18px] h-[18px] object-contain shrink-0"
+                                />
                               </div>
 
-                              <div className="flex-1 min-w-0 space-y-1">
-                                <div className="flex items-center justify-between gap-2">
-                                  <div className="flex items-center gap-1.5 min-w-0">
-                                    <span className="font-mono tabular-nums text-[11px] font-bold text-slate-900">
+                              <div className="flex-1 min-w-0 space-y-0.5">
+                                <div className="flex items-center justify-between gap-1.5">
+                                  <div className="flex items-center gap-1.5 min-w-0 truncate">
+                                    <span className="font-mono tabular-nums text-[11px] font-bold text-slate-900 shrink-0">
                                       #{item.ticketCode}
                                     </span>
                                     <span
-                                      className={`px-1.5 py-0.5 rounded-[4px] text-[9.5px] font-semibold ${badgeClass}`}
+                                      className={`px-1.5 py-0.2 rounded-[3px] text-[9.5px] font-semibold shrink-0 ${badgeClass}`}
                                     >
                                       {label}
                                     </span>
                                     {notifScope === "public" && isTracked && (
-                                      <span className="px-1.5 py-0.5 rounded-[4px] text-[9.5px] font-semibold bg-slate-100 text-slate-700">
+                                      <span className="px-1 py-0.2 rounded-[3px] text-[9px] font-semibold bg-slate-100 text-slate-600 shrink-0">
                                         Dipantau
                                       </span>
                                     )}
@@ -364,19 +390,9 @@ export default function Navbar({
                                   {item.roadName || item.title}
                                 </div>
 
-                                <p className="text-[11px] text-slate-600 leading-relaxed line-clamp-2">
+                                <p className="text-[11px] text-slate-500 leading-snug line-clamp-1">
                                   {item.message}
                                 </p>
-
-                                <div className="flex items-center justify-between gap-2 pt-0.5 text-[10px]">
-                                  <span className="font-medium text-slate-400 truncate">
-                                    {item.officer || item.authorityLabel}
-                                  </span>
-                                  <span className="font-bold text-[#c2410c] inline-flex items-center gap-0.5 shrink-0">
-                                    <span>Buka di Peta GIS</span>
-                                    <ArrowRight className="w-2.5 h-2.5" />
-                                  </span>
-                                </div>
                               </div>
                             </button>
                           );
@@ -385,16 +401,20 @@ export default function Navbar({
                     </div>
 
                     {/* Drawer Footer */}
-                    <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/80 flex items-center justify-between text-[10.5px]">
-                      <span className="text-slate-500">
-                        Dipicu otomatis dari Portal Dinas &amp; Peta GIS
+                    <div className="px-3.5 py-2 border-t border-slate-100 bg-slate-50/70 flex items-center justify-between text-[11px]">
+                      <span className="text-[10.5px] text-slate-400 font-mono">
+                        {displayedNotifications.length} notifikasi
                       </span>
                       <button
                         type="button"
-                        onClick={() => handleTabClick("ombudsman")}
-                        className="font-bold text-[#c2410c] hover:underline cursor-pointer"
+                        onClick={() => {
+                          setNotifOpen(false);
+                          handleTabClick("ombudsman");
+                        }}
+                        className="font-semibold text-[#c2410c] hover:underline cursor-pointer flex items-center gap-1"
                       >
-                        Kelola Tiket Dipantau
+                        <span>Kelola di Lacak Laporan</span>
+                        <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
