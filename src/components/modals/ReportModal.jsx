@@ -1104,7 +1104,13 @@ export default function ReportModal({
                     ) : (
                       /* Photo Preview Card with live AI Scanning & Actions */
                       <div className="space-y-3">
-                        <div className="relative rounded-[8px] overflow-hidden bg-slate-900 h-48 sm:h-52 group ring-1 ring-slate-200 shadow-sm flex items-center justify-center">
+                        <div
+                          className={`relative rounded-[8px] overflow-hidden bg-slate-900 h-48 sm:h-52 group shadow-sm flex items-center justify-center transition-all ${
+                            spamError
+                              ? "ring-2 ring-rose-400/80 shadow-rose-100/50"
+                              : "ring-1 ring-slate-200"
+                          }`}
+                        >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={photoPreview}
@@ -1163,32 +1169,70 @@ export default function ReportModal({
                             </div>
                           )}
 
-                          {/* Bottom Tag */}
-                          <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-sm flex items-center gap-1.5 shadow-xs">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Foto Berhasil Dimuat</span>
-                          </div>
+                          {/* Bottom Tag: dynamic according to verification status */}
+                          {spamError ? (
+                            <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-rose-950/90 text-rose-200 text-[10px] font-semibold backdrop-blur-sm flex items-center gap-1.5 shadow-xs ring-1 ring-rose-500/50 animate-fade-in">
+                              <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                              <span>Bukan Foto Kerusakan Jalan</span>
+                            </div>
+                          ) : (
+                            <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-sm flex items-center gap-1.5 shadow-xs">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                              <span>Foto Berhasil Dimuat</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* Inspector Results Card */}
                         <div className="space-y-2.5">
                           {spamError && (
-                            <div className="p-3.5 sm:p-4 rounded-[8px] bg-rose-50/90 ring-1 ring-rose-200 text-rose-800 space-y-2 animate-fade-in text-xs">
-                              <div className="flex items-center gap-2 font-bold text-rose-900 text-xs sm:text-[13px]">
-                                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
-                                <span>Foto Belum Sesuai</span>
+                            <div className="p-4 rounded-[8px] bg-rose-50/90 ring-1 ring-rose-200 text-rose-900 space-y-3 animate-fade-in shadow-2xs">
+                              <div className="flex items-center justify-between gap-2 border-b border-rose-200/70 pb-2">
+                                <div className="flex items-center gap-2 font-bold text-xs sm:text-[13px] text-rose-900">
+                                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                                  <span>Foto Belum Sesuai Kriteria</span>
+                                </div>
+                                <span className="px-2 py-0.5 rounded-[4px] bg-rose-100 text-rose-800 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                                  Verifikasi Ditolak
+                                </span>
                               </div>
-                              <p className="text-[11.5px] text-rose-700 leading-relaxed">
-                                {spamError}
-                              </p>
-                              <div className="pt-1">
+
+                              <div className="space-y-1.5 text-xs">
+                                <p className="text-[11.5px] text-rose-900 leading-relaxed font-medium">
+                                  {spamError}
+                                </p>
+                                <p className="text-[10.5px] text-rose-700/90 leading-normal">
+                                  💡 <strong>Saran:</strong> Mohon lampirkan foto yang memperlihatkan kondisi fisik permukaan jalan raya (aspal berlubang, retak buaya, jalan amblas, atau tebing labil).
+                                </p>
+                              </div>
+
+                              {/* Direct Action Buttons: Retake vs Re-select */}
+                              <div className="pt-1 flex flex-wrap items-center gap-2">
                                 <button
                                   type="button"
                                   onClick={() => cameraInputRef.current?.click()}
-                                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-rose-800 hover:text-rose-950 underline cursor-pointer"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-rose-700 hover:bg-rose-800 text-white text-[11px] font-bold transition-all shadow-xs cursor-pointer active:scale-95"
                                 >
-                                  <span>Ambil foto kondisi jalan yang sebenarnya</span>
-                                  <span>&rarr;</span>
+                                  <Camera className="w-3.5 h-3.5" />
+                                  <span>Buka Kamera Lagi</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => galleryInputRef.current?.click()}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[5px] bg-white hover:bg-rose-50 text-rose-900 ring-1 ring-rose-300 text-[11px] font-semibold transition-all shadow-2xs cursor-pointer active:scale-95"
+                                >
+                                  <Upload className="w-3.5 h-3.5 text-rose-700" />
+                                  <span>Pilih dari Galeri</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={handleClearPhoto}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[5px] text-rose-700 hover:bg-rose-100/80 text-[11px] font-semibold transition-colors cursor-pointer ml-auto"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  <span>Hapus</span>
                                 </button>
                               </div>
                             </div>
