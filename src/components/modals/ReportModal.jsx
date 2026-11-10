@@ -87,6 +87,13 @@ export default function ReportModal({
   const [gpsStatusMsg, setGpsStatusMsg] = useState("");
   const [showManualCoords, setShowManualCoords] = useState(false);
 
+  // Dynamic / Geolocated Road State (allows reporting any local road in Indonesia)
+  const [isCustomRoad, setIsCustomRoad] = useState(false);
+  const [customRoadName, setCustomRoadName] = useState("");
+  const [customDistrict, setCustomDistrict] = useState("");
+  const [customAuthority, setCustomAuthority] = useState("KOTA");
+  const [customAuthorityLabel, setCustomAuthorityLabel] = useState("");
+
   const [reporterName, setReporterName] = useState("");
   const [notificationContact, setNotificationContact] = useState("");
   const [notifyOnUpdate, setNotifyOnUpdate] = useState(true);
@@ -229,28 +236,52 @@ export default function ReportModal({
   const validLat = !Number.isNaN(parsedLat) ? parsedLat : defaultCoords[0];
   const validLng = !Number.isNaN(parsedLng) ? parsedLng : defaultCoords[1];
 
-  const currentRoad =
-    usePinnedLocation && initialLocation
-      ? {
-          ...baseRoad,
-          id: initialLocation.roadSegmentId || baseRoad.id || "ruas-gis-live",
-          name: initialLocation.roadName || baseRoad.name || "Ruas Jalan Terdeteksi GIS",
-          district: initialLocation.district || baseRoad.district || "Indonesia",
-          authority: initialLocation.authority || baseRoad.authority || "KABUPATEN",
-          authorityLabel:
-            initialLocation.authorityLabel ||
-            baseRoad.authorityLabel ||
-            "Dinas PUPR Penyelenggara Jalan",
-          legalBasis:
-            initialLocation.legalBasis ||
-            baseRoad.legalBasis ||
-            "UU No. 2 Tahun 2022 tentang Jalan",
-          leadership: initialLocation.leadership || baseRoad.leadership,
-          budget: initialLocation.budget || baseRoad.budget,
-        }
-      : baseRoad;
+  const currentRoad = isCustomRoad
+    ? {
+        id: "ruas-geospasial-lokal",
+        name: customRoadName.trim() || `Ruas Jalan Lokal [${validLat.toFixed(4)}, ${validLng.toFixed(4)}]`,
+        district: customDistrict.trim() || "Wilayah Terpeta GIS",
+        authority: customAuthority || "KOTA",
+        authorityLabel:
+          customAuthorityLabel.trim() ||
+          `Pemerintah ${customDistrict || "Daerah Setempat"} (Dinas PUPR)`,
+        legalBasis: "UU No. 2 Tahun 2022 Pasal 9 tentang Penyelenggaraan Jalan Daerah",
+        leadership: {
+          regionalHead: `Walikota / Bupati di Wilayah ${customDistrict || "Setempat"}`,
+          agency: `Dinas Pekerjaan Umum & Penataan Ruang (PUPR)`,
+          officialPic: "Bidang Bina Marga Dinas PU Daerah",
+        },
+        budget: { paguRp: 15000000000 },
+        isCustom: true,
+      }
+    : usePinnedLocation && initialLocation
+    ? {
+        ...baseRoad,
+        id: initialLocation.roadSegmentId || baseRoad.id || "ruas-gis-live",
+        name: initialLocation.roadName || baseRoad.name || "Ruas Jalan Terdeteksi GIS",
+        district: initialLocation.district || baseRoad.district || "Indonesia",
+        authority: initialLocation.authority || baseRoad.authority || "KABUPATEN",
+        authorityLabel:
+          initialLocation.authorityLabel ||
+          baseRoad.authorityLabel ||
+          "Dinas PUPR Penyelenggara Jalan",
+        legalBasis:
+          initialLocation.legalBasis ||
+          baseRoad.legalBasis ||
+          "UU No. 2 Tahun 2022 tentang Jalan",
+        leadership: initialLocation.leadership || baseRoad.leadership,
+        budget: initialLocation.budget || baseRoad.budget,
+      }
+    : baseRoad;
 
   const handleRoadSelectChange = (newRoadId) => {
+    if (newRoadId === "CUSTOM_MAP_POINT") {
+      setIsCustomRoad(true);
+      setCoordinateSource("GIS_MAP_PIN");
+      setIsRoadPickerOpen(false);
+      return;
+    }
+    setIsCustomRoad(false);
     setSelectedRoadId(newRoadId);
     setUsePinnedLocation(false);
     setCoordinateSource("ROAD_CORRIDOR");
@@ -262,48 +293,79 @@ export default function ReportModal({
     }
   };
 
-  const handleMiniMapLocationChange = (newLat, newLng) => {
+  const handleMiniMapLocationChange = async (newLat, newLng) => {
     setLatInput(String(newLat));
     setLngInput(String(newLng));
     setCoordinateSource("GIS_MAP_PIN");
 
     const detected = detectJurisdictionByCoordinates(newLat, newLng, roads);
-    if (detected?.nearestRoad?.id) {
+    const distMeters = Math.round((detected?.distanceKm || 999) * 1000);
+
+    if (!isCustomRoad && detected?.nearestRoad?.id && distMeters <= 60) {
       if (detected.nearestRoad.id !== selectedRoadId) {
         setSelectedRoadId(detected.nearestRoad.id);
-        const distMeters = Math.round((detected.distanceKm || 0) * 1000);
-        setGpsStatusMsg(`✓ Titik di peta disesuaikan: Dekat ${detected.nearestRoad.name} (~${distMeters > 0 ? distMeters : 20}m)`);
+        setGpsStatusMsg(`✓ Titik di peta disesuaikan: Dekat ${detected.nearestRoad.name} (~${distMeters}m)`);
       }
     } else {
       setGpsStatusMsg(`✓ Koordinat titik peta: ${newLat}, ${newLng}`);
+    }
+
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${newLat}&lon=${newLng}&zoom=17&accept-language=id`
+      );
+      if (res.ok) {
+        const nom = await res.json();
+        const roadLabel = nom?.address?.road || nom?.name || "";
+        const sub = nom?.address?.suburb || nom?.address?.village || "";
+        const city = nom?.address?.city || nom?.address?.county || nom?.address?.regency || nom?.address?.town || "";
+        const prov = nom?.address?.state || "";
+
+        if (roadLabel || sub || city) {
+          const finalRoad = roadLabel || (sub ? `Jl. Area ${sub}` : `Ruas Jalan di ${city || prov}`);
+          const finalDistrict = [city, prov].filter(Boolean).join(", ");
+          const isKota = city.toLowerCase().includes("kota");
+
+          if (isCustomRoad || distMeters > 60) {
+            setIsCustomRoad(true);
+            setCustomRoadName(finalRoad);
+            setCustomDistrict(finalDistrict || "Indonesia");
+            setCustomAuthority(isKota ? "KOTA" : "KABUPATEN");
+            setCustomAuthorityLabel(`Pemerintah ${city || "Daerah Setempat"} (Dinas PUPR)`);
+            setGpsStatusMsg(`✓ Titik peta: ${finalRoad}${city ? `, ${city}` : ""}`);
+          }
+
+          if (!addressDetail || addressDetail.startsWith("Titik") || coordinateSource === "GIS_MAP_PIN") {
+            const locDetails = [roadLabel, sub, city].filter(Boolean).join(", ");
+            if (locDetails) setAddressDetail(`${locDetails} (Titik GIS)`);
+          }
+        }
+      }
+    } catch {
+      // Ignore geocode network failure
     }
   };
 
   const handleUseCurrentGps = () => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) {
-      setGpsStatusMsg("Peramban tidak mendukung fitur geolokasi GPS.");
+      setGpsStatusMsg("Peramban Anda tidak mendukung fitur geolokasi GPS.");
       return;
     }
     setIsLocatingGps(true);
-    setGpsStatusMsg("Mendeteksi titik koordinat GPS perangkat...");
+    setGpsStatusMsg("Mendeteksi titik koordinat GPS perangkat Anda...");
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const lat = Number(pos.coords.latitude.toFixed(5));
         const lng = Number(pos.coords.longitude.toFixed(5));
+        const accuracy = Math.round(pos.coords.accuracy || 15);
         setLatInput(String(lat));
         setLngInput(String(lng));
         setCoordinateSource("DEVICE_GPS");
 
         const detected = detectJurisdictionByCoordinates(lat, lng, roads);
-        if (detected?.nearestRoad?.id) {
-          setSelectedRoadId(detected.nearestRoad.id);
-          setUsePinnedLocation(false);
-          const distMeters = Math.round((detected.distanceKm || 0) * 1000);
-          setGpsStatusMsg(`✓ GPS Terkunci: Dekat ${detected.nearestRoad.name} (~${distMeters > 0 ? distMeters : 30}m)`);
-        } else {
-          setGpsStatusMsg(`✓ Titik GPS terkunci: ${lat}, ${lng}`);
-        }
+        const distMeters = Math.round((detected?.distanceKm || 999) * 1000);
 
+        let detectedRoad = "";
         try {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=17&accept-language=id`
@@ -311,42 +373,59 @@ export default function ReportModal({
           if (res.ok) {
             const nom = await res.json();
             const roadLabel = nom?.address?.road || nom?.name || "";
-            const areaLabel =
-              nom?.address?.village ||
-              nom?.address?.suburb ||
-              nom?.address?.city ||
-              nom?.address?.county ||
-              "";
-            if (roadLabel || areaLabel) {
-              setAddressDetail(
-                [roadLabel, areaLabel].filter(Boolean).join(", ") +
-                  ` (GPS ${lat}, ${lng})`
-              );
+            const sub = nom?.address?.suburb || nom?.address?.village || "";
+            const city = nom?.address?.city || nom?.address?.county || nom?.address?.regency || nom?.address?.town || "";
+            const prov = nom?.address?.state || "";
+
+            detectedRoad = roadLabel;
+
+            const isKota = city.toLowerCase().includes("kota");
+            const finalRoad = roadLabel || (sub ? `Jl. Area ${sub}` : `Ruas Jalan di ${city || prov || "Wilayah Anda"}`);
+            const finalDistrict = [city, prov].filter(Boolean).join(", ");
+
+            if (distMeters > 60 || !detected?.nearestRoad?.id) {
+              setIsCustomRoad(true);
+              setCustomRoadName(finalRoad);
+              setCustomDistrict(finalDistrict || "Indonesia");
+              setCustomAuthority(isKota ? "KOTA" : "KABUPATEN");
+              setCustomAuthorityLabel(`Pemerintah ${city || "Daerah Setempat"} (Dinas PUPR)`);
+            } else {
+              setSelectedRoadId(detected.nearestRoad.id);
+              setIsCustomRoad(false);
+              setCustomRoadName(finalRoad);
             }
+
+            setAddressDetail(
+              [roadLabel, sub, city].filter(Boolean).join(", ") +
+                ` (GPS akurasi ±${accuracy}m)`
+            );
           }
         } catch {
-          // Ignore reverse geocode failure on GPS
+          // Ignore geocode error
+        }
+
+        if (detectedRoad) {
+          setGpsStatusMsg(`✓ GPS Terkunci: ${detectedRoad} (Akurasi ±${accuracy}m)`);
+        } else if (distMeters <= 60 && detected?.nearestRoad?.name) {
+          setGpsStatusMsg(`✓ GPS Terkunci: Dekat ${detected.nearestRoad.name} (~${distMeters}m)`);
+        } else {
+          setGpsStatusMsg(`✓ Titik GPS Terkunci: [${lat}, ${lng}] (Akurasi ±${accuracy}m)`);
         }
 
         setIsLocatingGps(false);
       },
       (err) => {
-        console.warn("GPS error fallback:", err);
-        const defaultPilot = roads.find((r) => r.id === "ruas-su-01") || roads[0];
-        if (defaultPilot) {
-          const [lat, lng] = getRoadMidpoint(defaultPilot);
-          setLatInput(String(lat));
-          setLngInput(String(lng));
-          setSelectedRoadId(defaultPilot.id);
-          setUsePinnedLocation(false);
-          setCoordinateSource("DEVICE_GPS");
-          setGpsStatusMsg(`Simulasi Lokasi Terdekat: ${defaultPilot.name} (${lat}, ${lng})`);
-        } else {
-          setGpsStatusMsg("Gagal mengakses GPS. Pastikan izin lokasi diaktifkan.");
+        console.warn("GPS error:", err);
+        let msg = "Gagal mengakses GPS. Pastikan izin lokasi aktif atau tentukan titik langsung di peta.";
+        if (err.code === 1) {
+          msg = "Izin lokasi belum diberikan. Silakan izinkan akses lokasi pada browser atau geser pin peta.";
+        } else if (err.code === 3) {
+          msg = "Waktu pencarian GPS habis. Silakan coba lagi atau geser pin langsung pada peta.";
         }
+        setGpsStatusMsg(msg);
         setIsLocatingGps(false);
       },
-      { enableHighAccuracy: true, timeout: 8000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
@@ -597,6 +676,10 @@ export default function ReportModal({
       alert("Harap masukkan patokan atau detail lokasi kerusakan jalan.");
       return;
     }
+    if (isCustomRoad && !customRoadName.trim()) {
+      alert("Harap masukkan nama ruas jalan lokasi kerusakan.");
+      return;
+    }
     setCurrentStep(2);
   };
 
@@ -751,6 +834,8 @@ export default function ReportModal({
     setIsCopied(false);
     setGpsStatusMsg("");
     setShowManualCoords(false);
+    setIsCustomRoad(false);
+    setCustomRoadName("");
     onClose();
   };
 
@@ -1088,56 +1173,121 @@ export default function ReportModal({
                       <div className="relative" ref={roadPickerRef}>
                         <div className="flex items-center justify-between mb-1">
                           <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-                            Ruas Jalan Terdata
+                            Ruas Jalan Laporan
                           </label>
-                          <span className="text-[10px] text-slate-400">Pilih koridor ruas</span>
+                          <span className="text-[10px] text-slate-400">
+                            {isCustomRoad ? "Jalan lokal terdeteksi" : "Pilih koridor ruas"}
+                          </span>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={() => setIsRoadPickerOpen((prev) => !prev)}
-                          className="w-full text-left p-3 rounded-[7px] bg-white text-slate-900 transition-all cursor-pointer ring-1 ring-slate-200 hover:ring-orange-300 focus:ring-2 focus:ring-[#c2410c]/30 space-y-1.5 shadow-2xs"
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug">
-                              {currentRoad?.name || "Pilih Ruas Jalan..."}
+                        {isCustomRoad ? (
+                          /* DYNAMIC / GEOLOCATED ROAD DISPLAY & EDIT FIELD */
+                          <div className="p-3 rounded-[7px] bg-white ring-1 ring-orange-200/90 space-y-2 shadow-2xs">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
+                                <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
+                                <span>Nama Jalan Sesuai Titik Peta</span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setIsRoadPickerOpen(true)}
+                                className="inline-flex items-center gap-1 text-[10.5px] font-bold text-[#c2410c] hover:underline cursor-pointer"
+                              >
+                                <span>Pilih Koridor Terdata</span>
+                                <ChevronDown className="w-3 h-3" />
+                              </button>
                             </div>
-                            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-slate-100 hover:bg-orange-50 text-[#c2410c] text-[10px] font-bold shrink-0 transition-colors">
-                              <span>Ganti</span>
-                              <ChevronDown
-                                className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                                  isRoadPickerOpen ? "rotate-180" : ""
-                                }`}
-                              />
-                            </div>
-                          </div>
 
-                          <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 text-[10.5px] text-slate-500">
-                            <span className="truncate">{currentRoad?.district || "Indonesia"}</span>
-                            <span
-                              className={`px-2 py-0.5 rounded-[3px] text-[9.5px] font-bold uppercase tracking-wider shrink-0 ${
-                                currentRoad?.authority === "NASIONAL"
-                                  ? "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70"
-                                  : currentRoad?.authority === "PROVINSI"
-                                  ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200/70"
-                                  : "bg-blue-50 text-blue-700 ring-1 ring-blue-200/70"
-                              }`}
-                            >
-                              {currentRoad?.authority || "JALAN"}
-                            </span>
+                            <div className="space-y-1">
+                              <input
+                                type="text"
+                                required
+                                value={customRoadName}
+                                onChange={(e) => setCustomRoadName(e.target.value)}
+                                placeholder="Ketik nama jalan (contoh: Jl. Hanoman Raya atau Jl. Krapyak)"
+                                className="w-full px-2.5 py-1.5 rounded-[5px] bg-slate-50 text-xs font-bold text-slate-900 ring-1 ring-slate-200 focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
+                              />
+                              <span className="text-[10px] text-slate-400 block">
+                                Nama jalan otomatis terdeteksi dari peta &amp; bisa Anda edit langsung secara bebas.
+                              </span>
+                            </div>
+
+                            <div className="flex items-center justify-between text-[10.5px] text-slate-500 pt-1 border-t border-slate-100">
+                              <span className="truncate">{customDistrict || "Wilayah Terpeta"}</span>
+                              <span className="px-2 py-0.5 rounded-[3px] text-[9.5px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 ring-1 ring-blue-200/70">
+                                {customAuthority || "KOTA/KAB"}
+                              </span>
+                            </div>
                           </div>
-                        </button>
+                        ) : (
+                          /* PREDEFINED CORRIDOR BUTTON */
+                          <button
+                            type="button"
+                            onClick={() => setIsRoadPickerOpen((prev) => !prev)}
+                            className="w-full text-left p-3 rounded-[7px] bg-white text-slate-900 transition-all cursor-pointer ring-1 ring-slate-200 hover:ring-orange-300 focus:ring-2 focus:ring-[#c2410c]/30 space-y-1.5 shadow-2xs"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug">
+                                {currentRoad?.name || "Pilih Ruas Jalan..."}
+                              </div>
+                              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-slate-100 hover:bg-orange-50 text-[#c2410c] text-[10px] font-bold shrink-0 transition-colors">
+                                <span>Ganti</span>
+                                <ChevronDown
+                                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                                    isRoadPickerOpen ? "rotate-180" : ""
+                                  }`}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 text-[10.5px] text-slate-500">
+                              <span className="truncate">{currentRoad?.district || "Indonesia"}</span>
+                              <span
+                                className={`px-2 py-0.5 rounded-[3px] text-[9.5px] font-bold uppercase tracking-wider shrink-0 ${
+                                  currentRoad?.authority === "NASIONAL"
+                                    ? "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70"
+                                    : currentRoad?.authority === "PROVINSI"
+                                    ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200/70"
+                                    : "bg-blue-50 text-blue-700 ring-1 ring-blue-200/70"
+                                }`}
+                              >
+                                {currentRoad?.authority || "JALAN"}
+                              </span>
+                            </div>
+                          </button>
+                        )}
 
                         {/* Searchable Road Dropdown */}
                         {isRoadPickerOpen && (
                           <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white rounded-[8px] shadow-2xl ring-1 ring-slate-200 p-2.5 space-y-2 animate-fade-in border border-slate-100">
+                            {/* Top action: Select current Map Point / Free text */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsCustomRoad(true);
+                                setIsRoadPickerOpen(false);
+                              }}
+                              className="w-full text-left p-2.5 rounded-[6px] transition-colors flex items-center justify-between gap-2 cursor-pointer border border-dashed border-orange-300 bg-orange-50/70 hover:bg-orange-100/70 mb-1"
+                            >
+                              <div className="min-w-0 flex-1">
+                                <div className="text-xs font-bold text-[#c2410c] flex items-center gap-1.5 truncate">
+                                  <MapPin className="w-3.5 h-3.5 shrink-0" />
+                                  <span>📍 Gunakan Sesuai Titik Peta (Nama Bebas)</span>
+                                </div>
+                                <div className="text-[10px] text-slate-600 mt-0.5 truncate">
+                                  {customRoadName ? customRoadName : "Ketik / deteksi nama jalan sesuai titik koordinat Anda"}
+                                </div>
+                              </div>
+                              {isCustomRoad && <Check className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />}
+                            </button>
+
                             <div className="relative">
                               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                               <input
                                 type="text"
                                 value={roadSearchQuery}
                                 onChange={(e) => setRoadSearchQuery(e.target.value)}
-                                placeholder="Cari ruas jalan, wilayah, atau wewenang..."
+                                placeholder="Cari koridor nasional, provinsi, atau kota..."
                                 autoFocus
                                 className="w-full pl-8 pr-7 py-1.5 text-xs rounded-[5px] bg-slate-50 ring-1 ring-slate-200 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-[#c2410c]/40 text-slate-900 placeholder:text-slate-400"
                               />
