@@ -599,22 +599,33 @@ export default function HeroSection({
                 <div className="space-y-1.5 border-b border-slate-200/60 pb-2">
                   {/* Row 1: Title & Main Type Switcher (Garis / Batang) */}
                   <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <span className="text-[9.5px] font-semibold text-slate-400 uppercase font-sans tracking-wide truncate block">
                         {selectedIndex === "kemantapan" && "BPS SIRUSA (DATA TAHUNAN 2020–2024)"}
                         {selectedIndex === "ombudsman" && "OMBUDSMAN RI (LAPORAN TAHUNAN 2020–2024)"}
                         {selectedIndex === "pagu" && "SIRUP & LPSE LKPP (TAHUN ANGGARAN 2026)"}
-                        {selectedIndex === "inpres" && "KEMENPUPR (INPRES NO. 3/2023)"}
+                        {selectedIndex === "inpres" && "KEMEN PU (INPRES NO. 3/2023 TAHAP I & II)"}
                       </span>
-                      <strong className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight truncate block">
-                        {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan Nasional & Daerah"}
-                        {selectedIndex === "ombudsman" && "Tren Penundaan Berlarut (Undue Delay)"}
+                      <strong
+                        className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight truncate block"
+                        title={
+                          selectedIndex === "kemantapan"
+                            ? "Tingkat Kemantapan Jalan (Nasional, Provinsi, Kab/Kota)"
+                            : selectedIndex === "ombudsman"
+                            ? "Tren Penundaan Berlarut (Undue Delay SLA)"
+                            : selectedIndex === "pagu"
+                            ? "Pagu Pengadaan vs Nilai Kontrak LPSE"
+                            : "Alokasi Inpres Jalan Daerah (IJD Tahap I & II)"
+                        }
+                      >
+                        {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan"}
+                        {selectedIndex === "ombudsman" && "Tren Penundaan Berlarut"}
                         {selectedIndex === "pagu" && (
                           budgetTimeScale === "bulanan"
-                            ? "Tren Realisasi Pagu vs Kontrak Bulanan"
-                            : "Komparasi Pagu vs Nilai Kontrak Pilot"
+                            ? "Realisasi Pagu vs Kontrak Bulanan"
+                            : "Pagu vs Nilai Kontrak Pilot"
                         )}
-                        {selectedIndex === "inpres" && "Alokasi Inpres Jalan Daerah (IJD Tahap I & II)"}
+                        {selectedIndex === "inpres" && "Alokasi Inpres Jalan Daerah"}
                       </strong>
                     </div>
 
