@@ -111,38 +111,39 @@ export default function HeroSection({
     const q = searchQuery.trim().toLowerCase();
     if (!q) {
       return {
-        matchedRoads: roads,
-        matchedReports: reports,
-        matchedPackages: roads.map((r) => r.budget).filter(Boolean),
+        matchedRoads: roads || [],
+        matchedReports: reports || [],
+        matchedPackages: (roads || []).map((r) => r?.budget).filter(Boolean),
         hasSearch: false,
       };
     }
 
-    const matchedRoads = roads.filter(
+    const matchedRoads = (roads || []).filter(
       (r) =>
-        r.name.toLowerCase().includes(q) ||
-        r.code.toLowerCase().includes(q) ||
-        r.authority.toLowerCase().includes(q) ||
-        r.district.toLowerCase().includes(q)
+        r?.name?.toLowerCase().includes(q) ||
+        r?.code?.toLowerCase().includes(q) ||
+        r?.authority?.toLowerCase().includes(q) ||
+        r?.district?.toLowerCase().includes(q)
     );
 
-    const matchedReports = reports.filter(
+    const matchedReports = (reports || []).filter(
       (rep) =>
-        rep.ticketCode.toLowerCase().includes(q) ||
-        rep.roadName.toLowerCase().includes(q) ||
-        rep.categoryLabel.toLowerCase().includes(q) ||
-        rep.address.toLowerCase().includes(q)
+        rep?.ticketCode?.toLowerCase().includes(q) ||
+        rep?.roadName?.toLowerCase().includes(q) ||
+        rep?.categoryLabel?.toLowerCase().includes(q) ||
+        rep?.address?.toLowerCase().includes(q)
     );
 
-    const matchedPackages = roads
-      .map((r) => r.budget)
+    const matchedPackages = (roads || [])
+      .map((r) => r?.budget)
       .filter(
         (b) =>
           b &&
-          (b.packageId.toLowerCase().includes(q) ||
-            b.name.toLowerCase().includes(q) ||
-            b.contractor.toLowerCase().includes(q) ||
-            b.source.toLowerCase().includes(q))
+          (b.packageId?.toLowerCase().includes(q) ||
+            b.name?.toLowerCase().includes(q) ||
+            b.packageName?.toLowerCase().includes(q) ||
+            b.contractor?.toLowerCase().includes(q) ||
+            b.source?.toLowerCase().includes(q))
       );
 
     return {
@@ -155,46 +156,47 @@ export default function HeroSection({
 
   // Dedicated Road Monitoring Table processing
   const processedTableRoads = useMemo(() => {
-    let list = roads;
+    let list = roads || [];
 
     // 1. Filter by category
     if (tableFilter === "NASIONAL") {
-      list = list.filter((r) => r.authority === "NASIONAL");
+      list = list.filter((r) => r?.authority === "NASIONAL");
     } else if (tableFilter === "PROVINSI") {
-      list = list.filter((r) => r.authority === "PROVINSI");
+      list = list.filter((r) => r?.authority === "PROVINSI");
     } else if (tableFilter === "KOTA") {
-      list = list.filter((r) => r.authority === "KOTA");
+      list = list.filter((r) => r?.authority === "KOTA");
     } else if (tableFilter === "KABUPATEN") {
-      list = list.filter((r) => r.authority === "KABUPATEN");
+      list = list.filter((r) => r?.authority === "KABUPATEN");
     } else if (tableFilter === "SUMUT") {
       list = list.filter(
         (r) =>
-          r.district?.toLowerCase().includes("medan") ||
-          r.district?.toLowerCase().includes("simalungun") ||
-          r.district?.toLowerCase().includes("karo") ||
-          r.district?.toLowerCase().includes("asahan") ||
-          (r.island === "Sumatera" && r.code?.includes("SMT"))
+          r?.district?.toLowerCase().includes("medan") ||
+          r?.district?.toLowerCase().includes("simalungun") ||
+          r?.district?.toLowerCase().includes("karo") ||
+          r?.district?.toLowerCase().includes("asahan") ||
+          (r?.island === "Sumatera" && r?.code?.includes("SMT"))
       );
     } else if (tableFilter === "DAERAH") {
-      list = list.filter((r) => r.authority === "PROVINSI" || r.authority === "KOTA" || r.authority === "KABUPATEN" || r.authority === "KOTA_KAB");
+      list = list.filter((r) => r?.authority === "PROVINSI" || r?.authority === "KOTA" || r?.authority === "KABUPATEN" || r?.authority === "KOTA_KAB");
     }
 
-    // 2. Filter by local search query
-    if (tableSearch.trim()) {
-      const q = tableSearch.trim().toLowerCase();
+    // 2. Filter by search query (combines local tableSearch and global hero searchQuery)
+    const activeQuery = (tableSearch || searchQuery || "").trim().toLowerCase();
+    if (activeQuery) {
       list = list.filter(
         (r) =>
-          r.name?.toLowerCase().includes(q) ||
-          r.code?.toLowerCase().includes(q) ||
-          r.district?.toLowerCase().includes(q) ||
-          r.authority?.toLowerCase().includes(q) ||
-          r.budget?.contractor?.toLowerCase().includes(q) ||
-          r.budget?.source?.toLowerCase().includes(q)
+          r?.name?.toLowerCase().includes(activeQuery) ||
+          r?.code?.toLowerCase().includes(activeQuery) ||
+          r?.district?.toLowerCase().includes(activeQuery) ||
+          r?.authority?.toLowerCase().includes(activeQuery) ||
+          r?.budget?.packageName?.toLowerCase().includes(activeQuery) ||
+          r?.budget?.contractor?.toLowerCase().includes(activeQuery) ||
+          r?.budget?.source?.toLowerCase().includes(activeQuery)
       );
     }
 
     return list;
-  }, [roads, tableFilter, tableSearch]);
+  }, [roads, tableFilter, tableSearch, searchQuery]);
 
   const totalTablePages = Math.max(
     1,
@@ -250,8 +252,15 @@ export default function HeroSection({
             <span className="text-slate-400 font-medium">Data Terverifikasi TA 2026</span>
           </div>
 
-          {/* Segment 3: Spacious Global Search Input */}
-          <div className="relative flex-1 min-w-[280px] flex items-center bg-white rounded-[6px] shadow-2xs group">
+          {/* Segment 3: Spacious Global Search Input with Active Submit */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const el = document.getElementById("daftar-ruas-tabel");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="relative flex-1 min-w-[280px] flex items-center bg-white rounded-[6px] shadow-2xs group ring-1 ring-orange-200/50 focus-within:ring-2 focus-within:ring-orange-500/40"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon/search_icon.png"
@@ -264,39 +273,74 @@ export default function HeroSection({
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setTablePage(1);
+              }}
               placeholder="Cari nama ruas jalan, kode laporan, paket pengadaan, kontraktor..."
-              className="w-full h-full pl-9 pr-8 py-2 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none transition-all font-sans"
+              className="w-full h-full pl-9 pr-20 py-2 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none transition-all font-sans"
             />
-            {searchQuery && (
+            <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setTablePage(1);
+                  }}
+                  className="w-4 h-4 rounded-full bg-slate-100 hover:bg-orange-100 text-slate-500 hover:text-[#c2410c] flex items-center justify-center text-[10px] font-bold cursor-pointer transition-colors"
+                  title="Hapus pencarian"
+                >
+                  ✕
+                </button>
+              )}
               <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-100 hover:bg-orange-100 text-slate-500 hover:text-[#c2410c] flex items-center justify-center text-[10px] font-bold cursor-pointer transition-colors"
-                title="Hapus pencarian"
+                type="submit"
+                className="px-2.5 py-1 rounded-[4px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-[11px] font-semibold transition-colors cursor-pointer shadow-2xs"
+                title="Cari ruas dan filter tabel"
               >
-                ✕
+                Cari
               </button>
-            )}
-          </div>
+            </div>
+          </form>
         </div>
 
         {/* Instant Search Results Summary Pill if searching */}
         {searchResults.hasSearch && (
           <div className="p-3 rounded-[6px] bg-orange-500/10 ring-1 ring-orange-500/20 text-xs flex flex-wrap items-center justify-between gap-2 animate-fade-in font-medium">
             <div className="flex items-center gap-3">
-              <span className="font-bold text-[#c2410c] font-sans uppercase tracking-wider text-[10.5px]">Hasil Pencarian:</span>
+              <span className="font-bold text-[#c2410c] font-sans uppercase tracking-wider text-[10.5px]">
+                Hasil Pencarian:
+              </span>
               <span className="text-slate-800">
                 <strong>{searchResults.matchedRoads.length}</strong> Ruas Jalan •{" "}
                 <strong>{searchResults.matchedPackages.length}</strong> Paket Pengadaan •{" "}
                 <strong>{searchResults.matchedReports.length}</strong> Tiket Aduan
               </span>
             </div>
-            <button
-              onClick={() => setSearchQuery("")}
-              className="text-[#c2410c] hover:underline font-bold text-[11px] cursor-pointer"
-            >
-              Reset Filter
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("daftar-ruas-tabel");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-slate-700 hover:text-[#c2410c] font-bold text-[11px] cursor-pointer flex items-center gap-1"
+              >
+                <span>Lihat Hasil di Tabel ({processedTableRoads.length})</span>
+                <span>↓</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  setTablePage(1);
+                }}
+                className="text-[#c2410c] hover:underline font-bold text-[11px] cursor-pointer"
+              >
+                Reset Filter
+              </button>
+            </div>
           </div>
         )}
 
@@ -1721,7 +1765,7 @@ export default function HeroSection({
         </div>
 
         {/* 4. ACTIVE DATA MONITORING TABLE: RUAS & ANGGARAN APBD / LPSE (DOUBLE-BEZEL AGENCY TIER) */}
-        <div className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+        <div id="daftar-ruas-tabel" className="bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50 scroll-mt-20">
           <div className="bg-white rounded-[6px] p-5 sm:p-7 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-5">
             
             {/* Table Header: Eyebrow + Title + Button-in-Button CTA */}

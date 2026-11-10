@@ -215,11 +215,11 @@ export async function GET(request) {
       const q = search.toLowerCase();
       auditedPackages = auditedPackages.filter(
         (pkg) =>
-          pkg.name.toLowerCase().includes(q) ||
-          pkg.packageId.toLowerCase().includes(q) ||
-          pkg.contractor.toLowerCase().includes(q) ||
-          pkg.road.name.toLowerCase().includes(q) ||
-          pkg.road.code.toLowerCase().includes(q)
+          pkg.name?.toLowerCase().includes(q) ||
+          pkg.packageId?.toLowerCase().includes(q) ||
+          pkg.contractor?.toLowerCase().includes(q) ||
+          pkg.road?.name?.toLowerCase().includes(q) ||
+          pkg.road?.code?.toLowerCase().includes(q)
       );
     }
 
