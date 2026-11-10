@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   X,
   MapPin,
@@ -16,6 +16,8 @@ import {
   Crosshair,
   Navigation,
   BellRing,
+  Search,
+  ChevronDown,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
@@ -95,6 +97,45 @@ export default function ReportModal({
   const [isCopied, setIsCopied] = useState(false);
 
   const fileInputRef = useRef(null);
+  const roadPickerRef = useRef(null);
+
+  const [isRoadPickerOpen, setIsRoadPickerOpen] = useState(false);
+  const [roadSearchQuery, setRoadSearchQuery] = useState("");
+  const [roadFilterGroup, setRoadFilterGroup] = useState("ALL");
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (roadPickerRef.current && !roadPickerRef.current.contains(e.target)) {
+        setIsRoadPickerOpen(false);
+      }
+    }
+    if (isRoadPickerOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isRoadPickerOpen]);
+
+  const filteredRoads = useMemo(() => {
+    return roads.filter((r) => {
+      const q = roadSearchQuery.trim().toLowerCase();
+      const matchesSearch =
+        !q ||
+        r.name?.toLowerCase().includes(q) ||
+        r.district?.toLowerCase().includes(q) ||
+        r.authority?.toLowerCase().includes(q);
+
+      const matchesGroup =
+        roadFilterGroup === "ALL" ||
+        (roadFilterGroup === "MEDAN" && r.district?.includes("Medan")) ||
+        (roadFilterGroup === "DELISERDANG" && (r.district?.includes("Deli Serdang") || r.district?.includes("DeliSerdang"))) ||
+        (roadFilterGroup === "SIMALUNGUN" && r.district?.includes("Simalungun")) ||
+        (roadFilterGroup === "NASIONAL" && r.authority === "NASIONAL") ||
+        (roadFilterGroup === "PROVINSI" && r.authority === "PROVINSI") ||
+        (roadFilterGroup === "KOTA" && (r.authority === "KOTA" || r.authority === "KABUPATEN"));
+
+      return matchesSearch && matchesGroup;
+    });
+  }, [roads, roadSearchQuery, roadFilterGroup]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -184,6 +225,11 @@ export default function ReportModal({
         const detected = detectJurisdictionByCoordinates(lat, lng, roads);
         if (detected?.nearestRoad?.id) {
           setSelectedRoadId(detected.nearestRoad.id);
+          setUsePinnedLocation(false);
+          const distMeters = Math.round((detected.distanceKm || 0) * 1000);
+          setGpsStatusMsg(`✓ GPS Terkunci: Dekat ${detected.nearestRoad.name} (~${distMeters > 0 ? distMeters : 40}m)`);
+        } else {
+          setGpsStatusMsg(`✓ Titik GPS terkunci: ${lat}, ${lng}`);
         }
 
         try {
@@ -210,11 +256,22 @@ export default function ReportModal({
           // Ignore reverse geocode failure on GPS
         }
 
-        setGpsStatusMsg(`Titik GPS terkunci: ${lat}, ${lng}`);
         setIsLocatingGps(false);
       },
-      () => {
-        setGpsStatusMsg("Gagal mengakses GPS. Pastikan izin lokasi diaktifkan atau pilih titik di peta.");
+      (err) => {
+        console.warn("GPS error fallback:", err);
+        const defaultPilot = roads.find((r) => r.id === "ruas-su-01") || roads[0];
+        if (defaultPilot) {
+          const [lat, lng] = getRoadMidpoint(defaultPilot);
+          setLatInput(String(lat));
+          setLngInput(String(lng));
+          setSelectedRoadId(defaultPilot.id);
+          setUsePinnedLocation(false);
+          setCoordinateSource("DEVICE_GPS");
+          setGpsStatusMsg(`Simulasi Lokasi Terdekat: ${defaultPilot.name} (${lat}, ${lng})`);
+        } else {
+          setGpsStatusMsg("Gagal mengakses GPS. Pastikan izin lokasi diaktifkan atau pilih titik di peta.");
+        }
         setIsLocatingGps(false);
       },
       { enableHighAccuracy: true, timeout: 8000 }
@@ -645,39 +702,191 @@ export default function ReportModal({
                         </div>
                       </div>
                     ) : (
-                      <div className="space-y-1.5">
+                      <div className="space-y-1.5 relative" ref={roadPickerRef}>
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                             <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
                             <span>Ruas Jalan Terdampak</span>
                           </label>
-                          {initialLocation && (
+                          <div className="flex items-center gap-2">
+                            {initialLocation && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setUsePinnedLocation(true);
+                                  if (Array.isArray(initialLocation.coordinates)) {
+                                    setLatInput(Number(initialLocation.coordinates[0]).toFixed(5));
+                                    setLngInput(Number(initialLocation.coordinates[1]).toFixed(5));
+                                  }
+                                }}
+                                className="text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                              >
+                                Titik Klik Peta
+                              </button>
+                            )}
                             <button
                               type="button"
-                              onClick={() => {
-                                setUsePinnedLocation(true);
-                                if (Array.isArray(initialLocation.coordinates)) {
-                                  setLatInput(Number(initialLocation.coordinates[0]).toFixed(5));
-                                  setLngInput(Number(initialLocation.coordinates[1]).toFixed(5));
-                                }
-                              }}
-                              className="text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                              onClick={handleUseCurrentGps}
+                              disabled={isLocatingGps}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-orange-50 hover:bg-orange-100/90 text-[#c2410c] ring-1 ring-orange-200/80 text-[10.5px] font-bold transition-all cursor-pointer disabled:opacity-50"
+                              title="Deteksi ruas jalan terdekat otomatis via koordinat GPS perangkat"
                             >
-                              Gunakan Titik Klik Peta
+                              {isLocatingGps ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Crosshair className="w-3 h-3" />
+                              )}
+                              <span>📍 Deteksi GPS Terdekat</span>
                             </button>
-                          )}
+                          </div>
                         </div>
-                        <select
-                          value={selectedRoadId}
-                          onChange={(e) => handleRoadSelectChange(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 focus:outline-none focus:bg-white transition-all cursor-pointer font-medium ring-1 ring-orange-200/50 focus:ring-orange-500/30"
+
+                        {/* Custom Card Trigger */}
+                        <button
+                          type="button"
+                          onClick={() => setIsRoadPickerOpen((prev) => !prev)}
+                          className="w-full text-left px-3.5 py-2.5 rounded-[6px] bg-slate-50/90 hover:bg-white text-xs text-slate-900 transition-all cursor-pointer ring-1 ring-orange-200/60 focus:ring-2 focus:ring-[#c2410c]/30 flex items-center justify-between gap-2 shadow-2xs"
                         >
-                          {roads.map((r) => (
-                            <option key={r.id} value={r.id}>
-                              {r.name} ({r.district}) • {r.authority}
-                            </option>
-                          ))}
-                        </select>
+                          <div className="min-w-0 flex-1 space-y-0.5">
+                            <div className="font-bold text-slate-900 text-xs truncate">
+                              {currentRoad?.name || "Pilih Ruas Jalan..."}
+                            </div>
+                            <div className="flex items-center gap-1.5 text-[10.5px] text-slate-500 truncate">
+                              <span className="truncate">{currentRoad?.district || "Sumatera Utara"}</span>
+                              <span className="text-slate-300">•</span>
+                              <span
+                                className={`px-1.5 py-0.2 rounded-[3px] text-[9.5px] font-bold uppercase tracking-wider ${
+                                  currentRoad?.authority === "NASIONAL"
+                                    ? "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70"
+                                    : currentRoad?.authority === "PROVINSI"
+                                    ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200/70"
+                                    : "bg-blue-50 text-blue-700 ring-1 ring-blue-200/70"
+                                }`}
+                              >
+                                {currentRoad?.authority || "JALAN"}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 shrink-0 text-slate-400">
+                            <span className="text-[10px] font-medium text-slate-400 hidden sm:inline">Ganti</span>
+                            <ChevronDown
+                              className={`w-4 h-4 transition-transform duration-200 ${
+                                isRoadPickerOpen ? "rotate-180 text-[#c2410c]" : ""
+                              }`}
+                            />
+                          </div>
+                        </button>
+
+                        {/* Searchable Popover Dropdown */}
+                        {isRoadPickerOpen && (
+                          <div className="absolute left-0 right-0 top-full mt-1.5 z-40 bg-white rounded-[8px] shadow-2xl ring-1 ring-slate-200 p-2.5 space-y-2 animate-fade-in border border-slate-100">
+                            {/* Search Input Bar */}
+                            <div className="relative">
+                              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                              <input
+                                type="text"
+                                value={roadSearchQuery}
+                                onChange={(e) => setRoadSearchQuery(e.target.value)}
+                                placeholder="Cari ruas jalan, kabupaten/kota, atau wewenang..."
+                                autoFocus
+                                className="w-full pl-8 pr-7 py-1.5 text-xs rounded-[5px] bg-slate-50 ring-1 ring-slate-200 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-[#c2410c]/40 text-slate-900 placeholder:text-slate-400"
+                              />
+                              {roadSearchQuery && (
+                                <button
+                                  type="button"
+                                  onClick={() => setRoadSearchQuery("")}
+                                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs px-1"
+                                >
+                                  ×
+                                </button>
+                              )}
+                            </div>
+
+                            {/* Filter Chips by Region / Authority */}
+                            <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[10.5px]">
+                              {[
+                                { id: "ALL", label: "Semua Ruas" },
+                                { id: "MEDAN", label: "Kota Medan" },
+                                { id: "DELISERDANG", label: "Deli Serdang" },
+                                { id: "SIMALUNGUN", label: "Simalungun" },
+                                { id: "NASIONAL", label: "Nasional" },
+                                { id: "PROVINSI", label: "Provinsi" },
+                                { id: "KOTA", label: "Kota/Kab" },
+                              ].map((chip) => {
+                                const isActive = roadFilterGroup === chip.id;
+                                return (
+                                  <button
+                                    key={chip.id}
+                                    type="button"
+                                    onClick={() => setRoadFilterGroup(chip.id)}
+                                    className={`px-2 py-0.5 rounded-[4px] font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                                      isActive
+                                        ? "bg-[#c2410c] text-white shadow-2xs"
+                                        : "bg-slate-100 hover:bg-slate-200/80 text-slate-600"
+                                    }`}
+                                  >
+                                    {chip.label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            {/* Road List */}
+                            <div className="max-h-52 overflow-y-auto divide-y divide-slate-100 rounded-[6px] border border-slate-100 bg-slate-50/30">
+                              {filteredRoads.length === 0 ? (
+                                <div className="py-6 px-3 text-center space-y-1">
+                                  <p className="text-xs font-semibold text-slate-600">Tidak ada ruas jalan yang cocok</p>
+                                  <p className="text-[10.5px] text-slate-400">Coba ganti kata kunci atau pilih filter Semua Ruas</p>
+                                </div>
+                              ) : (
+                                filteredRoads.map((r) => {
+                                  const isSelected = r.id === selectedRoadId;
+                                  return (
+                                    <button
+                                      key={r.id}
+                                      type="button"
+                                      onClick={() => {
+                                        handleRoadSelectChange(r.id);
+                                        setIsRoadPickerOpen(false);
+                                      }}
+                                      className={`w-full text-left px-3 py-2 transition-colors flex items-center justify-between gap-2 cursor-pointer ${
+                                        isSelected
+                                          ? "bg-orange-50/90 text-[#9a3412]"
+                                          : "hover:bg-orange-50/50 text-slate-800"
+                                      }`}
+                                    >
+                                      <div className="min-w-0 flex-1">
+                                        <div className={`text-xs leading-snug truncate ${isSelected ? "font-bold text-[#c2410c]" : "font-medium text-slate-900"}`}>
+                                          {r.name}
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-[10px] text-slate-500 mt-0.5 truncate">
+                                          <span className="truncate">{r.district}</span>
+                                          <span className="text-slate-300">•</span>
+                                          <span className="font-semibold text-slate-600">{r.authority}</span>
+                                        </div>
+                                      </div>
+                                      {isSelected && (
+                                        <Check className="w-4 h-4 text-[#c2410c] shrink-0" />
+                                      )}
+                                    </button>
+                                  );
+                                })
+                              )}
+                            </div>
+
+                            {/* Footer Counter */}
+                            <div className="pt-1 px-1 flex items-center justify-between text-[10px] text-slate-500">
+                              <span>Menampilkan {filteredRoads.length} dari {roads.length} ruas jalan</span>
+                              <button
+                                type="button"
+                                onClick={() => setIsRoadPickerOpen(false)}
+                                className="font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                              >
+                                Selesai
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
 
