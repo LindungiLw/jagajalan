@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -29,6 +30,17 @@ import {
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { detectJurisdictionByCoordinates } from "@/data/roadsData";
+
+// Dynamically import Mini GIS Map with SSR disabled to prevent Leaflet window errors
+const MiniGisPicker = dynamic(() => import("./MiniGisPickerInner"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[170px] bg-slate-100 flex flex-col items-center justify-center gap-1.5 text-slate-400">
+      <Loader2 className="w-5 h-5 animate-spin text-[#c2410c]" />
+      <span className="text-[11px] font-medium text-slate-500">Memuat peta GIS...</span>
+    </div>
+  ),
+});
 
 function getRoadMidpoint(road) {
   if (Array.isArray(road?.coordinates) && road.coordinates.length > 0) {
@@ -74,7 +86,7 @@ export default function ReportModal({
   const [notifyOnUpdate, setNotifyOnUpdate] = useState(true);
   const [addressDetail, setAddressDetail] = useState("");
 
-  // Photo & AI Inspection State: No stock photo preloaded, direct citizen photo upload/capture
+  // Photo & Checking State: direct citizen photo upload/capture
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -200,6 +212,23 @@ export default function ReportModal({
     }
   };
 
+  const handleMiniMapLocationChange = (newLat, newLng) => {
+    setLatInput(String(newLat));
+    setLngInput(String(newLng));
+    setCoordinateSource("GIS_MAP_PIN");
+
+    const detected = detectJurisdictionByCoordinates(newLat, newLng, roads);
+    if (detected?.nearestRoad?.id) {
+      if (detected.nearestRoad.id !== selectedRoadId) {
+        setSelectedRoadId(detected.nearestRoad.id);
+        const distMeters = Math.round((detected.distanceKm || 0) * 1000);
+        setGpsStatusMsg(`✓ Titik di peta disesuaikan: Dekat ${detected.nearestRoad.name} (~${distMeters > 0 ? distMeters : 20}m)`);
+      }
+    } else {
+      setGpsStatusMsg(`✓ Koordinat titik peta: ${newLat}, ${newLng}`);
+    }
+  };
+
   const handleUseCurrentGps = () => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) {
       setGpsStatusMsg("Peramban tidak mendukung fitur geolokasi GPS.");
@@ -313,14 +342,14 @@ export default function ReportModal({
       if (data.isValidRoadImage === false) {
         setSpamError(
           data.rejectionReason ||
-            "Sistem AI menolak foto ini karena bukan foto kerusakan jalan publik yang sah."
+            "Foto ini belum menampilkan kerusakan jalan publik yang sah. Yuk ambil foto kondisi aspal atau jalan yang ingin dilaporkan."
         );
         setAiResult(null);
       } else {
         setSpamError(null);
         setAiResult({
           category: data.category || "POTHOLE_CRITICAL",
-          categoryLabel: data.categoryLabel || "Lubang Jalan Kritis (Pothole)",
+          categoryLabel: data.categoryLabel || "Lubang Jalan Kritis",
           hazardScore: data.hazardScore || 85,
           hazardLevel: data.hazardLevel || "TINGGI",
           analysisText:
@@ -332,7 +361,7 @@ export default function ReportModal({
         });
       }
     } catch (err) {
-      console.error("AI Analysis failed:", err);
+      console.error("Analysis failed:", err);
       setAiResult({
         category: "POTHOLE_CRITICAL",
         categoryLabel: "Lubang Jalan Kritis",
@@ -405,7 +434,7 @@ export default function ReportModal({
     }
 
     if (spamError) {
-      alert("Foto ditolak sistem Anti-Spam AI. Harap gunakan foto kerusakan jalan yang valid.");
+      alert("Foto belum sesuai ketentuan. Harap gunakan foto kerusakan jalan yang valid.");
       return;
     }
 
@@ -558,21 +587,21 @@ export default function ReportModal({
 
   const modalContent = (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-fade-in font-sans">
-      <div className="rounded-[10px] bg-slate-100/90 p-2 sm:p-2.5 ring-1 ring-orange-200/60 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-800 shadow-2xl">
+      <div className="rounded-[10px] bg-slate-100/95 p-2 sm:p-3 ring-1 ring-orange-200/60 w-full max-w-4xl md:max-w-5xl lg:max-w-6xl max-h-[94vh] flex flex-col overflow-hidden text-slate-800 shadow-2xl">
         <div className="relative w-full flex-1 flex flex-col rounded-[8px] bg-white shadow-xl overflow-hidden">
           
           {/* Header */}
-          <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-[8px] bg-orange-50 p-2 shrink-0 flex items-center justify-center ring-1 ring-orange-200/60 shadow-xs">
+          <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-[7px] bg-orange-50 p-1.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/60 shadow-2xs">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/plus_icon.png"
                   alt="Lapor Kerusakan"
-                  width={24}
-                  height={24}
-                  style={{ width: "24px", height: "24px" }}
-                  className="w-6 h-6 object-contain"
+                  width={22}
+                  height={22}
+                  style={{ width: "22px", height: "22px" }}
+                  className="w-5 h-5 object-contain"
                 />
               </div>
               <div>
@@ -591,7 +620,7 @@ export default function ReportModal({
           </div>
 
           {/* Modal Body */}
-          <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+          <div className="p-4 sm:p-5 overflow-y-auto flex-1">
             {submitted ? (
               <div className="text-center py-6 px-4 max-w-lg mx-auto space-y-4 animate-fade-in font-sans">
                 <div className="w-16 h-16 rounded-[10px] bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-xs ring-1 ring-emerald-200">
@@ -689,71 +718,166 @@ export default function ReportModal({
                 </div>
               </div>
             ) : (
-              <form id="report-road-form" onSubmit={handleSubmit} className="space-y-4 font-sans">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
+              <form id="report-road-form" onSubmit={handleSubmit} className="space-y-5 font-sans">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7 items-start">
                   
-                  {/* LEFT COLUMN: 2 Cohesive Structured Cards */}
-                  <div className="space-y-3.5">
+                  {/* LEFT COLUMN: Mini Interactive GIS Map & Road Information */}
+                  <div className="space-y-4">
                     
-                    {/* CARD 1: Ruas Jalan & Wewenang Instansi */}
-                    <div className="p-3.5 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3">
+                    {/* 1. MINI INTERACTIVE GIS MAP CONTAINER */}
+                    <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
                           <MapPin className="w-3.5 h-3.5 text-[#c2410c]" />
-                          <span>Ruas Jalan &amp; Titik Lokasi</span>
+                          <span>Peta Geospasial Titik Kerusakan</span>
                         </span>
-                        
-                        {/* GPS Button */}
-                        <button
-                          type="button"
-                          onClick={handleUseCurrentGps}
-                          disabled={isLocatingGps}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] bg-white hover:bg-orange-50 text-[#c2410c] ring-1 ring-orange-200 text-[10.5px] font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
-                          title="Deteksi koordinat GPS saya secara presisi"
-                        >
-                          {isLocatingGps ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <Crosshair className="w-3 h-3" />
-                          )}
-                          <span>{isLocatingGps ? "Mencari GPS..." : "Kunci Titik GPS Saya"}</span>
-                        </button>
+                        <span className="text-[10.5px] text-slate-400">
+                          Klik / geser pin untuk atur titik
+                        </span>
                       </div>
 
-                      {/* Road Selector Trigger */}
+                      {/* Mini Map Canvas with Floating Controls */}
+                      <div className="relative rounded-[8px] overflow-hidden ring-1 ring-slate-300 shadow-xs bg-slate-100 h-48 sm:h-52 group">
+                        <MiniGisPicker
+                          lat={validLat}
+                          lng={validLng}
+                          onLocationChange={handleMiniMapLocationChange}
+                        />
+
+                        {/* Top Action Overlay: Kunci GPS */}
+                        <div className="absolute top-2.5 right-2.5 pointer-events-none z-10">
+                          <button
+                            type="button"
+                            onClick={handleUseCurrentGps}
+                            disabled={isLocatingGps}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-[10.5px] font-bold transition-all shadow-md cursor-pointer disabled:opacity-60 pointer-events-auto active:scale-95"
+                            title="Kunci titik GPS saya secara presisi"
+                          >
+                            {isLocatingGps ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Crosshair className="w-3.5 h-3.5" />
+                            )}
+                            <span>{isLocatingGps ? "Mencari GPS..." : "Kunci GPS Saya"}</span>
+                          </button>
+                        </div>
+
+                        {/* Bottom Coordinates Overlay */}
+                        <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between pointer-events-none z-10">
+                          <div className="px-2.5 py-1 rounded-[5px] bg-slate-900/90 backdrop-blur-xs text-white text-[10.5px] font-mono tabular-nums pointer-events-auto flex items-center gap-1.5 shadow-xs">
+                            <Navigation className="w-3 h-3 text-orange-400" />
+                            <span>{validLat.toFixed(5)}, {validLng.toFixed(5)}</span>
+                          </div>
+
+                          {showManualCoords ? (
+                            <button
+                              type="button"
+                              onClick={() => setShowManualCoords(false)}
+                              className="px-2.5 py-1 rounded-[5px] bg-white/95 text-[#c2410c] text-[10px] font-bold pointer-events-auto shadow-xs hover:bg-white cursor-pointer"
+                            >
+                              Tutup Koordinat
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setShowManualCoords(true)}
+                              className="px-2.5 py-1 rounded-[5px] bg-white/90 hover:bg-white text-slate-700 text-[10px] font-semibold pointer-events-auto shadow-xs cursor-pointer flex items-center gap-1.5"
+                            >
+                              <SlidersHorizontal className="w-3 h-3 text-[#c2410c]" />
+                              <span>Ubah Angka</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Expandable Manual Lat/Lng Fields if user wants precise manual survey */}
+                      {showManualCoords && (
+                        <div className="p-3 rounded-[7px] bg-slate-50 ring-1 ring-slate-200 grid grid-cols-2 gap-2.5 animate-fade-in text-[11px]">
+                          <div>
+                            <label className="block font-semibold text-slate-600 mb-1">
+                              Latitude (Lintang)
+                            </label>
+                            <input
+                              type="number"
+                              step="any"
+                              required
+                              value={latInput}
+                              onChange={(e) => {
+                                setLatInput(e.target.value);
+                                setCoordinateSource("MANUAL_COORDINATE");
+                              }}
+                              className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-semibold text-slate-600 mb-1">
+                              Longitude (Bujur)
+                            </label>
+                            <input
+                              type="number"
+                              step="any"
+                              required
+                              value={lngInput}
+                              onChange={(e) => {
+                                setLngInput(e.target.value);
+                                setCoordinateSource("MANUAL_COORDINATE");
+                              }}
+                              className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {gpsStatusMsg && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-[6px] bg-emerald-50 text-emerald-900 text-[11px] font-medium ring-1 ring-emerald-200/80 animate-fade-in">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span className="leading-snug">{gpsStatusMsg}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 2. RUAS JALAN & INSTANSI PENANGGUNG JAWAB */}
+                    <div className="p-3.5 sm:p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3.5">
                       <div className="relative" ref={roadPickerRef}>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                            Ruas Jalan Terdata
+                          </label>
+                          <span className="text-[10px] text-slate-400">Pilih koridor ruas</span>
+                        </div>
+
                         <button
                           type="button"
                           onClick={() => setIsRoadPickerOpen((prev) => !prev)}
-                          className="w-full text-left px-3.5 py-2.5 rounded-[6px] bg-white text-xs text-slate-900 transition-all cursor-pointer ring-1 ring-slate-200/90 hover:ring-orange-300 focus:ring-2 focus:ring-[#c2410c]/30 flex items-center justify-between gap-2 shadow-2xs"
+                          className="w-full text-left p-3 rounded-[7px] bg-white text-slate-900 transition-all cursor-pointer ring-1 ring-slate-200 hover:ring-orange-300 focus:ring-2 focus:ring-[#c2410c]/30 space-y-1.5 shadow-2xs"
                         >
-                          <div className="min-w-0 flex-1">
-                            <div className="font-bold text-slate-900 text-xs truncate">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug">
                               {currentRoad?.name || "Pilih Ruas Jalan..."}
                             </div>
-                            <div className="flex items-center gap-1.5 text-[10.5px] text-slate-500 mt-0.5 truncate">
-                              <span className="truncate">{currentRoad?.district || "Sumatera Utara"}</span>
-                              <span className="text-slate-300">•</span>
-                              <span
-                                className={`px-1.5 py-0.2 rounded-[3px] text-[9.5px] font-bold uppercase tracking-wider ${
-                                  currentRoad?.authority === "NASIONAL"
-                                    ? "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70"
-                                    : currentRoad?.authority === "PROVINSI"
-                                    ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200/70"
-                                    : "bg-blue-50 text-blue-700 ring-1 ring-blue-200/70"
+                            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-slate-100 hover:bg-orange-50 text-[#c2410c] text-[10px] font-bold shrink-0 transition-colors">
+                              <span>Ganti</span>
+                              <ChevronDown
+                                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                                  isRoadPickerOpen ? "rotate-180" : ""
                                 }`}
-                              >
-                                {currentRoad?.authority || "JALAN"}
-                              </span>
+                              />
                             </div>
                           </div>
-                          <div className="flex items-center gap-1 shrink-0 text-slate-400">
-                            <span className="text-[10.5px] font-medium text-slate-400 hidden sm:inline">Ganti</span>
-                            <ChevronDown
-                              className={`w-4 h-4 transition-transform duration-200 ${
-                                isRoadPickerOpen ? "rotate-180 text-[#c2410c]" : ""
+
+                          <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 text-[10.5px] text-slate-500">
+                            <span className="truncate">{currentRoad?.district || "Indonesia"}</span>
+                            <span
+                              className={`px-2 py-0.5 rounded-[3px] text-[9.5px] font-bold uppercase tracking-wider shrink-0 ${
+                                currentRoad?.authority === "NASIONAL"
+                                  ? "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70"
+                                  : currentRoad?.authority === "PROVINSI"
+                                  ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200/70"
+                                  : "bg-blue-50 text-blue-700 ring-1 ring-blue-200/70"
                               }`}
-                            />
+                            >
+                              {currentRoad?.authority || "JALAN"}
+                            </span>
                           </div>
                         </button>
 
@@ -782,7 +906,7 @@ export default function ReportModal({
                             </div>
 
                             {/* Filters */}
-                            <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[10.5px]">
+                            <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[10px]">
                               {[
                                 { id: "ALL", label: "Semua" },
                                 { id: "MEDAN", label: "Kota Medan" },
@@ -813,9 +937,9 @@ export default function ReportModal({
                             {/* Road List */}
                             <div className="max-h-48 overflow-y-auto divide-y divide-slate-100 rounded-[6px] border border-slate-100 bg-slate-50/30">
                               {filteredRoads.length === 0 ? (
-                                <div className="py-6 px-3 text-center space-y-1">
+                                <div className="py-5 px-3 text-center space-y-1">
                                   <p className="text-xs font-semibold text-slate-600">Tidak ada ruas jalan yang cocok</p>
-                                  <p className="text-[10.5px] text-slate-400">Coba ganti kata kunci pencarian</p>
+                                  <p className="text-[10px] text-slate-400">Coba kata kunci lain</p>
                                 </div>
                               ) : (
                                 filteredRoads.map((r) => {
@@ -845,7 +969,7 @@ export default function ReportModal({
                                         </div>
                                       </div>
                                       {isSelected && (
-                                        <Check className="w-4 h-4 text-[#c2410c] shrink-0" />
+                                        <Check className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
                                       )}
                                     </button>
                                   );
@@ -867,112 +991,26 @@ export default function ReportModal({
                         )}
                       </div>
 
-                      {/* Authority & Budget Summary Pill */}
-                      <div className="p-2.5 rounded-[6px] bg-white ring-1 ring-slate-200/70 text-xs space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1">
-                            <Building2 className="w-3 h-3 text-slate-400" />
-                            <span>Instansi Berwenang</span>
+                      {/* Authority & Budget Summary Bar - Full Natural Wrap */}
+                      <div className="p-3 rounded-[7px] bg-white ring-1 ring-slate-200/80 space-y-1.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                            <span>Instansi Penanggung Jawab</span>
                           </span>
-                          <span className="font-mono tabular-nums text-[10.5px] font-bold text-slate-700">
+                          <span className="font-mono tabular-nums text-[10.5px] font-bold text-[#c2410c] bg-orange-50/80 px-2 py-0.5 rounded-[4px] ring-1 ring-orange-200/50 shrink-0">
                             Pagu: Rp {((currentRoad.budget?.paguRp || 0) / 1000000000).toFixed(2)} M
                           </span>
                         </div>
-                        <div className="font-semibold text-slate-900 text-xs">
+                        <div className="font-semibold text-slate-900 text-xs sm:text-[12.5px] leading-relaxed">
                           {currentRoad.authorityLabel}
                         </div>
                       </div>
 
-                      {/* Compact Coordinates Bar with Toggle */}
-                      <div className="pt-1 flex items-center justify-between text-[11px] text-slate-600">
-                        <div className="flex items-center gap-1.5 truncate">
-                          <Navigation className="w-3 h-3 text-[#c2410c] shrink-0" />
-                          <span className="text-slate-500">GIS:</span>
-                          <span className="font-mono tabular-nums font-bold text-slate-800">
-                            {validLat.toFixed(5)}, {validLng.toFixed(5)}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setShowManualCoords((prev) => !prev)}
-                          className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
-                        >
-                          <SlidersHorizontal className="w-3 h-3" />
-                          <span>{showManualCoords ? "Tutup" : "Sesuaikan"}</span>
-                        </button>
-                      </div>
-
-                      {/* Optional Expandable Manual Lat/Lng Fields */}
-                      {showManualCoords && (
-                        <div className="pt-2 border-t border-slate-200/60 grid grid-cols-2 gap-2 animate-fade-in">
-                          <div>
-                            <label className="block text-[10px] font-semibold text-slate-500 mb-0.5">
-                              Latitude (Lintang)
-                            </label>
-                            <input
-                              type="number"
-                              step="any"
-                              required
-                              value={latInput}
-                              onChange={(e) => {
-                                setLatInput(e.target.value);
-                                setCoordinateSource("MANUAL_COORDINATE");
-                              }}
-                              className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[10px] font-semibold text-slate-500 mb-0.5">
-                              Longitude (Bujur)
-                            </label>
-                            <input
-                              type="number"
-                              step="any"
-                              required
-                              value={lngInput}
-                              onChange={(e) => {
-                                setLngInput(e.target.value);
-                                setCoordinateSource("MANUAL_COORDINATE");
-                              }}
-                              className="w-full px-2.5 py-1.5 rounded-[5px] bg-white text-xs font-mono tabular-nums text-slate-900 ring-1 ring-slate-200 focus:outline-none focus:ring-1.5 focus:ring-[#c2410c]/40"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {gpsStatusMsg && (
-                        <div className="text-[10px] font-medium text-[#9a3412] bg-orange-50 px-2 py-1 rounded-[4px] ring-1 ring-orange-200/50">
-                          {gpsStatusMsg}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* CARD 2: Keterangan Pelapor & Notifikasi */}
-                    <div className="p-3.5 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3">
-                      <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">
-                        Detail Pelapor &amp; Patokan Lokasi
-                      </span>
-
-                      <div className="space-y-1">
-                        <label className="block text-[11px] font-semibold text-slate-700">
-                          Nama / Inisial Pelapor
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={reporterName}
-                          onChange={(e) => setReporterName(e.target.value)}
-                          placeholder="Contoh: Budi Santoso atau B.S."
-                          className="w-full px-3 py-2 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40"
-                        />
-                        <span className="text-[10px] text-slate-400 block">
-                          Identitas pelapor disamarkan otomatis pada peta publik.
-                        </span>
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="block text-[11px] font-semibold text-slate-700">
-                          Patokan / Detail Lokasi Kerusakan
+                      {/* Patokan Detail Lokasi */}
+                      <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                          Patokan / Detail Lokasi Lapangan
                         </label>
                         <input
                           type="text"
@@ -980,33 +1018,8 @@ export default function ReportModal({
                           value={addressDetail}
                           onChange={(e) => setAddressDetail(e.target.value)}
                           placeholder="Contoh: Depan SPBU 34-16401, lajur kiri arah pusat kota"
-                          className="w-full px-3 py-2 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40"
+                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
                         />
-                      </div>
-
-                      {/* Notifikasi Status Switch */}
-                      <div className="p-2.5 rounded-[6px] bg-white ring-1 ring-slate-200/80 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5 cursor-pointer">
-                            <BellRing className="w-3.5 h-3.5 text-[#c2410c]" />
-                            <span>Kirim Notifikasi Status Penanganan</span>
-                          </label>
-                          <input
-                            type="checkbox"
-                            checked={notifyOnUpdate}
-                            onChange={(e) => setNotifyOnUpdate(e.target.checked)}
-                            className="accent-[#c2410c] w-3.5 h-3.5 cursor-pointer"
-                          />
-                        </div>
-                        {notifyOnUpdate && (
-                          <input
-                            type="text"
-                            value={notificationContact}
-                            onChange={(e) => setNotificationContact(e.target.value)}
-                            placeholder="WhatsApp / Email untuk pengingat tiket (Opsional)"
-                            className="w-full px-2.5 py-1.5 rounded-[5px] bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40"
-                          />
-                        )}
                       </div>
                     </div>
 
@@ -1046,52 +1059,52 @@ export default function ReportModal({
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
-                        className={`rounded-[8px] border-2 border-dashed transition-all p-5 sm:p-6 text-center flex flex-col items-center justify-center min-h-[220px] ${
+                        className={`rounded-[8px] border-2 border-dashed transition-all p-5 text-center flex flex-col items-center justify-center min-h-[190px] ${
                           isDragging
                             ? "border-[#c2410c] bg-orange-50/60 ring-4 ring-orange-200/50"
                             : "border-slate-300 hover:border-orange-300 bg-slate-50/70 hover:bg-slate-50"
                         }`}
                       >
-                        <div className="w-12 h-12 rounded-full bg-orange-100/80 text-[#c2410c] flex items-center justify-center mb-3 ring-1 ring-orange-200/70 shadow-xs">
-                          <ImageIcon className="w-6 h-6" />
+                        <div className="w-11 h-11 rounded-full bg-orange-100/80 text-[#c2410c] flex items-center justify-center mb-2.5 ring-1 ring-orange-200/70 shadow-2xs">
+                          <ImageIcon className="w-5 h-5" />
                         </div>
                         
                         <h4 className="text-xs sm:text-sm font-bold text-slate-900 mb-1">
                           Ambil Foto Langsung atau Unggah Berkas
                         </h4>
-                        <p className="text-[11px] text-slate-500 max-w-xs mb-4 leading-relaxed">
+                        <p className="text-[11px] text-slate-500 max-w-xs mb-3.5 leading-relaxed">
                           Sertakan foto kondisi jalan yang jelas agar laporan dapat segera dicek dan diteruskan ke dinas.
                         </p>
 
                         {/* Dual Action Buttons: Direct Camera vs Gallery */}
-                        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+                        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
                           <button
                             type="button"
                             onClick={() => cameraInputRef.current?.click()}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
                           >
-                            <Camera className="w-4 h-4" />
+                            <Camera className="w-3.5 h-3.5" />
                             <span>Buka Kamera</span>
                           </button>
                           
                           <button
                             type="button"
                             onClick={() => galleryInputRef.current?.click()}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-[6px] bg-white hover:bg-slate-100 text-slate-700 ring-1 ring-slate-300 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[6px] bg-white hover:bg-slate-100 text-slate-700 ring-1 ring-slate-300 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
                           >
-                            <Upload className="w-4 h-4 text-slate-500" />
+                            <Upload className="w-3.5 h-3.5 text-slate-500" />
                             <span>Pilih dari Galeri / Berkas</span>
                           </button>
                         </div>
 
-                        <span className="text-[10px] text-slate-400 mt-3">
+                        <span className="text-[10px] text-slate-400 mt-2.5">
                           atau seret dan lepas (drag &amp; drop) foto ke kotak ini
                         </span>
                       </div>
                     ) : (
                       /* Photo Preview Card with live AI Scanning & Actions */
-                      <div className="space-y-2.5">
-                        <div className="relative rounded-[8px] overflow-hidden bg-slate-900 h-48 group ring-1 ring-slate-200 shadow-sm flex items-center justify-center">
+                      <div className="space-y-3">
+                        <div className="relative rounded-[8px] overflow-hidden bg-slate-900 h-48 sm:h-52 group ring-1 ring-slate-200 shadow-sm flex items-center justify-center">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={photoPreview}
@@ -1108,11 +1121,11 @@ export default function ReportModal({
                                 <Crosshair className="w-6 h-6 text-orange-400 animate-spin" />
                               </div>
 
-                              <div className="text-[11px] font-bold text-orange-300 tracking-wider flex items-center gap-1.5">
-                                <ScanLine className="w-3.5 h-3.5 animate-pulse text-orange-400" />
+                              <div className="text-[11.5px] font-bold text-orange-300 tracking-wider flex items-center gap-1.5">
+                                <ScanLine className="w-4 h-4 animate-pulse text-orange-400" />
                                 <span>Ayo kita cek kondisi jalannya...</span>
                               </div>
-                              <span className="text-[9.5px] text-slate-300 font-sans mt-0.5 text-center">
+                              <span className="text-[10px] text-slate-300 font-sans mt-0.5 text-center">
                                 Mengecek tingkat kerusakan dan kelayakan foto
                               </span>
                             </div>
@@ -1120,77 +1133,78 @@ export default function ReportModal({
 
                           {/* Top Action Overlay: Retake / Delete */}
                           {!isAnalyzing && (
-                            <div className="absolute top-2 right-2 flex items-center gap-1.5 z-10">
+                            <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
                               <button
                                 type="button"
                                 onClick={() => cameraInputRef.current?.click()}
-                                className="px-2.5 py-1 rounded-[5px] bg-slate-900/80 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
+                                className="px-3 py-1.5 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
                                 title="Ambil foto ulang dengan kamera"
                               >
-                                <Camera className="w-3 h-3" />
+                                <Camera className="w-3.5 h-3.5" />
                                 <span>Foto Ulang</span>
                               </button>
                               <button
                                 type="button"
                                 onClick={() => galleryInputRef.current?.click()}
-                                className="px-2.5 py-1 rounded-[5px] bg-slate-900/80 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
+                                className="px-3 py-1.5 rounded-[5px] bg-slate-900/85 hover:bg-slate-900 text-white text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
                                 title="Pilih foto lain dari galeri"
                               >
-                                <Upload className="w-3 h-3" />
+                                <Upload className="w-3.5 h-3.5" />
                                 <span>Galeri</span>
                               </button>
                               <button
                                 type="button"
                                 onClick={handleClearPhoto}
-                                className="p-1 rounded-[5px] bg-rose-600/90 hover:bg-rose-700 text-white backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
+                                className="p-1.5 rounded-[5px] bg-rose-600/90 hover:bg-rose-700 text-white backdrop-blur-sm cursor-pointer shadow-xs transition-colors"
                                 title="Hapus foto"
                               >
-                                <Trash2 className="w-3.5 h-3.5" />
+                                <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
                           )}
 
                           {/* Bottom Tag */}
-                          <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-[4px] bg-slate-900/80 text-white text-[9.5px] font-medium backdrop-blur-sm flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          <div className="absolute bottom-2.5 left-2.5 z-10 px-2.5 py-1 rounded-[5px] bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-sm flex items-center gap-1.5 shadow-xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                             <span>Foto Berhasil Dimuat</span>
                           </div>
                         </div>
 
-                        {/* AI Inspector Results Card */}
-                        <div className="space-y-2">
+                        {/* Inspector Results Card */}
+                        <div className="space-y-2.5">
                           {spamError && (
-                            <div className="p-3.5 rounded-[8px] bg-rose-50 ring-1 ring-rose-200 text-rose-800 space-y-1.5 animate-fade-in text-xs">
-                              <div className="flex items-center gap-1.5 font-bold text-rose-900">
+                            <div className="p-3.5 sm:p-4 rounded-[8px] bg-rose-50/90 ring-1 ring-rose-200 text-rose-800 space-y-2 animate-fade-in text-xs">
+                              <div className="flex items-center gap-2 font-bold text-rose-900 text-xs sm:text-[13px]">
                                 <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
                                 <span>Foto Belum Sesuai</span>
                               </div>
-                              <p className="text-[11px] text-rose-700 leading-relaxed">
+                              <p className="text-[11.5px] text-rose-700 leading-relaxed">
                                 {spamError}
                               </p>
                               <div className="pt-1">
                                 <button
                                   type="button"
                                   onClick={() => cameraInputRef.current?.click()}
-                                  className="text-[11px] font-bold text-rose-800 underline cursor-pointer"
+                                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-rose-800 hover:text-rose-950 underline cursor-pointer"
                                 >
-                                  Ambil foto kondisi jalan yang sebenarnya &rarr;
+                                  <span>Ambil foto kondisi jalan yang sebenarnya</span>
+                                  <span>&rarr;</span>
                                 </button>
                               </div>
                             </div>
                           )}
 
                           {aiResult && !spamError && (
-                            <div className="p-3.5 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200 space-y-2 animate-fade-in text-xs">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-1.5">
+                            <div className="p-3.5 sm:p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200 space-y-2.5 animate-fade-in text-xs">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                  <span className="font-bold text-slate-900">
+                                  <span className="font-bold text-slate-900 text-xs sm:text-[13px]">
                                     {aiResult.categoryLabel}
                                   </span>
                                 </div>
                                 <span
-                                  className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold font-mono tabular-nums ${
+                                  className={`px-2.5 py-1 rounded-[4px] text-[10.5px] font-bold font-mono tabular-nums shrink-0 ${
                                     aiResult.hazardScore >= 80
                                       ? "bg-rose-100 text-rose-800"
                                       : "bg-amber-100 text-amber-800"
@@ -1200,14 +1214,14 @@ export default function ReportModal({
                                 </span>
                               </div>
 
-                              <p className="text-[11px] text-slate-600 leading-relaxed">
+                              <p className="text-[11.5px] text-slate-600 leading-relaxed">
                                 {aiResult.analysisText}
                               </p>
 
-                              <div className="pt-2 border-t border-slate-200/70 flex items-center justify-between text-[10px] text-slate-500 font-sans">
+                              <div className="pt-2 border-t border-slate-200/70 flex items-center justify-between text-[10.5px] text-slate-500 font-sans">
                                 <span>Dimensi: <strong className="text-slate-800">{aiResult.dimensions}</strong></span>
                                 <span className="text-emerald-700 font-bold flex items-center gap-1">
-                                  <Check className="w-3 h-3" />
+                                  <Check className="w-3.5 h-3.5" />
                                   <span>Pemeriksaan Selesai</span>
                                 </span>
                               </div>
@@ -1218,7 +1232,7 @@ export default function ReportModal({
                             <button
                               type="button"
                               onClick={() => handleAnalyzePhoto(photoPreview)}
-                              className="w-full py-2 px-3 rounded-[6px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ring-1 ring-slate-200"
+                              className="w-full py-2.5 px-3 rounded-[6px] bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ring-1 ring-slate-200 shadow-2xs"
                             >
                               <RefreshCw className="w-3.5 h-3.5 text-[#c2410c]" />
                               <span>Ayo Cek Ulang Foto</span>
@@ -1227,13 +1241,58 @@ export default function ReportModal({
                         </div>
                       </div>
                     )}
+
+                    {/* IDENTITAS PELAPOR & NOTIFIKASI TIKET */}
+                    <div className="p-3.5 sm:p-4 rounded-[8px] bg-slate-50/90 ring-1 ring-slate-200/80 space-y-3.5">
+                      <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                          Nama / Inisial Pelapor
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={reporterName}
+                          onChange={(e) => setReporterName(e.target.value)}
+                          placeholder="Contoh: Budi Santoso atau B.S."
+                          className="w-full px-3.5 py-2.5 rounded-[6px] bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 shadow-2xs"
+                        />
+                        <span className="text-[10px] text-slate-400 block pt-0.5">
+                          Identitas pelapor disamarkan otomatis pada peta publik.
+                        </span>
+                      </div>
+
+                      <div className="p-3 rounded-[6px] bg-white ring-1 ring-slate-200/80 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5 cursor-pointer">
+                            <BellRing className="w-3.5 h-3.5 text-[#c2410c]" />
+                            <span>Kirim Notifikasi Status Penanganan</span>
+                          </label>
+                          <input
+                            type="checkbox"
+                            checked={notifyOnUpdate}
+                            onChange={(e) => setNotifyOnUpdate(e.target.checked)}
+                            className="accent-[#c2410c] w-4 h-4 cursor-pointer"
+                          />
+                        </div>
+                        {notifyOnUpdate && (
+                          <input
+                            type="text"
+                            value={notificationContact}
+                            onChange={(e) => setNotificationContact(e.target.value)}
+                            placeholder="WhatsApp / Email pengingat tiket (Opsional)"
+                            className="w-full px-3 py-2 rounded-[5px] bg-slate-50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none ring-1 ring-slate-200 focus:ring-1.5 focus:ring-[#c2410c]/40 mt-1"
+                          />
+                        )}
+                      </div>
+                    </div>
+
                   </div>
 
                 </div>
 
                 {/* Bottom Action Bar */}
-                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-                  <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
+                <div className="pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                  <div className="text-[10.5px] text-slate-500 flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
                     <span>Terintegrasi Real-Time dengan Peta GIS &amp; Pengaduan Terbuka (UU 25/2009)</span>
                   </div>
