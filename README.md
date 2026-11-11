@@ -28,6 +28,9 @@
   </p>
 
   <p align="center">
+    <a href="https://jagajalan.vercel.app" target="_blank">
+      <img src="https://img.shields.io/badge/Demo_Live-jagajalan.vercel.app-ea580c?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo Vercel" />
+    </a>
     <img src="https://img.shields.io/badge/Next.js-16.4-black?style=for-the-badge&logo=next.js" alt="Next.js" />
     <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS" />
@@ -41,28 +44,36 @@
 
 ## 1. Latar Belakang dan Urgensi Masalah
 
-Penanganan jalan rusak di Indonesia sering terhambat oleh tiga masalah tata kelola di luar faktor teknis keausan aspal: batas wewenang antardinas yang tumpang-tindih, data kontrak pemeliharaan LPSE yang terpisah dari peta jalan, serta lambatnya respons instansi daerah. Berdasarkan data resmi nasional:
+Penanganan jalan rusak di Indonesia sering terhambat oleh masalah tata kelola di luar faktor teknis keausan aspal: batas wewenang antartingkat pemerintahan yang tumpang-tindih, data kontrak pemeliharaan LPSE yang terpisah dari peta jalan, serta lambatnya respons instansi daerah. Berdasarkan data resmi nasional:
 
-1. **Tingginya Penundaan Tanggapan di Tingkat Daerah (Data Ombudsman RI 2025/2026)**
-   Laporan Tahunan Ombudsman Republik Indonesia (dipublikasikan Februari 2026) mencatat **4.766 laporan masyarakat yang ditujukan kepada Pemerintah Daerah** (Provinsi, Kabupaten, dan Kota) sepanjang tahun 2025. Sektor perhubungan dan infrastruktur menyumbang **622 laporan**, dengan bentuk dugaan maladministrasi tertinggi berupa **Penundaan Berlarut (*Undue Delay*) sebesar 21,25%**. Angka ini menunjukkan masih lambatnya tindak lanjut birokrasi daerah atas keluhan warga.
+1. **Pembagian Kewenangan dan Panjang Jalan Nasional (Data BPS 2026)**
+   Badan Pusat Statistik (BPS, 2026) mencatat total panjang jalan di Indonesia tahun 2025 berdasarkan tiga tingkat kewenangan mencapai **538.102 km**, yang terbagi atas:
+   - **Jalan Negara (Nasional)**: **47.605 km**
+   - **Jalan Provinsi**: **59.462 km**
+   - **Jalan Kabupaten/Kota**: **431.035 km** (angka masih bersifat sementara dan tidak mencakup jalan tol).
+   Besarnya cakupan jalan daerah (mencapai >80% total jalan) menegaskan pentingnya keterbukaan informasi mengenai status ruas dan instansi penyelenggara yang dapat ditelusuri masyarakat secara transparan, sebagaimana diamanatkan dalam **Undang-Undang Nomor 2 Tahun 2022** tentang Jalan.
 
-2. **Kesenjangan Kemantapan Jalan Nasional vs Jalan Daerah**
-   Data Satu Data Kementerian Pekerjaan Umum dan BPS SIRUSA menunjukkan ketimpangan kondisi fisik antara jalan nasional dan jalan daerah:
-   - Jalan Nasional memiliki tingkat kemantapan di atas 90% karena didukung pembiayaan rutin APBN.
-   - Sebaliknya, hampir 43% jalan kabupaten/kota mengalami rusak ringan hingga rusak berat akibat terbatasnya anggaran pemeliharaan APBD.
-   - Ketimpangan ini mendorong diterbitkannya **Instruksi Presiden (Inpres) No. 3 Tahun 2023 tentang Percepatan Peningkatan Konektivitas Jalan Daerah (IJD)** dengan kucuran dana APBN sebesar **Rp 14,6 Triliun (Tahap I/2023)** dan **Rp 15,3 Triliun (Tahap II/2024)** untuk memperbaiki jalan daerah yang rusak parah.
+2. **Kesenjangan Tingkat Kemantapan Jalan (Renstra Kementerian PU 2025–2029)**
+   Perbedaan kondisi jalan terlihat nyata dalam Rancangan Akhir Rencana Strategis Kementerian Pekerjaan Umum 2025–2029, yang mencantumkan tingkat kemantapan:
+   - **94,18%** untuk jalan nasional (didukung pembiayaan rutin APBN).
+   - **71,33%** untuk jalan provinsi.
+   - **57,91%** untuk jalan kabupaten/kota (hampir 43% dalam kondisi tidak mantap/rusak).
+   Ketimpangan ini mendorong intervensi **Instruksi Presiden (Inpres) No. 3 Tahun 2023 tentang Percepatan Peningkatan Konektivitas Jalan Daerah (IJD)** dengan alokasi APBN sebesar **Rp 14,6 Triliun (Tahap I/2023)** dan **Rp 15,3 Triliun (Tahap II/2024)**.
 
-3. **Kebingungan Warga atas Batas Wewenang Jalan (*Blame-Shifting*)**
+3. **Tingginya Penundaan Tanggapan Publik (Data Ombudsman RI 2026)**
+   Sepanjang tahun 2025, Ombudsman Republik Indonesia mencatat **23.596 penerimaan masyarakat**, dengan **Pemerintah Daerah (Pemprov, Pemkab, Pemkot) sebagai instansi yang paling banyak dilaporkan, yaitu sebanyak 4.766 laporan** (Ombudsman RI, 2026). Sektor perhubungan dan infrastruktur menyumbang **622 laporan**, dengan bentuk dugaan maladministrasi tertinggi berupa **Penundaan Berlarut (*Undue Delay*) sebesar 21,25%**.
+
+4. **Kebingungan Warga atas Batas Wewenang Jalan (*Blame-Shifting*)**
    Pengguna jalan umumnya tidak mengetahui instansi mana yang bertanggung jawab atas ruas jalan yang mereka lewati setiap hari:
-   - Jalan Nasional: tanggung jawab Kementerian Pekerjaan Umum melalui Balai Besar Pelaksanaan Jalan Nasional (BBPJN).
-   - Jalan Provinsi: tanggung jawab Dinas Bina Marga Provinsi.
-   - Jalan Kota/Kabupaten: tanggung jawab Dinas Pekerjaan Umum dan Penataan Ruang (PUPR) Kota/Kabupaten.
-   Karena peta batas SK jalan jarang dibuka ke publik, aduan warga sering salah alamat atau dilempar dari satu dinas ke dinas lain.
+   - Jalan Nasional: Kementerian Pekerjaan Umum melalui Balai Besar Pelaksanaan Jalan Nasional (BBPJN).
+   - Jalan Provinsi: Dinas Bina Marga Provinsi.
+   - Jalan Kota/Kabupaten: Dinas Pekerjaan Umum dan Penataan Ruang (PUPR) Kota/Kabupaten.
+   Karena peta batas SK jalan jarang dibuka ke publik, aduan warga kerap salah sasaran atau terlempar antar-instansi tanpa kejelasan.
 
-4. **Terpisahnya Data Aduan Jalan dari Data Kontrak Lelang LPSE**
-   Selama ini, kanal pengaduan warga dan portal pengadaan proyek (SiRUP/LPSE) berjalan sendiri-sendiri. Warga tidak tahu apakah jalan berlubang di depan rumahnya sebenarnya sudah memiliki kontrak pemeliharaan aktif, siapa kontraktor pemenang tendernya, berapa nilai kontraknya, atau kapan masa pemeliharaan proyek tersebut berakhir.
+5. **Terpisahnya Kanal Aduan dari Data Kontrak Lelang LPSE**
+   Selama ini, kanal pengaduan warga dan portal pengadaan proyek (SiRUP/LPSE) berjalan terpisah. Warga tidak mengetahui apakah jalan rusak di wilayahnya sudah memiliki kontrak pemeliharaan aktif, siapa kontraktor pemenang tendernya, berapa nilai kontraknya, atau kapan masa pemeliharaannya berakhir.
 
-5. **Penerapan Arsitektur Dua Tingkat (*Two-Tier Data Architecture*)**
+6. **Penerapan Arsitektur Data Dua Tingkat (*Two-Tier Data Architecture*)**
    JagaJalan menerapkan pendekatan data dua tingkat untuk menjaga keseimbangan antara gambaran makro dan penelusuran mikro:
    - *Tingkat Makro:* Dashboard nasional menyajikan data agregat kondisi dan kemantapan jalan dari 38 provinsi di Indonesia yang bersumber dari BPS (SIRUSA) dan publikasi resmi Kementerian Pekerjaan Umum, serta informasi anggaran yang relevan.
    - *Tingkat Mikro:* Penelusuran mendalam terhadap ruas jalan, lokasi kerusakan, batas kewenangan instansi, dokumen SK penetapan status jalan, paket pengadaan lelang LPSE, dan laporan masyarakat pada wilayah percontohan Sumatera Utara (Kota Medan dan sekitarnya) serta koridor arteri strategis nasional antarpulau.
@@ -113,10 +124,13 @@ Masyarakat dapat memantau perjalanan laporan secara terbuka dan kronologis:
 ## 4. Fitur Pendukung: AI Vision & Pemantauan SLA Ombudsman RI
 
 ### A. AI Vision Sebagai Pemeriksaan Awal Foto (Multimodal Initial Triage)
-Modul Computer Vision berbasis model aktif Google Gemini 2.5 Flash berfungsi sebagai alat bantu pemeriksaan awal foto (*decision support tool*) dan pengelompokan laporan, bukan penentu resmi keabsahan laporan atau alat ukur laboratorium tanpa kalibrasi teknis:
+Modul Computer Vision berbasis model aktif Google Gemini Vision API (`gemini-flash-lite-latest` dan `gemini-3.5-flash-lite`) berfungsi sebagai alat bantu pemeriksaan awal foto (*decision support tool*) dan pengelompokan laporan, bukan penentu resmi keabsahan laporan atau alat ukur laboratorium tanpa kalibrasi teknis:
 - **Pemeriksaan Indikasi Kerusakan**: Mengidentifikasi tipe indikasi visual permukaan aspal (Lubang/Pothole, Penurunan Permukaan/Amblas, Retak Buaya/Alligator Cracking).
 - **Penyaringan Relevansi Awal**: Membantu aparatur dinas menyaring foto yang tidak relevan dengan infrastruktur jalan atau mendeteksi kemiripan visual laporan pada titik lokasi yang berdekatan.
 - **Estimasi Prioritas Awal (*Hazard Score* Skala 1-100)**: Menghasilkan rekomendasi skor prioritas awal berdasarkan tipe kerusakan tampak, perkiraan sebaran relatif terhadap jalur lalu lintas, dan potensi risiko bagi keselamatan pengguna jalan.
+- **Kompresi Gambar Sisi Klien (*Client-Side Downscaling*)**: Sebelum foto dikirim ke API serverless, browser secara otomatis melakukan kompresi dan downscale kanvas (maksimal dimensi 1440px, rasio kualitas WebP/JPEG 0.82). Hal ini menjamin foto resolusi tinggi dari kamera gawai (hingga 48MP) tidak melebihi batas muatan transmisi serverless cloud (4.5 MB Vercel payload limit) dan memangkas waktu analisis hingga 60%.
+- **3 Foto Sampel Evaluasi Instan**: Tersedia 3 preset foto kerusakan jalan lapangan (Lubang Dalam, Amblas Bahu Jalan, dan Retak Buaya Parah) di formulir pelaporan agar juri dan penilai dapat langsung menguji alur analisis AI tanpa perlu mencari foto eksternal.
+- **Ketahanan Failover Multi-Kunci & Heuristik**: Dilengkapi rotasi kunci API dinamis serta *deterministic heuristic fallback engine* yang menjamin proses pelaporan tidak pernah terblokir sekalipun kuota API publik eksternal habis.
 
 ### B. Pemantauan Tanggapan Pelayanan Publik & Complaint Guidance Generator
 - **Kesesuaian dengan Regulasi Pelayanan Publik**: Berdasarkan Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik, penyelenggara pelayanan publik wajib memberikan tanggapan atas pengaduan paling lambat 14 (empat belas) hari kerja sejak pengaduan diterima secara resmi. JagaJalan menyajikan hitung mundur batas waktu ini sebagai acuan pemantauan publik setelah laporan diteruskan ke instansi terkait.
@@ -175,6 +189,12 @@ Untuk menghindari bias interpretasi data, JagaJalan memisahkan secara tegas anta
 
 ### D. Warna Brand Utama & Tombol Aksi
 - **Safety Orange (`#ea580c` / `#f97316`)**: Standar keselamatan jalan raya internasional yang digunakan untuk logo, tombol aksi utama (*+ Lapor Kerusakan*), dan highlight interaktif.
+
+### E. Standar Kerajinan Antarmuka Kustom (*Anti-Slop UI Craft*)
+Untuk menciptakan pengalaman pengguna yang berwibawa dan terbebas dari artefak visual kaku bawaan sistem operasi:
+- **Komponen Dropdown Kustom Terstandarisasi (`CustomSelect`)**: Menggantikan seluruh elemen form bawaan `<select>` browser dengan menu melayang (*floating popover*) beranimasi halus, indikator centang visual aktif, dukungan *click-outside listener*, dan tombol keyboard `Esc`.
+- **Autentikasi Portal Dinas Ramping & Berpusat**: Tata letak kartu login dirancang dengan lebar fokus proporsional (`max-w-[460px]`), penataan tengah (*center-aligned*) pada ikon status dan segmented tabs, serta peniadaan ornamen visual klise AI.
+- **Mikrointeraksi & Umpan Balik Visual**: Indikator status denyut (*pulsing badges*), skeleton loading states, dan dialog konfirmasi aksi fisik yang menjaga keteraturan hierarki informasi.
 
 ---
 
@@ -407,9 +427,10 @@ Pengembangan platform JagaJalan mengombinasikan pustaka web modern, mesin geospa
 - **Live Street-Snapping**: Integrasi Overpass API (ekstraksi geometri ruas jalan aktif) dan OpenStreetMap Nominatim (geocoding & penamaan jalan lokal saat diklik)
 
 ### C. Kecerdasan Buatan (AI Multimodal)
-- **Model Multimodal**: Google Gemini 2.5 Flash API (`gemini-2.5-flash` melalui Google AI for Developers)
+- **Model Multimodal**: Google Gemini Vision API (`gemini-flash-lite-latest` dan `gemini-3.5-flash-lite` melalui Google AI for Developers)
 - **Peran Sistem**: Pendukung pemeriksaan awal foto (*multimodal initial triage*) untuk mengidentifikasi indikasi tipe kerusakan permukaan aspal dan rekomendasi prioritas pemeriksaan.
-- **Mekanisme Cadangan**: *Heuristic Fallback Engine* untuk memastikan sistem tetap responsif apabila kuota atau kunci API tidak terpasang.
+- **Optimasi Transmisi**: Kompresi kanvas sisi klien (*client-side canvas downscaling* < 1.5MB) sebelum transmisi base64 guna memastikan kepatuhan batas *payload* serverless Vercel (4.5 MB).
+- **Mekanisme Cadangan**: *Deterministic Heuristic Fallback Engine* untuk memastikan sistem tetap responsif sekalipun kuota API publik eksternal habis.
 
 ### D. Manajemen Data & Penyimpanan
 - **Data Repositori Master**: In-Memory Structured JSON Repositories (Data 38 Provinsi, Data Ruas Percontohan Sumatera Utara, Master Koridor Nasional & Provinsi)
@@ -478,14 +499,26 @@ npm run build
 npm run start
 ```
 
-### 7. Akun Simulasi Portal Dinas (Untuk Pengujian & Penjurian)
-Untuk mencoba fitur **Portal Dinas** sebagai aparatur penanggung jawab jalan, Anda dapat masuk melalui menu navigasi **Portal Dinas** (`/portaldinas`) menggunakan akun simulasi yang telah terdaftar dalam sistem:
+### 7. Akun Simulasi & Akses Cepat Portal Dinas (Untuk Evaluasi & Penjurian)
+Untuk mencoba fitur **Portal Dinas** sebagai aparatur penanggung jawab jalan, Anda dapat langsung mengakses [https://jagajalan.vercel.app/?tab=dinas](https://jagajalan.vercel.app/?tab=dinas) atau menu **Portal Dinas**. Sistem menyediakan 4 metode autentikasi yang fleksibel:
 
-| Peran Instansi | Identitas Petugas (NIP Simulasi) | Kata Sandi | Wilayah Kewenangan |
-| :--- | :--- | :--- | :--- |
-| **Balai Besar Pelaksanaan Jalan Nasional (BBPJN)** | `198503152010011002` (Budi Santoso, S.T.) | `admin123` | Jalan Nasional (Sumatera Utara) |
-| **Dinas PUPR Provinsi Sumatera Utara** | `197908222005021004` (Ir. Rahmat Hidayat) | `admin123` | Jalan Provinsi (Sumatera Utara) |
-| **Dinas SDABMBK Kota Medan** | `198811042012121001` (Ahmad Faisal, S.T.) | `admin123` | Jalan Kota (Kota Medan) |
+1. **Akses Cepat 1-Klik (*Evaluator Instant Login*)**:
+   Tersedia 3 kartu identitas peran dinas di bagian bawah form login yang dapat diklik langsung tanpa mengetik kredensial:
+   - **Tingkat Nasional**: Budi Santoso, S.T. — BBPJN Wilayah Sumatera Utara (Kementerian PU)
+   - **Tingkat Provinsi**: Ir. Rahmat Hidayat — Dinas Bina Marga & Bina Konstruksi Prov. Sumatera Utara
+   - **Tingkat Kota**: Ahmad Faisal, S.T. — Dinas SDABMBK Kota Medan
+
+2. **Email Kedinasan & Kode OTP Simulasi**:
+   - Masukkan alamat email apa pun (misal: `petugas.demo@jagajalan.id` atau email evaluator Anda).
+   - Klik **Kirim Kode OTP Masuk** ➔ Masukkan 6 digit kode OTP yang tertera atau klik tombol **Isi Cepat** untuk verifikasi instan.
+
+3. **Masuk dengan Akun Google (SSO Pemerintah)**:
+   - Terintegrasi dengan Google Auth Firebase (atau modal pemilih akun aparatur demo).
+
+4. **ID Akun Demo & Kata Sandi**:
+   - ID Demo: `DEMO-001`
+   - Kata Sandi: `jagajalan2026`
+   *(Atau gunakan opsi "Isi Otomatis" di atas form sandi)*
 
 ---
 
@@ -503,12 +536,13 @@ Pengembangan JagaJalan telah menyelesaikan seluruh fitur inti prototipe web fung
 | **Integrasi Aduan Real-Time & GIS Mapping** | **Selesai (100%)** | Pin titik kerusakan langsung dari peta interaktif (*Click-to-Report GIS*), sinkronisasi real-time antar-sesi via `/api/reports` & `BroadcastChannel`, serta ekspor layer GeoJSON (`/api/reports?format=geojson`). |
 | **Data Anggaran & Audit LPSE** | **Selesai (100%)** | Komparasi pagu anggaran HPS, nilai kontrak tender, identitas penyedia jasa, efisiensi penawaran, dan *match confidence*. |
 | **Ekspor Laporan Transparansi (PDF & Excel)** | **Selesai (100%)** | Fitur unduh laporan transparansi anggaran LPSE, statistik 38 provinsi, rekapitulasi aduan GIS, dan audit teknis ruas jalan dalam format **Microsoft Excel (`.xls`)** dan **PDF** siap cetak untuk analisis mandiri. |
-| **Statistik Nasional 38 Provinsi** | **Selesai (100%)** | Papan skor kemantapan jalan teragregasi dari data resmi BPS (SIRUSA) dan publikasi kementerian terkait dengan filter kepulauan. |
-| **Pelaporan Kerusakan Warga** | **Selesai (100%)** | Formulir aduan publik berbasis koordinat *geotagged*, unggah foto, dan penerbitan kode tiket pelacakan unik. |
-| **Pemeriksaan Awal AI Vision** | **Selesai (100%)** | Integrasi Google Gemini 2.5 Flash untuk pengenalan tipe kerusakan tampak dan rekomendasi skor prioritas awal (*decision support*). |
+| **Statistik Nasional 38 Provinsi** | **Selesai (100%)** | Papan skor kemantapan jalan teragregasi dari data resmi BPS (SIRUSA 2026) dan Renstra Kementerian PU 2025–2029 dengan filter kepulauan. |
+| **Pelaporan Kerusakan Warga** | **Selesai (100%)** | Formulir aduan publik berbasis koordinat *geotagged*, unggah foto, preset sampel evaluasi, dan penerbitan kode tiket unik. |
+| **Pemeriksaan Awal AI Vision** | **Selesai (100%)** | Integrasi Google Gemini Vision API (`gemini-flash-lite-latest` & `gemini-3.5-flash-lite`) dengan kompresi kanvas sisi klien untuk deteksi tipe kerusakan dan estimasi *hazard score*. |
 | **Pelacakan Tiket & SLA 14 Hari** | **Selesai (100%)** | Timeline kronologis transparansi tanggapan berlandaskan Pasal 44 ayat (2) UU No. 25 Tahun 2009 tentang Pelayanan Publik. |
 | **Complaint Guidance & Draft Generator** | **Selesai (100%)** | Generator draf surat formal ke Ombudsman RI untuk aduan yang melewati batas waktu tanggapan resmi. |
-| **Portal Dinas (Aparatur)** | **Selesai (100%)** | Panel simulasi kerja aparatur dinas untuk verifikasi berkas, pembaruan status pengerjaan, dan pengunggahan bukti dokumentasi fisik. |
+| **Portal Dinas Terpadu (Aparatur)** | **Selesai (100%)** | Panel kerja aparatur dinas untuk verifikasi berkas, pembaruan status pengerjaan, dan pengunggahan bukti dokumentasi fisik dengan 4 metode login modern. |
+| **Komponen Dropdown Kustom Modern** | **Selesai (100%)** | Standardisasi `CustomSelect` di seluruh dashboard (antrean tiket, filter anggaran, peringkat provinsi, dan pengawasan Ombudsman) menggantikan select HTML native yang kaku. |
 | **Optimasi Skalabilitas Basis Data** | **Selesai (100%)** | *In-Memory Multi-Index Engine* (`O(1)` partisi kode tiket, wewenang, & ruas), *Spatial Grid & Bounding-Box Indexing* (`?bbox=`), serta *Pagination* (`?page=&limit=`) pada `/api/reports` dan `/api/roads`. |
 | **Sistem Notifikasi Otomatis Status Laporan** | **Selesai (100%)** | *Pusat Notifikasi Status Laporan* (`Navbar`), *Live Notification Toast*, langganan pengingat status per tiket, serta pemicu otomatis saat tiket terbit atau diperbarui dinas. |
 
