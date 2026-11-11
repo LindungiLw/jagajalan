@@ -577,8 +577,8 @@ export default function ReportModal({
       alert("Format berkas tidak didukung. Harap unggah berkas gambar (JPG, PNG, WebP, HEIC).");
       return;
     }
-    if (file.size > 15 * 1024 * 1024) {
-      alert("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 15 MB.");
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 10 MB.");
       return;
     }
 

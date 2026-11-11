@@ -147,13 +147,49 @@ export default function OfficerDashboard({
 
   const handleCustomProofUpload = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setProofPhotoUrl(event.target?.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 10 MB.");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const rawDataUrl = event.target?.result;
+      if (typeof rawDataUrl === "string") {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const maxDimension = 1200;
+            let { width, height } = img;
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(width, 1);
+            canvas.height = Math.max(height, 1);
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+              setProofPhotoUrl(canvas.toDataURL("image/jpeg", 0.82));
+              return;
+            }
+          } catch {
+            // fallback to raw
+          }
+          setProofPhotoUrl(rawDataUrl);
+        };
+        img.onerror = () => setProofPhotoUrl(rawDataUrl);
+        img.src = rawDataUrl;
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSaveUpdate = (e) => {
