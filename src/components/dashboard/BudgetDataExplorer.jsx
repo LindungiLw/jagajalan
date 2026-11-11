@@ -1000,66 +1000,91 @@ export default function BudgetDataExplorer({
       </div>
 
       {/* ========================================================================= */}
-      {/* TIER 3: BOTTOM ASYMMETRIC SPLIT (KPI Akuntabilitas & Daftar Paket LPSE)   */}
+      {/* TIER 3: EXECUTIVE IKPA SCORECARD & FULL-WIDTH DAFTAR PAKET PENGADAAN LPSE */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Left Column: Capaian & Akuntabilitas Anggaran */}
-        <div className="lg:col-span-4 bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 space-y-4 hover:ring-orange-300 transition-all flex flex-col justify-between shadow-2xs">
-          <div>
-            <div className="pb-3 border-b border-slate-100 flex items-center justify-between">
+      <div className="space-y-4">
+        {/* 1. TOP EXECUTIVE IKPA SCORECARD (Full-Width, 2x4 Symmetrical Grid) */}
+        <div className="bg-white rounded-[8px] ring-1 ring-orange-200/60 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-4 sm:p-5 space-y-3.5">
+          {/* Header Row: Title + Verification Badge + Average Serapan Headline */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-[6px] bg-orange-50 border border-orange-200/70 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-4 h-4 text-[#c2410c]" />
+              </div>
               <div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                  Capaian &amp; Akuntabilitas Anggaran
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight font-heading">
+                    Capaian &amp; Akuntabilitas Anggaran
+                  </h3>
+                  <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded border border-orange-200">
+                    Terverifikasi
+                  </span>
+                </div>
                 <p className="text-[11px] text-slate-400 font-sans mt-0.5">
-                  Indikator Kinerja Pelaksanaan Anggaran (IKPA)
+                  Indikator Kinerja Pelaksanaan Anggaran (IKPA) Kementerian &amp; Pemerintah Daerah
                 </p>
               </div>
-              <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded border border-orange-200">
-                Terverifikasi
-              </span>
             </div>
 
-            {/* Stack of Progress Bars (100% Sesuai Data Riil) */}
-            <div className="space-y-4 mt-4">
-              {dynamicKpiList.map((item, idx) => (
-                <div key={idx} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-slate-700 truncate pr-2">
-                      {item.label}
-                    </span>
-                    <span className="font-bold text-slate-900 tabular-nums shrink-0">
-                      {item.pct}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                    <div
-                      className="h-full bg-[#c2410c] rounded-full transition-all duration-700 ease-out"
-                      style={{ width: `${item.pct}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+            {/* Average Serapan Headline Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-slate-50 border border-slate-200/80 text-xs self-start sm:self-auto shadow-2xs font-sans">
+              <span className="text-slate-500 text-[11px]">Rata-rata Kinerja Serapan:</span>
+              <strong className="text-emerald-700 font-bold tabular-nums text-xs">
+                {Math.round(
+                  (authorityBreakdown.national.serapanPct +
+                    authorityBreakdown.provincial.serapanPct +
+                    authorityBreakdown.cityRegency.serapanPct) /
+                    3
+                )}
+                % (Sangat Baik)
+              </strong>
             </div>
           </div>
 
-          {/* Ringkasan Akuntabilitas Mini */}
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-            <span>Rata-rata Kinerja Serapan:</span>
-            <strong className="text-emerald-700 font-bold tabular-nums">
-              {Math.round(
-                (authorityBreakdown.national.serapanPct +
-                  authorityBreakdown.provincial.serapanPct +
-                  authorityBreakdown.cityRegency.serapanPct) /
-                  3
-              )}
-              % (Sangat Baik)
-            </strong>
+          {/* 7 KPI Indicators + 1 Regulatory Compliance Tile in Clean 4-Column Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-0.5">
+            {dynamicKpiList.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-3 rounded-[6px] bg-slate-50/70 border border-slate-200/70 hover:border-orange-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs"
+              >
+                <div className="flex items-start justify-between gap-1.5 min-h-[30px]">
+                  <span className="text-[11.5px] font-semibold text-slate-700 leading-tight">
+                    {item.label}
+                  </span>
+                  <span className="text-xs font-black text-[#c2410c] tabular-nums shrink-0">
+                    {item.pct}%
+                  </span>
+                </div>
+                <div className="w-full bg-slate-200/80 rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className="h-full bg-[#c2410c] rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${item.pct}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+
+            {/* 8th Balanced Compliance Card */}
+            <div className="p-3 rounded-[6px] bg-emerald-50/50 border border-emerald-200/70 flex flex-col justify-between space-y-2 shadow-2xs">
+              <div className="flex items-start justify-between gap-1.5 min-h-[30px]">
+                <span className="text-[11.5px] font-semibold text-emerald-900 leading-tight">
+                  Status Kepatuhan KIP &amp; Regulasi
+                </span>
+                <span className="text-xs font-black text-emerald-700 shrink-0">
+                  100%
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-emerald-700 font-medium">
+                <span>Transparansi Publik</span>
+                <span className="font-bold">Terintegrasi</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Daftar Paket Pengadaan LPSE & SIRUP (DOUBLE-BEZEL AGENCY TIER) */}
-        <div className="lg:col-span-8 bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
+        {/* 2. FULL-WIDTH DAFTAR PAKET PENGADAAN LPSE & SIRUP (DOUBLE-BEZEL AGENCY TIER) */}
+        <div className="w-full bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
           <div className="bg-white rounded-[6px] p-5 sm:p-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] space-y-4">
             
             {/* Header & Controls Toolbar */}
@@ -1182,12 +1207,12 @@ export default function BudgetDataExplorer({
                 <table className="w-full text-left text-xs font-sans md:table-fixed border-collapse">
                   <thead>
                     <tr className="border-b border-slate-200/70 text-slate-400 font-bold text-[10px] uppercase tracking-[0.14em]">
-                      <th className="py-3 px-2.5 md:w-[32%]">Paket &amp; Ruas Jalan</th>
-                      <th className="py-3 px-2 md:w-[15%]">Kewenangan</th>
-                      <th className="py-3 px-2 md:w-[19%] text-right">Pagu &amp; Kontrak</th>
-                      <th className="py-3 px-2 md:w-[13%] text-right hidden sm:table-cell">Efisiensi</th>
+                      <th className="py-3 px-3 md:w-[35%]">Paket &amp; Ruas Jalan</th>
+                      <th className="py-3 px-2 md:w-[13%]">Kewenangan</th>
+                      <th className="py-3 px-2 md:w-[18%] text-right">Pagu &amp; Kontrak</th>
+                      <th className="py-3 px-2 md:w-[14%] text-right hidden sm:table-cell">Efisiensi</th>
                       <th className="py-3 px-2 md:w-[10%] text-center">Fisik</th>
-                      <th className="py-3 px-2.5 md:w-[11%] text-right">Aksi</th>
+                      <th className="py-3 px-3 md:w-[10%] text-right">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">

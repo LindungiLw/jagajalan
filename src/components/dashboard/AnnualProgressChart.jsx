@@ -247,12 +247,12 @@ export default function AnnualProgressChart() {
           <div className="lg:col-span-8 bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between space-y-4">
             
             {/* 1. TOP 4 OPEN KPI CARDS (Executive Layout with Clean Borders & Consistent Badges) */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 pb-4 border-b border-slate-100">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 pb-4 border-b border-slate-100">
               {/* Card 1: Jalan Nasional */}
-              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-blue-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
-                <div className="h-6 flex items-center justify-between gap-1">
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jalan Nasional</span>
-                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+              <div className="p-3 sm:p-3.5 rounded-[8px] overflow-hidden bg-slate-50/70 border border-slate-200/90 hover:border-blue-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="min-h-[28px] flex items-start justify-between gap-1.5">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 leading-tight">Jalan Nasional</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9px] sm:text-[9.5px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
                     nasionalDelta.isUp
                       ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
                       : nasionalDelta.isDown
@@ -274,10 +274,10 @@ export default function AnnualProgressChart() {
               </div>
 
               {/* Card 2: Jalan Provinsi */}
-              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-purple-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
-                <div className="h-6 flex items-center justify-between gap-1">
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jalan Provinsi</span>
-                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+              <div className="p-3 sm:p-3.5 rounded-[8px] overflow-hidden bg-slate-50/70 border border-slate-200/90 hover:border-purple-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="min-h-[28px] flex items-start justify-between gap-1.5">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 leading-tight">Jalan Provinsi</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9px] sm:text-[9.5px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
                     provinsiDelta.isUp
                       ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
                       : provinsiDelta.isDown
@@ -299,10 +299,10 @@ export default function AnnualProgressChart() {
               </div>
 
               {/* Card 3: Jalan Kab/Kota */}
-              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-orange-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
-                <div className="h-6 flex items-center justify-between gap-1">
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jalan Kab/Kota</span>
-                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+              <div className="p-3 sm:p-3.5 rounded-[8px] overflow-hidden bg-slate-50/70 border border-slate-200/90 hover:border-orange-300 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="min-h-[28px] flex items-start justify-between gap-1.5">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 leading-tight">Jalan Kab/Kota</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9px] sm:text-[9.5px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
                     kabKotaDelta.isUp
                       ? "text-emerald-700 bg-emerald-50 border-emerald-200/80"
                       : kabKotaDelta.isDown
@@ -324,10 +324,10 @@ export default function AnnualProgressChart() {
               </div>
 
               {/* Card 4: Jurang Ketimpangan */}
-              <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/70 border border-slate-200/90 hover:border-slate-400 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
-                <div className="h-6 flex items-center justify-between gap-1">
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 whitespace-nowrap">Jurang Ketimpangan</span>
-                  <span className={`inline-flex items-center gap-0.5 text-[9.5px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
+              <div className="p-3 sm:p-3.5 rounded-[8px] overflow-hidden bg-slate-50/70 border border-slate-200/90 hover:border-slate-400 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                <div className="min-h-[28px] flex items-start justify-between gap-1.5">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-700 leading-tight">Jurang Ketimpangan</span>
+                  <span className={`inline-flex items-center gap-0.5 text-[9px] sm:text-[9.5px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0 border ${
                     gapDelta.isDown
                       ? "text-rose-700 bg-rose-50 border-rose-200/80"
                       : gapDelta.isUp
@@ -340,10 +340,10 @@ export default function AnnualProgressChart() {
                   </span>
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-slate-900 font-sans tabular-nums tracking-tight">
-                  Δ {selectedRoadData.gap}%
+                  {selectedRoadData.gap}%
                 </div>
                 <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10.5px] text-slate-500 font-medium truncate">
-                  <span className="truncate">Selisih Pusat vs Daerah</span>
+                  <span className="truncate">Pusat vs Daerah</span>
                   <span className="font-semibold text-slate-700 shrink-0">Kesenjangan</span>
                 </div>
               </div>

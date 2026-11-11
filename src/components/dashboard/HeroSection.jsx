@@ -5,6 +5,7 @@ import {
   Search,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   ExternalLink,
   MapPin,
   FileText,
@@ -60,6 +61,15 @@ export default function HeroSection({
   const [tableSearch, setTableSearch] = useState("");
   const [tablePage, setTablePage] = useState(1);
   const [tablePageSize, setTablePageSize] = useState(6); // Default 6 rows to prevent vertical overload
+
+  // Expandable methodology footnote state
+  const [expandedSources, setExpandedSources] = useState({});
+  const toggleSourceExpanded = (key) => {
+    setExpandedSources((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
@@ -594,7 +604,7 @@ export default function HeroSection({
               </div>
 
               {/* Chart Column: Dynamic Visual Monitor based on selectedIndex */}
-              <div className="sm:col-span-7 bg-slate-50/80 rounded-[6px] p-3.5 flex flex-col justify-between">
+              <div className="sm:col-span-7 bg-slate-50/80 rounded-[6px] p-3 sm:p-3.5 flex flex-col justify-between overflow-hidden">
                 {/* Chart Header: Structured 2-Tier Header (Never Wraps Awkwardly) */}
                 <div className="space-y-1.5 border-b border-slate-200/60 pb-2">
                   {/* Row 1: Title & Main Type Switcher (Garis / Batang) */}
@@ -658,36 +668,36 @@ export default function HeroSection({
                     </div>
                   </div>
 
-                  {/* Row 2: Sub-toolbar / Legend & Filter Bar (Never wraps awkwardly!) */}
-                  <div className="flex items-center justify-between gap-1 pt-0.5 text-[9.5px] font-sans">
+                  {/* Row 2: Sub-toolbar / Legend & Filter Bar (Responsive & Clean) */}
+                  <div className="flex flex-wrap items-center justify-between gap-y-1.5 gap-x-2 pt-0.5 text-[9px] sm:text-[9.5px] font-sans">
                     {/* Left: Dynamic Color Legend */}
                     {selectedIndex === "kemantapan" && (
-                      <div className="flex items-center gap-3 font-medium text-slate-600">
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-xs bg-blue-600" />Nasional</span>
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-xs bg-purple-600" />Provinsi</span>
-                        <span className="flex items-center gap-1.5 text-orange-700 font-bold"><span className="w-2.5 h-1 rounded-xs bg-orange-600" />Kab/Kota</span>
+                      <div className="flex items-center gap-2 font-medium text-slate-600 shrink-0">
+                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-blue-600" />Nasional</span>
+                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-purple-600" />Provinsi</span>
+                        <span className="flex items-center gap-1 text-[9px] text-orange-700 font-bold"><span className="w-2 h-1 rounded-xs bg-orange-600" />Kab/Kota</span>
                       </div>
                     )}
                     {selectedIndex === "ombudsman" && (
-                      <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1.5 text-[#c2410c] font-bold"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Penundaan Penanganan (%)</span>
+                      <div className="flex items-center gap-2 font-medium text-slate-600 shrink-0">
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Penundaan Penanganan (%)</span>
                       </div>
                     )}
                     {selectedIndex === "pagu" && (
-                      <div className="flex items-center gap-3 font-medium">
-                        <span className="flex items-center gap-1.5 text-slate-600"><span className="w-2.5 h-1 rounded-xs bg-slate-700" />Pagu</span>
-                        <span className="flex items-center gap-1.5 text-[#c2410c]"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Kontrak</span>
+                      <div className="flex items-center gap-2 font-medium shrink-0">
+                        <span className="flex items-center gap-1 text-[9px] text-slate-600"><span className="w-2 h-1 rounded-xs bg-slate-700" />Pagu</span>
+                        <span className="flex items-center gap-1 text-[9px] text-[#c2410c]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Kontrak</span>
                       </div>
                     )}
                     {selectedIndex === "inpres" && (
-                      <div className="flex items-center gap-2 font-medium text-slate-600">
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-xs bg-[#c2410c]" />Alokasi APBN</span>
+                      <div className="flex items-center gap-2 font-medium text-slate-600 shrink-0">
+                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Alokasi APBN</span>
                       </div>
                     )}
 
                     {/* Right: Year Selector / Time Scale Toggle */}
                     {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman") && (
-                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[6px] overflow-hidden divide-x divide-orange-200/60 text-[10px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
+                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
                         {[2020, 2021, 2022, 2023, 2024].map((yr) => (
                           <button
                             key={yr}
@@ -705,7 +715,7 @@ export default function HeroSection({
                     )}
 
                     {selectedIndex === "pagu" && (
-                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[6px] overflow-hidden divide-x divide-orange-200/60 text-[9.5px] font-bold font-sans shadow-2xs shrink-0">
+                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs shrink-0">
                         <button
                           onClick={() => setBudgetTimeScale("instansi")}
                           className={`px-1.5 py-0.5 transition-colors cursor-pointer ${
@@ -730,12 +740,12 @@ export default function HeroSection({
                     )}
 
                     {selectedIndex === "inpres" && (
-                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[6px] overflow-hidden divide-x divide-orange-200/60 text-[10px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
+                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
                         {[2023, 2024].map((yr) => (
                           <button
                             key={yr}
                             onClick={() => setSelectedYear(yr)}
-                            className={`px-2.5 py-0.5 transition-colors cursor-pointer ${
+                            className={`px-2 py-0.5 transition-colors cursor-pointer ${
                               selectedYear === yr
                                 ? "bg-[#c2410c] text-white font-bold"
                                 : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
@@ -1539,9 +1549,25 @@ export default function HeroSection({
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
                         <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-slate-800">Sumber &amp; Metodologi BPS SiRUSA (2020–2024):</strong>{" "}
-                          Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, bersumber dari publikasi resmi Statistik Transportasi Darat BPS RI.
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="truncate">
+                              <strong className="text-slate-800">Sumber:</strong> BPS SiRUSA (2020–2024) · Statistik Transportasi BPS RI
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleSourceExpanded("kemantapan")}
+                              className="inline-flex items-center gap-0.5 text-[#c2410c] font-semibold hover:underline cursor-pointer text-[10px] shrink-0 ml-1"
+                            >
+                              <span>{expandedSources["kemantapan"] ? "Tutup" : "Selengkapnya"}</span>
+                              <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${expandedSources["kemantapan"] ? "rotate-180" : ""}`} />
+                            </button>
+                          </div>
+                          {expandedSources["kemantapan"] && (
+                            <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
+                              <strong className="text-slate-700">Metodologi:</strong> Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, bersumber dari publikasi resmi Statistik Transportasi Darat BPS RI.
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1569,9 +1595,25 @@ export default function HeroSection({
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
                         <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-slate-800">Definisi &amp; Sumber Ombudsman RI (2020–2024):</strong>{" "}
-                          Rasio penundaan penanganan (<em>undue delay</em>) merupakan persentase aduan masyarakat di Laporan Tahunan Ombudsman RI terkait keluhan batas waktu layanan publik bidang infrastruktur yang melampaui standar kepatutan UU 25/2009.
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="truncate">
+                              <strong className="text-slate-800">Sumber:</strong> Laporan Tahunan Ombudsman RI (2020–2024)
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleSourceExpanded("ombudsman")}
+                              className="inline-flex items-center gap-0.5 text-[#c2410c] font-semibold hover:underline cursor-pointer text-[10px] shrink-0 ml-1"
+                            >
+                              <span>{expandedSources["ombudsman"] ? "Tutup" : "Selengkapnya"}</span>
+                              <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${expandedSources["ombudsman"] ? "rotate-180" : ""}`} />
+                            </button>
+                          </div>
+                          {expandedSources["ombudsman"] && (
+                            <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
+                              <strong className="text-slate-700">Definisi:</strong> Rasio penundaan penanganan (<em>undue delay</em>) merupakan persentase aduan masyarakat di Laporan Tahunan Ombudsman RI terkait keluhan batas waktu layanan publik infrastruktur yang melampaui standar kepatutan UU 25/2009.
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1612,9 +1654,25 @@ export default function HeroSection({
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
                         <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-slate-800">Ruang Lingkup Data LPSE Pilot:</strong>{" "}
-                          Komparasi 6 paket pengadaan percontohan (bukan audit resmi BPK). Pagu bersumber dari rencana umum pengadaan SiRUP LKPP dan nilai kontrak riil dari pengumuman pemenang lelang SPSE daerah percontohan (TA 2026).
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="truncate">
+                              <strong className="text-slate-800">Sumber:</strong> SiRUP LKPP &amp; SPSE Pilot (TA 2026)
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleSourceExpanded("pagu")}
+                              className="inline-flex items-center gap-0.5 text-[#c2410c] font-semibold hover:underline cursor-pointer text-[10px] shrink-0 ml-1"
+                            >
+                              <span>{expandedSources["pagu"] ? "Tutup" : "Selengkapnya"}</span>
+                              <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${expandedSources["pagu"] ? "rotate-180" : ""}`} />
+                            </button>
+                          </div>
+                          {expandedSources["pagu"] && (
+                            <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
+                              <strong className="text-slate-700">Ruang Lingkup:</strong> Komparasi 6 paket pengadaan percontohan (bukan audit resmi BPK). Pagu bersumber dari rencana umum pengadaan SiRUP LKPP dan nilai kontrak riil dari pengumuman pemenang lelang SPSE daerah percontohan.
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1638,9 +1696,25 @@ export default function HeroSection({
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
                         <Info className="w-3.5 h-3.5 text-[#c2410c] shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-slate-800">Dasar Alokasi Inpres No. 3/2023 (IJD):</strong>{" "}
-                          Intervensi fiskal APBN percepatan konektivitas jalan daerah Tahap I (2023: Rp 14,60 T) dan Tahap II (2024: Rp 15,30 T) yang diadministrasikan Kementerian PU dan Kemenkeu RI.
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="truncate">
+                              <strong className="text-slate-800">Dasar Regulasi:</strong> Inpres No. 3/2023 (IJD)
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleSourceExpanded("inpres")}
+                              className="inline-flex items-center gap-0.5 text-[#c2410c] font-semibold hover:underline cursor-pointer text-[10px] shrink-0 ml-1"
+                            >
+                              <span>{expandedSources["inpres"] ? "Tutup" : "Selengkapnya"}</span>
+                              <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${expandedSources["inpres"] ? "rotate-180" : ""}`} />
+                            </button>
+                          </div>
+                          {expandedSources["inpres"] && (
+                            <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
+                              <strong className="text-slate-700">Alokasi:</strong> Intervensi fiskal APBN percepatan konektivitas jalan daerah Tahap I (2023: Rp 14,60 T) dan Tahap II (2024: Rp 15,30 T) yang diadministrasikan Kementerian PU dan Kemenkeu RI.
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1784,7 +1858,7 @@ export default function HeroSection({
             {/* SLA Alert Strip with Responsible Legal Context */}
             <div className="pt-2 text-[11px] text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 border-t border-slate-100 font-sans">
               <div>
-                <span>2 laporan terdata telah melewati batas waktu pemantauan internal SLA JagaJalan (+6 hari acuan).</span>
+                <span>2 laporan melewati batas waktu SLA (+6 hari).</span>
               </div>
               <button
                 onClick={() => {
