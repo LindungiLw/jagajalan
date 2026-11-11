@@ -16,7 +16,6 @@ import {
   UserCheck,
   Mail,
   RefreshCw,
-  Sparkles,
   Building2,
   ChevronRight,
   Check,
@@ -354,58 +353,50 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
   };
 
   return (
-    <section className="py-8 sm:py-12 max-w-3xl mx-auto px-4 sm:px-6 animate-fade-in text-slate-800 font-sans">
+    <section className="py-8 sm:py-12 max-w-[460px] mx-auto px-4 animate-fade-in text-slate-800 font-sans">
       {/* Top Breadcrumb & Status Pill */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-5 flex items-center justify-between gap-3 text-xs">
         <button
           onClick={onBackToPublic}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#c2410c] transition-colors cursor-pointer group"
+          className="inline-flex items-center gap-1.5 font-medium text-slate-500 hover:text-[#c2410c] transition-colors cursor-pointer group"
         >
-          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+          <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
           <span>Kembali ke Halaman Warga</span>
         </button>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-[11px] font-semibold text-amber-900 shadow-2xs">
-          <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-          <span>Mode Demonstrasi Aktif</span>
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/70 text-[10.5px] font-semibold text-amber-900">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+          <span>Mode Demonstrasi</span>
         </div>
       </div>
 
       {/* Main Login Card with Clean Modern Elevation */}
-      <div className="relative rounded-2xl bg-white border border-slate-200/90 shadow-[0_12px_40px_-8px_rgba(15,23,42,0.06)] overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200/90 shadow-[0_12px_40px_-8px_rgba(15,23,42,0.08)] overflow-hidden">
         {/* Subtle Top Accent Gradient Line */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#c2410c] via-orange-500 to-amber-500" />
 
-        {/* Card Header */}
-        <div className="p-6 sm:p-8 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 via-white to-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c2410c] to-amber-500 text-white shadow-md shadow-orange-500/20 flex items-center justify-center shrink-0">
-                <HardHat className="w-6 h-6 text-white" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
-                    Portal Kerja Penyelenggara Jalan
-                  </h1>
-                </div>
-                <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
-                  Sistem informasi aparatur dinas untuk verifikasi laporan lapangan, pembaruan progres fisik, dan transparansi pelayanan publik.
-                </p>
-              </div>
-            </div>
+        {/* Card Header - Centered */}
+        <div className="p-6 sm:p-7 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 via-white to-white flex flex-col items-center text-center">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#c2410c] to-amber-500 text-white shadow-md shadow-orange-500/20 flex items-center justify-center mb-3">
+            <HardHat className="w-6 h-6 text-white" />
           </div>
+          <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
+            Portal Kerja Penyelenggara Jalan
+          </h1>
+          <p className="text-xs text-slate-500 leading-relaxed mt-1.5 max-w-xs">
+            Sistem informasi aparatur dinas untuk verifikasi laporan lapangan, pembaruan progres fisik, dan transparansi pelayanan publik.
+          </p>
 
-          {/* Modern Segmented Tab Switcher */}
-          <div className="mt-6 flex items-center justify-start">
-            <div className="grid grid-cols-2 p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 w-full sm:w-auto min-w-[300px]">
+          {/* Modern Segmented Tab Switcher - Centered Full Width */}
+          <div className="mt-5 w-full">
+            <div className="grid grid-cols-2 p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 w-full">
               <button
                 type="button"
                 onClick={() => {
                   setActiveMode("email-otp");
                   setErrorMessage("");
                 }}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeMode === "email-otp"
                     ? "bg-white text-slate-900 shadow-xs border border-slate-200/60"
                     : "text-slate-500 hover:text-slate-900"
@@ -420,7 +411,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   setActiveMode("nip-password");
                   setErrorMessage("");
                 }}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeMode === "nip-password"
                     ? "bg-white text-slate-900 shadow-xs border border-slate-200/60"
                     : "text-slate-500 hover:text-slate-900"
@@ -434,7 +425,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         </div>
 
         {/* Card Body */}
-        <div className="p-6 sm:p-8 max-w-lg mx-auto space-y-6">
+        <div className="p-6 sm:p-7 space-y-5">
           {/* Error Notification */}
           {errorMessage && (
             <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2.5 animate-shake">
@@ -562,9 +553,9 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   </div>
 
                   {/* Simulation Helper Pill */}
-                  <div className="p-3 rounded-xl bg-orange-50/80 border border-orange-200/70 flex items-center justify-between gap-2 text-xs">
+                  <div className="p-2.5 rounded-xl bg-orange-50/80 border border-orange-200/70 flex items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#c2410c] shrink-0" />
+                      <KeyRound className="w-4 h-4 text-[#c2410c] shrink-0" />
                       <span className="text-[11.5px] text-slate-700">
                         Kode OTP Demo: <strong className="font-mono text-slate-900 font-bold">{generatedOtp}</strong>
                       </span>
@@ -701,94 +692,73 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         </div>
 
         {/* Legal & Trust Footer */}
-        <div className="bg-slate-50/80 px-6 py-3.5 border-t border-slate-100 text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-sans">
+        <div className="bg-slate-50/80 px-6 py-3 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between gap-2 font-sans">
           <div className="flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span>Enkripsi Sesi TLS 1.3 • Audit Trail Digital</span>
+            <span>Enkripsi Sesi TLS 1.3</span>
           </div>
-          <span className="text-slate-400">JagaJalan InfrasTrace • Mode Demonstrasi Aktif</span>
+          <span className="text-slate-400">Mode Demonstrasi Aktif</span>
         </div>
       </div>
 
       {/* ========================================================================= */}
       {/* SECTION DI BAWAHNYA: AKSES CEPAT PENGUJIAN 1-KLIK (JURI & EVALUATOR)      */}
       {/* ========================================================================= */}
-      <div className="mt-8 pt-6 border-t border-slate-200">
-        <div className="text-center max-w-xl mx-auto mb-5 space-y-1">
-          <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-orange-100/70 text-[#c2410c] text-[10.5px] font-bold tracking-wide uppercase mb-1">
-            <Sparkles className="w-3 h-3" />
-            <span>Uji Coba 1-Klik</span>
-          </div>
-          <h2 className="text-base sm:text-lg font-bold font-heading text-slate-900">
+      <div className="mt-7 pt-5 border-t border-slate-200/80">
+        <div className="text-center mb-3.5 space-y-0.5">
+          <h2 className="text-sm font-bold font-heading text-slate-900">
             Akses Cepat Pengujian Portal Dinas
           </h2>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Pilih tingkatan wewenang dinas di bawah ini untuk langsung mencoba alur verifikasi laporan dan progres fisik:
+          <p className="text-[11px] text-slate-500">
+            Pilih tingkatan wewenang dinas untuk langsung menguji sistem:
           </p>
         </div>
 
-        {/* 3 Interactive Cards Grid (Nasional, Provinsi, Kota/Kabupaten) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+        {/* 3 Interactive Cards (Nasional, Provinsi, Kota/Kabupaten) */}
+        <div className="space-y-2">
           {OFFICIAL_OFFICERS.slice(0, 3).map((officer) => {
             const isNasional = officer.authorityLevel === "NASIONAL";
             const isProvinsi = officer.authorityLevel === "PROVINSI";
 
             return (
-              <div
+              <button
                 key={officer.id}
+                type="button"
                 onClick={() => handleInstantDemoLogin(officer)}
-                className="bg-white rounded-xl p-4.5 border border-slate-200 hover:border-orange-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
+                className="w-full bg-white hover:bg-slate-50/80 rounded-xl p-3 border border-slate-200 hover:border-orange-300 hover:shadow-xs transition-all cursor-pointer group flex items-center justify-between text-left font-sans"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
-                        isNasional
-                          ? "bg-blue-50 text-blue-800 border border-blue-200"
-                          : isProvinsi
-                          ? "bg-purple-50 text-purple-800 border border-purple-200"
-                          : "bg-teal-50 text-teal-800 border border-teal-200"
-                      }`}
-                    >
-                      Tingkat {officer.authorityLevel}
-                    </span>
-                    <span className="text-[10.5px] font-bold text-slate-400 group-hover:text-[#c2410c] transition-colors flex items-center gap-1">
-                      <span>1-Klik</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                    </span>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
+                    {officer.avatar}
                   </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
-                      {officer.avatar}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-xs text-slate-900 group-hover:text-[#c2410c] transition-colors line-clamp-1">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="font-bold text-xs text-slate-900 group-hover:text-[#c2410c] transition-colors truncate">
                         {officer.name}
                       </h3>
-                      <p className="text-[10.5px] text-slate-500 font-sans line-clamp-2 mt-0.5">
-                        {officer.institution}
-                      </p>
+                      <span
+                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider shrink-0 ${
+                          isNasional
+                            ? "bg-blue-50 text-blue-700 border border-blue-200"
+                            : isProvinsi
+                            ? "bg-purple-50 text-purple-700 border border-purple-200"
+                            : "bg-teal-50 text-teal-700 border border-teal-200"
+                        }`}
+                      >
+                        {officer.authorityLevel}
+                      </span>
                     </div>
-                  </div>
-
-                  <div className="p-2.5 rounded-lg bg-slate-50 text-[10px] text-slate-600 border border-slate-100 space-y-1">
-                    <div className="flex items-center justify-between text-slate-500">
-                      <span>ID Akun:</span>
-                      <strong className="text-slate-900 font-mono">{officer.id}</strong>
-                    </div>
-                    <div className="flex items-center justify-between text-slate-500">
-                      <span>Wewenang:</span>
-                      <strong className="text-slate-800">{officer.authorityLabel}</strong>
-                    </div>
+                    <p className="text-[10.5px] text-slate-500 truncate mt-0.5">
+                      {officer.institution}
+                    </p>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#c2410c] group-hover:translate-x-0.5 transition-transform">
-                  <span>Masuk sebagai {officer.name}</span>
+                <div className="shrink-0 pl-2 flex items-center gap-1 text-[11px] font-bold text-[#c2410c] opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+                  <span className="hidden sm:inline text-[10.5px]">Masuk</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

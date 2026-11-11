@@ -18,7 +18,6 @@ import {
   ChevronRight,
   Eye,
   RefreshCw,
-  Sparkles,
   AlertCircle,
   Activity,
   ArrowUpDown,

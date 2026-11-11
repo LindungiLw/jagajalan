@@ -26,7 +26,6 @@ import {
   LayoutGrid,
   List,
   MapPin,
-  Sparkles,
 } from "lucide-react";
 
 // Preset photos of finished road repairs for rapid pitching demonstration
