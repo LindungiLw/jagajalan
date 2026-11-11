@@ -131,46 +131,15 @@ export default function Navbar({
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    const HERO_THRESHOLD = 400; // Batas area hero section
-    const IDLE_DELAY_MS = 2500; // 2.5 detik idle sebelum sembunyi otomatis
-
-    // Fungsi jadwal sembunyi jika berada di luar hero section
-    const scheduleHide = () => {
-      if (idleTimerRef.current) {
-        clearTimeout(idleTimerRef.current);
-        idleTimerRef.current = null;
-      }
-
-      // Jangan sembunyikan jika masih di dalam hero section, sedang hover navbar, atau drawer terbuka
-      if (
-        (typeof window !== "undefined" && window.scrollY < HERO_THRESHOLD) ||
-        isHoveredRef.current ||
-        notifOpenRef.current ||
-        mobileMenuOpenRef.current
-      ) {
-        setNavbarVisibility(true);
-        return;
-      }
-
-      idleTimerRef.current = setTimeout(() => {
-        if (
-          typeof window !== "undefined" &&
-          window.scrollY >= HERO_THRESHOLD &&
-          !isHoveredRef.current &&
-          !notifOpenRef.current &&
-          !mobileMenuOpenRef.current
-        ) {
-          setNavbarVisibility(false);
-        }
-      }, IDLE_DELAY_MS);
-    };
+    // Ambang batas Hero Section (paling atas) di mana navbar selalu tampil
+    const HERO_THRESHOLD = 280;
+    // Waktu tunggu saat berhenti scroll sebelum navbar otomatis sembunyi (1.3 detik)
+    const STOP_SCROLL_IDLE_DELAY = 1300;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollYRef.current;
-      lastScrollYRef.current = currentScrollY;
 
-      // 1. Di dalam Hero Section (paling atas): selalu tampil
+      // 1. Di dalam Hero Section (paling atas): selalu tampil, bersihkan timer sembunyi
       if (currentScrollY < HERO_THRESHOLD) {
         if (idleTimerRef.current) {
           clearTimeout(idleTimerRef.current);
@@ -180,60 +149,43 @@ export default function Navbar({
         return;
       }
 
-      // 2. Di luar Hero Section & scroll ke BAWAH (> 6px): sembunyikan langsung
-      if (delta > 6) {
-        if (!isHoveredRef.current && !notifOpenRef.current && !mobileMenuOpenRef.current) {
-          if (idleTimerRef.current) {
-            clearTimeout(idleTimerRef.current);
-            idleTimerRef.current = null;
-          }
+      // 2. Di luar Hero Section:
+      // Setiap kali user scroll (ada aksi scroll) -> langsung tampilkan navbar!
+      setNavbarVisibility(true);
+
+      // Bersihkan timer idle sebelumnya
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = null;
+      }
+
+      // Pasang timer: jika berhenti scroll (tidak ada aksi scroll selama 1.3s), otomatis sembunyi
+      idleTimerRef.current = setTimeout(() => {
+        // Jangan sembunyikan jika kursor sedang hover di navbar, atau dropdown notif/menu sedang terbuka
+        if (
+          !isHoveredRef.current &&
+          !notifOpenRef.current &&
+          !mobileMenuOpenRef.current &&
+          window.scrollY >= HERO_THRESHOLD
+        ) {
           setNavbarVisibility(false);
         }
-        return;
-      }
-
-      // 3. Di luar Hero Section & scroll ke ATAS (<-6px): langsung munculkan & pasang idle timer
-      if (delta < -6) {
-        setNavbarVisibility(true);
-        scheduleHide();
-      }
+      }, STOP_SCROLL_IDLE_DELAY);
     };
 
-    const handleMouseMove = (e) => {
-      // Jika kursor mendekati area navbar atas (<= 90px): selalu tampilkan
-      if (e.clientY <= 90) {
+    // Deteksi jika kursor diarahkan ke area tepi paling atas layar (<= 45px) untuk reveal manual
+    const handleTopEdgeHover = (e) => {
+      if (e.clientY <= 45) {
         setNavbarVisibility(true);
-        if (idleTimerRef.current) {
-          clearTimeout(idleTimerRef.current);
-          idleTimerRef.current = null;
-        }
-        return;
-      }
-
-      // Di luar hero section: jika ada pergerakan kursor mouse, munculkan navbar
-      if (typeof window !== "undefined" && window.scrollY >= HERO_THRESHOLD) {
-        setNavbarVisibility(true);
-        scheduleHide();
-      }
-    };
-
-    const handleClickOrTouch = () => {
-      if (typeof window !== "undefined" && window.scrollY >= HERO_THRESHOLD) {
-        setNavbarVisibility(true);
-        scheduleHide();
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("mousedown", handleClickOrTouch, { passive: true });
-    window.addEventListener("touchstart", handleClickOrTouch, { passive: true });
+    window.addEventListener("mousemove", handleTopEdgeHover, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleClickOrTouch);
-      window.removeEventListener("touchstart", handleClickOrTouch);
+      window.removeEventListener("mousemove", handleTopEdgeHover);
       if (idleTimerRef.current) {
         clearTimeout(idleTimerRef.current);
       }

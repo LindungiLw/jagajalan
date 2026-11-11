@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   ExternalLink,
@@ -40,12 +41,26 @@ export default function RoadDetailModal({
   onOpenOmbudsmanDraft,
   onOpenReportModal,
 }) {
-  if (!isOpen || !road) return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   // Reports associated with this road
-  const roadReports = reports.filter((r) => r.roadSegmentId === road.id);
+  const roadReports = reports.filter((r) => r.roadSegmentId === road?.id);
   const overdueReports = roadReports.filter((r) => r.status === "OVERDUE");
-  const budget = road.budget;
+  const budget = road?.budget;
 
   // Financial calculations
   const paguRp = Number(budget?.paguRp) || 0;
@@ -53,6 +68,8 @@ export default function RoadDetailModal({
   const efficiencyRp = paguRp > contractValueRp ? paguRp - contractValueRp : 0;
   const efficiencyPct = paguRp > 0 ? ((efficiencyRp / paguRp) * 100).toFixed(1) : "0.0";
   const progressPct = typeof budget?.progressPct === "number" ? budget.progressPct : null;
+
+  if (!isOpen || !road || !mounted) return null;
 
   const roadAuditRows = [
     {
@@ -190,10 +207,15 @@ export default function RoadDetailModal({
       ? { label: "Pencocokan Parsial", color: "bg-amber-50 text-amber-800 border-amber-200/80" }
       : { label: "Belum Ditemukan Paket", color: "bg-slate-100 text-slate-700 border-slate-200/80" };
 
-  return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 md:p-6 bg-slate-900/65 backdrop-blur-sm animate-fade-in font-sans overflow-y-auto">
+      <div
+        className="fixed inset-0 -z-10"
+        onClick={onClose}
+        aria-label="Tutup modal"
+      />
       {/* Outer Shell with Double Bezel */}
-      <div className="rounded-[10px] bg-slate-100/90 p-1.5 sm:p-2 ring-1 ring-slate-300/80 w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div className="my-auto rounded-[10px] bg-slate-100/95 p-1.5 sm:p-2 ring-1 ring-slate-300/80 w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative z-10">
         <div className="relative w-full flex-1 flex flex-col rounded-[8px] bg-white shadow-xl overflow-hidden">
           
           {/* Top Authority Color Accent Line */}
@@ -671,4 +693,6 @@ export default function RoadDetailModal({
       </div>
     </div>
   );
+
+  return typeof document !== "undefined" ? createPortal(modalContent, document.body) : null;
 }
