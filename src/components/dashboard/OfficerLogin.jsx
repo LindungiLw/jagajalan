@@ -108,13 +108,12 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
 
     const trimmed = emailInput.trim().toLowerCase();
     if (!trimmed || !trimmed.includes("@") || !trimmed.includes(".")) {
-      setErrorMessage("Silakan masukkan alamat email yang valid (contoh: petugas@pu.go.id).");
+      setErrorMessage("Silakan masukkan alamat email yang valid (contoh: petugas.demo@jagajalan.id).");
       return;
     }
 
     setIsLoading(true);
 
-    // Generate random realistic OTP or keep demo standard
     const newCode = String(Math.floor(100000 + Math.random() * 900000));
     setGeneratedOtp(newCode);
 
@@ -124,13 +123,12 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       setOtpDigits(["", "", "", "", "", ""]);
       setResendTimer(60);
       setCanResend(false);
-      setSuccessNotice(`Kode OTP 6-digit telah dikirim ke ${trimmed}`);
-    }, 600);
+      setSuccessNotice(`Kode OTP 6-digit verifikasi dikirim ke ${trimmed}`);
+    }, 550);
   };
 
   // Handle OTP Digit Input
   const handleOtpChange = (index, value) => {
-    // Only accept single digit
     const cleaned = value.replace(/\D/g, "");
     if (!cleaned) {
       const next = [...otpDigits];
@@ -140,10 +138,9 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }
 
     const next = [...otpDigits];
-    next[index] = cleaned[cleaned.length - 1]; // take last char
+    next[index] = cleaned[cleaned.length - 1];
     setOtpDigits(next);
 
-    // Auto-advance to next input box
     if (index < 5 && cleaned) {
       otpInputRefs.current[index + 1]?.focus();
     }
@@ -192,26 +189,23 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     setTimeout(() => {
       setIsLoading(false);
 
-      // Verify code
       if (enteredCode !== generatedOtp && enteredCode !== "829104") {
         setErrorMessage("Kode OTP yang Anda masukkan salah atau telah kedaluwarsa. Silakan periksa kembali.");
         return;
       }
 
-      // Check if email matches an existing official officer
       const cleanEmail = emailInput.trim().toLowerCase();
       const matched = OFFICIAL_OFFICERS.find((o) => o.email.toLowerCase() === cleanEmail);
 
       let officerPayload = matched;
 
-      // If custom/new email, dynamically create a demo officer persona
       if (!officerPayload) {
         officerPayload = {
           id: "DEMO-001",
           nip: "DEMO-001",
           email: cleanEmail,
           name: "Petugas Demo",
-          title: "Inspektur Pelaporan & Penanganan Preservasi Jalan (Mode Demonstrasi)",
+          title: "Inspektur Pelaporan & Preservasi Jalan (Mode Demonstrasi)",
           institution: "Simulasi Satuan Tugas Penyelenggara Jalan",
           authorityLevel: "NASIONAL",
           authorityLabel: "Jalan Nasional (Mode Demo)",
@@ -223,7 +217,6 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         };
       }
 
-      // Store in session
       if (typeof window !== "undefined") {
         try {
           localStorage.setItem("jagajalan_officer_session", JSON.stringify(officerPayload));
@@ -233,7 +226,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       }
 
       onLoginSuccess(officerPayload);
-    }, 600);
+    }, 550);
   };
 
   // Handle Google SSO
@@ -275,7 +268,6 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       console.warn("Firebase popup skipped or not configured:", err);
     }
 
-    // Fallback: Open realistic Google Account Selector Modal
     setIsLoading(false);
     setShowGoogleModal(true);
   };
@@ -299,7 +291,8 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         jurisdiction: presetAccount.jurisdiction,
         badgeColor: presetAccount.badgeColor,
         avatar: presetAccount.avatar,
-        activeSince: presetAccount.activeSince,
+        status: presetAccount.status || "Mode Demonstrasi Aktif",
+        activeSince: presetAccount.activeSince || "Simulasi 2026",
       };
 
       if (typeof window !== "undefined") {
@@ -331,7 +324,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }, 400);
   };
 
-  // 1-Click Instant Demo Login (From Bottom Section)
+  // 1-Click Instant Demo Login
   const handleInstantDemoLogin = (officer) => {
     setIsLoading(true);
     setErrorMessage("");
@@ -349,370 +342,388 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }, 300);
   };
 
+  const handleAutofillDemoEmail = () => {
+    setEmailInput("petugas.demo@jagajalan.id");
+    setErrorMessage("");
+  };
+
+  const handleAutofillDemoNip = () => {
+    setIdentifier("DEMO-001");
+    setPassword("jagajalan2026");
+    setErrorMessage("");
+  };
+
   return (
     <section className="py-8 sm:py-12 max-w-3xl mx-auto px-4 sm:px-6 animate-fade-in text-slate-800 font-sans">
-      {/* Back Link */}
-      <div className="mb-4">
+      {/* Top Breadcrumb & Status Pill */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <button
           onClick={onBackToPublic}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#c2410c] transition-colors cursor-pointer group"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Kembali ke Halaman Publik (Warga)</span>
+          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+          <span>Kembali ke Halaman Warga</span>
         </button>
+
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-[11px] font-semibold text-amber-900 shadow-2xs">
+          <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+          <span>Mode Demonstrasi Aktif</span>
+        </div>
       </div>
 
-      {/* Main Single Login Card (Double-Bezel Architecture) */}
-      <div className="rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50">
-        <div className="bg-white rounded-[6px] shadow-[0_2px_14px_-4px_rgba(15,23,42,0.04)] overflow-hidden">
-          
-          {/* Institutional Header Banner */}
-          <div className="bg-white p-6 sm:p-7 border-b border-slate-100">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-[6px] bg-orange-50/80 p-2.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/icon/profile.png"
-                    alt="Akses Petugas"
-                    width={36}
-                    height={36}
-                    style={{ width: "36px", height: "36px" }}
-                    className="w-9 h-9 object-contain"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
+      {/* Main Login Card with Clean Modern Elevation */}
+      <div className="relative rounded-2xl bg-white border border-slate-200/90 shadow-[0_12px_40px_-8px_rgba(15,23,42,0.06)] overflow-hidden">
+        {/* Subtle Top Accent Gradient Line */}
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#c2410c] via-orange-500 to-amber-500" />
+
+        {/* Card Header */}
+        <div className="p-6 sm:p-8 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 via-white to-white">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c2410c] to-amber-500 text-white shadow-md shadow-orange-500/20 flex items-center justify-center shrink-0">
+                <HardHat className="w-6 h-6 text-white" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
                     Portal Kerja Penyelenggara Jalan
                   </h1>
-                  <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-                    Sistem informasi aparatur dinas untuk verifikasi laporan lapangan, pembaruan status pengerjaan fisik, dan monitoring tenggat waktu pelayanan publik.
-                  </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Login Method Toggle Pills */}
-            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center sm:justify-start">
-              <div className="inline-flex items-center p-1 bg-slate-100/80 rounded-full ring-1 ring-slate-200/70">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveMode("email-otp");
-                    setErrorMessage("");
-                  }}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                    activeMode === "email-otp"
-                      ? "bg-white text-slate-900 shadow-2xs ring-1 ring-slate-200/60"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-[#c2410c]" />
-                    <span>Email & Kode OTP</span>
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveMode("nip-password");
-                    setErrorMessage("");
-                  }}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                    activeMode === "nip-password"
-                      ? "bg-white text-slate-900 shadow-2xs ring-1 ring-slate-200/60"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-slate-500" />
-                    <span>NIP & Kata Sandi</span>
-                  </span>
-                </button>
+                <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
+                  Sistem informasi aparatur dinas untuk verifikasi laporan lapangan, pembaruan progres fisik, dan transparansi pelayanan publik.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Form Card Content */}
-          <div className="p-6 sm:p-8 max-w-lg mx-auto space-y-6">
-
-            {/* Error Notification */}
-            {errorMessage && (
-              <div className="p-3.5 rounded-[6px] bg-rose-50/80 ring-1 ring-rose-200/70 text-rose-800 text-xs flex items-center gap-2.5 animate-shake">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-                <span>{errorMessage}</span>
-              </div>
-            )}
-
-            {/* Success Notice */}
-            {successNotice && (
-              <div className="p-3.5 rounded-[6px] bg-emerald-50/80 ring-1 ring-emerald-200/70 text-emerald-800 text-xs flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                <span>{successNotice}</span>
-              </div>
-            )}
-
-            {/* 1. Google SSO Button (Primary 1-Click Option) */}
-            <div className="space-y-3">
+          {/* Modern Segmented Tab Switcher */}
+          <div className="mt-6 flex items-center justify-start">
+            <div className="grid grid-cols-2 p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 w-full sm:w-auto min-w-[300px]">
               <button
                 type="button"
-                disabled={isLoading}
-                onClick={handleGoogleLogin}
-                className="w-full inline-flex items-center justify-center gap-3 px-4 py-2.5 rounded-[6px] text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-300/80 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-60 active:scale-[0.99] group"
+                onClick={() => {
+                  setActiveMode("email-otp");
+                  setErrorMessage("");
+                }}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  activeMode === "email-otp"
+                    ? "bg-white text-slate-900 shadow-xs border border-slate-200/60"
+                    : "text-slate-500 hover:text-slate-900"
+                }`}
               >
-                <GoogleIcon className="w-4 h-4 shrink-0" />
-                <span>Masuk dengan Akun Google (SSO Pemerintah)</span>
+                <Mail className={`w-3.5 h-3.5 ${activeMode === "email-otp" ? "text-[#c2410c]" : "text-slate-400"}`} />
+                <span>Email &amp; Kode OTP</span>
               </button>
-
-              {/* Divider with Text */}
-              <div className="relative flex items-center justify-center my-4">
-                <div className="border-t border-slate-200 w-full" />
-                <span className="bg-white px-3 text-[11px] font-semibold text-slate-600 uppercase tracking-wider shrink-0 font-sans">
-                  atau melalui {activeMode === "email-otp" ? "email dinas" : "NIP ASN"}
-                </span>
-                <div className="border-t border-slate-200 w-full" />
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveMode("nip-password");
+                  setErrorMessage("");
+                }}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  activeMode === "nip-password"
+                    ? "bg-white text-slate-900 shadow-xs border border-slate-200/60"
+                    : "text-slate-500 hover:text-slate-900"
+                }`}
+              >
+                <Lock className={`w-3.5 h-3.5 ${activeMode === "nip-password" ? "text-[#c2410c]" : "text-slate-400"}`} />
+                <span>ID Demo &amp; Sandi</span>
+              </button>
             </div>
+          </div>
+        </div>
 
-            {/* 2. MODE: Email & OTP */}
-            {activeMode === "email-otp" && (
-              <div className="space-y-4">
-                {otpStep === "input-email" ? (
-                  /* Step 1: Input Email */
-                  <form onSubmit={handleSendOtp} className="space-y-4">
-                    <div className="space-y-1.5">
+        {/* Card Body */}
+        <div className="p-6 sm:p-8 max-w-lg mx-auto space-y-6">
+          {/* Error Notification */}
+          {errorMessage && (
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2.5 animate-shake">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Success Notice */}
+          {successNotice && (
+            <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span>{successNotice}</span>
+            </div>
+          )}
+
+          {/* 1. Google SSO Button (Sleek Modern White Card) */}
+          <div className="space-y-4">
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={handleGoogleLogin}
+              className="w-full inline-flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-60 active:scale-[0.99] group"
+            >
+              <GoogleIcon className="w-4 h-4 shrink-0" />
+              <span>Masuk dengan Akun Google (SSO Pemerintah)</span>
+            </button>
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center my-3">
+              <div className="border-t border-slate-200 w-full" />
+              <span className="bg-white px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0 font-sans">
+                atau melalui {activeMode === "email-otp" ? "email dinas" : "ID akun demo"}
+              </span>
+              <div className="border-t border-slate-200 w-full" />
+            </div>
+          </div>
+
+          {/* 2. MODE: Email & OTP */}
+          {activeMode === "email-otp" && (
+            <div className="space-y-4">
+              {otpStep === "input-email" ? (
+                /* Step 1: Input Email */
+                <form onSubmit={handleSendOtp} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-slate-700 block">
                         Alamat Email Kedinasan / Akun Uji Coba Demo
                       </label>
-                      <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                        <input
-                          type="email"
-                          required
-                          value={emailInput}
-                          onChange={(e) => setEmailInput(e.target.value)}
-                          placeholder="contoh: petugas.demo@jagajalan.id atau email juri"
-                          className="w-full pl-9 pr-3 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
-                        />
-                      </div>
-                      <p className="text-[11px] text-slate-600">
-                        Mode Demonstrasi: Masukkan <code>petugas.demo@jagajalan.id</code> atau gunakan akses 1-klik di bawah.
-                      </p>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-60 shadow-sm transition-all cursor-pointer active:scale-[0.99] font-sans"
-                    >
-                      {isLoading ? (
-                        <>
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                          <span>Mengirim Kode OTP...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Kirim Kode OTP Masuk</span>
-                          <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                            <ArrowRight className="w-3 h-3 text-white" />
-                          </span>
-                        </>
-                      )}
-                    </button>
-                  </form>
-                ) : (
-                  /* Step 2: Enter 6-Digit OTP */
-                  <form onSubmit={handleVerifyOtp} className="space-y-5 animate-fade-in">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-700">Masukkan 6-Digit Kode OTP:</span>
                       <button
                         type="button"
-                        onClick={() => {
-                          setOtpStep("input-email");
-                          setErrorMessage("");
-                        }}
-                        className="text-[11px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                        onClick={handleAutofillDemoEmail}
+                        className="text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
                       >
-                        ← Ubah Email
+                        Gunakan Akun Demo
                       </button>
                     </div>
 
-                    {/* Interactive 6-Digit Input Boxes */}
-                    <div className="flex items-center justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
-                      {otpDigits.map((digit, idx) => (
-                        <input
-                          key={idx}
-                          ref={(el) => (otpInputRefs.current[idx] = el)}
-                          type="text"
-                          maxLength={1}
-                          inputMode="numeric"
-                          value={digit}
-                          onChange={(e) => handleOtpChange(idx, e.target.value)}
-                          onKeyDown={(e) => handleOtpKeyDown(idx, e.key)}
-                          className="w-10 sm:w-12 h-12 sm:h-13 text-center text-lg sm:text-xl font-bold font-mono text-slate-900 bg-slate-50/80 rounded-[6px] ring-1 ring-slate-300 focus:ring-2 focus:ring-[#c2410c] focus:bg-white focus:outline-none transition-all"
-                        />
-                      ))}
+                    <div className="relative">
+                      <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="email"
+                        required
+                        value={emailInput}
+                        onChange={(e) => setEmailInput(e.target.value)}
+                        placeholder="contoh: petugas.demo@jagajalan.id atau email juri"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50/70 hover:bg-white focus:bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all font-sans border border-slate-200 focus:border-[#c2410c] focus:ring-4 focus:ring-orange-500/10"
+                      />
                     </div>
-
-                    {/* Simulation Helper Pill (Effortless Testing for Judges) */}
-                    <div className="p-3 rounded-[6px] bg-orange-50/90 ring-1 ring-orange-200/60 flex items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#c2410c] shrink-0" />
-                        <span className="text-[11px] text-slate-700">
-                          Kode OTP Simulasi: <strong className="font-mono text-slate-900">{generatedOtp}</strong>
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleFillDemoOtp}
-                        className="px-2.5 py-1 rounded-[4px] text-[10px] font-bold bg-[#c2410c] text-white hover:bg-[#9a3412] transition-colors cursor-pointer shrink-0"
-                      >
-                        Isi Cepat
-                      </button>
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
+                      <span>Mode Demonstrasi: Akun otomatis terverifikasi.</span>
                     </div>
-
-                    {/* Resend Timer */}
-                    <div className="flex items-center justify-between text-xs text-slate-500 font-sans">
-                      <span>Tidak menerima kode?</span>
-                      {canResend ? (
-                        <button
-                          type="button"
-                          onClick={(e) => handleSendOtp(e)}
-                          className="font-bold text-[#c2410c] hover:underline cursor-pointer flex items-center gap-1"
-                        >
-                          <RefreshCw className="w-3 h-3" />
-                          <span>Kirim Ulang OTP</span>
-                        </button>
-                      ) : (
-                        <span className="text-slate-400 font-mono text-[11px]">
-                          Kirim ulang dalam ({resendTimer}s)
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Verify & Enter Button */}
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-60 shadow-sm transition-all cursor-pointer active:scale-[0.99] font-sans"
-                    >
-                      {isLoading ? (
-                        <>
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                          <span>Memverifikasi Kode OTP...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Verifikasi & Masuk ke Panel Kerja</span>
-                          <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                            <ArrowRight className="w-3 h-3 text-white" />
-                          </span>
-                        </>
-                      )}
-                    </button>
-                  </form>
-                )}
-              </div>
-            )}
-
-            {/* 3. MODE: Classic NIP & Password */}
-            {activeMode === "nip-password" && (
-              <form onSubmit={handleNipSubmit} className="space-y-4">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-700 block">
-                      ID Akun Demo / NIP Petugas
-                    </label>
-                    <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">
-                      Gunakan: DEMO-001
-                    </span>
                   </div>
-                  <div className="relative">
-                    <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      required
-                      value={identifier}
-                      onChange={(e) => setIdentifier(e.target.value)}
-                      placeholder="Contoh: DEMO-001"
-                      className="w-full pl-9 pr-3 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans tabular-nums ring-1 ring-slate-200/70 focus:ring-orange-500/30"
-                    />
-                  </div>
-                </div>
 
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-700 block">
-                      Kata Sandi Keamanan
-                    </label>
-                    <span className="text-[10px] text-slate-400 font-sans">Default: jagajalan2026</span>
-                  </div>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••••••"
-                      className="w-full pl-9 pr-10 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
-                    />
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c2410c] to-[#ea580c] hover:from-[#9a3412] hover:to-[#c2410c] disabled:opacity-60 shadow-sm shadow-orange-500/20 hover:shadow-md transition-all cursor-pointer active:scale-[0.99] font-sans"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        <span>Mengirim Kode OTP...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Kirim Kode OTP Masuk</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                /* Step 2: Enter 6-Digit OTP */
+                <form onSubmit={handleVerifyOtp} className="space-y-5 animate-fade-in">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-700">Masukkan 6-Digit Kode OTP:</span>
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                      onClick={() => {
+                        setOtpStep("input-email");
+                        setErrorMessage("");
+                      }}
+                      className="text-[11px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      ← Ubah Email
                     </button>
                   </div>
-                </div>
 
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] disabled:opacity-60 shadow-sm transition-all cursor-pointer active:scale-[0.99] font-sans"
-                >
-                  {isLoading ? (
-                    <span>Memverifikasi Kredensial...</span>
-                  ) : (
-                    <>
-                      <span>Masuk dengan NIP</span>
-                      <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                        <ArrowRight className="w-3 h-3 text-white" />
+                  {/* Interactive 6-Digit Input Boxes */}
+                  <div className="flex items-center justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
+                    {otpDigits.map((digit, idx) => (
+                      <input
+                        key={idx}
+                        ref={(el) => (otpInputRefs.current[idx] = el)}
+                        type="text"
+                        maxLength={1}
+                        inputMode="numeric"
+                        value={digit}
+                        onChange={(e) => handleOtpChange(idx, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(idx, e.key)}
+                        className="w-10 sm:w-12 h-12 sm:h-13 text-center text-lg sm:text-xl font-bold font-mono text-slate-900 bg-slate-50/80 rounded-xl border border-slate-300 focus:border-[#c2410c] focus:ring-4 focus:ring-orange-500/10 focus:bg-white focus:outline-none transition-all"
+                      />
+                    ))}
+                  </div>
+
+                  {/* Simulation Helper Pill */}
+                  <div className="p-3 rounded-xl bg-orange-50/80 border border-orange-200/70 flex items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#c2410c] shrink-0" />
+                      <span className="text-[11.5px] text-slate-700">
+                        Kode OTP Demo: <strong className="font-mono text-slate-900 font-bold">{generatedOtp}</strong>
                       </span>
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleFillDemoOtp}
+                      className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-[#c2410c] text-white hover:bg-[#9a3412] transition-colors cursor-pointer shrink-0"
+                    >
+                      Isi Cepat
+                    </button>
+                  </div>
 
-            {/* Security Footnote */}
-            <div className="pt-2 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5 font-sans">
-              <KeyRound className="w-3.5 h-3.5 text-[#c2410c]" />
-              <span>Setiap sesi pengerjaan terekam pada Audit Trail Digital berbasis UU No. 25/2009</span>
+                  {/* Resend Timer */}
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-sans">
+                    <span>Tidak menerima kode?</span>
+                    {canResend ? (
+                      <button
+                        type="button"
+                        onClick={(e) => handleSendOtp(e)}
+                        className="font-bold text-[#c2410c] hover:underline cursor-pointer flex items-center gap-1"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        <span>Kirim Ulang OTP</span>
+                      </button>
+                    ) : (
+                      <span className="text-slate-400 font-mono text-[11px]">
+                        Kirim ulang dalam ({resendTimer}s)
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Verify & Enter Button */}
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c2410c] to-[#ea580c] hover:from-[#9a3412] hover:to-[#c2410c] disabled:opacity-60 shadow-sm shadow-orange-500/20 hover:shadow-md transition-all cursor-pointer active:scale-[0.99] font-sans"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        <span>Memverifikasi Kode OTP...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Verifikasi &amp; Masuk ke Portal Kerja</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
             </div>
-          </div>
+          )}
 
-          {/* Legal Disclaimer Footer */}
-          <div className="bg-slate-50/80 px-6 py-3.5 border-t border-slate-100 text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <span>
-              Landasan Hukum: <strong>UU No. 20/2023 (ASN)</strong> • <strong>UU No. 25/2009 (Pelayanan Publik)</strong>
-            </span>
-            <span className="font-sans text-slate-400">JagaJalan InfrasTrace • Enkripsi Sesi TLS 1.3</span>
+          {/* 3. MODE: Classic NIP & Password */}
+          {activeMode === "nip-password" && (
+            <form onSubmit={handleNipSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 block">
+                    ID Akun Demo / NIP Petugas
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleAutofillDemoNip}
+                    className="text-[10.5px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
+                  >
+                    Isi Otomatis (DEMO-001)
+                  </button>
+                </div>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    required
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder="Contoh: DEMO-001"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50/70 hover:bg-white focus:bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all font-sans tabular-nums border border-slate-200 focus:border-[#c2410c] focus:ring-4 focus:ring-orange-500/10"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 block">
+                    Kata Sandi Keamanan
+                  </label>
+                  <span className="text-[10.5px] text-slate-400 font-sans">Default: jagajalan2026</span>
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50/70 hover:bg-white focus:bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all font-sans border border-slate-200 focus:border-[#c2410c] focus:ring-4 focus:ring-orange-500/10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c2410c] to-[#ea580c] hover:from-[#9a3412] hover:to-[#c2410c] disabled:opacity-60 shadow-sm shadow-orange-500/20 hover:shadow-md transition-all cursor-pointer active:scale-[0.99] font-sans"
+              >
+                {isLoading ? (
+                  <span>Memverifikasi Kredensial...</span>
+                ) : (
+                  <>
+                    <span>Masuk dengan ID Demo</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+
+          {/* Security Trust Note */}
+          <div className="pt-2 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5 font-sans">
+            <KeyRound className="w-3.5 h-3.5 text-[#c2410c]" />
+            <span>Sesi simulasi aparatur terekam dalam Audit Trail Digital</span>
           </div>
+        </div>
+
+        {/* Legal & Trust Footer */}
+        <div className="bg-slate-50/80 px-6 py-3.5 border-t border-slate-100 text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-sans">
+          <div className="flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span>Enkripsi Sesi TLS 1.3 • Audit Trail Digital</span>
+          </div>
+          <span className="text-slate-400">JagaJalan InfrasTrace • Mode Demonstrasi Aktif</span>
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* SECTION DI BAWAHNYA: COBA DASHBOARD (SIMULASI PENYELENGGARA JALAN)        */}
+      {/* SECTION DI BAWAHNYA: AKSES CEPAT PENGUJIAN 1-KLIK (JURI & EVALUATOR)      */}
       {/* ========================================================================= */}
       <div className="mt-8 pt-6 border-t border-slate-200">
         <div className="text-center max-w-xl mx-auto mb-5 space-y-1">
-          <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
+          <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-orange-100/70 text-[#c2410c] text-[10.5px] font-bold tracking-wide uppercase mb-1">
+            <Sparkles className="w-3 h-3" />
+            <span>Uji Coba 1-Klik</span>
+          </div>
+          <h2 className="text-base sm:text-lg font-bold font-heading text-slate-900">
             Akses Cepat Pengujian Portal Dinas
           </h2>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Pilih tingkatan wewenang dinas untuk langsung mencoba alur verifikasi lapangan dan pembaruan status fisik:
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Pilih tingkatan wewenang dinas di bawah ini untuk langsung mencoba alur verifikasi laporan dan progres fisik:
           </p>
         </div>
 
@@ -726,7 +737,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               <div
                 key={officer.id}
                 onClick={() => handleInstantDemoLogin(officer)}
-                className="bg-white rounded-[8px] p-4.5 ring-1 ring-slate-200 hover:ring-orange-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
+                className="bg-white rounded-xl p-4.5 border border-slate-200 hover:border-orange-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -741,26 +752,27 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     >
                       Tingkat {officer.authorityLevel}
                     </span>
-                    <span className="text-[10px] font-bold text-slate-400 group-hover:text-[#c2410c] transition-colors">
-                      1-Klik Masuk
+                    <span className="text-[10.5px] font-bold text-slate-400 group-hover:text-[#c2410c] transition-colors flex items-center gap-1">
+                      <span>1-Klik</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                     </span>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-[6px] bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
+                    <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
                       {officer.avatar}
                     </div>
                     <div>
                       <h3 className="font-bold text-xs text-slate-900 group-hover:text-[#c2410c] transition-colors line-clamp-1">
                         {officer.name}
                       </h3>
-                      <p className="text-[10px] text-slate-500 font-sans line-clamp-2 mt-0.5">
+                      <p className="text-[10.5px] text-slate-500 font-sans line-clamp-2 mt-0.5">
                         {officer.institution}
                       </p>
                     </div>
                   </div>
 
-                  <div className="p-2.5 rounded-[6px] bg-slate-50 text-[10px] text-slate-600 border border-slate-100 space-y-1">
+                  <div className="p-2.5 rounded-lg bg-slate-50 text-[10px] text-slate-600 border border-slate-100 space-y-1">
                     <div className="flex items-center justify-between text-slate-500">
                       <span>ID Akun:</span>
                       <strong className="text-slate-900 font-mono">{officer.id}</strong>
@@ -783,11 +795,11 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       </div>
 
       {/* ========================================================================= */}
-      {/* MODAL: GOOGLE ACCOUNT PICKER (Realistic Fallback for Demo & Local Sandbox) */}
+      {/* MODAL: GOOGLE ACCOUNT PICKER                                              */}
       {/* ========================================================================= */}
       {showGoogleModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white rounded-[12px] shadow-2xl max-w-md w-full p-6 text-left border border-slate-200">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-left border border-slate-200">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
               <GoogleIcon className="w-6 h-6 shrink-0" />
               <div>
@@ -806,7 +818,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   key={off.id}
                   type="button"
                   onClick={() => handleSelectGoogleAccount(off)}
-                  className="w-full p-3 rounded-[8px] border border-slate-200 hover:border-amber-400 hover:bg-amber-50/40 text-left transition-all flex items-center gap-3 cursor-pointer group"
+                  className="w-full p-3 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/40 text-left transition-all flex items-center gap-3 cursor-pointer group"
                 >
                   <div className="w-8 h-8 rounded-full bg-amber-100 border border-amber-200 font-bold text-xs flex items-center justify-center text-amber-900 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
                     {off.avatar}
@@ -848,7 +860,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     activeSince: "Simulasi 2026",
                   })
                 }
-                className="w-full p-3 rounded-[8px] border border-dashed border-amber-300 bg-amber-50/60 hover:bg-amber-100/60 text-left transition-all flex items-center gap-3 cursor-pointer group"
+                className="w-full p-3 rounded-xl border border-dashed border-amber-300 bg-amber-50/60 hover:bg-amber-100/60 text-left transition-all flex items-center gap-3 cursor-pointer group"
               >
                 <div className="w-8 h-8 rounded-full bg-amber-600 font-bold text-xs flex items-center justify-center text-white">
                   ★
@@ -867,7 +879,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               <button
                 type="button"
                 onClick={() => setShowGoogleModal(false)}
-                className="px-3.5 py-1.5 rounded-[6px] text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 Batal
               </button>
