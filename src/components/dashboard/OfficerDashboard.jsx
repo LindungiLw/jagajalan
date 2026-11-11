@@ -187,14 +187,14 @@ export default function OfficerDashboard({
 
   return (
     <div className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 animate-fade-in">
-      {/* 1. Active Authenticated Session Bar (Mode Demonstrasi) */}
-      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-[6px] ring-1 ring-orange-200/50 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* 1. Active Authenticated Session Bar */}
+      <div className="bg-white text-slate-800 p-4 sm:p-5 rounded-[6px] ring-1 ring-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-[6px] bg-amber-50 border border-amber-200/80 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-[6px] bg-slate-50 border border-slate-200 p-1.5 shadow-2xs flex items-center justify-center shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon/profile.png"
-              alt="Profil Petugas Demo"
+              alt="Profil Petugas"
               width={28}
               height={28}
               style={{ width: "28px", height: "28px" }}
@@ -204,9 +204,8 @@ export default function OfficerDashboard({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-extrabold text-sm text-slate-900">{currentOfficer?.name || "Petugas Demo"}</span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1.5 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
-                <span>{currentOfficer?.status || "Mode Demonstrasi Aktif"}</span>
+              <span className="font-mono text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                ID: {currentOfficer?.id || currentOfficer?.nip || "DEMO-001"}
               </span>
               {currentOfficer?.authorityLevel && (
                 <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-sans font-bold uppercase tracking-wider border ${
@@ -222,13 +221,10 @@ export default function OfficerDashboard({
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-600 font-sans tabular-nums mt-1 flex flex-wrap items-center gap-1.5">
-              <span>ID:</span>
-              <span className="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 text-[11px]">
-                {currentOfficer?.id || currentOfficer?.nip || "DEMO-001"}
-              </span>
-              <span className="text-slate-400">•</span>
-              <span>{currentOfficer?.institution || "Portal Simulasi Demonstrasi Penyelenggara Jalan"}</span>
+            <p className="text-xs text-slate-500 font-sans tabular-nums mt-1 flex flex-wrap items-center gap-1.5">
+              <span>{currentOfficer?.institution || "Kementerian Pekerjaan Umum (BBPJN)"}</span>
+              <span className="text-slate-300">•</span>
+              <span>{currentOfficer?.title || "Pengawas Preservasi Jalan"}</span>
             </p>
           </div>
         </div>
@@ -237,7 +233,7 @@ export default function OfficerDashboard({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onSwitchToMap}
-            className="px-3.5 py-2 rounded-[6px] bg-white hover:bg-orange-50/60 text-slate-700 ring-1 ring-orange-200/60 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-2 rounded-[6px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5 text-[#c2410c]" />
             <span>Pratinjau Peta Publik</span>
@@ -253,19 +249,6 @@ export default function OfficerDashboard({
             </button>
           )}
         </div>
-      </div>
-
-      {/* 2. Notice Banner: Mode Demonstrasi Aktif */}
-      <div className="p-3.5 rounded-[6px] bg-amber-50/80 border border-amber-200/90 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-sans shadow-2xs">
-        <div className="flex items-center gap-2.5">
-          <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
-          <span>
-            <strong>Simulasi Mode Demonstrasi Aktif:</strong> Anda masuk sebagai <strong>{currentOfficer?.name || "Petugas Demo"}</strong> (ID: <code className="font-mono font-bold bg-amber-100 px-1.5 py-0.5 rounded text-[11px]">{currentOfficer?.id || currentOfficer?.nip || "DEMO-001"}</code>). Modul ini disediakan untuk simulasi alur verifikasi lapangan, respons SLA, dan pengunggahan bukti pekerjaan fisik tanpa menggunakan identitas pejabat riil.
-          </span>
-        </div>
-        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 bg-amber-200/70 border border-amber-300 px-2.5 py-0.5 rounded shrink-0 self-start sm:self-auto">
-          Mode Demonstrasi Aktif
-        </span>
       </div>
 
       {/* Success Notification Banner */}

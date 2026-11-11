@@ -382,15 +382,11 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tracking-wider uppercase bg-amber-50 text-amber-900 ring-1 ring-amber-300">
-                    <HardHat className="w-3.5 h-3.5 text-amber-700" />
-                    <span>Portal Dinas Penyelenggara Jalan • Mode Demonstrasi Aktif</span>
-                  </div>
                   <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
                     Portal Kerja Penyelenggara Jalan
                   </h1>
                   <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-                    Modul simulasi resmi aparatur dinas untuk verifikasi lapangan, pembaruan status pengerjaan fisik, dan audit transparansi batas waktu SLA. Dilengkapi identitas demonstrasi (ID: <strong>DEMO-001</strong>).
+                    Sistem informasi aparatur dinas untuk verifikasi laporan lapangan, pembaruan status pengerjaan fisik, dan monitoring tenggat waktu pelayanan publik.
                   </p>
                 </div>
               </div>
@@ -711,16 +707,12 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       {/* SECTION DI BAWAHNYA: COBA DASHBOARD (SIMULASI PENYELENGGARA JALAN)        */}
       {/* ========================================================================= */}
       <div className="mt-8 pt-6 border-t border-slate-200">
-        <div className="text-center max-w-xl mx-auto mb-5 space-y-1.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
-            <span>Mode Demonstrasi Aktif</span>
-          </div>
+        <div className="text-center max-w-xl mx-auto mb-5 space-y-1">
           <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
-            Akses Langsung Mode Demonstrasi (1-Klik Masuk)
+            Akses Cepat Pengujian Portal Dinas
           </h2>
           <p className="text-xs text-slate-600 leading-relaxed">
-            Pilih salah satu tingkatan yurisdiksi dinas di bawah ini untuk langsung mencoba simulasi verifikasi lapangan, pembaruan status pengerjaan fisik, dan batas waktu SLA:
+            Pilih tingkatan wewenang dinas untuk langsung mencoba alur verifikasi lapangan, pembaruan status fisik, dan kepatuhan SLA:
           </p>
         </div>
 
@@ -734,7 +726,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               <div
                 key={officer.id}
                 onClick={() => handleInstantDemoLogin(officer)}
-                className="bg-white rounded-[8px] p-4.5 ring-1 ring-slate-200/80 hover:ring-amber-400 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
+                className="bg-white rounded-[8px] p-4.5 ring-1 ring-slate-200 hover:ring-orange-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -749,14 +741,13 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     >
                       Tingkat {officer.authorityLevel}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-amber-600 animate-ping" />
+                    <span className="text-[10px] font-bold text-slate-400 group-hover:text-[#c2410c] transition-colors">
                       1-Klik Masuk
                     </span>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-[6px] bg-amber-50 text-amber-900 border border-amber-200 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
+                    <div className="w-9 h-9 rounded-[6px] bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
                       {officer.avatar}
                     </div>
                     <div>
@@ -771,19 +762,12 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
 
                   <div className="p-2.5 rounded-[6px] bg-slate-50 text-[10px] text-slate-600 border border-slate-100 space-y-1">
                     <div className="flex items-center justify-between text-slate-500">
-                      <span>ID Petugas:</span>
-                      <strong className="text-slate-900 font-mono bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">{officer.id}</strong>
+                      <span>ID Akun:</span>
+                      <strong className="text-slate-900 font-mono">{officer.id}</strong>
                     </div>
                     <div className="flex items-center justify-between text-slate-500">
-                      <span>Status:</span>
-                      <span className="font-bold text-amber-800 flex items-center gap-1">
-                        <span className="w-1 h-1 rounded-full bg-amber-600 animate-pulse" />
-                        {officer.status}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-slate-500 pt-0.5 border-t border-slate-100 text-[9.5px]">
                       <span>Wewenang:</span>
-                      <span className="text-slate-700 font-medium">{officer.authorityLabel}</span>
+                      <strong className="text-slate-800">{officer.authorityLabel}</strong>
                     </div>
                   </div>
                 </div>
