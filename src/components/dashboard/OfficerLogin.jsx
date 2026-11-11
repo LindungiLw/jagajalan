@@ -385,67 +385,73 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         <div className="bg-white rounded-[6px] shadow-[0_2px_14px_-4px_rgba(15,23,42,0.04)] overflow-hidden">
           
           {/* Institutional Header Banner */}
-          <div className="bg-white p-6 sm:p-7 border-b border-slate-100 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-[8px] bg-orange-50/90 ring-1 ring-orange-200/60 mb-3.5 mx-auto">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon/profile.png"
-                alt="Akses Petugas"
-                width={36}
-                height={36}
-                style={{ width: "36px", height: "36px" }}
-                className="w-9 h-9 object-contain"
-              />
+          <div className="bg-white p-6 sm:p-7 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-[6px] bg-orange-50/80 p-2.5 shrink-0 flex items-center justify-center ring-1 ring-orange-200/50">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icon/profile.png"
+                    alt="Akses Petugas"
+                    width={36}
+                    height={36}
+                    style={{ width: "36px", height: "36px" }}
+                    className="w-9 h-9 object-contain"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tracking-wider uppercase bg-orange-50 text-orange-900 ring-1 ring-orange-200/60">
+                    <HardHat className="w-3.5 h-3.5 text-[#c2410c]" />
+                    <span>Portal Dinas Penyelenggara Jalan • SPBE Terintegrasi</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
+                    Portal Kerja Penyelenggara Jalan
+                  </h1>
+                  <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
+                    Modul autentikasi resmi aparatur dinas untuk verifikasi lapangan, pembaruan status pengerjaan fisik, dan audit transparansi batas waktu SLA.
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tracking-wider uppercase bg-orange-50 text-orange-900 ring-1 ring-orange-200/60 mb-2">
-              <HardHat className="w-3.5 h-3.5 text-[#c2410c]" />
-              <span>Portal Dinas Penyelenggara Jalan • SPBE Terintegrasi</span>
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
-              Masuk ke Portal Penyelenggara Jalan
-            </h1>
-            <p className="text-xs text-slate-600 max-w-lg mx-auto leading-relaxed mt-1.5">
-              Autentikasi resmi bagi aparatur dinas untuk memverifikasi laporan kerusakan jalan, memperbarui progres fisik, dan transparansi batas waktu SLA.
-            </p>
 
             {/* Login Method Toggle Pills */}
-            <div className="inline-flex items-center p-1 bg-slate-100/80 rounded-full ring-1 ring-slate-200/70 mt-5">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveMode("email-otp");
-                  setErrorMessage("");
-                }}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                  activeMode === "email-otp"
-                    ? "bg-white text-slate-900 shadow-2xs ring-1 ring-slate-200/60"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-[#c2410c]" />
-                  <span>Email & Kode OTP</span>
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveMode("nip-password");
-                  setErrorMessage("");
-                }}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                  activeMode === "nip-password"
-                    ? "bg-white text-slate-900 shadow-2xs ring-1 ring-slate-200/60"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-slate-500" />
-                  <span>NIP & Kata Sandi</span>
-                </span>
-              </button>
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center sm:justify-start">
+              <div className="inline-flex items-center p-1 bg-slate-100/80 rounded-full ring-1 ring-slate-200/70">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveMode("email-otp");
+                    setErrorMessage("");
+                  }}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    activeMode === "email-otp"
+                      ? "bg-white text-slate-900 shadow-2xs ring-1 ring-slate-200/60"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-[#c2410c]" />
+                    <span>Email & Kode OTP</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveMode("nip-password");
+                    setErrorMessage("");
+                  }}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    activeMode === "nip-password"
+                      ? "bg-white text-slate-900 shadow-2xs ring-1 ring-slate-200/60"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-slate-500" />
+                    <span>NIP & Kata Sandi</span>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -715,14 +721,10 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       </div>
 
       {/* ========================================================================= */}
-      {/* SECTION DI BAWAHNYA: COBA DASHBOARD (INSTANT DEMO UNTUK JURI / EVALUATOR) */}
+      {/* SECTION DI BAWAHNYA: COBA DASHBOARD (SIMULASI PENYELENGGARA JALAN)        */}
       {/* ========================================================================= */}
       <div className="mt-8 pt-6 border-t border-slate-200">
-        <div className="text-center max-w-xl mx-auto mb-5 space-y-1.5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold bg-orange-100/80 text-[#9a3412] ring-1 ring-orange-200">
-            <Sparkles className="w-3.5 h-3.5 text-[#c2410c]" />
-            <span>Akses Cepat Pengujian Dewan Juri</span>
-          </div>
+        <div className="text-center max-w-xl mx-auto mb-5 space-y-1">
           <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
             Coba Mode Simulasi Dashboard (Tanpa Login)
           </h2>
@@ -835,22 +837,22 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                 </button>
               ))}
 
-              {/* Custom Guest Evaluator Account */}
+              {/* Custom Guest Inspector Account */}
               <button
                 type="button"
                 onClick={() =>
                   handleSelectGoogleAccount({
-                    id: "OFF-GGL-JURI",
+                    id: "OFF-GGL-TAMU",
                     nip: "199001012026011099",
-                    email: "evaluator.wia2026@gmail.com",
-                    name: "Dewan Juri / Evaluator WIA 2026",
-                    title: "Penilai Ahli Tata Kelola Sistem Informasi Publik",
-                    institution: "KSM Multimedia Universitas Veteran / Tim Penguji",
+                    email: "inspektur.tamu@pupr.go.id",
+                    name: "Inspektur Tamu Terverifikasi",
+                    title: "Verifikator Preservasi Jalan Publik",
+                    institution: "Satuan Tugas Pengawasan Infrastruktur Jalan",
                     authorityLevel: "NASIONAL",
                     authorityLabel: "Jalan Nasional & Multi-Wilayah",
-                    jurisdiction: "Akses Penuh Evaluasi Seluruh Yurisdiksi",
+                    jurisdiction: "Akses Penuh Seluruh Yurisdiksi",
                     badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-200",
-                    avatar: "WIA",
+                    avatar: "PU",
                     activeSince: "2026",
                   })
                 }
@@ -861,9 +863,9 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors truncate">
-                    Gunakan Akun Google Tamu (Dewan Juri)
+                    Gunakan Akun Tamu Terverifikasi (Uji Coba Langsung)
                   </div>
-                  <div className="text-[11px] text-slate-500 font-mono truncate">evaluator.wia2026@gmail.com</div>
+                  <div className="text-[11px] text-slate-500 font-mono truncate">inspektur.tamu@pupr.go.id</div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#c2410c] shrink-0" />
               </button>
