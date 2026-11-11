@@ -44,7 +44,7 @@ const NATIONAL_ROAD_COMPOSITION = [
   {
     key: "provinsi",
     label: "Jalan Provinsi",
-    owner: "Pemerintah Provinsi (DBMPR)",
+    owner: "Pemerintah Provinsi (Dinas PUPR / Bina Marga)",
     km: 54500,
     pct: 9.9,
     color: "#9333ea", // Purple-600

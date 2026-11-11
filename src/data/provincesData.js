@@ -20,14 +20,15 @@ export const NATIONAL_STATS = {
   inpresBudgetTrillion2023: 14.6,
 
   // Rekapitulasi Data Operasional Pilot JagaJalan:
+  // Koridor Sumatera Utara (Medan, Simalungun, Deli Serdang - Karo, Asahan)
   pilot: {
-    region: "Jawa Barat & Koridor Bodetabek",
+    region: "Sumatera Utara (Medan - Berastagi - Simalungun - Asahan)",
     totalRoads: 6,
     totalPackages: 6,
-    totalPaguMiliar: 35.80,
-    totalContractMiliar: 33.57,
-    overdueResponseComplaints: 2, // 2 laporan pilot yang melewati tenggat pemantauan respons resmi dinas
-    lastVerifiedDate: "18 Oktober 2026",
+    totalPaguMiliar: 106.90,
+    totalContractMiliar: 101.40,
+    overdueResponseComplaints: 2, // 2 laporan pilot yang melewati tenggat pemantauan respons resmi dinas (Medan & Simalungun)
+    lastVerifiedDate: "24 Oktober 2026",
   },
 };
 

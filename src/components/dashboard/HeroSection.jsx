@@ -89,25 +89,25 @@ export default function HeroSection({
       resolved: 10650,
     };
 
-  // Pilot budget statistics by authority (TA 2026)
+  // Pilot budget statistics by authority (Sumatera Utara Pilot TA 2026)
   const pilotBudgetStats = useMemo(() => [
-    { key: "depok", label: "Dinas Depok", fullName: "Dinas PUPR Depok", timeline: "Mar – Jul 2026", pagu: 11.65, kontrak: 10.87, ruas: 3, efficiency: 6.7, savings: "0,78 M" },
-    { key: "jabar", label: "DBMPR Jabar", fullName: "DBMPR Jawa Barat", timeline: "Mei – Jun 2026", pagu: 15.70, kontrak: 14.80, ruas: 2, efficiency: 5.7, savings: "0,90 M" },
-    { key: "pupr", label: "KemenPUPR", fullName: "KemenPUPR (BBPJN)", timeline: "Feb – Apr 2026", pagu: 8.45, kontrak: 7.92, ruas: 1, efficiency: 6.3, savings: "0,53 M" },
+    { key: "bbpjn", label: "BBPJN Sumut", fullName: "KemenPU (BBPJN Sumut)", timeline: "Jan – Okt 2026", pagu: 76.90, kontrak: 73.15, ruas: 3, efficiency: 4.9, savings: "3,75 M" },
+    { key: "pupr_sumut", label: "PUPR Sumut", fullName: "Dinas PUPR Prov. Sumut", timeline: "Feb – Sep 2026", pagu: 18.70, kontrak: 17.80, ruas: 1, efficiency: 4.8, savings: "0,90 M" },
+    { key: "sdabmbk", label: "SDABMBK Medan", fullName: "Dinas SDABMBK Kota Medan", timeline: "Mar – Jul 2026", pagu: 11.30, kontrak: 10.45, ruas: 2, efficiency: 7.5, savings: "0,85 M" },
   ], []);
 
   // Monthly progress for Pilot Budget (TA 2026: Jan - Okt)
   const monthlyPilotBudgetTrend = useMemo(() => [
-    { month: "Jan", pagu: 3.50, kontrak: 0.00, phase: "SiRUP LKPP" },
-    { month: "Feb", pagu: 8.45, kontrak: 7.92, phase: "KemenPUPR Selesai" },
-    { month: "Mar", pagu: 14.20, kontrak: 13.40, phase: "Depok Paket 1" },
-    { month: "Apr", pagu: 20.10, kontrak: 18.79, phase: "Depok Paket 2" },
-    { month: "Mei", pagu: 24.15, kontrak: 22.54, phase: "DBMPR Jabar 1" },
-    { month: "Jun", pagu: 31.85, kontrak: 29.80, phase: "DBMPR Jabar 2" },
-    { month: "Jul", pagu: 33.50, kontrak: 31.35, phase: "Depok Paket 3" },
-    { month: "Ags", pagu: 34.90, kontrak: 32.70, phase: "MC-50 Lapangan" },
-    { month: "Sep", pagu: 35.80, kontrak: 33.59, phase: "MC-100 Lapangan" },
-    { month: "Okt", pagu: 35.80, kontrak: 33.59, phase: "Audit PHO Selesai" },
+    { month: "Jan", pagu: 14.20, kontrak: 0.00, phase: "Tayang SiRUP LKPP" },
+    { month: "Feb", pagu: 28.50, kontrak: 13.45, phase: "Kontrak Sisingamangaraja" },
+    { month: "Mar", pagu: 47.20, kontrak: 40.35, phase: "Kontrak Medan-Berastagi" },
+    { month: "Apr", pagu: 65.90, kontrak: 58.15, phase: "Kontrak Siantar-Tanah Jawa" },
+    { month: "Mei", pagu: 77.20, kontrak: 68.60, phase: "Kontrak Katamso & Diponegoro" },
+    { month: "Jun", pagu: 106.90, kontrak: 95.40, phase: "Paket Inpres Lintas Asahan" },
+    { month: "Jul", pagu: 106.90, kontrak: 101.40, phase: "Tuntas Lelang 100%" },
+    { month: "Ags", pagu: 106.90, kontrak: 101.40, phase: "Pelaksanaan Konstruksi Fisik" },
+    { month: "Sep", pagu: 106.90, kontrak: 101.40, phase: "PHO Diponegoro & Sisingamangaraja" },
+    { month: "Okt", pagu: 106.90, kontrak: 101.40, phase: "Audit Realisasi & SLA Terbuka" },
   ], []);
 
   // Inpres stages
@@ -367,7 +367,7 @@ export default function HeroSection({
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5" title="Data percontohan komparasi transparansi pagu lelang vs nilai kontrak penyedia">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
-              <span className="text-white/90 font-medium text-xs">Paket Pengadaan Pilot (Rp 35,80 M)</span>
+              <span className="text-white/90 font-medium text-xs">Paket Pengadaan Pilot (Rp 106,90 M)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
             <div className="flex items-center gap-1.5" title="Tiket aduan terdata yang melampaui batas waktu pemantauan internal SLA JagaJalan (+6 hari acuan)">
@@ -543,7 +543,7 @@ export default function HeroSection({
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "pagu" ? "text-white" : "text-slate-900"}>Rp 35,80</span>
+                        <span className={selectedIndex === "pagu" ? "text-white" : "text-slate-900"}>Rp 106,90</span>
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "pagu" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
@@ -1627,7 +1627,7 @@ export default function HeroSection({
                             Total Anggaran
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                            Rp 35,80 M
+                            Rp 106,90 M
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
@@ -1635,7 +1635,7 @@ export default function HeroSection({
                             Kontrak
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                            Rp 33,59 M
+                            Rp 101,40 M
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
@@ -1644,10 +1644,10 @@ export default function HeroSection({
                           </span>
                           <div className="flex items-center gap-1">
                             <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                              Rp 2,21 M
+                              Rp 5,50 M
                             </strong>
                             <span className="text-[9px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded">
-                              6,2%
+                              5,1%
                             </span>
                           </div>
                         </div>
@@ -1757,16 +1757,16 @@ export default function HeroSection({
                 <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
                   6 Ruas
                 </strong>
-                <span className="text-[9px] text-slate-400 font-sans block">1 Nas • 2 Prov • 3 Kota</span>
+                <span className="text-[9px] text-slate-400 font-sans block">3 Nas • 1 Prov • 2 Kota</span>
               </div>
               <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
                   Total Anggaran
                 </span>
                 <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
-                  Rp 35,80 M
+                  Rp 106,90 M
                 </strong>
-                <span className="text-[9px] text-slate-400 font-sans block">Kontrak: Rp 33,59 M</span>
+                <span className="text-[9px] text-slate-400 font-sans block">Kontrak: Rp 101,40 M</span>
               </div>
               <div className="bg-rose-50/75 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-rose-700 font-semibold font-sans block">
@@ -1793,16 +1793,16 @@ export default function HeroSection({
                 <tbody className="divide-y divide-slate-100 font-sans text-xs">
                   <tr className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-2 px-2.5">
-                      <div className="font-bold text-slate-900 text-xs">KemenPUPR (BBPJN)</div>
+                      <div className="font-bold text-slate-900 text-xs">KemenPU (BBPJN Sumut)</div>
                       <div className="text-[9.5px] text-slate-500 font-medium">Jalan Nasional</div>
                     </td>
-                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">1</td>
+                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">3</td>
                     <td className="py-2 px-2.5 text-right">
-                      <div className="font-bold tabular-nums text-slate-900">Rp 8,45 M</div>
-                      <div className="text-[9px] text-slate-400 tabular-nums">23,6% Pagu</div>
+                      <div className="font-bold tabular-nums text-slate-900">Rp 76,90 M</div>
+                      <div className="text-[9px] text-slate-400 tabular-nums">71,9% Pagu</div>
                     </td>
                     <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center text-[9.5px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-[5px] tabular-nums">
+                      <span className="inline-flex items-center text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-[5px] tabular-nums">
                         Aman (0)
                       </span>
                     </td>
@@ -1810,13 +1810,13 @@ export default function HeroSection({
 
                   <tr className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-2 px-2.5">
-                      <div className="font-bold text-slate-900 text-xs">DBMPR Jawa Barat</div>
+                      <div className="font-bold text-slate-900 text-xs">Dinas PUPR Prov. Sumut</div>
                       <div className="text-[9.5px] text-slate-500 font-medium">Jalan Provinsi</div>
                     </td>
-                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">2</td>
+                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">1</td>
                     <td className="py-2 px-2.5 text-right">
-                      <div className="font-bold tabular-nums text-slate-900">Rp 15,70 M</div>
-                      <div className="text-[9px] text-slate-400 tabular-nums">43,9% Pagu</div>
+                      <div className="font-bold tabular-nums text-slate-900">Rp 18,70 M</div>
+                      <div className="text-[9px] text-slate-400 tabular-nums">17,5% Pagu</div>
                     </td>
                     <td className="py-2 px-2.5 text-right">
                       <span className="inline-flex items-center text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-[5px] tabular-nums">
@@ -1827,13 +1827,13 @@ export default function HeroSection({
 
                   <tr className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-2 px-2.5">
-                      <div className="font-bold text-slate-900 text-xs">Dinas PUPR Depok</div>
+                      <div className="font-bold text-slate-900 text-xs">Dinas SDABMBK Kota Medan</div>
                       <div className="text-[9.5px] text-slate-500 font-medium">Jalan Kab / Kota</div>
                     </td>
-                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">3</td>
+                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">2</td>
                     <td className="py-2 px-2.5 text-right">
-                      <div className="font-bold tabular-nums text-slate-900">Rp 11,65 M</div>
-                      <div className="text-[9px] text-slate-400 tabular-nums">32,5% Pagu</div>
+                      <div className="font-bold tabular-nums text-slate-900">Rp 11,30 M</div>
+                      <div className="text-[9px] text-slate-400 tabular-nums">10,6% Pagu</div>
                     </td>
                     <td className="py-2 px-2.5 text-right">
                       <span className="inline-flex items-center text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-[5px] tabular-nums">
@@ -1846,7 +1846,7 @@ export default function HeroSection({
                   <tr>
                     <td className="py-2 px-2.5 text-slate-900">Total Koridor Pilot</td>
                     <td className="py-2 px-2 text-center tabular-nums text-slate-900">6 Ruas</td>
-                    <td className="py-2 px-2.5 text-right tabular-nums text-slate-900">Rp 35,80 M</td>
+                    <td className="py-2 px-2.5 text-right tabular-nums text-slate-900">Rp 106,90 M</td>
                     <td className="py-2 px-2.5 text-right">
                       <span className="text-[9.5px] font-bold text-rose-700 tabular-nums">2 Lewat SLA</span>
                     </td>
