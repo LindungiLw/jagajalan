@@ -131,16 +131,42 @@ export default function Navbar({
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    // Ambang batas Hero Section (paling atas) di mana navbar selalu tampil
-    const HERO_THRESHOLD = 280;
-    // Waktu tunggu saat berhenti scroll sebelum navbar otomatis sembunyi (1.3 detik)
-    const STOP_SCROLL_IDLE_DELAY = 1300;
+    // Posisi puncak paling atas (posisi awal halaman)
+    const TOP_RESTING_THRESHOLD = 20;
+    // Jeda saat berhenti scroll sebelum navbar otomatis sembunyi (750ms)
+    const STOP_SCROLL_HIDE_DELAY = 750;
+
+    const scheduleHideOnStop = () => {
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = null;
+      }
+
+      // Jangan sembunyikan jika berada di posisi puncak paling atas halaman (scrollY <= 20)
+      if (typeof window !== "undefined" && window.scrollY <= TOP_RESTING_THRESHOLD) {
+        setNavbarVisibility(true);
+        return;
+      }
+
+      // Pasang timer: jika berhenti scroll, otomatis sembunyikan navbar
+      idleTimerRef.current = setTimeout(() => {
+        if (
+          !isHoveredRef.current &&
+          !notifOpenRef.current &&
+          !mobileMenuOpenRef.current &&
+          typeof window !== "undefined" &&
+          window.scrollY > TOP_RESTING_THRESHOLD
+        ) {
+          setNavbarVisibility(false);
+        }
+      }, STOP_SCROLL_HIDE_DELAY);
+    };
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // 1. Di dalam Hero Section (paling atas): selalu tampil, bersihkan timer sembunyi
-      if (currentScrollY < HERO_THRESHOLD) {
+      // 1. Di posisi puncak paling atas: selalu tampilkan navbar di tempat aslinya
+      if (currentScrollY <= TOP_RESTING_THRESHOLD) {
         if (idleTimerRef.current) {
           clearTimeout(idleTimerRef.current);
           idleTimerRef.current = null;
@@ -149,34 +175,18 @@ export default function Navbar({
         return;
       }
 
-      // 2. Di luar Hero Section:
-      // Setiap kali user scroll (ada aksi scroll) -> langsung tampilkan navbar!
+      // 2. Saat sedang scroll (baik ke atas maupun ke bawah): MUNCULKAN NAVBAR SEGERA
       setNavbarVisibility(true);
 
-      // Bersihkan timer idle sebelumnya
-      if (idleTimerRef.current) {
-        clearTimeout(idleTimerRef.current);
-        idleTimerRef.current = null;
-      }
-
-      // Pasang timer: jika berhenti scroll (tidak ada aksi scroll selama 1.3s), otomatis sembunyi
-      idleTimerRef.current = setTimeout(() => {
-        // Jangan sembunyikan jika kursor sedang hover di navbar, atau dropdown notif/menu sedang terbuka
-        if (
-          !isHoveredRef.current &&
-          !notifOpenRef.current &&
-          !mobileMenuOpenRef.current &&
-          window.scrollY >= HERO_THRESHOLD
-        ) {
-          setNavbarVisibility(false);
-        }
-      }, STOP_SCROLL_IDLE_DELAY);
+      // 3. Begitu berhenti scroll: pasang timer untuk langsung HILANG
+      scheduleHideOnStop();
     };
 
-    // Deteksi jika kursor diarahkan ke area tepi paling atas layar (<= 45px) untuk reveal manual
+    // Deteksi jika kursor diarahkan ke area tepi paling atas layar (<= 35px) untuk reveal manual
     const handleTopEdgeHover = (e) => {
-      if (e.clientY <= 45) {
+      if (e.clientY <= 35) {
         setNavbarVisibility(true);
+        scheduleHideOnStop();
       }
     };
 
@@ -251,11 +261,13 @@ export default function Navbar({
               if (
                 !isHoveredRef.current &&
                 !notifOpenRef.current &&
-                !mobileMenuOpenRef.current
+                !mobileMenuOpenRef.current &&
+                typeof window !== "undefined" &&
+                window.scrollY > 20
               ) {
                 setNavbarVisibility(false);
               }
-            }, 2000);
+            }, 600);
           }
         }}
         className={`fixed top-0 inset-x-0 z-50 pt-3 pb-2 px-4 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-in-out ${
