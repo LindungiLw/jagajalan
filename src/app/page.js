@@ -733,7 +733,7 @@ export default function Home() {
         </div>
       )}
 
-      {activeTab !== "peta" && <Footer onSelectTab={setActiveTab} activeTab={activeTab} />}
+      {activeTab !== "peta" && activeTab !== "dinas" && <Footer onSelectTab={setActiveTab} activeTab={activeTab} />}
 
       {/* Global Modals (Rendered at Root with Z-[2000]) */}
       <ReportModal
