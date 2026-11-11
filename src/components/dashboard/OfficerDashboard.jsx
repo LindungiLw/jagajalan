@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+import CustomSelect from "./CustomSelect";
 import {
   ShieldAlert,
   HardHat,
@@ -395,22 +396,23 @@ export default function OfficerDashboard({
 
         {/* Sort Dropdown & Status Reset */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-500 font-medium hidden sm:inline">Urutan Antrean:</span>
-          <select
+          <CustomSelect
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 text-slate-800 text-xs focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600 font-sans"
-          >
-            <option value="HAZARD">Prioritas Hazard Score AI (Tertinggi)</option>
-            <option value="SLA">Kritis Batas Waktu SLA (Terancam Lewat Tenggat)</option>
-            <option value="UPVOTES">Dukungan Warga (Upvotes Terbanyak)</option>
-            <option value="DATE">Laporan Terbaru</option>
-          </select>
+            onChange={setSortBy}
+            prefix="Urutan:"
+            align="right"
+            options={[
+              { value: "HAZARD", label: "Prioritas Hazard Score AI (Tertinggi)" },
+              { value: "SLA", label: "Kritis Batas Waktu SLA (Terancam Lewat Tenggat)" },
+              { value: "UPVOTES", label: "Dukungan Warga (Upvotes Terbanyak)" },
+              { value: "DATE", label: "Laporan Terbaru" },
+            ]}
+          />
 
           {selectedStatusFilter !== "ALL" && (
             <button
               onClick={() => setSelectedStatusFilter("ALL")}
-              className="px-2.5 py-1.5 rounded-[6px] bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+              className="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
             >
               <X className="w-3.5 h-3.5" />
               <span>Reset Filter</span>

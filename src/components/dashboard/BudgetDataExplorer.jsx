@@ -28,6 +28,7 @@ import {
   FileText,
 } from "lucide-react";
 import RoadDetailModal from "@/components/modals/RoadDetailModal";
+import CustomSelect from "./CustomSelect";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 
 // Helper format Rupiah singkat
@@ -1120,18 +1121,17 @@ export default function BudgetDataExplorer({
                     <span>Unduh PDF</span>
                   </button>
 
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 text-xs shrink-0 font-sans">
-                    <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-transparent text-slate-700 font-medium focus:outline-none cursor-pointer"
-                    >
-                      <option value="value-desc">Nilai Anggaran Tertinggi</option>
-                      <option value="efficiency-desc">Efisiensi Hemat Tertinggi</option>
-                      <option value="progress-desc">Progres Fisik Tertinggi</option>
-                    </select>
-                  </div>
+                  <CustomSelect
+                    value={sortBy}
+                    onChange={setSortBy}
+                    icon={<ArrowUpDown className="w-3.5 h-3.5" />}
+                    align="right"
+                    options={[
+                      { value: "value-desc", label: "Nilai Anggaran Tertinggi" },
+                      { value: "efficiency-desc", label: "Efisiensi Hemat Tertinggi" },
+                      { value: "progress-desc", label: "Progres Fisik Tertinggi" },
+                    ]}
+                  />
                 </div>
               </div>
 

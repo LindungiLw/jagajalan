@@ -24,6 +24,7 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
+import CustomSelect from "./CustomSelect";
 
 /**
  * Komponen Circular Donut Meter Kemantapan Jalan Daerah
@@ -297,18 +298,17 @@ export default function NationalRankingSection({ onSelectPilot }) {
             </button>
             
             {/* Sort Selector */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-500 shrink-0">
-              <span className="hidden sm:inline text-[11px] font-medium text-slate-400">Urutkan:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer"
-              >
-                <option value="complaints">Volume Aduan Terbanyak</option>
-                <option value="damaged">Persentase Jalan Rusak Tertinggi</option>
-                <option value="inpres">Alokasi Inpres IJD Terbesar</option>
-              </select>
-            </div>
+            <CustomSelect
+              value={sortBy}
+              onChange={setSortBy}
+              prefix="Urutkan:"
+              align="right"
+              options={[
+                { value: "complaints", label: "Volume Aduan Terbanyak" },
+                { value: "damaged", label: "Persentase Jalan Rusak Tertinggi" },
+                { value: "inpres", label: "Alokasi Inpres IJD Terbesar" },
+              ]}
+            />
 
             {/* View Mode Toggle (Grid vs Table) */}
             <div className="flex items-center bg-white p-0.5 rounded-[6px] ring-1 ring-orange-200/50 shrink-0">

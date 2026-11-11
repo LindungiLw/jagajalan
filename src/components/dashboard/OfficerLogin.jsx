@@ -58,7 +58,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
   const [generatedOtp, setGeneratedOtp] = useState("829104");
   const [resendTimer, setResendTimer] = useState(60);
-  const [canResend, setCanResend] = useState(false);
+  const canResend = resendTimer === 0;
   const otpInputRefs = useRef([]);
 
   // NIP / Password State
@@ -79,11 +79,8 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     let interval = null;
     if (otpStep === "enter-otp" && resendTimer > 0) {
       interval = setInterval(() => {
-        setResendTimer((prev) => prev - 1);
+        setResendTimer((prev) => Math.max(0, prev - 1));
       }, 1000);
-    } else if (resendTimer === 0) {
-      setCanResend(true);
-      if (interval) clearInterval(interval);
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -121,7 +118,6 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       setOtpStep("enter-otp");
       setOtpDigits(["", "", "", "", "", ""]);
       setResendTimer(60);
-      setCanResend(false);
       setSuccessNotice(`Kode OTP 6-digit verifikasi dikirim ke ${trimmed}`);
     }, 550);
   };

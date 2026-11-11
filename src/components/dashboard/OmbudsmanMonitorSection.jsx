@@ -27,6 +27,7 @@ import {
   AlertOctagon,
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
+import CustomSelect from "./CustomSelect";
 
 /**
  * Komponen Visualisasi Diagram Donut Distribusi Status Aduan
@@ -1056,18 +1057,17 @@ export default function OmbudsmanMonitorSection({
             {/* Sort & View Mode Toggle */}
             <div className="flex items-center gap-2 shrink-0">
               {/* Sort Dropdown */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-slate-50/80 ring-1 ring-slate-200/70 text-xs">
-                <ArrowUpDown className="w-3.5 h-3.5 text-slate-500" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent text-slate-700 font-semibold focus:outline-none cursor-pointer font-sans"
-                >
-                  <option value="urgency">Prioritas Keterlambatan</option>
-                  <option value="hazard-desc">Skor Bahaya Tertinggi</option>
-                  <option value="newest">Laporan Terbaru</option>
-                </select>
-              </div>
+              <CustomSelect
+                value={sortBy}
+                onChange={setSortBy}
+                icon={<ArrowUpDown className="w-3.5 h-3.5 text-slate-500" />}
+                align="right"
+                options={[
+                  { value: "urgency", label: "Prioritas Keterlambatan" },
+                  { value: "hazard-desc", label: "Skor Bahaya Tertinggi" },
+                  { value: "newest", label: "Laporan Terbaru" },
+                ]}
+              />
 
               {/* View Mode Toggle: Grid vs Table */}
               <div className="flex items-center rounded-[6px] bg-slate-100/90 p-0.5 ring-1 ring-slate-200/70">
