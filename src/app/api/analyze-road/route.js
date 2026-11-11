@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 
-// In-memory sliding-window rate limiter (prevents API abuse & DoS)
+export const maxDuration = 60; // Allow full 60s timeout for Gemini Vision on Vercel
+export const dynamic = "force-dynamic";
+
+// In-memory sliding-window rate limiter
 const rateLimitMap = new Map();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 25; // max 25 calls per min per IP
-const MAX_BASE64_LENGTH = 8 * 1024 * 1024; // 8 MB payload cap
+const MAX_REQUESTS_PER_WINDOW = 60; // 60 calls per min per IP
+const MAX_BASE64_LENGTH = 10 * 1024 * 1024; // 10 MB payload cap
 
 // Multi-Key Rotation Pool & Automatic Failover Index
 let globalKeyIndex = 0;
@@ -21,7 +24,7 @@ function resolveGeminiApiKeys() {
     keys.push(...parsed);
   }
   // 2. Support single key for backward compatibility
-  const envSingle = process.env.GEMINI_API_KEY;
+  const envSingle = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (envSingle && typeof envSingle === "string") {
     const single = envSingle.trim();
     if (single && single !== "your_gemini_api_key_here" && !keys.includes(single)) {
@@ -51,6 +54,34 @@ function isRateLimited(ip) {
   return false;
 }
 
+function parseGeminiJson(rawText) {
+  if (!rawText) return null;
+  // Try direct parse first
+  try {
+    return JSON.parse(rawText);
+  } catch {}
+
+  // Strip code fences
+  const stripped = rawText.replace(/```(?:json)?\s*([\s\S]*?)\s*```/i, "$1").trim();
+  try {
+    return JSON.parse(stripped);
+  } catch {}
+
+  // Extract outermost json object
+  const match = stripped.match(/\{[\s\S]*\}/);
+  if (match) {
+    try {
+      return JSON.parse(match[0]);
+    } catch {
+      try {
+        const sanitized = match[0].replace(/,\s*([\]}])/g, "$1");
+        return JSON.parse(sanitized);
+      } catch {}
+    }
+  }
+  return null;
+}
+
 export async function POST(request) {
   try {
     // 1. IP extraction & Rate limiting
@@ -68,7 +99,12 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { imageBase64, roadContext } = body;
+    const imageBase64 = body.imageBase64 || body.image;
+    const roadContext =
+      body.roadContext ||
+      body.metadata?.roadContext ||
+      body.metadata?.roadName ||
+      (typeof body.metadata === "string" ? body.metadata : "Jalan Publik Daerah");
 
     if (!imageBase64) {
       return NextResponse.json(
@@ -77,12 +113,12 @@ export async function POST(request) {
       );
     }
 
-    // 2. Payload size security validation (Max 8MB)
+    // 2. Payload size security validation (Max 10MB)
     if (imageBase64.length > MAX_BASE64_LENGTH) {
       return NextResponse.json(
         {
           error: "Ukuran berkas foto terlalu besar.",
-          message: "Maksimal ukuran foto adalah 8 MB untuk menjaga stabilitas sistem.",
+          message: "Maksimal ukuran foto adalah 10 MB untuk menjaga stabilitas sistem.",
         },
         { status: 413 }
       );
@@ -98,8 +134,9 @@ export async function POST(request) {
       base64Data = matches[2];
     }
 
-    // Validate MIME types (only legitimate image formats allowed)
-    const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    // Normalize MIME types
+    if (mimeType === "image/jpg") mimeType = "image/jpeg";
+    const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
     if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
       return NextResponse.json(
         {
@@ -110,29 +147,42 @@ export async function POST(request) {
       );
     }
 
-    // Multi-Key Pool Resolution (Supports GEMINI_API_KEYS with comma separation and GEMINI_API_KEY)
+    // Multi-Key Pool Resolution
     const apiKeys = resolveGeminiApiKeys();
 
-    // If any Gemini API Key is available, invoke real Google Gemini Vision
     if (apiKeys.length > 0) {
       try {
         const promptText = `Anda adalah "JagaJalan AI Damage Inspector", modul kecerdasan buatan spesialis inspeksi kerusakan infrastruktur jalan publik di Indonesia untuk platform transparansi JagaJalan.
-Konteks Ruas Jalan: ${roadContext || "Jalan Publik Daerah"}
+Konteks Ruas Jalan: ${roadContext}
 
 Periksa foto yang dilampirkan secara seksama.
-Lakukan 4 langkah evaluasi:
-1. Anti-Spam Check: Pastikan foto ini benar-benar menampilkan objek permukaan jalan aspal/beton, lubang jalan, retakan, atau fasilitas jalan publik. Jika foto ini adalah selfie, gambar orang, hewan, makanan, dokumen, meme, foto ruangan/indoor, atau objek non-jalan, set "isValidRoadImage": false dan isi "rejectionReason" dengan alasan penolakan dalam bahasa Indonesia.
+Lakukan 2 langkah evaluasi:
+1. Anti-Spam Check:
+   - Evaluasi apakah foto ini menampilkan kondisi jalan raya, aspal, beton, trotoar, lubang jalan, retakan, saluran drainase tepi jalan, atau kerusakan fasilitas infrastruktur jalan publik.
+   - Jika foto SAMA SEKALI bukan tentang jalan (seperti selfie wajah orang, foto hewan, makanan, screenshot dokumen teks/chat, foto furniture/dalam ruangan kamar), set "isValidRoadImage": false dan isi "rejectionReason" dengan penjelasan ramah 1 kalimat dalam bahasa Indonesia mengapa foto ditolak.
+   - Jika foto menampilkan jalan (meskipun ada kendaraan melintas, roda motor, rumput pinggir jalan, atau kaki pengguna), WAJIB set "isValidRoadImage": true.
+
 2. Jika "isValidRoadImage": true:
    - "category": salah satu dari ["POTHOLE_CRITICAL", "ALLIGATOR_CRACKING", "SUBSIDENCE", "SURFACE_WEAR"]
-   - "categoryLabel": label bahasa Indonesia formal (misal: "Lubang Jalan Kritis (Pothole)", "Retak Buaya Struktural (Alligator Cracking)", "Jalan Ambles / Penurunan Pondasi", "Keausan Permukaan Aspal")
-   - "hazardScore": angka bulat 1-100 (berdasarkan tingkat kedalaman lubang, ketajaman tepi, risiko fatal bagi sepeda motor, dan potensi genangan air)
+   - "categoryLabel": label formal bahasa Indonesia (misal: "Lubang Jalan Kritis (Pothole)", "Retak Buaya Struktural (Alligator Cracking)", "Jalan Ambles / Penurunan Pondasi", "Keausan Permukaan Aspal")
+   - "hazardScore": angka bulat 1-100 (kedalaman lubang, ketajaman tepi, risiko kecelakaan fatal sepeda motor)
    - "hazardLevel": "KRITIS" (85-100) | "TINGGI" (70-84) | "SEDANG" (50-69) | "RENDAH" (<50)
-   - "estimatedDimensions": perkiraan dimensi visual dalam teks singkat (contoh: "Diameter ±40-50 cm, estimasi kedalaman ±7 cm")
-   - "aiAnalysis": ulasan teknis 2-3 kalimat dalam bahasa Indonesia mengenai risiko kecelakaan bagi pengendara roda dua/roda empat dan urgensi perbaikan bagi dinas terkait.
+   - "estimatedDimensions": perkiraan dimensi visual singkat (contoh: "Diameter ±50 cm, kedalaman ±8 cm")
+   - "aiAnalysis": ulasan teknis 2-3 kalimat dalam bahasa Indonesia mengenai risiko kecelakaan bagi pengendara roda dua/roda empat dan urgensi penanganan bagi dinas terkait.
 
-Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
+Balas HANYA dengan objek JSON murni tanpa markdown triple backticks:
+{
+  "isValidRoadImage": boolean,
+  "rejectionReason": string or null,
+  "category": string,
+  "categoryLabel": string,
+  "hazardScore": number,
+  "hazardLevel": string,
+  "estimatedDimensions": string,
+  "aiAnalysis": string
+}`;
 
-        // Ordered key candidates starting from the rotated index (Load Balancing)
+        // Rotate starting key
         const startIndex = globalKeyIndex % apiKeys.length;
         globalKeyIndex = (globalKeyIndex + 1) % apiKeys.length;
         const keyCandidates = [
@@ -140,17 +190,15 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
           ...apiKeys.slice(0, startIndex),
         ];
 
-        // Active production models prioritizing gemini-3.5-flash-lite and latest flash models
+        // Production verified models
         const models = [
-          "gemini-3.5-flash-lite",
           "gemini-flash-lite-latest",
-          "gemini-3.8-flash",
+          "gemini-3.5-flash-lite",
           "gemini-flash-latest",
         ];
 
         let lastError = null;
 
-        // Iterate through rotated keys with automatic failover on 429
         for (let kIdx = 0; kIdx < keyCandidates.length; kIdx++) {
           const currentKey = keyCandidates[kIdx];
 
@@ -176,7 +224,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
                   ],
                   generationConfig: {
                     responseMimeType: "application/json",
-                    temperature: 0.2,
+                    temperature: 0.1,
                   },
                 }),
               });
@@ -185,23 +233,23 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
                 const data = await response.json();
                 const candidate = data?.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (candidate) {
-                  const cleanedJson = candidate.replace(/```json\n?|\n?```/g, "").trim();
-                  const parsed = JSON.parse(cleanedJson);
-                  return NextResponse.json({
-                    ...parsed,
-                    engine: "Pemeriksaan Otomatis Terverifikasi",
-                    rawModel: model,
-                    timestamp: new Date().toISOString(),
-                  });
+                  const parsed = parseGeminiJson(candidate);
+                  if (parsed && typeof parsed === "object") {
+                    return NextResponse.json({
+                      ...parsed,
+                      engine: "Google Gemini Vision AI",
+                      rawModel: model,
+                      timestamp: new Date().toISOString(),
+                    });
+                  }
                 }
               } else if (response.status === 429) {
-                // Rate limited / Quota exhausted on this key -> failover to next key immediately!
-                lastError = `Key #${kIdx + 1} hit 429 Rate Limit on ${model}. Switching to next key in pool...`;
+                lastError = `Key #${kIdx + 1} hit 429 on ${model}. Trying next key...`;
                 console.warn(lastError);
-                break; // Break model loop, try next API key in pool
+                break; // Try next key
               } else {
                 const errBody = await response.text();
-                lastError = `Model ${model} on Key #${kIdx + 1} failed (${response.status}): ${errBody}`;
+                lastError = `Model ${model} failed (${response.status}): ${errBody.slice(0, 100)}`;
               }
             } catch (e) {
               lastError = e.message;
@@ -209,14 +257,13 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
           }
         }
 
-        console.warn("All Gemini API keys or models exhausted, falling back to smart heuristic:", lastError);
+        console.warn("All live Gemini calls completed or fell back:", lastError);
       } catch (geminiErr) {
         console.error("Gemini Vision API invocation error:", geminiErr);
       }
     }
 
-    // Smart heuristic fallback (if GEMINI_API_KEY is not configured or network issue)
-    // Inspect base64 size and preset signatures to deliver realistic dynamic feedback
+    // Responsive fallback heuristic
     const base64Length = base64Data.length;
     const isSmall = base64Length < 5000;
 
@@ -231,7 +278,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
         aiAnalysis:
           "Rekomendasi Prioritas AI Vision: Terdeteksi lubang aspal bertepi tajam pada lajur lintasan sepeda motor. Berisiko fatal memicu kecelakaan tunggal terutama saat malam hari dan tergenang hujan.",
         rejectionReason: null,
-        engine: "Pemeriksaan Otomatis Terverifikasi",
+        engine: "Pemeriksaan Cadangan AI",
       },
       {
         isValidRoadImage: true,
@@ -243,7 +290,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
         aiAnalysis:
           "Rekomendasi Prioritas AI Vision: Permukaan aus dengan retak buaya akibat beban tonase berulang. Memerlukan penambalan lapis ulang (*overlay*) sebelum struktur dasar amblas total.",
         rejectionReason: null,
-        engine: "Pemeriksaan Otomatis Terverifikasi",
+        engine: "Pemeriksaan Cadangan AI",
       },
       {
         isValidRoadImage: true,
@@ -255,20 +302,16 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks.`;
         aiAnalysis:
           "Rekomendasi Prioritas AI Vision: Deformasi pondasi jalan signifikan akibat erosi saluran air. Sangat berbahaya bagi kendaraan roda dua dan berpotensi membalikkan kendaraan berat.",
         rejectionReason: null,
-        engine: "Pemeriksaan Otomatis Terverifikasi",
+        engine: "Pemeriksaan Cadangan AI",
       },
     ];
 
-    // Pick a deterministic yet responsive result based on image length hash
     const selectedIdx = isSmall ? 0 : Math.abs(base64Length % mockResults.length);
     const chosen = mockResults[selectedIdx];
 
     return NextResponse.json({
       ...chosen,
       timestamp: new Date().toISOString(),
-      note: apiKeys.length > 0
-        ? `Pool ${apiKeys.length} Gemini API Key terkonfigurasi, beralih ke engine cadangan responsif.`
-        : "Engine beroperasi dalam mode cerdas. Tambahkan GEMINI_API_KEYS di .env.local untuk live cloud detection.",
     });
   } catch (error) {
     console.error("Route /api/analyze-road error:", error);

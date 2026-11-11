@@ -11,17 +11,29 @@ export const aiService = {
    */
   async analyzeRoadImage(imageBase64, metadata = {}) {
     try {
+      const roadContext =
+        typeof metadata === "string"
+          ? metadata
+          : metadata.roadName || metadata.roadContext || "Jalan Publik Daerah";
+
       const res = await fetch("/api/analyze-road", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          imageBase64,
           image: imageBase64,
+          roadContext,
           metadata,
         }),
       });
 
       if (!res.ok) {
-        throw new Error(`API analysis error: ${res.status}`);
+        let errMessage = `API analysis error: ${res.status}`;
+        try {
+          const errData = await res.json();
+          if (errData?.error) errMessage = errData.error;
+        } catch {}
+        throw new Error(errMessage);
       }
 
       return await res.json();
@@ -35,6 +47,7 @@ export const aiService = {
         severityLevel: "SEDANG",
         safetyImpact: "Potensi kecelakaan bagi pengendara roda dua terutama saat hujan.",
         isFallback: true,
+        error: err.message,
       };
     }
   },
