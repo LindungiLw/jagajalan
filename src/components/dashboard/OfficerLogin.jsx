@@ -204,41 +204,22 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
 
       let officerPayload = matched;
 
-      // If custom/new email, dynamically create a verified officer persona
+      // If custom/new email, dynamically create a demo officer persona
       if (!officerPayload) {
-        const emailUser = cleanEmail.split("@")[0].replace(/[._]/g, " ");
-        const formattedName = emailUser
-          .split(" ")
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(" ");
-
         officerPayload = {
-          id: `OFF-OTP-${Date.now().toString().slice(-4)}`,
-          nip: `19${Math.floor(8000000000000000 + Math.random() * 1999999999999999)}`,
+          id: "DEMO-001",
+          nip: "DEMO-001",
           email: cleanEmail,
-          name: formattedName.length > 2 ? `${formattedName}, S.T.` : "Aparatur Verifikator Dinas",
-          title: "Inspektur Pelaporan & Penanganan Preservasi Jalan",
-          institution: cleanEmail.includes("pu.go.id")
-            ? "Kementerian Pekerjaan Umum (KemenPU)"
-            : cleanEmail.includes("prov.go.id")
-            ? "Dinas Bina Marga & Penataan Ruang Provinsi"
-            : cleanEmail.includes("pemkab") || cleanEmail.includes("kotakab")
-            ? "Dinas Bina Marga & Bina Konstruksi Daerah"
-            : "Satuan Tugas Pengawasan Jalan (Verifikator Resmi)",
-          authorityLevel: cleanEmail.includes("pu.go.id")
-            ? "NASIONAL"
-            : cleanEmail.includes("prov.go.id")
-            ? "PROVINSI"
-            : "KOTA",
-          authorityLabel: cleanEmail.includes("pu.go.id")
-            ? "Jalan Nasional"
-            : cleanEmail.includes("prov.go.id")
-            ? "Jalan Provinsi"
-            : "Jalan Kota / Kabupaten",
-          jurisdiction: "Wilayah Penyelenggaraan Terverifikasi",
-          badgeColor: "bg-orange-100 text-orange-900 border-orange-200",
-          avatar: formattedName.slice(0, 2).toUpperCase() || "PU",
-          activeSince: "2024",
+          name: "Petugas Demo",
+          title: "Inspektur Pelaporan & Penanganan Preservasi Jalan (Mode Demonstrasi)",
+          institution: "Simulasi Satuan Tugas Penyelenggara Jalan",
+          authorityLevel: "NASIONAL",
+          authorityLabel: "Jalan Nasional (Mode Demo)",
+          jurisdiction: "Wilayah Penyelenggaraan Terverifikasi (Simulasi)",
+          badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
+          avatar: "DM",
+          status: "Mode Demonstrasi Aktif",
+          activeSince: "Simulasi 2026",
         };
       }
 
@@ -268,18 +249,19 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         const user = userCredential.user;
 
         const officerPayload = {
-          id: `OFF-GGL-${user.uid.slice(0, 5)}`,
-          nip: `1985${Math.floor(10000000000000 + Math.random() * 90000000000000)}`,
-          email: user.email,
-          name: user.displayName || "Aparatur Dinas PUPR (Google SSO)",
-          title: "Inspektur Lapangan Penyelenggara Jalan",
-          institution: "Dinas Pekerjaan Umum & Penataan Ruang (PUPR)",
+          id: "DEMO-001",
+          nip: "DEMO-001",
+          email: user.email || "petugas.demo@jagajalan.id",
+          name: "Petugas Demo",
+          title: "Inspektur Lapangan Penyelenggara Jalan (Mode Demonstrasi)",
+          institution: "Dinas Pekerjaan Umum & Penataan Ruang (Simulasi)",
           authorityLevel: "NASIONAL",
-          authorityLabel: "Jalan Nasional & Lintas Wilayah",
-          jurisdiction: "Koridor Pengawasan Lintas Wilayah",
-          badgeColor: "bg-orange-100 text-orange-900 border-orange-200",
-          avatar: (user.displayName ? user.displayName.slice(0, 2) : "GG").toUpperCase(),
-          activeSince: "2026",
+          authorityLabel: "Jalan Nasional (Mode Demo)",
+          jurisdiction: "Koridor Pengawasan Lintas Wilayah (Simulasi)",
+          badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
+          avatar: "DM",
+          status: "Mode Demonstrasi Aktif",
+          activeSince: "Simulasi 2026",
         };
 
         if (typeof window !== "undefined") {
@@ -400,15 +382,15 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tracking-wider uppercase bg-orange-50 text-orange-900 ring-1 ring-orange-200/60">
-                    <HardHat className="w-3.5 h-3.5 text-[#c2410c]" />
-                    <span>Portal Dinas Penyelenggara Jalan • SPBE Terintegrasi</span>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-sans tracking-wider uppercase bg-amber-50 text-amber-900 ring-1 ring-amber-300">
+                    <HardHat className="w-3.5 h-3.5 text-amber-700" />
+                    <span>Portal Dinas Penyelenggara Jalan • Mode Demonstrasi Aktif</span>
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-bold font-heading tracking-tight text-slate-900">
                     Portal Kerja Penyelenggara Jalan
                   </h1>
                   <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-                    Modul autentikasi resmi aparatur dinas untuk verifikasi lapangan, pembaruan status pengerjaan fisik, dan audit transparansi batas waktu SLA.
+                    Modul simulasi resmi aparatur dinas untuk verifikasi lapangan, pembaruan status pengerjaan fisik, dan audit transparansi batas waktu SLA. Dilengkapi identitas demonstrasi (ID: <strong>DEMO-001</strong>).
                   </p>
                 </div>
               </div>
@@ -504,7 +486,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   <form onSubmit={handleSendOtp} className="space-y-4">
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-slate-700 block">
-                        Alamat Email Kedinasan / ASN
+                        Alamat Email Kedinasan / Akun Uji Coba Demo
                       </label>
                       <div className="relative">
                         <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -513,12 +495,12 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                           required
                           value={emailInput}
                           onChange={(e) => setEmailInput(e.target.value)}
-                          placeholder="contoh: petugas.bbpjn@pu.go.id"
+                          placeholder="contoh: petugas.demo@jagajalan.id atau email juri"
                           className="w-full pl-9 pr-3 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
                         />
                       </div>
                       <p className="text-[11px] text-slate-600">
-                        Mendukung domain resmi <code>@pu.go.id</code>, <code>@jabarprov.go.id</code>, maupun email uji coba juri.
+                        Mode Demonstrasi: Masukkan <code>petugas.demo@jagajalan.id</code> atau gunakan akses 1-klik di bawah.
                       </p>
                     </div>
 
@@ -641,9 +623,14 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
             {activeMode === "nip-password" && (
               <form onSubmit={handleNipSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 block">
-                    NIP Pegawai ASN (18 Digit)
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-700 block">
+                      ID Akun Demo / NIP Petugas
+                    </label>
+                    <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">
+                      Gunakan: DEMO-001
+                    </span>
+                  </div>
                   <div className="relative">
                     <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
@@ -651,7 +638,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                       required
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
-                      placeholder="Contoh: 198503152010121002"
+                      placeholder="Contoh: DEMO-001"
                       className="w-full pl-9 pr-3 py-2.5 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all font-sans tabular-nums ring-1 ring-slate-200/70 focus:ring-orange-500/30"
                     />
                   </div>
@@ -724,12 +711,16 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       {/* SECTION DI BAWAHNYA: COBA DASHBOARD (SIMULASI PENYELENGGARA JALAN)        */}
       {/* ========================================================================= */}
       <div className="mt-8 pt-6 border-t border-slate-200">
-        <div className="text-center max-w-xl mx-auto mb-5 space-y-1">
+        <div className="text-center max-w-xl mx-auto mb-5 space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+            <span>Mode Demonstrasi Aktif</span>
+          </div>
           <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
-            Coba Mode Simulasi Dashboard (Tanpa Login)
+            Akses Langsung Mode Demonstrasi (1-Klik Masuk)
           </h2>
           <p className="text-xs text-slate-600 leading-relaxed">
-            Pilih salah satu tingkatan yurisdiksi dinas di bawah ini untuk langsung mencoba simulasi verifikasi lapangan, pembaruan status pengerjaan fisik, dan batas waktu SLA secara instan:
+            Pilih salah satu tingkatan yurisdiksi dinas di bawah ini untuk langsung mencoba simulasi verifikasi lapangan, pembaruan status pengerjaan fisik, dan batas waktu SLA:
           </p>
         </div>
 
@@ -743,7 +734,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
               <div
                 key={officer.id}
                 onClick={() => handleInstantDemoLogin(officer)}
-                className="bg-white rounded-[8px] p-4.5 ring-1 ring-slate-200/80 hover:ring-orange-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
+                className="bg-white rounded-[8px] p-4.5 ring-1 ring-slate-200/80 hover:ring-amber-400 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between text-left font-sans"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -758,13 +749,14 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     >
                       Tingkat {officer.authorityLevel}
                     </span>
-                    <span className="text-[10px] font-bold text-slate-400 group-hover:text-[#c2410c] transition-colors">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-amber-600 animate-ping" />
                       1-Klik Masuk
                     </span>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-[6px] bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
+                    <div className="w-9 h-9 rounded-[6px] bg-amber-50 text-amber-900 border border-amber-200 font-bold text-xs flex items-center justify-center shrink-0 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
                       {officer.avatar}
                     </div>
                     <div>
@@ -779,17 +771,25 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
 
                   <div className="p-2.5 rounded-[6px] bg-slate-50 text-[10px] text-slate-600 border border-slate-100 space-y-1">
                     <div className="flex items-center justify-between text-slate-500">
-                      <span>Wewenang:</span>
-                      <strong className="text-slate-800">{officer.authorityLabel}</strong>
+                      <span>ID Petugas:</span>
+                      <strong className="text-slate-900 font-mono bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">{officer.id}</strong>
                     </div>
-                    <div className="text-slate-400 text-[9px] line-clamp-1">
-                      NIP: {officer.nip}
+                    <div className="flex items-center justify-between text-slate-500">
+                      <span>Status:</span>
+                      <span className="font-bold text-amber-800 flex items-center gap-1">
+                        <span className="w-1 h-1 rounded-full bg-amber-600 animate-pulse" />
+                        {officer.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-slate-500 pt-0.5 border-t border-slate-100 text-[9.5px]">
+                      <span>Wewenang:</span>
+                      <span className="text-slate-700 font-medium">{officer.authorityLabel}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#c2410c] group-hover:translate-x-0.5 transition-transform">
-                  <span>Coba Dashboard Ini</span>
+                  <span>Masuk sebagai {officer.name}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -807,13 +807,13 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
             <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
               <GoogleIcon className="w-6 h-6 shrink-0" />
               <div>
-                <h3 className="text-base font-bold text-slate-900">Pilih Akun Google untuk Masuk</h3>
-                <p className="text-xs text-slate-500">Lanjutkan autentikasi SSO ke portal <strong>JagaJalan</strong></p>
+                <h3 className="text-base font-bold text-slate-900">Pilih Akun Demo untuk Masuk</h3>
+                <p className="text-xs text-slate-500">Lanjutkan simulasi portal dinas <strong>JagaJalan</strong></p>
               </div>
             </div>
 
             <p className="text-xs text-slate-600 mb-3">
-              Pilih profil aparatur dinas yang terhubung dengan akun Google:
+              Pilih identitas demonstrasi aparatur dinas yang ingin diuji coba:
             </p>
 
             <div className="space-y-2 mb-5">
@@ -822,52 +822,60 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   key={off.id}
                   type="button"
                   onClick={() => handleSelectGoogleAccount(off)}
-                  className="w-full p-3 rounded-[8px] border border-slate-200 hover:border-orange-300 hover:bg-orange-50/40 text-left transition-all flex items-center gap-3 cursor-pointer group"
+                  className="w-full p-3 rounded-[8px] border border-slate-200 hover:border-amber-400 hover:bg-amber-50/40 text-left transition-all flex items-center gap-3 cursor-pointer group"
                 >
-                  <div className="w-8 h-8 rounded-full bg-slate-100 font-bold text-xs flex items-center justify-center text-slate-700 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-amber-100 border border-amber-200 font-bold text-xs flex items-center justify-center text-amber-900 group-hover:bg-[#c2410c] group-hover:text-white transition-colors">
                     {off.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors truncate">
-                      {off.name}
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors truncate">
+                        {off.name}
+                      </span>
+                      <span className="text-[9px] font-bold font-mono px-1.5 py-0.2 bg-slate-100 text-slate-700 rounded border border-slate-200">
+                        {off.id}
+                      </span>
                     </div>
-                    <div className="text-[11px] text-slate-500 font-mono truncate">{off.email}</div>
+                    <div className="text-[11px] text-amber-800 font-medium truncate mt-0.5">
+                      {off.status} • {off.authorityLabel}
+                    </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#c2410c] shrink-0" />
                 </button>
               ))}
 
-              {/* Custom Guest Inspector Account */}
+              {/* Custom Direct Demo Account */}
               <button
                 type="button"
                 onClick={() =>
                   handleSelectGoogleAccount({
-                    id: "OFF-GGL-TAMU",
-                    nip: "199001012026011099",
-                    email: "inspektur.tamu@pupr.go.id",
-                    name: "Inspektur Tamu Terverifikasi",
-                    title: "Verifikator Preservasi Jalan Publik",
-                    institution: "Satuan Tugas Pengawasan Infrastruktur Jalan",
+                    id: "DEMO-001",
+                    nip: "DEMO-001",
+                    email: "petugas.demo@jagajalan.id",
+                    name: "Petugas Demo",
+                    title: "Inspektur Pelaporan & Preservasi Jalan (Mode Demonstrasi)",
+                    institution: "Portal Penyelenggara Jalan (Simulasi)",
                     authorityLevel: "NASIONAL",
-                    authorityLabel: "Jalan Nasional & Multi-Wilayah",
-                    jurisdiction: "Akses Penuh Seluruh Yurisdiksi",
-                    badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-200",
-                    avatar: "PU",
-                    activeSince: "2026",
+                    authorityLabel: "Jalan Nasional (Mode Demo)",
+                    jurisdiction: "Akses Penuh Seluruh Yurisdiksi (Simulasi)",
+                    badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
+                    avatar: "DM",
+                    status: "Mode Demonstrasi Aktif",
+                    activeSince: "Simulasi 2026",
                   })
                 }
-                className="w-full p-3 rounded-[8px] border border-dashed border-orange-300 bg-orange-50/60 hover:bg-orange-100/60 text-left transition-all flex items-center gap-3 cursor-pointer group"
+                className="w-full p-3 rounded-[8px] border border-dashed border-amber-300 bg-amber-50/60 hover:bg-amber-100/60 text-left transition-all flex items-center gap-3 cursor-pointer group"
               >
-                <div className="w-8 h-8 rounded-full bg-[#c2410c] font-bold text-xs flex items-center justify-center text-white">
+                <div className="w-8 h-8 rounded-full bg-amber-600 font-bold text-xs flex items-center justify-center text-white">
                   ★
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-bold text-slate-900 group-hover:text-[#c2410c] transition-colors truncate">
-                    Gunakan Akun Tamu Terverifikasi (Uji Coba Langsung)
+                  <div className="text-xs font-bold text-slate-900 group-hover:text-amber-800 transition-colors truncate">
+                    Gunakan Akun Demonstrasi Utama (Petugas Demo)
                   </div>
-                  <div className="text-[11px] text-slate-500 font-mono truncate">inspektur.tamu@pupr.go.id</div>
+                  <div className="text-[11px] text-amber-900 font-mono truncate">ID: DEMO-001 • Mode Demonstrasi Aktif</div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#c2410c] shrink-0" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-700 shrink-0" />
               </button>
             </div>
 
