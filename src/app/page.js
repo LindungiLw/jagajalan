@@ -541,7 +541,7 @@ export default function Home() {
         activeTab === "peta" ? "h-screen overflow-hidden" : "min-h-screen overflow-x-hidden"
       }`}
     >
-      {activeTab === "beranda" && <SerpentineRoadBackground />}
+      {activeTab !== "peta" && <SerpentineRoadBackground />}
 
       <Navbar
         activeTab={activeTab}

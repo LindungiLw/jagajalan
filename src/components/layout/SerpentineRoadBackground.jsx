@@ -49,7 +49,7 @@ export default function SerpentineRoadBackground() {
         style={{ transform: `translateY(${scrollY * 0.04}px)` }}
       >
         <svg
-          viewBox="0 0 1440 3400"
+          viewBox="0 0 1440 6500"
           fill="none"
           preserveAspectRatio="xMidYMin slice"
           className="w-full h-full"
@@ -74,14 +74,14 @@ export default function SerpentineRoadBackground() {
 
           {/* 1. OUTER CONTOUR TOPOGRAPHY GUIDES (Geospatial Survey Lines) */}
           <path
-            d="M 1080,-50 C 980,350 240,480 200,850 C 160,1220 1260,1320 1200,1720 C 1140,2080 340,2180 420,2650 C 500,3050 1180,3080 960,3450"
+            d="M 1080,-50 C 980,350 240,480 200,850 C 160,1220 1260,1320 1200,1720 C 1140,2080 340,2180 420,2650 C 500,3050 1180,3080 960,3450 C 740,3850 40,4100 120,4450 C 200,4800 1260,5100 1180,5450 C 1100,5800 560,6100 640,6450"
             stroke="#d97706"
             strokeWidth="1.25"
             strokeDasharray="6 14"
             strokeOpacity="0.08"
           />
           <path
-            d="M 820,-50 C 720,350 -20,480 -60,850 C -100,1220 1000,1320 940,1720 C 880,2080 80,2180 160,2650 C 240,3050 920,3080 700,3450"
+            d="M 820,-50 C 720,350 -20,480 -60,850 C -100,1220 1000,1320 940,1720 C 880,2080 80,2180 160,2650 C 240,3050 920,3080 700,3450 C 480,3850 20,4100 100,4450 C 180,4800 1000,5100 920,5450 C 840,5800 420,6100 500,6450"
             stroke="#d97706"
             strokeWidth="1"
             strokeDasharray="4 12"
@@ -90,7 +90,7 @@ export default function SerpentineRoadBackground() {
 
           {/* 2. ASPHALT ROAD BED (Wide Ribbon) */}
           <path
-            d="M 960,-50 C 860,350 360,480 320,850 C 280,1220 1140,1320 1080,1720 C 1020,2080 460,2180 540,2650 C 620,3050 1060,3080 840,3450"
+            d="M 960,-50 C 860,350 360,480 320,850 C 280,1220 1140,1320 1080,1720 C 1020,2080 460,2180 540,2650 C 620,3050 1060,3080 840,3450 C 620,3850 160,4100 240,4450 C 320,4800 1140,5100 1060,5450 C 980,5800 680,6100 760,6450"
             stroke="url(#globalRoadSurface)"
             strokeWidth="96"
             strokeLinecap="round"
@@ -98,21 +98,21 @@ export default function SerpentineRoadBackground() {
 
           {/* 3. LEFT ROAD SHOULDER */}
           <path
-            d="M 912,-50 C 812,350 312,480 272,850 C 232,1220 1092,1320 1032,1720 C 972,2080 412,2180 492,2650 C 572,3050 1012,3080 792,3450"
+            d="M 912,-50 C 812,350 312,480 272,850 C 232,1220 1092,1320 1032,1720 C 972,2080 412,2180 492,2650 C 572,3050 1012,3080 792,3450 C 572,3850 112,4100 192,4450 C 272,4800 1092,5100 1012,5450 C 932,5800 632,6100 712,6450"
             stroke="url(#globalShoulderGrad)"
             strokeWidth="1.75"
           />
 
           {/* 4. RIGHT ROAD SHOULDER */}
           <path
-            d="M 1008,-50 C 908,350 408,480 368,850 C 328,1220 1188,1320 1128,1720 C 1068,2080 508,2180 588,2650 C 668,3050 1108,3080 888,3450"
+            d="M 1008,-50 C 908,350 408,480 368,850 C 328,1220 1188,1320 1128,1720 C 1068,2080 508,2180 588,2650 C 668,3050 1108,3080 888,3450 C 668,3850 208,4100 288,4450 C 368,4800 1188,5100 1108,5450 C 1028,5800 728,6100 808,6450"
             stroke="url(#globalShoulderGrad)"
             strokeWidth="1.75"
           />
 
           {/* 5. INNER LEFT LANE GUIDE (Slow Dash Flow) */}
           <path
-            d="M 936,-50 C 836,350 336,480 296,850 C 256,1220 1116,1320 1056,1720 C 996,2080 436,2180 516,2650 C 596,3050 1036,3080 816,3450"
+            d="M 936,-50 C 836,350 336,480 296,850 C 256,1220 1116,1320 1056,1720 C 996,2080 436,2180 516,2650 C 596,3050 1036,3080 816,3450 C 596,3850 136,4100 216,4450 C 296,4800 1116,5100 1036,5450 C 956,5800 656,6100 736,6450"
             stroke="#d97706"
             strokeWidth="1.25"
             strokeDasharray="8 26"
@@ -122,7 +122,7 @@ export default function SerpentineRoadBackground() {
 
           {/* 6. CENTER HIGHWAY DIVIDING LINE (Animated Continuous Flow) */}
           <path
-            d="M 960,-50 C 860,350 360,480 320,850 C 280,1220 1140,1320 1080,1720 C 1020,2080 460,2180 540,2650 C 620,3050 1060,3080 840,3450"
+            d="M 960,-50 C 860,350 360,480 320,850 C 280,1220 1140,1320 1080,1720 C 1020,2080 460,2180 540,2650 C 620,3050 1060,3080 840,3450 C 620,3850 160,4100 240,4450 C 320,4800 1140,5100 1060,5450 C 980,5800 680,6100 760,6450"
             stroke="#c2410c"
             strokeWidth="2.5"
             strokeDasharray="16 22"
@@ -133,7 +133,7 @@ export default function SerpentineRoadBackground() {
 
           {/* 7. INNER RIGHT LANE GUIDE (Slow Dash Flow) */}
           <path
-            d="M 984,-50 C 884,350 384,480 344,850 C 304,1220 1164,1320 1104,1720 C 1044,2080 484,2180 564,2650 C 644,3050 1084,3080 864,3450"
+            d="M 984,-50 C 884,350 384,480 344,850 C 304,1220 1164,1320 1104,1720 C 1044,2080 484,2180 564,2650 C 644,3050 1084,3080 864,3450 C 644,3850 184,4100 264,4450 C 344,4800 1164,5100 1084,5450 C 1004,5800 704,6100 784,6450"
             stroke="#d97706"
             strokeWidth="1.25"
             strokeDasharray="8 26"
@@ -149,6 +149,10 @@ export default function SerpentineRoadBackground() {
           <circle cx="1080" cy="1720" r="3.5" fill="#c2410c" fillOpacity="0.35" />
           <circle cx="740" cy="2140" r="3" fill="#ea580c" fillOpacity="0.3" />
           <circle cx="540" cy="2650" r="3.5" fill="#c2410c" fillOpacity="0.3" />
+          <circle cx="840" cy="3450" r="3.5" fill="#c2410c" fillOpacity="0.35" />
+          <circle cx="240" cy="4450" r="3.5" fill="#ea580c" fillOpacity="0.3" />
+          <circle cx="1060" cy="5450" r="3.5" fill="#c2410c" fillOpacity="0.35" />
+          <circle cx="760" cy="6450" r="3.5" fill="#ea580c" fillOpacity="0.3" />
         </svg>
       </div>
     </div>
