@@ -88,7 +88,7 @@ export default function CustomSelect({
       {isOpen && (
         <div
           role="listbox"
-          className={`absolute z-50 mt-1.5 min-w-[220px] max-w-[340px] w-max bg-white rounded-xl border border-slate-200/90 shadow-[0_10px_25px_-5px_rgba(15,23,42,0.1),0_8px_10px_-6px_rgba(15,23,42,0.06)] py-1.5 overflow-hidden focus:outline-none animate-in fade-in zoom-in-95 duration-100 ${
+          className={`absolute z-50 mt-1.5 min-w-[200px] max-w-[calc(100vw-32px)] sm:max-w-[340px] w-max bg-white rounded-xl border border-slate-200/90 shadow-[0_10px_25px_-5px_rgba(15,23,42,0.1),0_8px_10px_-6px_rgba(15,23,42,0.06)] py-1.5 overflow-hidden focus:outline-none animate-in fade-in zoom-in-95 duration-100 ${
             align === "right" ? "right-0" : "left-0"
           } ${dropdownClassName}`}
         >

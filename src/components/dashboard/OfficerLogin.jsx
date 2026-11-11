@@ -421,7 +421,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         </div>
 
         {/* Card Body */}
-        <div className="p-6 sm:p-7 space-y-5">
+        <div className="p-4.5 sm:p-7 space-y-4 sm:space-y-5">
           {/* Error Notification */}
           {errorMessage && (
             <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2.5 animate-shake">
@@ -532,7 +532,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                   </div>
 
                   {/* Interactive 6-Digit Input Boxes */}
-                  <div className="flex items-center justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2.5" onPaste={handleOtpPaste}>
                     {otpDigits.map((digit, idx) => (
                       <input
                         key={idx}
@@ -543,7 +543,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                         value={digit}
                         onChange={(e) => handleOtpChange(idx, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(idx, e.key)}
-                        className="w-10 sm:w-12 h-12 sm:h-13 text-center text-lg sm:text-xl font-bold font-mono text-slate-900 bg-slate-50/80 rounded-xl border border-slate-300 focus:border-[#c2410c] focus:ring-4 focus:ring-orange-500/10 focus:bg-white focus:outline-none transition-all"
+                        className="w-9 sm:w-11 h-11 sm:h-12 text-center text-base sm:text-lg font-bold font-mono text-slate-900 bg-slate-50/90 rounded-lg sm:rounded-xl border border-slate-300 focus:border-[#c2410c] focus:ring-4 focus:ring-orange-500/10 focus:bg-white focus:outline-none transition-all"
                       />
                     ))}
                   </div>
