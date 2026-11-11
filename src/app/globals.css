@@ -188,7 +188,8 @@ table, .tabular-nums, [data-metric] {
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: infiniteMarquee 32s linear infinite;
+  animation: infiniteMarquee 50s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee:hover {

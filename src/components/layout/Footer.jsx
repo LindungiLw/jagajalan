@@ -55,6 +55,15 @@ const DATA_RESOURCES = [
   },
 ];
 
+// Multi-set repetition (24 items per half, 48 items total) to guarantee full coverage even on 4K/ultra-wide screens without gaps or cutoffs
+const MARQUEE_SET = [
+  ...DATA_RESOURCES,
+  ...DATA_RESOURCES,
+  ...DATA_RESOURCES,
+  ...DATA_RESOURCES,
+];
+const ALL_MARQUEE_ITEMS = [...MARQUEE_SET, ...MARQUEE_SET];
+
 export default function Footer({ onSelectTab, activeTab = "beranda" }) {
   const [isVisible, setIsVisible] = useState(false);
   const footerRef = useRef(null);
@@ -238,7 +247,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
       )}
 
       {/* OPEN DATA SOURCES MARQUEE STRIP */}
-      <div className="relative border-b border-[#E6DFD5]/90 bg-white/70 backdrop-blur-xs py-3.5 overflow-hidden">
+      <div className="relative border-y border-[#E6DFD5]/90 bg-white/95 py-3.5 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -253,12 +262,12 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
 
         {/* Infinite Running Marquee Track */}
         <div className="relative w-full overflow-hidden py-1">
-          {/* Gradient Masks on Left & Right to fade in/out smoothly */}
-          <div className="absolute left-0 inset-y-0 w-12 sm:w-24 bg-gradient-to-r from-[#FAF7F2] via-[#FAF7F2]/80 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 inset-y-0 w-12 sm:w-24 bg-gradient-to-l from-[#FAF7F2] via-[#FAF7F2]/80 to-transparent z-10 pointer-events-none" />
+          {/* Gradient Masks on Left & Right to fade in/out smoothly without harsh cutoffs */}
+          <div className="absolute left-0 inset-y-0 w-12 sm:w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 inset-y-0 w-12 sm:w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
-          <div className="animate-marquee flex items-center">
-            {[...DATA_RESOURCES, ...DATA_RESOURCES].map((item, idx) => (
+          <div className="animate-marquee flex items-center whitespace-nowrap">
+            {ALL_MARQUEE_ITEMS.map((item, idx) => (
               <a
                 key={`${item.name}-${idx}`}
                 href={item.href}
