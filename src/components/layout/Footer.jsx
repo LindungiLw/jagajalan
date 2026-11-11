@@ -98,7 +98,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
     { label: "BPS SIRUSA (Statistik Jalan)", href: "https://sirusa.bps.go.id" },
     { label: "LKPP Inaproc & SiRUP", href: "https://inaproc.id" },
     { label: "Ombudsman RI (Laptah)", href: "https://ombudsman.go.id" },
-    { label: "Open Data Daerah (APBD)", href: "https://opendata.jabarprov.go.id" },
+    { label: "Portal Satu Data Indonesia (SDI)", href: "https://data.go.id" },
   ];
 
   const legalLinks = [
