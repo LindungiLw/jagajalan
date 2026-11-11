@@ -712,7 +712,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
             Akses Cepat Pengujian Portal Dinas
           </h2>
           <p className="text-xs text-slate-600 leading-relaxed">
-            Pilih tingkatan wewenang dinas untuk langsung mencoba alur verifikasi lapangan, pembaruan status fisik, dan kepatuhan SLA:
+            Pilih tingkatan wewenang dinas untuk langsung mencoba alur verifikasi lapangan dan pembaruan status fisik:
           </p>
         </div>
 

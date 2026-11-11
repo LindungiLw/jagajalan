@@ -277,11 +277,9 @@ export default function OfficerDashboard({
             <span className="text-[11px] font-bold uppercase text-amber-700 font-sans">Butuh Verifikasi</span>
             <AlertTriangle className="w-4 h-4 text-amber-600" />
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
+          <div className="mt-2.5">
             <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.needVerify}</span>
-            <span className="text-xs text-slate-500 font-sans">laporan baru</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-600 font-sans">Perlu disposisi tim lapangan UPTD</p>
         </div>
 
         {/* Counter 2: Dalam Penanganan */}
@@ -297,14 +295,12 @@ export default function OfficerDashboard({
             <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Dalam Pengerjaan</span>
             <HardHat className="w-4 h-4 text-[#c2410c]" />
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
+          <div className="mt-2.5">
             <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.inProgress}</span>
-            <span className="text-xs text-slate-500 font-sans">pekerjaan fisik</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-600 font-sans">Sedang ditambal/overlay di lapangan</p>
         </div>
 
-        {/* Counter 3: Selesai Diperbaiki (Emerald) */}
+        {/* Counter 3: Selesai */}
         <div
           onClick={() => setSelectedStatusFilter("COMPLETED")}
           className={`cursor-pointer p-4 rounded-[6px] transition-all ${
@@ -314,17 +310,15 @@ export default function OfficerDashboard({
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai (+Foto Bukti)</span>
+            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
+          <div className="mt-2.5">
             <span className="text-3xl font-bold font-sans tabular-nums text-emerald-800">{stats.completed}</span>
-            <span className="text-xs text-slate-500 font-sans">tiket ditutup</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-600 font-sans">Terbukti dengan foto before-after</p>
         </div>
 
-        {/* Counter 4: Overdue SLA */}
+        {/* Counter 4: Lewat Batas Respons */}
         <div
           onClick={() => setSelectedStatusFilter("OVERDUE")}
           className={`cursor-pointer p-4 rounded-[6px] transition-all ${
@@ -337,11 +331,9 @@ export default function OfficerDashboard({
             <span className="text-[11px] font-bold uppercase text-rose-700 font-sans">Lewat Batas Respons</span>
             <Clock className="w-4 h-4 text-rose-600" />
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
+          <div className="mt-2.5">
             <span className="text-3xl font-bold font-sans tabular-nums text-rose-700">{stats.overdue}</span>
-            <span className="text-xs text-slate-500 font-sans">Belum ada tanggapan dinas</span>
           </div>
-          <p className="mt-1 text-[11px] text-rose-600 font-sans">Objek pengawasan Ombudsman RI</p>
         </div>
       </div>
 
@@ -437,9 +429,6 @@ export default function OfficerDashboard({
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-sans bg-orange-100/70 text-orange-900 border border-orange-200/70">
               {filteredReports.length} Tiket
-            </span>
-            <span className="text-[11px] text-slate-400 font-sans hidden sm:inline">
-              • Kepatuhan SLA UU No. 25/2009
             </span>
           </div>
 
@@ -784,8 +773,6 @@ export default function OfficerDashboard({
           <span>Portal Administrasi &amp; Disposisi Operasional Penyelenggara Jalan</span>
         </div>
         <div className="flex items-center gap-2 text-[10px] text-slate-400">
-          <span>Kepatuhan SLA UU No. 25/2009</span>
-          <span className="text-slate-300">•</span>
           <span className="font-mono">Sistem Terintegrasi v2.4</span>
         </div>
       </footer>
