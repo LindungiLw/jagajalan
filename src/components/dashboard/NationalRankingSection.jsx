@@ -225,7 +225,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
         {
           label: "Aduan Pemda (Ombudsman)",
           value: "4.766 Laporan",
-          sub: "Substansi Infrastruktur Tertinggi",
+          sub: "Instansi Terbanyak Dilaporkan (2025)",
         },
         {
           label: "Rujukan Data",

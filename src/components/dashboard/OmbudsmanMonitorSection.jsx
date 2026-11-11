@@ -34,6 +34,10 @@ import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
  * dengan label persentase dinamis dan interaktivitas filter sekali klik.
  */
 function StatusDistributionDonut({ counts, activeFilter, onSelectFilter }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredSlice, setHoveredSlice] = useState(null); // "OVERDUE" | "DALAM_PENGERJAAN" | "SELESAI" | null
+  const [mousePos, setMousePos] = useState({ x: 75, y: 70 });
+
   const total = counts.all || 1;
   const overdue = counts.overdue || 0;
   const inProgress = counts.inProgress || 0;
@@ -79,19 +83,161 @@ function StatusDistributionDonut({ counts, activeFilter, onSelectFilter }) {
   const lxResolved = cx + 57 * Math.cos(radResolved);
   const lyResolved = cy + 57 * Math.sin(radResolved);
 
+  // Spiderweb / Radar Mesh Angles & Rings
+  const spokesAngles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+  const webRings = [20, 28, 40, 50, 58];
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const x = ((e.clientX - rect.left) / rect.width) * 150;
+    const y = ((e.clientY - rect.top) / rect.height) * 140;
+    setMousePos({ x, y });
+  };
+
   return (
     <div className="flex flex-col items-center justify-between h-full w-full select-none">
       <h4 className="text-[10.5px] font-bold font-sans tracking-wider uppercase text-slate-700 text-center">
         Distribusi Status Aduan
       </h4>
 
-      {/* SVG Donut */}
+      {/* SVG Donut dengan Jaring-Jaring Interaktif */}
       <div className="relative my-0.5 sm:my-1 flex items-center justify-center">
         <svg
           viewBox="0 0 150 140"
-          className="w-36 h-36 sm:w-40 sm:h-40 overflow-visible"
+          className="w-36 h-36 sm:w-40 sm:h-40 overflow-visible transition-transform duration-300 cursor-crosshair"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => {
+            setIsHovered(false);
+            setHoveredSlice(null);
+          }}
+          onMouseMove={handleMouseMove}
         >
-          {/* Subtle background track */}
+          <defs>
+            {/* Mesh Pattern Jaring-jaring Crosshatch */}
+            <pattern
+              id="donut-mesh-crosshatch"
+              width="5"
+              height="5"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(45)"
+            >
+              <line x1="0" y1="0" x2="0" y2="5" stroke="#ffffff" strokeWidth="0.9" strokeOpacity="0.6" />
+              <line x1="0" y1="0" x2="5" y2="0" stroke="#ffffff" strokeWidth="0.9" strokeOpacity="0.6" />
+            </pattern>
+            {/* Fine Radar Grid Pattern */}
+            <pattern
+              id="bg-grid-mesh"
+              width="10"
+              height="10"
+              patternUnits="userSpaceOnUse"
+            >
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e2e8f0" strokeWidth="0.5" strokeOpacity="0.7" />
+            </pattern>
+          </defs>
+
+          {/* 1. Background Grid Backdrop on Hover */}
+          {isHovered && (
+            <rect
+              x="5"
+              y="5"
+              width="140"
+              height="130"
+              rx="12"
+              fill="url(#bg-grid-mesh)"
+              className="animate-fade-in pointer-events-none"
+            />
+          )}
+
+          {/* 2. SPIDERWEB RADIAL MESH (Jaring-Jaring Laba-laba / Radar Koordinat) */}
+          <g className={`transition-all duration-300 pointer-events-none ${isHovered ? "opacity-100" : "opacity-0"}`}>
+            {/* Concentric 12-sided Web Polygons */}
+            {webRings.map((rWeb, idx) => {
+              const polyPoints = spokesAngles
+                .map((deg) => {
+                  const rad = (deg * Math.PI) / 180;
+                  return `${(cx + rWeb * Math.cos(rad)).toFixed(1)},${(cy + rWeb * Math.sin(rad)).toFixed(1)}`;
+                })
+                .join(" ");
+              const isCenterRing = rWeb === 40;
+              return (
+                <polygon
+                  key={`web-ring-${idx}`}
+                  points={polyPoints}
+                  fill="none"
+                  stroke={isCenterRing ? "#c2410c" : "#94a3b8"}
+                  strokeWidth={isCenterRing ? "1" : "0.75"}
+                  strokeDasharray={isCenterRing ? "none" : "2.5 2"}
+                  strokeOpacity={isCenterRing ? "0.85" : "0.45"}
+                />
+              );
+            })}
+
+            {/* 12 Radial Spoke Lines */}
+            {spokesAngles.map((deg) => {
+              const rad = (deg * Math.PI) / 180;
+              const x1 = cx + 18 * Math.cos(rad);
+              const y1 = cy + 18 * Math.sin(rad);
+              const x2 = cx + 60 * Math.cos(rad);
+              const y2 = cy + 60 * Math.sin(rad);
+              return (
+                <line
+                  key={`spoke-${deg}`}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="#94a3b8"
+                  strokeWidth="0.75"
+                  strokeDasharray="2 2"
+                  strokeOpacity="0.4"
+                />
+              );
+            })}
+
+            {/* Glowing Intersection Vertex Nodes (Simpul Jaring-Jaring) */}
+            {webRings.map((rWeb) =>
+              spokesAngles.map((deg) => {
+                const rad = (deg * Math.PI) / 180;
+                const vx = cx + rWeb * Math.cos(rad);
+                const vy = cy + rWeb * Math.sin(rad);
+                return (
+                  <circle
+                    key={`node-${rWeb}-${deg}`}
+                    cx={vx}
+                    cy={vy}
+                    r={rWeb === 40 ? "1.5" : "1"}
+                    fill={rWeb === 40 ? "#c2410c" : "#64748b"}
+                    opacity="0.8"
+                  />
+                );
+              })
+            )}
+
+            {/* Interactive Raycast Line to Cursor */}
+            <line
+              x1={cx}
+              y1={cy}
+              x2={mousePos.x}
+              y2={mousePos.y}
+              stroke="#c2410c"
+              strokeWidth="1.2"
+              strokeDasharray="3 2"
+              strokeOpacity="0.85"
+            />
+            <circle
+              cx={mousePos.x}
+              cy={mousePos.y}
+              r="3.5"
+              fill="#c2410c"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+              className="animate-ping"
+              style={{ animationDuration: "2s" }}
+            />
+          </g>
+
+          {/* 3. Base Donut Background Track */}
           <circle
             cx={cx}
             cy={cy}
@@ -101,63 +247,117 @@ function StatusDistributionDonut({ counts, activeFilter, onSelectFilter }) {
             strokeWidth={strokeWidth}
           />
 
-          {/* Slices group (rotated -90deg so 0 begins at 12 o'clock) */}
+          {/* 4. Slices group (rotated -90deg so 0 begins at 12 o'clock) */}
           <g transform={`rotate(-90 ${cx} ${cy})`}>
             {/* Slice 1: Melewati Tenggat (Rose / Red) */}
             {overdue > 0 && (
-              <circle
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill="none"
-                stroke="#e11d48"
-                strokeWidth={activeFilter === "OVERDUE" ? strokeWidth + 2 : strokeWidth}
-                strokeDasharray={`${lenOverdue} ${C - lenOverdue}`}
-                strokeDashoffset={-offsetOverdue}
-                strokeLinecap="butt"
-                className="transition-all duration-300 cursor-pointer hover:opacity-85"
-                onClick={() => onSelectFilter(activeFilter === "OVERDUE" ? "ALL" : "OVERDUE")}
-              >
-                <title>{`Melewati Tenggat: ${overdue} Aduan (${pctOverdue}%)`}</title>
-              </circle>
+              <>
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill="none"
+                  stroke="#e11d48"
+                  strokeWidth={hoveredSlice === "OVERDUE" || activeFilter === "OVERDUE" ? strokeWidth + 3 : strokeWidth}
+                  strokeDasharray={`${lenOverdue} ${C - lenOverdue}`}
+                  strokeDashoffset={-offsetOverdue}
+                  strokeLinecap="butt"
+                  className="transition-all duration-300 cursor-pointer"
+                  onMouseEnter={() => setHoveredSlice("OVERDUE")}
+                  onClick={() => onSelectFilter(activeFilter === "OVERDUE" ? "ALL" : "OVERDUE")}
+                >
+                  <title>{`Melewati Tenggat: ${overdue} Aduan (${pctOverdue}%)`}</title>
+                </circle>
+                {/* Jaring-Jaring Crosshatch Overlay on Hover */}
+                {isHovered && (
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={r}
+                    fill="none"
+                    stroke="url(#donut-mesh-crosshatch)"
+                    strokeWidth={hoveredSlice === "OVERDUE" ? strokeWidth + 3 : strokeWidth}
+                    strokeDasharray={`${lenOverdue} ${C - lenOverdue}`}
+                    strokeDashoffset={-offsetOverdue}
+                    strokeLinecap="butt"
+                    className="pointer-events-none transition-all duration-300"
+                  />
+                )}
+              </>
             )}
 
             {/* Slice 2: Dalam Tanggapan (Amber / Yellow) */}
             {inProgress > 0 && (
-              <circle
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill="none"
-                stroke="#f59e0b"
-                strokeWidth={activeFilter === "DALAM_PENGERJAAN" ? strokeWidth + 2 : strokeWidth}
-                strokeDasharray={`${lenInProgress} ${C - lenInProgress}`}
-                strokeDashoffset={-offsetInProgress}
-                strokeLinecap="butt"
-                className="transition-all duration-300 cursor-pointer hover:opacity-85"
-                onClick={() => onSelectFilter(activeFilter === "DALAM_PENGERJAAN" ? "ALL" : "DALAM_PENGERJAAN")}
-              >
-                <title>{`Dalam Masa Tanggap: ${inProgress} Aduan (${pctInProgress}%)`}</title>
-              </circle>
+              <>
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill="none"
+                  stroke="#f59e0b"
+                  strokeWidth={hoveredSlice === "DALAM_PENGERJAAN" || activeFilter === "DALAM_PENGERJAAN" ? strokeWidth + 3 : strokeWidth}
+                  strokeDasharray={`${lenInProgress} ${C - lenInProgress}`}
+                  strokeDashoffset={-offsetInProgress}
+                  strokeLinecap="butt"
+                  className="transition-all duration-300 cursor-pointer"
+                  onMouseEnter={() => setHoveredSlice("DALAM_PENGERJAAN")}
+                  onClick={() => onSelectFilter(activeFilter === "DALAM_PENGERJAAN" ? "ALL" : "DALAM_PENGERJAAN")}
+                >
+                  <title>{`Dalam Masa Tanggap: ${inProgress} Aduan (${pctInProgress}%)`}</title>
+                </circle>
+                {/* Jaring-Jaring Crosshatch Overlay on Hover */}
+                {isHovered && (
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={r}
+                    fill="none"
+                    stroke="url(#donut-mesh-crosshatch)"
+                    strokeWidth={hoveredSlice === "DALAM_PENGERJAAN" ? strokeWidth + 3 : strokeWidth}
+                    strokeDasharray={`${lenInProgress} ${C - lenInProgress}`}
+                    strokeDashoffset={-offsetInProgress}
+                    strokeLinecap="butt"
+                    className="pointer-events-none transition-all duration-300"
+                  />
+                )}
+              </>
             )}
 
             {/* Slice 3: Selesai Ditangani (Emerald / Green) */}
             {resolved > 0 && (
-              <circle
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill="none"
-                stroke="#10b981"
-                strokeWidth={activeFilter === "SELESAI" ? strokeWidth + 2 : strokeWidth}
-                strokeDasharray={`${lenResolved} ${C - lenResolved}`}
-                strokeDashoffset={-offsetResolved}
-                strokeLinecap="butt"
-                className="transition-all duration-300 cursor-pointer hover:opacity-85"
-                onClick={() => onSelectFilter(activeFilter === "SELESAI" ? "ALL" : "SELESAI")}
-              >
-                <title>{`Tuntas Ditangani: ${resolved} Aduan (${pctResolved}%)`}</title>
-              </circle>
+              <>
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth={hoveredSlice === "SELESAI" || activeFilter === "SELESAI" ? strokeWidth + 3 : strokeWidth}
+                  strokeDasharray={`${lenResolved} ${C - lenResolved}`}
+                  strokeDashoffset={-offsetResolved}
+                  strokeLinecap="butt"
+                  className="transition-all duration-300 cursor-pointer"
+                  onMouseEnter={() => setHoveredSlice("SELESAI")}
+                  onClick={() => onSelectFilter(activeFilter === "SELESAI" ? "ALL" : "SELESAI")}
+                >
+                  <title>{`Tuntas Ditangani: ${resolved} Aduan (${pctResolved}%)`}</title>
+                </circle>
+                {/* Jaring-Jaring Crosshatch Overlay on Hover */}
+                {isHovered && (
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={r}
+                    fill="none"
+                    stroke="url(#donut-mesh-crosshatch)"
+                    strokeWidth={hoveredSlice === "SELESAI" ? strokeWidth + 3 : strokeWidth}
+                    strokeDasharray={`${lenResolved} ${C - lenResolved}`}
+                    strokeDashoffset={-offsetResolved}
+                    strokeLinecap="butt"
+                    className="pointer-events-none transition-all duration-300"
+                  />
+                )}
+              </>
             )}
           </g>
 
@@ -204,6 +404,13 @@ function StatusDistributionDonut({ counts, activeFilter, onSelectFilter }) {
             onClick={() => onSelectFilter("ALL")}
             title="Klik untuk melihat seluruh aduan"
           >
+            <circle
+              cx={cx}
+              cy={cy}
+              r={r - strokeWidth / 2 - 2}
+              fill={isHovered ? "rgba(255,255,255,0.95)" : "transparent"}
+              className="transition-colors duration-200"
+            />
             <text
               x={cx}
               y={cy - 4}
@@ -224,6 +431,34 @@ function StatusDistributionDonut({ counts, activeFilter, onSelectFilter }) {
             </text>
           </g>
         </svg>
+      </div>
+
+      {/* Dynamic Hover Status Indicator */}
+      <div className="h-5 text-center mt-0.5 flex items-center justify-center">
+        {hoveredSlice === "OVERDUE" ? (
+          <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 animate-fade-in flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
+            <span>Melewati Tenggat: {overdue} Aduan ({pctOverdue}%)</span>
+          </span>
+        ) : hoveredSlice === "DALAM_PENGERJAAN" ? (
+          <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-fade-in flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            <span>Dalam Masa Tanggap: {inProgress} Aduan ({pctInProgress}%)</span>
+          </span>
+        ) : hoveredSlice === "SELESAI" ? (
+          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 animate-fade-in flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+            <span>Tuntas Ditangani: {resolved} Aduan ({pctResolved}%)</span>
+          </span>
+        ) : isHovered ? (
+          <span className="text-[9.5px] font-medium text-slate-500 animate-fade-in font-mono">
+            Jaring Radar Koordinat • Klik irisan untuk memfilter
+          </span>
+        ) : (
+          <span className="text-[9.5px] text-slate-400 font-sans">
+            Arahkan kursor untuk jaring radar interaktif
+          </span>
+        )}
       </div>
 
       {/* Legend below Donut */}
@@ -534,7 +769,7 @@ export default function OmbudsmanMonitorSection({
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-1">
         <div className="space-y-1">
           <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-rose-800">
-            Pengawasan Pelayanan Publik
+            Pengawasan Pelayanan Publik · Rujukan Ombudsman RI (2026b)
           </p>
           <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
             Lacak Laporan &amp; Batas Waktu Tanggapan

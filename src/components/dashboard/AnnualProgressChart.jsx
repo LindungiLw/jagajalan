@@ -23,39 +23,35 @@ import {
 } from "lucide-react";
 import { ANNUAL_HISTORICAL_DATA } from "@/data/provincesData";
 
-// Data Resmi Panjang Jalan Indonesia Berdasarkan Status Wewenang (BPS SIRUSA & Ditjen Bina Marga KemenPUPR)
+// Data Resmi Panjang Jalan Indonesia Berdasarkan 3 Tingkat Kewenangan (BPS 2026, Data Tahun 2025 non-tol)
+// Sebagaimana diatur dalam Undang-Undang Nomor 2 Tahun 2022 (Republik Indonesia, 2022)
 const NATIONAL_ROAD_COMPOSITION = [
   {
-    key: "kabupaten",
-    label: "Jalan Kabupaten",
-    owner: "Pemerintah Kabupaten",
-    km: 316200,
-    pct: 57.6,
-    color: "#059669", // Emerald-600
-  },
-  {
-    key: "kota",
-    label: "Jalan Kota",
-    owner: "Pemerintah Kota",
-    km: 130700,
-    pct: 23.8,
-    color: "#0d9488", // Teal-600
+    key: "kabupaten_kota",
+    label: "Jalan Kab/Kota (Daerah)",
+    owner: "Pemerintah Kabupaten & Kota",
+    km: 431035,
+    pct: 80.1,
+    color: "#ea580c", // Orange-600
+    note: "Angka sementara BPS 2026 (non-tol)",
   },
   {
     key: "provinsi",
     label: "Jalan Provinsi",
-    owner: "Pemerintah Provinsi (Dinas PUPR / Bina Marga)",
-    km: 54500,
-    pct: 9.9,
+    owner: "Pemerintah Provinsi (Dinas Bina Marga / PUPR)",
+    km: 59462,
+    pct: 11.0,
     color: "#9333ea", // Purple-600
+    note: "SK Gubernur",
   },
   {
     key: "nasional",
-    label: "Jalan Nasional",
-    owner: "Kementerian PUPR (BBPJN/BPJN)",
-    km: 47600,
-    pct: 8.7,
+    label: "Jalan Negara (Nasional)",
+    owner: "Kementerian Pekerjaan Umum (BBPJN / BPJN)",
+    km: 47605,
+    pct: 8.9,
     color: "#2563eb", // Blue-600
+    note: "SK Menteri PU No. 430/KPTS/M/2022",
   },
 ];
 
@@ -63,7 +59,7 @@ export default function AnnualProgressChart() {
   const [mounted, setMounted] = useState(false);
   const [activeMetric, setActiveMetric] = useState("road-condition"); // 'road-condition' | 'complaints' | 'inpres'
   const [chartViewMode, setChartViewMode] = useState("line"); // 'line' (clean disparity lines, default) | 'combo'
-  const [selectedYear, setSelectedYear] = useState(2024);
+  const [selectedYear, setSelectedYear] = useState(2025);
   const [hoveredSlice, setHoveredSlice] = useState(null);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
 
@@ -106,10 +102,11 @@ export default function AnnualProgressChart() {
 
   // SVG Coordinates for Line Chart (viewBox: 0 0 660 230, scale 0% to 100%)
   // Baseline 0% is at y = 195, 100% is at y = 25. Total height = 170px.
-  // Data points horizontally: x = 105 to 585 (480px width across 4 intervals -> 120px step)
+  // Data points horizontally: x = 105 to 585 (480px width across intervals)
   const linePoints = useMemo(() => {
+    const totalSteps = Math.max(1, roadConditionTrends.length - 1);
     return roadConditionTrends.map((d, i) => {
-      const x = 105 + (i / 4) * 480;
+      const x = 105 + (i / totalSteps) * 480;
       const yNasional = 195 - (d.nasional / 100) * 170;
       const yProvinsi = 195 - (d.provinsi / 100) * 170;
       const yKabKota = 195 - (d.kabupatenKota / 100) * 170;
@@ -179,7 +176,7 @@ export default function AnnualProgressChart() {
     };
   });
 
-  const availableYears = [2020, 2021, 2022, 2023, 2024];
+  const availableYears = [2020, 2021, 2022, 2023, 2024, 2025];
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -652,14 +649,14 @@ export default function AnnualProgressChart() {
                   onClick={() => setShowExplanationModal(true)}
                   className="text-xs font-bold text-[#c2410c] hover:text-[#9a3412] transition-colors cursor-pointer flex items-center gap-1 shrink-0"
                 >
-                  <span>Metodologi BPS SIRUSA</span>
+                  <span>Metodologi BPS &amp; Renstra PU</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
 
               {/* Clean italic source text without border or dot */}
               <p className="text-[11px] text-slate-400 italic">
-                * Sumber: Data Resmi Historis (2020 – 2024) BPS SIRUSA & Ombudsman RI
+                * Sumber: BPS (2026), Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029, dan Ombudsman RI (2026b)
               </p>
             </div>
           </div>
@@ -671,13 +668,13 @@ export default function AnnualProgressChart() {
             <div>
               <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 mb-0.5">
                 <Clock className="w-3.5 h-3.5 text-blue-600" />
-                <span>Beban Ruas Nasional</span>
+                <span>Beban Ruas Berdasarkan Kewenangan</span>
               </div>
               <h3 className="text-base font-bold text-slate-900 tracking-tight">
                 Proporsi Panjang Jalan Indonesia
               </h3>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Distribusi total ~549.000 Km berdasarkan kewenangan (BPS).
+                Distribusi total 538.102 Km non-tol menurut 3 kewenangan (BPS, 2026).
               </p>
             </div>
 
@@ -694,7 +691,7 @@ export default function AnnualProgressChart() {
                   strokeWidth="11"
                 />
 
-                {/* Slices for the 4 authorities */}
+                {/* Slices for the 3 authorities */}
                 {donutSlices.map((slice) => {
                   const isHovered = hoveredSlice === slice.key;
                   return (
@@ -721,23 +718,22 @@ export default function AnnualProgressChart() {
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                 <span className="text-[10px] uppercase font-semibold text-slate-400">Total Ruas</span>
                 <span className="text-xl font-black text-slate-900 font-sans tabular-nums leading-tight">
-                  549.000
+                  538.102
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium">Kilometer</span>
+                <span className="text-[10px] text-slate-500 font-medium">Km (Non-Tol)</span>
               </div>
             </div>
 
             {/* Proportional Stacked Segment Track */}
             <div className="space-y-1.5 pt-1">
               <div className="flex h-2.5 w-full rounded-full overflow-hidden bg-slate-100 ring-1 ring-slate-200/50">
-                <div style={{ width: "57.6%" }} className="bg-[#059669] h-full" title="Jalan Kabupaten: 57.6%" />
-                <div style={{ width: "23.8%" }} className="bg-[#0d9488] h-full" title="Jalan Kota: 23.8%" />
-                <div style={{ width: "9.9%" }} className="bg-[#9333ea] h-full" title="Jalan Provinsi: 9.9%" />
-                <div style={{ width: "8.7%" }} className="bg-[#2563eb] h-full" title="Jalan Nasional: 8.7%" />
+                <div style={{ width: "80.1%" }} className="bg-[#ea580c] h-full" title="Jalan Kabupaten/Kota: 80.1% (431.035 Km)" />
+                <div style={{ width: "11.0%" }} className="bg-[#9333ea] h-full" title="Jalan Provinsi: 11.0% (59.462 Km)" />
+                <div style={{ width: "8.9%" }} className="bg-[#2563eb] h-full" title="Jalan Negara: 8.9% (47.605 Km)" />
               </div>
               <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5">
-                <span>Daerah (Kab+Kota): <strong>81.4%</strong></span>
-                <span>Pusat: <strong>8.7%</strong></span>
+                <span>Daerah (Kab/Kota): <strong>80.1% (431.035 Km)</strong></span>
+                <span>Pusat: <strong>8.9% (47.605 Km)</strong></span>
               </div>
             </div>
 
@@ -784,8 +780,8 @@ export default function AnnualProgressChart() {
             <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200/80 text-xs text-slate-700 flex items-start gap-2.5 leading-relaxed font-sans shadow-2xs">
               <Scale className="w-4 h-4 text-[#c2410c] shrink-0 mt-0.5" />
               <div>
-                <strong className="text-slate-900 font-semibold">Akar Masalah Kesenjangan Fiskal:</strong>{" "}
-                Sebesar <strong className="text-slate-900">81.4% (446.900 Km)</strong> ruas jalan di Indonesia berada di bawah wewenang Pemerintah Kabupaten &amp; Kota dengan keterbatasan kapasitas PAD. Beban bentang yang timpang inilah yang melatarbelakangi terbitnya <strong>Inpres No. 3/2023 (Intervensi Fiskal APBN)</strong>.
+                <strong className="text-slate-900 font-semibold">Kewenangan &amp; Kesenjangan Fiskal:</strong>{" "}
+                BPS (2026) mencatat <strong className="text-slate-900">80,10% (431.035 Km)</strong> jalan non-tol merupakan wewenang Pemkab/Pemkot dan <strong className="text-slate-900">11,05% (59.462 Km)</strong> wewenang Pemprov. Besarnya cakupan jalan daerah di tengah PAD terbatas inilah urgensi utama penelusuran status ruas (<strong>UU No. 2 Tahun 2022</strong>) dan intervensi <strong>Inpres No. 3/2023 (IJD)</strong>.
               </div>
             </div>
           </div>
@@ -798,10 +794,10 @@ export default function AnnualProgressChart() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                Evolusi Keluhan Pelayanan Publik Jalan Rusak (2020 – 2024)
+                Evolusi Keluhan Pelayanan Publik Jalan Rusak (2020 – 2025)
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Sumber: Laporan Tahunan Ombudsman RI & Konsolidasi SP4N-LAPOR!.
+                Sumber: Laporan Ombudsman RI (2026b) &amp; Konsolidasi SP4N-LAPOR!.
               </p>
             </div>
 
@@ -826,20 +822,28 @@ export default function AnnualProgressChart() {
           {/* 4 Complaint Stat Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-4 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50">
-              <span className="text-[11px] font-semibold text-slate-500 block">Total Aduan ({selectedComplaintData.year})</span>
+              <span className="text-[11px] font-semibold text-slate-500 block">Total Penerimaan ({selectedComplaintData.year})</span>
               <div className="text-2xl font-extrabold text-slate-900 font-sans tabular-nums mt-1">
                 {selectedComplaintData.totalComplaints.toLocaleString("id-ID")}
               </div>
-              <span className="text-[10px] text-slate-400 block mt-0.5">Naik 164% sejak 2020</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">
+                {selectedComplaintData.year === 2025 ? "23.596 Laporan (Ombudsman RI, 2026b)" : "Kompilasi Laporan Tahunan"}
+              </span>
             </div>
 
             <div className="p-4 rounded-[6px] bg-emerald-50/70 border border-emerald-200">
-              <span className="text-[11px] font-semibold text-emerald-700 block">Tuntas Ditindaklanjuti</span>
+              <span className="text-[11px] font-semibold text-emerald-700 block">
+                {selectedComplaintData.year === 2025 ? "Terlapor Terbanyak (Pemda)" : "Tuntas Ditindaklanjuti"}
+              </span>
               <div className="text-2xl font-extrabold text-emerald-800 font-sans tabular-nums mt-1">
-                {selectedComplaintData.resolved.toLocaleString("id-ID")}
+                {selectedComplaintData.year === 2025
+                  ? "4.766"
+                  : selectedComplaintData.resolved.toLocaleString("id-ID")}
               </div>
               <span className="text-[10px] text-emerald-700 block mt-0.5">
-                {((selectedComplaintData.resolved / selectedComplaintData.totalComplaints) * 100).toFixed(1)}% Penyelesaian
+                {selectedComplaintData.year === 2025
+                  ? "4.766 laporan kepada Pemda (Ombudsman, 2026b)"
+                  : `${((selectedComplaintData.resolved / selectedComplaintData.totalComplaints) * 100).toFixed(1)}% Penyelesaian`}
               </span>
             </div>
 
@@ -982,23 +986,26 @@ export default function AnnualProgressChart() {
 
                 <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
                   <h4 className="font-bold text-slate-900 text-sm mb-1">
-                    2. Definisi &amp; Metodologi Indikator Kesenjangan Kemantapan (36,3%)
+                    2. Rujukan Resmi Panjang Jalan &amp; Kemantapan (BPS 2026 &amp; Renstra PU 2025–2029)
                   </h4>
                   <p>
-                    Indikator disparitas kemantapan pada dashboard dihitung secara transparan dengan rujukan resmi:
+                    Data makro komparasi pada platform JagaJalan merujuk secara konsisten pada dokumen negara resmi:
                   </p>
                   <ul className="list-disc pl-5 mt-1.5 space-y-1">
                     <li>
-                      <strong>Sumber Data:</strong> Publikasi resmi <em>Statistik Transportasi Darat (BPS SIRUSA 2020–2024)</em> dan Dokumen Rancangan Akhir Rencana Strategis Kementerian Pekerjaan Umum 2025–2029.
+                      <strong>Panjang Jalan Berdasarkan 3 Kewenangan (BPS, 2026):</strong> Total <strong>538.102 km</strong> jalan non-tol nasional, terdiri atas <strong>47.605 km</strong> jalan negara (8,85%), <strong>59.462 km</strong> jalan provinsi (11,05%), dan <strong>431.035 km</strong> jalan kabupaten/kota (80,10% - angka sementara, tidak mencakup jalan tol).
                     </li>
                     <li>
-                      <strong>Periode &amp; Cakupan:</strong> Rangkaian data tahunan 2020 s.d. 2024 yang mencakup seluruh jaringan jalan umum non-tol di 38 provinsi di Indonesia (~538.102 Km).
+                      <strong>Tingkat Kemantapan Jalan (Rancangan Akhir Renstra PU 2025–2029):</strong> Menetapkan capaian kemantapan sebesar <strong>94,18%</strong> untuk jalan nasional, <strong>71,33%</strong> untuk jalan provinsi, dan <strong>57,91%</strong> untuk jalan kabupaten/kota (Kementerian Pekerjaan Umum, 2025).
                     </li>
                     <li>
-                      <strong>Definisi &amp; Formula Perhitungan:</strong> Selisih poin persentase kemantapan agregat jalan nasional (kondisi baik + sedang: <strong>93,4%</strong>) dikurangi tingkat kemantapan jalan kabupaten/kota (kondisi baik + sedang: <strong>57,1%</strong>). Selisihnya menghasilkan <strong>jurang kesenjangan 36,3%</strong>.
+                      <strong>Jurang Ketimpangan (36,27%):</strong> Selisih poin persentase kemantapan jalan nasional (94,18%) dikurangi kemantapan jalan kabupaten/kota (57,91%), merefleksikan disparitas fiskal pemeliharaan jalan daerah.
                     </li>
                     <li>
-                      <strong>Akar Masalah Struktural:</strong> Pemerintah Kabupaten &amp; Kota menanggung beban bentang terpanjang di Indonesia (<strong>81,4%</strong> dari total bentang nasional) dengan kapasitas Pendapatan Asli Daerah (PAD) yang terbatas untuk preservasi berkala.
+                      <strong>Dasar Regulasi Penelusuran Ruas (UU No. 2 Tahun 2022):</strong> Mewajibkan transparansi status ruas dan kepastian instansi penyelenggara teknis yang dapat ditelusuri masyarakat luas (Republik Indonesia, 2022).
+                    </li>
+                    <li>
+                      <strong>Data Penerimaan Ombudsman RI (2026b):</strong> Mencatat <strong>23.596 penerimaan masyarakat</strong> sepanjang 2025, dengan pemerintah daerah sebagai instansi yang paling banyak dilaporkan (<strong>4.766 laporan</strong>).
                     </li>
                   </ul>
                 </div>

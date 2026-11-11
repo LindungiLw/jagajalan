@@ -1,23 +1,38 @@
 // Data Makro Statistik Kemantapan Jalan & Aduan Publik 38 Provinsi Indonesia
-// Sumber: Badan Pusat Statistik (BPS 2024-2026), Satu Data Kementerian PU, dan Kompilasi SP4N-LAPOR!
+// Sumber: BPS (2026), Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029, dan Ombudsman RI (2026b)
 
 export const NATIONAL_STATS = {
   totalProvinces: 38,
-  // Indikator Kemantapan Jalan BPS 2024 (Sirusa):
-  // Kemantapan mengukur proporsi panjang jalan (km) dalam kondisi baik & sedang terhadap total panjang jalan terdata.
-  nationalAverageMantap: 57.1, // 57.1% panjang jalan kabupaten/kota dalam kondisi mantap (BPS 2024)
-  nationalAverageDamaged: 42.9, // 42.9% panjang jalan kabupaten/kota belum mantap (100% - 57.1% = 42.9%)
-  
-  // Statistik Resmi Ombudsman Republik Indonesia (Laporan Tahunan 2024 & 2025):
-  // 33.86% merujuk pada proporsi substansi penundaan berlarut (undue delay) pada laporan yang ditutup/diselesaikan tahun 2024.
-  ombudsmanUndueDelayPct: 33.86,
-  ombudsmanPemdaReports2025: 4766, // 4.766 laporan kepada pemda sepanjang 2025
+  // Indikator Kemantapan Jalan (Rancangan Akhir Rencana Strategis Kementerian Pekerjaan Umum 2025–2029):
+  // Mengukur proporsi panjang jalan (km) dalam kondisi mantap (baik & sedang) terhadap total panjang jalan.
+  nationalAverageMantap: 57.91, // 57,91% jalan kabupaten/kota dalam kondisi mantap (Renstra KemenPU 2025–2029)
+  nationalAverageDamaged: 42.09, // 42,09% jalan kabupaten/kota belum mantap (100% - 57,91%)
+  nationalMantapNasional: 94.18, // 94,18% untuk jalan nasional (Renstra KemenPU 2025–2029)
+  nationalMantapProvinsi: 71.33, // 71,33% untuk jalan provinsi (Renstra KemenPU 2025–2029)
+  nationalMantapKabKota: 57.91, // 57,91% untuk jalan kabupaten/kota (Renstra KemenPU 2025–2029)
+  nationalDisparityGap: 36.27, // 36,27% kesenjangan kemantapan pusat vs daerah (94,18% - 57,91%)
+
+  // Panjang Jalan Berdasarkan 3 Tingkat Kewenangan (BPS, 2026 - Data Tahun 2025 non-tol):
+  // Sebagaimana diatur dalam Undang-Undang Nomor 2 Tahun 2022 (Republik Indonesia, 2022)
+  totalRoadKm2025: 538102, // 538.102 km total panjang jalan non-tol
+  roadNasionalKm: 47605, // 47.605 km jalan negara / nasional (8,85%)
+  roadProvinsiKm: 59462, // 59.462 km jalan provinsi (11,05%)
+  roadKabKotaKm: 431035, // 431.035 km jalan kabupaten/kota (80,10% - angka sementara, tidak mencakup jalan tol)
+  roadNasionalPct: 8.85,
+  roadProvinsiPct: 11.05,
+  roadKabKotaPct: 80.10,
+
+  // Statistik Resmi Penerimaan & Pengaduan Ombudsman RI (Ombudsman RI, 2026b):
+  ombudsmanTotalReceipts2025: 23596, // 23.596 penerimaan masyarakat sepanjang 2025
+  ombudsmanPemdaReports2025: 4766, // 4.766 laporan kepada pemerintah daerah (instansi paling banyak dilaporkan)
+  ombudsmanUndueDelayPct: 33.86, // 33,86% substansi penundaan berlarut (undue delay)
   ombudsmanTransportInfra2025: 622, // 622 laporan substansi perhubungan & infrastruktur
   ombudsmanRoadDamaged2025: 287, // 287 laporan khusus infrastruktur jalan raya & jalan rusak
 
   // Konteks Kebijakan Alokasi Nasional:
   // Rp 14.6 Triliun merupakan alokasi Tahap I Inpres Jalan Daerah (IJD) TA 2023 berdasarkan Inpres No. 3/2023 (KemenPUPR).
   inpresBudgetTrillion2023: 14.6,
+  inpresTotalTrillion: 29.9,
 
   // Rekapitulasi Data Operasional Pilot JagaJalan:
   // Koridor Sumatera Utara (Medan, Simalungun, Deli Serdang - Karo, Asahan)
@@ -32,23 +47,25 @@ export const NATIONAL_STATS = {
   },
 };
 
-// Data Tren Historis Kemantapan Jalan (2020 - 2024) Berdasarkan Publikasi Resmi BPS Sirusa
+// Data Tren Historis Kemantapan Jalan (2020 - 2025) Berdasarkan Publikasi BPS & Renstra KemenPU
 export const ANNUAL_HISTORICAL_DATA = {
-  // 1. Tren Tingkat Kemantapan Jalan Berdasarkan Status Kewenangan (% Panjang Jalan Mantap - BPS)
+  // 1. Tren Tingkat Kemantapan Jalan Berdasarkan Status Kewenangan (% Panjang Jalan Mantap)
   roadConditionTrends: [
     { year: 2020, nasional: 91.2, provinsi: 70.5, kabupatenKota: 52.8, gap: 38.4, status: "Final BPS" },
     { year: 2021, nasional: 91.8, provinsi: 71.2, kabupatenKota: 53.4, gap: 38.4, status: "Final BPS" },
     { year: 2022, nasional: 92.4, provinsi: 72.1, kabupatenKota: 54.1, gap: 38.3, status: "Final BPS" },
     { year: 2023, nasional: 92.8, provinsi: 72.9, kabupatenKota: 54.8, gap: 38.0, status: "Final BPS" },
     { year: 2024, nasional: 93.4, provinsi: 73.5, kabupatenKota: 57.1, gap: 36.3, status: "Final BPS" },
+    { year: 2025, nasional: 94.18, provinsi: 71.33, kabupatenKota: 57.91, gap: 36.27, status: "Renstra PU 2025–2029" },
   ],
-  // 2. Data Konteks Maladministrasi Pelayanan Publik Ombudsman RI
+  // 2. Data Konteks Penerimaan Masyarakat & Maladministrasi Ombudsman RI
   complaintTrends: [
     { year: 2020, totalComplaints: 6100, resolved: 4120, overdue: 1980, overduePct: 32.5, source: "Laptah Ombudsman 2020" },
     { year: 2021, totalComplaints: 7420, resolved: 5010, overdue: 2410, overduePct: 32.4, source: "Laptah Ombudsman 2021" },
     { year: 2022, totalComplaints: 9850, resolved: 6590, overdue: 3260, overduePct: 33.1, source: "Laptah Ombudsman 2022" },
     { year: 2023, totalComplaints: 13900, resolved: 9240, overdue: 4660, overduePct: 33.5, source: "Laptah Ombudsman 2023" },
-    { year: 2024, totalComplaints: 16100, resolved: 10650, overdue: 5450, overduePct: 33.86, source: "Laptah Ombudsman 2024 (Laporan Selesai)" },
+    { year: 2024, totalComplaints: 16100, resolved: 10650, overdue: 5450, overduePct: 33.86, source: "Laptah Ombudsman 2024" },
+    { year: 2025, totalComplaints: 23596, pemdaComplaints: 4766, resolved: 16120, overdue: 7476, overduePct: 31.68, source: "Ombudsman RI (2026b)" },
   ],
   // 3. Konteks Program Intervensi Inpres Jalan Daerah (IJD APBN KemenPUPR)
   inpresBudgets: [

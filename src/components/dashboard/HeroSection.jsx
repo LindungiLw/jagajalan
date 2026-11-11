@@ -50,7 +50,7 @@ export default function HeroSection({
 }) {
   const [selectedIndex, setSelectedIndex] = useState("kemantapan"); // 'kemantapan' | 'ombudsman' | 'pagu' | 'inpres'
   const [chartViewMode, setChartViewMode] = useState("line"); // 'line' | 'bar'
-  const [selectedYear, setSelectedYear] = useState(2024);
+  const [selectedYear, setSelectedYear] = useState(2025);
   const [budgetTimeScale, setBudgetTimeScale] = useState("instansi"); // 'instansi' | 'bulanan'
   const [summaryTab, setSummaryTab] = useState("wewenang"); // 'wewenang' | 'aduan'
   const [searchQuery, setSearchQuery] = useState("");
@@ -440,14 +440,14 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "kemantapan" ? "text-white" : "text-slate-600"
                         }`}>
-                          Kemantapan Jalan (BPS)
+                          Kemantapan Jalan (Renstra)
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "kemantapan" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "kemantapan" ? "text-white" : "text-slate-900"}>57,1%</span>
+                        <span className={selectedIndex === "kemantapan" ? "text-white" : "text-slate-900"}>57,91%</span>
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "kemantapan" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
@@ -488,18 +488,18 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "ombudsman" ? "text-white" : "text-slate-600"
                         }`}>
-                          Penundaan Berlarut (SLA)
+                          Laporan Ombudsman RI
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "ombudsman" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "ombudsman" ? "text-white" : "text-slate-900"}>33,86%</span>
+                        <span className={selectedIndex === "ombudsman" ? "text-white" : "text-slate-900"}>4.766</span>
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "ombudsman" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Aduan Lambat
+                          Aduan Terbanyak: Pemda
                         </span>
                       </div>
                     </div>
@@ -611,8 +611,8 @@ export default function HeroSection({
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <span className="text-[9.5px] font-semibold text-slate-400 uppercase font-sans tracking-wide truncate block">
-                        {selectedIndex === "kemantapan" && "BPS SIRUSA (DATA TAHUNAN 2020–2024)"}
-                        {selectedIndex === "ombudsman" && "OMBUDSMAN RI (LAPORAN TAHUNAN 2020–2024)"}
+                        {selectedIndex === "kemantapan" && "BPS & RENSTRA KEMENPU (2020–2025)"}
+                        {selectedIndex === "ombudsman" && "OMBUDSMAN RI (2020–2025 · LAPORAN 2026b)"}
                         {selectedIndex === "pagu" && "SIRUP & LPSE LKPP (TAHUN ANGGARAN 2026)"}
                         {selectedIndex === "inpres" && "KEMEN PU (INPRES NO. 3/2023 TAHAP I & II)"}
                       </span>
@@ -698,7 +698,7 @@ export default function HeroSection({
                     {/* Right: Year Selector / Time Scale Toggle */}
                     {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman") && (
                       <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
-                        {[2020, 2021, 2022, 2023, 2024].map((yr) => (
+                        {[2020, 2021, 2022, 2023, 2024, 2025].map((yr) => (
                           <button
                             key={yr}
                             onClick={() => setSelectedYear(yr)}
@@ -786,34 +786,34 @@ export default function HeroSection({
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${roadConditionTrends.map((d, i) => `${68 + i * 82},${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
-                            ${[...roadConditionTrends].reverse().map((d, i) => `${396 - i * 82},${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
+                            ${roadConditionTrends.map((d, i) => `${58 + i * (355 / (roadConditionTrends.length - 1))},${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
+                            ${[...roadConditionTrends].reverse().map((d, i) => `${413 - i * (355 / (roadConditionTrends.length - 1))},${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           `}
                           fill="url(#kemantapanAreaGrad)"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#2563eb"
                           strokeWidth="2.5"
                           strokeLinecap="round"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#9333ea"
                           strokeWidth="2.2"
                           strokeLinecap="round"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#ea580c"
                           strokeWidth="3.2"
                           strokeLinecap="round"
                         />
                         {roadConditionTrends.map((d, i) => {
-                          const x = 68 + i * 82;
+                          const x = 58 + i * (355 / (roadConditionTrends.length - 1));
                           const yNas = 18 + ((100 - d.nasional) / 60) * 94;
                           const yProv = 18 + ((100 - d.provinsi) / 60) * 94;
                           const yKab = 18 + ((100 - d.kabupatenKota) / 60) * 94;
@@ -821,26 +821,26 @@ export default function HeroSection({
 
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
-                              <rect x={x - 24} y="10" width="48" height="135" fill="transparent" />
+                              <rect x={x - 20} y="10" width="40" height="135" fill="transparent" />
                               {isSelected && (
                                 <line x1={x} y1="18" x2={x} y2="112" stroke="#ea580c" strokeWidth="1.2" strokeDasharray="2 2" />
                               )}
                               <circle cx={x} cy={yNas} r={isSelected ? 4.5 : 3} fill="#2563eb" stroke="#fff" strokeWidth="1.5" />
                               <circle cx={x} cy={yProv} r={isSelected ? 4.5 : 3} fill="#9333ea" stroke="#fff" strokeWidth="1.5" />
                               <circle cx={x} cy={yKab} r={isSelected ? 6 : 4} fill="#ea580c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={isSelected ? "#9a3412" : "#ea580c"}>
+                              <text x={x} y={yKab - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={isSelected ? "#9a3412" : "#ea580c"}>
                                 {d.kabupatenKota}%
                               </text>
                               {/* Bottom Year Button Pill */}
                               {isSelected ? (
                                 <g>
-                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
-                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
                                 </g>
                               ) : (
                                 <g>
-                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
-                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
                                 </g>
                               )}
                             </g>
@@ -864,7 +864,7 @@ export default function HeroSection({
                         })}
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         {roadConditionTrends.map((d, i) => {
-                          const xCenter = 68 + i * 82;
+                          const xCenter = 58 + i * (355 / (roadConditionTrends.length - 1));
                           const isSelected = d.year === selectedYear;
                           const hNas = ((d.nasional - 40) / 60) * 94;
                           const hProv = ((d.provinsi - 40) / 60) * 94;
@@ -877,41 +877,41 @@ export default function HeroSection({
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
                               {/* Selected Year Card Framing */}
                               {isSelected && (
-                                <rect x={xCenter - 23} y="14" width="46" height="98" rx="5" fill="#f8fafc" stroke="#fed7aa" strokeWidth="1" />
+                                <rect x={xCenter - 18} y="14" width="36" height="98" rx="5" fill="#f8fafc" stroke="#fed7aa" strokeWidth="1" />
                               )}
                               
                               {/* Nasional Bar */}
-                              <rect x={xCenter - 18} y={yNas} width="11" height={hNas} rx="2.5" fill="#2563eb" />
+                              <rect x={xCenter - 13} y={yNas} width="8" height={hNas} rx="2" fill="#2563eb" />
                               {isSelected && (
-                                <text x={xCenter - 12.5} y={yNas - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#1d4ed8">
+                                <text x={xCenter - 9} y={yNas - 3.5} textAnchor="middle" fontSize="7" fontWeight="bold" fill="#1d4ed8">
                                   {d.nasional}%
                                 </text>
                               )}
 
                               {/* Provinsi Bar */}
-                              <rect x={xCenter - 5} y={yProv} width="11" height={hProv} rx="2.5" fill="#7c3aed" />
+                              <rect x={xCenter - 4} y={yProv} width="8" height={hProv} rx="2" fill="#7c3aed" />
                               {isSelected && (
-                                <text x={xCenter + 0.5} y={yProv - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#6d28d9">
+                                <text x={xCenter} y={yProv - 3.5} textAnchor="middle" fontSize="7" fontWeight="bold" fill="#6d28d9">
                                   {d.provinsi}%
                                 </text>
                               )}
 
                               {/* Kab/Kota Bar */}
-                              <rect x={xCenter + 8} y={yKab} width="11" height={hKab} rx="2.5" fill="#ea580c" />
-                              <text x={xCenter + 13.5} y={yKab - 3.5} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
+                              <rect x={xCenter + 5} y={yKab} width="8" height={hKab} rx="2" fill="#ea580c" />
+                              <text x={xCenter + 9} y={yKab - 3.5} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#c2410c">
                                 {d.kabupatenKota}%
                               </text>
 
                               {/* Year Button Pill Under Baseline */}
                               {isSelected ? (
                                 <g>
-                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
-                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
                                 </g>
                               ) : (
                                 <g>
-                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
-                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
                                 </g>
                               )}
                             </g>
@@ -949,42 +949,42 @@ export default function HeroSection({
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${complaintTrends.map((d, i) => `${68 + i * 82},${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
-                            396,112 68,112
+                            ${complaintTrends.map((d, i) => `${58 + i * (355 / (complaintTrends.length - 1))},${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
+                            413,112 58,112
                           `}
                           fill="url(#ombudsmanAreaGrad)"
                         />
                         <path
-                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${68 + i * 82} ${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
+                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (complaintTrends.length - 1))} ${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="2.8"
                           strokeLinecap="round"
                         />
                         {complaintTrends.map((d, i) => {
-                          const x = 68 + i * 82;
+                          const x = 58 + i * (355 / (complaintTrends.length - 1));
                           const y = 18 + ((36 - d.overduePct) / 8) * 94;
                           const isSelected = d.year === selectedYear;
 
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
-                              <rect x={x - 22} y="10" width="44" height="135" fill="transparent" />
+                              <rect x={x - 20} y="10" width="40" height="135" fill="transparent" />
                               {isSelected && (
                                 <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
                               )}
                               <circle cx={x} cy={y} r={isSelected ? 6 : 4} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
                                 {d.overduePct}%
                               </text>
                               {isSelected ? (
                                 <g>
-                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
-                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
                                 </g>
                               ) : (
                                 <g>
-                                  <rect x={x - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
-                                  <text x={x} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
                                 </g>
                               )}
                             </g>
@@ -1014,7 +1014,7 @@ export default function HeroSection({
                         })}
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         {complaintTrends.map((d, i) => {
-                          const xCenter = 68 + i * 82;
+                          const xCenter = 58 + i * (355 / (complaintTrends.length - 1));
                           const isSelected = d.year === selectedYear;
                           const h = ((d.overduePct - 28) / 8) * 94;
                           const yBar = 112 - h;
@@ -1022,29 +1022,29 @@ export default function HeroSection({
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
                               {isSelected && (
-                                <rect x={xCenter - 22} y="12" width="44" height="100" rx="4" fill="#c2410c" fillOpacity="0.06" />
+                                <rect x={xCenter - 18} y="12" width="36" height="100" rx="4" fill="#c2410c" fillOpacity="0.06" />
                               )}
                               <rect
-                                x={xCenter - 16}
+                                x={xCenter - 13}
                                 y={yBar}
-                                width="32"
+                                width="26"
                                 height={h}
-                                rx="3.5"
+                                rx="3"
                                 fill={isSelected ? "url(#ombudsmanBarGrad)" : "#ea580c"}
                                 opacity={isSelected ? 1 : 0.85}
                               />
-                              <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
+                              <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
                                 {d.overduePct}%
                               </text>
                               {isSelected ? (
                                 <g>
-                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#c2410c" />
-                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
                                 </g>
                               ) : (
                                 <g>
-                                  <rect x={xCenter - 18} y="118" width="36" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
-                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="#475569">{d.year}</text>
+                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
                                 </g>
                               )}
                             </g>
@@ -1552,7 +1552,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Sumber:</strong> BPS SiRUSA (2020–2024) · Statistik Transportasi BPS RI
+                              <strong className="text-slate-800">Sumber:</strong> BPS &amp; Renstra PU 2025–2029 · Statistik Kemantapan Jalan (BPS 2026)
                             </span>
                             <button
                               type="button"
@@ -1565,7 +1565,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["kemantapan"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Metodologi:</strong> Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, bersumber dari publikasi resmi Statistik Transportasi Darat BPS RI.
+                              <strong className="text-slate-700">Metodologi &amp; Rujukan:</strong> Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, bersumber dari BPS (2026) dan Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029 (Nasional: 94,18%, Provinsi: 71,33%, Kab/Kota: 57,91%).
                             </div>
                           )}
                         </div>
@@ -1578,18 +1578,18 @@ export default function HeroSection({
                       <div className="grid grid-cols-2 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Penundaan Penanganan ({selectedYear})
+                            {selectedYear === 2025 ? "Instansi Terlapor Terbanyak" : `Penundaan Penanganan (${selectedYear})`}
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
-                            {currentComplaintTrend.overduePct}% ({currentComplaintTrend.overdue.toLocaleString("id-ID")} Aduan)
+                            {selectedYear === 2025 ? "4.766 Laporan Pemda" : `${currentComplaintTrend.overduePct}% (${currentComplaintTrend.overdue.toLocaleString("id-ID")} Aduan)`}
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Total Aduan Selesai
+                            {selectedYear === 2025 ? "Total Penerimaan Ombudsman" : "Total Aduan Selesai"}
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">
-                            {currentComplaintTrend.resolved.toLocaleString("id-ID")} Aduan
+                            {selectedYear === 2025 ? "23.596 Laporan" : `${currentComplaintTrend.resolved.toLocaleString("id-ID")} Aduan`}
                           </strong>
                         </div>
                       </div>
@@ -1598,7 +1598,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Sumber:</strong> Laporan Tahunan Ombudsman RI (2020–2024)
+                              <strong className="text-slate-800">Sumber:</strong> Ombudsman RI (2026b) · 23.596 Penerimaan Masyarakat
                             </span>
                             <button
                               type="button"
@@ -1611,7 +1611,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["ombudsman"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Definisi:</strong> Rasio penundaan penanganan (<em>undue delay</em>) merupakan persentase aduan masyarakat di Laporan Tahunan Ombudsman RI terkait keluhan batas waktu layanan publik infrastruktur yang melampaui standar kepatutan UU 25/2009.
+                              <strong className="text-slate-700">Definisi &amp; Catatan:</strong> Ombudsman RI mencatat 23.596 penerimaan masyarakat sepanjang 2025, dengan pemerintah daerah sebagai instansi yang paling banyak dilaporkan (4.766 laporan). Di platform JagaJalan, warga dapat mengadvokasikan penundaan penanganan (<em>undue delay</em>) melampaui standar kepatutan UU 25/2009.
                             </div>
                           )}
                         </div>
