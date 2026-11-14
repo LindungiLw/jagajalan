@@ -47,6 +47,17 @@ function mergeReportsById(...reportLists) {
   return merged;
 }
 
+function applyReportOverrides(reportList, overridesMap) {
+  if (!Array.isArray(reportList)) return [];
+  if (!overridesMap || typeof overridesMap !== "object") return reportList;
+  return reportList.map((rep) => {
+    if (!rep || !rep.id) return rep;
+    const ov = overridesMap[rep.id];
+    if (!ov || typeof ov !== "object") return rep;
+    return { ...rep, ...ov };
+  });
+}
+
 function mergeNotificationsById(...notifLists) {
   const seen = new Set();
   const merged = [];
@@ -173,6 +184,7 @@ export default function Home() {
 
   const syncReportsFromBackend = useCallback(async () => {
     let localCustom = [];
+    let localOverrides = {};
     let localNotifs = [];
     if (typeof window !== "undefined") {
       try {
@@ -180,6 +192,11 @@ export default function Home() {
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed)) localCustom = parsed;
+        }
+        const rawOverrides = window.localStorage.getItem("jagajalan_report_overrides_v1");
+        if (rawOverrides) {
+          const parsedOv = JSON.parse(rawOverrides);
+          if (parsedOv && typeof parsedOv === "object") localOverrides = parsedOv;
         }
         const rawNotifs = window.localStorage.getItem("jagajalan_live_notifs_v1");
         if (rawNotifs) {
@@ -197,7 +214,10 @@ export default function Home() {
         const payload = await res.json();
         if (Array.isArray(payload?.data)) {
           setReports((prev) =>
-            mergeReportsById(localCustom, payload.data, prev, INITIAL_REPORTS)
+            applyReportOverrides(
+              mergeReportsById(localCustom, payload.data, prev, INITIAL_REPORTS),
+              localOverrides
+            )
           );
         }
         if (Array.isArray(payload?.notifications)) {
@@ -211,9 +231,12 @@ export default function Home() {
       // Fallback to local + initial reports if API unreachable
     }
 
-    if (localCustom.length > 0) {
-      setReports((prev) => mergeReportsById(localCustom, prev, INITIAL_REPORTS));
-    }
+    setReports((prev) =>
+      applyReportOverrides(
+        mergeReportsById(localCustom, prev, INITIAL_REPORTS),
+        localOverrides
+      )
+    );
     if (localNotifs.length > 0) {
       setNotifications((prev) => mergeNotificationsById(localNotifs, prev).slice(0, 40));
     }
@@ -407,20 +430,86 @@ export default function Home() {
     }
   };
 
-  const handleUpdateReport = async (reportId, updatedFields) => {
+  const handleUpdateReport = async (reportId, rawUpdatedFields) => {
     const targetReport = reports.find((r) => r.id === reportId);
+    const nextStatus =
+      rawUpdatedFields.status || rawUpdatedFields.progressStatus || "DALAM_PENGERJAAN";
+    const isResolvedOrHandled =
+      nextStatus === "SELESAI" ||
+      nextStatus === "DALAM_PENGERJAAN" ||
+      nextStatus === "TERVERIFIKASI";
+
+    const updatedFields = {
+      ...rawUpdatedFields,
+      status: nextStatus,
+      progressStatus: nextStatus,
+      isResponseOverdue: isResolvedOrHandled
+        ? false
+        : Boolean(rawUpdatedFields.isResponseOverdue),
+      daysOverdue: isResolvedOrHandled ? 0 : rawUpdatedFields.daysOverdue || 0,
+      ...(rawUpdatedFields.proofPhotoUrl
+        ? { afterPhotoUrl: rawUpdatedFields.proofPhotoUrl }
+        : {}),
+      updatedAt: new Date().toISOString(),
+    };
+
     setReports((prevReports) =>
       prevReports.map((report) =>
         report.id === reportId ? { ...report, ...updatedFields } : report
       )
     );
 
-    const nextStatus = updatedFields.status || updatedFields.progressStatus || "DALAM_PENGERJAAN";
-    const latestUpdate =
-      Array.isArray(updatedFields.updates) && updatedFields.updates.length > 0
-        ? updatedFields.updates[updatedFields.updates.length - 1]
-        : null;
+    if (targetReport?.roadSegmentId) {
+      setRoads((prevRoads) =>
+        prevRoads.map((road) => {
+          if (road.id !== targetReport.roadSegmentId) return road;
+          const nextRoad = { ...road };
+          if (targetReport.status === "OVERDUE" && isResolvedOrHandled) {
+            nextRoad.overdueReportsCount = Math.max(
+              0,
+              (road.overdueReportsCount || 1) - 1
+            );
+          }
+          if (nextStatus === "SELESAI") {
+            if (updatedFields.proofPhotoUrl) {
+              nextRoad.photos = {
+                ...(road.photos || {}),
+                beforeUrl: road.photos?.beforeUrl || targetReport.photoUrl,
+                afterUrl: updatedFields.proofPhotoUrl,
+                description:
+                  updatedFields.updates?.[0]?.note ||
+                  road.photos?.description ||
+                  "Perbaikan fisik lapangan telah diselesaikan dan terverifikasi.",
+              };
+            }
+            if (road.budget) {
+              nextRoad.budget = {
+                ...road.budget,
+                progressStatus: "SELESAI",
+                progressPct: 100,
+                physicalProgressPct: 100,
+              };
+            }
+          } else if (nextStatus === "DALAM_PENGERJAAN" && road.budget) {
+            nextRoad.budget = {
+              ...road.budget,
+              progressStatus: "DALAM_PENGERJAAN",
+              physicalProgressPct: Math.max(road.budget.physicalProgressPct || 0, 72),
+            };
+          }
+          return nextRoad;
+        })
+      );
+    }
+
+    const sortedUpdates = Array.isArray(updatedFields.updates)
+      ? [...updatedFields.updates].sort(
+          (a, b) => new Date(b?.date || 0).getTime() - new Date(a?.date || 0).getTime()
+        )
+      : [];
+    const latestUpdate = sortedUpdates[0] || null;
     const isResolved = nextStatus === "SELESAI";
+    const isVerified = nextStatus === "TERVERIFIKASI";
 
     const statusNotif = {
       id: `NOTIF-UPD-${reportId}-${Date.now()}`,
@@ -431,16 +520,24 @@ export default function Home() {
       district: targetReport?.district || "",
       authority: targetReport?.authority || "",
       authorityLabel: targetReport?.authorityLabel || "Dinas Penyelenggara Jalan",
-      type: isResolved ? "STATUS_RESOLVED" : "STATUS_IN_PROGRESS",
+      type: isResolved
+        ? "STATUS_RESOLVED"
+        : isVerified
+        ? "STATUS_VERIFIED"
+        : "STATUS_IN_PROGRESS",
       status: nextStatus,
       title: isResolved
         ? `Perbaikan Selesai: #${targetReport?.ticketCode || reportId}`
-        : `Status Diperbarui Dinas: #${targetReport?.ticketCode || reportId}`,
+        : isVerified
+        ? `Verifikasi Diterima Dinas: #${targetReport?.ticketCode || reportId}`
+        : `Dalam Perbaikan Dinas: #${targetReport?.ticketCode || reportId}`,
       message:
         latestUpdate?.note ||
         (isResolved
           ? `Perbaikan fisik jalan pada ${targetReport?.roadName || "ruas jalan"} telah selesai dan bukti foto lapangan telah diunggah.`
-          : `Status penanganan tiket #${targetReport?.ticketCode || reportId} diperbarui menjadi Dalam Pengerjaan.`),
+          : isVerified
+          ? `Laporan warga pada ${targetReport?.roadName || "ruas jalan"} telah diterima dan diverifikasi oleh dinas terkait.`
+          : `Status penanganan tiket #${targetReport?.ticketCode || reportId} diperbarui menjadi Dalam Perbaikan Fisik.`),
       officer: latestUpdate?.officer || targetReport?.authorityLabel || "Petugas Dinas",
       createdAt: new Date().toISOString(),
     };
@@ -449,6 +546,20 @@ export default function Home() {
 
     try {
       if (typeof window !== "undefined") {
+        const rawOv = window.localStorage.getItem("jagajalan_report_overrides_v1");
+        const parsedOv = rawOv ? JSON.parse(rawOv) : {};
+        const nextOverrides = {
+          ...(parsedOv && typeof parsedOv === "object" ? parsedOv : {}),
+          [reportId]: {
+            ...(parsedOv?.[reportId] || {}),
+            ...updatedFields,
+          },
+        };
+        window.localStorage.setItem(
+          "jagajalan_report_overrides_v1",
+          JSON.stringify(nextOverrides)
+        );
+
         const raw = window.localStorage.getItem("jagajalan_custom_reports_v1");
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -529,8 +640,9 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSelectRoadOnMap = (roadId) => {
-    setFocusedRoadId(roadId);
+  const handleSelectRoadOnMap = (roadId, reportId = null) => {
+    if (reportId) setFocusedReportId(reportId);
+    if (roadId) setFocusedRoadId(roadId);
     setActiveTab("peta");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -653,9 +765,16 @@ export default function Home() {
               <OfficerDashboard
                 reports={reports}
                 onUpdateReport={handleUpdateReport}
-                onSwitchToMap={() => {
+                onOpenReportModal={() => handleOpenReportModal(null)}
+                onSwitchToMap={(targetReport = null) => {
+                  if (targetReport?.id) {
+                    setFocusedReportId(targetReport.id);
+                  }
+                  if (targetReport?.roadSegmentId) {
+                    setFocusedRoadId(targetReport.roadSegmentId);
+                  }
                   setActiveTab("peta");
-                  window.scrollTo({ top: 100, behavior: "smooth" });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 currentOfficer={officerSession}
                 onLogout={handleOfficerLogout}

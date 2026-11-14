@@ -259,8 +259,8 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         onLoginSuccess(officerPayload);
         return;
       }
-    } catch (err) {
-      console.warn("Firebase popup skipped or not configured:", err);
+    } catch {
+      // Fallback mulus ke modal pemilih akun instansi/demo
     }
 
     setIsLoading(false);

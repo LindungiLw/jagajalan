@@ -354,6 +354,9 @@ export async function GET(request) {
               targetResponseDeadline: rep.targetResponseDeadline,
               spatialCellId: rep.spatialCellId,
               isLiveCitizenReport: Boolean(rep.isLiveCitizenReport),
+              proofPhotoUrl: rep.proofPhotoUrl || rep.afterPhotoUrl || null,
+              latestOfficerNote: rep.updates?.[0]?.note || null,
+              latestOfficerName: rep.updates?.[0]?.officer || null,
             },
           })),
       };
@@ -548,13 +551,29 @@ export async function POST(request) {
 export async function PATCH(request) {
   try {
     const body = await request.json();
-    const { id, ...updatedFields } = body;
+    const { id, ...rawUpdatedFields } = body;
 
     if (!id) {
       return NextResponse.json(
         { success: false, error: "ID laporan wajib disertakan." },
         { status: 400 }
       );
+    }
+
+    const updatedFields = { ...rawUpdatedFields };
+    const nextStatusCandidate = updatedFields.status || updatedFields.progressStatus;
+    if (
+      nextStatusCandidate === "TERVERIFIKASI" ||
+      nextStatusCandidate === "DALAM_PENGERJAAN" ||
+      nextStatusCandidate === "SELESAI"
+    ) {
+      updatedFields.status = nextStatusCandidate;
+      updatedFields.progressStatus = nextStatusCandidate;
+      updatedFields.isResponseOverdue = false;
+      updatedFields.daysOverdue = 0;
+    }
+    if (updatedFields.proofPhotoUrl && !updatedFields.afterPhotoUrl) {
+      updatedFields.afterPhotoUrl = updatedFields.proofPhotoUrl;
     }
 
     const state = loadPersistedState();
@@ -579,12 +598,15 @@ export async function PATCH(request) {
     let generatedNotification = null;
     if (updatedReport && (updatedFields.status || updatedFields.progressStatus || updatedFields.updates)) {
       const nextStatus = updatedReport.status || updatedReport.progressStatus || "DALAM_PENGERJAAN";
-      const latestUpdate =
-        Array.isArray(updatedReport.updates) && updatedReport.updates.length > 0
-          ? updatedReport.updates[updatedReport.updates.length - 1]
-          : null;
+      const sortedUpdates = Array.isArray(updatedReport.updates)
+        ? [...updatedReport.updates].sort(
+            (a, b) => new Date(b?.date || 0).getTime() - new Date(a?.date || 0).getTime()
+          )
+        : [];
+      const latestUpdate = sortedUpdates[0] || null;
 
       const isResolved = nextStatus === "SELESAI";
+      const isVerified = nextStatus === "TERVERIFIKASI";
       generatedNotification = {
         id: `NOTIF-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
         reportId: updatedReport.id,
@@ -595,19 +617,27 @@ export async function PATCH(request) {
         authority: updatedReport.authority,
         authorityLabel: updatedReport.authorityLabel,
         previousStatus: previousReport?.status || "MENUNGGU_VERIFIKASI",
-        type: isResolved ? "STATUS_RESOLVED" : "STATUS_IN_PROGRESS",
+        type: isResolved
+          ? "STATUS_RESOLVED"
+          : isVerified
+          ? "STATUS_VERIFIED"
+          : "STATUS_IN_PROGRESS",
         status: nextStatus,
         title: isResolved
           ? `Perbaikan Selesai: #${updatedReport.ticketCode}`
-          : `Status Diperbarui Dinas: #${updatedReport.ticketCode}`,
+          : isVerified
+          ? `Verifikasi Diterima Dinas: #${updatedReport.ticketCode}`
+          : `Dalam Perbaikan Dinas: #${updatedReport.ticketCode}`,
         message:
           latestUpdate?.note ||
           (isResolved
             ? `Perbaikan fisik jalan pada ${updatedReport.roadName} telah selesai beserta unggahan bukti dokumentasi.`
-            : `Laporan pada ${updatedReport.roadName} kini berstatus Dalam Pengerjaan oleh ${updatedReport.authorityLabel}.`),
+            : isVerified
+            ? `Laporan warga pada ${updatedReport.roadName} telah diterima dan diverifikasi oleh ${updatedReport.authorityLabel}.`
+            : `Laporan pada ${updatedReport.roadName} kini berstatus Dalam Perbaikan oleh ${updatedReport.authorityLabel}.`),
         officer: latestUpdate?.officer || updatedReport.authorityLabel,
         createdAt: new Date().toISOString(),
-        hasProofPhoto: Boolean(updatedReport.afterPhotoUrl),
+        hasProofPhoto: Boolean(updatedReport.proofPhotoUrl || updatedReport.afterPhotoUrl),
       };
 
       state.notifications = [

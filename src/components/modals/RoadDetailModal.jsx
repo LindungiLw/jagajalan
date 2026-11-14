@@ -546,8 +546,10 @@ export default function RoadDetailModal({
               {roadReports.length > 0 ? (
                 <div className="space-y-2.5">
                   {roadReports.map((report) => {
-                    const isOverdue = report.status === "OVERDUE";
+                    const isOverdue = report.status === "OVERDUE" || Boolean(report.isResponseOverdue);
                     const isCompleted = report.status === "SELESAI";
+                    const isInProgress = report.status === "DALAM_PENGERJAAN";
+                    const isVerified = report.status === "TERVERIFIKASI";
                     return (
                       <div
                         key={report.id}
@@ -556,6 +558,10 @@ export default function RoadDetailModal({
                             ? "bg-rose-50/50 border-rose-200"
                             : isCompleted
                             ? "bg-emerald-50/40 border-emerald-200"
+                            : isInProgress
+                            ? "bg-orange-50/40 border-orange-200"
+                            : isVerified
+                            ? "bg-blue-50/40 border-blue-200"
                             : "bg-slate-50/80 border-slate-200"
                         }`}
                       >
@@ -578,11 +584,19 @@ export default function RoadDetailModal({
                             </span>
                           ) : isCompleted ? (
                             <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                              Penanganan Selesai
+                              ✓ Penanganan Selesai Diperbaiki
+                            </span>
+                          ) : isInProgress ? (
+                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
+                              ⚒ Dalam Perbaikan Fisik Dinas
+                            </span>
+                          ) : isVerified ? (
+                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                              ✓ Verifikasi Diterima Dinas
                             </span>
                           ) : (
                             <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
-                              Dalam Batas Respons
+                              Menunggu Verifikasi Dinas
                             </span>
                           )}
                         </div>
@@ -590,9 +604,41 @@ export default function RoadDetailModal({
                         <div className="font-bold text-slate-900 text-xs mb-1">
                           {report.address}
                         </div>
-                        <p className="text-[11px] text-slate-600 mb-2.5 leading-relaxed">
+                        <p className="text-[11px] text-slate-600 mb-2 leading-relaxed">
                           {report.aiAnalysis}
                         </p>
+
+                        {report.updates?.[0]?.note && (
+                          <div className="mb-2.5 p-2.5 rounded-[6px] bg-white/90 border border-slate-200/80 text-[11px] text-slate-700">
+                            <span className="font-bold text-slate-900">
+                              Tindak Lanjut Dinas ({report.updates[0].officer || "Petugas Dinas"}):{" "}
+                            </span>
+                            <span>{report.updates[0].note}</span>
+                          </div>
+                        )}
+
+                        {report.proofPhotoUrl && (
+                          <div className="mb-2.5 grid grid-cols-2 gap-2 max-w-sm">
+                            <div className="space-y-1">
+                              <div className="h-20 rounded-[6px] overflow-hidden border border-slate-300 bg-slate-100">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={report.photoUrl} alt="Before" className="w-full h-full object-cover" />
+                              </div>
+                              <span className="text-[9.5px] font-bold text-slate-500 block text-center">
+                                BEFORE: Kerusakan Awal
+                              </span>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="h-20 rounded-[6px] overflow-hidden border border-emerald-500 bg-slate-100">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={report.proofPhotoUrl} alt="After" className="w-full h-full object-cover" />
+                              </div>
+                              <span className="text-[9.5px] font-bold text-emerald-800 block text-center">
+                                AFTER: Bukti Perbaikan Dinas
+                              </span>
+                            </div>
+                          </div>
+                        )}
 
                         {isOverdue && onOpenOmbudsmanDraft && (
                           <div className="pt-2.5 border-t border-rose-200/80 flex items-center justify-between gap-2 flex-wrap">

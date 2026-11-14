@@ -280,7 +280,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
             <button
               type="button"
               onClick={handleExportProvincesExcel}
-              title="Unduh Data 38 Provinsi dalam format Microsoft Excel (.xls)"
+              title="Unduh Data 38 Provinsi dalam format Microsoft Excel (.xlsx)"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80 text-xs font-bold transition-colors cursor-pointer shrink-0"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />

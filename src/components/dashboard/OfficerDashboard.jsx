@@ -52,28 +52,36 @@ export default function OfficerDashboard({
   reports,
   onUpdateReport,
   onSwitchToMap,
+  onOpenReportModal,
   currentOfficer,
   onLogout,
 }) {
   const [mounted, setMounted] = useState(false);
+  const isDemoSession =
+    !currentOfficer ||
+    currentOfficer.id === "DEMO-001" ||
+    currentOfficer.nip === "DEMO-001" ||
+    String(currentOfficer.status || "").toLowerCase().includes("demo");
+
   const [selectedAuthority, setSelectedAuthority] = useState(
-    currentOfficer?.authorityLevel || "ALL"
+    isDemoSession ? "ALL" : currentOfficer?.authorityLevel || "ALL"
   );
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("HAZARD"); // HAZARD | SLA | UPVOTES | DATE
   const [activeReportToEdit, setActiveReportToEdit] = useState(null);
   const [viewMode, setViewMode] = useState("grid"); // "grid" (5 kolom) | "list" (baris rinci)
+  const [lastUpdatedReport, setLastUpdatedReport] = useState(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   // Form states in action modal
-  const [targetStatus, setTargetStatus] = useState("DALAM_PENGERJAAN");
+  const [targetStatus, setTargetStatus] = useState("TERVERIFIKASI");
   const [officerNote, setOfficerNote] = useState("");
   const [officerName, setOfficerName] = useState(
     currentOfficer
-      ? `${currentOfficer.name} (NIP: ${currentOfficer.nip})`
+      ? `${currentOfficer.name} (NIP: ${currentOfficer.nip || currentOfficer.id || "DEMO-001"})`
       : "Satgas Bina Marga / UPTD Wilayah"
   );
   const [proofPhotoUrl, setProofPhotoUrl] = useState(PRESET_PROOF_PHOTOS[0].url);
@@ -81,7 +89,9 @@ export default function OfficerDashboard({
 
   useEffect(() => {
     if (currentOfficer) {
-      setOfficerName(`${currentOfficer.name} (NIP: ${currentOfficer.nip})`);
+      setOfficerName(
+        `${currentOfficer.name} (NIP: ${currentOfficer.nip || currentOfficer.id || "DEMO-001"})`
+      );
     }
   }, [currentOfficer]);
 
@@ -94,11 +104,16 @@ export default function OfficerDashboard({
         const matchAuth =
           selectedAuthority === "ALL" ||
           r.authority === selectedAuthority ||
-          (selectedAuthority === "KOTA_KAB" && (r.authority === "KOTA" || r.authority === "KABUPATEN" || r.authority === "KOTA_KAB"));
+          (selectedAuthority === "KOTA_KAB" &&
+            (r.authority === "KOTA" ||
+              r.authority === "KABUPATEN" ||
+              r.authority === "KOTA_KAB"));
         const matchStatus =
           selectedStatusFilter === "ALL" ||
-          (selectedStatusFilter === "NEED_VERIFY" && r.status === "MENUNGGU_VERIFIKASI") ||
-          (selectedStatusFilter === "IN_PROGRESS" && r.status === "DALAM_PENGERJAAN") ||
+          (selectedStatusFilter === "NEED_VERIFY" &&
+            r.status === "MENUNGGU_VERIFIKASI") ||
+          (selectedStatusFilter === "IN_PROGRESS" &&
+            (r.status === "TERVERIFIKASI" || r.status === "DALAM_PENGERJAAN")) ||
           (selectedStatusFilter === "COMPLETED" && r.status === "SELESAI") ||
           (selectedStatusFilter === "OVERDUE" && r.status === "OVERDUE");
         return matchAuth && matchStatus;
@@ -118,31 +133,56 @@ export default function OfficerDashboard({
   const stats = useMemo(() => {
     const total = reports.length;
     const needVerify = reports.filter((r) => r.status === "MENUNGGU_VERIFIKASI").length;
-    const inProgress = reports.filter((r) => r.status === "DALAM_PENGERJAAN").length;
+    const inProgress = reports.filter(
+      (r) => r.status === "TERVERIFIKASI" || r.status === "DALAM_PENGERJAAN"
+    ).length;
     const completed = reports.filter((r) => r.status === "SELESAI").length;
     const overdue = reports.filter((r) => r.status === "OVERDUE").length;
     return { total, needVerify, inProgress, completed, overdue };
   }, [reports]);
 
-  const handleOpenActionModal = (report) => {
+  const getSuggestedNoteForStage = (stage, report) => {
+    const roadTitle = report?.roadName || "ruas jalan terkait";
+    if (stage === "TERVERIFIKASI") {
+      return `Laporan pada ${roadTitle} telah diterima dan terverifikasi oleh verifikator dinas. Tiket diteruskan ke tim teknis lapangan untuk penjadwalan penanganan.`;
+    }
+    if (stage === "DALAM_PENGERJAAN") {
+      return `Tim pemeliharaan jalan dan material hotmix telah dikerahkan ke lokasi ${roadTitle}. Pengerjaan perbaikan fisik sedang berlangsung di lapangan.`;
+    }
+    return `Pekerjaan penambalan struktural dan pemadatan aspal pada ${roadTitle} telah selesai 100% dilaksanakan sesuai standar mutu.`;
+  };
+
+  const handleSelectStage = (stage) => {
+    setTargetStatus(stage);
+    setOfficerNote(getSuggestedNoteForStage(stage, activeReportToEdit));
+  };
+
+  const handleOpenActionModal = (report, preferredStage = null) => {
     setActiveReportToEdit(report);
     if (currentOfficer) {
-      setOfficerName(`${currentOfficer.name || "Petugas Demo"} (ID: ${currentOfficer.id || "DEMO-001"})`);
+      setOfficerName(
+        `${currentOfficer.name || "Petugas Demo"} (ID: ${currentOfficer.id || currentOfficer.nip || "DEMO-001"})`
+      );
     } else {
       setOfficerName("Petugas Demo (ID: DEMO-001)");
     }
-    // Suggest next logical status
-    if (report.status === "MENUNGGU_VERIFIKASI") {
-      setTargetStatus("DALAM_PENGERJAAN");
-      setOfficerNote("Laporan telah diverifikasi oleh petugas UPTD. Dijadwalkan pengerjaan pemeliharaan rutin.");
-    } else if (report.status === "DALAM_PENGERJAAN" || report.status === "OVERDUE") {
-      setTargetStatus("SELESAI");
-      setOfficerNote("Pekerjaan penambalan aspal dan pemadatan selesai dilaksanakan di lapangan.");
-    } else {
-      setTargetStatus("SELESAI");
-      setOfficerNote("Pekerjaan telah terverifikasi rampung dan siap diperiksa kembali.");
+
+    let nextStage = preferredStage;
+    if (!nextStage) {
+      if (report.status === "MENUNGGU_VERIFIKASI") {
+        nextStage = "TERVERIFIKASI";
+      } else if (report.status === "TERVERIFIKASI") {
+        nextStage = "DALAM_PENGERJAAN";
+      } else if (report.status === "DALAM_PENGERJAAN" || report.status === "OVERDUE") {
+        nextStage = "SELESAI";
+      } else {
+        nextStage = "SELESAI";
+      }
     }
-    setProofPhotoUrl(report.proofPhotoUrl || PRESET_PROOF_PHOTOS[0].url);
+
+    setTargetStatus(nextStage);
+    setOfficerNote(getSuggestedNoteForStage(nextStage, report));
+    setProofPhotoUrl(report.proofPhotoUrl || report.afterPhotoUrl || PRESET_PROOF_PHOTOS[0].url);
   };
 
   const handleCustomProofUpload = (e) => {
@@ -197,28 +237,40 @@ export default function OfficerDashboard({
     if (!activeReportToEdit) return;
 
     const isNowDone = targetStatus === "SELESAI";
+    const isResponded =
+      targetStatus === "TERVERIFIKASI" ||
+      targetStatus === "DALAM_PENGERJAAN" ||
+      targetStatus === "SELESAI";
 
     const newAuditUpdate = {
       date: new Date().toISOString(),
       officer: officerName.trim() || "Verifikator Resmi Dinas",
       note: officerNote.trim() || "Pembaruan progres pengerjaan lapangan.",
+      status: targetStatus,
       proofPhotoUrl: isNowDone ? proofPhotoUrl : null,
     };
 
     const updatedData = {
       status: targetStatus,
       progressStatus: targetStatus,
-      isResponseOverdue: targetStatus === "SELESAI" ? false : activeReportToEdit.isResponseOverdue,
-      daysOverdue: targetStatus === "SELESAI" ? 0 : activeReportToEdit.daysOverdue,
+      isResponseOverdue: isResponded ? false : activeReportToEdit.isResponseOverdue,
+      daysOverdue: isResponded ? 0 : activeReportToEdit.daysOverdue,
       proofPhotoUrl: isNowDone ? proofPhotoUrl : activeReportToEdit.proofPhotoUrl,
+      afterPhotoUrl: isNowDone ? proofPhotoUrl : activeReportToEdit.afterPhotoUrl,
       updates: [newAuditUpdate, ...(activeReportToEdit.updates || [])],
     };
 
+    const updatedSnapshot = {
+      ...activeReportToEdit,
+      ...updatedData,
+    };
+
     onUpdateReport(activeReportToEdit.id, updatedData);
+    setLastUpdatedReport(updatedSnapshot);
     setActiveReportToEdit(null);
     setIsSuccessToast(true);
 
-    setTimeout(() => setIsSuccessToast(false), 3500);
+    setTimeout(() => setIsSuccessToast(false), 6000);
   };
 
   return (
@@ -266,9 +318,21 @@ export default function OfficerDashboard({
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          {onOpenReportModal && (
+            <button
+              type="button"
+              onClick={onOpenReportModal}
+              className="px-3.5 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+              title="Kirim laporan baru atau simulasi laporan dari halaman Admin"
+            >
+              <Camera className="w-3.5 h-3.5 text-white" />
+              <span>+ Buat Laporan / Simulasi</span>
+            </button>
+          )}
           <button
-            onClick={onSwitchToMap}
+            type="button"
+            onClick={() => onSwitchToMap(lastUpdatedReport || null)}
             className="px-3.5 py-2 rounded-[6px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5 text-[#c2410c]" />
@@ -276,6 +340,7 @@ export default function OfficerDashboard({
           </button>
           {onLogout && (
             <button
+              type="button"
               onClick={onLogout}
               className="px-3.5 py-2 rounded-[6px] bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Keluar dari sesi verifikator dinas"
@@ -289,12 +354,35 @@ export default function OfficerDashboard({
 
       {/* Success Notification Banner */}
       {isSuccessToast && (
-        <div className="p-4 rounded-[6px] bg-emerald-50 border border-emerald-200 text-emerald-950 flex items-center justify-between animate-fade-in shadow-2xs">
-          <div className="flex items-center gap-2.5 text-xs font-semibold font-sans">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>Pembaruan status &amp; dokumentasi bukti pengerjaan berhasil disinkronkan ke peta publik!</span>
+        <div className="p-4 rounded-[6px] bg-emerald-50 border border-emerald-200 text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in shadow-2xs">
+          <div className="flex items-start sm:items-center gap-2.5 text-xs font-semibold font-sans">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5 sm:mt-0" />
+            <div>
+              <span>
+                Tiket <strong>{lastUpdatedReport?.ticketCode || "Laporan"}</strong> ({lastUpdatedReport?.roadName}) berhasil diperbarui ke status{" "}
+                <strong className="uppercase">
+                  {lastUpdatedReport?.status === "TERVERIFIKASI"
+                    ? "Verifikasi Diterima Dinas"
+                    : lastUpdatedReport?.status === "DALAM_PENGERJAAN"
+                    ? "Dalam Perbaikan Fisik"
+                    : "Selesai Diperbaiki"}
+                </strong>{" "}
+                &amp; langsung tersinkronisasi ke Peta Transparansi Publik!
+              </span>
+            </div>
           </div>
-          <span className="text-[11px] font-sans font-medium text-emerald-800">Audit Trail Terverifikasi</span>
+          <div className="flex items-center gap-2 shrink-0">
+            {lastUpdatedReport && (
+              <button
+                type="button"
+                onClick={() => onSwitchToMap(lastUpdatedReport)}
+                className="px-3 py-1.5 rounded-[5px] bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+              >
+                <MapPin className="w-3 h-3" />
+                <span>Lihat di Peta Transparansi</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
 
@@ -302,7 +390,11 @@ export default function OfficerDashboard({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Counter 1: Butuh Verifikasi */}
         <div
-          onClick={() => setSelectedStatusFilter("NEED_VERIFY")}
+          onClick={() =>
+            setSelectedStatusFilter(
+              selectedStatusFilter === "NEED_VERIFY" ? "ALL" : "NEED_VERIFY"
+            )
+          }
           className={`cursor-pointer p-4 rounded-[6px] transition-all ${
             selectedStatusFilter === "NEED_VERIFY"
               ? "bg-amber-50 ring-2 ring-amber-400"
@@ -318,9 +410,13 @@ export default function OfficerDashboard({
           </div>
         </div>
 
-        {/* Counter 2: Dalam Penanganan */}
+        {/* Counter 2: Terverifikasi & Dalam Penanganan */}
         <div
-          onClick={() => setSelectedStatusFilter("IN_PROGRESS")}
+          onClick={() =>
+            setSelectedStatusFilter(
+              selectedStatusFilter === "IN_PROGRESS" ? "ALL" : "IN_PROGRESS"
+            )
+          }
           className={`cursor-pointer p-4 rounded-[6px] transition-all ${
             selectedStatusFilter === "IN_PROGRESS"
               ? "bg-orange-50 ring-2 ring-orange-400 text-orange-900"
@@ -328,7 +424,7 @@ export default function OfficerDashboard({
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Dalam Pengerjaan</span>
+            <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Terverifikasi / Dikerjakan</span>
             <HardHat className="w-4 h-4 text-[#c2410c]" />
           </div>
           <div className="mt-2.5">
@@ -338,7 +434,11 @@ export default function OfficerDashboard({
 
         {/* Counter 3: Selesai */}
         <div
-          onClick={() => setSelectedStatusFilter("COMPLETED")}
+          onClick={() =>
+            setSelectedStatusFilter(
+              selectedStatusFilter === "COMPLETED" ? "ALL" : "COMPLETED"
+            )
+          }
           className={`cursor-pointer p-4 rounded-[6px] transition-all ${
             selectedStatusFilter === "COMPLETED"
               ? "bg-emerald-50 ring-2 ring-emerald-400"
@@ -346,7 +446,7 @@ export default function OfficerDashboard({
           }`}
         >
           <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai</span>
+            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai Diperbaiki</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="mt-2.5">
@@ -356,7 +456,11 @@ export default function OfficerDashboard({
 
         {/* Counter 4: Lewat Batas Respons */}
         <div
-          onClick={() => setSelectedStatusFilter("OVERDUE")}
+          onClick={() =>
+            setSelectedStatusFilter(
+              selectedStatusFilter === "OVERDUE" ? "ALL" : "OVERDUE"
+            )
+          }
           className={`cursor-pointer p-4 rounded-[6px] transition-all ${
             selectedStatusFilter === "OVERDUE"
               ? "bg-rose-50 ring-2 ring-rose-400"
@@ -380,7 +484,7 @@ export default function OfficerDashboard({
           <span className="text-slate-500 mr-1 hidden sm:inline">Instansi Anda:</span>
           <button
             onClick={() => setSelectedAuthority("ALL")}
-            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer shrink-0 ${
               selectedAuthority === "ALL"
                 ? "bg-[#c2410c] text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -390,7 +494,7 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("NASIONAL")}
-            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer shrink-0 ${
               selectedAuthority === "NASIONAL"
                 ? "bg-blue-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -400,7 +504,7 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("PROVINSI")}
-            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer shrink-0 ${
               selectedAuthority === "PROVINSI"
                 ? "bg-purple-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -410,7 +514,7 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("KOTA")}
-            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer shrink-0 ${
               selectedAuthority === "KOTA"
                 ? "bg-teal-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -420,13 +524,23 @@ export default function OfficerDashboard({
           </button>
           <button
             onClick={() => setSelectedAuthority("KABUPATEN")}
-            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer shrink-0 ${
               selectedAuthority === "KABUPATEN"
                 ? "bg-emerald-600 text-white font-bold shadow-2xs"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
             PUPR (Kabupaten)
+          </button>
+          <button
+            onClick={() => setSelectedAuthority("DESA")}
+            className={`px-3 py-1.5 rounded-[6px] transition-all cursor-pointer shrink-0 ${
+              selectedAuthority === "DESA"
+                ? "bg-amber-600 text-white font-bold shadow-2xs"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+            }`}
+          >
+            Pemdes (Desa)
           </button>
         </div>
 
@@ -515,6 +629,7 @@ export default function OfficerDashboard({
               const isOverdue = report.status === "OVERDUE";
               const isDone = report.status === "SELESAI";
               const isInProgress = report.status === "DALAM_PENGERJAAN";
+              const isVerified = report.status === "TERVERIFIKASI";
 
               const statusBadge = isOverdue
                 ? { text: `LEWAT SLA (+${report.daysOverdue}H)`, cls: "bg-rose-600 text-white shadow-xs font-bold" }
@@ -522,7 +637,9 @@ export default function OfficerDashboard({
                 ? { text: "SELESAI", cls: "bg-emerald-600 text-white shadow-xs font-bold" }
                 : isInProgress
                 ? { text: "DIKERJAKAN", cls: "bg-orange-600 text-white shadow-xs font-bold" }
-                : { text: "VERIFIKASI", cls: "bg-amber-600 text-white shadow-xs font-bold" };
+                : isVerified
+                ? { text: "TERVERIFIKASI", cls: "bg-blue-600 text-white shadow-xs font-bold" }
+                : { text: "BUTUH VERIFIKASI", cls: "bg-amber-600 text-white shadow-xs font-bold" };
 
               return (
                 <div
@@ -535,6 +652,8 @@ export default function OfficerDashboard({
                       ? "border-emerald-300 ring-1 ring-emerald-200/50"
                       : isInProgress
                       ? "border-orange-300 ring-1 ring-orange-200/50"
+                      : isVerified
+                      ? "border-blue-300 ring-1 ring-blue-200/50"
                       : "border-slate-200 hover:border-orange-400"
                   }`}
                 >
@@ -571,15 +690,29 @@ export default function OfficerDashboard({
                     {/* Content: Tanggal & Lokasi */}
                     <div className="p-3 space-y-1.5">
                       {/* Tanggal */}
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-500 font-sans">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>
-                          {new Date(report.reportDate).toLocaleDateString("id-ID", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
-                        </span>
+                      <div className="flex items-center justify-between gap-1.5 text-[11px] text-slate-500 font-sans">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>
+                            {new Date(report.reportDate).toLocaleDateString("id-ID", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSwitchToMap(report);
+                          }}
+                          className="text-[10px] font-bold text-[#c2410c] hover:underline flex items-center gap-0.5 cursor-pointer"
+                          title="Lihat lokasi laporan ini di Peta Transparansi"
+                        >
+                          <MapPin className="w-2.5 h-2.5" />
+                          <span>Peta</span>
+                        </button>
                       </div>
 
                       {/* Ruas Jalan & Alamat */}
@@ -607,7 +740,15 @@ export default function OfficerDashboard({
                       type="button"
                       className="w-full py-1.5 px-2.5 rounded-[6px] text-[11px] font-bold text-slate-700 bg-slate-50 group-hover:bg-[#c2410c] group-hover:text-white border border-slate-200 group-hover:border-transparent transition-all flex items-center justify-between cursor-pointer"
                     >
-                      <span>Kelola Disposisi</span>
+                      <span>
+                        {report.status === "MENUNGGU_VERIFIKASI"
+                          ? "Terima Verifikasi / Proses"
+                          : report.status === "TERVERIFIKASI"
+                          ? "Mulai Perbaikan / Selesai"
+                          : report.status === "DALAM_PENGERJAAN"
+                          ? "Selesaikan Perbaikan"
+                          : "Kelola Disposisi"}
+                      </span>
                       <ArrowRight className="w-3 h-3" />
                     </button>
                   </div>
@@ -621,6 +762,7 @@ export default function OfficerDashboard({
               const isOverdue = report.status === "OVERDUE";
               const isDone = report.status === "SELESAI";
               const isInProgress = report.status === "DALAM_PENGERJAAN";
+              const isVerified = report.status === "TERVERIFIKASI";
 
               return (
                 <div
@@ -632,6 +774,8 @@ export default function OfficerDashboard({
                       ? "border-emerald-300 border-l-4 border-l-emerald-600"
                       : isInProgress
                       ? "border-orange-300 border-l-4 border-l-orange-500"
+                      : isVerified
+                      ? "border-blue-300 border-l-4 border-l-blue-600"
                       : "border-amber-300 border-l-4 border-l-amber-500"
                   }`}
                 >
@@ -680,6 +824,11 @@ export default function OfficerDashboard({
                               DALAM PENGERJAAN FISIK
                             </span>
                           )}
+                          {isVerified && (
+                            <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
+                              VERIFIKASI DITERIMA DINAS
+                            </span>
+                          )}
                           {report.status === "MENUNGGU_VERIFIKASI" && (
                             <span className="px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
                               MENUNGGU VERIFIKASI DISPOSISI
@@ -723,12 +872,23 @@ export default function OfficerDashboard({
                         <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-[6px] ring-1 ring-orange-200/40">
                           {report.aiAnalysis}
                         </p>
+
+                        {/* Latest Officer Note Preview */}
+                        {report.updates && report.updates.length > 0 && (
+                          <div className="p-2 rounded-[6px] bg-emerald-50/60 border border-emerald-200/60 text-[11px] text-slate-700">
+                            <span className="font-bold text-emerald-900">
+                              Catatan Terakhir ({report.updates[0].officer}):{" "}
+                            </span>
+                            <span>{report.updates[0].note}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     {/* Right: Actions */}
-                    <div className="flex lg:flex-col items-center justify-end gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
+                    <div className="flex flex-wrap lg:flex-col items-center justify-end gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                       <button
+                        type="button"
                         onClick={() => handleOpenActionModal(report)}
                         className="w-full sm:w-auto px-4 py-2 rounded-[6px] text-xs font-bold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
@@ -737,7 +897,8 @@ export default function OfficerDashboard({
                       </button>
 
                       <button
-                        onClick={onSwitchToMap}
+                        type="button"
+                        onClick={() => onSwitchToMap(report)}
                         className="w-full sm:w-auto px-3 py-2 rounded-[6px] text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 ring-1 ring-orange-200/50 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5 text-slate-500" />
@@ -845,15 +1006,33 @@ export default function OfficerDashboard({
 
               {/* Modal Body Form */}
               <form onSubmit={handleSaveUpdate} className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs text-slate-700">
-                {/* Step 1: Status Change */}
+                {/* Step 1: Status Change (3 Complete Stages) */}
                 <div>
                   <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
-                    1. Perbarui Tahapan Status Penanganan
+                    1. Pilih Tahapan Keputusan &amp; Tindak Lanjut Dinas
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <button
                       type="button"
-                      onClick={() => setTargetStatus("DALAM_PENGERJAAN")}
+                      onClick={() => handleSelectStage("TERVERIFIKASI")}
+                      className={`p-3 rounded-[6px] border text-left transition-all cursor-pointer ${
+                        targetStatus === "TERVERIFIKASI"
+                          ? "bg-blue-50 border-blue-400 ring-2 ring-blue-400/25 text-blue-950"
+                          : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
+                      }`}
+                    >
+                      <div className="font-bold flex items-center gap-1.5">
+                        <BadgeCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                        <span>Terima Verifikasi</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-1">
+                        Laporan diterima &amp; lolos verifikasi dinas. Masuk antrean disposisi teknis.
+                      </p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleSelectStage("DALAM_PENGERJAAN")}
                       className={`p-3 rounded-[6px] border text-left transition-all cursor-pointer ${
                         targetStatus === "DALAM_PENGERJAAN"
                           ? "bg-orange-50 border-orange-300 ring-2 ring-orange-300/30 text-orange-950"
@@ -861,17 +1040,17 @@ export default function OfficerDashboard({
                       }`}
                     >
                       <div className="font-bold flex items-center gap-1.5">
-                        <HardHat className="w-3.5 h-3.5 text-[#c2410c]" />
-                        <span>Dalam Penanganan Fisik</span>
+                        <HardHat className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+                        <span>Sedang Diperbaiki</span>
                       </div>
                       <p className="text-[11px] text-slate-500 mt-1">
-                        Material/tim telah dikerahkan ke lokasi jalan. Menghentikan indikator keterlambatan.
+                        Material/tim telah dikerahkan ke lokasi. Menghentikan indikator keterlambatan.
                       </p>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => setTargetStatus("SELESAI")}
+                      onClick={() => handleSelectStage("SELESAI")}
                       className={`p-3 rounded-[6px] border text-left transition-all cursor-pointer ${
                         targetStatus === "SELESAI"
                           ? "bg-emerald-50 border-emerald-400 ring-2 ring-emerald-400/20 text-emerald-950"
@@ -879,11 +1058,11 @@ export default function OfficerDashboard({
                       }`}
                     >
                       <div className="font-bold flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Penanganan Selesai Diperbaiki</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>Selesai Diperbaiki</span>
                       </div>
                       <p className="text-[11px] text-slate-500 mt-1">
-                        Perbaikan fisik tuntas. Wajib menyertakan dokumentasi foto bukti hasil pekerjaan.
+                        Perbaikan fisik tuntas 100% beserta foto bukti hasil pengerjaan lapangan.
                       </p>
                     </button>
                   </div>
@@ -893,7 +1072,7 @@ export default function OfficerDashboard({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                      Identitas Petugas (Mode Demonstrasi)
+                      Identitas Petugas (Mode Demonstrasi / Dinas)
                     </label>
                     <input
                       type="text"
@@ -919,14 +1098,14 @@ export default function OfficerDashboard({
 
                 <div>
                   <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                    Catatan Teknis Tindak Lanjut Lapangan
+                    Catatan Teknis Verifikasi / Tindak Lanjut Lapangan
                   </label>
                   <textarea
                     rows={2}
                     required
                     value={officerNote}
                     onChange={(e) => setOfficerNote(e.target.value)}
-                    placeholder="Deskripsikan material yang digunakan, volume penambalan, dan hasil pengerjaan..."
+                    placeholder="Deskripsikan hasil verifikasi, material yang digunakan, atau hasil pengerjaan..."
                     className="w-full px-3 py-2 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-1.5 focus:ring-orange-600"
                   />
                 </div>
@@ -937,7 +1116,9 @@ export default function OfficerDashboard({
                     <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
                       2. Dokumentasi Foto Bukti Pengerjaan Fisik (After Photo)
                     </label>
-                    <span className="text-[11px] text-emerald-700 font-semibold">Syarat Akuntabilitas Publik</span>
+                    <span className="text-[11px] text-emerald-700 font-semibold">
+                      {targetStatus === "SELESAI" ? "Wajib untuk Status Selesai" : "Opsional / Pratinjau Bukti"}
+                    </span>
                   </div>
 
                   {/* Preset Chips */}
@@ -1014,7 +1195,13 @@ export default function OfficerDashboard({
                     className="w-full py-2.5 px-4 rounded-[6px] font-bold text-xs text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-2xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <FileCheck className="w-4 h-4" />
-                    <span>Simpan Perubahan &amp; Terbitkan Bukti ke Publik</span>
+                    <span>
+                      {targetStatus === "TERVERIFIKASI"
+                        ? "Terima Verifikasi & Sinkronkan ke Peta Publik"
+                        : targetStatus === "DALAM_PENGERJAAN"
+                        ? "Tetapkan Status Sedang Diperbaiki & Sinkronkan ke Peta"
+                        : "Simpan Status Selesai & Terbitkan Bukti ke Peta Publik"}
+                    </span>
                   </button>
                 </div>
               </form>

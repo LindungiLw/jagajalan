@@ -100,8 +100,8 @@ export default function MapExplorer({
   const [mapZoom, setMapZoom] = useState(5);
   const [mapInstance, setMapInstance] = useState(null);
 
-  // Synchronize when focusedRoadId changes from external navigation (React 19 state adjustment pattern)
-  const [prevFocusedRoadId, setPrevFocusedRoadId] = useState(focusedRoadId);
+  // Synchronize when focusedRoadId changes from external navigation (including initial mount when switching tabs)
+  const [prevFocusedRoadId, setPrevFocusedRoadId] = useState(null);
   if (focusedRoadId !== prevFocusedRoadId) {
     setPrevFocusedRoadId(focusedRoadId);
     if (focusedRoadId) {
@@ -116,8 +116,8 @@ export default function MapExplorer({
     }
   }
 
-  // Synchronize when focusedReportId changes (e.g. newly submitted real-time citizen report)
-  const [prevFocusedReportId, setPrevFocusedReportId] = useState(focusedReportId);
+  // Synchronize when focusedReportId changes (including initial mount when switching from Admin/Ombudsman to Map)
+  const [prevFocusedReportId, setPrevFocusedReportId] = useState(null);
   if (focusedReportId !== prevFocusedReportId) {
     setPrevFocusedReportId(focusedReportId);
     if (focusedReportId) {
@@ -126,7 +126,24 @@ export default function MapExplorer({
         setSelectedReport(targetReport);
         setShowReportsLayer(true);
         const parentRoad = roads.find((r) => r.id === targetReport.roadSegmentId);
-        if (parentRoad) setSelectedRoad(parentRoad);
+        if (parentRoad) {
+          setSelectedRoad(parentRoad);
+        } else {
+          setSelectedRoad({
+            id: targetReport.roadSegmentId || targetReport.id,
+            name: targetReport.roadName || "Ruas Jalan Laporan Warga",
+            district: targetReport.district || "Indonesia",
+            authority: targetReport.authority || "KABUPATEN",
+            authorityLabel: targetReport.authorityLabel || "Dinas PUPR Terkait",
+            legalBasis: targetReport.legalBasis || "UU No. 2 Tahun 2022 tentang Jalan",
+            leadership: targetReport.leadership || {
+              agency: targetReport.authorityLabel || "Dinas PUPR Terkait",
+            },
+            budget: targetReport.matchingBudget || { paguRp: 6800000000, fiscalYear: "2026" },
+            center: targetReport.coordinates,
+            condition: targetReport.status === "SELESAI" ? "MANTAP" : "RUSAK_BERAT",
+          });
+        }
         if (Array.isArray(targetReport.coordinates) && targetReport.coordinates.length >= 2) {
           setMapCenter(targetReport.coordinates);
           setMapZoom(15);
@@ -260,7 +277,24 @@ export default function MapExplorer({
   const handleSelectReport = (report) => {
     setSelectedReport(report);
     const parentRoad = roads.find((r) => r.id === report.roadSegmentId);
-    if (parentRoad) setSelectedRoad(parentRoad);
+    if (parentRoad) {
+      setSelectedRoad(parentRoad);
+    } else {
+      setSelectedRoad({
+        id: report.roadSegmentId || report.id,
+        name: report.roadName || "Ruas Jalan Laporan Warga",
+        district: report.district || "Indonesia",
+        authority: report.authority || "KABUPATEN",
+        authorityLabel: report.authorityLabel || "Dinas PUPR Terkait",
+        legalBasis: report.legalBasis || "UU No. 2 Tahun 2022 tentang Jalan",
+        leadership: report.leadership || {
+          agency: report.authorityLabel || "Dinas PUPR Terkait",
+        },
+        budget: report.matchingBudget || { paguRp: 6800000000, fiscalYear: "2026" },
+        center: report.coordinates,
+        condition: report.status === "SELESAI" ? "MANTAP" : "RUSAK_BERAT",
+      });
+    }
     if (Array.isArray(report.coordinates) && report.coordinates.length >= 2) {
       setMapCenter(report.coordinates);
       mapInstance?.flyTo(report.coordinates, Math.max(mapInstance.getZoom(), 14), { duration: 1.0 });
@@ -825,9 +859,16 @@ export default function MapExplorer({
   }, [highlightFilter]);
 
   // Active item to display in drawer (prioritize report if selected, fallback to road)
-  const displayItem = selectedReport || selectedRoad;
-  const currentRoad = selectedRoad || roads[0];
-  const currentReport = selectedReport;
+  // Derive live objects from `roads` and `reports` props so officer updates reflect immediately
+  const currentRoad = selectedRoad
+    ? roads.find((r) => r.id === selectedRoad.id) || selectedRoad
+    : roads[0];
+
+  const currentReport = selectedReport
+    ? reports.find((r) => r.id === selectedReport.id) || selectedReport
+    : null;
+
+  const displayItem = currentReport || currentRoad;
 
   // Budget & Analytic calculations for the selected road & report
   const budgetData = currentRoad?.budget;
@@ -837,13 +878,23 @@ export default function MapExplorer({
   const savingsPct = paguRp > 0 ? ((savingsRp / paguRp) * 100).toFixed(1) : "0.0";
 
   // Analytical card metrics inspired by the reference design
-  const physicalProgressPct = budgetData?.physicalProgressPct ??
+  const basePhysicalProgressPct =
+    budgetData?.physicalProgressPct ??
     (currentRoad?.condition === "MANTAP" ? 92 : currentRoad?.condition === "RUSAK_SEDANG" ? 64 : 38);
+  const physicalProgressPct =
+    currentReport?.status === "SELESAI"
+      ? 100
+      : currentReport?.status === "DALAM_PENGERJAAN"
+      ? Math.max(basePhysicalProgressPct, 75)
+      : currentReport?.status === "TERVERIFIKASI"
+      ? Math.max(basePhysicalProgressPct, 52)
+      : basePhysicalProgressPct;
   const contractCommitmentPct = Math.min(100, Math.round((contractValueRp / (paguRp || 1)) * 100));
   const roadConditionScore = currentRoad?.condition === "MANTAP" ? 88 : currentRoad?.condition === "RUSAK_SEDANG" ? 62 : 35;
+  const currentRoadId = currentRoad?.id;
   const roadReports = useMemo(() => {
-    return reports.filter((r) => r.roadSegmentId === currentRoad?.id);
-  }, [reports, currentRoad?.id]);
+    return reports.filter((r) => r.roadSegmentId === currentRoadId);
+  }, [reports, currentRoadId]);
   const reportsCount = roadReports.length || (currentReport ? 1 : 4);
 
   return (
@@ -854,8 +905,8 @@ export default function MapExplorer({
           roads={filteredRoads}
           liveViewportRoads={filteredLiveViewportRoads}
           reports={filteredReports}
-          selectedRoad={selectedRoad}
-          selectedReport={selectedReport}
+          selectedRoad={currentRoad}
+          selectedReport={currentReport}
           detectedPoint={detectedPoint}
           onSelectRoad={handleSelectRoad}
           onSelectReport={handleSelectReport}
@@ -1371,7 +1422,7 @@ export default function MapExplorer({
                       }`}
                     >
                       <div className="min-w-0 space-y-0.5">
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="font-mono tabular-nums text-[10px] font-bold text-[#c2410c]">
                             {rep.ticketCode}
                           </span>
@@ -1380,6 +1431,29 @@ export default function MapExplorer({
                               BARU
                             </span>
                           )}
+                          <span
+                            className={`px-1.5 py-0.2 rounded text-[8.5px] font-bold uppercase ${
+                              rep.status === "SELESAI"
+                                ? "bg-emerald-100 text-emerald-800"
+                                : rep.status === "DALAM_PENGERJAAN"
+                                ? "bg-orange-100 text-orange-800"
+                                : rep.status === "TERVERIFIKASI"
+                                ? "bg-blue-100 text-blue-800"
+                                : rep.status === "OVERDUE"
+                                ? "bg-rose-100 text-rose-800"
+                                : "bg-amber-100 text-amber-800"
+                            }`}
+                          >
+                            {rep.status === "SELESAI"
+                              ? "Selesai"
+                              : rep.status === "DALAM_PENGERJAAN"
+                              ? "Diperbaiki"
+                              : rep.status === "TERVERIFIKASI"
+                              ? "Terverifikasi"
+                              : rep.status === "OVERDUE"
+                              ? "Overdue"
+                              : "Menunggu"}
+                          </span>
                           <span className="text-[9.5px] font-semibold text-slate-400 uppercase">
                             {rep.authority}
                           </span>
@@ -1390,7 +1464,9 @@ export default function MapExplorer({
                       <div className="text-right shrink-0 space-y-0.5">
                         <span
                           className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-mono tabular-nums font-bold ${
-                            rep.status === "OVERDUE"
+                            rep.status === "SELESAI"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : rep.status === "OVERDUE"
                               ? "bg-rose-50 text-rose-700 border border-rose-200"
                               : "bg-amber-50 text-amber-800 border border-amber-200"
                           }`}
@@ -1862,7 +1938,7 @@ export default function MapExplorer({
               <div className="relative w-full h-40 sm:h-44 bg-slate-900 rounded-[10px] overflow-hidden shadow-2xs">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={currentReport?.photoUrl || currentRoad?.photoUrl}
+                  src={currentReport?.proofPhotoUrl || currentReport?.photoUrl || currentRoad?.photoUrl}
                   alt="Kondisi Fisik Ruas Jalan"
                   className="w-full h-full object-cover"
                   loading="lazy"
@@ -1877,17 +1953,134 @@ export default function MapExplorer({
                   </span>
                 </div>
 
-                {/* Top-Right Overdue Alert */}
-                {currentReport?.isResponseOverdue && (
+                {/* Top-Right Live Status Badge */}
+                {currentReport?.status === "SELESAI" ? (
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className="px-2.5 py-1 rounded-[6px] text-[10.5px] font-bold bg-emerald-600 text-white shadow-xs flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Selesai Diperbaiki</span>
+                    </span>
+                  </div>
+                ) : currentReport?.status === "DALAM_PENGERJAAN" ? (
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className="px-2.5 py-1 rounded-[6px] text-[10.5px] font-bold bg-orange-600 text-white shadow-xs flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      <span>Dalam Perbaikan Dinas</span>
+                    </span>
+                  </div>
+                ) : currentReport?.status === "TERVERIFIKASI" ? (
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className="px-2.5 py-1 rounded-[6px] text-[10.5px] font-bold bg-blue-600 text-white shadow-xs flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Verifikasi Diterima</span>
+                    </span>
+                  </div>
+                ) : currentReport?.isResponseOverdue ? (
                   <div className="absolute top-2.5 right-2.5">
                     <span className="px-2.5 py-1 rounded-[6px] text-[10.5px] font-bold bg-rose-600 text-white shadow-xs flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       <span>Terlambat {currentReport.daysOverdue} Hari</span>
                     </span>
                   </div>
+                ) : currentReport ? (
+                  <div className="absolute top-2.5 right-2.5">
+                    <span className="px-2.5 py-1 rounded-[6px] text-[10.5px] font-bold bg-amber-600 text-white shadow-xs flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      <span>Menunggu Verifikasi</span>
+                    </span>
+                  </div>
+                ) : null}
+
+                {/* Bottom-Left Ticket Badge if Report */}
+                {currentReport?.ticketCode && (
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2">
+                    <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-mono font-bold bg-black/65 backdrop-blur-xs text-white border border-white/20">
+                      {currentReport.ticketCode}
+                    </span>
+                    {currentReport.proofPhotoUrl && (
+                      <span className="px-2 py-0.5 rounded-[5px] text-[10px] font-bold bg-emerald-600/95 text-white shadow-xs">
+                        ✓ Foto Bukti Selesai Dinas
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             )}
+
+            {/* Live Officer Verification / Progress Box if Report was updated */}
+            {currentReport &&
+              (currentReport.status === "TERVERIFIKASI" ||
+                currentReport.status === "DALAM_PENGERJAAN" ||
+                currentReport.status === "SELESAI" ||
+                (currentReport.updates && currentReport.updates.length > 0)) && (
+                <div
+                  className={`p-3 rounded-[10px] border space-y-2 ${
+                    currentReport.status === "SELESAI"
+                      ? "bg-emerald-50/90 border-emerald-200 text-emerald-950"
+                      : currentReport.status === "DALAM_PENGERJAAN"
+                      ? "bg-orange-50/90 border-orange-200 text-orange-950"
+                      : "bg-blue-50/90 border-blue-200 text-blue-950"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10.5px] font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>
+                        {currentReport.status === "SELESAI"
+                          ? "Tindak Lanjut Dinas: Selesai Diperbaiki"
+                          : currentReport.status === "DALAM_PENGERJAAN"
+                          ? "Tindak Lanjut Dinas: Sedang Diperbaiki"
+                          : "Tindak Lanjut Dinas: Verifikasi Diterima"}
+                      </span>
+                    </span>
+                    <span className="text-[9.5px] font-mono font-bold opacity-75">
+                      Live Sync
+                    </span>
+                  </div>
+                  {currentReport.updates?.[0]?.note && (
+                    <p className="text-[11px] leading-relaxed font-medium">
+                      &ldquo;{currentReport.updates[0].note}&rdquo;
+                    </p>
+                  )}
+                  {currentReport.updates?.[0]?.officer && (
+                    <div className="text-[10px] opacity-80 font-semibold">
+                      Oleh: {currentReport.updates[0].officer}
+                    </div>
+                  )}
+
+                  {/* Before vs After Mini Comparison when Proof Photo is attached */}
+                  {currentReport.proofPhotoUrl && currentReport.photoUrl && (
+                    <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-emerald-200/70">
+                      <div className="space-y-1">
+                        <div className="h-16 rounded-[6px] overflow-hidden border border-slate-300 bg-slate-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={currentReport.photoUrl}
+                            alt="Before"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="text-[9.5px] font-bold text-slate-600 block text-center">
+                          BEFORE (Laporan Warga)
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-16 rounded-[6px] overflow-hidden border border-emerald-500 bg-slate-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={currentReport.proofPhotoUrl}
+                            alt="After"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="text-[9.5px] font-bold text-emerald-800 block text-center">
+                          AFTER (Bukti Dinas)
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
             {/* 2. Key Data Row: Penanggung Jawab & Anggaran (2 Columns, matching reference image 1) */}
             <div className="grid grid-cols-2 gap-2.5 p-3 rounded-[10px] bg-slate-50/80 border border-slate-200/70">
@@ -1957,14 +2150,28 @@ export default function MapExplorer({
                 </div>
                 <div
                   className={`p-2 rounded-[8px] border ${
-                    currentReport?.isResponseOverdue
+                    currentReport?.status === "SELESAI"
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                      : currentReport?.status === "DALAM_PENGERJAAN"
+                      ? "bg-orange-50 border-orange-200 text-orange-800"
+                      : currentReport?.status === "TERVERIFIKASI"
+                      ? "bg-blue-50 border-blue-200 text-blue-800"
+                      : currentReport?.isResponseOverdue
                       ? "bg-rose-50 border-rose-200 text-rose-800"
                       : "bg-white border-slate-200/70 text-slate-900"
                   }`}
                 >
-                  <div className="text-[10px] text-slate-400">Tenggat SLA</div>
+                  <div className="text-[10px] text-slate-400">Status / SLA</div>
                   <div className="font-bold text-xs mt-0.5 truncate">
-                    {currentReport?.isResponseOverdue ? `+${currentReport.daysOverdue} Hari` : "Tepat Waktu"}
+                    {currentReport?.status === "SELESAI"
+                      ? "✓ Selesai"
+                      : currentReport?.status === "DALAM_PENGERJAAN"
+                      ? "Diperbaiki"
+                      : currentReport?.status === "TERVERIFIKASI"
+                      ? "Terverifikasi"
+                      : currentReport?.isResponseOverdue
+                      ? `+${currentReport.daysOverdue} Hari`
+                      : "Tepat Waktu"}
                   </div>
                 </div>
               </div>
@@ -1977,7 +2184,9 @@ export default function MapExplorer({
                 </div>
                 <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden flex">
                   <div
-                    className="h-full bg-[#c2410c] rounded-full transition-all duration-500"
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      currentReport?.status === "SELESAI" ? "bg-emerald-600" : "bg-[#c2410c]"
+                    }`}
                     style={{ width: `${physicalProgressPct}%` }}
                   />
                 </div>
@@ -2023,11 +2232,31 @@ export default function MapExplorer({
                             : "bg-white hover:bg-slate-100 text-slate-700"
                         }`}
                       >
-                        <span className="truncate">
+                        <span className="truncate flex items-center gap-1">
                           <strong className="font-mono tabular-nums">{rep.ticketCode}</strong> • {rep.categoryLabel}
                         </span>
-                        <span className="font-mono tabular-nums text-[9.5px] text-slate-500 shrink-0">
-                          {Number(rep.coordinates?.[0] || 0).toFixed(3)}, {Number(rep.coordinates?.[1] || 0).toFixed(3)}
+                        <span
+                          className={`px-1.5 py-0.2 rounded text-[8.5px] font-bold shrink-0 ${
+                            rep.status === "SELESAI"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : rep.status === "DALAM_PENGERJAAN"
+                              ? "bg-orange-100 text-orange-800"
+                              : rep.status === "TERVERIFIKASI"
+                              ? "bg-blue-100 text-blue-800"
+                              : rep.status === "OVERDUE"
+                              ? "bg-rose-100 text-rose-800"
+                              : "bg-amber-100 text-amber-800"
+                          }`}
+                        >
+                          {rep.status === "SELESAI"
+                            ? "Selesai"
+                            : rep.status === "DALAM_PENGERJAAN"
+                            ? "Diperbaiki"
+                            : rep.status === "TERVERIFIKASI"
+                            ? "Terverifikasi"
+                            : rep.status === "OVERDUE"
+                            ? "Overdue"
+                            : "Menunggu"}
                         </span>
                       </button>
                     ))}

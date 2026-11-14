@@ -65,9 +65,13 @@ export const REPORT_STATUS = {
     label: "Menunggu Verifikasi",
     badgeBg: "bg-amber-50 text-amber-800 border-amber-200",
   },
+  TERVERIFIKASI: {
+    label: "Verifikasi Diterima Dinas",
+    badgeBg: "bg-blue-50 text-blue-800 border-blue-200",
+  },
   DALAM_PENGERJAAN: {
     label: "Dalam Penanganan Fisik",
-    badgeBg: "bg-amber-50 text-amber-800 border-amber-200",
+    badgeBg: "bg-orange-50 text-orange-800 border-orange-200",
   },
   SELESAI: {
     label: "Penanganan Selesai",

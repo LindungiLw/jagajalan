@@ -297,7 +297,7 @@ export default function ReportModal({
 
   const currentRoad = isCustomRoad
     ? {
-        id: "ruas-geospasial-lokal",
+        id: `ruas-lokal-${validLat.toFixed(3)}-${validLng.toFixed(3)}`,
         name: customRoadName.trim() || `Ruas Jalan Lokal [${validLat.toFixed(4)}, ${validLng.toFixed(4)}]`,
         district: customDistrict.trim() || "Wilayah Terpeta GIS",
         authority: customAuthority || "KOTA",
@@ -924,11 +924,16 @@ export default function ReportModal({
     setIsSubmitting(false);
 
     if (db) {
-      addDoc(collection(db, "reports"), {
+      const firestorePayload = {
         ...persistedReport,
+        photoUrl:
+          typeof persistedReport.photoUrl === "string" && persistedReport.photoUrl.length > 250000
+            ? "[LOCAL_COMPRESSED_IMAGE]"
+            : persistedReport.photoUrl,
         syncedToCloudAt: new Date().toISOString(),
-      }).catch((err) => {
-        console.warn("Sinkronisasi laporan ke Cloud Firestore dilewati:", err.message);
+      };
+      addDoc(collection(db, "reports"), firestorePayload).catch(() => {
+        // Silent fallback when Firestore rules or offline mode is active
       });
     }
   };

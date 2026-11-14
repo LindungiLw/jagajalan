@@ -600,7 +600,12 @@ export default function OmbudsmanMonitorSection({
     return {
       all: reports.length,
       overdue: reports.filter((r) => r.status === "OVERDUE").length,
-      inProgress: reports.filter((r) => r.status === "DALAM_PENGERJAAN" || r.status === "MENUNGGU_VERIFIKASI").length,
+      inProgress: reports.filter(
+        (r) =>
+          r.status === "TERVERIFIKASI" ||
+          r.status === "DALAM_PENGERJAAN" ||
+          r.status === "MENUNGGU_VERIFIKASI"
+      ).length,
       resolved: reports.filter((r) => r.status === "SELESAI").length,
     };
   }, [reports]);
@@ -612,6 +617,7 @@ export default function OmbudsmanMonitorSection({
       if (statusFilter === "OVERDUE" && report.status !== "OVERDUE") return false;
       if (
         statusFilter === "DALAM_PENGERJAAN" &&
+        report.status !== "TERVERIFIKASI" &&
         report.status !== "DALAM_PENGERJAAN" &&
         report.status !== "MENUNGGU_VERIFIKASI"
       )
@@ -781,7 +787,7 @@ export default function OmbudsmanMonitorSection({
           <button
             type="button"
             onClick={handleExportReportsExcel}
-            title="Unduh Rekapitulasi Laporan Warga & Koordinat GIS dalam format Microsoft Excel (.xls)"
+            title="Unduh Rekapitulasi Laporan Warga & Koordinat GIS dalam format Microsoft Excel (.xlsx)"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80 text-xs font-bold transition-colors cursor-pointer"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
@@ -1180,6 +1186,8 @@ export default function OmbudsmanMonitorSection({
           {paginatedReports.map((report) => {
             const isOverdue = report.status === "OVERDUE";
             const isCompleted = report.status === "SELESAI";
+            const isInProgress = report.status === "DALAM_PENGERJAAN";
+            const isVerified = report.status === "TERVERIFIKASI";
             const reportDateStr = new Date(report.reportDate).toLocaleDateString("id-ID", {
               day: "numeric",
               month: "short",
@@ -1215,10 +1223,20 @@ export default function OmbudsmanMonitorSection({
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Selesai Ditangani</span>
                       </span>
+                    ) : isInProgress ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-800 ring-1 ring-orange-200/80 font-sans">
+                        <Clock className="w-3.5 h-3.5 text-[#c2410c]" />
+                        <span>Sedang Diperbaiki Dinas</span>
+                      </span>
+                    ) : isVerified ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-800 ring-1 ring-blue-200/80 font-sans">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                        <span>Verifikasi Diterima Dinas</span>
+                      </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 ring-1 ring-amber-200/80 font-sans">
                         <Clock className="w-3.5 h-3.5 text-amber-600" />
-                        <span>Dalam Masa Tanggap</span>
+                        <span>Menunggu Verifikasi</span>
                       </span>
                     )}
                   </div>
@@ -1267,6 +1285,26 @@ export default function OmbudsmanMonitorSection({
                     <HazardRadialGauge score={report.hazardScore} />
                   </div>
 
+                  {/* Live Officer Verification / Repair Update Note */}
+                  {report.updates?.[0]?.note && (
+                    <div
+                      className={`p-2.5 rounded-[6px] border text-[11px] leading-relaxed ${
+                        isCompleted
+                          ? "bg-emerald-50/70 border-emerald-200/80 text-emerald-950"
+                          : isInProgress
+                          ? "bg-orange-50/70 border-orange-200/80 text-orange-950"
+                          : isVerified
+                          ? "bg-blue-50/70 border-blue-200/80 text-blue-950"
+                          : "bg-slate-50 border-slate-200 text-slate-700"
+                      }`}
+                    >
+                      <span className="font-bold">
+                        Tindak Lanjut Dinas ({report.updates[0].officer || "Petugas Dinas"}):{" "}
+                      </span>
+                      <span>{report.updates[0].note}</span>
+                    </div>
+                  )}
+
                   {/* Row 3: Boxed SLA Stepper Track (With Lock / Overdue / Completed States) */}
                   <div className="p-3 sm:p-3.5 rounded-[8px] bg-slate-50/80 border border-slate-200/70 space-y-2 select-none">
                     <div className="relative flex items-center h-5 w-full">
@@ -1303,6 +1341,8 @@ export default function OmbudsmanMonitorSection({
                             ? "w-5 h-5 rounded-full bg-emerald-600 text-white border-2 border-white shadow-2xs"
                             : isOverdue
                             ? "w-5 h-5 rounded-full bg-rose-600 text-white border-2 border-white shadow-2xs"
+                            : isVerified
+                            ? "w-5 h-5 rounded-full bg-blue-600 text-white border-2 border-white ring-4 ring-blue-200 shadow-2xs"
                             : "w-5 h-5 rounded-full bg-[#ea580c] text-white border-2 border-white ring-4 ring-orange-200 shadow-2xs"
                         }`}
                         title={
@@ -1313,7 +1353,7 @@ export default function OmbudsmanMonitorSection({
                             : "Dalam Batas Wajar Respons (Maks. 14 Hari Kerja UU 25/2009)"
                         }
                       >
-                        {isCompleted ? (
+                        {isCompleted || isVerified || isInProgress ? (
                           <Check className="w-3 h-3 stroke-[3]" />
                         ) : (
                           <span className="w-1.5 h-1.5 rounded-full bg-white block" />
@@ -1353,11 +1393,23 @@ export default function OmbudsmanMonitorSection({
                       
                       <div className="text-center">
                         <span className="font-bold text-slate-800 block">
-                          {isCompleted ? "Tuntas Sesuai Target" : isOverdue ? "Lewat Tenggat" : "Masa Tanggap"}
+                          {isCompleted
+                            ? "Tuntas Sesuai Target"
+                            : isInProgress
+                            ? "Dalam Perbaikan Dinas"
+                            : isVerified
+                            ? "Verifikasi Diterima Dinas"
+                            : isOverdue
+                            ? "Lewat Tenggat"
+                            : "Masa Tanggap"}
                         </span>
                         <span className="text-[9.5px] text-slate-500 font-medium block">
                           {isCompleted
-                            ? "(Perbaikan Lapangan)"
+                            ? "(Perbaikan Lapangan 100%)"
+                            : isInProgress
+                            ? "(Tim Lapangan Bekerja)"
+                            : isVerified
+                            ? "(Disposisi Terverifikasi)"
                             : isOverdue
                             ? `(+${report.daysOverdue} Hari Terlambat)`
                             : "(Hari 7/14)"}
@@ -1376,7 +1428,7 @@ export default function OmbudsmanMonitorSection({
                       {/* Cek Peta GIS */}
                       <button
                         type="button"
-                        onClick={() => onSelectRoadOnMap && onSelectRoadOnMap(report.roadSegmentId)}
+                        onClick={() => onSelectRoadOnMap && onSelectRoadOnMap(report.roadSegmentId, report.id)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition-colors cursor-pointer font-sans"
                       >
                         <span>Cek Peta GIS</span>
@@ -1460,6 +1512,8 @@ export default function OmbudsmanMonitorSection({
                 {paginatedReports.map((report) => {
                   const isOverdue = report.status === "OVERDUE";
                   const isCompleted = report.status === "SELESAI";
+                  const isInProgress = report.status === "DALAM_PENGERJAAN";
+                  const isVerified = report.status === "TERVERIFIKASI";
 
                   return (
                     <tr key={report.id} className="hover:bg-slate-50/60 transition-colors">
@@ -1487,10 +1541,20 @@ export default function OmbudsmanMonitorSection({
                             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                             <span>Selesai</span>
                           </span>
+                        ) : isInProgress ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[5px] text-[10px] font-medium bg-orange-50 text-orange-800 ring-1 ring-orange-200/60">
+                            <Clock className="w-3 h-3 text-[#c2410c]" />
+                            <span>Diperbaiki</span>
+                          </span>
+                        ) : isVerified ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[5px] text-[10px] font-medium bg-blue-50 text-blue-800 ring-1 ring-blue-200/60">
+                            <CheckCircle2 className="w-3 h-3 text-blue-600" />
+                            <span>Terverifikasi</span>
+                          </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[5px] text-[10px] font-medium bg-amber-50 text-amber-800 ring-1 ring-amber-200/60">
                             <Clock className="w-3 h-3 text-amber-600" />
-                            <span>Berjalan</span>
+                            <span>Menunggu</span>
                           </span>
                         )}
                       </td>
@@ -1505,7 +1569,7 @@ export default function OmbudsmanMonitorSection({
                           </button>
                         ) : (
                           <button
-                            onClick={() => onSelectRoadOnMap && onSelectRoadOnMap(report.roadSegmentId)}
+                            onClick={() => onSelectRoadOnMap && onSelectRoadOnMap(report.roadSegmentId, report.id)}
                             className="px-2.5 py-1 rounded-full text-[11px] font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
                           >
                             Peta GIS

@@ -116,11 +116,41 @@ const getPolylinePositions = (coords) => {
   return segments.length > 1 ? segments : coords;
 };
 
-// Create custom orange marker icon matching the high-fidelity UI design
-const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport = false) => {
+// Create custom marker icon matching the high-fidelity UI design & live status
+const createReportIcon = (
+  category,
+  isOverdue,
+  isSelected,
+  isLiveCitizenReport = false,
+  status = ""
+) => {
+  const isCompleted = status === "SELESAI";
+  const isVerified = status === "TERVERIFIKASI";
+  const isInProgress = status === "DALAM_PENGERJAAN";
+
   let bgColor = "#ea580c"; // Safety Orange
-  if (isOverdue) bgColor = "#dc2626"; // Crimson Red for Overdue
-  else if (category === "SUBSIDENCE") bgColor = "#d97706";
+  let haloRgbaOuter = "rgba(234, 88, 12, 0.16)";
+  let haloRgbaInner = "rgba(234, 88, 12, 0.28)";
+
+  if (isCompleted) {
+    bgColor = "#059669"; // Emerald Green for Completed
+    haloRgbaOuter = "rgba(5, 150, 105, 0.16)";
+    haloRgbaInner = "rgba(5, 150, 105, 0.28)";
+  } else if (isVerified) {
+    bgColor = "#2563eb"; // Blue for Verified by Agency
+    haloRgbaOuter = "rgba(37, 99, 235, 0.16)";
+    haloRgbaInner = "rgba(37, 99, 235, 0.28)";
+  } else if (isInProgress) {
+    bgColor = "#d97706"; // Amber for In Progress
+    haloRgbaOuter = "rgba(217, 119, 6, 0.16)";
+    haloRgbaInner = "rgba(217, 119, 6, 0.28)";
+  } else if (isOverdue) {
+    bgColor = "#dc2626"; // Crimson Red for Overdue
+    haloRgbaOuter = "rgba(220, 38, 38, 0.18)";
+    haloRgbaInner = "rgba(220, 38, 38, 0.30)";
+  } else if (category === "SUBSIDENCE") {
+    bgColor = "#d97706";
+  }
 
   if (isSelected) {
     return L.divIcon({
@@ -140,7 +170,7 @@ const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport =
             width: 58px;
             height: 58px;
             border-radius: 50%;
-            background: rgba(234, 88, 12, 0.16);
+            background: ${haloRgbaOuter};
             pointer-events: none;
           "></div>
           <div style="
@@ -148,7 +178,7 @@ const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport =
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: rgba(234, 88, 12, 0.28);
+            background: ${haloRgbaInner};
             pointer-events: none;
           "></div>
           <!-- Teardrop Location Pin SVG pointing down -->
@@ -160,10 +190,12 @@ const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport =
             <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M17 0C7.61116 0 0 7.61116 0 17C0 27.5 14.5 40.5 16.2 41.8C16.65 42.1 17.35 42.1 17.8 41.8C19.5 40.5 34 27.5 34 17C34 7.61116 26.3888 0 17 0Z" fill="${bgColor}"/>
               <circle cx="17" cy="16" r="10" fill="#ffffff" fill-opacity="0.25"/>
-              <!-- Exclamation Mark Inside Pin -->
-              <circle cx="17" cy="14" r="5" fill="#ffffff"/>
-              <path d="M17 12V14.5" stroke="${bgColor}" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="17" cy="17" r="1" fill="${bgColor}"/>
+              <circle cx="17" cy="14" r="5.5" fill="#ffffff"/>
+              ${
+                isCompleted || isVerified
+                  ? `<path d="M14.5 14L16.3 15.8L19.8 12.3" stroke="${bgColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+                  : `<path d="M17 12V14.5" stroke="${bgColor}" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="17" r="1" fill="${bgColor}"/>`
+              }
             </svg>
           </div>
         </div>
@@ -173,7 +205,7 @@ const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport =
     });
   }
 
-  // Regular non-selected pin with white warning triangle icon
+  // Regular non-selected pin
   return L.divIcon({
     className: "custom-map-marker",
     html: `
@@ -187,7 +219,7 @@ const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport =
         cursor: pointer;
       ">
         ${
-          isOverdue || isLiveCitizenReport
+          (isOverdue || isLiveCitizenReport) && !isCompleted
             ? `<span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background-color: ${bgColor}; opacity: 0.38; animation: ping 1.6s infinite;"></span>`
             : ""
         }
@@ -202,11 +234,11 @@ const createReportIcon = (category, isOverdue, isSelected, isLiveCitizenReport =
           align-items: center;
           justify-content: center;
         ">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
+          ${
+            isCompleted || isVerified
+              ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+              : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+          }
         </div>
       </div>
     `,
@@ -572,18 +604,42 @@ export default function MapInner({
       {showReportsLayer &&
         reports.map((report) => {
           if (!Array.isArray(report.coordinates) || report.coordinates.length < 2) return null;
-          const isOverdue = report.status === "OVERDUE";
+          const isOverdue = report.status === "OVERDUE" || Boolean(report.isResponseOverdue);
+          const isCompleted = report.status === "SELESAI";
+          const isVerified = report.status === "TERVERIFIKASI";
+          const isInProgress = report.status === "DALAM_PENGERJAAN";
           const isSelected = selectedReport?.id === report.id;
           const icon = createReportIcon(
             report.damageCategory,
             isOverdue,
             isSelected,
-            Boolean(report.isLiveCitizenReport)
+            Boolean(report.isLiveCitizenReport),
+            report.status
           );
+
+          const statusPillText = isCompleted
+            ? "✓ Selesai Diperbaiki"
+            : isInProgress
+            ? "⚒ Dalam Perbaikan Dinas"
+            : isVerified
+            ? "✓ Verifikasi Diterima Dinas"
+            : isOverdue
+            ? "⚠ Melewati Tenggat Respons"
+            : "⏳ Menunggu Verifikasi";
+
+          const statusPillClass = isCompleted
+            ? "bg-emerald-100 text-emerald-800"
+            : isInProgress
+            ? "bg-orange-100 text-orange-800"
+            : isVerified
+            ? "bg-blue-100 text-blue-800"
+            : isOverdue
+            ? "bg-rose-100 text-rose-800"
+            : "bg-amber-100 text-amber-800";
 
           return (
             <Marker
-              key={report.id}
+              key={`${report.id}-${report.status || "OPEN"}`}
               position={report.coordinates}
               icon={icon}
               zIndexOffset={isSelected ? 1000 : report.isLiveCitizenReport ? 400 : 1}
@@ -596,11 +652,9 @@ export default function MapInner({
                   <div className="font-bold text-slate-900 flex items-center gap-1.5">
                     <span className="font-mono tabular-nums">{report.ticketCode}</span>
                     <span>• {report.roadName}</span>
-                    {report.isLiveCitizenReport && (
-                      <span className="px-1.5 py-0.2 rounded text-[8.5px] font-bold bg-orange-100 text-[#9a3412]">
-                        BARU
-                      </span>
-                    )}
+                    <span className={`px-1.5 py-0.2 rounded text-[8.5px] font-bold ${statusPillClass}`}>
+                      {statusPillText}
+                    </span>
                   </div>
                   <div className="text-[10px] text-slate-500">
                     {report.categoryLabel} • Indeks Bahaya: <span className="font-mono tabular-nums font-bold">{report.hazardScore}/100</span>
@@ -610,22 +664,12 @@ export default function MapInner({
 
               <Popup className="jagajalan-leaflet-popup">
                 <div className="p-1 space-y-2 font-sans max-w-[260px] text-xs">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-1 gap-1.5">
                     <span className="font-mono tabular-nums text-[9px] font-bold text-orange-800 bg-orange-100 px-1.5 py-0.5 rounded-[4px]">
                       {report.ticketCode}
                     </span>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${
-                      isOverdue
-                        ? "bg-rose-100 text-rose-800"
-                        : report.isLiveCitizenReport
-                        ? "bg-orange-100 text-[#9a3412]"
-                        : "bg-emerald-100 text-emerald-800"
-                    }`}>
-                      {isOverdue
-                        ? "Melewati Tenggat Respons"
-                        : report.isLiveCitizenReport
-                        ? "Laporan Warga Real-Time"
-                        : "Dalam Pengerjaan"}
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] ${statusPillClass}`}>
+                      {statusPillText}
                     </span>
                   </div>
 
@@ -647,6 +691,13 @@ export default function MapInner({
                       <span className="font-mono tabular-nums font-bold text-rose-600">{report.hazardScore}/100 ({report.hazardLevel})</span>
                     </div>
                   </div>
+
+                  {report.updates?.[0]?.note && (
+                    <div className="text-[9.5px] text-slate-700 bg-emerald-50/80 p-1.5 rounded-[5px] border border-emerald-200/70">
+                      <span className="font-bold text-emerald-900">Tindak Lanjut Dinas: </span>
+                      <span>{report.updates[0].note}</span>
+                    </div>
+                  )}
 
                   {report.matchingBudget && (
                     <div className="text-[9px] text-slate-600 bg-orange-50/60 p-1.5 rounded-[5px] border border-orange-100">
