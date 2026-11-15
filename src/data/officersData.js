@@ -73,72 +73,128 @@ export const OFFICIAL_OFFICERS = [
   },
 ];
 
-const SESSION_STORAGE_KEY = "jagajalan_officer_session";
+const SESSION_STORAGE_KEY = "jagajalan_officer_session_v2";
+const LEGACY_SESSION_KEY = "jagajalan_officer_session";
+const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 jam masa aktif sesi
+
+function generateSessionToken() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `jgj_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
+}
+
+/**
+ * Menyimpan sesi login petugas yang telah terautentikasi (Demo / Google SSO / OTP / NIP)
+ * dengan token sesi dan batas waktu kedaluwarsa (TTL) tanpa menyimpan password.
+ */
+export function saveOfficerSession(officerPayload, authMethod = "DEMO") {
+  if (!officerPayload || typeof officerPayload !== "object") return null;
+
+  const { password: _omittedPassword, ...safeOfficer } = officerPayload;
+  const now = Date.now();
+  const sessionRecord = {
+    ...safeOfficer,
+    id: safeOfficer.id || "DEMO-001",
+    nip: safeOfficer.nip || safeOfficer.id || "DEMO-001",
+    name: safeOfficer.name || "Petugas Demo",
+    isAuthenticated: true,
+    authMethod,
+    sessionToken: safeOfficer.sessionToken || generateSessionToken(),
+    issuedAt: new Date(now).toISOString(),
+    expiresAt: now + SESSION_TTL_MS,
+  };
+
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.removeItem(LEGACY_SESSION_KEY);
+      window.sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionRecord));
+      window.localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionRecord));
+    } catch (e) {
+      console.warn("Gagal menyimpan sesi petugas:", e);
+    }
+  }
+
+  return sessionRecord;
+}
 
 /**
  * Autentikasi petugas dengan ID Demo / NIP atau Email dan Kata Sandi
  */
 export function authenticateOfficer(identifier, password) {
-  if (!identifier) {
-    return { success: false, message: "ID Akun (misal: DEMO-001) atau Email wajib diisi." };
+  if (!identifier || typeof identifier !== "string" || !identifier.trim()) {
+    return {
+      success: false,
+      message: "ID Akun (misal: DEMO-001) atau Email wajib diisi.",
+    };
+  }
+
+  if (!password || typeof password !== "string" || !password.trim()) {
+    return {
+      success: false,
+      message: "Kata sandi wajib diisi.",
+    };
   }
 
   const cleanId = identifier.trim().toLowerCase();
+  const cleanPassword = password.trim();
 
-  // Cari yang cocok berdasarkan id, nip, email, legacyEmail, atau kata kunci 'demo'
+  // Cari akun petugas yang cocok berdasarkan id, nip, email, atau legacyEmail
   const found = OFFICIAL_OFFICERS.find(
     (o) =>
       o.id.toLowerCase() === cleanId ||
       o.nip.toLowerCase() === cleanId ||
       o.email.toLowerCase() === cleanId ||
       o.legacyEmail?.toLowerCase() === cleanId
-  ) || (cleanId.includes("demo") ? OFFICIAL_OFFICERS[0] : null);
+  );
 
-  // Jika tidak ditemukan secara spesifik, fallback ke akun demo utama DEMO-001
-  const targetOfficer = found || {
-    ...OFFICIAL_OFFICERS[0],
-    id: cleanId.startsWith("demo") ? cleanId.toUpperCase() : "DEMO-001",
-    name: "Petugas Demo",
-    status: "Aktif",
-  };
-
-  // Simpan ke local storage jika di lingkungan browser
-  if (typeof window !== "undefined") {
-    try {
-      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(targetOfficer));
-    } catch (e) {
-      console.warn("Gagal menyimpan sesi petugas:", e);
-    }
+  if (!found || found.password !== cleanPassword) {
+    return {
+      success: false,
+      message:
+        "ID Akun atau Kata Sandi tidak sesuai. Gunakan akun demo resmi (misal: DEMO-001 / jagajalan2026).",
+    };
   }
 
-  return { success: true, officer: targetOfficer };
+  const sessionOfficer = saveOfficerSession(found, "NIP_PASSWORD");
+  return { success: true, officer: sessionOfficer };
 }
 
 /**
- * Mengambil data sesi petugas yang sedang aktif
+ * Mengambil data sesi petugas yang sedang aktif dan valid (belum kedaluwarsa)
  */
 export function getActiveOfficerSession() {
   if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+    // Bersihkan kunci sesi versi lama yang belum memiliki validasi autentikasi/TTL
+    window.localStorage.removeItem(LEGACY_SESSION_KEY);
+
+    const raw =
+      window.sessionStorage.getItem(SESSION_STORAGE_KEY) ||
+      window.localStorage.getItem(SESSION_STORAGE_KEY);
     if (!raw) return null;
+
     const parsed = JSON.parse(raw);
-    
-    // Auto-migrate sesi lama jika masih berisi nama pejabat riil
-    if (parsed && !parsed.id?.startsWith("DEMO") && parsed.name !== "Petugas Demo") {
-      const demoAccount = {
-        ...OFFICIAL_OFFICERS[0],
-        name: "Petugas Demo",
-        id: "DEMO-001",
-        nip: "DEMO-001",
-        status: "Aktif",
-      };
-      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(demoAccount));
-      return demoAccount;
+    if (
+      !parsed ||
+      typeof parsed !== "object" ||
+      parsed.isAuthenticated !== true ||
+      !parsed.sessionToken ||
+      !parsed.id
+    ) {
+      clearOfficerSession();
+      return null;
     }
-    
-    return parsed;
-  } catch (e) {
+
+    // Periksa masa berlaku sesi (TTL)
+    if (parsed.expiresAt && Number(parsed.expiresAt) < Date.now()) {
+      clearOfficerSession();
+      return null;
+    }
+
+    const { password: _omittedPassword, ...safeSession } = parsed;
+    return safeSession;
+  } catch {
     return null;
   }
 }
@@ -149,7 +205,9 @@ export function getActiveOfficerSession() {
 export function clearOfficerSession() {
   if (typeof window === "undefined") return;
   try {
-    localStorage.removeItem(SESSION_STORAGE_KEY);
+    window.sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    window.localStorage.removeItem(SESSION_STORAGE_KEY);
+    window.localStorage.removeItem(LEGACY_SESSION_KEY);
   } catch (e) {
     console.warn("Gagal menghapus sesi petugas:", e);
   }

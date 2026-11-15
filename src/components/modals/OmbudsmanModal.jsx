@@ -61,16 +61,24 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
 
   const handlePrint = () => {
     if (typeof window === "undefined") return;
-    const escapedText = letterText
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+    const escapeHtml = (val) =>
+      String(val ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    const escapedText = escapeHtml(letterText);
+    const safeTicketCode = escapeHtml(report.ticketCode);
+    const safeTodayStr = escapeHtml(todayStr);
+    const safeDaysOverdue = escapeHtml(report.daysOverdue || 4);
 
     const htmlDoc = `<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Draf Pengaduan Ombudsman RI — #${report.ticketCode}</title>
+  <title>Draf Pengaduan Ombudsman RI — #${safeTicketCode}</title>
   <style>
     @page { size: A4 portrait; margin: 16mm; }
     * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -162,7 +170,7 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
 </head>
 <body>
   <div class="toolbar">
-    <div><strong>Berkas Advokasi Pengaduan Ombudsman RI (#${report.ticketCode})</strong> — Pilih <em>"Save as PDF"</em> pada jendela cetak.</div>
+    <div><strong>Berkas Advokasi Pengaduan Ombudsman RI (#${safeTicketCode})</strong> — Pilih <em>"Save as PDF"</em> pada jendela cetak.</div>
     <button class="toolbar-btn" onclick="window.print()">Simpan / Cetak PDF Sekarang</button>
   </div>
   <div class="letterhead">
@@ -172,9 +180,9 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
       <div style="font-size: 8.5pt; color: #475569;">Rujukan Yuridis: Pasal 44 ayat (2) UU No. 25/2009 &amp; Pasal 24 UU No. 37/2008 tentang Ombudsman RI</div>
     </div>
     <div class="meta-box">
-      <div><strong>TIKET:</strong> #${report.ticketCode}</div>
-      <div><strong>TANGGAL:</strong> ${todayStr}</div>
-      <div><strong>STATUS SLA:</strong> Lewat +${report.daysOverdue || 4} Hari</div>
+      <div><strong>TIKET:</strong> #${safeTicketCode}</div>
+      <div><strong>TANGGAL:</strong> ${safeTodayStr}</div>
+      <div><strong>STATUS SLA:</strong> Lewat +${safeDaysOverdue} Hari</div>
     </div>
   </div>
   <pre>${escapedText}</pre>

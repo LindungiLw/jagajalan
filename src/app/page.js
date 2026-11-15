@@ -597,7 +597,11 @@ export default function Home() {
     try {
       await fetch("/api/reports", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Officer-Id": officerSession?.id || "DEMO-001",
+          "X-Officer-Token": officerSession?.sessionToken || "",
+        },
         body: JSON.stringify({ id: reportId, ...updatedFields }),
       });
     } catch {

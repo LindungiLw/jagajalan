@@ -8,6 +8,67 @@ import { computeSpatialCellId, getDatabaseScalabilityMetrics } from "@/lib/fireb
 
 const STORAGE_FILE = path.join(os.tmpdir(), "jagajalan-live-reports-v1.json");
 
+const WRITE_RATE_LIMIT_MAP = new Map();
+const WRITE_RATE_WINDOW_MS = 60 * 1000;
+const MAX_WRITES_PER_WINDOW = 45;
+const ALLOWED_STATUSES = new Set([
+  "MENUNGGU_VERIFIKASI",
+  "TERVERIFIKASI",
+  "DALAM_PENGERJAAN",
+  "SELESAI",
+  "OVERDUE",
+]);
+
+function isWriteRateLimited(request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "127.0.0.1";
+  const now = Date.now();
+  const entry = WRITE_RATE_LIMIT_MAP.get(ip) || {
+    count: 0,
+    resetTime: now + WRITE_RATE_WINDOW_MS,
+  };
+  if (now > entry.resetTime) {
+    entry.count = 1;
+    entry.resetTime = now + WRITE_RATE_WINDOW_MS;
+    WRITE_RATE_LIMIT_MAP.set(ip, entry);
+    return false;
+  }
+  if (entry.count >= MAX_WRITES_PER_WINDOW) {
+    return true;
+  }
+  entry.count += 1;
+  WRITE_RATE_LIMIT_MAP.set(ip, entry);
+  return false;
+}
+
+function sanitizePlainText(val, maxLen = 500, fallback = "") {
+  if (typeof val !== "string") return fallback;
+  const cleaned = val
+    .replace(/<[^>]*>?/gm, "")
+    .replace(/javascript:/gi, "")
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    .trim();
+  return cleaned ? cleaned.slice(0, maxLen) : fallback;
+}
+
+function sanitizeImageUrl(url, fallback = "/images/roads/jalan-lubang-medan.jpg") {
+  if (!url || typeof url !== "string") return fallback;
+  const trimmed = url.trim();
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) {
+    return trimmed.slice(0, 300);
+  }
+  if (/^https:\/\/[a-zA-Z0-9.-]+(\/[^\s<>"']*)?$/.test(trimmed)) {
+    return trimmed.slice(0, 1000);
+  }
+  if (
+    /^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(trimmed) &&
+    trimmed.length <= 6 * 1024 * 1024
+  ) {
+    return trimmed;
+  }
+  return fallback;
+}
+
 function buildSeedNotifications(reports) {
   const seeded = [];
 
@@ -413,7 +474,24 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    if (isWriteRateLimited(request)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Terlalu banyak permintaan pengiriman laporan. Silakan tunggu 1 menit.",
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { success: false, error: "Payload laporan tidak valid." },
+        { status: 400 }
+      );
+    }
+
     const state = loadPersistedState();
 
     const matchedRoad =
@@ -421,80 +499,130 @@ export async function POST(request) {
 
     let lat = Number(body.coordinates?.[0]);
     let lng = Number(body.coordinates?.[1]);
-    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+    if (Number.isNaN(lat) || Number.isNaN(lng) || lat < -15 || lat > 10 || lng < 90 || lng > 145) {
       lat = matchedRoad?.center?.[0] || -6.2088;
       lng = matchedRoad?.center?.[1] || 106.8456;
     }
 
     const detected = detectJurisdictionByCoordinates(lat, lng, ROAD_SEGMENTS);
-    const authority =
-      body.authority || matchedRoad?.authority || detected?.authority || "NASIONAL";
+    const rawAuthority = sanitizePlainText(
+      body.authority || matchedRoad?.authority || detected?.authority || "NASIONAL",
+      30,
+      "NASIONAL"
+    ).toUpperCase();
+    const authority = ["NASIONAL", "PROVINSI", "KABUPATEN", "KOTA", "KOTA_KAB", "DESA"].includes(
+      rawAuthority
+    )
+      ? rawAuthority
+      : "NASIONAL";
     const authCode = authority.substring(0, 3).toUpperCase();
-    const ticketCode =
-      body.ticketCode || `JGJ-${authCode}-${Math.floor(100 + Math.random() * 900)}`;
+    const ticketCode = sanitizePlainText(
+      body.ticketCode,
+      32,
+      `JGJ-${authCode}-${Math.floor(100 + Math.random() * 900)}`
+    );
 
     const nowIso = new Date().toISOString();
     const deadlineIso = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
 
+    const initialStatus = ALLOWED_STATUSES.has(body.status)
+      ? body.status
+      : "MENUNGGU_VERIFIKASI";
+
+    const sanitizedUpdates =
+      Array.isArray(body.updates) && body.updates.length > 0
+        ? body.updates.slice(0, 15).map((u) => ({
+            date: sanitizePlainText(u?.date, 40, nowIso),
+            officer: sanitizePlainText(u?.officer, 120, "Sistem Geospasial JagaJalan"),
+            note: sanitizePlainText(u?.note, 600, "Laporan terdaftar di layer GIS."),
+          }))
+        : [
+            {
+              date: nowIso,
+              officer: "Sistem Geospasial JagaJalan",
+              note: `Titik kerusakan [${lat.toFixed(5)}, ${lng.toFixed(5)}] dipetakan pada layer GIS dan diteruskan ke ${sanitizePlainText(
+                body.authorityLabel || matchedRoad?.authorityLabel || "dinas terkait",
+                120
+              )}.`,
+            },
+          ];
+
     const newReport = {
-      id: body.id || `REP-${Date.now()}`,
+      id: sanitizePlainText(body.id, 64, `REP-${Date.now()}`),
       ticketCode,
-      roadSegmentId: body.roadSegmentId || matchedRoad?.id || "ruas-nas-01",
-      roadName: body.roadName || matchedRoad?.name || "Ruas Jalan Publik",
-      district:
-        body.district || matchedRoad?.district || detected?.district || "Indonesia",
+      roadSegmentId: sanitizePlainText(
+        body.roadSegmentId,
+        80,
+        matchedRoad?.id || "ruas-nas-01"
+      ),
+      roadName: sanitizePlainText(
+        body.roadName,
+        160,
+        matchedRoad?.name || "Ruas Jalan Publik"
+      ),
+      district: sanitizePlainText(
+        body.district,
+        120,
+        matchedRoad?.district || detected?.district || "Indonesia"
+      ),
       authority,
-      authorityLabel:
-        body.authorityLabel ||
+      authorityLabel: sanitizePlainText(
+        body.authorityLabel,
+        140,
         matchedRoad?.authorityLabel ||
-        detected?.authorityLabel ||
-        "Penyelenggara Jalan Terkait",
-      legalBasis:
-        body.legalBasis ||
+          detected?.authorityLabel ||
+          "Penyelenggara Jalan Terkait"
+      ),
+      legalBasis: sanitizePlainText(
+        body.legalBasis,
+        180,
         matchedRoad?.legalBasis ||
-        detected?.legalBasis ||
-        "UU No. 2 Tahun 2022 tentang Jalan",
+          detected?.legalBasis ||
+          "UU No. 2 Tahun 2022 tentang Jalan"
+      ),
       coordinates: [Number(lat.toFixed(6)), Number(lng.toFixed(6))],
-      coordinateSource: body.coordinateSource || "GIS_PINPOINT",
+      coordinateSource: sanitizePlainText(body.coordinateSource, 40, "GIS_PINPOINT"),
       spatialCellId: computeSpatialCellId(lat, lng, 0.5),
-      address:
-        body.address || `Titik Koordinat [${lat.toFixed(5)}, ${lng.toFixed(5)}]`,
-      damageCategory: body.damageCategory || "POTHOLE_CRITICAL",
-      categoryLabel: body.categoryLabel || "Lubang Jalan Kritis (Pothole)",
-      hazardScore: Number(body.hazardScore) || 85,
-      hazardLevel: body.hazardLevel || "TINGGI",
-      aiAnalysis:
-        body.aiAnalysis ||
-        "Pemeriksaan awal foto mendeteksi indikasi kerusakan perkerasan jalan yang memerlukan verifikasi lapangan.",
-      photoUrl:
-        body.photoUrl ||
-        "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      reporterName: body.reporterName || "W*** (Warga Terverifikasi)",
-      notificationContact: body.notificationContact || "",
+      address: sanitizePlainText(
+        body.address,
+        240,
+        `Titik Koordinat [${lat.toFixed(5)}, ${lng.toFixed(5)}]`
+      ),
+      damageCategory: sanitizePlainText(body.damageCategory, 50, "POTHOLE_CRITICAL"),
+      categoryLabel: sanitizePlainText(
+        body.categoryLabel,
+        100,
+        "Lubang Jalan Kritis (Pothole)"
+      ),
+      hazardScore: Math.min(100, Math.max(1, Number(body.hazardScore) || 85)),
+      hazardLevel: ["KRITIS", "TINGGI", "SEDANG", "RENDAH"].includes(body.hazardLevel)
+        ? body.hazardLevel
+        : "TINGGI",
+      aiAnalysis: sanitizePlainText(
+        body.aiAnalysis,
+        800,
+        "Pemeriksaan awal foto mendeteksi indikasi kerusakan perkerasan jalan yang memerlukan verifikasi lapangan."
+      ),
+      photoUrl: sanitizeImageUrl(body.photoUrl, "/images/roads/jalan-lubang-medan.jpg"),
+      reporterName: sanitizePlainText(
+        body.reporterName,
+        80,
+        "W*** (Warga Terverifikasi)"
+      ),
+      notificationContact: sanitizePlainText(body.notificationContact, 120, ""),
       notifyOnUpdate: body.notifyOnUpdate !== false,
-      reportDate: body.reportDate || nowIso,
-      targetResponseDeadline: body.targetResponseDeadline || deadlineIso,
-      status: body.status || "MENUNGGU_VERIFIKASI",
-      progressStatus: body.progressStatus || "MENUNGGU_VERIFIKASI",
+      reportDate: nowIso,
+      targetResponseDeadline: deadlineIso,
+      status: initialStatus,
+      progressStatus: initialStatus,
       isResponseOverdue: false,
       daysOverdue: 0,
-      upvotes: Number(body.upvotes) || 1,
+      upvotes: Math.min(100000, Math.max(1, Number(body.upvotes) || 1)),
       userConfirmed: true,
       isLiveCitizenReport: true,
-      leadership: body.leadership || matchedRoad?.leadership || detected?.leadership,
-      matchingBudget: body.matchingBudget || matchedRoad?.budget || null,
-      updates:
-        Array.isArray(body.updates) && body.updates.length > 0
-          ? body.updates
-          : [
-              {
-                date: nowIso,
-                officer: "Sistem Geospasial JagaJalan",
-                note: `Titik kerusakan [${lat.toFixed(5)}, ${lng.toFixed(5)}] dipetakan pada layer GIS dan diteruskan ke ${
-                  body.authorityLabel || matchedRoad?.authorityLabel || "dinas terkait"
-                }.`,
-              },
-            ],
+      leadership: matchedRoad?.leadership || detected?.leadership || null,
+      matchingBudget: matchedRoad?.budget || null,
+      updates: sanitizedUpdates,
     };
 
     const createdNotification = {
@@ -550,9 +678,25 @@ export async function POST(request) {
 
 export async function PATCH(request) {
   try {
-    const body = await request.json();
-    const { id, ...rawUpdatedFields } = body;
+    if (isWriteRateLimited(request)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Terlalu banyak permintaan pembaruan. Silakan tunggu 1 menit.",
+        },
+        { status: 429 }
+      );
+    }
 
+    const body = await request.json();
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { success: false, error: "Payload pembaruan tidak valid." },
+        { status: 400 }
+      );
+    }
+
+    const id = sanitizePlainText(body.id, 64, "");
     if (!id) {
       return NextResponse.json(
         { success: false, error: "ID laporan wajib disertakan." },
@@ -560,21 +704,86 @@ export async function PATCH(request) {
       );
     }
 
-    const updatedFields = { ...rawUpdatedFields };
-    const nextStatusCandidate = updatedFields.status || updatedFields.progressStatus;
+    // Validasi otorisasi petugas untuk perubahan status dinas
+    const officerHeaderId = sanitizePlainText(request.headers.get("x-officer-id") || "", 64, "");
+    const nextStatusCandidate = body.status || body.progressStatus;
     if (
-      nextStatusCandidate === "TERVERIFIKASI" ||
-      nextStatusCandidate === "DALAM_PENGERJAAN" ||
-      nextStatusCandidate === "SELESAI"
+      nextStatusCandidate &&
+      !ALLOWED_STATUSES.has(nextStatusCandidate)
     ) {
+      return NextResponse.json(
+        { success: false, error: "Status tindak lanjut tidak valid." },
+        { status: 400 }
+      );
+    }
+
+    if (
+      (nextStatusCandidate === "TERVERIFIKASI" ||
+        nextStatusCandidate === "DALAM_PENGERJAAN" ||
+        nextStatusCandidate === "SELESAI") &&
+      !officerHeaderId &&
+      !Array.isArray(body.updates)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Otorisasi sesi Petugas Dinas diperlukan untuk mengubah status penanganan.",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Whitelist field yang diizinkan (mencegah Prototype Pollution & Mass Assignment)
+    const updatedFields = {};
+
+    if (nextStatusCandidate && ALLOWED_STATUSES.has(nextStatusCandidate)) {
       updatedFields.status = nextStatusCandidate;
       updatedFields.progressStatus = nextStatusCandidate;
-      updatedFields.isResponseOverdue = false;
-      updatedFields.daysOverdue = 0;
+      if (
+        nextStatusCandidate === "TERVERIFIKASI" ||
+        nextStatusCandidate === "DALAM_PENGERJAAN" ||
+        nextStatusCandidate === "SELESAI"
+      ) {
+        updatedFields.isResponseOverdue = false;
+        updatedFields.daysOverdue = 0;
+      }
     }
-    if (updatedFields.proofPhotoUrl && !updatedFields.afterPhotoUrl) {
-      updatedFields.afterPhotoUrl = updatedFields.proofPhotoUrl;
+
+    if (typeof body.isResponseOverdue === "boolean" && updatedFields.isResponseOverdue === undefined) {
+      updatedFields.isResponseOverdue = body.isResponseOverdue;
     }
+
+    if (typeof body.daysOverdue === "number" && updatedFields.daysOverdue === undefined) {
+      updatedFields.daysOverdue = Math.max(0, Math.min(3650, Math.floor(body.daysOverdue)));
+    }
+
+    if (typeof body.upvotes === "number" && !Number.isNaN(body.upvotes)) {
+      updatedFields.upvotes = Math.max(0, Math.min(100000, Math.floor(body.upvotes)));
+    }
+
+    if (body.proofPhotoUrl) {
+      const safeProof = sanitizeImageUrl(
+        body.proofPhotoUrl,
+        "/images/roads/jalan-selesai-hotmix.jpg"
+      );
+      updatedFields.proofPhotoUrl = safeProof;
+      updatedFields.afterPhotoUrl = safeProof;
+    } else if (body.afterPhotoUrl) {
+      updatedFields.afterPhotoUrl = sanitizeImageUrl(
+        body.afterPhotoUrl,
+        "/images/roads/jalan-selesai-hotmix.jpg"
+      );
+    }
+
+    if (Array.isArray(body.updates)) {
+      updatedFields.updates = body.updates.slice(0, 25).map((u) => ({
+        date: sanitizePlainText(u?.date, 40, new Date().toISOString()),
+        officer: sanitizePlainText(u?.officer, 120, officerHeaderId || "Petugas Dinas"),
+        note: sanitizePlainText(u?.note, 600, "Status penanganan diperbarui."),
+      }));
+    }
+
+    updatedFields.updatedAt = new Date().toISOString();
 
     const state = loadPersistedState();
     const previousReport = getIndexedReportsStore().byId.get(id) || null;

@@ -236,6 +236,10 @@ export default function Navbar({
     [personalNotifications, readNotificationIds]
   );
 
+  const isOfficerLoggedIn = Boolean(
+    officerSession && officerSession.isAuthenticated && officerSession.id
+  );
+
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
     setMobileMenuOpen(false);
@@ -338,12 +342,12 @@ export default function Navbar({
               );
             })}
 
-            {(officerSession || activeTab === "dinas") && (
+            {isOfficerLoggedIn && (
               <button
                 type="button"
                 id="nav-tab-dinas"
                 onClick={() => handleTabClick("dinas")}
-                title="Buka Portal Tindak Lanjut Dinas"
+                title={`Sesi Petugas Aktif: ${officerSession?.name || "Petugas Demo"}`}
                 className={`relative py-1 px-2.5 rounded-full text-[12.5px] tracking-[-0.015em] whitespace-nowrap transition-all cursor-pointer select-none inline-flex items-center gap-1.5 ${
                   activeTab === "dinas"
                     ? "bg-[#FAF3EB] text-[#9a3412] font-bold ring-1 ring-orange-300/80"
@@ -358,11 +362,11 @@ export default function Navbar({
 
           {/* Right Actions: Status Notification Bell + Lapor CTA */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0" ref={notifContainerRef}>
-            {(officerSession || activeTab === "dinas") && (
+            {isOfficerLoggedIn && (
               <button
                 type="button"
                 onClick={() => handleTabClick("dinas")}
-                title="Buka Portal Tindak Lanjut Dinas"
+                title={`Sesi Petugas Aktif: ${officerSession?.name || "Petugas Demo"}`}
                 className={`lg:hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
                   activeTab === "dinas"
                     ? "bg-[#FAF3EB] text-[#9a3412] ring-1 ring-orange-300"
@@ -668,35 +672,47 @@ export default function Navbar({
               );
             })}
 
-            <div className="pt-1 mt-1 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => handleTabClick("dinas")}
-                className={`w-full text-left px-3 py-2.5 rounded-[6px] font-medium flex items-center justify-between gap-3 transition-colors cursor-pointer ${
-                  activeTab === "dinas"
-                    ? "bg-slate-900 text-white font-semibold"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/icon/user.png"
-                    alt=""
-                    width={18}
-                    height={18}
-                    style={{ width: "18px", height: "18px" }}
-                    className={`w-4.5 h-4.5 object-contain shrink-0 ${activeTab === "dinas" ? "invert brightness-0" : ""}`}
-                  />
-                  <span>Portal Dinas (Petugas)</span>
-                </div>
-                {officerSession && (
+            {isOfficerLoggedIn && (
+              <div className="pt-1 mt-1 border-t border-slate-100 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => handleTabClick("dinas")}
+                  className={`w-full text-left px-3 py-2.5 rounded-[6px] font-medium flex items-center justify-between gap-3 transition-colors cursor-pointer ${
+                    activeTab === "dinas"
+                      ? "bg-slate-900 text-white font-semibold"
+                      : "text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/icon/user.png"
+                      alt=""
+                      width={18}
+                      height={18}
+                      style={{ width: "18px", height: "18px" }}
+                      className={`w-4.5 h-4.5 object-contain shrink-0 ${activeTab === "dinas" ? "invert brightness-0" : ""}`}
+                    />
+                    <span>Portal Dinas (Petugas)</span>
+                  </div>
                   <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
                     Sesi Aktif
                   </span>
+                </button>
+                {onLogoutOfficer && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onLogoutOfficer();
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-[6px] text-[11px] font-semibold text-rose-700 hover:bg-rose-50 transition-colors cursor-pointer"
+                  >
+                    Keluar dari Sesi Petugas
+                  </button>
                 )}
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -21,7 +21,11 @@ import {
   Check,
   Info,
 } from "lucide-react";
-import { OFFICIAL_OFFICERS, authenticateOfficer } from "@/data/officersData";
+import {
+  OFFICIAL_OFFICERS,
+  authenticateOfficer,
+  saveOfficerSession,
+} from "@/data/officersData";
 import { auth, isFirebaseConfigured } from "@/lib/firebase";
 
 // Google 4-Color Official SVG Icon
@@ -70,6 +74,8 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successNotice, setSuccessNotice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [lockoutUntil, setLockoutUntil] = useState(0);
 
   // Modal Google Account Picker (Simulation / Fallback)
   const [showGoogleModal, setShowGoogleModal] = useState(false);
@@ -172,6 +178,15 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
   const handleVerifyOtp = (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    if (lockoutUntil > Date.now()) {
+      const waitSec = Math.ceil((lockoutUntil - Date.now()) / 1000);
+      setErrorMessage(
+        `Terlalu banyak percobaan gagal. Silakan tunggu ${waitSec} detik sebelum mencoba kembali.`
+      );
+      return;
+    }
+
     const enteredCode = otpDigits.join("");
 
     if (enteredCode.length !== 6) {
@@ -185,10 +200,18 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
       setIsLoading(false);
 
       if (enteredCode !== generatedOtp && enteredCode !== "829104") {
-        setErrorMessage("Kode OTP yang Anda masukkan salah atau telah kedaluwarsa. Silakan periksa kembali.");
+        const nextFailed = failedAttempts + 1;
+        setFailedAttempts(nextFailed);
+        if (nextFailed >= 5) {
+          setLockoutUntil(Date.now() + 30000);
+        }
+        setErrorMessage(
+          "Kode OTP yang Anda masukkan salah atau telah kedaluwarsa. Silakan periksa kembali."
+        );
         return;
       }
 
+      setFailedAttempts(0);
       const cleanEmail = emailInput.trim().toLowerCase();
       const matched = OFFICIAL_OFFICERS.find((o) => o.email.toLowerCase() === cleanEmail);
 
@@ -212,15 +235,8 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         };
       }
 
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem("jagajalan_officer_session", JSON.stringify(officerPayload));
-        } catch (err) {
-          console.warn("Storage warning:", err);
-        }
-      }
-
-      onLoginSuccess(officerPayload);
+      const sessionOfficer = saveOfficerSession(officerPayload, "EMAIL_OTP");
+      onLoginSuccess(sessionOfficer || officerPayload);
     }, 550);
   };
 
@@ -240,23 +256,21 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
           id: "DEMO-001",
           nip: "DEMO-001",
           email: user.email || "petugas.demo@jagajalan.id",
-          name: "Petugas Demo",
-          title: "Inspektur Lapangan Penyelenggara Jalan (Mode Demonstrasi)",
-          institution: "Dinas Pekerjaan Umum & Penataan Ruang (Simulasi)",
+          name: user.displayName ? `${user.displayName} (Petugas)` : "Petugas Demo",
+          title: "Inspektur Lapangan Penyelenggara Jalan (SSO Google)",
+          institution: "Dinas Pekerjaan Umum & Penataan Ruang",
           authorityLevel: "NASIONAL",
           authorityLabel: "Jalan Nasional (Mode Demo)",
           jurisdiction: "Koridor Pengawasan Lintas Wilayah (Simulasi)",
           badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
-          avatar: "DM",
-          status: "Mode Demonstrasi Aktif",
+          avatar: "GG",
+          status: "Terverifikasi Google SSO",
           activeSince: "Simulasi 2026",
         };
 
-        if (typeof window !== "undefined") {
-          localStorage.setItem("jagajalan_officer_session", JSON.stringify(officerPayload));
-        }
+        const sessionOfficer = saveOfficerSession(officerPayload, "GOOGLE_SSO");
         setIsLoading(false);
-        onLoginSuccess(officerPayload);
+        onLoginSuccess(sessionOfficer || officerPayload);
         return;
       }
     } catch {
@@ -290,15 +304,8 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         activeSince: presetAccount.activeSince || "Simulasi 2026",
       };
 
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem("jagajalan_officer_session", JSON.stringify(officerPayload));
-        } catch (e) {
-          console.warn(e);
-        }
-      }
-
-      onLoginSuccess(officerPayload);
+      const sessionOfficer = saveOfficerSession(officerPayload, "GOOGLE_SSO");
+      onLoginSuccess(sessionOfficer || officerPayload);
     }, 450);
   };
 
@@ -306,14 +313,29 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
   const handleNipSubmit = (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    if (lockoutUntil > Date.now()) {
+      const waitSec = Math.ceil((lockoutUntil - Date.now()) / 1000);
+      setErrorMessage(
+        `Terlalu banyak percobaan gagal. Silakan tunggu ${waitSec} detik sebelum mencoba kembali.`
+      );
+      return;
+    }
+
     setIsLoading(true);
 
     setTimeout(() => {
       const result = authenticateOfficer(identifier, password);
       setIsLoading(false);
       if (result.success) {
+        setFailedAttempts(0);
         onLoginSuccess(result.officer);
       } else {
+        const nextFailed = failedAttempts + 1;
+        setFailedAttempts(nextFailed);
+        if (nextFailed >= 5) {
+          setLockoutUntil(Date.now() + 30000);
+        }
         setErrorMessage(result.message);
       }
     }, 400);
@@ -326,14 +348,9 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
 
     setTimeout(() => {
       setIsLoading(false);
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem("jagajalan_officer_session", JSON.stringify(officer));
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-      onLoginSuccess(officer);
+      setFailedAttempts(0);
+      const sessionOfficer = saveOfficerSession(officer, "DEMO_INSTANT");
+      onLoginSuccess(sessionOfficer || officer);
     }, 300);
   };
 

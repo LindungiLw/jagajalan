@@ -250,9 +250,13 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
                 <Scale className="w-4 h-4" />
               </a>
               <a
-                href="/portaldinas"
+                href="/?tab=dinas"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNav("dinas");
+                }}
                 title="Portal Kerja Dinas (Aparatur)"
-                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
+                className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4" />
               </a>
@@ -293,8 +297,12 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
               ))}
               <li className="pt-1.5 border-t border-[#E6DFD5]/60">
                 <a
-                  href="/portaldinas"
-                  className="group inline-flex items-center gap-1.5 text-slate-500 hover:text-orange-700 transition-colors text-xs font-semibold py-0.5"
+                  href="/?tab=dinas"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNav("dinas");
+                  }}
+                  className="group inline-flex items-center gap-1.5 text-slate-500 hover:text-orange-700 transition-colors text-xs font-semibold py-0.5 cursor-pointer"
                 >
                   <span>Portal Kerja Dinas (Aparatur)</span>
                   <span className="text-slate-400 group-hover:text-orange-600 transition-transform duration-200 group-hover:translate-x-1">
