@@ -59,6 +59,15 @@ function getStatusBadgeMeta(item) {
       alt: "Peringatan Lewat Tenggat",
     };
   }
+  if (item.status === "TERVERIFIKASI" || item.type === "STATUS_VERIFIED") {
+    return {
+      label: "Terverifikasi Dinas",
+      badgeClass: "bg-sky-50 text-sky-800 ring-1 ring-sky-200/80",
+      iconWrapClass: "bg-sky-50/90 ring-sky-200/80",
+      customIcon: "/icon/report.png",
+      alt: "Terverifikasi Dinas",
+    };
+  }
   if (item.type === "REPORT_CREATED") {
     return {
       label: "Terdaftar GIS",
@@ -277,11 +286,11 @@ export default function Navbar({
         }`}
       >
       <div
-        className={`w-full max-w-4xl mx-auto relative transition-all duration-300 ${
+        className={`w-full max-w-5xl mx-auto relative transition-all duration-300 ${
           isVisible ? "pointer-events-auto" : "pointer-events-none"
         }`}
       >
-        <div className="flex items-center justify-between h-13 px-4 sm:px-5 rounded-full bg-white/95 backdrop-blur-md border border-[#E6DFD5] ring-1 ring-orange-200/40 shadow-[0_6px_28px_-6px_rgba(28,25,23,0.08)]">
+        <div className="flex items-center justify-between gap-3 h-13 px-4 sm:px-5 rounded-full bg-white/95 backdrop-blur-md border border-[#E6DFD5] ring-1 ring-orange-200/40 shadow-[0_6px_28px_-6px_rgba(28,25,23,0.08)]">
           {/* Brand Identity */}
           <div
             className="flex items-center gap-2 cursor-pointer select-none shrink-0 group"
@@ -307,7 +316,7 @@ export default function Navbar({
           </div>
 
           {/* Primary Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-6 h-full">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-5 h-full">
             {NAV_ITEMS.map((item) => {
               const isActive = activeTab === item.id;
               return (
@@ -328,10 +337,43 @@ export default function Navbar({
                 </button>
               );
             })}
+
+            {(officerSession || activeTab === "dinas") && (
+              <button
+                type="button"
+                id="nav-tab-dinas"
+                onClick={() => handleTabClick("dinas")}
+                title="Buka Portal Tindak Lanjut Dinas"
+                className={`relative py-1 px-2.5 rounded-full text-[12.5px] tracking-[-0.015em] whitespace-nowrap transition-all cursor-pointer select-none inline-flex items-center gap-1.5 ${
+                  activeTab === "dinas"
+                    ? "bg-[#FAF3EB] text-[#9a3412] font-bold ring-1 ring-orange-300/80"
+                    : "bg-[#F8F5F0] hover:bg-[#F2ECE4] text-[#44403C] hover:text-[#1C1917] font-semibold ring-1 ring-[#E6DFD5]"
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span>Portal Dinas</span>
+              </button>
+            )}
           </nav>
 
           {/* Right Actions: Status Notification Bell + Lapor CTA */}
-          <div className="flex items-center gap-2 shrink-0" ref={notifContainerRef}>
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0" ref={notifContainerRef}>
+            {(officerSession || activeTab === "dinas") && (
+              <button
+                type="button"
+                onClick={() => handleTabClick("dinas")}
+                title="Buka Portal Tindak Lanjut Dinas"
+                className={`lg:hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  activeTab === "dinas"
+                    ? "bg-[#FAF3EB] text-[#9a3412] ring-1 ring-orange-300"
+                    : "bg-[#F8F5F0] hover:bg-[#F2ECE4] text-[#1C1917] ring-1 ring-[#E6DFD5]"
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span>Dinas</span>
+              </button>
+            )}
+
             <div className="relative">
               <button
                 type="button"
@@ -353,7 +395,7 @@ export default function Navbar({
               </button>
 
               {notifOpen && (
-                <div className="absolute right-0 mt-3 w-[340px] sm:w-[390px] rounded-[10px] bg-[#F2ECE4]/95 p-1.5 ring-1 ring-[#E6DFD5] shadow-[0_20px_48px_-12px_rgba(28,25,23,0.18)] z-50 animate-fade-in font-sans">
+                <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-[390px] rounded-[10px] bg-[#F2ECE4]/95 p-1.5 ring-1 ring-[#E6DFD5] shadow-[0_20px_48px_-12px_rgba(28,25,23,0.18)] z-50 animate-fade-in font-sans">
                   <div className="bg-white rounded-[7px] ring-1 ring-slate-200/60 overflow-hidden flex flex-col max-h-[460px]">
                     {/* Drawer Header */}
                     <div className="px-3.5 pt-3 pb-2.5 border-b border-slate-100 space-y-2 bg-white">
@@ -569,7 +611,7 @@ export default function Navbar({
 
             <button
               onClick={onOpenReportModal}
-              className="group inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap font-sans"
+              className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#c2410c] hover:bg-[#9a3412] shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap font-sans"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -580,7 +622,8 @@ export default function Navbar({
                 style={{ width: "12px", height: "12px" }}
                 className="w-3 h-3 object-contain invert brightness-0"
               />
-              <span>Lapor Kerusakan</span>
+              <span className="hidden xs:inline sm:inline">Lapor Kerusakan</span>
+              <span className="inline xs:hidden sm:hidden">Lapor</span>
             </button>
 
             {/* Mobile Hamburger Button */}
@@ -598,14 +641,14 @@ export default function Navbar({
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-2 p-2 rounded-[6px] border border-[#E6DFD5] ring-1 ring-orange-200/50 space-y-1 text-xs animate-fade-in bg-white shadow-xl">
+          <div className="lg:hidden mt-2 p-2 rounded-[10px] border border-[#E6DFD5] ring-1 ring-orange-200/50 space-y-1 text-xs animate-fade-in bg-white shadow-xl">
             {NAV_ITEMS.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  className={`w-full text-left px-3 py-2.5 rounded-[6px] font-medium flex items-center gap-3 transition-colors ${
+                  className={`w-full text-left px-3 py-2.5 rounded-[6px] font-medium flex items-center gap-3 transition-colors cursor-pointer ${
                     isActive
                       ? "bg-[#c2410c] text-white font-semibold"
                       : "text-[#1C1917] hover:bg-[#FAF8F5]"
@@ -624,6 +667,36 @@ export default function Navbar({
                 </button>
               );
             })}
+
+            <div className="pt-1 mt-1 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => handleTabClick("dinas")}
+                className={`w-full text-left px-3 py-2.5 rounded-[6px] font-medium flex items-center justify-between gap-3 transition-colors cursor-pointer ${
+                  activeTab === "dinas"
+                    ? "bg-slate-900 text-white font-semibold"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icon/user.png"
+                    alt=""
+                    width={18}
+                    height={18}
+                    style={{ width: "18px", height: "18px" }}
+                    className={`w-4.5 h-4.5 object-contain shrink-0 ${activeTab === "dinas" ? "invert brightness-0" : ""}`}
+                  />
+                  <span>Portal Dinas (Petugas)</span>
+                </div>
+                {officerSession && (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                    Sesi Aktif
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -60,7 +60,144 @@ ${report.reporterName || "Perwakilan Warga / Pengguna Jalan"}
   };
 
   const handlePrint = () => {
-    window.print();
+    if (typeof window === "undefined") return;
+    const escapedText = letterText
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+    const htmlDoc = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Draf Pengaduan Ombudsman RI — #${report.ticketCode}</title>
+  <style>
+    @page { size: A4 portrait; margin: 16mm; }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body {
+      font-family: "Times New Roman", Georgia, serif;
+      color: #0f172a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      font-size: 11pt;
+      line-height: 1.55;
+    }
+    .toolbar {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      border-radius: 6px;
+      font-size: 9.5pt;
+    }
+    .toolbar-btn {
+      background: #c2410c;
+      color: #ffffff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 9pt;
+      cursor: pointer;
+    }
+    .letterhead {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .brand {
+      font-size: 9pt;
+      font-weight: 800;
+      color: #c2410c;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .doc-title {
+      font-size: 13pt;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 3px 0;
+    }
+    .meta-box {
+      text-align: right;
+      font-family: Consolas, monospace;
+      font-size: 8.5pt;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+    pre {
+      white-space: pre-wrap;
+      font-family: "Times New Roman", Georgia, serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #0f172a;
+      margin: 0;
+    }
+    .footer-note {
+      margin-top: 24px;
+      border-top: 1px solid #cbd5e1;
+      padding-top: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 8pt;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+    }
+    @media print {
+      .toolbar { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div><strong>Berkas Advokasi Pengaduan Ombudsman RI (#${report.ticketCode})</strong> — Pilih <em>"Save as PDF"</em> pada jendela cetak.</div>
+    <button class="toolbar-btn" onclick="window.print()">Simpan / Cetak PDF Sekarang</button>
+  </div>
+  <div class="letterhead">
+    <div>
+      <div class="brand">JagaJalan • Instrumen Advokasi Pelayanan Publik</div>
+      <div class="doc-title">BERKAS PENGADUAN DUGAAN MALADMINISTRASI (UNDUE DELAY)</div>
+      <div style="font-size: 8.5pt; color: #475569;">Rujukan Yuridis: Pasal 44 ayat (2) UU No. 25/2009 &amp; Pasal 24 UU No. 37/2008 tentang Ombudsman RI</div>
+    </div>
+    <div class="meta-box">
+      <div><strong>TIKET:</strong> #${report.ticketCode}</div>
+      <div><strong>TANGGAL:</strong> ${todayStr}</div>
+      <div><strong>STATUS SLA:</strong> Lewat +${report.daysOverdue || 4} Hari</div>
+    </div>
+  </div>
+  <pre>${escapedText}</pre>
+  <div class="footer-note">
+    <div>Dokumen diterbitkan otomatis melalui Sistem Audit Spasial &amp; SLA Pelayanan Publik JagaJalan</div>
+    <div>https://jagajalan.vercel.app</div>
+  </div>
+  <script>
+    window.addEventListener("load", function () {
+      setTimeout(function () { window.focus(); window.print(); }, 300);
+    });
+  </script>
+</body>
+</html>`;
+
+    const printWin = window.open("", "_blank", "width=960,height=800");
+    if (printWin) {
+      printWin.document.open();
+      printWin.document.write(htmlDoc);
+      printWin.document.close();
+    } else {
+      window.print();
+    }
   };
 
   return (

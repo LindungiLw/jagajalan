@@ -765,7 +765,7 @@ export default function MapInner({
                   <div>
                     <h4 className="font-bold text-slate-900 leading-snug">{ms.name}</h4>
                     <p className="text-[10px] text-slate-500">{road.name}</p>
-                    <p className="text-[9px] text-slate-600 mt-1 italic">"{ms.note}"</p>
+                    <p className="text-[9px] text-slate-600 mt-1 italic">&ldquo;{ms.note}&rdquo;</p>
                   </div>
                   <div className="bg-slate-50 p-2 rounded-[5px] border border-orange-200/50 text-[9px] space-y-0.5">
                     <div className="text-slate-500">Penanggung Jawab:</div>

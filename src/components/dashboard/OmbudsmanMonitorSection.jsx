@@ -25,6 +25,7 @@ import {
   Lock,
   Building2,
   AlertOctagon,
+  ThumbsUp,
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 import CustomSelect from "./CustomSelect";
@@ -568,6 +569,8 @@ export default function OmbudsmanMonitorSection({
   onOpenOmbudsmanDraft,
   onSelectRoadOnMap,
   onSubscribeTicketNotification,
+  upvotedReportIds = [],
+  onUpvoteReport,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -1425,6 +1428,23 @@ export default function OmbudsmanMonitorSection({
                   {/* Row 4: Action Footer */}
                   <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 flex-wrap">
                     <div className="flex items-center gap-2 flex-wrap">
+                      {/* Dukung Prioritas (Upvote) */}
+                      {onUpvoteReport && (
+                        <button
+                          type="button"
+                          onClick={() => onUpvoteReport(report.id)}
+                          title="Dukung prioritas penanganan laporan ini"
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-xs font-bold shadow-2xs transition-colors cursor-pointer font-sans border ${
+                            upvotedReportIds.includes(report.id)
+                              ? "bg-orange-100 text-[#c2410c] border-orange-300"
+                              : "bg-white hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] border-slate-200/80"
+                          }`}
+                        >
+                          <ThumbsUp className="w-3.5 h-3.5" />
+                          <span className="font-mono tabular-nums">{report.upvotes || 0}</span>
+                        </button>
+                      )}
+
                       {/* Cek Peta GIS */}
                       <button
                         type="button"

@@ -33,6 +33,14 @@ function formatRupiahShort(amount) {
   return `Rp ${Number(amount).toLocaleString("id-ID")}`;
 }
 
+function resolveSafeProofPhoto(url) {
+  if (!url) return "/images/roads/jalan-selesai-hotmix.jpg";
+  if (typeof url === "string" && url.includes("images.unsplash.com")) {
+    return "/images/roads/jalan-selesai-hotmix.jpg";
+  }
+  return url;
+}
+
 export default function RoadDetailModal({
   isOpen,
   onClose,
@@ -334,7 +342,15 @@ export default function RoadDetailModal({
                     </div>
                     <div className="h-40 rounded-[6px] overflow-hidden bg-slate-100 border border-slate-200 relative group">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={road.photos.beforeUrl} alt="Sebelum Penanganan" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                      <img
+                        src={road.photos.beforeUrl}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "/images/roads/jalan-lubang-medan.jpg";
+                        }}
+                        alt="Sebelum Penanganan"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
                     </div>
                   </div>
                   <div className="space-y-1.5">
@@ -344,7 +360,15 @@ export default function RoadDetailModal({
                     </div>
                     <div className="h-40 rounded-[6px] overflow-hidden bg-slate-100 border border-slate-200 relative group">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={road.photos.afterUrl} alt="Hasil Penanganan" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                      <img
+                        src={resolveSafeProofPhoto(road.photos.afterUrl)}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "/images/roads/jalan-selesai-hotmix.jpg";
+                        }}
+                        alt="Hasil Penanganan"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
                     </div>
                   </div>
                 </div>
@@ -622,7 +646,15 @@ export default function RoadDetailModal({
                             <div className="space-y-1">
                               <div className="h-20 rounded-[6px] overflow-hidden border border-slate-300 bg-slate-100">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={report.photoUrl} alt="Before" className="w-full h-full object-cover" />
+                                <img
+                                  src={report.photoUrl || "/images/roads/jalan-lubang-medan.jpg"}
+                                  onError={(e) => {
+                                    e.currentTarget.onerror = null;
+                                    e.currentTarget.src = "/images/roads/jalan-lubang-medan.jpg";
+                                  }}
+                                  alt="Before"
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                               <span className="text-[9.5px] font-bold text-slate-500 block text-center">
                                 BEFORE: Kerusakan Awal
@@ -631,7 +663,15 @@ export default function RoadDetailModal({
                             <div className="space-y-1">
                               <div className="h-20 rounded-[6px] overflow-hidden border border-emerald-500 bg-slate-100">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={report.proofPhotoUrl} alt="After" className="w-full h-full object-cover" />
+                                <img
+                                  src={resolveSafeProofPhoto(report.proofPhotoUrl)}
+                                  onError={(e) => {
+                                    e.currentTarget.onerror = null;
+                                    e.currentTarget.src = "/images/roads/jalan-selesai-hotmix.jpg";
+                                  }}
+                                  alt="After"
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                               <span className="text-[9.5px] font-bold text-emerald-800 block text-center">
                                 AFTER: Bukti Perbaikan Dinas

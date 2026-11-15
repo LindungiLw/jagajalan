@@ -33,20 +33,28 @@ import {
 const PRESET_PROOF_PHOTOS = [
   {
     label: "Penambalan Hotmix Mulus",
-    url: "https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=800&q=80",
+    url: "/images/roads/jalan-selesai-hotmix.jpg",
     desc: "Permukaan aspal baru selesai dipadatkan",
   },
   {
     label: "Perataan & Beton Penutup",
-    url: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=800&q=80",
+    url: "/images/roads/jalan-selesai-hotmix.jpg",
     desc: "Pengecoran struktural bahu jalan selesai",
   },
   {
     label: "Marka & Pengaspalan Ulang",
-    url: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=800&q=80",
+    url: "/images/roads/jalan-selesai-hotmix.jpg",
     desc: "Lajur jalan rapi dan siap dilintasi",
   },
 ];
+
+function resolveSafeProofPhoto(url) {
+  if (!url) return "/images/roads/jalan-selesai-hotmix.jpg";
+  if (typeof url === "string" && url.includes("images.unsplash.com")) {
+    return "/images/roads/jalan-selesai-hotmix.jpg";
+  }
+  return url;
+}
 
 export default function OfficerDashboard({
   reports,
@@ -182,7 +190,11 @@ export default function OfficerDashboard({
 
     setTargetStatus(nextStage);
     setOfficerNote(getSuggestedNoteForStage(nextStage, report));
-    setProofPhotoUrl(report.proofPhotoUrl || report.afterPhotoUrl || PRESET_PROOF_PHOTOS[0].url);
+    setProofPhotoUrl(
+      resolveSafeProofPhoto(
+        report.proofPhotoUrl || report.afterPhotoUrl || PRESET_PROOF_PHOTOS[0].url
+      )
+    );
   };
 
   const handleCustomProofUpload = (e) => {
@@ -923,7 +935,11 @@ export default function OfficerDashboard({
                           <div className="h-24 rounded-[6px] overflow-hidden border border-slate-300 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                              src={report.photoUrl}
+                              src={report.photoUrl || "/images/roads/jalan-lubang-medan.jpg"}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = "/images/roads/jalan-lubang-medan.jpg";
+                              }}
                               alt="Before"
                               className="w-full h-full object-cover"
                             />
@@ -936,7 +952,11 @@ export default function OfficerDashboard({
                           <div className="h-24 rounded-[6px] overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                              src={report.proofPhotoUrl}
+                              src={resolveSafeProofPhoto(report.proofPhotoUrl)}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = "/images/roads/jalan-selesai-hotmix.jpg";
+                              }}
                               alt="After"
                               className="w-full h-full object-cover"
                             />
@@ -1148,7 +1168,11 @@ export default function OfficerDashboard({
                       <div className="h-32 rounded-[6px] overflow-hidden border border-slate-200 bg-slate-100">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={activeReportToEdit.photoUrl}
+                          src={activeReportToEdit.photoUrl || "/images/roads/jalan-lubang-medan.jpg"}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/images/roads/jalan-lubang-medan.jpg";
+                          }}
                           alt="Kerusakan Awal"
                           className="w-full h-full object-cover"
                         />
@@ -1163,7 +1187,11 @@ export default function OfficerDashboard({
                       <div className="relative h-32 rounded-[6px] overflow-hidden border border-emerald-400 ring-2 ring-emerald-400/20 bg-slate-100">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={proofPhotoUrl}
+                          src={resolveSafeProofPhoto(proofPhotoUrl)}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/images/roads/jalan-selesai-hotmix.jpg";
+                          }}
                           alt="Bukti Hasil Perbaikan"
                           className="w-full h-full object-cover"
                         />

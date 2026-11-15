@@ -133,6 +133,7 @@ export default function Home() {
   const [focusedRoadId, setFocusedRoadId] = useState(null);
   const [focusedReportId, setFocusedReportId] = useState(null);
   const [officerSession, setOfficerSession] = useState(null);
+  const [upvotedReportIds, setUpvotedReportIds] = useState([]);
 
   const setActiveTab = (tab) => {
     setActiveTabState(tab);
@@ -259,6 +260,11 @@ export default function Home() {
         if (rawSubs) {
           const parsedSubs = JSON.parse(rawSubs);
           if (Array.isArray(parsedSubs)) setSubscribedTickets(parsedSubs);
+        }
+        const rawUpvotes = window.localStorage.getItem("jagajalan_upvoted_reports_v1");
+        if (rawUpvotes) {
+          const parsedUpvotes = JSON.parse(rawUpvotes);
+          if (Array.isArray(parsedUpvotes)) setUpvotedReportIds(parsedUpvotes);
         }
       } catch {
         // Ignore parse error
@@ -647,6 +653,45 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleUpvoteReport = (reportId) => {
+    if (!reportId) return;
+    const isAlreadyUpvoted = upvotedReportIds.includes(reportId);
+    const nextUpvotedIds = isAlreadyUpvoted
+      ? upvotedReportIds.filter((id) => id !== reportId)
+      : [...upvotedReportIds, reportId];
+
+    setUpvotedReportIds(nextUpvotedIds);
+
+    const targetReport = reports.find((r) => r.id === reportId);
+    const currentUpvotes = Number(targetReport?.upvotes || 0);
+    const nextUpvotes = Math.max(0, isAlreadyUpvoted ? currentUpvotes - 1 : currentUpvotes + 1);
+
+    setReports((prev) =>
+      prev.map((rep) => (rep.id === reportId ? { ...rep, upvotes: nextUpvotes } : rep))
+    );
+
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.setItem(
+          "jagajalan_upvoted_reports_v1",
+          JSON.stringify(nextUpvotedIds)
+        );
+        const rawOv = window.localStorage.getItem("jagajalan_report_overrides_v1");
+        const parsedOv = rawOv ? JSON.parse(rawOv) : {};
+        parsedOv[reportId] = {
+          ...(parsedOv[reportId] || {}),
+          upvotes: nextUpvotes,
+        };
+        window.localStorage.setItem(
+          "jagajalan_report_overrides_v1",
+          JSON.stringify(parsedOv)
+        );
+      } catch {
+        // Ignore storage errors
+      }
+    }
+  };
+
   return (
     <div
       className={`relative flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-orange-100 selection:text-orange-900 ${
@@ -717,6 +762,13 @@ export default function Home() {
               onOpenReportModal={handleOpenReportModal}
               focusedRoadId={focusedRoadId}
               focusedReportId={focusedReportId}
+              upvotedReportIds={upvotedReportIds}
+              onUpvoteReport={handleUpvoteReport}
+              officerSession={officerSession}
+              onOpenOfficerDashboard={() => {
+                setActiveTab("dinas");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             />
           </div>
         )}
@@ -747,6 +799,8 @@ export default function Home() {
               onOpenOmbudsmanDraft={handleOpenOmbudsmanDraft}
               onSelectRoadOnMap={handleSelectRoadOnMap}
               onSubscribeTicketNotification={handleSubscribeTicketNotification}
+              upvotedReportIds={upvotedReportIds}
+              onUpvoteReport={handleUpvoteReport}
             />
           </div>
         )}
@@ -786,7 +840,7 @@ export default function Home() {
 
       {/* Live Automated Status Notification Toast */}
       {activeToast && (
-        <div className="fixed bottom-4 right-4 z-50 w-[330px] sm:w-[375px] rounded-[8px] bg-slate-900/95 p-1.5 ring-1 ring-orange-400/50 shadow-2xl animate-fade-in font-sans">
+        <div className="fixed bottom-4 inset-x-3 sm:inset-x-auto sm:right-4 z-50 sm:w-[375px] rounded-[8px] bg-slate-900/95 p-1.5 ring-1 ring-orange-400/50 shadow-2xl animate-fade-in font-sans">
           <div className="rounded-[6px] bg-white p-3.5 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -794,12 +848,17 @@ export default function Home() {
                   className={`w-6 h-6 rounded-[5px] flex items-center justify-center shrink-0 ring-1 ${
                     activeToast.status === "SELESAI"
                       ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                      : activeToast.status === "TERVERIFIKASI" ||
+                        activeToast.type === "STATUS_VERIFIED"
+                      ? "bg-sky-50 text-sky-700 ring-sky-200"
                       : activeToast.type === "REPORT_CREATED"
                       ? "bg-orange-50 text-[#c2410c] ring-orange-200"
                       : "bg-amber-50 text-amber-700 ring-amber-200"
                   }`}
                 >
-                  {activeToast.status === "SELESAI" ? (
+                  {activeToast.status === "SELESAI" ||
+                  activeToast.status === "TERVERIFIKASI" ||
+                  activeToast.type === "STATUS_VERIFIED" ? (
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   ) : activeToast.type === "REPORT_CREATED" ? (
                     <BellRing className="w-3.5 h-3.5" />

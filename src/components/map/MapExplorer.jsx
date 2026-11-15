@@ -35,6 +35,8 @@ import {
   Scale,
   Coins,
   AlertCircle,
+  ThumbsUp,
+  Maximize2,
 } from "lucide-react";
 import {
   INDONESIA_REGIONS,
@@ -51,6 +53,19 @@ function formatCurrencyCompact(amount) {
   if (amount >= 1e9) return `Rp ${(amount / 1e9).toFixed(2)} M`;
   if (amount >= 1e6) return `Rp ${(amount / 1e6).toFixed(0)} Jt`;
   return `Rp ${Number(amount).toLocaleString("id-ID")}`;
+}
+
+function resolveSafeProofPhoto(url) {
+  if (!url) return "";
+  if (typeof url === "string" && url.includes("images.unsplash.com")) {
+    return "/images/roads/jalan-selesai-hotmix.jpg";
+  }
+  return url;
+}
+
+function resolveSafeBeforePhoto(url) {
+  if (!url) return "/images/roads/jalan-lubang-medan.jpg";
+  return url;
 }
 
 // Dynamic import with SSR disabled to prevent Leaflet "window is not defined" error
@@ -71,10 +86,15 @@ export default function MapExplorer({
   onOpenReportModal,
   focusedRoadId,
   focusedReportId,
+  upvotedReportIds = [],
+  onUpvoteReport,
+  officerSession = null,
+  onOpenOfficerDashboard,
 }) {
   const [selectedRoad, setSelectedRoad] = useState(roads[2] || roads[0]); // Default to Katamso Medan (ruas-su-03)
   const [selectedReport, setSelectedReport] = useState(reports[0] || null); // Default to JGJ-MDN-001
   const [selectedRoadForDetailModal, setSelectedRoadForDetailModal] = useState(null);
+  const [photoLightboxOpen, setPhotoLightboxOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("masalah"); // "masalah" | "proyek" | "kewenangan" | "sumber"
   const [authorityFilter, setAuthorityFilter] = useState("ALL");
   const [highlightFilter, setHighlightFilter] = useState("ALL"); // "ALL" | "OVERDUE" | "CRITICAL" | "BUDGET"
@@ -862,7 +882,7 @@ export default function MapExplorer({
   // Derive live objects from `roads` and `reports` props so officer updates reflect immediately
   const currentRoad = selectedRoad
     ? roads.find((r) => r.id === selectedRoad.id) || selectedRoad
-    : roads[0];
+    : null;
 
   const currentReport = selectedReport
     ? reports.find((r) => r.id === selectedReport.id) || selectedReport
@@ -892,9 +912,7 @@ export default function MapExplorer({
   const contractCommitmentPct = Math.min(100, Math.round((contractValueRp / (paguRp || 1)) * 100));
   const roadConditionScore = currentRoad?.condition === "MANTAP" ? 88 : currentRoad?.condition === "RUSAK_SEDANG" ? 62 : 35;
   const currentRoadId = currentRoad?.id;
-  const roadReports = useMemo(() => {
-    return reports.filter((r) => r.roadSegmentId === currentRoadId);
-  }, [reports, currentRoadId]);
+  const roadReports = reports.filter((r) => r.roadSegmentId === currentRoadId);
   const reportsCount = roadReports.length || (currentReport ? 1 : 4);
 
   return (
@@ -937,7 +955,7 @@ export default function MapExplorer({
       {/* 2. Top-Left Unified GIS Command Toolbar (Compact 2-Tier Modular HUD) */}
       <div className="absolute top-18 sm:top-20 left-3 sm:left-4 z-[450] flex flex-col gap-2 max-w-[calc(100vw-24px)] pointer-events-auto font-sans">
         {/* Tier 1: Search & Lokasi Utama (Scope & Search) */}
-        <div className="w-fit max-w-full flex items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-md rounded-[10px] shadow-md border border-slate-200/90">
+        <div className="w-fit max-w-full flex flex-wrap sm:flex-nowrap items-center gap-1.5 p-1.5 bg-white/95 backdrop-blur-md rounded-[10px] shadow-md border border-slate-200/90">
           {/* Interactive Region & Province Dropdown */}
           <div className="relative inline-block font-sans shrink-0">
             <button
@@ -1078,7 +1096,7 @@ export default function MapExplorer({
           <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
 
           {/* Search Bar */}
-          <div className="relative w-36 sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
+          <div className="relative flex-1 min-w-[130px] sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
             <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <input
               type="text"
@@ -1104,7 +1122,7 @@ export default function MapExplorer({
             type="button"
             onClick={() => setPinReportMode(!pinReportMode)}
             title="Klik titik jalan mana pun di peta untuk langsung melaporkan kerusakan beserta koordinat GIS"
-            className={`h-9 px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 ${
+            className={`h-9 px-2.5 sm:px-3 rounded-[6px] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-sans shrink-0 ${
               pinReportMode
                 ? "bg-[#c2410c] text-white shadow-sm ring-2 ring-orange-300"
                 : "bg-orange-50 hover:bg-orange-100 text-[#c2410c] border border-orange-200/80"
@@ -1118,7 +1136,7 @@ export default function MapExplorer({
         </div>
 
         {/* Tier 2: Filter & Layer Chips (Secondary Quick Filter Row) */}
-        <div className="w-fit max-w-[calc(100vw-32px)] flex items-center gap-1.5 p-1 bg-white/90 backdrop-blur-md rounded-[8px] shadow-sm border border-slate-200/80 overflow-x-auto no-scrollbar">
+        <div className="w-fit max-w-[calc(100vw-24px)] flex flex-wrap sm:flex-nowrap items-center gap-1.5 p-1 bg-white/90 backdrop-blur-md rounded-[8px] shadow-sm border border-slate-200/80">
           {/* Status / Wewenang Jalan Filter Dropdown */}
           <div className="relative inline-block font-sans shrink-0">
             <button
@@ -1386,7 +1404,7 @@ export default function MapExplorer({
               <div
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute top-full right-0 sm:left-0 mt-1.5 w-80 sm:w-96 rounded-[6px] bg-white shadow-2xl ring-1 ring-orange-200/60 p-2.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-2"
+                className="fixed inset-x-3 top-36 sm:absolute sm:inset-x-auto sm:top-full sm:left-0 mt-1.5 sm:w-96 rounded-[6px] bg-white shadow-2xl ring-1 ring-orange-200/60 p-2.5 text-xs text-slate-700 z-[600] animate-fade-in font-sans space-y-2"
               >
                 <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                   <div>
@@ -1701,7 +1719,11 @@ export default function MapExplorer({
         )}
 
         {/* Zoom & Reset Location Controls */}
-        <div className="flex flex-col gap-1 bg-white/95 backdrop-blur-md rounded-[6px] shadow-md ring-1 ring-orange-200/60 p-1 pointer-events-auto w-fit">
+        <div
+          className={`${
+            displayItem ? "hidden sm:flex" : "flex"
+          } flex-col gap-1 bg-white/95 backdrop-blur-md rounded-[6px] shadow-md ring-1 ring-orange-200/60 p-1 pointer-events-auto w-fit`}
+        >
           <button
             onClick={() => mapInstance?.zoomIn()}
             title="Perbesar Peta"
@@ -1874,13 +1896,18 @@ export default function MapExplorer({
         </span>
       </div>
 
-      {/* 5. Modern Map Inspector Card (Clean, Simple, Anti-Puyeng Popup) */}
+      {/* 5. Modern Map Inspector Card (Responsive Mobile Bottom-Sheet + Desktop Floating Panel) */}
       {displayItem && (
         <aside
           role="region"
           aria-label="Detail Ruas Jalan"
-          className="absolute top-18 sm:top-20 right-3 sm:right-4 w-[380px] sm:w-[410px] max-w-[calc(100vw-24px)] max-h-[calc(100vh-92px)] z-[480] bg-white/98 backdrop-blur-md rounded-[16px] shadow-[0_16px_40px_-8px_rgba(15,23,42,0.18)] ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans"
+          className="absolute bottom-2.5 sm:bottom-auto sm:top-20 inset-x-2.5 sm:inset-x-auto sm:right-4 sm:w-[410px] max-h-[55vh] sm:max-h-[calc(100vh-92px)] z-[480] bg-white/98 backdrop-blur-md rounded-[18px] sm:rounded-[16px] shadow-[0_16px_40px_-8px_rgba(15,23,42,0.22)] ring-1 ring-orange-200/70 flex flex-col overflow-hidden animate-fade-in pointer-events-auto font-sans"
         >
+          {/* Mobile Bottom-Sheet Pill Indicator */}
+          <div className="sm:hidden pt-2 pb-0.5 flex justify-center bg-white/90">
+            <span className="w-10 h-1 rounded-full bg-slate-300" />
+          </div>
+
           {/* Subtle Warm Topographic Accent Curve (Header Corner Decor) */}
           <div className="absolute -top-12 -right-12 w-32 h-32 pointer-events-none select-none opacity-20" aria-hidden="true">
             <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-amber-500">
@@ -1889,10 +1916,10 @@ export default function MapExplorer({
           </div>
 
           {/* Card Header: Squircle Pin Badge + Road Name + Location + Close Button */}
-          <div className="p-3.5 sm:p-4 border-b border-slate-100 flex items-start justify-between gap-3 bg-white/90 relative z-10">
+          <div className="p-3 sm:p-4 border-b border-slate-100 flex items-start justify-between gap-3 bg-white/90 relative z-10">
             <div className="flex items-start gap-3 min-w-0">
               {/* Squircle Road Icon Badge */}
-              <div className="w-11 h-11 rounded-[12px] bg-orange-50 border border-orange-200/70 p-2 flex items-center justify-center shrink-0 shadow-2xs">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-[12px] bg-orange-50 border border-orange-200/70 p-2 flex items-center justify-center shrink-0 shadow-2xs">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icon/maps.png"
@@ -1905,13 +1932,25 @@ export default function MapExplorer({
 
               {/* Title & Location Subtitle */}
               <div className="min-w-0 space-y-0.5">
-                <h2 className="text-base sm:text-[17px] font-bold font-heading text-slate-900 tracking-tight leading-snug truncate">
-                  {currentReport ? currentReport.roadName : currentRoad.name}
+                <h2 className="text-sm sm:text-[17px] font-bold font-heading text-slate-900 tracking-tight leading-snug truncate">
+                  {currentReport ? currentReport.roadName : currentRoad?.name}
                 </h2>
                 <p className="text-xs text-slate-500 flex items-center gap-1 truncate">
                   <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
                   <span className="truncate">
-                    {currentReport?.address || `${currentRoad.district || currentRoad.provinceName} / ${currentRoad.lengthKm || 0} KM`}
+                    {currentReport
+                      ? [
+                          currentReport.district &&
+                          !String(currentReport.address || "")
+                            .toLowerCase()
+                            .includes(String(currentReport.district).toLowerCase())
+                            ? currentReport.district
+                            : null,
+                          currentReport.address,
+                        ]
+                          .filter(Boolean)
+                          .join(" • ")
+                      : `${currentRoad?.district || currentRoad?.provinceName || ""} / ${currentRoad?.lengthKm || 0} KM`}
                   </span>
                 </p>
               </div>
@@ -1938,12 +1977,21 @@ export default function MapExplorer({
               <div className="relative w-full h-40 sm:h-44 bg-slate-900 rounded-[10px] overflow-hidden shadow-2xs">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={currentReport?.proofPhotoUrl || currentReport?.photoUrl || currentRoad?.photoUrl}
+                  src={
+                    resolveSafeProofPhoto(currentReport?.proofPhotoUrl) ||
+                    resolveSafeBeforePhoto(currentReport?.photoUrl || currentRoad?.photoUrl)
+                  }
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = currentReport?.proofPhotoUrl
+                      ? "/images/roads/jalan-selesai-hotmix.jpg"
+                      : "/images/roads/jalan-lubang-medan.jpg";
+                  }}
                   alt="Kondisi Fisik Ruas Jalan"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
                 
                 {/* Top-Left Status Pill */}
                 <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
@@ -2039,7 +2087,12 @@ export default function MapExplorer({
                   </div>
                   {currentReport.updates?.[0]?.note && (
                     <p className="text-[11px] leading-relaxed font-medium">
-                      &ldquo;{currentReport.updates[0].note}&rdquo;
+                      &ldquo;
+                      {currentReport.status === "SELESAI" &&
+                      String(currentReport.updates[0].note).includes("Dijadwalkan pengerjaan")
+                        ? `Pekerjaan penambalan struktural dan pemadatan aspal hotmix pada ${currentReport.roadName} telah selesai 100% dilaksanakan sesuai standar mutu.`
+                        : currentReport.updates[0].note}
+                      &rdquo;
                     </p>
                   )}
                   {currentReport.updates?.[0]?.officer && (
@@ -2050,70 +2103,103 @@ export default function MapExplorer({
 
                   {/* Before vs After Mini Comparison when Proof Photo is attached */}
                   {currentReport.proofPhotoUrl && currentReport.photoUrl && (
-                    <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-emerald-200/70">
-                      <div className="space-y-1">
-                        <div className="h-16 rounded-[6px] overflow-hidden border border-slate-300 bg-slate-100">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={currentReport.photoUrl}
-                            alt="Before"
-                            className="w-full h-full object-cover"
-                          />
+                    <div className="space-y-2 pt-2 border-t border-emerald-200/80">
+                      <div
+                        onClick={() => setPhotoLightboxOpen(true)}
+                        className="grid grid-cols-2 gap-2.5 cursor-pointer group"
+                        title="Klik untuk memperbesar perbandingan foto Before vs After"
+                      >
+                        <div className="space-y-1">
+                          <div className="h-20 rounded-[8px] overflow-hidden border border-slate-300 bg-slate-900 relative shadow-2xs">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={resolveSafeBeforePhoto(currentReport.photoUrl)}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = "/images/roads/jalan-lubang-medan.jpg";
+                              }}
+                              alt="Kondisi Awal (Before)"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-[4px] bg-black/70 text-white text-[8.5px] font-extrabold tracking-wide uppercase">
+                              Before
+                            </span>
+                          </div>
+                          <span className="text-[9.5px] font-bold text-slate-600 block text-center">
+                            BEFORE (Laporan Warga)
+                          </span>
                         </div>
-                        <span className="text-[9.5px] font-bold text-slate-600 block text-center">
-                          BEFORE (Laporan Warga)
-                        </span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="h-16 rounded-[6px] overflow-hidden border border-emerald-500 bg-slate-100">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={currentReport.proofPhotoUrl}
-                            alt="After"
-                            className="w-full h-full object-cover"
-                          />
+                        <div className="space-y-1">
+                          <div className="h-20 rounded-[8px] overflow-hidden border-2 border-emerald-500 bg-slate-900 relative shadow-2xs">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={resolveSafeProofPhoto(currentReport.proofPhotoUrl)}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = "/images/roads/jalan-selesai-hotmix.jpg";
+                              }}
+                              alt="Bukti Selesai Dinas (After)"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-[4px] bg-emerald-600/95 text-white text-[8.5px] font-extrabold tracking-wide uppercase">
+                              After ✓
+                            </span>
+                          </div>
+                          <span className="text-[9.5px] font-bold text-emerald-800 block text-center">
+                            AFTER (Bukti Dinas)
+                          </span>
                         </div>
-                        <span className="text-[9.5px] font-bold text-emerald-800 block text-center">
-                          AFTER (Bukti Dinas)
-                        </span>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setPhotoLightboxOpen(true)}
+                        className="w-full py-1.5 px-2.5 rounded-[6px] bg-white hover:bg-emerald-50 border border-emerald-300 text-emerald-900 text-[10.5px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                      >
+                        <Maximize2 className="w-3 h-3 text-emerald-700" />
+                        <span>Perbesar Perbandingan Foto Before vs After</span>
+                      </button>
                     </div>
                   )}
                 </div>
               )}
 
-            {/* 2. Key Data Row: Penanggung Jawab & Anggaran (2 Columns, matching reference image 1) */}
-            <div className="grid grid-cols-2 gap-2.5 p-3 rounded-[10px] bg-slate-50/80 border border-slate-200/70">
+            {/* 2. Key Data Row: Penanggung Jawab & Anggaran (2 Columns, Clean Non-Colliding Layout) */}
+            <div className="grid grid-cols-2 gap-2.5 p-3 rounded-[10px] bg-slate-50/90 border border-slate-200/80">
               {/* Penanggung Jawab */}
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-9 h-9 rounded-[8px] bg-white border border-slate-200/80 flex items-center justify-center text-orange-700 shadow-2xs shrink-0">
-                  <Building2 className="w-4.5 h-4.5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+              <div className="flex flex-col justify-between gap-1.5 min-w-0 pr-1">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 rounded-[6px] bg-white border border-slate-200/90 flex items-center justify-center text-orange-700 shadow-2xs shrink-0">
+                    <Building2 className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider truncate">
                     Penanggung Jawab
-                  </div>
-                  <div className="text-xs font-bold text-slate-900 truncate" title={currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}>
-                    {currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}
-                  </div>
+                  </span>
+                </div>
+                <div
+                  className="text-xs font-bold text-slate-900 leading-snug line-clamp-2"
+                  title={currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}
+                >
+                  {currentReport?.leadership?.agency || currentRoad?.leadership?.agency || "Dinas PUPR Terkait"}
                 </div>
               </div>
 
               {/* Anggaran */}
-              <div className="flex items-center gap-2.5 min-w-0 border-l border-slate-200/80 pl-2.5">
-                <div className="w-9 h-9 rounded-[8px] bg-white border border-slate-200/80 flex items-center justify-center text-amber-700 shadow-2xs shrink-0">
-                  <Coins className="w-4.5 h-4.5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>Anggaran</span>
-                    <span className="font-mono text-[9px] bg-amber-100 text-amber-900 px-1 py-0.2 rounded font-bold">
-                      TA {budgetData?.fiscalYear || "2026"}
+              <div className="flex flex-col justify-between gap-1.5 min-w-0 border-l border-slate-200/80 pl-3">
+                <div className="flex items-center justify-between gap-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <div className="w-6 h-6 rounded-[6px] bg-white border border-slate-200/90 flex items-center justify-center text-amber-700 shadow-2xs shrink-0">
+                      <Coins className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider truncate">
+                      Anggaran
                     </span>
                   </div>
-                  <div className="text-xs font-bold font-mono text-slate-900 tabular-nums">
-                    {formatCurrencyCompact(contractValueRp || paguRp)}
-                  </div>
+                  <span className="font-mono text-[9px] bg-amber-100 text-amber-900 border border-amber-200/80 px-1.5 py-0.5 rounded-[4px] font-bold whitespace-nowrap shrink-0">
+                    TA {budgetData?.fiscalYear || "2026"}
+                  </span>
+                </div>
+                <div className="text-[13px] font-extrabold font-mono text-slate-900 tabular-nums leading-snug">
+                  {formatCurrencyCompact(contractValueRp || paguRp)}
                 </div>
               </div>
             </div>
@@ -2297,8 +2383,26 @@ export default function MapExplorer({
               <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </button>
 
-            {/* Secondary Action Row: Detail Lengkap Ruas + Ombudsman */}
-            <div className="flex items-center gap-2">
+            {/* Secondary Action Row: Upvote + Detail Lengkap Ruas + Ombudsman */}
+            <div className="flex items-center gap-1.5">
+              {currentReport && onUpvoteReport && (
+                <button
+                  type="button"
+                  onClick={() => onUpvoteReport(currentReport.id)}
+                  title="Dukung prioritas penanganan laporan ini"
+                  className={`py-2 px-2.5 rounded-[8px] text-xs font-bold border transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 ${
+                    upvotedReportIds.includes(currentReport.id)
+                      ? "bg-orange-100 text-[#c2410c] border-orange-300 shadow-2xs"
+                      : "bg-slate-50 hover:bg-orange-50 text-slate-700 hover:text-[#c2410c] border-slate-200"
+                  }`}
+                >
+                  <ThumbsUp className="w-3.5 h-3.5" />
+                  <span className="font-mono tabular-nums">
+                    {currentReport.upvotes || 0}
+                  </span>
+                </button>
+              )}
+
               <button
                 onClick={() => {
                   const targetRoad = (currentReport?.roadSegmentId && roads.find((r) => r.id === currentReport.roadSegmentId)) || currentRoad;
@@ -2307,22 +2411,132 @@ export default function MapExplorer({
                 className="flex-1 py-2 px-3 rounded-[8px] text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100/90 hover:bg-slate-200/90 border border-slate-200/80 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Eye className="w-3.5 h-3.5 text-[#c2410c]" />
-                <span>Lihat Detail Lengkap</span>
+                <span>Detail Lengkap</span>
               </button>
 
               {currentReport?.isResponseOverdue && (
                 <button
                   onClick={() => onOpenOmbudsmanDraft(currentReport)}
-                  className="py-2 px-3 rounded-[8px] text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  className="py-2 px-2.5 rounded-[8px] text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                   title="Unduh Draf Laporan Ombudsman RI"
                 >
                   <FileText className="w-3.5 h-3.5" />
-                  <span>Draf Ombudsman</span>
+                  <span>Ombudsman</span>
                 </button>
               )}
             </div>
+
+            {/* Officer Quick Action Shortcut when Officer Session is Active */}
+            {officerSession && onOpenOfficerDashboard && (
+              <button
+                type="button"
+                onClick={onOpenOfficerDashboard}
+                className="w-full py-2 px-3 rounded-[8px] text-[11px] font-bold text-sky-900 bg-sky-50 hover:bg-sky-100 border border-sky-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Shield className="w-3.5 h-3.5 text-sky-700" />
+                <span>Tindak Lanjuti Status di Portal Dinas (Mode Petugas)</span>
+              </button>
+            )}
           </div>
         </aside>
+      )}
+
+      {/* Fullscreen Before vs After Photo Lightbox Modal */}
+      {photoLightboxOpen && currentReport && (
+        <div
+          className="fixed inset-0 z-[2100] bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans"
+          onClick={() => setPhotoLightboxOpen(false)}
+        >
+          <div
+            className="max-w-4xl w-full rounded-[12px] bg-white shadow-2xl ring-1 ring-orange-200/60 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
+              <div>
+                <div className="text-xs font-bold flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded bg-emerald-600 text-white font-mono text-[10px]">
+                    #{currentReport.ticketCode}
+                  </span>
+                  <span>Verifikasi Visual: Kondisi Awal vs Bukti Selesai Dinas</span>
+                </div>
+                <div className="text-[11px] text-slate-300 mt-0.5">
+                  {currentReport.roadName} • {currentReport.authorityLabel}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPhotoLightboxOpen(false)}
+                className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-4 sm:p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50">
+              <div className="rounded-[10px] bg-white border border-slate-200 overflow-hidden shadow-xs flex flex-col">
+                <div className="px-3 py-2 bg-rose-50 border-b border-rose-200 flex items-center justify-between">
+                  <span className="text-[11px] font-extrabold uppercase text-rose-800">
+                    1. Kondisi Awal (Laporan Warga)
+                  </span>
+                  <span className="text-[10px] font-mono font-bold text-rose-700">
+                    AI Hazard {currentReport.hazardScore}/100
+                  </span>
+                </div>
+                <div className="h-60 sm:h-72 bg-slate-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={resolveSafeBeforePhoto(currentReport.photoUrl)}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/images/roads/jalan-lubang-medan.jpg";
+                    }}
+                    alt="Kondisi Awal Kerusakan"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-[10px] bg-white border border-emerald-300 overflow-hidden shadow-xs flex flex-col">
+                <div className="px-3 py-2 bg-emerald-50 border-b border-emerald-200 flex items-center justify-between">
+                  <span className="text-[11px] font-extrabold uppercase text-emerald-900">
+                    2. Bukti Selesai Perbaikan Dinas
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-700">
+                    ✓ Terverifikasi
+                  </span>
+                </div>
+                <div className="h-60 sm:h-72 bg-slate-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={
+                      resolveSafeProofPhoto(currentReport.proofPhotoUrl) ||
+                      "/images/roads/jalan-selesai-hotmix.jpg"
+                    }
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/images/roads/jalan-selesai-hotmix.jpg";
+                    }}
+                    alt="Bukti Selesai Perbaikan"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {currentReport.updates?.[0]?.note && (
+              <div className="px-5 py-3 bg-emerald-50/70 border-t border-emerald-200 text-xs text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <strong>Catatan Petugas Dinas:</strong> &ldquo;{currentReport.updates[0].note}&rdquo;
+                </div>
+                {currentReport.updates?.[0]?.officer && (
+                  <span className="text-[11px] font-semibold text-emerald-800 shrink-0">
+                    {currentReport.updates[0].officer}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* 7. Modal Penjelasan Arsitektur SIGI PU & GeoAPI (Double-Bezel 5pt with Orange Header & White Text) */}
