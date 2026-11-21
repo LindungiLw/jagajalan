@@ -102,11 +102,12 @@ export const INDONESIA_REGIONS = [
   }
 ];
 
-// Ringkasan Statistik Jaringan Jalan Resmi Indonesia (BPS & Ditjen Bina Marga Kementerian PU)
+// Ringkasan Statistik Jaringan Jalan Resmi Indonesia (BPS 2026 - Data Tahun 2025 non-tol & Ditjen Bina Marga Kementerian PU)
 export const PROVINCIAL_NETWORK_STATS = {
-  totalProvincialKmIndonesia: 54544.75,
-  totalNationalKmIndonesia: 47017.0,
-  totalKabupatenKotaKmIndonesia: 445000.0,
+  totalNonTolKmIndonesia: 538102,
+  totalProvincialKmIndonesia: 59462,
+  totalNationalKmIndonesia: 47605,
+  totalKabupatenKotaKmIndonesia: 431035,
   totalVillageKmIndonesia: 316000.0,
   totalProvinces: 38,
   activeCuratedProvincialCorridors: 26,
@@ -114,7 +115,7 @@ export const PROVINCIAL_NETWORK_STATS = {
   activeCuratedCityRegencyCorridors: 56,
   activeCuratedVillageCorridors: 15,
   activeCuratedPilotRoads: 7,
-  dataSource: "PUSDATIN SIGI Kementerian PU x BPS Statistik Transportasi Darat x Kemendesa PDTT (Dana Desa) x SK Kepala Daerah 38 Provinsi",
+  dataSource: "BPS (2026) Data Panjang Jalan 2025 x PUSDATIN SIGI Kementerian PU x Kemendesa PDTT (Dana Desa) x SK Kepala Daerah 38 Provinsi",
 };
 
 // Katalog 38 Provinsi Indonesia dengan Data Kewenangan Jalan Provinsi Resmi

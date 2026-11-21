@@ -94,6 +94,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("complaints"); // "complaints" | "damaged" | "inpres"
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "table"
+  const [showAllGridCards, setShowAllGridCards] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState(null);
 
   useEffect(() => {
@@ -101,12 +102,13 @@ export default function NationalRankingSection({ onSelectPilot }) {
   }, []);
 
   const islands = [
-    { id: "ALL", label: "Semua Wilayah" },
-    { id: "Jawa", label: "Jawa" },
+    { id: "ALL", label: "Semua Wilayah (38)" },
     { id: "Sumatera", label: "Sumatera" },
+    { id: "Jawa", label: "Jawa" },
+    { id: "Bali & Nusa Tenggara", label: "Bali & Nusra" },
     { id: "Kalimantan", label: "Kalimantan" },
     { id: "Sulawesi", label: "Sulawesi" },
-    { id: "Nusa Tenggara", label: "Nusa Tenggara" },
+    { id: "Maluku", label: "Maluku" },
     { id: "Papua", label: "Papua" },
   ];
 
@@ -197,9 +199,14 @@ export default function NationalRankingSection({ onSelectPilot }) {
       subtitle: `Wilayah: ${selectedIsland === "ALL" ? "Seluruh Indonesia (38 Provinsi)" : selectedIsland} • Sumber: BPS SIRUSA & Kementerian PU`,
       summaryMetrics: [
         { label: "Cakupan Provinsi", value: `${filteredAndSortedProvinces.length} Provinsi` },
-        { label: "Total Jaringan Jalan", value: NATIONAL_STATS?.totalNationalRoadKm || "548.420 KM" },
+        {
+          label: "Total Jaringan Jalan",
+          value: NATIONAL_STATS?.totalRoadKm2025
+            ? `${NATIONAL_STATS.totalRoadKm2025.toLocaleString("id-ID")} km (Non-Tol)`
+            : "538.102 km (Non-Tol)",
+        },
         { label: "Alokasi Inpres IJD", value: "Rp 29,9 Triliun (Tahap I & II)" },
-        { label: "Sumber Data Resmi", value: "BPS SIRUSA & Satu Data PU" },
+        { label: "Sumber Data Resmi", value: "BPS (2026) & Renstra Kementerian PU" },
       ],
       columns: provinceExportColumns,
       rows: filteredAndSortedProvinces,
@@ -374,8 +381,12 @@ export default function NationalRankingSection({ onSelectPilot }) {
         /* ------------------------------------------------------------- */
         /* VIEW 1: SIGNATURE STATISTIC CARDS (Dual-Arc Donut & Metrics)  */
         /* ------------------------------------------------------------- */
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredAndSortedProvinces.map((prov) => {
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {(showAllGridCards || searchQuery.trim() || selectedIsland !== "ALL"
+              ? filteredAndSortedProvinces
+              : filteredAndSortedProvinces.slice(0, 12)
+            ).map((prov) => {
             const isPilot = prov.activePilot;
             const mantapPct = (100 - prov.damagedPercentage).toFixed(1);
             const damagedKm = prov.damagedKm || Math.round((prov.damagedPercentage / 100) * prov.totalRoadKm);
@@ -524,6 +535,37 @@ export default function NationalRankingSection({ onSelectPilot }) {
               </div>
             );
           })}
+          </div>
+
+          {!searchQuery.trim() && selectedIsland === "ALL" && filteredAndSortedProvinces.length > 12 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 rounded-[8px] bg-white ring-1 ring-orange-200/50 text-xs">
+              <span className="text-slate-600">
+                Menampilkan{" "}
+                <strong className="text-slate-900 font-mono tabular-nums">
+                  {showAllGridCards ? filteredAndSortedProvinces.length : 12}
+                </strong>{" "}
+                dari{" "}
+                <strong className="text-slate-900 font-mono tabular-nums">
+                  {filteredAndSortedProvinces.length}
+                </strong>{" "}
+                Provinsi di Indonesia (BPS 2026 &amp; Renstra KemenPU 2025–2029)
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowAllGridCards((prev) => !prev)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[6px] bg-orange-50 hover:bg-orange-100 text-[#9a3412] ring-1 ring-orange-200/80 font-bold transition-colors cursor-pointer shrink-0"
+              >
+                <span>
+                  {showAllGridCards
+                    ? "Ringkas Tampilan (12 Provinsi)"
+                    : `Tampilkan Semua ${filteredAndSortedProvinces.length} Provinsi`}
+                </span>
+                <ChevronRight
+                  className={`w-3.5 h-3.5 transition-transform ${showAllGridCards ? "-rotate-90" : "rotate-90"}`}
+                />
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         
@@ -648,8 +690,8 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
           {/* Table Summary Footer */}
           <div className="p-3 bg-slate-50/70 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <span>Menampilkan <strong>{filteredAndSortedProvinces.length}</strong> dari 38 Provinsi se-Indonesia</span>
-            <span className="text-[11px] text-slate-400">Sumber: BPS SIRUSA 2024 &amp; Inpres No. 3/2023 (Tahap I)</span>
+            <span>Menampilkan <strong>{filteredAndSortedProvinces.length}</strong> dari {PROVINCES_DATA.length} Provinsi se-Indonesia</span>
+            <span className="text-[11px] text-slate-400">Sumber: BPS (2026) Data Jalan 2025, Renstra Kementerian PU 2025–2029, &amp; Inpres No. 3/2023</span>
           </div>
         </div>
       )}

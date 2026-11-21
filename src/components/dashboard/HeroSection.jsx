@@ -259,7 +259,7 @@ export default function HeroSection({
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span className="font-medium text-slate-700">BPS • LPSE • Kemen PU • Ombudsman</span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-500 font-medium">Data Historis 2020–2024 &amp; Pengadaan TA 2026</span>
+            <span className="text-slate-500 font-medium">Data 2020–2025 &amp; Pengadaan TA 2026</span>
           </div>
 
           {/* Segment 3: Spacious Global Search Input with Active Submit */}
@@ -370,8 +370,10 @@ export default function HeroSection({
               <span className="text-white/90 font-medium text-xs">Paket Pengadaan Pilot (Rp 106,90 M)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
-            <div className="flex items-center gap-1.5" title="Tiket aduan terdata yang melampaui batas waktu pemantauan internal SLA JagaJalan (+6 hari acuan)">
-              <strong className="text-white font-sans font-bold text-sm tabular-nums">2</strong>
+            <div className="flex items-center gap-1.5" title="Tiket aduan terdata yang melampaui batas waktu pemantauan respons 14 hari kerja (sinkron real-time)">
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">
+                {(reports || []).filter((r) => r?.status === "OVERDUE" || r?.isResponseOverdue).length}
+              </strong>
               <span className="text-white/90 font-medium text-xs">Laporan Lewat Batas Pantau SLA</span>
             </div>
           </div>

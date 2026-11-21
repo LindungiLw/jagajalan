@@ -31,7 +31,7 @@
     <a href="https://jagajalan.vercel.app" target="_blank">
       <img src="https://img.shields.io/badge/Demo_Live-jagajalan.vercel.app-ea580c?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo Vercel" />
     </a>
-    <img src="https://img.shields.io/badge/Next.js-16.4-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+    <img src="https://img.shields.io/badge/Next.js-16.4.6-black?style=for-the-badge&logo=next.js" alt="Next.js" />
     <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS" />
     <img src="https://img.shields.io/badge/Gemini_Vision-AI-8b5cf6?style=for-the-badge&logo=google" alt="Gemini Vision" />
@@ -61,7 +61,7 @@ Penanganan jalan rusak di Indonesia sering terhambat oleh masalah tata kelola di
    Ketimpangan ini mendorong intervensi **Instruksi Presiden (Inpres) No. 3 Tahun 2023 tentang Percepatan Peningkatan Konektivitas Jalan Daerah (IJD)** dengan alokasi APBN sebesar **Rp 14,6 Triliun (Tahap I/2023)** dan **Rp 15,3 Triliun (Tahap II/2024)**.
 
 3. **Tingginya Penundaan Tanggapan Publik (Data Ombudsman RI 2026)**
-   Sepanjang tahun 2025, Ombudsman Republik Indonesia mencatat **23.596 penerimaan masyarakat**, dengan **Pemerintah Daerah (Pemprov, Pemkab, Pemkot) sebagai instansi yang paling banyak dilaporkan, yaitu sebanyak 4.766 laporan** (Ombudsman RI, 2026). Sektor perhubungan dan infrastruktur menyumbang **622 laporan**, dengan bentuk dugaan maladministrasi tertinggi berupa **Penundaan Berlarut (*Undue Delay*) sebesar 21,25%**.
+   Sepanjang tahun 2025, Ombudsman Republik Indonesia mencatat **23.596 penerimaan masyarakat**, dengan **Pemerintah Daerah (Pemprov, Pemkab, Pemkot) sebagai instansi yang paling banyak dilaporkan, yaitu sebanyak 4.766 laporan** (Ombudsman RI, 2026b). Dalam Laporan Kinerja Tahun 2025, sektor perhubungan dan infrastruktur mencatat **622 laporan** (287 di antaranya pada sub-kategori infrastruktur jalan raya, jalan tol, dan jalan rusak), dengan dugaan maladministrasi **Penundaan Berlarut (*Undue Delay*)** menjadi salah satu substansi tertinggi (**33,86%**).
 
 4. **Kebingungan Warga atas Batas Wewenang Jalan (*Blame-Shifting*)**
    Pengguna jalan umumnya tidak mengetahui instansi mana yang bertanggung jawab atas ruas jalan yang mereka lewati setiap hari:

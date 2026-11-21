@@ -187,7 +187,7 @@ export default function AnnualProgressChart() {
             Perbandingan Kemantapan Jalan Nasional vs Daerah
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Data historis BPS SIRUSA (2020–2024) memperlihatkan disparitas kualitas jalan kabupaten/kota dibanding jalan nasional.
+            Data historis BPS &amp; Renstra Kementerian PU (2020–2025) memperlihatkan disparitas kualitas jalan kabupaten/kota dibanding jalan nasional.
           </p>
         </div>
 
