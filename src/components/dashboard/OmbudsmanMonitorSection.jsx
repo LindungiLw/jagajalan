@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import {
   Shield,
   FileText,
@@ -29,6 +29,52 @@ import {
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 import CustomSelect from "./CustomSelect";
+
+function AnimatedNumber({ value = 0, duration = 480 }) {
+  const [displayValue, setDisplayValue] = useState(Number(value) || 0);
+  const prevValueRef = useRef(Number(value) || 0);
+
+  useEffect(() => {
+    const target = Number(value) || 0;
+    const start = prevValueRef.current;
+    if (start === target) return undefined;
+
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      prevValueRef.current = target;
+      const raf = window.requestAnimationFrame(() => setDisplayValue(target));
+      return () => window.cancelAnimationFrame(raf);
+    }
+
+    let frameId = null;
+    const startTime = performance.now();
+
+    const tick = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      // Exponential ease-out for crisp deceleration
+      const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const nextVal = Math.round(start + (target - start) * eased);
+      setDisplayValue(nextVal);
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(tick);
+      } else {
+        prevValueRef.current = target;
+      }
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => {
+      if (frameId) window.cancelAnimationFrame(frameId);
+      prevValueRef.current = target;
+    };
+  }, [value, duration]);
+
+  return <>{displayValue.toLocaleString("id-ID")}</>;
+}
 
 /**
  * Komponen Visualisasi Diagram Donut Distribusi Status Aduan
@@ -818,201 +864,232 @@ export default function OmbudsmanMonitorSection({
 
       {/* 2. SIGNATURE TOP SCOREBOARD & DONUT DISTRIBUTION (Side-by-Side Dual Panel) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
-        {/* Left: 4 Interactive Metric Cards (8 cols lg, 9 cols xl) */}
-        <div className="lg:col-span-8 xl:col-span-9 rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50 flex flex-col justify-center">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 h-full">
+        {/* Left: Unified Institutional SLA Scoreboard (8 cols lg, 9 cols xl) */}
+        <div className="lg:col-span-8 xl:col-span-9 rounded-[10px] bg-[#F2ECE4]/80 p-2 sm:p-2.5 ring-1 ring-[#E6DFD5] flex flex-col">
+          <div className="bg-white rounded-[8px] shadow-[0_2px_12px_-4px_rgba(28,25,23,0.05)] ring-1 ring-slate-200/60 flex-1 flex flex-col justify-between overflow-hidden">
             {(() => {
               const totalCount = counts.all || 1;
               const pctOverdue = Math.round((counts.overdue / totalCount) * 100);
               const pctInProgress = Math.round((counts.inProgress / totalCount) * 100);
               const pctResolved = Math.max(0, 100 - pctOverdue - pctInProgress);
 
+              const scoreCards = [
+                {
+                  id: "ALL",
+                  label: "Total Aduan",
+                  value: counts.all,
+                  pct: 100,
+                  caption: "Terdata resmi di peta GIS",
+                  dotClass: "bg-slate-800",
+                  pulse: false,
+                  topBarClass: "bg-[#c2410c]",
+                  valueClass: "text-slate-900",
+                  pctClass: "text-slate-500",
+                  barTrackClass: "bg-slate-100",
+                  barFillClass: "bg-slate-800",
+                  activeBgClass: "bg-[#FAF7F2]/90",
+                },
+                {
+                  id: "OVERDUE",
+                  label: "Lewat Tenggat",
+                  value: counts.overdue,
+                  pct: pctOverdue,
+                  caption: "Memenuhi syarat Ombudsman",
+                  dotClass: "bg-rose-600",
+                  pulse: counts.overdue > 0,
+                  topBarClass: "bg-rose-600",
+                  valueClass: "text-rose-600",
+                  pctClass: "text-rose-600/80",
+                  barTrackClass: "bg-rose-100/80",
+                  barFillClass: "bg-rose-600",
+                  activeBgClass: "bg-rose-50/50",
+                },
+                {
+                  id: "DALAM_PENGERJAAN",
+                  label: "Masa Tanggap",
+                  value: counts.inProgress,
+                  pct: pctInProgress,
+                  caption: "Dalam batas 14 hari kerja",
+                  dotClass: "bg-amber-500",
+                  pulse: false,
+                  topBarClass: "bg-amber-500",
+                  valueClass: "text-amber-700",
+                  pctClass: "text-amber-700/80",
+                  barTrackClass: "bg-amber-100/80",
+                  barFillClass: "bg-amber-500",
+                  activeBgClass: "bg-amber-50/50",
+                },
+                {
+                  id: "SELESAI",
+                  label: "Tuntas Ditangani",
+                  value: counts.resolved,
+                  pct: pctResolved,
+                  caption: "Bukti fisik terverifikasi",
+                  dotClass: "bg-emerald-600",
+                  pulse: false,
+                  topBarClass: "bg-emerald-600",
+                  valueClass: "text-emerald-700",
+                  pctClass: "text-emerald-700/80",
+                  barTrackClass: "bg-emerald-100/80",
+                  barFillClass: "bg-emerald-600",
+                  activeBgClass: "bg-emerald-50/50",
+                },
+              ];
+
               return (
                 <>
-                  {/* Metric 1: Total Reports */}
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("ALL")}
-                    className={`p-4 sm:p-4.5 rounded-[8px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden border ${
-                      statusFilter === "ALL"
-                        ? "border-orange-600 ring-2 ring-orange-400/40 shadow-sm bg-gradient-to-b from-orange-50/20 to-white"
-                        : "border-slate-200/80 hover:border-orange-300 hover:shadow-xs"
-                    }`}
-                  >
-                    {/* Header: Label + Icon */}
-                    <div className="flex items-center justify-between gap-1.5 w-full">
-                      <span className="text-xs font-bold text-slate-700 font-sans group-hover:text-slate-900 transition-colors leading-tight">
-                        Total Aduan Terpantau
+                  {/* Top Bar: Institutional Context + Multi-Segment Composition Ratio */}
+                  <div className="px-4 sm:px-5 py-3 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-[#FAF8F5]/60">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                      <span className="text-xs font-bold text-slate-800 tracking-tight truncate">
+                        Ringkasan Kepatuhan Tanggap (SLA 14 Hari Kerja)
                       </span>
-                      <div className="w-8 h-8 rounded-[6px] bg-slate-100 flex items-center justify-center text-slate-700 ring-1 ring-slate-200/70 shrink-0">
-                        <FileText className="w-4 h-4 text-slate-700" />
-                      </div>
                     </div>
 
-                    {/* Hero Metric: Big Number + Micro-Badge */}
-                    <div className="my-2.5 sm:my-3">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl sm:text-4xl lg:text-5xl font-black font-sans tabular-nums text-slate-900 tracking-tight leading-none">
-                          {counts.all}
-                        </span>
-                        <span className="text-[10px] sm:text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/70 font-sans">
-                          100% Total
-                        </span>
-                      </div>
-                      {/* Micro Progress Bar */}
-                      <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden mt-2.5 flex">
-                        <div className="h-full bg-slate-800 rounded-full w-full" />
-                      </div>
-                    </div>
-
-                    {/* Subtitle Caption */}
-                    <p className="text-[11px] text-slate-500 font-sans font-medium leading-snug">
-                      Laporan warga terdaftar resmi
-                    </p>
-                  </button>
-
-                  {/* Metric 2: Melewati Tenggat Respons (Signal Rose/Red) */}
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("OVERDUE")}
-                    className={`p-4 sm:p-4.5 rounded-[8px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden border ${
-                      statusFilter === "OVERDUE"
-                        ? "border-rose-600 ring-2 ring-rose-400/40 shadow-sm bg-gradient-to-b from-rose-50/30 to-white"
-                        : "border-rose-200/80 hover:border-rose-400 bg-rose-50/15 hover:bg-rose-50/30 hover:shadow-xs"
-                    }`}
-                  >
-                    {/* Header: Label + Icon */}
-                    <div className="flex items-center justify-between gap-1.5 w-full">
-                      <span className="text-xs font-bold text-rose-700 font-sans leading-tight">
-                        Melewati Tenggat Respons
+                    <div className="flex items-center gap-2.5 shrink-0">
+                      <span className="text-[10.5px] font-mono text-slate-500 tabular-nums">
+                        Proporsi Status:
                       </span>
-                      <div className="w-8 h-8 rounded-[6px] bg-rose-100/80 flex items-center justify-center ring-1 ring-rose-200 shrink-0">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src="/icon/warning_icon.png"
-                          alt=""
-                          width={20}
-                          height={20}
-                          style={{ width: "20px", height: "20px" }}
-                          className="w-5 h-5 object-contain"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Hero Metric: Big Number + Micro-Badge */}
-                    <div className="my-2.5 sm:my-3">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl sm:text-4xl lg:text-5xl font-black font-sans tabular-nums text-rose-600 tracking-tight leading-none">
-                          {counts.overdue}
-                        </span>
-                        <span className="text-[10px] sm:text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-sans">
-                          {pctOverdue}% Kritis
-                        </span>
-                      </div>
-                      {/* Micro Progress Bar */}
-                      <div className="w-full h-1.5 rounded-full bg-rose-100 overflow-hidden mt-2.5 flex">
+                      <div
+                        className="w-28 sm:w-36 h-2 rounded-full bg-slate-200/70 overflow-hidden flex gap-[1.5px]"
+                        title={`Lewat Tenggat ${pctOverdue}% · Masa Tanggap ${pctInProgress}% · Tuntas ${pctResolved}%`}
+                      >
                         <div
-                          className="h-full bg-rose-600 rounded-full transition-all duration-500"
+                          className="h-full bg-rose-600 transition-all duration-700 ease-out"
                           style={{ width: `${pctOverdue}%` }}
                         />
-                      </div>
-                    </div>
-
-                    {/* Subtitle Caption */}
-                    <p className="text-[11px] text-rose-700/90 font-sans font-medium leading-snug">
-                      Syarat advokasi Ombudsman aktif
-                    </p>
-                  </button>
-
-                  {/* Metric 3: Dalam Masa Tanggap (Amber) */}
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("DALAM_PENGERJAAN")}
-                    className={`p-4 sm:p-4.5 rounded-[8px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden border ${
-                      statusFilter === "DALAM_PENGERJAAN"
-                        ? "border-amber-600 ring-2 ring-amber-400/40 shadow-sm bg-gradient-to-b from-amber-50/30 to-white"
-                        : "border-slate-200/80 hover:border-amber-300 hover:bg-amber-50/20 hover:shadow-xs"
-                    }`}
-                  >
-                    {/* Header: Label + Icon */}
-                    <div className="flex items-center justify-between gap-1.5 w-full">
-                      <span className="text-xs font-bold text-amber-800 font-sans leading-tight">
-                        Dalam Masa Tanggap
-                      </span>
-                      <div className="w-8 h-8 rounded-[6px] bg-amber-50 flex items-center justify-center text-amber-700 ring-1 ring-amber-200/80 shrink-0">
-                        <Clock className="w-4.5 h-4.5 text-amber-600" />
-                      </div>
-                    </div>
-
-                    {/* Hero Metric: Big Number + Micro-Badge */}
-                    <div className="my-2.5 sm:my-3">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl sm:text-4xl lg:text-5xl font-black font-sans tabular-nums text-amber-900 tracking-tight leading-none">
-                          {counts.inProgress}
-                        </span>
-                        <span className="text-[10px] sm:text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 font-sans">
-                          {pctInProgress}% Proses
-                        </span>
-                      </div>
-                      {/* Micro Progress Bar */}
-                      <div className="w-full h-1.5 rounded-full bg-amber-100 overflow-hidden mt-2.5 flex">
                         <div
-                          className="h-full bg-amber-500 rounded-full transition-all duration-500"
+                          className="h-full bg-amber-500 transition-all duration-700 ease-out"
                           style={{ width: `${pctInProgress}%` }}
                         />
-                      </div>
-                    </div>
-
-                    {/* Subtitle Caption */}
-                    <p className="text-[11px] text-slate-500 font-sans font-medium leading-snug">
-                      Masih dalam batas wajar dinas
-                    </p>
-                  </button>
-
-                  {/* Metric 4: Tuntas Ditangani (Emerald) */}
-                  <button
-                    type="button"
-                    onClick={() => setStatusFilter("SELESAI")}
-                    className={`p-4 sm:p-4.5 rounded-[8px] bg-white text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden border ${
-                      statusFilter === "SELESAI"
-                        ? "border-emerald-600 ring-2 ring-emerald-400/40 shadow-sm bg-gradient-to-b from-emerald-50/30 to-white"
-                        : "border-slate-200/80 hover:border-emerald-300 hover:bg-emerald-50/20 hover:shadow-xs"
-                    }`}
-                  >
-                    {/* Header: Label + Icon */}
-                    <div className="flex items-center justify-between gap-1.5 w-full">
-                      <span className="text-xs font-bold text-emerald-800 font-sans leading-tight">
-                        Tuntas Ditangani
-                      </span>
-                      <div className="w-8 h-8 rounded-[6px] bg-emerald-50 flex items-center justify-center text-emerald-700 ring-1 ring-emerald-200/80 shrink-0">
-                        <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600" />
-                      </div>
-                    </div>
-
-                    {/* Hero Metric: Big Number + Micro-Badge */}
-                    <div className="my-2.5 sm:my-3">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl sm:text-4xl lg:text-5xl font-black font-sans tabular-nums text-emerald-800 tracking-tight leading-none">
-                          {counts.resolved}
-                        </span>
-                        <span className="text-[10px] sm:text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-sans">
-                          {pctResolved}% Selesai
-                        </span>
-                      </div>
-                      {/* Micro Progress Bar */}
-                      <div className="w-full h-1.5 rounded-full bg-emerald-100 overflow-hidden mt-2.5 flex">
                         <div
-                          className="h-full bg-emerald-600 rounded-full transition-all duration-500"
+                          className="h-full bg-emerald-600 transition-all duration-700 ease-out"
                           style={{ width: `${pctResolved}%` }}
                         />
                       </div>
                     </div>
+                  </div>
 
-                    {/* Subtitle Caption */}
-                    <p className="text-[11px] text-slate-500 font-sans font-medium leading-snug">
-                      Perbaikan lapangan selesai
-                    </p>
-                  </button>
+                  {/* Middle: 4-Column Connected Precision Metric Grid (Borderless Hairline Dividers, Centered Numerals) */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 flex-1">
+                    {scoreCards.map((card) => {
+                      const isActive = statusFilter === card.id;
+                      return (
+                        <button
+                          key={card.id}
+                          type="button"
+                          onClick={() => setStatusFilter(card.id)}
+                          aria-pressed={isActive}
+                          className={`group relative px-4 sm:px-5 py-4 sm:py-5 flex flex-col items-center justify-between text-center transition-all duration-200 ease-out cursor-pointer focus:outline-none active:scale-[0.985] ${
+                            isActive
+                              ? card.activeBgClass
+                              : "bg-white hover:bg-[#FAF8F5]"
+                          }`}
+                        >
+                          {/* Top Active Accent Bar (Smooth scale-x animation) */}
+                          <span
+                            className={`absolute top-0 inset-x-0 h-[3px] transition-all duration-300 ease-out origin-center ${card.topBarClass} ${
+                              isActive
+                                ? "opacity-100 scale-x-100"
+                                : "opacity-0 scale-x-50 group-hover:opacity-40 group-hover:scale-x-75"
+                            }`}
+                          />
+
+                          {/* Row 1: Semantic Micro-Dot + Crisp Single-Line Title */}
+                          <div className="inline-flex items-center justify-center gap-1.5">
+                            <span className="relative flex h-2 w-2 shrink-0">
+                              {card.pulse && (
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                              )}
+                              <span className={`relative inline-flex rounded-full h-2 w-2 ${card.dotClass}`} />
+                            </span>
+                            <span
+                              className={`text-[11.5px] font-bold tracking-tight transition-colors whitespace-nowrap ${
+                                isActive
+                                  ? "text-slate-950"
+                                  : "text-slate-600 group-hover:text-slate-900"
+                              }`}
+                            >
+                              {card.label}
+                            </span>
+                          </div>
+
+                          {/* Row 2: Centered Authoritative Hero Number + Tabular Percentage */}
+                          <div className="my-3 w-full flex flex-col items-center">
+                            <div className="flex items-baseline justify-center gap-1.5 transition-transform duration-200 ease-out group-hover:-translate-y-0.5">
+                              <span
+                                className={`text-4xl sm:text-[42px] font-extrabold font-heading tabular-nums tracking-[-0.04em] leading-none ${card.valueClass}`}
+                              >
+                                <AnimatedNumber value={card.value} />
+                              </span>
+                              <span
+                                className={`text-xs font-mono font-bold tabular-nums ${card.pctClass}`}
+                              >
+                                {card.pct}%
+                              </span>
+                            </div>
+
+                            {/* Precision Hairline Progress Bar */}
+                            <div
+                              className={`w-full max-w-[128px] h-1 rounded-full ${card.barTrackClass} overflow-hidden mt-3`}
+                            >
+                              <div
+                                className={`h-full rounded-full ${card.barFillClass} transition-all duration-700 ease-out`}
+                                style={{ width: `${Math.max(card.pct, card.value > 0 ? 6 : 0)}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Row 3: Grounded 1-Line Caption */}
+                          <div className="space-y-1">
+                            <p className="text-[11px] text-slate-500 font-medium leading-snug">
+                              {card.caption}
+                            </p>
+                            <span
+                              className={`inline-block text-[10px] font-semibold transition-all duration-200 ${
+                                isActive
+                                  ? "text-[#c2410c] opacity-100"
+                                  : "text-slate-400 opacity-0 group-hover:opacity-100"
+                              }`}
+                            >
+                              {isActive ? "Filter aktif" : "Lihat daftar →"}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Bottom Institutional Footnote Strip */}
+                  <div className="px-4 sm:px-5 py-2.5 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span>
+                        Tingkat Penyelesaian:{" "}
+                        <strong className="font-mono tabular-nums text-emerald-700 font-bold">
+                          {pctResolved}%
+                        </strong>
+                      </span>
+                      <span className="text-slate-300">·</span>
+                      <span>
+                        Dasar Acuan: <strong className="text-slate-700 font-semibold">Pasal 44 ayat (2) UU No. 25/2009</strong>
+                      </span>
+                    </div>
+
+                    {statusFilter !== "ALL" ? (
+                      <button
+                        type="button"
+                        onClick={() => setStatusFilter("ALL")}
+                        className="text-[11px] font-bold text-[#c2410c] hover:underline cursor-pointer"
+                      >
+                        Tampilkan Semua ({counts.all})
+                      </button>
+                    ) : (
+                      <span className="text-[10.5px] text-slate-400">
+                        Klik salah satu metrik untuk menyaring tiket
+                      </span>
+                    )}
+                  </div>
                 </>
               );
             })()}
@@ -1020,8 +1097,8 @@ export default function OmbudsmanMonitorSection({
         </div>
 
         {/* Right: Distribusi Status Aduan Donut Card (4 cols lg, 3 cols xl) */}
-        <div className="lg:col-span-4 xl:col-span-3 rounded-[8px] bg-slate-100/70 p-2 sm:p-2.5 ring-1 ring-orange-200/50 flex flex-col">
-          <div className="bg-white rounded-[6px] p-3.5 sm:p-4 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] h-full flex flex-col justify-between items-center text-center">
+        <div className="lg:col-span-4 xl:col-span-3 rounded-[10px] bg-[#F2ECE4]/80 p-2 sm:p-2.5 ring-1 ring-[#E6DFD5] flex flex-col">
+          <div className="bg-white rounded-[8px] ring-1 ring-slate-200/60 p-3.5 sm:p-4 shadow-[0_2px_12px_-4px_rgba(28,25,23,0.05)] h-full flex flex-col justify-between items-center text-center">
             <StatusDistributionDonut
               counts={counts}
               activeFilter={statusFilter}

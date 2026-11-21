@@ -26,6 +26,10 @@
   --authority-daerah: #0d9488;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -34,6 +38,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.015em;
+  caret-color: var(--accent-orange-hover);
+}
+
+::selection {
+  background-color: rgba(234, 88, 12, 0.16);
+  color: #7c2d12;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(194, 65, 12, 0.55);
+  outline-offset: 2px;
 }
 
 h1, h2, h3, h4, .font-heading {
