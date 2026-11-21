@@ -51,6 +51,24 @@ function sanitizePlainText(val, maxLen = 500, fallback = "") {
   return cleaned ? cleaned.slice(0, maxLen) : fallback;
 }
 
+function maskReporterIdentity(rawName) {
+  const cleaned = sanitizePlainText(rawName, 80, "");
+  if (!cleaned) return "W*** (Warga Terverifikasi)";
+  if (cleaned.includes("***")) return cleaned;
+  const initial = cleaned.charAt(0).toUpperCase();
+  return `${initial}*** (Warga Terverifikasi)`;
+}
+
+function toPublicReportView(rep) {
+  if (!rep || typeof rep !== "object") return rep;
+  const { notificationContact, ...publicFields } = rep;
+  return {
+    ...publicFields,
+    reporterName: maskReporterIdentity(publicFields.reporterName),
+    hasNotificationContact: Boolean(notificationContact),
+  };
+}
+
 function sanitizeImageUrl(url, fallback = "/images/roads/jalan-lubang-medan.jpg") {
   if (!url || typeof url !== "string") return fallback;
   const trimmed = url.trim();
@@ -452,7 +470,7 @@ export async function GET(request) {
           authorityClassification: "UU No. 2 Tahun 2022 tentang Jalan & SK Penetapan Ruas",
         },
         notifications: (state.notifications || []).slice(0, 30),
-        data: paginatedReports,
+        data: paginatedReports.map(toPublicReportView),
       },
       {
         headers: {
@@ -604,11 +622,7 @@ export async function POST(request) {
         "Pemeriksaan awal foto mendeteksi indikasi kerusakan perkerasan jalan yang memerlukan verifikasi lapangan."
       ),
       photoUrl: sanitizeImageUrl(body.photoUrl, "/images/roads/jalan-lubang-medan.jpg"),
-      reporterName: sanitizePlainText(
-        body.reporterName,
-        80,
-        "W*** (Warga Terverifikasi)"
-      ),
+      reporterName: maskReporterIdentity(body.reporterName),
       notificationContact: sanitizePlainText(body.notificationContact, 120, ""),
       notifyOnUpdate: body.notifyOnUpdate !== false,
       reportDate: nowIso,
@@ -657,7 +671,7 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: true,
-        report: newReport,
+        report: toPublicReportView(newReport),
         notification: createdNotification,
         totalCustomReports: state.customReports.length,
         lastUpdatedAt: state.lastUpdatedAt,
@@ -858,7 +872,7 @@ export async function PATCH(request) {
 
     return NextResponse.json({
       success: true,
-      report: updatedReport,
+      report: toPublicReportView(updatedReport),
       notification: generatedNotification,
       lastUpdatedAt: state.lastUpdatedAt,
     });
