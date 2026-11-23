@@ -91,7 +91,8 @@ function processAndAuditPackage(road) {
     fiscalYear: b.fiscalYear || "2026",
     source: b.source,
     sourceDocument: b.sourceDocument || "DIPA / DPA Resmi TA 2026",
-    sourceUrl: b.sourceUrl || "https://lpse.pu.go.id",
+    sourceUrl: b.sourceUrl || road.officialSources?.transparencyUrl || "https://spse.inaproc.id/pu",
+    portalLabel: b.portalLabel || "Portal INAPROC LKPP",
     lastVerifiedAt: b.lastVerifiedAt || "2026-10-24",
     matchConfidence: b.matchConfidence || "TERKONFIRMASI",
     matchReason: b.matchReason || `Paket preservasi langsung terhubung dengan koridor ${road.name}.`,
@@ -153,7 +154,7 @@ export async function GET(request) {
 
     // 1. Coba koneksi upstream jika token/gateway disediakan di environment Vercel
     let liveGatewayStatus = "SIMULATED_VERIFIED";
-    let liveSyncMessage = "Menggunakan data yang telah diperiksa dari DIPA Kementerian PU & LPSE TA 2026.";
+    let liveSyncMessage = "Menampilkan dataset kurasi pilot (128 koridor). Siap sinkronisasi langsung saat token API INAPROC LKPP aktif.";
 
     const inaprocToken = process.env.INAPROC_API_TOKEN;
     const inaprocUrl = process.env.INAPROC_API_URL || "https://data.inaproc.id/portal";
@@ -259,13 +260,13 @@ export async function GET(request) {
           platform: "JagaJalan Civic Infrastructure Oversight",
           deploymentEnvironment: "Vercel Serverless Function",
           timestamp: new Date().toISOString(),
-          legalIntegrity: "100% Otentik (UU KIP No. 14/2008 & SK Menteri PUPR No. 1688/2022)",
+          legalIntegrity: "Model Kurasi Pilot Siap Integrasi INAPROC/LPSE (UU KIP No. 14/2008 & SK Menteri PUPR No. 1688/2022)",
           totalPackages: auditedPackages.length,
           gateway: {
             status: liveGatewayStatus,
             message: liveSyncMessage,
-            inaprocEndpoint: "https://data.inaproc.id/portal",
-            lpseEndpoint: "https://lpse.pu.go.id",
+            inaprocEndpoint: "https://sirup.inaproc.id",
+            lpseEndpoint: "https://spse.inaproc.id/pu",
             sigiEndpoint: "https://sigi.pu.go.id",
           },
         },

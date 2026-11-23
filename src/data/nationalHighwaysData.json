@@ -8,7 +8,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut, Sumsel, BPJN Aceh, Riau, Jambi, Lampung)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 2150.0,
+    "lengthKm": 2150,
     "pavementType": "Aspal Hotmix Heavy Duty AC-WC & Beton Rigid",
     "condition": "MANTAP",
     "district": "Lintas 6 Provinsi (Aceh - Sumut - Riau - Jambi - Sumsel - Lampung)",
@@ -36413,15 +36413,17 @@
       "progressPct": 68,
       "statusNote": "Pekerjaan preservasi rutin dan rekonstruksi rigid beton berjalan sesuai kurva S.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-PUPR-JALINTIM-2026",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Pelaksanaan No. 04/KTR/BBPJN-SUMATERA/2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-JALINTIM-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (Ruas Nasional Arteri Primer)",
       "budgetSource": "SiRUP LKPP & LPSE Kementerian PU (Pagu APBN TA 2026)",
       "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id) & Sensor IRI Balai PU",
-      "transparencyUrl": "https://sigi.pu.go.id/astv2/"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -36433,7 +36435,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumut, Sumbar, BPJN Jambi, BBPJN Sumsel)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 1840.0,
+    "lengthKm": 1840,
     "pavementType": "Aspal Hotmix AC-WC & DPT Pasangan Batu",
     "condition": "RUSAK_RINGAN",
     "district": "Lintas 5 Provinsi (Medan - Tarutung - Padang Sidempuan - Bukittinggi - Lubuk Linggau - Lahat)",
@@ -84806,15 +84808,17 @@
       "progressPct": 54,
       "statusNote": "Pemasangan dinding penahan tanah di titik lereng kritis 65% rampung.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA Petikan Ditjen Bina Marga TA 2026",
-      "lastVerifiedAt": "2026-10-23"
+      "lastVerifiedAt": "2026-10-23",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-JALINTENG-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian Pekerjaan Umum",
       "fieldDataSource": "Pusdatin SIGI PU & Balai Geoteknik Jalan KemenPU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -84826,7 +84830,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Aceh, BBPJN Sumut, BPJN Sumbar, BPJN Bengkulu, BPJN Lampung)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 2350.0,
+    "lengthKm": 2350,
     "pavementType": "Aspal Hotmix AC-WC & Talud Pemecah Gelombang",
     "condition": "MANTAP",
     "district": "Pesisir Samudra Hindia (Banda Aceh - Meulaboh - Sibolga - Padang - Bengkulu - Krui)",
@@ -91816,7 +91820,7 @@
         96.54304
       ],
       [
-        4.0,
+        4,
         96.54377
       ],
       [
@@ -153269,15 +153273,17 @@
       "progressPct": 72,
       "statusNote": "Pemasangan revetment di pesisir Krui dan Mukomuko mencapai target.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Kerja Preservasi Balai Wilayah Bengkulu-Lampung 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-JALINBAR-03) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -153289,7 +153295,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN DKI-Jabar, BBPJN Jateng-DIY, BBPJN Jatim-Bali)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 1316.0,
+    "lengthKm": 1316,
     "pavementType": "Beton Rigid Pavement Heavy Duty & AC-WC Tebal",
     "condition": "MANTAP",
     "district": "Lintas 5 Provinsi (Banten - DKI Jakarta - Jawa Barat - Jawa Tengah - Jawa Timur)",
@@ -165914,15 +165920,17 @@
       "progressPct": 78,
       "statusNote": "Peninggian struktur polder Kaligawe dan rigid beton KM 442 tuntas 82%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Penanganan Banjir Rob Kaligawe BBPJN Jateng No. 08/BBPJN-VII/2026",
-      "lastVerifiedAt": "2026-10-25"
+      "lastVerifiedAt": "2026-10-25",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-PANTURA-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (Arteri Primer Nasional)",
       "budgetSource": "LPSE & SiRUP Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -165934,7 +165942,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN DKI-Jabar, BBPJN Jateng-DIY, BBPJN Jatim)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 860.0,
+    "lengthKm": 860,
     "pavementType": "Aspal Hotmix AC-WC & Rigid Pavement",
     "condition": "MANTAP",
     "district": "Jakarta - Bandung - Purwokerto - Yogyakarta - Solo - Madiun - Surabaya",
@@ -180449,15 +180457,17 @@
       "progressPct": 85,
       "statusNote": "Overlay halus dan marka jalan 100% selesai di ruas Solo-Madiun.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Tahunan Preservasi Jalan Nasional BBPJN Jateng 2026",
-      "lastVerifiedAt": "2026-10-21"
+      "lastVerifiedAt": "2026-10-21",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-JATENGTENG-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -180469,7 +180479,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN DKI-Jabar, BBPJN Jateng-DIY, BBPJN Jatim)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 1540.0,
+    "lengthKm": 1540,
     "pavementType": "Aspal Hotmix AC-WC Desain Geometrik Modern",
     "condition": "MANTAP",
     "district": "Pesisir Selatan (Simpang Labuan - Pangandaran - Cilacap - Yogyakarta - Pacitan - Banyuwangi)",
@@ -180527,7 +180537,7 @@
         "name": "Cilacap - Kebumen",
         "coords": [
           -7.72,
-          109.0
+          109
         ],
         "status": "MANTAP",
         "note": "Jalur Pansela Jawa Tengah Baru"
@@ -222364,15 +222374,17 @@
       "progressPct": 91,
       "statusNote": "Segmen DIY dan Pacitan siap beroperasi penuh tahun ini.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA Proyek Strategis Nasional Pansela TA 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-PANSELA-03) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (PSN Jalan Pansela)",
       "budgetSource": "LPSE & SiRUP Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -222384,7 +222396,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Jawa Timur - Bali)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 142.0,
+    "lengthKm": 142,
     "pavementType": "Aspal Hotmix AC-WC & Trotoar Tematik",
     "condition": "MANTAP",
     "district": "Lintas Kabupaten Jembrana - Tabanan - Denpasar - Badung - Gianyar - Karangasem",
@@ -225865,15 +225877,17 @@
       "progressPct": 88,
       "statusNote": "Pekerjaan preservasi tuntas untuk menyambut agenda internasional pariwisata.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Kerja BBPJN Wilayah VIII 2026",
-      "lastVerifiedAt": "2026-10-25"
+      "lastVerifiedAt": "2026-10-25",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-BALI-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -225885,7 +225899,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Nusa Tenggara Barat)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 98.0,
+    "lengthKm": 98,
     "pavementType": "Aspal Hotmix AC-WC Standar Sirkuit & DPT",
     "condition": "MANTAP",
     "district": "Lintas Lombok Barat - Mataram - Lombok Timur - Sumbawa Besar - Dompu - Bima",
@@ -227554,15 +227568,17 @@
       "progressPct": 76,
       "statusNote": "Pekerjaan preservasi perkerasan jalan berjalan lancar sesuai target.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN NTB TA 2026",
-      "lastVerifiedAt": "2026-10-23"
+      "lastVerifiedAt": "2026-10-23",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-NTB-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -227574,7 +227590,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Nusa Tenggara Barat)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 415.0,
+    "lengthKm": 415,
     "pavementType": "Aspal Hotmix AC-WC Standar Sirkuit & DPT",
     "condition": "MANTAP",
     "district": "Lintas Lombok Barat - Mataram - Lombok Timur - Sumbawa Besar - Dompu - Bima",
@@ -227632,7 +227648,7 @@
         "name": "Pelabuhan Sape",
         "coords": [
           -8.57,
-          119.0
+          119
         ],
         "status": "MANTAP",
         "note": "Koneksi Penyeberangan NTB - Labuan Bajo NTT"
@@ -239561,15 +239577,17 @@
       "progressPct": 76,
       "statusNote": "Pekerjaan preservasi perkerasan jalan berjalan lancar sesuai target.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN NTB TA 2026",
-      "lastVerifiedAt": "2026-10-23"
+      "lastVerifiedAt": "2026-10-23",
+      "matchReason": "Pencocokan koridor jalan nasional (NAS-NTB-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -239581,7 +239599,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Nusa Tenggara Timur)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 675.0,
+    "lengthKm": 675,
     "pavementType": "Aspal Hotmix AC-WC & Pengaman Tebing Kawat Bronjong",
     "condition": "MANTAP",
     "district": "Lintas Flores (Manggarai Barat - Ende - Maumere) & Timor (Kupang - Belu - PLBN Motaain)",
@@ -275292,15 +275310,17 @@
       "progressPct": 69,
       "statusNote": "Pemasangan bronjong penahan lereng di Bajawa mencapai 75%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN NTT Kementerian PU 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-NTT-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -275312,7 +275332,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Nusa Tenggara Timur)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 310.0,
+    "lengthKm": 310,
     "pavementType": "Aspal Hotmix AC-WC & Pengaman Tebing Kawat Bronjong",
     "condition": "MANTAP",
     "district": "Lintas Flores (Manggarai Barat - Ende - Maumere) & Timor (Kupang - Belu - PLBN Motaain)",
@@ -285875,15 +285895,17 @@
       "progressPct": 69,
       "statusNote": "Pemasangan bronjong penahan lereng di Bajawa mencapai 75%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN NTT Kementerian PU 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (NAS-NTT-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -285895,7 +285917,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Kalbar, BPJN Kalteng, BBPJN Kalsel)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 1180.0,
+    "lengthKm": 1180,
     "pavementType": "Aspal Hotmix Geotekstil & Jembatan Baja Bentang Panjang",
     "condition": "RUSAK_RINGAN",
     "district": "Lintas 3 Provinsi (Kalbar - Kalteng - Kalsel)",
@@ -314286,15 +314308,17 @@
       "progressPct": 62,
       "statusNote": "Pemasangan geotekstil pada segmen Sampit - Kasongan mencapai 65%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Kalteng TA 2026",
-      "lastVerifiedAt": "2026-10-23"
+      "lastVerifiedAt": "2026-10-23",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSKAL-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -314306,7 +314330,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Kalsel & BBPJN Kaltim)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 1510.0,
+    "lengthKm": 1510,
     "pavementType": "Beton Rigid Mutu Tinggi & Aspal SMA Modifikasi Polimer",
     "condition": "MANTAP",
     "district": "Lintas Kalsel - Kaltim (Banjarmasin - Penajam - Balikpapan - Sepaku/IKN - Samarinda - Berau)",
@@ -314344,7 +314368,7 @@
         "name": "Batu Licin (Tanah Bumbu)",
         "coords": [
           -3.45,
-          116.0
+          116
         ],
         "status": "MANTAP",
         "note": "Pelabuhan Feri Menuju Pulau Laut"
@@ -359111,15 +359135,17 @@
       "progressPct": 94,
       "statusNote": "Arteri lingkar Sepaku dan Jembatan Pulau Balang beroperasi mulus.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA Alokasi Pembangunan IKN Nusantara TA 2026",
-      "lastVerifiedAt": "2026-10-25"
+      "lastVerifiedAt": "2026-10-25",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSKAL-IKN-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022 (Kawasan Strategis Nasional IKN)",
       "budgetSource": "LPSE & SiRUP Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -359131,7 +359157,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sulsel, BPJN Sulbar, BPJN Sulteng)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 985.0,
+    "lengthKm": 985,
     "pavementType": "Aspal Hotmix AC-WC & Dinding Penahan Tebing Laut",
     "condition": "MANTAP",
     "district": "Lintas 3 Provinsi (Sulsel - Sulbar - Sulteng)",
@@ -379594,15 +379620,17 @@
       "progressPct": 79,
       "statusNote": "Rekonstruksi dinding pelindung pantai Majene dan aspal tuntas 80%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Wilayah Sulawesi 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSSUL-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -379614,7 +379642,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Sulteng, BPJN Gorontalo, BPJN Sulut)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 1060.0,
+    "lengthKm": 1060,
     "pavementType": "Aspal Hotmix AC-WC & Jalan Tol Manado-Bitung",
     "condition": "MANTAP",
     "district": "Lintas Sulteng - Gorontalo - Sulut",
@@ -410041,15 +410069,17 @@
       "progressPct": 83,
       "statusNote": "Pekerjaan preservasi ruas Amurang - Manado selesai 88%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Sulut TA 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSSUL-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -410061,7 +410091,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Papua & BPJN Papua Pegunungan)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 585.0,
+    "lengthKm": 585,
     "pavementType": "Aspal Hotmix Pengikat Polimer & Jembatan Baja Gantung",
     "condition": "RUSAK_BERAT",
     "district": "Lintas Prov. Papua & Papua Pegunungan (Jayapura - Keerom - Yalimo - Wamena)",
@@ -415919,7 +415949,7 @@
         140.00774
       ],
       [
-        -3.0,
+        -3,
         140.00727
       ],
       [
@@ -434136,15 +434166,17 @@
       "progressPct": 58,
       "statusNote": "Pembersihan material longsoran dan pengecoran slab beton jalan terus dipacu.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA Khusus Percepatan Pembangunan Infrastruktur Papua 2026",
-      "lastVerifiedAt": "2026-10-25"
+      "lastVerifiedAt": "2026-10-25",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSPAP-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "Inpres Percepatan Pembangunan Kesejahteraan Papua & SK Menteri PUPR No. 1688/2022",
       "budgetSource": "LPSE & SiRUP Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU (sigi.pu.go.id)",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -434156,7 +434188,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Papua Selatan)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 445.0,
+    "lengthKm": 445,
     "pavementType": "Aspal Hotmix AC-WC & Jembatan Rangka Baja Kali Digoel",
     "condition": "MANTAP",
     "district": "Provinsi Papua Selatan (Merauke - Sota PLBN - Muting - Tanah Merah Boven Digoel)",
@@ -435037,7 +435069,7 @@
       ],
       [
         -8.00454,
-        141.0
+        141
       ],
       [
         -8.00188,
@@ -441113,15 +441145,17 @@
       "progressPct": 86,
       "statusNote": "Pekerjaan preservasi rutin berjalan tepat waktu.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Kerja BPJN Papua Selatan 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSPAP-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -441133,7 +441167,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sumatera Utara)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 (KSPN Danau Toba)",
-    "lengthKm": 148.0,
+    "lengthKm": 148,
     "pavementType": "Aspal Hotmix AC-WC Modifikasi & DPT Beton",
     "condition": "RUSAK_RINGAN",
     "district": "Kota Medan - Deli Serdang - Karo - Simalungun (Danau Toba)",
@@ -446486,15 +446520,17 @@
       "progressPct": 74,
       "statusNote": "Konstruksi cantilever pengaman tebing Sibolangit mencapai 78%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA DPSP Danau Toba KemenPU 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TOBA-04) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -446506,13 +446542,13 @@
     "authority": "NASIONAL",
     "authorityLabel": "Jalan Nasional (APBN / Ditjen Bina Marga)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional Koridor Perbatasan Kalbar",
-    "lengthKm": 685.0,
+    "lengthKm": 685,
     "pavementType": "Aspal Hotmix & Perkerasan Beton (Rigid Pavement)",
     "condition": "MANTAP",
     "district": "Kab. Sambas - Bengkayang - Sanggau - Sintang - Kapuas Hulu (Kalbar)",
     "center": [
       1.15,
-      111.0
+      111
     ],
     "startPoint": {
       "name": "Simpang Ampar / Jembatan Tayan (Kalbar)",
@@ -449916,7 +449952,7 @@
         111.01932
       ],
       [
-        1e-05,
+        0.00001,
         111.0263
       ],
       [
@@ -450036,7 +450072,7 @@
         111.10477
       ],
       [
-        2e-05,
+        0.00002,
         111.10538
       ],
       [
@@ -450056,7 +450092,7 @@
         111.12303
       ],
       [
-        7e-05,
+        0.00007,
         111.12427
       ],
       [
@@ -450420,7 +450456,7 @@
         111.24648
       ],
       [
-        5e-05,
+        0.00005,
         111.25111
       ],
       [
@@ -471105,7 +471141,13 @@
       "contractor": "PT Wijaya Karya (Persero) Tbk - KSO",
       "source": "APBN Kementerian PU (Preservasi Koridor Perbatasan)",
       "fiscalYear": 2026,
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-APBN-RUASNASKAL03",
+      "sourceDocument": "DIPA Ditjen Bina Marga Kementerian PU TA 2026",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-KALBAR-03) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "sourceUrl": "https://spse.inaproc.id/pu",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": [
       "Ditjen Bina Marga Kementerian PUPR - Satker PJN Kalbar",
@@ -471122,13 +471164,13 @@
     "authority": "NASIONAL",
     "authorityLabel": "Jalan Nasional (APBN / Ditjen Bina Marga)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional Koridor Perbatasan Kaltara",
-    "lengthKm": 530.0,
+    "lengthKm": 530,
     "pavementType": "Aspal Hotmix AC-WC & Beton Perkerasan",
     "condition": "MANTAP",
     "district": "Kab. Bulungan - Malinau - Nunukan (Kalimantan Utara)",
     "center": [
       3.5,
-      117.0
+      117
     ],
     "startPoint": {
       "name": "Kota Tanjung Selor (Ibu Kota Kaltara)",
@@ -488943,7 +488985,13 @@
       "contractor": "PT Hutama Karya (Persero) Tbk",
       "source": "APBN Kementerian PU (Konektivitas Wilayah Perbatasan 3T)",
       "fiscalYear": 2026,
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-APBN-RUASNASKALTARA01",
+      "sourceDocument": "DIPA Ditjen Bina Marga Kementerian PU TA 2026",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-KALTARA-04) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "sourceUrl": "https://spse.inaproc.id/pu",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": [
       "Ditjen Bina Marga Kementerian PUPR - Satker PJN Kaltara",
@@ -488960,13 +489008,13 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BBPJN Sulsel & BPJN Sultra)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 495.0,
+    "lengthKm": 495,
     "pavementType": "Aspal Hotmix AC-WC & Penyeberangan Feri Teluk Bone",
     "condition": "MANTAP",
     "district": "Lintas Sulsel - Sultra (Makassar - Maros - Bone - Kolaka - Kendari)",
     "center": [
       -4.5,
-      121.0
+      121
     ],
     "startPoint": {
       "name": "Makassar (Simpang Lima Mandai)",
@@ -513880,7 +513928,7 @@
         121.83115
       ],
       [
-        -4.0,
+        -4,
         121.8314
       ],
       [
@@ -517121,15 +517169,17 @@
       "progressPct": 86,
       "statusNote": "Pekerjaan marka reflektif dan perbaikan bahu tuntas.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Sultra TA 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSSUL-03) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -517141,7 +517191,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Maluku)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 475.0,
+    "lengthKm": 475,
     "pavementType": "Aspal Hotmix AC-WC & Jembatan Merah Putih Ambon",
     "condition": "MANTAP",
     "district": "Kota Ambon - Maluku Tengah - Seram Bagian Barat - Seram Bagian Timur (Bula)",
@@ -530746,15 +530796,17 @@
       "progressPct": 87,
       "statusNote": "Pemeliharaan rutin perkerasan jalan tuntas.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Maluku 2026",
-      "lastVerifiedAt": "2026-10-23"
+      "lastVerifiedAt": "2026-10-23",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-SERAM-01) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -530766,7 +530818,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Maluku)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 42.0,
+    "lengthKm": 42,
     "pavementType": "Aspal Hotmix AC-WC & Jembatan Merah Putih Ambon",
     "condition": "MANTAP",
     "district": "Kota Ambon - Maluku Tengah - Seram Bagian Barat - Seram Bagian Timur (Bula)",
@@ -531937,15 +531989,17 @@
       "progressPct": 87,
       "statusNote": "Pemeliharaan rutin perkerasan jalan tuntas.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Maluku 2026",
-      "lastVerifiedAt": "2026-10-23"
+      "lastVerifiedAt": "2026-10-23",
+      "matchReason": "Pencocokan koridor jalan nasional (NAS-MAL-02) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -531957,7 +532011,7 @@
     "authority": "NASIONAL",
     "authorityLabel": "Kementerian Pekerjaan Umum (BPJN Papua Barat & BPJN Papua Barat Daya)",
     "legalBasis": "SK Menteri PUPR No. 1688/KPTS/M/2022 tentang Penetapan Status Ruas Jalan Nasional",
-    "lengthKm": 560.0,
+    "lengthKm": 560,
     "pavementType": "Aspal Hotmix AC-WC & Jembatan Beton Bertulang",
     "condition": "MANTAP",
     "district": "Prov. Papua Barat Daya & Papua Barat (Kota Sorong - Aimas - Maybrat - Teluk Bintuni - Manokwari)",
@@ -564070,15 +564124,17 @@
       "progressPct": 81,
       "statusNote": "Pengecoran jembatan gelagar beton selesai 100%.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BPJN Papua Barat TA 2026",
-      "lastVerifiedAt": "2026-10-24"
+      "lastVerifiedAt": "2026-10-24",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-TRANSPAPBART-03) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 1688/KPTS/M/2022",
       "budgetSource": "LPSE Kementerian PU",
       "fieldDataSource": "Pusdatin SIGI PU",
-      "transparencyUrl": "https://sigi.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -564104,11 +564160,11 @@
         116.08542
       ]
     },
-    "lengthKm": 345.0,
+    "lengthKm": 345,
     "condition": "MANTAP",
     "conditionBreakdown": {
       "mantapPct": 88.5,
-      "rusakRinganPct": 8.0,
+      "rusakRinganPct": 8,
       "rusakBeratPct": 3.5
     },
     "hazardScore": 48,
@@ -564119,7 +564175,13 @@
       "source": "APBN Kementerian PU - SBSN Trans Kalimantan TA 2026",
       "fiscalYear": 2026,
       "contractor": "PT Wijaya Karya (Persero) Tbk",
-      "packageName": "Preservasi Jalan Nasional Lintas Tengah Kalsel (Martapura - Rantau - Kandangan - Tanjung - Batas Kaltim)"
+      "packageName": "Preservasi Jalan Nasional Lintas Tengah Kalsel (Martapura - Rantau - Kandangan - Tanjung - Batas Kaltim)",
+      "packageId": "PKG-APBN-RUASNASKAL04",
+      "sourceDocument": "DIPA Ditjen Bina Marga Kementerian PU TA 2026",
+      "matchReason": "Pencocokan koridor jalan nasional (NAS-KAL-04) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "sourceUrl": "https://spse.inaproc.id/pu",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "leadership": {
       "agency": "BBPJN Kalimantan Selatan (Ditjen Bina Marga Kementerian PU)",
@@ -571903,7 +571965,13 @@
         -1.79147,
         116.08542
       ]
-    ]
+    ],
+    "officialSources": {
+      "authoritySource": "Kepmen PUPR No. 430/KPTS/M/2022 tentang Penetapan Ruas Jalan Menurut Statusnya Sebagai Jalan Nasional",
+      "budgetSource": "SPSE Kementerian PU (INAPROC) (Data Kurasi Pilot)",
+      "fieldDataSource": "Pemetaan Koridor Geospasial JagaJalan",
+      "transparencyUrl": "https://spse.inaproc.id/pu"
+    }
   },
   {
     "id": "ruas-nas-kal-05",
@@ -571928,12 +571996,12 @@
         110.35602
       ]
     },
-    "lengthKm": 520.0,
+    "lengthKm": 520,
     "condition": "MANTAP",
     "conditionBreakdown": {
       "mantapPct": 89.2,
       "rusakRinganPct": 7.8,
-      "rusakBeratPct": 3.0
+      "rusakBeratPct": 3
     },
     "hazardScore": 44,
     "hazardLevel": "SEDANG",
@@ -571943,7 +572011,13 @@
       "source": "APBN Kementerian PU - SBSN Jalan Nasional Kalbar TA 2026",
       "fiscalYear": 2026,
       "contractor": "PT Hutama Karya (Persero)",
-      "packageName": "Preservasi Jalan Nasional Lintas Pantai Barat & Akses PLBN Entikong"
+      "packageName": "Preservasi Jalan Nasional Lintas Pantai Barat & Akses PLBN Entikong",
+      "packageId": "PKG-APBN-RUASNASKAL05",
+      "sourceDocument": "DIPA Ditjen Bina Marga Kementerian PU TA 2026",
+      "matchReason": "Pencocokan koridor jalan nasional (NAS-KAL-05) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "sourceUrl": "https://spse.inaproc.id/pu",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "leadership": {
       "agency": "BPJN Kalimantan Barat (Ditjen Bina Marga Kementerian PU)",
@@ -572126,7 +572200,7 @@
         109.32824
       ],
       [
-        -4e-05,
+        -0.00004,
         109.32348
       ],
       [
@@ -584213,6 +584287,12 @@
         0.95525,
         110.35602
       ]
-    ]
+    ],
+    "officialSources": {
+      "authoritySource": "Kepmen PUPR No. 430/KPTS/M/2022 tentang Penetapan Ruas Jalan Menurut Statusnya Sebagai Jalan Nasional",
+      "budgetSource": "SPSE Kementerian PU (INAPROC) (Data Kurasi Pilot)",
+      "fieldDataSource": "Pemetaan Koridor Geospasial JagaJalan",
+      "transparencyUrl": "https://spse.inaproc.id/pu"
+    }
   }
 ]

@@ -39,13 +39,19 @@
       "fiscalYear": 2026,
       "progressPct": 45,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABSU03",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Deli Serdang (Sumatera Utara) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Lubuk Pakam - Pantai Labu (Akses Pesisir & Bandara) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Deli Serdang No. 412/2022",
       "budgetSource": "LPSE Kabupaten Deli Serdang & SiRUP LKPP",
       "fieldDataSource": "Dinas SDABMBK Kabupaten Deli Serdang",
-      "transparencyUrl": "https://lpse.deliserdangkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -2490,12 +2496,7 @@
     "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
     "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kabupaten Deli Serdang TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
-    }
+    "fundingSourceLabel": "APBD Kabupaten Deli Serdang TA 2026"
   },
   {
     "id": "ruas-kab-su-04",
@@ -2537,13 +2538,19 @@
       "fiscalYear": 2026,
       "progressPct": 32,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABSU04",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Simalungun (Sumatera Utara) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Perdagangan - Bandar Betsy (Sentra Perkebunan) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Simalungun No. 188.45/489/PUPR/2021",
       "budgetSource": "LPSE Kab. Simalungun & BPKAD Simalungun",
       "fieldDataSource": "Dinas PUTR Kabupaten Simalungun",
-      "transparencyUrl": "https://lpse.simalungunkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -3424,12 +3431,7 @@
     "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
     "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "Dana Bagi Hasil (DBH) Sawit & APBD Simalungun",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
-    }
+    "fundingSourceLabel": "Dana Bagi Hasil (DBH) Sawit & APBD Simalungun"
   },
   {
     "id": "ruas-kab-riau-01",
@@ -3452,7 +3454,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Pekanbaru",
+      "regionalHead": "Wali Kota Pekanbaru",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Pekanbaru",
       "picName": "Edward Riansyah, S.T., M.T."
     },
@@ -3471,13 +3473,19 @@
       "fiscalYear": 2026,
       "progressPct": 75,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABRIAU01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Pekanbaru (Riau) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Arifin Achmad - Tuanku Tambusai (Sentra Niaga) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Pekanbaru No. 176/2023",
       "budgetSource": "LPSE Kota Pekanbaru",
       "fieldDataSource": "Dinas PUPR Kota Pekanbaru",
-      "transparencyUrl": "https://lpse.pekanbaru.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -4950,12 +4958,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Pekanbaru TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Pekanbaru TA 2026"
   },
   {
     "id": "ruas-kab-sumbar-01",
@@ -4978,7 +4981,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Padang",
+      "regionalHead": "Wali Kota Padang",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Padang",
       "picName": "Tri Hadiyanto, S.T., M.Sc."
     },
@@ -4997,13 +5000,19 @@
       "fiscalYear": 2026,
       "progressPct": 88,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABSUMBAR01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Padang (Sumatera Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Bagindo Aziz Chan - Aie Pacah (Balai Kota Padang) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Perwako Padang No. 34/2021",
       "budgetSource": "LPSE Kota Padang",
       "fieldDataSource": "Dinas PUPR Kota Padang",
-      "transparencyUrl": "https://lpse.padang.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -7488,12 +7497,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Padang TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Padang TA 2026"
   },
   {
     "id": "ruas-kab-sumsel-01",
@@ -7516,7 +7520,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Palembang",
+      "regionalHead": "Wali Kota Palembang",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Palembang",
       "picName": "Ir. H. Akhmad Bastari, S.T., M.T."
     },
@@ -7535,13 +7539,19 @@
       "fiscalYear": 2026,
       "progressPct": 60,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABSUMSEL01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Palembang (Sumatera Selatan) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. R. Sukamto - Basuki Rahmat (Urat Nadi Niaga) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Palembang No. 210/2022",
       "budgetSource": "LPSE Kota Palembang",
       "fieldDataSource": "Dinas PUPR Kota Palembang",
-      "transparencyUrl": "https://lpse.palembang.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -9402,12 +9412,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Palembang TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Palembang TA 2026"
   },
   {
     "id": "ruas-kab-kepri-01",
@@ -9430,7 +9435,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Batam / Kepala BP Batam",
+      "regionalHead": "Wali Kota Batam / Kepala BP Batam",
       "agency": "Dinas Bina Marga dan Sumber Daya Air Kota Batam",
       "picName": "Dr. Ir. Yumasnur, M.T."
     },
@@ -9449,13 +9454,19 @@
       "fiscalYear": 2026,
       "progressPct": 90,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABKEPRI01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Batam (Kepulauan Riau) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Engku Putri - Batam Center (Pusat Pemerintahan & Feri) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Batam No. KPTS.148/2022",
       "budgetSource": "LPSE Kota Batam & BP Batam",
       "fieldDataSource": "Dinas BMSDA Kota Batam",
-      "transparencyUrl": "https://lpse.batam.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -11416,12 +11427,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Batam & PNBP BP Batam",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Batam & PNBP BP Batam"
   },
   {
     "id": "ruas-kab-lampung-01",
@@ -11444,7 +11450,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Bandar Lampung",
+      "regionalHead": "Wali Kota Bandar Lampung",
       "agency": "Dinas Bina Marga dan Bina Konstruksi Kota Bandar Lampung",
       "picName": "Iwan Gunawan, S.T., M.T."
     },
@@ -11463,13 +11469,19 @@
       "fiscalYear": 2026,
       "progressPct": 65,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABLAMPUNG01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Bandar Lampung (Lampung) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Raden Intan - Tanjung Karang Pusat terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Perwako Bandar Lampung No. 12/2021",
       "budgetSource": "LPSE Kota Bandar Lampung",
       "fieldDataSource": "Dinas BMBK Kota Bandar Lampung",
-      "transparencyUrl": "https://lpse.bandarlampungkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -12634,12 +12646,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Bandar Lampung TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Bandar Lampung TA 2026"
   },
   {
     "id": "ruas-kab-dki-01",
@@ -12662,7 +12669,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Jakarta Selatan / Pj. Gubernur DKI",
+      "regionalHead": "Wali Kota Jakarta Selatan & Gubernur DKI Jakarta",
       "agency": "Suku Dinas Bina Marga Jakarta Selatan",
       "picName": "Heri Darmawan, S.T."
     },
@@ -12681,13 +12688,19 @@
       "fiscalYear": 2026,
       "progressPct": 92,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABDKI01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Jakarta Selatan (DKI Jakarta) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Prof. Dr. Satrio - Casablanca (Koridor Non-Tol) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Kepgub DKI No. 1290/2021",
       "budgetSource": "LPSE DKI Jakarta",
       "fieldDataSource": "Sudin Bina Marga Kota Adm. Jakarta Selatan",
-      "transparencyUrl": "https://lpse.jakarta.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -14424,12 +14437,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Provinsi DKI Jakarta TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Provinsi DKI Jakarta TA 2026"
   },
   {
     "id": "ruas-kab-jabar-01",
@@ -14452,7 +14460,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Bandung",
+      "regionalHead": "Wali Kota Bandung",
       "agency": "Dinas Sumber Daya Air dan Bina Marga (DSDABM) Kota Bandung",
       "picName": "Didi Ruswandi, M.T."
     },
@@ -14471,13 +14479,19 @@
       "fiscalYear": 2026,
       "progressPct": 85,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJABAR01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Bandung (Jawa Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Ir. H. Djuanda (Dago) - Simpang Dago (Ikon Kota) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Bandung No. 620/2021",
       "budgetSource": "LPSE Kota Bandung",
       "fieldDataSource": "DSDABM Kota Bandung",
-      "transparencyUrl": "https://lpse.bandung.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -16046,12 +16060,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Bandung TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Bandung TA 2026"
   },
   {
     "id": "ruas-kab-jabar-02",
@@ -16074,7 +16083,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Depok",
+      "regionalHead": "Wali Kota Depok",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Depok",
       "picName": "Citra Indah Yulianty, S.T., M.H."
     },
@@ -16093,13 +16102,19 @@
       "fiscalYear": 2026,
       "progressPct": 70,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJABAR02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Depok (Jawa Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Margonda Raya - Juanda (Urat Nadi Kota Depok) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Perwako Depok No. 58/2021",
       "budgetSource": "LPSE Kota Depok",
       "fieldDataSource": "Dinas PUPR Kota Depok",
-      "transparencyUrl": "https://lpse.depok.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -18740,12 +18755,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Depok TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Depok TA 2026"
   },
   {
     "id": "ruas-kab-jabar-03",
@@ -18768,7 +18778,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Bekasi",
+      "regionalHead": "Wali Kota Bekasi",
       "agency": "Dinas Bina Marga dan Sumber Daya Air (DBMSDA) Kota Bekasi",
       "picName": "H. Solihin, S.T., M.Si."
     },
@@ -18787,13 +18797,19 @@
       "fiscalYear": 2026,
       "progressPct": 62,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJABAR03",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Bekasi (Jawa Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. KH Noer Ali (Kalimalang Kota Bekasi) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Bekasi No. 620/2022",
       "budgetSource": "LPSE Kota Bekasi",
       "fieldDataSource": "DBMSDA Kota Bekasi",
-      "transparencyUrl": "https://lpse.bekasikota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -21354,12 +21370,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "Bantuan Keuangan Provinsi DKI & APBD Kota Bekasi",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "Bantuan Keuangan Provinsi DKI & APBD Kota Bekasi"
   },
   {
     "id": "ruas-kab-jabar-04",
@@ -21382,7 +21393,7 @@
     "hazardLevel": "TINGGI",
     "activeReportsCount": 1,
     "leadership": {
-      "regionalHead": "Pj. Bupati Bogor",
+      "regionalHead": "Bupati Bogor",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kabupaten Bogor",
       "picName": "Iwan Irawan, S.T., M.M."
     },
@@ -21401,13 +21412,19 @@
       "fiscalYear": 2026,
       "progressPct": 40,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABJABAR04",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Bogor (Jawa Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Cibinong - Bojonggede (Akses Stasiun KRL) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Bogor No. 620/2021",
       "budgetSource": "LPSE Kabupaten Bogor",
       "fieldDataSource": "Dinas PUPR Kabupaten Bogor",
-      "transparencyUrl": "https://lpse.bogorkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -23472,12 +23489,7 @@
     "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
     "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kabupaten Bogor TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
-    }
+    "fundingSourceLabel": "APBD Kabupaten Bogor TA 2026"
   },
   {
     "id": "ruas-kab-jateng-01",
@@ -23500,7 +23512,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Semarang",
+      "regionalHead": "Wali Kota Semarang",
       "agency": "Dinas Pekerjaan Umum Kota Semarang",
       "picName": "Ir. Suwarto, M.T."
     },
@@ -23519,13 +23531,19 @@
       "fiscalYear": 2026,
       "progressPct": 95,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJATENG01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Semarang (Jawa Tengah) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Pandanaran - Simpang Lima (Pusat Kota) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Semarang No. 620/847/2022",
       "budgetSource": "LPSE Kota Semarang",
       "fieldDataSource": "Dinas PU Kota Semarang",
-      "transparencyUrl": "https://lpse.semarangkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -24706,12 +24724,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Semarang TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Semarang TA 2026"
   },
   {
     "id": "ruas-kab-jateng-02",
@@ -24734,7 +24747,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Surakarta",
+      "regionalHead": "Wali Kota Surakarta",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Surakarta",
       "picName": "Ir. Nur Basuki, M.T."
     },
@@ -24753,13 +24766,19 @@
       "fiscalYear": 2026,
       "progressPct": 92,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJATENG02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Surakarta / Solo (Jawa Tengah) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Slamet Riyadi - Gladag (Arteri Kota Surakarta) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Surakarta No. 620/22/2021",
       "budgetSource": "LPSE Kota Surakarta",
       "fieldDataSource": "DPUPR Kota Surakarta",
-      "transparencyUrl": "https://lpse.surakarta.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -25656,12 +25675,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Surakarta TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Surakarta TA 2026"
   },
   {
     "id": "ruas-kab-diy-01",
@@ -25684,7 +25698,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Yogyakarta",
+      "regionalHead": "Wali Kota Yogyakarta",
       "agency": "Dinas Pekerjaan Umum Perumahan dan Kawasan Permukiman Kota Yogyakarta",
       "picName": "Ir. Umi Akhsanti, M.T."
     },
@@ -25703,13 +25717,19 @@
       "fiscalYear": 2026,
       "progressPct": 98,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABDIY01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Yogyakarta (DI Yogyakarta) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Malioboro - Margo Utomo (Sumbu Filosofi) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Perwako Yogyakarta No. 42/2022",
       "budgetSource": "LPSE Kota Yogyakarta",
       "fieldDataSource": "DPUPKP Kota Yogyakarta",
-      "transparencyUrl": "https://lpse.jogjakota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -26822,12 +26842,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "Dana Keistimewaan (Danais) DIY & APBD Kota",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "Dana Keistimewaan (Danais) DIY & APBD Kota"
   },
   {
     "id": "ruas-kab-jatim-01",
@@ -26850,7 +26865,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Surabaya",
+      "regionalHead": "Wali Kota Surabaya",
       "agency": "Dinas Sumber Daya Air dan Bina Marga (DSDABM) Kota Surabaya",
       "picName": "Lilik Arijanto, S.T., M.T."
     },
@@ -26869,13 +26884,19 @@
       "fiscalYear": 2026,
       "progressPct": 88,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJATIM01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Surabaya (Jawa Timur) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Raya Darmo - Wonokromo (Urat Nadi Kota Surabaya) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Surabaya No. 188.45/219/2022",
       "budgetSource": "LPSE Kota Surabaya",
       "fieldDataSource": "DSDABM Kota Surabaya",
-      "transparencyUrl": "https://lpse.surabaya.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -28108,12 +28129,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Surabaya TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Surabaya TA 2026"
   },
   {
     "id": "ruas-kab-jatim-02",
@@ -28136,7 +28152,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Malang",
+      "regionalHead": "Wali Kota Malang",
       "agency": "Dinas Pekerjaan Umum, Penataan Ruang, Perumahan dan Kawasan Permukiman Kota Malang",
       "picName": "Dandung Djulharjanto, S.T., M.T."
     },
@@ -28155,13 +28171,19 @@
       "fiscalYear": 2026,
       "progressPct": 92,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABJATIM02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Malang (Jawa Timur) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Ijen - Alun-Alun Tugu (Kawasan Bersejarah) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Malang No. 188.45/144/2021",
       "budgetSource": "LPSE Kota Malang",
       "fieldDataSource": "DPUPRPKP Kota Malang",
-      "transparencyUrl": "https://lpse.malangkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -29734,12 +29756,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Malang TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Malang TA 2026"
   },
   {
     "id": "ruas-kab-bali-01",
@@ -29762,7 +29779,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Denpasar",
+      "regionalHead": "Wali Kota Denpasar",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Denpasar",
       "picName": "Ir. Anak Agung Ngurah Bagus Airawata, M.T."
     },
@@ -29781,13 +29798,19 @@
       "fiscalYear": 2026,
       "progressPct": 70,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABBALI01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Denpasar (Bali) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Teuku Umar - Simpang Enam (Sentra Digital & Niaga) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Denpasar No. 188.45/2022",
       "budgetSource": "LPSE Kota Denpasar",
       "fieldDataSource": "Dinas PUPR Kota Denpasar",
-      "transparencyUrl": "https://lpse.denpasarkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -31248,12 +31271,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Denpasar TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Denpasar TA 2026"
   },
   {
     "id": "ruas-kab-bali-02",
@@ -31295,13 +31313,19 @@
       "fiscalYear": 2026,
       "progressPct": 85,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABBALI02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Badung (Bali) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Kuta - Legian - Seminyak (Jl. Sunset Road Barat) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Badung No. 712/2021",
       "budgetSource": "LPSE Kabupaten Badung",
       "fieldDataSource": "Dinas PUPR Kabupaten Badung",
-      "transparencyUrl": "https://lpse.badungkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -33254,12 +33278,7 @@
     "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
     "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "Pendapatan Asli Daerah (PAD) PHR Kabupaten Badung",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
-    }
+    "fundingSourceLabel": "Pendapatan Asli Daerah (PAD) PHR Kabupaten Badung"
   },
   {
     "id": "ruas-kab-ntb-01",
@@ -33282,7 +33301,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Mataram",
+      "regionalHead": "Wali Kota Mataram",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Mataram",
       "picName": "Lale Widiahning, S.T., M.Eng."
     },
@@ -33301,13 +33320,19 @@
       "fiscalYear": 2026,
       "progressPct": 68,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABNTB01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Mataram (Nusa Tenggara Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Pejanggik - Simpang Cakranegara (Pusat Niaga) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Mataram No. 248/2022",
       "budgetSource": "LPSE Kota Mataram",
       "fieldDataSource": "Dinas PUPR Kota Mataram",
-      "transparencyUrl": "https://lpse.mataramkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -34360,12 +34385,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Mataram TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Mataram TA 2026"
   },
   {
     "id": "ruas-kab-kaltim-01",
@@ -34388,7 +34408,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Balikpapan",
+      "regionalHead": "Wali Kota Balikpapan",
       "agency": "Dinas Pekerjaan Umum Kota Balikpapan",
       "picName": "Rita, S.T., M.Si."
     },
@@ -34407,13 +34427,19 @@
       "fiscalYear": 2026,
       "progressPct": 85,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABKALTIM01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Balikpapan (Kalimantan Timur) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Jenderal Sudirman - Klandasan (Pesisir Minyak) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Balikpapan No. 188.45-312/2021",
       "budgetSource": "LPSE Kota Balikpapan",
       "fieldDataSource": "Dinas PU Kota Balikpapan",
-      "transparencyUrl": "https://lpse.balikpapan.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -36166,12 +36192,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Balikpapan TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Balikpapan TA 2026"
   },
   {
     "id": "ruas-kab-kaltim-02",
@@ -36194,7 +36215,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Samarinda",
+      "regionalHead": "Wali Kota Samarinda",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Samarinda",
       "picName": "Desy Damayanti, S.T., M.T."
     },
@@ -36213,13 +36234,19 @@
       "fiscalYear": 2026,
       "progressPct": 65,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABKALTIM02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Samarinda (Kalimantan Timur) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Pangeran Antasari - Juanda (Pusat Kota Tepian) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Samarinda No. 620/124/2022",
       "budgetSource": "LPSE Kota Samarinda",
       "fieldDataSource": "Dinas PUPR Kota Samarinda",
-      "transparencyUrl": "https://lpse.samarindakota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -37904,12 +37931,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Samarinda TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Samarinda TA 2026"
   },
   {
     "id": "ruas-kab-kaltim-03",
@@ -37932,7 +37954,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Bupati Penajam Paser Utara",
+      "regionalHead": "Bupati Penajam Paser Utara",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kab. PPU",
       "picName": "Rivin Mulawarman, S.T."
     },
@@ -37951,13 +37973,19 @@
       "fiscalYear": 2026,
       "progressPct": 78,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABKALTIM03",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Penajam Paser Utara (Kawasan Nusantara) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Sepaku - Semoi Dua (Jalan Kabupaten Akses IKN) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati PPU No. 620/152/2021",
       "budgetSource": "Balai Besar Pelaksanaan Jalan Nasional Kaltim & LPSE PPU",
       "fieldDataSource": "Dinas PUPR Kabupaten Penajam Paser Utara",
-      "transparencyUrl": "https://lpse.penajamkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -40338,12 +40366,7 @@
     "urbanDrainageStatus": "Drainase Parit Terbuka Alami Tepi Jalan",
     "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Angkutan Muatan Panen)",
     "fundingSourceType": "INPRES_IJD",
-    "fundingSourceLabel": "Inpres Jalan Daerah (IJD) Bantuan APBN Pusat",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi perkerasan jalan kabupaten sebelum vs setelah intervensi preservasi"
-    }
+    "fundingSourceLabel": "Inpres Jalan Daerah (IJD) Bantuan APBN Pusat"
   },
   {
     "id": "ruas-kab-kalsel-01",
@@ -40366,7 +40389,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Banjarmasin",
+      "regionalHead": "Wali Kota Banjarmasin",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Banjarmasin",
       "picName": "Surun, S.T., M.T."
     },
@@ -40385,13 +40408,19 @@
       "fiscalYear": 2026,
       "progressPct": 72,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABKALSEL01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Banjarmasin (Kalimantan Selatan) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Lambung Mangkurat - Pasar Terapung Siring terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Banjarmasin No. 188.45/2022",
       "budgetSource": "LPSE Kota Banjarmasin",
       "fieldDataSource": "Dinas PUPR Kota Banjarmasin",
-      "transparencyUrl": "https://lpse.banjarmasinkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -41672,12 +41701,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Banjarmasin TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Banjarmasin TA 2026"
   },
   {
     "id": "ruas-kab-sulsel-01",
@@ -41700,7 +41724,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Makassar",
+      "regionalHead": "Wali Kota Makassar",
       "agency": "Dinas Pekerjaan Umum Kota Makassar",
       "picName": "Zuhaelsi Zubir, S.T., M.T."
     },
@@ -41719,13 +41743,19 @@
       "fiscalYear": 2026,
       "progressPct": 90,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABSULSEL01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Makassar (Sulawesi Selatan) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Penghibur (Pantai Losari) - Somba Opu terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Makassar No. 620/190/2022",
       "budgetSource": "LPSE Kota Makassar",
       "fieldDataSource": "Dinas PU Kota Makassar",
-      "transparencyUrl": "https://lpse.makassarkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -43530,12 +43560,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Makassar TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Makassar TA 2026"
   },
   {
     "id": "ruas-kab-sulsel-02",
@@ -43558,7 +43583,7 @@
     "hazardLevel": "TINGGI",
     "activeReportsCount": 1,
     "leadership": {
-      "regionalHead": "Walikota Makassar / Bupati Gowa",
+      "regionalHead": "Wali Kota Makassar / Bupati Gowa",
       "agency": "Dinas PU Kota Makassar",
       "picName": "Tim Tanggap Darurat DPU Makassar"
     },
@@ -43577,13 +43602,19 @@
       "fiscalYear": 2026,
       "progressPct": 35,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABSULSEL02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Makassar - Kab. Gowa (Sulawesi Selatan) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Hertasning Baru - Aroepala (Koridor Pemukiman Timur) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Perwali Makassar No. 88/2021",
       "budgetSource": "LPSE Kota Makassar",
       "fieldDataSource": "Dinas PU Kota Makassar",
-      "transparencyUrl": "https://lpse.makassarkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -44852,12 +44883,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Makassar & Bantuan Keuangan Pemprov Sulsel",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Makassar & Bantuan Keuangan Pemprov Sulsel"
   },
   {
     "id": "ruas-kab-sulut-01",
@@ -44880,7 +44906,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Walikota Manado",
+      "regionalHead": "Wali Kota Manado",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Manado",
       "picName": "Johny Suwu, S.T."
     },
@@ -44899,13 +44925,19 @@
       "fiscalYear": 2026,
       "progressPct": 88,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABSULUT01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Manado (Sulawesi Utara) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Piere Tendean (Boulevard Manado Waterfront) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Manado No. 142/2021",
       "budgetSource": "LPSE Kota Manado",
       "fieldDataSource": "Dinas PUPR Kota Manado",
-      "transparencyUrl": "https://lpse.manadokota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -46322,12 +46354,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Manado TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Manado TA 2026"
   },
   {
     "id": "ruas-kab-maluku-01",
@@ -46350,7 +46377,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Ambon",
+      "regionalHead": "Wali Kota Ambon",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Ambon",
       "picName": "Melianus Latuihamallo, S.T., M.T."
     },
@@ -46369,13 +46396,19 @@
       "fiscalYear": 2026,
       "progressPct": 75,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABMALUKU01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Ambon (Maluku) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Pattimura - Mardika (Pusat Kota & Dermaga Ambon) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Ambon No. 289/2022",
       "budgetSource": "LPSE Kota Ambon",
       "fieldDataSource": "Dinas PUPR Kota Ambon",
-      "transparencyUrl": "https://lpse.ambon.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -47616,12 +47649,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Kota Ambon TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "APBD Kota Ambon TA 2026"
   },
   {
     "id": "ruas-kab-papua-01",
@@ -47644,7 +47672,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Jayapura",
+      "regionalHead": "Wali Kota Jayapura",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Jayapura",
       "picName": "Nofdi J. Rampi, S.T., M.T."
     },
@@ -47663,13 +47691,19 @@
       "fiscalYear": 2026,
       "progressPct": 90,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABPAPUA01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Jayapura (Papua) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Percetakan Negara - Taman Imbi (Pusat Kota Jayapura) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Jayapura No. 188.4/112/2022",
       "budgetSource": "LPSE Kota Jayapura",
       "fieldDataSource": "Dinas PUPR Kota Jayapura",
-      "transparencyUrl": "https://lpse.jayapurakota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -48954,12 +48988,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "Dana Otonomi Khusus (Otsus) Papua & APBD Kota Jayapura",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "Dana Otonomi Khusus (Otsus) Papua & APBD Kota Jayapura"
   },
   {
     "id": "ruas-kab-pabar-01",
@@ -48982,7 +49011,7 @@
     "hazardLevel": "SEDANG",
     "activeReportsCount": 0,
     "leadership": {
-      "regionalHead": "Pj. Walikota Sorong",
+      "regionalHead": "Wali Kota Sorong",
       "agency": "Dinas Bina Marga dan Cipta Karya Kota Sorong",
       "picName": "Esau Isir, S.T."
     },
@@ -49001,13 +49030,19 @@
       "fiscalYear": 2026,
       "progressPct": 70,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABPABAR01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Sorong (Papua Barat Daya) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Basuki Rahmat Km 8 - 10 (Pintu Gerbang Sorong) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Sorong No. 620/88/2023",
       "budgetSource": "LPSE Kota Sorong",
       "fieldDataSource": "Dinas Bina Marga Kota Sorong",
-      "transparencyUrl": "https://lpse.kotasorong.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -50124,12 +50159,7 @@
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Terdampak Bekas Galian Utilitas Kabel Fiber Optik & Pipa PDAM",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "Dana Otsus Papua Barat Daya & APBD Kota Sorong",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi koridor jalan perkotaan sebelum vs sesudah rekonstruksi & perbaikan"
-    }
+    "fundingSourceLabel": "Dana Otsus Papua Barat Daya & APBD Kota Sorong"
   },
   {
     "id": "ruas-kab-jabar-05",
@@ -50171,13 +50201,19 @@
       "fiscalYear": 2026,
       "progressPct": 52,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABJABAR05",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Bandung (Jawa Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Soreang - Ciwidey (Akses Wisata & Sentra Hortikultura) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Bandung No. 620/Kep.188/2022",
-      "budgetSource": "LPSE Kabupaten Bandung (Kode Tender: 14892014)",
+      "budgetSource": "LPSE Kabupaten Bandung (Data Simulasi Pilot)",
       "fieldDataSource": "Dinas PUTR Kabupaten Bandung",
-      "transparencyUrl": "https://lpse.bandungkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "functionalClass": "Kolektor Primer Kawasan Wisata & Pertanian",
     "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
@@ -50185,11 +50221,6 @@
     "utilityDigIssue": "Bebas Galian Perkotaan (Tantangan Erosi & Debit Air Hujan Lereng)",
     "fundingSourceType": "APBD_MURNI",
     "fundingSourceLabel": "APBD Kabupaten Bandung TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi retak bahu jalan lereng sebelum vs penguatan dinding penahan tanah"
-    },
     "milestones": [
       {
         "km": 0,
@@ -58409,13 +58440,19 @@
       "fiscalYear": 2026,
       "progressPct": 38,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABDIY02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Sleman (DI Yogyakarta) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Godean - Seyegan - Tempel (Sentra Pangan Sleman Barat) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Sleman No. 12.3/2021",
       "budgetSource": "LPSE Kabupaten Sleman (ID Tender: 9210214)",
       "fieldDataSource": "Dinas PUP-ESDM Sleman",
-      "transparencyUrl": "https://lpse.slemankab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "functionalClass": "Lokal Primer Penghubung Antar-Kecamatan Pertanian",
     "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
@@ -58423,11 +58460,6 @@
     "utilityDigIssue": "Bebas Galian Perkotaan (Isu Utama: Overload Truk Pasir Merapi)",
     "fundingSourceType": "APBD_MURNI",
     "fundingSourceLabel": "APBD Kabupaten Sleman TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi gelombang bekas lintasan truk pasir sebelum vs sesudah perkerasan"
-    },
     "milestones": [
       {
         "km": 0,
@@ -60415,13 +60447,19 @@
       "fiscalYear": 2026,
       "progressPct": 62,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABJATIM03",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Malang (Jawa Timur) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Gondanglegi - Balekambang (Akses Wisata Pantai Selatan) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Malang No. 188.45/2021 jo. Inpres No. 3/2023",
       "budgetSource": "LPSE Kementerian PU & LPSE Kab. Malang",
       "fieldDataSource": "Dinas PUBM Kab. Malang & Balai Besar Pelaksanaan Jalan Nasional Jatim-Bali",
-      "transparencyUrl": "https://lpse.malangkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "functionalClass": "Kolektor Primer Penghubung Kawasan Wisata Bahari & Pesisir",
     "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
@@ -60429,11 +60467,6 @@
     "utilityDigIssue": "Bebas Galian Kabel (Isu Utama: Tanah Labil Kapur & Alur Truk Tebu)",
     "fundingSourceType": "INPRES_IJD",
     "fundingSourceLabel": "Inpres Jalan Daerah (IJD) Bantuan APBN Pusat",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi jalan tanah kapur berlubang sebelum vs pelebaran rigid beton IJD"
-    },
     "milestones": [
       {
         "km": 0,
@@ -65649,13 +65682,19 @@
       "fiscalYear": 2026,
       "progressPct": 40,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABSULSEL03",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Maros (Sulawesi Selatan) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Maros - Moncongloe (Kawasan Industri & Penyangga Mamminasata) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Maros No. 542/2021",
       "budgetSource": "LPSE Kabupaten Maros",
       "fieldDataSource": "Dinas PUTRPP Kabupaten Maros",
-      "transparencyUrl": "https://lpse.maroskab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "functionalClass": "Kolektor Primer Penyangga Aglomerasi Mamminasata",
     "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
@@ -65663,11 +65702,6 @@
     "utilityDigIssue": "Bebas Galian Utilitas (Isu Utama: Tonase Truk Tanah Timbunan Makassar)",
     "fundingSourceType": "APBD_MURNI",
     "fundingSourceLabel": "APBD Kabupaten Maros TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi patahan plat beton sebelum vs penggantian segmen rigid beton baru"
-    },
     "milestones": [
       {
         "km": 0,
@@ -70883,13 +70917,19 @@
       "fiscalYear": 2026,
       "progressPct": 45,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABKALBAR01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Kubu Raya (Kalimantan Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Rasau Jaya - Jembatan Kapuas III (Konektivitas Transmigrasi & Pertanian) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Kubu Raya No. 418/2021",
       "budgetSource": "LPSE Kabupaten Kubu Raya",
       "fieldDataSource": "Dinas PUPR Kabupaten Kubu Raya",
-      "transparencyUrl": "https://lpse.kuburayakab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "functionalClass": "Lokal Primer Kawasan Transmigrasi & Pertanian Gambut",
     "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
@@ -70897,11 +70937,6 @@
     "utilityDigIssue": "Bebas Galian Utilitas (Isu Utama: Konsolidasi Gambut & Rob Sungai Kapuas)",
     "fundingSourceType": "APBD_MURNI",
     "fundingSourceLabel": "APBD Kabupaten Kubu Raya TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi jalan tanah gambut sebelum vs perkuatan geotekstil matras beton"
-    },
     "milestones": [
       {
         "km": 0,
@@ -74190,7 +74225,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 1,
     "leadership": {
-      "regionalHead": "Walikota Palangka Raya",
+      "regionalHead": "Wali Kota Palangka Raya",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Palangka Raya",
       "picName": "Arbert Tombak, S.E., M.A.P. (Kadis PUPR Kota Palangka Raya)"
     },
@@ -74209,13 +74244,19 @@
       "fiscalYear": 2026,
       "progressPct": 85,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABKALTENG01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Palangka Raya (Kalimantan Tengah) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. RTA Milono - Bundaran Besar - G. Obos (Arteri Kota Palangka Raya) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Palangka Raya No. 188.45/210/2022",
       "budgetSource": "LPSE Kota Palangka Raya & SiRUP LKPP",
       "fieldDataSource": "Dinas PUPR Kota Palangka Raya",
-      "transparencyUrl": "https://lpse.palangkaraya.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -75372,13 +75413,19 @@
       "fiscalYear": 2026,
       "progressPct": 52,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABKALTENG02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Kotawaringin Timur (Kalimantan Tengah) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Sampit - Samuda - Ujung Pandaran (Sentra Pangan & Pesisir Kotim) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Kotawaringin Timur No. 188.45/0312/2022",
       "budgetSource": "LPSE Kab. Kotawaringin Timur & SiRUP LKPP",
       "fieldDataSource": "Dinas SDABMBKPRKP Kab. Kotim",
-      "transparencyUrl": "https://lpse.kotimkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -79580,7 +79627,7 @@
     "hazardLevel": "RENDAH",
     "activeReportsCount": 1,
     "leadership": {
-      "regionalHead": "Walikota Tarakan",
+      "regionalHead": "Wali Kota Tarakan",
       "agency": "Dinas Pekerjaan Umum dan Tata Ruang (DPUTR) Kota Tarakan",
       "picName": "Faidil Qur'ani, S.T., M.T. (Kadis PUTR Kota Tarakan)"
     },
@@ -79599,13 +79646,19 @@
       "fiscalYear": 2026,
       "progressPct": 78,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKABKALTARA01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Tarakan (Kalimantan Utara) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Mulawarman - Kusuma Bangsa - Juata Laut (Arteri Kota Tarakan) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Tarakan No. 620/HK-VIII/2022",
       "budgetSource": "LPSE Kota Tarakan & SiRUP LKPP",
       "fieldDataSource": "DPUTR Kota Tarakan",
-      "transparencyUrl": "https://lpse.tarakankota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -84590,13 +84643,19 @@
       "fiscalYear": 2026,
       "progressPct": 62,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABPAPUA02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Jayapura (Papua) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Sentani - Kemiri - Depapre (Akses Pelabuhan Peti Kemas Teluk Tanah Merah) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Jayapura No. 188.4/245/2022",
       "budgetSource": "LPSE Kabupaten Jayapura & SiRUP LKPP",
       "fieldDataSource": "Dinas PUPR Kabupaten Jayapura",
-      "transparencyUrl": "https://lpse.jayapurakab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -89521,13 +89580,19 @@
       "fiscalYear": 2026,
       "progressPct": 74,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABMALUKU02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Maluku Tengah (Pulau Seram, Maluku) TA 2026",
+      "matchReason": "Pencocokan ruas Ruas Masohi - Amahai - Rutah (Jalur Pesisir Selatan Kabupaten Maluku Tengah) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Maluku Tengah No. 620-318/2022",
       "budgetSource": "LPSE Kab. Maluku Tengah & SiRUP LKPP",
       "fieldDataSource": "Dinas PUPR Kab. Maluku Tengah",
-      "transparencyUrl": "https://lpse.malukutengahkab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -95156,13 +95221,19 @@
       "fiscalYear": 2026,
       "progressPct": 88,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABKALTARA02",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kecamatan Tanjung Selor, Kabupaten Bulungan (Kalimantan Utara) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Kolonel H. Soetadji - Jl. Durian - Jl. Sengkawit (Arteri Kota Tanjung Selor) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Bulungan No. 188.45/315/2022",
       "budgetSource": "LPSE Kabupaten Bulungan & SiRUP LKPP",
       "fieldDataSource": "Dinas PUPR Kabupaten Bulungan",
-      "transparencyUrl": "https://lpse.bulungankab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "milestones": [
       {
@@ -95867,7 +95938,7 @@
     "hazardScore": 28,
     "hazardLevel": "RENDAH",
     "leadership": {
-      "regionalHead": "Pj. Walikota Banda Aceh",
+      "regionalHead": "Wali Kota Banda Aceh",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Banda Aceh",
       "picName": "Ir. Jalaluddin, S.T., M.T."
     },
@@ -95886,13 +95957,19 @@
       "fiscalYear": 2026,
       "progressPct": 82,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTAACH01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Banda Aceh (Aceh) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Teuku Nyak Arief - Darussalam (Koridor Kampus & Pemerintahan) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Banda Aceh No. 318/2022",
       "budgetSource": "LPSE Kota Banda Aceh",
       "fieldDataSource": "Dinas PUPR Kota Banda Aceh",
-      "transparencyUrl": "https://lpse.bandaacehkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       5.56624,
@@ -96874,7 +96951,7 @@
     "hazardScore": 54,
     "hazardLevel": "SEDANG",
     "leadership": {
-      "regionalHead": "Pj. Walikota Jambi",
+      "regionalHead": "Wali Kota Jambi",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Jambi",
       "picName": "Momon Sukmana Fitra, S.T., M.T."
     },
@@ -96893,13 +96970,19 @@
       "fiscalYear": 2026,
       "progressPct": 60,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTAJMB01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Jambi (Jambi) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Soemantri Brojonegoro - Sipin (Poros Niaga Kota Jambi) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Jambi No. 295/2022",
       "budgetSource": "LPSE Kota Jambi",
       "fieldDataSource": "Dinas PUPR Kota Jambi",
-      "transparencyUrl": "https://lpse.jambikota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -1.61624,
@@ -97869,7 +97952,7 @@
     "hazardScore": 52,
     "hazardLevel": "SEDANG",
     "leadership": {
-      "regionalHead": "Pj. Walikota Bengkulu",
+      "regionalHead": "Wali Kota Bengkulu",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Bengkulu",
       "picName": "Noprisman, S.T., M.Si."
     },
@@ -97888,13 +97971,19 @@
       "fiscalYear": 2026,
       "progressPct": 68,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTABKL01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Bengkulu (Bengkulu) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Pariwisata Pantai Panjang - Pasar Bengkulu terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Bengkulu No. 214/2022",
       "budgetSource": "LPSE Kota Bengkulu",
       "fieldDataSource": "Dinas PUPR Kota Bengkulu",
-      "transparencyUrl": "https://lpse.bengkulukota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -3.7862,
@@ -98592,7 +98681,7 @@
     "hazardScore": 30,
     "hazardLevel": "RENDAH",
     "leadership": {
-      "regionalHead": "Pj. Walikota Pangkalpinang",
+      "regionalHead": "Wali Kota Pangkalpinang",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Pangkalpinang",
       "picName": "Ir. Suparlan Dulaspar, M.T."
     },
@@ -98611,13 +98700,19 @@
       "fiscalYear": 2026,
       "progressPct": 86,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTAPBA01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Pangkalpinang (Kep. Bangka Belitung) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Jenderal Sudirman - Gabek (Poros Utama Pangkalpinang) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Pangkalpinang No. 188/2022",
       "budgetSource": "LPSE Kota Pangkalpinang",
       "fieldDataSource": "Dinas PUPR Kota Pangkalpinang",
-      "transparencyUrl": "https://lpse.pangkalpinangkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -2.11521,
@@ -99587,7 +99682,7 @@
     "hazardScore": 55,
     "hazardLevel": "SEDANG",
     "leadership": {
-      "regionalHead": "Pj. Walikota Serang",
+      "regionalHead": "Wali Kota Serang",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Serang",
       "picName": "Iwan Sunardi, S.T., M.M."
     },
@@ -99606,13 +99701,19 @@
       "fiscalYear": 2026,
       "progressPct": 58,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTABTN01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Serang (Banten) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. KH Abdul Fatah Hasan - Ciceri (Poros Kota Serang) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Serang No. 620/Kep.192-Huk/2022",
       "budgetSource": "LPSE Kota Serang",
       "fieldDataSource": "Dinas PUPR Kota Serang",
-      "transparencyUrl": "https://lpse.serangkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -6.12497,
@@ -100330,7 +100431,7 @@
     "hazardScore": 56,
     "hazardLevel": "SEDANG",
     "leadership": {
-      "regionalHead": "Pj. Walikota Kupang",
+      "regionalHead": "Wali Kota Kupang",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Kupang",
       "picName": "Maxi N. Dethan, S.T."
     },
@@ -100349,13 +100450,19 @@
       "fiscalYear": 2026,
       "progressPct": 63,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTANTT01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Kupang (Nusa Tenggara Timur) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. W.J. Lalamentik - Oebobo (Poros Pemerintahan Kota Kupang) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Kupang No. 194/KEP/HK/2022",
       "budgetSource": "LPSE Kota Kupang",
       "fieldDataSource": "Dinas PUPR Kota Kupang",
-      "transparencyUrl": "https://lpse.kupangkota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -10.16887,
@@ -101113,7 +101220,7 @@
     "hazardScore": 32,
     "hazardLevel": "RENDAH",
     "leadership": {
-      "regionalHead": "Pj. Walikota Gorontalo",
+      "regionalHead": "Wali Kota Gorontalo",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Gorontalo",
       "picName": "Heru Z. Thalib, S.T., M.T."
     },
@@ -101132,13 +101239,19 @@
       "fiscalYear": 2026,
       "progressPct": 88,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTAGTO01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Gorontalo (Gorontalo) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Nani Wartabone - Limba U (Pusat Kota Gorontalo) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Gorontalo No. 210/2022",
       "budgetSource": "LPSE Kota Gorontalo",
       "fieldDataSource": "Dinas PUPR Kota Gorontalo",
-      "transparencyUrl": "https://lpse.gorontalokota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       0.54799,
@@ -101524,7 +101637,7 @@
     "hazardScore": 34,
     "hazardLevel": "RENDAH",
     "leadership": {
-      "regionalHead": "Walikota Palu",
+      "regionalHead": "Wali Kota Palu",
       "agency": "Dinas Pekerjaan Umum Kota Palu",
       "picName": "Ir. SinggihBudi Prasetyo, M.Si."
     },
@@ -101543,13 +101656,19 @@
       "fiscalYear": 2026,
       "progressPct": 79,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTAPLU01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Palu (Sulawesi Tengah) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Moh. Yamin - Tondo (Koridor Rekonstruksi Kota Palu) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Palu No. 620/312/PU/2022",
       "budgetSource": "LPSE Kota Palu",
       "fieldDataSource": "Dinas PU Kota Palu",
-      "transparencyUrl": "https://lpse.palukota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -0.88097,
@@ -102882,13 +103001,19 @@
       "fiscalYear": 2026,
       "progressPct": 65,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABMMJ01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Mamuju (Sulawesi Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Yos Sudarso - Pantai Manakarra (Poros Perkotaan Mamuju) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Mamuju No. 188.45/280/KPTS/2022",
       "budgetSource": "LPSE Kabupaten Mamuju",
       "fieldDataSource": "Dinas PUPR Kabupaten Mamuju",
-      "transparencyUrl": "https://lpse.mamujukab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -2.67527,
@@ -103258,7 +103383,7 @@
     "hazardScore": 53,
     "hazardLevel": "SEDANG",
     "leadership": {
-      "regionalHead": "Pj. Walikota Kendari",
+      "regionalHead": "Wali Kota Kendari",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Kendari",
       "picName": "Hj. Erlis Sadya Kencana, S.T., M.T."
     },
@@ -103277,13 +103402,19 @@
       "fiscalYear": 2026,
       "progressPct": 61,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTAKDI01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Kendari (Sulawesi Tenggara) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. MT Haryono - Wuawua (Poros Niaga Kota Kendari) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Kendari No. 412/2022",
       "budgetSource": "LPSE Kota Kendari",
       "fieldDataSource": "Dinas PUPR Kota Kendari",
-      "transparencyUrl": "https://lpse.kendarikota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -3.98877,
@@ -103813,7 +103944,7 @@
     "hazardScore": 35,
     "hazardLevel": "RENDAH",
     "leadership": {
-      "regionalHead": "Walikota Ternate",
+      "regionalHead": "Wali Kota Ternate",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kota Ternate",
       "picName": "Rus'an M. Nur Taib, S.T., M.T."
     },
@@ -103832,13 +103963,19 @@
       "fiscalYear": 2026,
       "progressPct": 81,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KTA-RUASKTATTE01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kota Ternate (Maluku Utara) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Sultan Muhammad Djabir Sjah - Bastiong (Poros Kota Ternate) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Walikota Ternate No. 188.4/152/2022",
       "budgetSource": "LPSE Kota Ternate",
       "fieldDataSource": "Dinas PUPR Kota Ternate",
-      "transparencyUrl": "https://lpse.ternatekota.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       0.78715,
@@ -104551,13 +104688,19 @@
       "fiscalYear": 2026,
       "progressPct": 64,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABMKW01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Manokwari (Papua Barat) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Trikora Wosi - Sanggeng (Poros Utama Manokwari) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Manokwari No. 620/195/2022",
       "budgetSource": "LPSE Kabupaten Manokwari",
       "fieldDataSource": "Dinas PUPR Kabupaten Manokwari",
-      "transparencyUrl": "https://lpse.manokwarikab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -0.8618,
@@ -105342,13 +105485,19 @@
       "fiscalYear": 2026,
       "progressPct": 84,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABMRK01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Merauke (Papua Selatan) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Raya Mandala - Mopah (Poros Utama Kota Merauke) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Merauke No. 620/244/2022",
       "budgetSource": "LPSE Kabupaten Merauke",
       "fieldDataSource": "Dinas PUPR Kabupaten Merauke",
-      "transparencyUrl": "https://lpse.meraukekab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -8.50831,
@@ -105897,13 +106046,19 @@
       "fiscalYear": 2026,
       "progressPct": 72,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABNBR01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Nabire (Papua Tengah) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Merdeka - Oyehe (Poros Perkotaan Nabire) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Nabire No. 620/118/2022",
       "budgetSource": "LPSE Kabupaten Nabire",
       "fieldDataSource": "Dinas PUPR Kabupaten Nabire",
-      "transparencyUrl": "https://lpse.nabirekab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -3.36204,
@@ -106269,7 +106424,7 @@
     "hazardScore": 56,
     "hazardLevel": "SEDANG",
     "leadership": {
-      "regionalHead": "Pj. Bupati Jayawijaya",
+      "regionalHead": "Bupati Jayawijaya",
       "agency": "Dinas Pekerjaan Umum dan Penataan Ruang Kabupaten Jayawijaya",
       "picName": "Markus Walilo, S.T."
     },
@@ -106288,13 +106443,19 @@
       "fiscalYear": 2026,
       "progressPct": 59,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-KAB-RUASKABWMN01",
+      "sourceDocument": "DPA Dinas PUPR / Bina Marga Kabupaten Jayawijaya / Wamena (Papua Pegunungan) TA 2026",
+      "matchReason": "Pencocokan ruas Jl. Yos Sudarso - Homhom (Poros Lembah Baliem Wamena) terhadap penetapan status jalan kabupaten & kurasi paket pilot.",
+      "sourceUrl": "https://sirup.inaproc.id",
+      "portalLabel": "SiRUP INAPROC LKPP (RUP APBD Kab/Kota)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Jayawijaya No. 620/164/2022",
       "budgetSource": "LPSE Kabupaten Jayawijaya",
       "fieldDataSource": "Dinas PUPR Kabupaten Jayawijaya",
-      "transparencyUrl": "https://lpse.jayawijayakab.go.id"
+      "transparencyUrl": "https://sirup.inaproc.id"
     },
     "center": [
       -4.08804,

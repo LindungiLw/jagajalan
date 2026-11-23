@@ -30,7 +30,7 @@ export const INITIAL_REPORTS = [
     upvotes: 64,
     userConfirmed: true,
     leadership: {
-      regionalHead: "Walikota Medan (M. Bobby Afif Nasution)",
+      regionalHead: "Wali Kota Medan",
       agency: "Dinas SDABMBK Kota Medan",
       officialPic: "Bidang Jalan & Jembatan Pemkot Medan",
     },
@@ -53,9 +53,9 @@ export const INITIAL_REPORTS = [
     },
     officialSources: {
       authoritySource: "Peraturan Walikota Medan No. 34 Tahun 2021 (Jalan Kota)",
-      budgetSource: "SiRUP LKPP & LPSE Kota Medan (RUP ID: 4102934)",
+      budgetSource: "SiRUP LKPP & LPSE Kota Medan (Skenario Pilot TA 2026)",
       fieldDataSource: "Laporan Warga Tiket #JGJ-MDN-001 & Validasi AI Vision",
-      transparencyUrl: "https://lpse.pemkomedan.go.id",
+      transparencyUrl: "https://spse.inaproc.id/medankota",
     },
     updates: [
       {
@@ -102,7 +102,7 @@ export const INITIAL_REPORTS = [
     upvotes: 142,
     userConfirmed: true,
     leadership: {
-      regionalHead: "Pj. Gubernur Sumatera Utara (Dr. Drs. A. Fatoni, M.Si.)",
+      regionalHead: "Gubernur Sumatera Utara",
       agency: "Dinas PUPR Provinsi Sumatera Utara",
       officialPic: "UPTD Pengelolaan Jalan & Jembatan Pematangsiantar",
     },
@@ -125,9 +125,9 @@ export const INITIAL_REPORTS = [
     },
     officialSources: {
       authoritySource: "Kepgub Sumut No. 188.44/673/KPTS/2023 (Ruas Jalan Provinsi)",
-      budgetSource: "Portal LPSE Pemprov Sumut (Tender #401928)",
+      budgetSource: "Portal LPSE Pemprov Sumut (Skenario Pilot TA 2026)",
       fieldDataSource: "Laporan Warga #JGJ-SML-002 & Tim Pengawasan JagaJalan",
-      transparencyUrl: "https://lpse.sumutprov.go.id",
+      transparencyUrl: "https://spse.inaproc.id/sumutprov",
     },
     updates: [
       {
@@ -192,9 +192,9 @@ export const INITIAL_REPORTS = [
     },
     officialSources: {
       authoritySource: "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
-      budgetSource: "Portal LPSE Kementerian PU (Kode Tender: 8920114)",
+      budgetSource: "Portal LPSE Kementerian PU (Skenario Pilot TA 2026)",
       fieldDataSource: "Posko Siaga Bencana BBPJN Sumut & Geotag Warga",
-      transparencyUrl: "https://lpse.pu.go.id",
+      transparencyUrl: "https://spse.inaproc.id/pu",
     },
     updates: [
       {
@@ -260,9 +260,9 @@ export const INITIAL_REPORTS = [
     },
     officialSources: {
       authoritySource: "SK Menteri PUPR No. 430/KPTS/M/2022",
-      budgetSource: "Portal LPSE Kementerian PU (Kode RUP: 5210948)",
-      fieldDataSource: "Berita Acara PHO BBPJN Sumut No. 602/PHO-014/2026",
-      transparencyUrl: "https://lpse.pu.go.id",
+      budgetSource: "Portal LPSE Kementerian PU (Skenario Pilot TA 2026)",
+      fieldDataSource: "Dokumentasi Verifikasi Lapangan Pilot JagaJalan",
+      transparencyUrl: "https://spse.inaproc.id/pu",
     },
     updates: [
       {
@@ -334,7 +334,7 @@ export const INITIAL_REPORTS = [
       authoritySource: "SK Bupati Deli Serdang No. 412/2022",
       budgetSource: "LPSE Kabupaten Deli Serdang & SiRUP LKPP",
       fieldDataSource: "Laporan Warga Tiket #JGJ-DLS-005 & Validasi AI Vision",
-      transparencyUrl: "https://lpse.deliserdangkab.go.id",
+      transparencyUrl: "https://sirup.inaproc.id",
     },
     updates: [
       {

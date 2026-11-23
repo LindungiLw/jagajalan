@@ -1101,15 +1101,17 @@
       "progressPct": 100,
       "statusNote": "Pekerjaan tuntas tepat waktu; BAST Pertama (PHO) telah terbit resmi.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-SMT-014",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "DIPA BBPJN Sumatera Utara TA 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-SMT-001) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
-      "budgetSource": "Portal LPSE Kementerian PU (Kode RUP: 5210948)",
+      "budgetSource": "Portal LPSE Kementerian PU (Data Simulasi Pilot)",
       "fieldDataSource": "Survei IRMS Semester I Ditjen Bina Marga & Audit JagaJalan",
-      "transparencyUrl": "https://lpse.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -5530,15 +5532,17 @@
       "progressPct": 55,
       "statusNote": "Konstruksi tiang pancang lereng selesai 60%; arus lalu lintas buka-tutup bergantian.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-SMT-042",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Kontrak Penanganan Bencana BBPJN Sumut TA 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-SMT-008) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
-      "budgetSource": "Portal LPSE Kementerian PU (Kode Tender: 8920114)",
+      "budgetSource": "Portal LPSE Kementerian PU (Data Simulasi Pilot)",
       "fieldDataSource": "Laporan Tim Reaksi Cepat BBPJN Sumut & Geotag Warga",
-      "transparencyUrl": "https://lpse.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -6705,7 +6709,7 @@
     "hazardScore": 88,
     "hazardLevel": "TINGGI",
     "leadership": {
-      "regionalHead": "Walikota Medan (M. Bobby Afif Nasution / Pjs. Walikota)",
+      "regionalHead": "Wali Kota Medan",
       "agency": "Dinas Sumber Daya Air, Bina Marga, & Bina Konstruksi (SDABMBK) Medan",
       "officialPic": "Bidang Jalan & Jembatan Pemkot Medan",
       "contactCenter": "061-4512000 (Call Center Pemko Medan 112)"
@@ -6731,27 +6735,24 @@
       "progressPct": 18,
       "statusNote": "Progres fisik lambat akibat kendala pemindahan pipa PDAM Tirtanadi di lokasi saluran.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pemkomedan.go.id/eproc4/lelang/view/PKG-MDN-031",
+      "sourceUrl": "https://spse.inaproc.id/medankota",
       "sourceDocument": "DPA Dinas SDABMBK Kota Medan TA 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan ruas Jl. Brigjen Katamso (Kampung Baru - Titi Kuning) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "portalLabel": "SPSE Kota Medan (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "Perwal Medan No. 34/2021 (Jaringan Jalan Kewenangan Kota)",
-      "budgetSource": "SiRUP LKPP & LPSE Kota Medan (RUP ID: 4102934)",
+      "budgetSource": "SiRUP LKPP & LPSE Kota Medan (Data Simulasi Pilot)",
       "fieldDataSource": "Laporan Warga Tiket #JGJ-MDN-031 & Verifikasi AI",
-      "transparencyUrl": "https://lpse.pemkomedan.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/medankota"
     },
     "functionalClass": "Kolektor Sekunder Perkotaan",
     "maxAxleLoad": "MST 8 Ton (Muatan Sumbu Terberat Kelas III)",
     "urbanDrainageStatus": "Rawan Genangan (Sedimentasi Saluran Drainase & Luapan Air Hujan)",
     "utilityDigIssue": "Bekas Galian Kabel Fiber Optik & Pipa PDAM Tanpa Pemadatan Aspal Standar",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Murni Kota Medan TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-      "caption": "Kondisi genangan luapan drainase & galian kabel sebelum vs target overlay hotmix"
-    }
+    "fundingSourceLabel": "APBD Murni Kota Medan TA 2026"
   },
   {
     "id": "ruas-su-04",
@@ -8753,7 +8754,7 @@
     "hazardScore": 96,
     "hazardLevel": "KRITIS",
     "leadership": {
-      "regionalHead": "Pj. Gubernur Sumatera Utara (Dr. Drs. A. Fatoni, M.Si.)",
+      "regionalHead": "Gubernur Sumatera Utara",
       "agency": "Dinas PUPR Provinsi Sumatera Utara",
       "officialPic": "UPTD Pengelolaan Jalan & Jembatan Pematangsiantar",
       "contactCenter": "0622-21450 (UPTD Siantar Prov. Sumut)"
@@ -8779,15 +8780,17 @@
       "progressPct": 20,
       "statusNote": "Penanganan darurat jembatan bailey belum terealisasi; aduan publik menumpuk tinggi.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.sumutprov.go.id/eproc4/lelang/view/PKG-PRV-088",
+      "sourceUrl": "https://spse.inaproc.id/sumutprov",
       "sourceDocument": "DPA Dinas PUPR Prov. Sumatera Utara TA 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan ruas jalan provinsi (RUAS-PRV-SMT-054) dengan SK Gubernur & rencana paket pemeliharaan kurasi pilot.",
+      "portalLabel": "SPSE Prov. Sumatera Utara (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "Kepgub Sumut No. 188.44/673/KPTS/2023 (Ruas Jalan Provinsi)",
-      "budgetSource": "Portal LPSE Pemprov Sumut (Tender #401928)",
+      "budgetSource": "Portal LPSE Pemprov Sumut (Data Simulasi Pilot)",
       "fieldDataSource": "Aduan Publik SP4N-LAPOR! & Laporan Terverifikasi JagaJalan",
-      "transparencyUrl": "https://lpse.sumutprov.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/sumutprov"
     }
   },
   {
@@ -11744,15 +11747,17 @@
       "progressPct": 42,
       "statusNote": "Pengecoran beton lajur kiri sepanjang 6 km selesai; dilanjutkan pembesian lajur kanan.",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pu.go.id/eproc4/lelang/view/PKG-IJD-112",
+      "sourceUrl": "https://spse.inaproc.id/pu",
       "sourceDocument": "Lampiran Alokasi Inpres Jalan Daerah KemenPU TA 2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan koridor jalan nasional (RUAS-NAS-SMT-021) berdasarkan SK Menteri PUPR & kurasi paket preservasi pilot.",
+      "portalLabel": "SPSE Kementerian PU (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "SK Menteri PUPR No. 430/KPTS/M/2022 (Jalan Nasional)",
       "budgetSource": "Alokasi Inpres Jalan Daerah (Inpres No. 3/2023) & LPSE KemenPU",
       "fieldDataSource": "Inspeksi Balai BBPJN Wilayah III & Aduan Lintas Sumatera",
-      "transparencyUrl": "https://lpse.pu.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/pu"
     }
   },
   {
@@ -12339,7 +12344,7 @@
     "hazardScore": 12,
     "hazardLevel": "RENDAH",
     "leadership": {
-      "regionalHead": "Walikota Medan (M. Bobby Afif Nasution)",
+      "regionalHead": "Wali Kota Medan",
       "agency": "Dinas SDABMBK Kota Medan",
       "officialPic": "Bidang Preservasi Jalan Protokol Pemko Medan",
       "contactCenter": "061-4512000 (Pemko Medan)"
@@ -12365,26 +12370,23 @@
       "progressPct": 100,
       "statusNote": "Proyek tuntas tepat waktu; diserahterimakan pertama (PHO).",
       "matchConfidence": "TERKONFIRMASI",
-      "sourceUrl": "https://lpse.pemkomedan.go.id/eproc4/lelang/view/PKG-MDN-008",
+      "sourceUrl": "https://spse.inaproc.id/medankota",
       "sourceDocument": "Berita Acara PHO No. 602/PHO-04/SDABMBK/2026",
-      "lastVerifiedAt": "2026-10-22"
+      "lastVerifiedAt": "2026-10-22",
+      "matchReason": "Pencocokan ruas Jl. Pangeran Diponegoro (Pusat Kota Medan) terhadap penetapan status jalan kota & kurasi paket pilot.",
+      "portalLabel": "SPSE Kota Medan (INAPROC)"
     },
     "officialSources": {
       "authoritySource": "Perwal Medan No. 34/2021 (Jalan Protokol Kota Medan)",
       "budgetSource": "LPSE Kota Medan (Tender Konstruksi TA 2026)",
       "fieldDataSource": "Berita Acara PHO No. 602/PHO-04 & Audit Geospasial JagaJalan",
-      "transparencyUrl": "https://lpse.pemkomedan.go.id"
+      "transparencyUrl": "https://spse.inaproc.id/medankota"
     },
     "functionalClass": "Arteri Sekunder Perkotaan",
     "maxAxleLoad": "MST 10 Ton (Muatan Sumbu Terberat Kelas II)",
     "urbanDrainageStatus": "Terawat & Terhubung Sistem Drainase Induk Kota",
     "utilityDigIssue": "Bebas Galian Utilitas Aktif (Ducting Terpadu)",
     "fundingSourceType": "APBD_MURNI",
-    "fundingSourceLabel": "APBD Murni Kota Medan TA 2026",
-    "photos": {
-      "before": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-      "after": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-      "caption": "Koridor pusat niaga kota dalam kondisi mantap dengan trotoar pedestrian"
-    }
+    "fundingSourceLabel": "APBD Murni Kota Medan TA 2026"
   }
 ]

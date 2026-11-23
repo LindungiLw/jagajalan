@@ -34,7 +34,13 @@
       "fiscalYear": 2026,
       "progressPct": 74,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESASU01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Helvetia, Kec. Labuhan Deli, Kab. Deli Serdang (Sumatera Utara) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "UU No. 2/2022 Pasal 9 & SK Bupati Deli Serdang tentang Inventarisasi Jalan Desa",
@@ -493,7 +499,13 @@
       "fiscalYear": 2026,
       "progressPct": 42,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESASU02",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Tongging, Kec. Merek, Kab. Karo (Sumatera Utara) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "UU No. 2 Tahun 2022 Pasal 9 & Perbup Karo tentang Jalan Desa",
@@ -1332,7 +1344,13 @@
       "fiscalYear": 2026,
       "progressPct": 91,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESASBR01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Nagari Pariangan, Kec. Pariangan, Kab. Tanah Datar (Sumatera Barat) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Tanah Datar tentang Inventarisasi Jalan Nagari",
@@ -2755,13 +2773,19 @@
       "fiscalYear": 2026,
       "progressPct": 68,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAJBR01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Ciburial, Kec. Cimenyan, Kab. Bandung (Jawa Barat) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "Perbup Bandung No. 72/2021 tentang Jalan Desa",
       "budgetSource": "Siskeudes & Portal Desa Ciburial",
       "fieldDataSource": "Pemerintah Desa Ciburial",
-      "transparencyUrl": "https://ciburial.desa.id"
+      "transparencyUrl": "https://sid.kemendesa.go.id"
     },
     "center": [
       -6.85222,
@@ -3710,7 +3734,13 @@
       "fiscalYear": 2026,
       "progressPct": 87,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAJTG01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Karangrejo, Kec. Borobudur, Kab. Magelang (Jawa Tengah) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Magelang tentang Inventarisasi Jalan Desa",
@@ -4345,7 +4375,13 @@
       "fiscalYear": 2026,
       "progressPct": 76,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAJTM01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Pujon Kidul, Kec. Pujon, Kab. Malang (Jawa Timur) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Malang tentang Status Jalan Desa",
@@ -5712,7 +5748,13 @@
       "fiscalYear": 2026,
       "progressPct": 70,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESABLI01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Tigawasa, Kec. Banjar, Kab. Buleleng (Bali) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Buleleng tentang Ruas Jalan Desa",
@@ -7539,7 +7581,13 @@
       "fiscalYear": 2026,
       "progressPct": 66,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESANTB01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Rembitan, Kec. Pujut, Kab. Lombok Tengah (Nusa Tenggara Barat) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Lombok Tengah tentang Jalan Desa",
@@ -8798,7 +8846,13 @@
       "fiscalYear": 2026,
       "progressPct": 62,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAKLB01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Sungai Rengas, Kec. Sungai Kakap, Kab. Kubu Raya (Kalimantan Barat) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Kubu Raya tentang Ruas Jalan Desa",
@@ -9605,7 +9659,13 @@
       "fiscalYear": 2026,
       "progressPct": 71,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAKLT01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Bukit Raya, Kec. Sepaku, Kab. Penajam Paser Utara (Kalimantan Timur) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Penajam Paser Utara tentang Jalan Desa",
@@ -12812,7 +12872,13 @@
       "fiscalYear": 2026,
       "progressPct": 69,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAKLU01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Jelarai Selor, Kec. Tanjung Selor, Kab. Bulungan (Kalimantan Utara) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Bulungan tentang Inventarisasi Jalan Desa",
@@ -13675,7 +13741,13 @@
       "fiscalYear": 2026,
       "progressPct": 85,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESASLS01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Salenrang, Kec. Bontoa, Kab. Maros (Sulawesi Selatan) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Maros tentang Status Jalan Desa",
@@ -14710,7 +14782,13 @@
       "fiscalYear": 2026,
       "progressPct": 73,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESASLU01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Desa Wori, Kec. Wori, Kab. Minahasa Utara (Sulawesi Utara) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Minahasa Utara tentang Jalan Desa",
@@ -16293,7 +16371,13 @@
       "fiscalYear": 2026,
       "progressPct": 82,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAMLK01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Negeri Hila, Kec. Leihitu, Kab. Maluku Tengah (Maluku) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Maluku Tengah tentang Jalan Negeri",
@@ -16832,7 +16916,13 @@
       "fiscalYear": 2026,
       "progressPct": 67,
       "progressStatus": "BERJALAN",
-      "matchConfidence": "TERKONFIRMASI"
+      "matchConfidence": "TERKONFIRMASI",
+      "packageId": "PKG-DESA-RUASDESAPPU01",
+      "sourceDocument": "APBDes & Dana Desa TA 2026",
+      "matchReason": "Pencocokan ruas jalan desa pada Kampung Doyo Baru, Distrik Waibu, Kab. Jayapura (Papua) berdasarkan UU No. 2/2022 Pasal 9 & data kurasi pilot.",
+      "sourceUrl": "https://sid.kemendesa.go.id",
+      "portalLabel": "SID Kemendesa PDTT (Dana Desa)",
+      "lastVerifiedAt": "2026-10-22"
     },
     "officialSources": {
       "authoritySource": "SK Bupati Jayapura tentang Inventarisasi Jalan Kampung",
