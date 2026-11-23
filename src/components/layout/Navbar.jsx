@@ -9,10 +9,9 @@ import {
   Clock,
   AlertTriangle,
   MapPin,
+  ShieldCheck,
   CheckCheck,
   ArrowRight,
-  BookmarkCheck,
-  Globe,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -40,49 +39,54 @@ function formatRelativeTime(isoDate) {
   });
 }
 
-function getStatusBadgeMeta(item) {
-  if (item.status === "SELESAI") {
+function getStatusMeta(item) {
+  if (item.status === "SELESAI" || item.type === "STATUS_RESOLVED") {
     return {
       label: "Selesai",
-      badgeClass: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/70",
-      iconWrapClass: "bg-emerald-50/90 ring-emerald-200/80",
-      customIcon: "/icon/jalan.png",
-      alt: "Selesai",
+      textClass: "text-emerald-800",
+      dotClass: "bg-emerald-600",
+      iconWrapClass: "bg-emerald-50 text-emerald-700",
+      Icon: CheckCircle2,
+      actionCue: "Peta",
     };
   }
-  if (item.status === "OVERDUE") {
+  if (item.status === "OVERDUE" || item.type === "SLA_OVERDUE_ALERT") {
     return {
-      label: "Lewat Tenggat",
-      badgeClass: "bg-rose-50 text-rose-700 ring-1 ring-rose-200/70",
-      iconWrapClass: "bg-rose-50/90 ring-rose-200/80",
-      customIcon: "/icon/warning_icon.png",
-      alt: "Peringatan Lewat Tenggat",
+      label: "Lewat 14 Hari",
+      textClass: "text-rose-700",
+      dotClass: "bg-rose-600",
+      iconWrapClass: "bg-rose-50 text-rose-700",
+      Icon: AlertTriangle,
+      actionCue: "Lacak",
     };
   }
   if (item.status === "TERVERIFIKASI" || item.type === "STATUS_VERIFIED") {
     return {
-      label: "Terverifikasi Dinas",
-      badgeClass: "bg-sky-50 text-sky-800 ring-1 ring-sky-200/80",
-      iconWrapClass: "bg-sky-50/90 ring-sky-200/80",
-      customIcon: "/icon/report.png",
-      alt: "Terverifikasi Dinas",
+      label: "Terverifikasi",
+      textClass: "text-sky-800",
+      dotClass: "bg-sky-600",
+      iconWrapClass: "bg-sky-50 text-sky-700",
+      Icon: ShieldCheck,
+      actionCue: "Peta",
     };
   }
-  if (item.type === "REPORT_CREATED") {
+  if (item.type === "REPORT_CREATED" || item.status === "MENUNGGU_VERIFIKASI") {
     return {
-      label: "Terdaftar GIS",
-      badgeClass: "bg-orange-50 text-[#9a3412] ring-1 ring-orange-200/70",
-      iconWrapClass: "bg-orange-50/90 ring-orange-200/80",
-      customIcon: "/icon/maps.png",
-      alt: "Titik GIS",
+      label: "Baru Diterima",
+      textClass: "text-[#9a3412]",
+      dotClass: "bg-[#c2410c]",
+      iconWrapClass: "bg-orange-50 text-[#c2410c]",
+      Icon: MapPin,
+      actionCue: "Peta",
     };
   }
   return {
-    label: "Dalam Proses",
-    badgeClass: "bg-amber-50 text-amber-800 ring-1 ring-amber-200/70",
-    iconWrapClass: "bg-amber-50/90 ring-amber-200/80",
-    customIcon: "/icon/time.png",
-    alt: "Dalam Pengerjaan",
+    label: "Dalam Perbaikan",
+    textClass: "text-amber-800",
+    dotClass: "bg-amber-600",
+    iconWrapClass: "bg-amber-50 text-amber-700",
+    Icon: Clock,
+    actionCue: "Peta",
   };
 }
 
@@ -217,24 +221,27 @@ export default function Navbar({
         setNotifOpen(false);
       }
     };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setNotifOpen(false);
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const personalNotifications = useMemo(() => {
     const trackedSet = new Set(subscribedTickets);
-    return notifications.filter(
-      (item) => trackedSet.has(item.ticketCode) || item.type === "REPORT_CREATED"
-    );
+    return notifications.filter((item) => trackedSet.has(item.ticketCode));
   }, [notifications, subscribedTickets]);
 
   const displayedNotifications =
     notifScope === "personal" ? personalNotifications : notifications;
-
-  const personalUnreadCount = useMemo(
-    () => personalNotifications.filter((n) => !readNotificationIds.includes(n.id)).length,
-    [personalNotifications, readNotificationIds]
-  );
+  const visibleNotifications = displayedNotifications.slice(0, 15);
 
   const isOfficerLoggedIn = Boolean(
     officerSession && officerSession.isAuthenticated && officerSession.id
@@ -399,215 +406,204 @@ export default function Navbar({
               </button>
 
               {notifOpen && (
-                <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-[390px] rounded-[10px] bg-[#F2ECE4]/95 p-1.5 ring-1 ring-[#E6DFD5] shadow-[0_20px_48px_-12px_rgba(28,25,23,0.18)] z-50 animate-fade-in font-sans">
-                  <div className="bg-white rounded-[7px] ring-1 ring-slate-200/60 overflow-hidden flex flex-col max-h-[460px]">
-                    {/* Drawer Header */}
-                    <div className="px-3.5 pt-3 pb-2.5 border-b border-slate-100 space-y-2 bg-white">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-xs font-bold text-slate-900 font-heading tracking-tight">
-                            Notifikasi
-                          </h3>
-                          {unreadCount > 0 && (
-                            <span className="px-1.5 py-0.2 rounded-full bg-orange-100 text-[#c2410c] font-mono text-[10px] font-bold">
-                              {unreadCount} baru
-                            </span>
-                          )}
-                        </div>
-                        {unreadCount > 0 && onMarkAllRead && (
-                          <button
-                            type="button"
-                            onClick={onMarkAllRead}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-slate-50 hover:bg-orange-50 text-slate-600 hover:text-[#c2410c] ring-1 ring-slate-200/80 text-[10px] font-semibold transition-colors cursor-pointer"
-                          >
-                            <CheckCheck className="w-3 h-3" />
-                            <span>Tandai dibaca</span>
-                          </button>
+                <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-[400px] rounded-[12px] bg-white border border-[#E7DDD0] shadow-[0_20px_48px_-14px_rgba(28,25,23,0.16)] overflow-hidden flex flex-col max-h-[480px] z-50 animate-fade-in font-sans">
+                  <div className="px-4 pt-3.5 pb-0 border-b border-stone-100 bg-white">
+                    <div className="flex items-center justify-between gap-2 pb-2.5">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-[13.5px] font-bold text-stone-950 font-heading tracking-tight">
+                          Notifikasi
+                        </h3>
+                        {unreadCount > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-full bg-orange-100 text-[#9a3412] font-mono tabular-nums text-[10px] font-bold leading-none">
+                            {unreadCount} baru
+                          </span>
                         )}
                       </div>
-
-                      {/* Segmented Switcher: Dipantau vs Semua Publik */}
-                      <div className="grid grid-cols-2 gap-1 p-0.5 rounded-[6px] bg-slate-100/90 ring-1 ring-slate-200/50">
+                      {unreadCount > 0 && onMarkAllRead && (
                         <button
                           type="button"
-                          onClick={() => setNotifScope("personal")}
-                          className={`py-1 px-2 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                            notifScope === "personal"
-                              ? "bg-white text-slate-900 shadow-2xs font-bold"
-                              : "text-slate-600 hover:text-slate-900"
-                          }`}
+                          onClick={onMarkAllRead}
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-stone-500 hover:text-[#c2410c] transition-colors cursor-pointer"
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src="/icon/report.png"
-                            alt=""
-                            width={14}
-                            height={14}
-                            style={{ width: "14px", height: "14px" }}
-                            className="w-3.5 h-3.5 object-contain shrink-0"
-                          />
-                          <span>Dipantau</span>
-                          <span
-                            className={`px-1.5 py-0.2 rounded-[4px] font-mono tabular-nums text-[10px] ${
-                              notifScope === "personal"
-                                ? "bg-orange-50 text-[#c2410c] font-bold"
-                                : "bg-slate-200/70 text-slate-600"
-                            }`}
-                          >
-                            {personalNotifications.length}
-                          </span>
+                          <CheckCheck className="w-3.5 h-3.5" />
+                          <span>Tandai dibaca</span>
                         </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setNotifScope("public")}
-                          className={`py-1 px-2 rounded-[5px] text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                            notifScope === "public"
-                              ? "bg-white text-slate-900 shadow-2xs font-bold"
-                              : "text-slate-600 hover:text-slate-900"
-                          }`}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src="/icon/maps.png"
-                            alt=""
-                            width={14}
-                            height={14}
-                            style={{ width: "14px", height: "14px" }}
-                            className="w-3.5 h-3.5 object-contain shrink-0"
-                          />
-                          <span>Semua Publik</span>
-                          <span
-                            className={`px-1.5 py-0.2 rounded-[4px] font-mono tabular-nums text-[10px] ${
-                              notifScope === "public"
-                                ? "bg-slate-100 text-slate-800 font-bold"
-                                : "bg-slate-200/70 text-slate-600"
-                            }`}
-                          >
-                            {notifications.length}
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Notification List */}
-                    <div className="divide-y divide-slate-100 overflow-y-auto flex-1">
-                      {displayedNotifications.length === 0 ? (
-                        <div className="p-6 text-center space-y-2">
-                          <div className="w-9 h-9 rounded-[8px] bg-orange-50/80 ring-1 ring-orange-200/50 flex items-center justify-center mx-auto p-1.5">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src="/icon/report.png"
-                              alt="Lacak Tiket"
-                              width={24}
-                              height={24}
-                              style={{ width: "24px", height: "24px" }}
-                              className="w-6 h-6 object-contain"
-                            />
-                          </div>
-                          <div className="text-xs font-semibold text-slate-700">
-                            Belum ada tiket dipantau
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setNotifOpen(false);
-                              handleTabClick("ombudsman");
-                            }}
-                            className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-[#c2410c] hover:underline cursor-pointer"
-                          >
-                            <span>Buka Lacak Laporan</span>
-                            <ArrowRight className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ) : (
-                        displayedNotifications.slice(0, 12).map((item) => {
-                          const isUnread = !readNotificationIds.includes(item.id);
-                          const isTracked = subscribedTickets.includes(item.ticketCode);
-                          const { label, badgeClass, iconWrapClass, customIcon, alt } =
-                            getStatusBadgeMeta(item);
-
-                          return (
-                            <button
-                              key={item.id}
-                              type="button"
-                              onClick={() => {
-                                setNotifOpen(false);
-                                if (onSelectNotification) onSelectNotification(item);
-                              }}
-                              className={`w-full text-left px-3.5 py-2.5 transition-colors cursor-pointer flex items-start gap-2.5 ${
-                                isUnread
-                                  ? "bg-orange-50/40 hover:bg-orange-50/70"
-                                  : "bg-white hover:bg-slate-50"
-                              }`}
-                            >
-                              <div
-                                className={`mt-0.5 w-7 h-7 rounded-[6px] flex items-center justify-center shrink-0 ring-1 ${iconWrapClass} p-1 shadow-2xs`}
-                              >
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={customIcon}
-                                  alt={alt || "Status"}
-                                  width={18}
-                                  height={18}
-                                  style={{ width: "18px", height: "18px" }}
-                                  className="w-[18px] h-[18px] object-contain shrink-0"
-                                />
-                              </div>
-
-                              <div className="flex-1 min-w-0 space-y-0.5">
-                                <div className="flex items-center justify-between gap-1.5">
-                                  <div className="flex items-center gap-1.5 min-w-0 truncate">
-                                    <span className="font-mono tabular-nums text-[11px] font-bold text-slate-900 shrink-0">
-                                      #{item.ticketCode}
-                                    </span>
-                                    <span
-                                      className={`px-1.5 py-0.2 rounded-[3px] text-[9.5px] font-semibold shrink-0 ${badgeClass}`}
-                                    >
-                                      {label}
-                                    </span>
-                                    {notifScope === "public" && isTracked && (
-                                      <span className="px-1 py-0.2 rounded-[3px] text-[9px] font-semibold bg-slate-100 text-slate-600 shrink-0">
-                                        Dipantau
-                                      </span>
-                                    )}
-                                  </div>
-                                  <span className="text-[10px] text-slate-400 font-mono tabular-nums shrink-0">
-                                    {formatRelativeTime(item.createdAt)}
-                                  </span>
-                                </div>
-
-                                <div className="text-xs font-bold text-slate-900 leading-snug truncate">
-                                  {item.roadName || item.title}
-                                </div>
-
-                                <p className="text-[11px] text-slate-500 leading-snug line-clamp-1">
-                                  {item.message}
-                                </p>
-                              </div>
-                            </button>
-                          );
-                        })
                       )}
                     </div>
 
-                    {/* Drawer Footer */}
-                    <div className="px-3.5 py-2 border-t border-slate-100 bg-slate-50/70 flex items-center justify-between text-[11px]">
-                      <span className="text-[10.5px] text-slate-400 font-mono">
-                        {displayedNotifications.length} notifikasi
-                      </span>
+                    <div className="flex items-center gap-5">
                       <button
                         type="button"
-                        onClick={() => {
-                          setNotifOpen(false);
-                          handleTabClick("ombudsman");
-                        }}
-                        className="font-semibold text-[#c2410c] hover:underline cursor-pointer flex items-center gap-1"
+                        onClick={() => setNotifScope("personal")}
+                        className={`relative pb-2.5 text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+                          notifScope === "personal"
+                            ? "text-stone-950 font-semibold"
+                            : "text-stone-500 hover:text-stone-800 font-medium"
+                        }`}
                       >
-                        <span>Kelola di Lacak Laporan</span>
-                        <ArrowRight className="w-3 h-3" />
+                        <span>Dipantau</span>
+                        <span
+                          className={`px-1.5 py-0.5 rounded-full font-mono tabular-nums text-[10px] leading-none ${
+                            notifScope === "personal"
+                              ? "bg-orange-100 text-[#9a3412] font-bold"
+                              : "bg-stone-100 text-stone-600"
+                          }`}
+                        >
+                          {personalNotifications.length}
+                        </span>
+                        {notifScope === "personal" && (
+                          <span className="absolute bottom-0 inset-x-0 h-[2px] bg-[#c2410c] rounded-full" />
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setNotifScope("public")}
+                        className={`relative pb-2.5 text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+                          notifScope === "public"
+                            ? "text-stone-950 font-semibold"
+                            : "text-stone-500 hover:text-stone-800 font-medium"
+                        }`}
+                      >
+                        <span>Aktivitas Publik</span>
+                        <span
+                          className={`px-1.5 py-0.5 rounded-full font-mono tabular-nums text-[10px] leading-none ${
+                            notifScope === "public"
+                              ? "bg-orange-100 text-[#9a3412] font-bold"
+                              : "bg-stone-100 text-stone-600"
+                          }`}
+                        >
+                          {notifications.length}
+                        </span>
+                        {notifScope === "public" && (
+                          <span className="absolute bottom-0 inset-x-0 h-[2px] bg-[#c2410c] rounded-full" />
+                        )}
                       </button>
                     </div>
+                  </div>
+
+                  <div className="divide-y divide-stone-100 overflow-y-auto flex-1">
+                    {visibleNotifications.length === 0 ? (
+                      <div className="px-6 py-8 text-center space-y-2">
+                        <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#E7DDD0] text-[#c2410c] flex items-center justify-center mx-auto">
+                          <Bell className="w-4 h-4" />
+                        </div>
+                        <div className="text-xs font-bold text-stone-900">
+                          Belum ada laporan yang dipantau
+                        </div>
+                        <p className="text-[11.5px] text-stone-500 max-w-[260px] mx-auto leading-relaxed">
+                          Laporan yang kamu kirim atau tandai Pantau di halaman Lacak Laporan akan tampil di sini.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setNotifOpen(false);
+                            handleTabClick("ombudsman");
+                          }}
+                          className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-[#c2410c] hover:text-[#9a3412] hover:underline cursor-pointer"
+                        >
+                          <span>Pilih di Lacak Laporan</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      visibleNotifications.map((item) => {
+                        const isUnread = !readNotificationIds.includes(item.id);
+                        const isTracked = subscribedTickets.includes(item.ticketCode);
+                        const { label, textClass, dotClass, iconWrapClass, Icon, actionCue } =
+                          getStatusMeta(item);
+
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => {
+                              setNotifOpen(false);
+                              if (onSelectNotification) onSelectNotification(item);
+                            }}
+                            className={`group w-full text-left px-4 py-3 transition-colors cursor-pointer flex items-start gap-3 ${
+                              isUnread
+                                ? "bg-[#FFF9F4] hover:bg-[#FAF3EB]"
+                                : "bg-white hover:bg-[#FAF7F2]/70"
+                            }`}
+                          >
+                            <div
+                              className={`mt-0.5 w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${iconWrapClass}`}
+                            >
+                              <Icon className="w-4 h-4" />
+                            </div>
+
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  {isUnread && (
+                                    <span
+                                      className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0"
+                                      aria-label="Belum dibaca"
+                                    />
+                                  )}
+                                  <span className="text-[12.5px] font-bold text-stone-950 leading-snug truncate">
+                                    {item.roadName || item.title}
+                                  </span>
+                                </div>
+                                <span className="text-[10.5px] text-stone-500 font-mono tabular-nums shrink-0 pt-0.5">
+                                  {formatRelativeTime(item.createdAt)}
+                                </span>
+                              </div>
+
+                              <p className="text-[11.5px] text-stone-600 leading-relaxed line-clamp-2">
+                                {item.message}
+                              </p>
+
+                              <div className="flex items-center justify-between gap-2 pt-0.5">
+                                <div className="flex items-center gap-1.5 min-w-0 text-[10.5px]">
+                                  <span className={`inline-flex items-center gap-1 font-semibold shrink-0 ${textClass}`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full ${dotClass}`} />
+                                    <span>{label}</span>
+                                  </span>
+                                  <span className="text-stone-300">·</span>
+                                  <span className="font-mono tabular-nums text-stone-500 truncate">
+                                    #{item.ticketCode}
+                                  </span>
+                                  {notifScope === "public" && isTracked && (
+                                    <>
+                                      <span className="text-stone-300">·</span>
+                                      <span className="font-semibold text-[#9a3412] shrink-0">
+                                        Dipantau
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
+
+                                <span className="inline-flex items-center gap-0.5 text-[10.5px] font-semibold text-[#c2410c] opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                                  <span>{actionCue}</span>
+                                  <ArrowRight className="w-3 h-3" />
+                                </span>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })
+                    )}
+                  </div>
+
+                  <div className="px-4 py-2.5 border-t border-[#EDE6DC] bg-[#FAF7F2] flex items-center justify-between text-[11px]">
+                    <span className="text-stone-500 font-mono tabular-nums">
+                      {displayedNotifications.length > visibleNotifications.length
+                        ? `${visibleNotifications.length} dari ${displayedNotifications.length} pembaruan`
+                        : `${displayedNotifications.length} pembaruan`}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNotifOpen(false);
+                        handleTabClick("ombudsman");
+                      }}
+                      className="font-semibold text-[#c2410c] hover:text-[#9a3412] hover:underline cursor-pointer inline-flex items-center gap-1"
+                    >
+                      <span>Kelola di Lacak Laporan</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
                   </div>
                 </div>
               )}

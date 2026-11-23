@@ -87,19 +87,105 @@ function sanitizeImageUrl(url, fallback = "/images/roads/jalan-lubang-medan.jpg"
   return fallback;
 }
 
+function canonicalNotifStage(item) {
+  const status = String(item?.status || "").toUpperCase();
+  const type = String(item?.type || "").toUpperCase();
+  if (status === "SELESAI" || type === "STATUS_RESOLVED") return "SELESAI";
+  if (status === "OVERDUE" || type === "SLA_OVERDUE_ALERT") return "OVERDUE";
+  if (status === "TERVERIFIKASI" || type === "STATUS_VERIFIED") return "TERVERIFIKASI";
+  if (status === "DALAM_PENGERJAAN" || type === "STATUS_IN_PROGRESS") return "DALAM_PENGERJAAN";
+  return "CREATED";
+}
+
+function buildCleanNotificationMessage({ status, roadName, authorityLabel, note, daysOverdue }) {
+  const safeRoad = roadName || "ruas jalan ini";
+  const safeAuth = authorityLabel || "dinas penyelenggara jalan";
+  const rawNote = typeof note === "string" ? note.trim() : "";
+  const looksLikeRawGps = /\[-?\d+\.\d+,\s*-?\d+\.\d+\]/.test(rawNote) || /terpetakan secara real/i.test(rawNote);
+  const looksLikeOverdueNote = /terlampaui|tenggat batas waktu/i.test(rawNote);
+
+  if (status === "SELESAI") {
+    if (rawNote && !looksLikeRawGps && !looksLikeOverdueNote) return rawNote;
+    return `Perbaikan pada ${safeRoad} selesai dikerjakan dan diverifikasi oleh ${safeAuth}.`;
+  }
+  if (status === "OVERDUE") {
+    if (rawNote && !looksLikeRawGps) return rawNote;
+    return `Batas tanggap 14 hari kerja terlewati (+${daysOverdue || 1} hari). Draf pengaduan Ombudsman RI siap digunakan.`;
+  }
+  if (status === "TERVERIFIKASI") {
+    if (rawNote && !looksLikeRawGps && !looksLikeOverdueNote) return rawNote;
+    return `Laporan diterima dan diverifikasi oleh ${safeAuth}. Jadwal penanganan sedang disiapkan.`;
+  }
+  if (status === "DALAM_PENGERJAAN") {
+    if (rawNote && !looksLikeRawGps && !looksLikeOverdueNote) return rawNote;
+    return `Tim lapangan ${safeAuth} sedang menangani perbaikan pada ${safeRoad}.`;
+  }
+  return `Laporan kerusakan pada ${safeRoad} masuk antrean verifikasi ${safeAuth}.`;
+}
+
+function normalizeAndDedupeNotifications(rawList) {
+  if (!Array.isArray(rawList)) return [];
+
+  const sorted = [...rawList]
+    .filter((item) => item && typeof item === "object")
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+
+  const byReportKey = new Map();
+  for (const item of sorted) {
+    if (
+      typeof item.title === "string" &&
+      item.title.toLowerCase().includes("notifikasi otomatis aktif")
+    ) {
+      continue;
+    }
+
+    const reportKey = String(item.reportId || item.ticketCode || item.id || "").toUpperCase();
+    if (!reportKey || byReportKey.has(reportKey)) continue;
+
+    const stage = canonicalNotifStage(item);
+    const normalizedStatus = stage === "CREATED" ? item.status || "MENUNGGU_VERIFIKASI" : stage;
+    const normalizedType =
+      stage === "SELESAI"
+        ? "STATUS_RESOLVED"
+        : stage === "OVERDUE"
+        ? "SLA_OVERDUE_ALERT"
+        : stage === "TERVERIFIKASI"
+        ? "STATUS_VERIFIED"
+        : stage === "DALAM_PENGERJAAN"
+        ? "STATUS_IN_PROGRESS"
+        : "REPORT_CREATED";
+
+    byReportKey.set(reportKey, {
+      ...item,
+      id: `NOTIF-${reportKey}-${stage}`,
+      status: normalizedStatus,
+      type: normalizedType,
+      message: buildCleanNotificationMessage({
+        status: normalizedStatus,
+        roadName: item.roadName,
+        authorityLabel: item.authorityLabel,
+        note: item.message,
+      }),
+    });
+  }
+
+  return Array.from(byReportKey.values());
+}
+
 function buildSeedNotifications(reports) {
   const seeded = [];
 
   for (const rep of reports) {
     if (!rep) continue;
 
+    const lastUpdate =
+      Array.isArray(rep.updates) && rep.updates.length > 0
+        ? rep.updates[rep.updates.length - 1]
+        : null;
+
     if (rep.status === "SELESAI" || rep.progressStatus === "SELESAI") {
-      const lastUpdate =
-        Array.isArray(rep.updates) && rep.updates.length > 0
-          ? rep.updates[rep.updates.length - 1]
-          : null;
       seeded.push({
-        id: `NOTIF-SEED-${rep.id}-DONE`,
+        id: `NOTIF-${String(rep.id).toUpperCase()}-SELESAI`,
         reportId: rep.id,
         ticketCode: rep.ticketCode,
         roadSegmentId: rep.roadSegmentId,
@@ -110,20 +196,19 @@ function buildSeedNotifications(reports) {
         type: "STATUS_RESOLVED",
         status: "SELESAI",
         title: `Perbaikan Selesai: #${rep.ticketCode}`,
-        message:
-          lastUpdate?.note ||
-          `Perbaikan fisik pada ${rep.roadName} telah diselesaikan dan terverifikasi oleh ${rep.authorityLabel}.`,
+        message: buildCleanNotificationMessage({
+          status: "SELESAI",
+          roadName: rep.roadName,
+          authorityLabel: rep.authorityLabel,
+          note: lastUpdate?.note,
+        }),
         officer: lastUpdate?.officer || rep.authorityLabel,
         createdAt: lastUpdate?.date || rep.reportDate || new Date().toISOString(),
-        hasProofPhoto: Boolean(rep.afterPhotoUrl),
+        hasProofPhoto: Boolean(rep.afterPhotoUrl || rep.proofPhotoUrl),
       });
     } else if (rep.status === "DALAM_PENGERJAAN" || rep.progressStatus === "DALAM_PENGERJAAN") {
-      const lastUpdate =
-        Array.isArray(rep.updates) && rep.updates.length > 0
-          ? rep.updates[rep.updates.length - 1]
-          : null;
       seeded.push({
-        id: `NOTIF-SEED-${rep.id}-PROG`,
+        id: `NOTIF-${String(rep.id).toUpperCase()}-DALAM_PENGERJAAN`,
         reportId: rep.id,
         ticketCode: rep.ticketCode,
         roadSegmentId: rep.roadSegmentId,
@@ -133,17 +218,20 @@ function buildSeedNotifications(reports) {
         authorityLabel: rep.authorityLabel,
         type: "STATUS_IN_PROGRESS",
         status: "DALAM_PENGERJAAN",
-        title: `Dalam Pengerjaan Dinas: #${rep.ticketCode}`,
-        message:
-          lastUpdate?.note ||
-          `Tim teknis ${rep.authorityLabel} sedang menindaklanjuti perbaikan pada ${rep.roadName}.`,
+        title: `Dalam Perbaikan Dinas: #${rep.ticketCode}`,
+        message: buildCleanNotificationMessage({
+          status: "DALAM_PENGERJAAN",
+          roadName: rep.roadName,
+          authorityLabel: rep.authorityLabel,
+          note: lastUpdate?.note,
+        }),
         officer: lastUpdate?.officer || rep.authorityLabel,
         createdAt: lastUpdate?.date || rep.reportDate || new Date().toISOString(),
         hasProofPhoto: false,
       });
     } else if (rep.status === "OVERDUE" || rep.isResponseOverdue) {
       seeded.push({
-        id: `NOTIF-SEED-${rep.id}-SLA`,
+        id: `NOTIF-${String(rep.id).toUpperCase()}-OVERDUE`,
         reportId: rep.id,
         ticketCode: rep.ticketCode,
         roadSegmentId: rep.roadSegmentId,
@@ -153,18 +241,21 @@ function buildSeedNotifications(reports) {
         authorityLabel: rep.authorityLabel,
         type: "SLA_OVERDUE_ALERT",
         status: "OVERDUE",
-        title: `Peringatan Tenggat Respons: #${rep.ticketCode}`,
-        message: `Laporan pada ${rep.roadName} telah melewati batas waktu tanggap acuan (+${rep.daysOverdue || 1} hari). Draf advokasi Ombudsman RI siap digunakan.`,
-        officer: "Pemantau Akuntabilitas JagaJalan",
+        title: `Lewat Batas 14 Hari: #${rep.ticketCode}`,
+        message: buildCleanNotificationMessage({
+          status: "OVERDUE",
+          roadName: rep.roadName,
+          authorityLabel: rep.authorityLabel,
+          daysOverdue: rep.daysOverdue,
+        }),
+        officer: "Pemantau Batas 14 Hari JagaJalan",
         createdAt: rep.targetResponseDeadline || rep.reportDate || new Date().toISOString(),
         hasProofPhoto: false,
       });
     }
   }
 
-  return seeded
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 12);
+  return normalizeAndDedupeNotifications(seeded).slice(0, 12);
 }
 
 function loadPersistedState() {
@@ -469,7 +560,7 @@ export async function GET(request) {
           geojsonEndpoint: "/api/reports?format=geojson",
           authorityClassification: "UU No. 2 Tahun 2022 tentang Jalan & SK Penetapan Ruas",
         },
-        notifications: (state.notifications || []).slice(0, 30),
+        notifications: normalizeAndDedupeNotifications(state.notifications || []).slice(0, 25),
         data: paginatedReports.map(toPublicReportView),
       },
       {
@@ -640,7 +731,7 @@ export async function POST(request) {
     };
 
     const createdNotification = {
-      id: `NOTIF-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      id: `NOTIF-${String(newReport.id).toUpperCase()}-CREATED`,
       reportId: newReport.id,
       ticketCode: newReport.ticketCode,
       roadSegmentId: newReport.roadSegmentId,
@@ -650,9 +741,13 @@ export async function POST(request) {
       authorityLabel: newReport.authorityLabel,
       type: "REPORT_CREATED",
       status: newReport.status,
-      title: `Tiket #${newReport.ticketCode} Terbit & Dipetakan di GIS`,
-      message: `Titik laporan pada ${newReport.roadName} [${lat.toFixed(4)}, ${lng.toFixed(4)}] telah masuk antrean verifikasi ${newReport.authorityLabel}.`,
-      officer: "Sistem Notifikasi Otomatis JagaJalan",
+      title: `Laporan Baru Diterima: #${newReport.ticketCode}`,
+      message: buildCleanNotificationMessage({
+        status: newReport.status,
+        roadName: newReport.roadName,
+        authorityLabel: newReport.authorityLabel,
+      }),
+      officer: "Sistem JagaJalan",
       createdAt: nowIso,
       hasProofPhoto: false,
     };
@@ -661,10 +756,10 @@ export async function POST(request) {
       newReport,
       ...state.customReports.filter((r) => r.id !== newReport.id),
     ];
-    state.notifications = [
+    state.notifications = normalizeAndDedupeNotifications([
       createdNotification,
       ...(state.notifications || []),
-    ].slice(0, 60);
+    ]).slice(0, 40);
 
     savePersistedState(state);
 
@@ -830,8 +925,9 @@ export async function PATCH(request) {
 
       const isResolved = nextStatus === "SELESAI";
       const isVerified = nextStatus === "TERVERIFIKASI";
+      const stage = canonicalNotifStage({ status: nextStatus });
       generatedNotification = {
-        id: `NOTIF-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        id: `NOTIF-${String(updatedReport.id).toUpperCase()}-${stage}`,
         reportId: updatedReport.id,
         ticketCode: updatedReport.ticketCode,
         roadSegmentId: updatedReport.roadSegmentId,
@@ -849,24 +945,23 @@ export async function PATCH(request) {
         title: isResolved
           ? `Perbaikan Selesai: #${updatedReport.ticketCode}`
           : isVerified
-          ? `Verifikasi Diterima Dinas: #${updatedReport.ticketCode}`
+          ? `Terverifikasi Dinas: #${updatedReport.ticketCode}`
           : `Dalam Perbaikan Dinas: #${updatedReport.ticketCode}`,
-        message:
-          latestUpdate?.note ||
-          (isResolved
-            ? `Perbaikan fisik jalan pada ${updatedReport.roadName} telah selesai beserta unggahan bukti dokumentasi.`
-            : isVerified
-            ? `Laporan warga pada ${updatedReport.roadName} telah diterima dan diverifikasi oleh ${updatedReport.authorityLabel}.`
-            : `Laporan pada ${updatedReport.roadName} kini berstatus Dalam Perbaikan oleh ${updatedReport.authorityLabel}.`),
+        message: buildCleanNotificationMessage({
+          status: nextStatus,
+          roadName: updatedReport.roadName,
+          authorityLabel: updatedReport.authorityLabel,
+          note: latestUpdate?.note,
+        }),
         officer: latestUpdate?.officer || updatedReport.authorityLabel,
         createdAt: new Date().toISOString(),
         hasProofPhoto: Boolean(updatedReport.proofPhotoUrl || updatedReport.afterPhotoUrl),
       };
 
-      state.notifications = [
+      state.notifications = normalizeAndDedupeNotifications([
         generatedNotification,
         ...(state.notifications || []),
-      ].slice(0, 60);
+      ]).slice(0, 40);
       savePersistedState(state);
     }
 

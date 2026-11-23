@@ -58,34 +58,110 @@ function applyReportOverrides(reportList, overridesMap) {
   });
 }
 
+function canonicalNotifStage(item) {
+  const status = String(item?.status || "").toUpperCase();
+  const type = String(item?.type || "").toUpperCase();
+  if (status === "SELESAI" || type === "STATUS_RESOLVED") return "SELESAI";
+  if (status === "OVERDUE" || type === "SLA_OVERDUE_ALERT") return "OVERDUE";
+  if (status === "TERVERIFIKASI" || type === "STATUS_VERIFIED") return "TERVERIFIKASI";
+  if (status === "DALAM_PENGERJAAN" || type === "STATUS_IN_PROGRESS") return "DALAM_PENGERJAAN";
+  return "CREATED";
+}
+
+function buildCleanNotificationMessage({ status, roadName, authorityLabel, note, daysOverdue }) {
+  const safeRoad = roadName || "ruas jalan ini";
+  const safeAuth = authorityLabel || "dinas penyelenggara jalan";
+  const rawNote = typeof note === "string" ? note.trim() : "";
+  const looksLikeRawGps =
+    /\[-?\d+\.\d+,\s*-?\d+\.\d+\]/.test(rawNote) || /terpetakan secara real/i.test(rawNote);
+  const looksLikeOverdueNote = /terlampaui|tenggat batas waktu/i.test(rawNote);
+
+  if (status === "SELESAI") {
+    if (rawNote && !looksLikeRawGps && !looksLikeOverdueNote) return rawNote;
+    return `Perbaikan pada ${safeRoad} selesai dikerjakan dan diverifikasi oleh ${safeAuth}.`;
+  }
+  if (status === "OVERDUE") {
+    if (rawNote && !looksLikeRawGps) return rawNote;
+    return `Batas tanggap 14 hari kerja terlewati (+${daysOverdue || 1} hari). Draf pengaduan Ombudsman RI siap digunakan.`;
+  }
+  if (status === "TERVERIFIKASI") {
+    if (rawNote && !looksLikeRawGps && !looksLikeOverdueNote) return rawNote;
+    return `Laporan diterima dan diverifikasi oleh ${safeAuth}. Jadwal penanganan sedang disiapkan.`;
+  }
+  if (status === "DALAM_PENGERJAAN") {
+    if (rawNote && !looksLikeRawGps && !looksLikeOverdueNote) return rawNote;
+    return `Tim lapangan ${safeAuth} sedang menangani perbaikan pada ${safeRoad}.`;
+  }
+  return `Laporan kerusakan pada ${safeRoad} masuk antrean verifikasi ${safeAuth}.`;
+}
+
 function mergeNotificationsById(...notifLists) {
-  const seen = new Set();
-  const merged = [];
+  const flattened = [];
   for (const list of notifLists) {
     if (!Array.isArray(list)) continue;
     for (const item of list) {
-      if (!item || !item.id || seen.has(item.id)) continue;
-      seen.add(item.id);
-      merged.push(item);
+      if (!item || typeof item !== "object") continue;
+      if (
+        typeof item.title === "string" &&
+        item.title.toLowerCase().includes("notifikasi otomatis aktif")
+      ) {
+        continue;
+      }
+      flattened.push(item);
     }
   }
-  return merged.sort(
+
+  flattened.sort(
     (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
   );
+
+  const byReportKey = new Map();
+  for (const item of flattened) {
+    const reportKey = String(item.reportId || item.ticketCode || item.id || "").toUpperCase();
+    if (!reportKey || byReportKey.has(reportKey)) continue;
+
+    const stage = canonicalNotifStage(item);
+    const normalizedStatus = stage === "CREATED" ? item.status || "MENUNGGU_VERIFIKASI" : stage;
+    const normalizedType =
+      stage === "SELESAI"
+        ? "STATUS_RESOLVED"
+        : stage === "OVERDUE"
+        ? "SLA_OVERDUE_ALERT"
+        : stage === "TERVERIFIKASI"
+        ? "STATUS_VERIFIED"
+        : stage === "DALAM_PENGERJAAN"
+        ? "STATUS_IN_PROGRESS"
+        : "REPORT_CREATED";
+
+    byReportKey.set(reportKey, {
+      ...item,
+      id: `NOTIF-${reportKey}-${stage}`,
+      status: normalizedStatus,
+      type: normalizedType,
+      message: buildCleanNotificationMessage({
+        status: normalizedStatus,
+        roadName: item.roadName,
+        authorityLabel: item.authorityLabel,
+        note: item.message,
+      }),
+    });
+  }
+
+  return Array.from(byReportKey.values());
 }
 
 function buildInitialSeedNotifications(reports) {
-  return (reports || [])
-    .slice(0, 6)
-    .map((rep) => {
+  return mergeNotificationsById(
+    (reports || []).slice(0, 6).map((rep) => {
       const lastUpd =
         Array.isArray(rep.updates) && rep.updates.length > 0
           ? rep.updates[rep.updates.length - 1]
           : null;
       const isResolved = rep.status === "SELESAI" || rep.progressStatus === "SELESAI";
       const isOverdue = rep.status === "OVERDUE" || rep.isResponseOverdue;
+      const status = isResolved ? "SELESAI" : isOverdue ? "OVERDUE" : "DALAM_PENGERJAAN";
       return {
-        id: `NOTIF-INIT-${rep.id}`,
+        id: `NOTIF-${String(rep.id).toUpperCase()}-${status}`,
         reportId: rep.id,
         ticketCode: rep.ticketCode,
         roadSegmentId: rep.roadSegmentId,
@@ -98,19 +174,24 @@ function buildInitialSeedNotifications(reports) {
           : isOverdue
           ? "SLA_OVERDUE_ALERT"
           : "STATUS_IN_PROGRESS",
-        status: rep.status,
+        status,
         title: isResolved
           ? `Perbaikan Selesai: #${rep.ticketCode}`
           : isOverdue
-          ? `Peringatan Tenggat Respons: #${rep.ticketCode}`
-          : `Pembaruan Status Dinas: #${rep.ticketCode}`,
-        message:
-          lastUpd?.note ||
-          `Status penanganan pada ${rep.roadName} dipantau secara real-time oleh ${rep.authorityLabel}.`,
+          ? `Lewat Batas 14 Hari: #${rep.ticketCode}`
+          : `Dalam Perbaikan Dinas: #${rep.ticketCode}`,
+        message: buildCleanNotificationMessage({
+          status,
+          roadName: rep.roadName,
+          authorityLabel: rep.authorityLabel,
+          note: lastUpd?.note,
+          daysOverdue: rep.daysOverdue,
+        }),
         officer: lastUpd?.officer || rep.authorityLabel,
         createdAt: lastUpd?.date || rep.reportDate || new Date().toISOString(),
       };
-    });
+    })
+  );
 }
 
 export default function Home() {
@@ -355,7 +436,8 @@ export default function Home() {
     if (notif.roadSegmentId) {
       setFocusedRoadId(notif.roadSegmentId);
     }
-    setActiveTab("peta");
+    const isOverdueAlert = notif.status === "OVERDUE" || notif.type === "SLA_OVERDUE_ALERT";
+    setActiveTab(isOverdueAlert ? "ombudsman" : "peta");
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -405,7 +487,7 @@ export default function Home() {
     );
 
     const createdNotif = {
-      id: `NOTIF-LOCAL-${newReport.id}`,
+      id: `NOTIF-${String(newReport.id).toUpperCase()}-CREATED`,
       reportId: newReport.id,
       ticketCode: newReport.ticketCode,
       roadSegmentId: newReport.roadSegmentId,
@@ -415,9 +497,13 @@ export default function Home() {
       authorityLabel: newReport.authorityLabel,
       type: "REPORT_CREATED",
       status: newReport.status || "MENUNGGU_VERIFIKASI",
-      title: `Tiket #${newReport.ticketCode} Terbit & Dipetakan di GIS`,
-      message: `Laporan kerusakan pada ${newReport.roadName} telah masuk antrean verifikasi ${newReport.authorityLabel}.`,
-      officer: "Sistem Notifikasi Otomatis JagaJalan",
+      title: `Laporan Baru Diterima: #${newReport.ticketCode}`,
+      message: buildCleanNotificationMessage({
+        status: newReport.status || "MENUNGGU_VERIFIKASI",
+        roadName: newReport.roadName,
+        authorityLabel: newReport.authorityLabel,
+      }),
+      officer: "Sistem JagaJalan",
       createdAt: new Date().toISOString(),
     };
     pushLiveNotification(createdNotif, true);
@@ -516,9 +602,10 @@ export default function Home() {
     const latestUpdate = sortedUpdates[0] || null;
     const isResolved = nextStatus === "SELESAI";
     const isVerified = nextStatus === "TERVERIFIKASI";
+    const stage = canonicalNotifStage({ status: nextStatus });
 
     const statusNotif = {
-      id: `NOTIF-UPD-${reportId}-${Date.now()}`,
+      id: `NOTIF-${String(reportId).toUpperCase()}-${stage}`,
       reportId,
       ticketCode: targetReport?.ticketCode || reportId,
       roadSegmentId: targetReport?.roadSegmentId,
@@ -535,15 +622,14 @@ export default function Home() {
       title: isResolved
         ? `Perbaikan Selesai: #${targetReport?.ticketCode || reportId}`
         : isVerified
-        ? `Verifikasi Diterima Dinas: #${targetReport?.ticketCode || reportId}`
+        ? `Terverifikasi Dinas: #${targetReport?.ticketCode || reportId}`
         : `Dalam Perbaikan Dinas: #${targetReport?.ticketCode || reportId}`,
-      message:
-        latestUpdate?.note ||
-        (isResolved
-          ? `Perbaikan fisik jalan pada ${targetReport?.roadName || "ruas jalan"} telah selesai dan bukti foto lapangan telah diunggah.`
-          : isVerified
-          ? `Laporan warga pada ${targetReport?.roadName || "ruas jalan"} telah diterima dan diverifikasi oleh dinas terkait.`
-          : `Status penanganan tiket #${targetReport?.ticketCode || reportId} diperbarui menjadi Dalam Perbaikan Fisik.`),
+      message: buildCleanNotificationMessage({
+        status: nextStatus,
+        roadName: targetReport?.roadName,
+        authorityLabel: targetReport?.authorityLabel,
+        note: latestUpdate?.note,
+      }),
       officer: latestUpdate?.officer || targetReport?.authorityLabel || "Petugas Dinas",
       createdAt: new Date().toISOString(),
     };
@@ -621,23 +707,19 @@ export default function Home() {
     ) {
       window.Notification.requestPermission().catch(() => {});
     }
-    const subNotif = {
-      id: `NOTIF-SUB-${report.id}-${Date.now()}`,
+    setActiveToast({
+      id: `TOAST-SUB-${report.id}-${Date.now()}`,
       reportId: report.id,
       ticketCode: report.ticketCode,
       roadSegmentId: report.roadSegmentId,
       roadName: report.roadName,
-      district: report.district,
-      authority: report.authority,
-      authorityLabel: report.authorityLabel,
-      type: "REPORT_CREATED",
       status: report.status,
-      title: `Notifikasi Otomatis Aktif: #${report.ticketCode}`,
-      message: `Anda akan menerima pemberitahuan real-time setiap kali ${report.authorityLabel} memperbarui status atau mengunggah bukti perbaikan pada ${report.roadName}.`,
-      officer: "Sistem Notifikasi Otomatis JagaJalan",
+      type: "STATUS_SUBSCRIBED",
+      title: `Pemantauan Aktif: #${report.ticketCode}`,
+      message: `Setiap pembaruan dari ${report.authorityLabel} untuk ${report.roadName} akan muncul di tab Dipantau.`,
+      officer: "Notifikasi JagaJalan",
       createdAt: new Date().toISOString(),
-    };
-    pushLiveNotification(subNotif, true);
+    });
   };
 
   const handleOpenOmbudsmanDraft = (report) => {
@@ -731,6 +813,10 @@ export default function Home() {
                 reports={reports}
                 onExploreData={() => {
                   setActiveTab("data-anggaran");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onExploreMap={() => {
+                  setActiveTab("peta");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 onOpenReport={() => handleOpenReportModal(null)}
@@ -842,42 +928,43 @@ export default function Home() {
         )}
       </main>
 
-      {/* Live Automated Status Notification Toast */}
       {activeToast && (
-        <div className="fixed bottom-4 inset-x-3 sm:inset-x-auto sm:right-4 z-50 sm:w-[375px] rounded-[8px] bg-slate-900/95 p-1.5 ring-1 ring-orange-400/50 shadow-2xl animate-fade-in font-sans">
-          <div className="rounded-[6px] bg-white p-3.5 space-y-2">
+        <div className="fixed bottom-4 inset-x-3 sm:inset-x-auto sm:right-4 z-50 sm:w-[375px] rounded-[10px] bg-white border border-[#E7DDD0] shadow-[0_18px_40px_-12px_rgba(28,25,23,0.18)] overflow-hidden animate-fade-in font-sans">
+          <div className="p-3.5 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`w-6 h-6 rounded-[5px] flex items-center justify-center shrink-0 ring-1 ${
+                  className={`w-6 h-6 rounded-[6px] flex items-center justify-center shrink-0 ${
                     activeToast.status === "SELESAI"
-                      ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                      ? "bg-emerald-50 text-emerald-700"
                       : activeToast.status === "TERVERIFIKASI" ||
                         activeToast.type === "STATUS_VERIFIED"
-                      ? "bg-sky-50 text-sky-700 ring-sky-200"
-                      : activeToast.type === "REPORT_CREATED"
-                      ? "bg-orange-50 text-[#c2410c] ring-orange-200"
-                      : "bg-amber-50 text-amber-700 ring-amber-200"
+                      ? "bg-sky-50 text-sky-700"
+                      : activeToast.type === "REPORT_CREATED" ||
+                        activeToast.type === "STATUS_SUBSCRIBED"
+                      ? "bg-orange-50 text-[#c2410c]"
+                      : "bg-amber-50 text-amber-700"
                   }`}
                 >
                   {activeToast.status === "SELESAI" ||
                   activeToast.status === "TERVERIFIKASI" ||
                   activeToast.type === "STATUS_VERIFIED" ? (
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                  ) : activeToast.type === "REPORT_CREATED" ? (
+                  ) : activeToast.type === "REPORT_CREATED" ||
+                    activeToast.type === "STATUS_SUBSCRIBED" ? (
                     <BellRing className="w-3.5 h-3.5" />
                   ) : (
                     <Clock className="w-3.5 h-3.5" />
                   )}
                 </div>
-                <span className="font-mono tabular-nums text-[10px] font-bold text-[#c2410c] uppercase tracking-wider">
-                  Notifikasi Status Otomatis
+                <span className="text-[11px] font-semibold text-[#9a3412]">
+                  Pembaruan Laporan
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveToast(null)}
-                className="p-0.5 rounded-[4px] text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="p-0.5 rounded-[4px] text-stone-400 hover:text-stone-700 cursor-pointer"
                 aria-label="Tutup Notifikasi"
               >
                 <X className="w-3.5 h-3.5" />
@@ -885,32 +972,36 @@ export default function Home() {
             </div>
 
             <div className="space-y-0.5">
-              <div className="text-xs font-bold text-slate-900 font-heading leading-snug">
+              <div className="text-xs font-bold text-stone-950 font-heading leading-snug">
                 {activeToast.title}
               </div>
-              <p className="text-[11px] text-slate-600 leading-relaxed line-clamp-2">
+              <p className="text-[11.5px] text-stone-600 leading-relaxed line-clamp-2">
                 {activeToast.message}
               </p>
             </div>
+          </div>
 
-            <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10.5px]">
-              <span className="text-slate-400 truncate max-w-[180px]">
-                {activeToast.officer}
+          <div className="px-3.5 py-2 bg-[#FAF7F2] border-t border-[#EDE6DC] flex items-center justify-between text-[11px]">
+            <span className="text-stone-500 truncate max-w-[180px]">
+              {activeToast.officer}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                const target = activeToast;
+                setActiveToast(null);
+                handleSelectNotification(target);
+              }}
+              className="font-semibold text-[#c2410c] hover:text-[#9a3412] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <MapPin className="w-3 h-3" />
+              <span>
+                {activeToast.status === "OVERDUE" || activeToast.type === "SLA_OVERDUE_ALERT"
+                  ? "Buka Lacak Laporan"
+                  : "Lihat di Peta"}
               </span>
-              <button
-                type="button"
-                onClick={() => {
-                  const target = activeToast;
-                  setActiveToast(null);
-                  handleSelectNotification(target);
-                }}
-                className="font-bold text-[#c2410c] hover:underline inline-flex items-center gap-1 cursor-pointer"
-              >
-                <MapPin className="w-3 h-3" />
-                <span>Lihat di Peta GIS</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
+              <ArrowRight className="w-3 h-3" />
+            </button>
           </div>
         </div>
       )}
