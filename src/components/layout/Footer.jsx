@@ -261,10 +261,10 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
                 <ShieldCheck className="w-4 h-4" />
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/LindungiLw/jagajalan"
                 target="_blank"
                 rel="noreferrer"
-                title="Repositori Sumber Terbuka (Open Source)"
+                title="Repositori Sumber Terbuka JagaJalan (GitHub)"
                 className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
@@ -371,13 +371,13 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
 
         {/* SLA Pelayanan Publik (Clean & editorial row) */}
         <div className="py-4 border-b border-[#E6DFD5]/80 flex flex-col md:flex-row md:items-center justify-between gap-2.5 text-xs text-slate-500 font-sans">
-          <span className="font-medium text-slate-800">Standar Tenggat Pelayanan Publik (SLA):</span>
+          <span className="font-medium text-slate-800">Acuan Batas Waktu Respons (SLA):</span>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-slate-600 text-xs">
-            <span>Jalan Nasional: <strong className="text-slate-900">&le; 24 Jam Darurat</strong></span>
+            <span>Tanggap Darurat: <strong className="text-slate-900">&le; 24 Jam (Target)</strong></span>
             <span className="text-slate-300 hidden sm:inline" aria-hidden="true">|</span>
-            <span>Jalan Provinsi: <strong className="text-slate-900">&le; 48 Jam Verifikasi</strong></span>
+            <span>Verifikasi Awal: <strong className="text-slate-900">&le; 48 Jam (Target)</strong></span>
             <span className="text-slate-300 hidden sm:inline" aria-hidden="true">|</span>
-            <span>Jalan Kab/Kota: <strong className="text-slate-900">&le; 7 Hari Tindak Lanjut</strong></span>
+            <span>Batas Hukum Tanggapan (UU 25/2009): <strong className="text-slate-900">&le; 14 Hari Kerja</strong></span>
           </div>
         </div>
 

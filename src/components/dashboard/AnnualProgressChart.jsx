@@ -67,6 +67,15 @@ export default function AnnualProgressChart() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!showExplanationModal) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setShowExplanationModal(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [showExplanationModal]);
+
   const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
   // Selected year data for active metric
@@ -655,7 +664,7 @@ export default function AnnualProgressChart() {
               </div>
 
               {/* Clean italic source text without border or dot */}
-              <p className="text-[11px] text-slate-400 italic">
+              <p className="text-[11px] text-slate-500 italic">
                 * Sumber: BPS (2026), Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029, dan Ombudsman RI (2026b)
               </p>
             </div>
@@ -716,7 +725,7 @@ export default function AnnualProgressChart() {
 
               {/* Centered Donut Text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Total Ruas</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-500">Total Ruas</span>
                 <span className="text-xl font-black text-slate-900 font-sans tabular-nums leading-tight">
                   538.102
                 </span>
@@ -756,7 +765,7 @@ export default function AnnualProgressChart() {
                         {item.label}
                       </span>
                       <div className="flex items-baseline gap-1.5 font-sans">
-                        <span className="text-[11px] text-slate-400 font-medium">
+                        <span className="text-[11px] text-slate-500 font-medium">
                           {item.km.toLocaleString("id-ID")} Km
                         </span>
                         <span className="font-extrabold text-xs" style={{ color: item.color }}>
@@ -826,7 +835,7 @@ export default function AnnualProgressChart() {
               <div className="text-2xl font-extrabold text-slate-900 font-sans tabular-nums mt-1">
                 {selectedComplaintData.totalComplaints.toLocaleString("id-ID")}
               </div>
-              <span className="text-[10px] text-slate-400 block mt-0.5">
+              <span className="text-[10px] text-slate-500 block mt-0.5">
                 {selectedComplaintData.year === 2025 ? "23.596 Laporan (Ombudsman RI, 2026b)" : "Kompilasi Laporan Tahunan"}
               </span>
             </div>
@@ -848,12 +857,18 @@ export default function AnnualProgressChart() {
             </div>
 
             <div className="p-4 rounded-[6px] bg-rose-50/70 border border-rose-200">
-              <span className="text-[11px] font-semibold text-rose-700 block">Melewati Tenggat Respons</span>
+              <span className="text-[11px] font-semibold text-rose-700 block">
+                {selectedComplaintData.year === 2025 ? "Dugaan Penundaan Berlarut" : "Melewati Tenggat Respons"}
+              </span>
               <div className="text-2xl font-extrabold text-rose-800 font-sans tabular-nums mt-1">
-                {selectedComplaintData.overdue.toLocaleString("id-ID")}
+                {selectedComplaintData.year === 2025
+                  ? `${selectedComplaintData.overduePct}%`
+                  : selectedComplaintData.overdue.toLocaleString("id-ID")}
               </div>
               <span className="text-[10px] text-rose-700 block mt-0.5">
-                {selectedComplaintData.overduePct}% Penundaan Berlarut
+                {selectedComplaintData.year === 2025
+                  ? `Peringkat ke-2 Maladministrasi (±${selectedComplaintData.overdue.toLocaleString("id-ID")} aduan)`
+                  : `${selectedComplaintData.overduePct}% Penundaan Berlarut`}
               </span>
             </div>
 
@@ -886,7 +901,7 @@ export default function AnnualProgressChart() {
               </p>
             </div>
             <span className="text-xs font-bold text-white bg-[#c2410c] px-3 py-1 rounded-[6px]">
-              Total Realisasi: Rp 29,9 Triliun
+              Realisasi Tahap I: Rp 14,6 T · Rencana Awal II: Rp 15,0 T
             </span>
           </div>
 
@@ -896,16 +911,27 @@ export default function AnnualProgressChart() {
                 key={item.year}
                 className="p-5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50 hover:ring-orange-300 transition-all space-y-3"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                      Tahun Anggaran {item.year}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                        Tahun Anggaran {item.year}
+                      </span>
+                      {item.statusLabel && (
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
+                          item.year === 2023
+                            ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                            : "bg-amber-50 text-amber-800 border border-amber-200"
+                        }`}>
+                          {item.statusLabel}
+                        </span>
+                      )}
+                    </div>
                     <h4 className="text-base font-bold text-slate-900 mt-0.5">{item.note}</h4>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <span className="text-2xl font-extrabold text-[#c2410c] font-sans tabular-nums">
-                      Rp {item.budgetTrillion}
+                      Rp {item.budgetTrillion.toFixed(1).replace(".", ",")}
                     </span>
                     <span className="text-xs font-bold text-slate-500 ml-1">Triliun</span>
                   </div>
@@ -920,9 +946,13 @@ export default function AnnualProgressChart() {
 
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/60 text-xs">
                   <div>
-                    <span className="text-[10px] text-slate-500 block">Realisasi Fisik:</span>
+                    <span className="text-[10px] text-slate-500 block">
+                      {item.year === 2023 ? "Realisasi Fisik (KemenPUPR):" : "Target Awal Perencanaan:"}
+                    </span>
                     <strong className="text-slate-800 font-sans tabular-nums">
-                      {item.realizedKm.toLocaleString("id-ID")} Km
+                      {item.year === 2023
+                        ? `${item.realizedKm.toLocaleString("id-ID")} Km`
+                        : `±${item.realizedKm.toLocaleString("id-ID")} Km (Penyesuaian APBN)`}
                     </strong>
                   </div>
                   <div>
@@ -940,7 +970,15 @@ export default function AnnualProgressChart() {
 
       {/* METODOLOGI & REGULASI MODAL (PORTALED TO ROOT BODY Z-[2000]) */}
       {mounted && showExplanationModal && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Metodologi dan Regulasi Statistik Jalan"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowExplanationModal(false);
+          }}
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans"
+        >
           <div className="max-w-2xl w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
             <div className="bg-white rounded-[6px] w-full overflow-hidden ring-1 ring-orange-200/50 max-h-[88vh] flex flex-col">
               {/* Orange Header with White Text */}

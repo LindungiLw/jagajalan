@@ -26,6 +26,7 @@ import {
   Download,
   FileSpreadsheet,
   FileText,
+  X,
 } from "lucide-react";
 import RoadDetailModal from "@/components/modals/RoadDetailModal";
 import CustomSelect from "./CustomSelect";
@@ -40,15 +41,15 @@ function formatRupiahShort(amount) {
   return `Rp ${Number(amount).toLocaleString("id-ID")}`;
 }
 
-// Dataset historis perbandingan Pagu HPS vs Nilai Kontrak SPK (2020 – 2026) dalam Triliun Rupiah
+// Dataset historis alokasi APBN Ditjen Bina Marga Kementerian PU (2020 – 2025) dalam Triliun Rupiah
+// Rujukan: Nota Keuangan RAPBN & rilis pagu Ditjen Bina Marga Kementerian PUPR/PU (2023 mencakup tambahan IJD & IKN)
 const HISTORICAL_BAR_DATA = [
-  { year: "2020", pagu: 32.4, kontrak: 28.5, paguRp: "Rp 32,4 T", kontrakRp: "Rp 28,5 T" },
-  { year: "2021", pagu: 34.1, kontrak: 30.7, paguRp: "Rp 34,1 T", kontrakRp: "Rp 30,7 T" },
-  { year: "2022", pagu: 36.8, kontrak: 32.9, paguRp: "Rp 36,8 T", kontrakRp: "Rp 32,9 T" },
-  { year: "2023", pagu: 38.5, kontrak: 34.2, paguRp: "Rp 38,5 T", kontrakRp: "Rp 34,2 T" },
-  { year: "2024", pagu: 39.7, kontrak: 35.6, paguRp: "Rp 39,7 T", kontrakRp: "Rp 35,6 T" },
-  { year: "2025", pagu: 40.8, kontrak: 36.8, paguRp: "Rp 40,8 T", kontrakRp: "Rp 36,8 T" },
-  { year: "2026", pagu: 41.2, kontrak: 37.1, paguRp: "Rp 41,2 T", kontrakRp: "Rp 37,1 T" },
+  { year: "2020", pagu: 42.95, kontrak: 39.1, paguRp: "Rp 42,95 T", kontrakRp: "±Rp 39,1 T" },
+  { year: "2021", pagu: 53.96, kontrak: 50.2, paguRp: "Rp 53,96 T", kontrakRp: "±Rp 50,2 T" },
+  { year: "2022", pagu: 39.70, kontrak: 37.4, paguRp: "Rp 39,70 T", kontrakRp: "±Rp 37,4 T" },
+  { year: "2023", pagu: 78.96, kontrak: 73.4, paguRp: "Rp 78,96 T", kontrakRp: "±Rp 73,4 T" },
+  { year: "2024", pagu: 55.39, kontrak: 51.5, paguRp: "Rp 55,39 T", kontrakRp: "±Rp 51,5 T" },
+  { year: "2025", pagu: 37.41, kontrak: 34.8, paguRp: "Rp 37,41 T", kontrakRp: "±Rp 34,8 T" },
 ];
 
 // Helper kurva bezier halus (Cubic Bezier Spline) untuk Area Chart
@@ -389,14 +390,18 @@ export default function BudgetDataExplorer({
       ? Math.round((allPackages.filter((p) => p.contractor).length / allPackages.length) * 100)
       : 95;
 
+    const avgPhysicalProgress = allPackages.length > 0
+      ? Math.round(allPackages.reduce((sum, p) => sum + (Number(p.progressPct) || 0), 0) / allPackages.length)
+      : 0;
+
     return [
       { label: "Serapan Pagu Nasional (APBN)", pct: authorityBreakdown.national.serapanPct },
       { label: "Realisasi Kontrak Provinsi (APBD I)", pct: authorityBreakdown.provincial.serapanPct },
       { label: "Realisasi Kontrak Kab/Kota (APBD II)", pct: authorityBreakdown.cityRegency.serapanPct },
-      { label: "Penyaluran Inpres Jalan Daerah (IJD)", pct: 92 },
+      { label: "Rata-Rata Progres Fisik Paket Pilot", pct: avgPhysicalProgress },
       { label: "Efisiensi Penghematan Lelang", pct: Math.min(100, Math.max(10, Math.round(Number(efficiencyPercent) * 10))) },
       { label: "Ketepatan Waktu Fisik Lapangan", pct: onTimeFisik },
-      { label: "Kepatuhan Pelaporan LPSE & Sirup", pct: lpseCompliance },
+      { label: "Kelengkapan Data Rekanan (Kurasi)", pct: lpseCompliance },
     ];
   }, [allPackages, authorityBreakdown, efficiencyPercent]);
 
@@ -407,29 +412,29 @@ export default function BudgetDataExplorer({
     return filteredPackages.slice(start, start + pageSize);
   }, [filteredPackages, currentPage, pageSize]);
 
-  // Precomputed SVG coordinate points for Area Chart (Alokasi vs Realisasi Fisik dalam Triliun Rp, skala 0 - 50 T)
+  // Precomputed SVG coordinate points for Area Chart (Alokasi vs Estimasi Serapan Bina Marga dalam Triliun Rp, skala 0 - 80 T)
   const areaPoints = useMemo(() => {
-    const years = ["2020", "2021", "2022", "2023", "2024", "2025", "2026"];
-    const upperVals = [32.4, 34.1, 36.8, 38.5, 39.7, 40.8, 41.2];
-    const lowerVals = [28.5, 30.7, 32.9, 34.2, 35.6, 36.8, 37.1];
+    const years = HISTORICAL_BAR_DATA.map((d) => d.year);
+    const upperVals = HISTORICAL_BAR_DATA.map((d) => d.pagu);
+    const lowerVals = HISTORICAL_BAR_DATA.map((d) => d.kontrak);
 
     const upperPts = years.map((yr, i) => {
-      const x = 40 + i * 76.66;
-      const y = 180 - (upperVals[i] / 50) * 150;
+      const x = 50 + i * 86;
+      const y = 180 - (upperVals[i] / 80) * 150;
       return { x, y, year: yr, val: upperVals[i] };
     });
 
     const lowerPts = years.map((yr, i) => {
-      const x = 40 + i * 76.66;
-      const y = 180 - (lowerVals[i] / 50) * 150;
+      const x = 50 + i * 86;
+      const y = 180 - (lowerVals[i] / 80) * 150;
       return { x, y, year: yr, val: lowerVals[i] };
     });
 
     const upperLine = getSmoothCurvePath(upperPts);
-    const upperArea = `${upperLine} L 500 180 L 40 180 Z`;
+    const upperArea = `${upperLine} L 480 180 L 50 180 Z`;
 
     const lowerLine = getSmoothCurvePath(lowerPts);
-    const lowerArea = `${lowerLine} L 500 180 L 40 180 Z`;
+    const lowerArea = `${lowerLine} L 480 180 L 50 180 Z`;
 
     return { upperPts, lowerPts, upperLine, upperArea, lowerLine, lowerArea, years };
   }, []);
@@ -552,7 +557,7 @@ export default function BudgetDataExplorer({
               {formatRupiahShort(totalPagu)}
             </div>
             <p className="text-[11.5px] text-slate-500 font-sans mt-1">
-              {filteredPackages.length} Paket Pengadaan Terverifikasi
+              {filteredPackages.length} Paket Kurasi Pilot (Model LPSE)
             </p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
@@ -634,7 +639,7 @@ export default function BudgetDataExplorer({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                Perbandingan Pagu HPS vs Nilai Kontrak (Nasional)
+                Pagu APBN Ditjen Bina Marga vs Estimasi Serapan (2020–2025)
               </h3>
             </div>
 
@@ -646,7 +651,7 @@ export default function BudgetDataExplorer({
                     {formatRupiahShort(totalPagu)}
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-400 font-sans mt-0.5">Pagu Terdata</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Pagu Terdata</div>
               </div>
 
               <div>
@@ -655,7 +660,7 @@ export default function BudgetDataExplorer({
                     {formatRupiahShort(totalContract)}
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-400 font-sans mt-0.5">Kontrak SPK</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Kontrak SPK</div>
               </div>
 
               <div>
@@ -664,7 +669,7 @@ export default function BudgetDataExplorer({
                     {formatRupiahShort(totalEfficiency)}
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-400 font-sans mt-0.5">Efisiensi Lelang</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Efisiensi Lelang</div>
               </div>
             </div>
           </div>
@@ -675,12 +680,12 @@ export default function BudgetDataExplorer({
               viewBox="0 0 520 220"
               className="w-full h-auto overflow-visible select-none"
             >
-              {/* Horizontal Gridlines & Y-Axis Labels (0T, 12.5T, 25T, 37.5T, 50T) */}
+              {/* Horizontal Gridlines & Y-Axis Labels (0T, 20T, 40T, 60T, 80T) */}
               {[
-                { val: "50T", y: 30 },
-                { val: "38T", y: 67.5 },
-                { val: "25T", y: 105 },
-                { val: "12T", y: 142.5 },
+                { val: "80T", y: 30 },
+                { val: "60T", y: 67.5 },
+                { val: "40T", y: 105 },
+                { val: "20T", y: 142.5 },
                 { val: "0", y: 180 },
               ].map((grid) => (
                 <g key={grid.val}>
@@ -705,9 +710,9 @@ export default function BudgetDataExplorer({
 
               {/* Double Bars per Year */}
               {HISTORICAL_BAR_DATA.map((item, idx) => {
-                const centerX = 40 + idx * 76.66;
-                const paguH = (item.pagu / 50) * 150;
-                const kontrakH = (item.kontrak / 50) * 150;
+                const centerX = 50 + idx * 86;
+                const paguH = (item.pagu / 80) * 150;
+                const kontrakH = (item.kontrak / 80) * 150;
                 const paguY = 180 - paguH;
                 const kontrakY = 180 - kontrakH;
                 const isHovered = hoveredBarIndex === idx;
@@ -773,16 +778,16 @@ export default function BudgetDataExplorer({
             {hoveredBarIndex !== null && (
               <div
                 className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
-                style={{ left: `${(40 + hoveredBarIndex * 76.66) / 5.2}%` }}
+                style={{ left: `${(50 + hoveredBarIndex * 86) / 5.2}%` }}
               >
                 <div className="font-bold text-white mb-0.5">
                   Tahun {HISTORICAL_BAR_DATA[hoveredBarIndex].year}
                 </div>
                 <div className="text-white">
-                  <span>Pagu: {HISTORICAL_BAR_DATA[hoveredBarIndex].paguRp}</span>
+                  <span>Pagu Bina Marga: {HISTORICAL_BAR_DATA[hoveredBarIndex].paguRp}</span>
                 </div>
                 <div className="text-white font-semibold">
-                  <span>Kontrak: {HISTORICAL_BAR_DATA[hoveredBarIndex].kontrakRp}</span>
+                  <span>Estimasi Serapan: {HISTORICAL_BAR_DATA[hoveredBarIndex].kontrakRp}</span>
                 </div>
               </div>
             )}
@@ -792,11 +797,11 @@ export default function BudgetDataExplorer({
           <div className="flex items-center justify-center gap-6 pt-1 text-xs text-slate-500">
             <div className="flex items-center gap-2">
               <span className="w-3 h-1.5 rounded-xs bg-[#64748b]" />
-              <span className="font-medium">Pagu HPS Resmi (Rp Triliun)</span>
+              <span className="font-medium">Pagu APBN Bina Marga (Rp Triliun)</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-1.5 rounded-xs bg-[#c2410c]" />
-              <span className="font-medium">Realisasi SPK Terikat (Rp Triliun)</span>
+              <span className="font-medium">Estimasi Serapan (Rp Triliun)</span>
             </div>
           </div>
         </div>
@@ -819,7 +824,7 @@ export default function BudgetDataExplorer({
                     {authorityBreakdown.national.pct}%
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-400 font-sans mt-0.5">APBN Nasional</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">APBN Nasional</div>
               </div>
 
               <div>
@@ -828,7 +833,7 @@ export default function BudgetDataExplorer({
                     {authorityBreakdown.provincial.pct}%
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-400 font-sans mt-0.5">APBD Provinsi</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">APBD Provinsi</div>
               </div>
 
               <div>
@@ -837,7 +842,7 @@ export default function BudgetDataExplorer({
                     {authorityBreakdown.cityRegency.pct}%
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-400 font-sans mt-0.5">APBD Kab/Kota</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">APBD Kab/Kota</div>
               </div>
             </div>
           </div>
@@ -862,12 +867,12 @@ export default function BudgetDataExplorer({
                 </linearGradient>
               </defs>
 
-              {/* Horizontal Gridlines & Y-Axis Labels (0, 12T, 25T, 38T, 50T) */}
+              {/* Horizontal Gridlines & Y-Axis Labels (0, 20T, 40T, 60T, 80T) */}
               {[
-                { val: "50T", y: 30 },
-                { val: "38T", y: 67.5 },
-                { val: "25T", y: 105 },
-                { val: "12T", y: 142.5 },
+                { val: "80T", y: 30 },
+                { val: "60T", y: 67.5 },
+                { val: "40T", y: 105 },
+                { val: "20T", y: 142.5 },
                 { val: "0", y: 180 },
               ].map((grid) => (
                 <g key={grid.val}>
@@ -970,16 +975,16 @@ export default function BudgetDataExplorer({
             {hoveredAreaIndex !== null && (
               <div
                 className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
-                style={{ left: `${(40 + hoveredAreaIndex * 76.66) / 5.2}%` }}
+                style={{ left: `${(50 + hoveredAreaIndex * 86) / 5.2}%` }}
               >
                 <div className="font-bold text-white mb-0.5">
                   Tahun {areaPoints.years[hoveredAreaIndex]}
                 </div>
                 <div className="text-white">
-                  <span>Alokasi Rencana: Rp {areaPoints.upperPts[hoveredAreaIndex].val} T</span>
+                  <span>Pagu Bina Marga: Rp {areaPoints.upperPts[hoveredAreaIndex].val} T</span>
                 </div>
                 <div className="text-white font-semibold">
-                  <span>Realisasi Fisik: Rp {areaPoints.lowerPts[hoveredAreaIndex].val} T</span>
+                  <span>Estimasi Serapan: ±Rp {areaPoints.lowerPts[hoveredAreaIndex].val} T</span>
                 </div>
               </div>
             )}
@@ -1017,10 +1022,10 @@ export default function BudgetDataExplorer({
                     Capaian &amp; Akuntabilitas Anggaran
                   </h3>
                   <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded border border-orange-200">
-                    Terverifikasi
+                    Model Kurasi Pilot
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 font-sans mt-0.5">
+                <p className="text-[11px] text-slate-500 font-sans mt-0.5">
                   Indikator Kinerja Pelaksanaan Anggaran (IKPA) Kementerian &amp; Pemerintah Daerah
                 </p>
               </div>
@@ -1138,20 +1143,22 @@ export default function BudgetDataExplorer({
               {/* Search Input & Quick Filter Chips */}
               <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
                 <div className="relative flex-1">
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Cari kode paket, nama ruas, rekanan..."
-                    className="w-full pl-9 pr-7 py-2 rounded-[6px] bg-slate-50/90 ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans"
+                    className="w-full pl-9 pr-9 py-2 rounded-[6px] bg-slate-50/90 ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:bg-white transition-all font-sans"
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 cursor-pointer font-bold"
+                      aria-label="Hapus pencarian paket pengadaan"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-[5px] text-slate-500 hover:text-slate-800 hover:bg-slate-200/70 transition-colors cursor-pointer"
                     >
-                      ✕
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -1199,7 +1206,7 @@ export default function BudgetDataExplorer({
               <div className="py-12 text-center space-y-2">
                 <AlertCircle className="w-8 h-8 text-slate-300 mx-auto" />
                 <p className="text-xs font-bold text-slate-700">Tidak ada paket lelang yang cocok</p>
-                <p className="text-[11px] text-slate-400">Silakan ubah filter atau kata kunci pencarian Anda.</p>
+                <p className="text-[11px] text-slate-500">Silakan ubah filter atau kata kunci pencarian Anda.</p>
               </div>
             ) : (
               <div className="w-full">
@@ -1253,7 +1260,7 @@ export default function BudgetDataExplorer({
                             >
                               {pkg.roadName || pkg.name}
                             </div>
-                            <div className="text-[10.5px] text-slate-400 font-sans truncate mt-0.5">
+                            <div className="text-[10.5px] text-slate-500 font-sans truncate mt-0.5">
                               {pkg.packageId} • {pkg.contractor || "Rekanan LPSE"}
                             </div>
                           </td>
@@ -1273,7 +1280,7 @@ export default function BudgetDataExplorer({
                             <div className="font-bold text-slate-900 text-[12.5px]">
                               {formatRupiahShort(pkg.paguRp)}
                             </div>
-                            <div className="text-[10.5px] font-mono text-slate-400 mt-0.5">
+                            <div className="text-[10.5px] font-mono text-slate-500 mt-0.5">
                               Kontrak: {formatRupiahShort(pkg.contractValueRp)}
                             </div>
                           </td>
@@ -1340,7 +1347,7 @@ export default function BudgetDataExplorer({
             {/* Clean Floating Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between gap-4 pt-3 border-t border-slate-100 font-sans text-xs">
-                <div className="text-slate-400 text-[11.5px]">
+                <div className="text-slate-500 text-[11.5px]">
                   Halaman <strong>{currentPage}</strong> dari <strong>{totalPages}</strong> (
                   {filteredPackages.length} paket total)
                 </div>
@@ -1393,8 +1400,8 @@ export default function BudgetDataExplorer({
 
       {/* Catatan Sumber Data Resmi (Italic, Clean, Tanpa Border) */}
       <div className="pt-2 pb-1 text-center">
-        <p className="text-[11px] text-slate-400 italic font-sans tracking-wide">
-          *Sumber data resmi: BPS SIRUSA, Ditjen Bina Marga Kementerian PUPR, LKPP LPSE, & Ombudsman RI.
+        <p className="text-[11px] text-slate-500 italic font-sans tracking-wide">
+          *Data makro APBN merujuk pada Ditjen Bina Marga Kementerian PU (2020–2025). Rincian {allPackages.length} paket pengadaan di atas merupakan dataset kurasi pilot yang siap dihubungkan ke API resmi INAPROC LKPP &amp; LPSE.
         </p>
       </div>
 

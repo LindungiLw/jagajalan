@@ -101,6 +101,15 @@ export default function NationalRankingSection({ onSelectPilot }) {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!selectedProvince) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedProvince(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedProvince]);
+
   const islands = [
     { id: "ALL", label: "Semua Wilayah (38)" },
     { id: "Sumatera", label: "Sumatera" },
@@ -205,8 +214,8 @@ export default function NationalRankingSection({ onSelectPilot }) {
             ? `${NATIONAL_STATS.totalRoadKm2025.toLocaleString("id-ID")} km (Non-Tol)`
             : "538.102 km (Non-Tol)",
         },
-        { label: "Alokasi Inpres IJD", value: "Rp 29,9 Triliun (Tahap I & II)" },
-        { label: "Sumber Data Resmi", value: "BPS (2026) & Renstra Kementerian PU" },
+        { label: "Alokasi Inpres IJD", value: "Rp 14,6 Triliun (Realisasi Tahap I 2023)" },
+        { label: "Sumber & Metodologi", value: "Kalibrasi Makro BPS (2026), Renstra PU, & Ombudsman RI (2026b)" },
       ],
       columns: provinceExportColumns,
       rows: filteredAndSortedProvinces,
@@ -226,9 +235,9 @@ export default function NationalRankingSection({ onSelectPilot }) {
           sub: "Basis Data Agregat Nasional",
         },
         {
-          label: "Dana Inpres Jalan Daerah",
-          value: "Rp 29,9 Triliun",
-          sub: "Inpres No. 3 Tahun 2023",
+          label: "Realisasi IJD Tahap I",
+          value: "Rp 14,6 Triliun",
+          sub: "Inpres No. 3/2023 (3.194 Km)",
         },
         {
           label: "Aduan Pemda (Ombudsman)",
@@ -236,9 +245,9 @@ export default function NationalRankingSection({ onSelectPilot }) {
           sub: "Instansi Terbanyak Dilaporkan (2025)",
         },
         {
-          label: "Rujukan Data",
+          label: "Rujukan & Kalibrasi",
           value: "BPS & KemenPU",
-          sub: "Publikasi Statistik Resmi",
+          sub: "Estimasi Proporsional 38 Provinsi",
         },
       ],
       columns: provinceExportColumns,
@@ -270,14 +279,16 @@ export default function NationalRankingSection({ onSelectPilot }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari provinsi atau ibukota (misal: Sumatera Utara, Medan, Jawa)..."
-              className="w-full pl-9 pr-7 py-2 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+              className="w-full pl-9 pr-9 py-2 rounded-[6px] bg-white ring-1 ring-orange-200/50 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all"
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold cursor-pointer"
+                aria-label="Hapus pencarian provinsi"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-[5px] text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
               >
-                ✕
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
@@ -349,7 +360,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
         {/* Row 2: Island Pill Filters */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 pt-1 scrollbar-none text-xs">
-          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider shrink-0 mr-1 hidden sm:inline">
+          <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider shrink-0 mr-1 hidden sm:inline">
             Gugus Pulau:
           </span>
           <div className="flex items-center gap-1 flex-nowrap">
@@ -374,7 +385,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
       {filteredAndSortedProvinces.length === 0 ? (
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-8 text-center space-y-2">
           <p className="text-sm font-semibold text-slate-700">Tidak ada provinsi yang cocok dengan pencarian.</p>
-          <p className="text-xs text-slate-400">Silakan ubah filter gugus pulau atau kata kunci pencarian Anda.</p>
+          <p className="text-xs text-slate-500">Silakan ubah filter gugus pulau atau kata kunci pencarian Anda.</p>
         </div>
       ) : viewMode === "grid" ? (
         
@@ -502,7 +513,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
                 {/* 4. Footer: Verification Note & Action CTA */}
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs font-sans">
-                  <span className="text-[11px] text-slate-400 font-medium">
+                  <span className="text-[11px] text-slate-500 font-medium">
                     Data Terverifikasi BPS &amp; KemenPU
                   </span>
 
@@ -634,7 +645,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                         <span className="font-bold tabular-nums text-xs text-slate-800">
                           {mantapPct}%
                         </span>
-                        <span className="text-[10px] text-slate-400 block tabular-nums">
+                        <span className="text-[10px] text-slate-500 block tabular-nums">
                           Rusak: {prov.damagedPercentage}%
                         </span>
                       </td>
@@ -691,7 +702,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           {/* Table Summary Footer */}
           <div className="p-3 bg-slate-50/70 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
             <span>Menampilkan <strong>{filteredAndSortedProvinces.length}</strong> dari {PROVINCES_DATA.length} Provinsi se-Indonesia</span>
-            <span className="text-[11px] text-slate-400">Sumber: BPS (2026) Data Jalan 2025, Renstra Kementerian PU 2025–2029, &amp; Inpres No. 3/2023</span>
+            <span className="text-[11px] text-slate-500">Distribusi per provinsi dikalibrasi proporsional terhadap total makro BPS (2026: 538.102 km), Ombudsman RI (2026b: 4.766 laporan Pemda), &amp; IJD Tahap I (Rp 14,6 T)</span>
           </div>
         </div>
       )}
@@ -700,7 +711,15 @@ export default function NationalRankingSection({ onSelectPilot }) {
       {/* 3. MODAL DETAIL PROVINSI (PORTALED TO ROOT BODY Z-[2000])     */}
       {/* ------------------------------------------------------------- */}
       {mounted && selectedProvince && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Detail Statistik ${selectedProvince.name}`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedProvince(null);
+          }}
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans"
+        >
           <div className="max-w-xl w-full rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
             <div className="bg-white rounded-[6px] w-full overflow-hidden ring-1 ring-orange-200/50 max-h-[90vh] flex flex-col">
               
@@ -753,51 +772,51 @@ export default function NationalRankingSection({ onSelectPilot }) {
 
                 {/* 2. Key Metrics Grid */}
                 <div>
-                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 font-sans">
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2 font-sans">
                     Ringkasan Statistik Infrastruktur (BPS SIRUSA)
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
-                      <span className="text-[10px] text-slate-400 block font-medium">Total Panjang Jalan</span>
+                      <span className="text-[10px] text-slate-500 block font-medium">Total Panjang Jalan</span>
                       <strong className="text-sm font-bold text-slate-900 tabular-nums">
                         {selectedProvince.totalRoadKm.toLocaleString("id-ID")} Km
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
-                      <span className="text-[10px] text-slate-400 block font-medium">Kondisi Mantap (BPS)</span>
+                      <span className="text-[10px] text-slate-500 block font-medium">Kondisi Mantap (BPS)</span>
                       <strong className="text-sm font-bold text-emerald-800 tabular-nums">
                         {(100 - selectedProvince.damagedPercentage).toFixed(1)}%
                       </strong>
-                      <span className="text-[10px] text-slate-400 block">Baik &amp; Sedang</span>
+                      <span className="text-[10px] text-slate-500 block">Baik &amp; Sedang</span>
                     </div>
 
                     <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
-                      <span className="text-[10px] text-slate-400 block font-medium">Rasio Belum Mantap</span>
+                      <span className="text-[10px] text-slate-500 block font-medium">Rasio Belum Mantap</span>
                       <strong className={`text-sm font-bold tabular-nums ${
                         selectedProvince.damagedPercentage > 45 ? "text-rose-600" : "text-amber-700"
                       }`}>
                         {selectedProvince.damagedPercentage}%
                       </strong>
-                      <span className="text-[10px] text-slate-400 block">Rusak Ringan/Berat</span>
+                      <span className="text-[10px] text-slate-500 block">Rusak Ringan/Berat</span>
                     </div>
 
                     <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
-                      <span className="text-[10px] text-slate-400 block font-medium">Total Aduan Publik</span>
+                      <span className="text-[10px] text-slate-500 block font-medium">Total Aduan Publik</span>
                       <strong className="text-sm font-bold text-slate-900 tabular-nums">
                         {selectedProvince.totalComplaints.toLocaleString("id-ID")}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
-                      <span className="text-[10px] text-slate-400 block font-medium">Lewat Waktu Acuan</span>
+                      <span className="text-[10px] text-slate-500 block font-medium">Lewat Waktu Acuan</span>
                       <strong className="text-sm font-bold text-rose-600 tabular-nums">
                         {selectedProvince.overdueComplaints.toLocaleString("id-ID")}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-[6px] bg-slate-50 border border-slate-200/70">
-                      <span className="text-[10px] text-slate-400 block font-medium">Alokasi Inpres IJD</span>
+                      <span className="text-[10px] text-slate-500 block font-medium">Alokasi Inpres IJD</span>
                       <strong className="text-sm font-bold text-emerald-800 tabular-nums">
                         Rp {selectedProvince.inpresAllocationMiliar} M
                       </strong>
@@ -846,16 +865,16 @@ export default function NationalRankingSection({ onSelectPilot }) {
                     </p>
                   </div>
                 ) : (
-                  <p className="text-[11px] text-slate-400 italic font-sans">
-                    * Catatan: Data mikro ruas jalan berkoordinat dan titik laporan berfoto saat ini difokuskan pada Wilayah Percontohan (Sumatera Utara / Kota Medan). Wilayah ini menyajikan data agregasi resmi BPS SIRUSA.
+                  <p className="text-[11px] text-slate-500 italic font-sans">
+                    * Catatan metodologi: Rincian jalan berkoordinat mikro saat ini berfokus pada Wilayah Percontohan Sumatera Utara. Angka agregat per provinsi di atas adalah estimasi proporsional JagaJalan yang dikalibrasi ke total makro resmi BPS (538.102 km), Ombudsman RI (4.766 laporan Pemda), dan IJD Tahap I (Rp 14,6 T) sembari menunggu integrasi API pemerintah daerah.
                   </p>
                 )}
               </div>
 
               {/* Modal Footer Actions */}
               <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
-                <span className="text-[11px] text-slate-400 font-sans hidden sm:inline">
-                  Sumber: BPS SIRUSA &amp; Inpres No. 3/2023
+                <span className="text-[11px] text-slate-500 font-sans hidden sm:inline">
+                  Kalibrasi Makro: BPS (2026), Ombudsman RI (2026b), &amp; Inpres No. 3/2023
                 </span>
 
                 <div className="flex items-center gap-2 justify-end w-full sm:w-auto">
