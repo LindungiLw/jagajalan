@@ -59,23 +59,70 @@ export default function RoadDetailModal({
     if (isOpen) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
+      const onKeyDown = (e) => {
+        if (e.key === "Escape") onClose();
+      };
+      window.addEventListener("keydown", onKeyDown);
       return () => {
         document.body.style.overflow = originalOverflow;
+        window.removeEventListener("keydown", onKeyDown);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   // Reports associated with this road
   const roadReports = reports.filter((r) => r.roadSegmentId === road?.id);
   const overdueReports = roadReports.filter((r) => r.status === "OVERDUE");
   const budget = road?.budget;
 
-  // Financial calculations
+  // Financial calculations & guaranteed non-empty metadata fallbacks
   const paguRp = Number(budget?.paguRp) || 0;
   const contractValueRp = Number(budget?.contractValueRp) || 0;
   const efficiencyRp = paguRp > contractValueRp ? paguRp - contractValueRp : 0;
   const efficiencyPct = paguRp > 0 ? ((efficiencyRp / paguRp) * 100).toFixed(1) : "0.0";
   const progressPct = typeof budget?.progressPct === "number" ? budget.progressPct : null;
+
+  const resolvedPackageId =
+    budget?.packageId ||
+    `PKG-${(road?.authority || "RUAS").slice(0, 4).toUpperCase()}-${(road?.code || road?.id || "001")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toUpperCase()}`;
+
+  const defaultPortalByAuthority =
+    road?.authority === "DESA"
+      ? { url: "https://sid.kemendesa.go.id", label: "SID Kemendesa PDTT (Dana Desa)" }
+      : road?.authority === "NASIONAL"
+      ? { url: "https://spse.inaproc.id/pu", label: "SPSE Kementerian PU (INAPROC)" }
+      : { url: "https://sirup.inaproc.id", label: "SiRUP INAPROC LKPP" };
+
+  const resolvedSourceUrl =
+    budget?.sourceUrl || road?.officialSources?.transparencyUrl || defaultPortalByAuthority.url;
+
+  const resolvedPortalLabel =
+    budget?.portalLabel ||
+    (resolvedSourceUrl.includes("spse.inaproc.id/pu")
+      ? "SPSE Kementerian PU (INAPROC)"
+      : resolvedSourceUrl.includes("spse.inaproc.id/sumutprov")
+      ? "SPSE Prov. Sumatera Utara (INAPROC)"
+      : resolvedSourceUrl.includes("spse.inaproc.id/medankota")
+      ? "SPSE Kota Medan (INAPROC)"
+      : resolvedSourceUrl.includes("sid.kemendesa.go.id")
+      ? "SID Kemendesa PDTT"
+      : "SiRUP INAPROC LKPP");
+
+  const resolvedSourceHost = resolvedSourceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+  const resolvedSourceDocument =
+    budget?.sourceDocument ||
+    (road?.authority === "NASIONAL"
+      ? `DIPA Ditjen Bina Marga TA ${budget?.fiscalYear || "2026"}`
+      : road?.authority === "DESA"
+      ? `APBDes & Dana Desa TA ${budget?.fiscalYear || "2026"}`
+      : `DPA APBD ${road?.district || road?.provinceName || "Daerah"} TA ${budget?.fiscalYear || "2026"}`);
+
+  const resolvedMatchReason =
+    budget?.matchReason ||
+    `Pencocokan koridor ${road?.name || "ruas jalan"} terhadap kewenangan SK resmi & paket kurasi pilot.`;
 
   if (!isOpen || !road || !mounted) return null;
 
@@ -102,7 +149,7 @@ export default function RoadDetailModal({
       section: "Audit Anggaran LPSE",
       field: "Paket Pekerjaan",
       value: budget?.name || "Belum Terhubung Paket Lelang",
-      note: budget?.packageId ? `ID: ${budget.packageId} (TA ${budget.fiscalYear || "2026"})` : "-",
+      note: `ID: ${resolvedPackageId} (TA ${budget?.fiscalYear || "2026"})`,
     },
     {
       section: "Audit Anggaran LPSE",
@@ -175,112 +222,115 @@ export default function RoadDetailModal({
   const authorityConfig =
     road.authority === "NASIONAL"
       ? {
-          label: "Jalan Nasional (APBN)",
-          color: "bg-blue-50 text-blue-800 border-blue-200/80",
+          label: "Jalan Nasional · APBN",
+          dot: "bg-blue-600",
           topBar: "bg-blue-600",
           borderAccent: "border-l-blue-600",
         }
       : road.authority === "PROVINSI"
       ? {
-          label: "Jalan Provinsi (APBD Provinsi)",
-          color: "bg-purple-50 text-purple-800 border-purple-200/80",
+          label: "Jalan Provinsi · APBD Provinsi",
+          dot: "bg-purple-600",
           topBar: "bg-purple-600",
           borderAccent: "border-l-purple-600",
         }
       : road.authority === "KOTA"
       ? {
-          label: "Jalan Kota (APBD Kota)",
-          color: "bg-teal-50 text-teal-800 border-teal-200/80",
+          label: "Jalan Kota · APBD Kota",
+          dot: "bg-teal-600",
           topBar: "bg-teal-600",
           borderAccent: "border-l-teal-600",
         }
       : road.authority === "DESA"
       ? {
-          label: "Jalan Desa (APBDes / Dana Desa)",
-          color: "bg-amber-50 text-amber-900 border-amber-200/80",
+          label: "Jalan Desa · APBDes / Dana Desa",
+          dot: "bg-amber-600",
           topBar: "bg-amber-600",
           borderAccent: "border-l-amber-600",
         }
       : {
-          label: "Jalan Kabupaten (APBD Kab / IJD)",
-          color: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
+          label: "Jalan Kabupaten · APBD Kab / IJD",
+          dot: "bg-emerald-600",
           topBar: "bg-emerald-600",
           borderAccent: "border-l-emerald-600",
         };
 
   const matchBadge =
     budget?.matchConfidence === "TERKONFIRMASI"
-      ? { label: "Terkonfirmasi LPSE", color: "bg-emerald-50 text-emerald-800 border-emerald-200/80" }
+      ? { label: "Terkurasi (Model LPSE)", dot: "bg-emerald-600", text: "text-emerald-800" }
       : budget?.matchConfidence === "PARSIAL"
-      ? { label: "Pencocokan Parsial", color: "bg-amber-50 text-amber-800 border-amber-200/80" }
-      : { label: "Belum Ditemukan Paket", color: "bg-slate-100 text-slate-700 border-slate-200/80" };
+      ? { label: "Pencocokan Parsial", dot: "bg-amber-500", text: "text-amber-800" }
+      : { label: "Belum Ditemukan Paket", dot: "bg-slate-400", text: "text-slate-600" };
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 md:p-6 bg-slate-900/65 backdrop-blur-sm animate-fade-in font-sans overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Detail Ruas Jalan ${road.name || ""}`}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 md:p-6 bg-slate-900/65 backdrop-blur-sm animate-fade-in font-sans overflow-y-auto"
+    >
       <div
         className="fixed inset-0 -z-10"
         onClick={onClose}
         aria-label="Tutup modal"
       />
       {/* Outer Shell with Double Bezel */}
-      <div className="my-auto rounded-[10px] bg-slate-100/95 p-1.5 sm:p-2 ring-1 ring-slate-300/80 w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative z-10">
-        <div className="relative w-full flex-1 flex flex-col rounded-[8px] bg-white shadow-xl overflow-hidden">
+      <div className="my-auto rounded-[12px] bg-[#F5F1EA]/95 p-1.5 ring-1 ring-[#E6DFD5] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative z-10">
+        <div className="relative w-full flex-1 flex flex-col rounded-[9px] bg-white shadow-sm overflow-hidden">
           
-          {/* Top Authority Color Accent Line */}
-          <div className={`h-1.5 w-full ${authorityConfig.topBar}`} />
+          {/* Top Authority Color Accent Hairline */}
+          <div className={`h-1 w-full ${authorityConfig.topBar}`} />
 
           {/* 1. MODAL HEADER */}
-          <div className="px-5 py-4 border-b border-slate-100 flex items-start justify-between gap-3 bg-white">
+          <div className="px-5 sm:px-6 pt-4 pb-3.5 border-b border-slate-100 flex items-start justify-between gap-3 bg-white">
             <div className="space-y-1.5 flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-[5px] bg-slate-100 text-slate-800 border border-slate-200/70">
+              <div className="flex items-center gap-2.5 flex-wrap text-xs">
+                <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-[4px] bg-slate-100 text-slate-800">
                   {road.code || road.id}
                 </span>
-                <span className={`px-2.5 py-0.5 rounded-full text-[10.5px] font-bold border ${authorityConfig.color}`}>
-                  {authorityConfig.label}
+                <span className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-slate-700">
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${authorityConfig.dot}`} aria-hidden="true" />
+                  <span>{authorityConfig.label}</span>
                 </span>
-                <span className={`px-2.5 py-0.5 rounded-full text-[10.5px] font-bold border ${matchBadge.color} inline-flex items-center gap-1`}>
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span className="text-slate-300" aria-hidden="true">·</span>
+                <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${matchBadge.text}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${matchBadge.dot}`} aria-hidden="true" />
                   <span>{matchBadge.label}</span>
                 </span>
-                {road.fundingSourceLabel && (
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 text-slate-700 border border-slate-200/60">
-                    {road.fundingSourceLabel}
-                  </span>
-                )}
               </div>
 
-              <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight leading-snug">
+              <h2 className="text-lg sm:text-[19px] font-bold font-heading text-slate-950 tracking-tight leading-snug">
                 {road.name}
               </h2>
 
-              <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium font-sans flex-wrap">
-                <span className="inline-flex items-center gap-1 text-slate-700">
+              <div className="flex items-center gap-2 text-xs text-slate-600 font-medium font-sans flex-wrap">
+                <span className="inline-flex items-center gap-1 text-slate-800">
                   <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
                   <span>{road.district}</span>
                 </span>
-                <span className="text-slate-300">•</span>
-                <span>Bentang: <strong className="text-slate-900 font-bold tabular-nums">{road.lengthKm} Km</strong></span>
-                <span className="text-slate-300">•</span>
-                <span>Perkerasan: <strong className="text-slate-800">{road.pavementType}</strong></span>
+                <span className="text-slate-300">·</span>
+                <span>Bentang <strong className="text-slate-900 font-semibold tabular-nums">{road.lengthKm} km</strong></span>
+                <span className="text-slate-300">·</span>
+                <span>{road.pavementType}</span>
                 {road.functionalClass && (
                   <>
-                    <span className="text-slate-300">•</span>
-                    <span>Fungsi: <strong className="text-slate-800">{road.functionalClass}</strong></span>
+                    <span className="text-slate-300">·</span>
+                    <span>{road.functionalClass}</span>
                   </>
                 )}
                 {road.maxAxleLoad && (
                   <>
-                    <span className="text-slate-300">•</span>
-                    <span>MST: <strong className="text-amber-800 font-bold tabular-nums">{road.maxAxleLoad}</strong></span>
+                    <span className="text-slate-300">·</span>
+                    <span className="text-amber-800 font-semibold tabular-nums">{road.maxAxleLoad}</span>
                   </>
                 )}
               </div>
             </div>
 
             <button
+              type="button"
               onClick={onClose}
-              className="p-1.5 rounded-[6px] text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+              className="p-1.5 rounded-[6px] text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
               aria-label="Tutup Detail"
             >
               <X className="w-5 h-5" />
@@ -288,34 +338,34 @@ export default function RoadDetailModal({
           </div>
 
           {/* 2. MODAL BODY (SCROLLABLE) */}
-          <div className="px-5 py-4 sm:py-5 overflow-y-auto flex-1 space-y-4 text-xs text-slate-700 font-sans">
+          <div className="px-5 sm:px-6 py-4 sm:py-5 overflow-y-auto flex-1 space-y-5 text-xs text-slate-700 font-sans">
             
-            {/* A. Dasar Hukum & Instansi Berwenang (Legal Credential Panel) */}
-            <div className={`p-4 rounded-[8px] bg-slate-50/90 border border-slate-200/80 border-l-4 ${authorityConfig.borderAccent} shadow-2xs space-y-2`}>
+            {/* A. Dasar Hukum & Instansi Berwenang (Clean Borderless Tonal Strip) */}
+            <div className={`px-4 py-3.5 rounded-[8px] bg-[#FAF7F2] border-l-[3px] ${authorityConfig.borderAccent} space-y-2.5`}>
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 text-slate-900 font-bold text-xs">
-                  <Scale className="w-4 h-4 text-[#c2410c] shrink-0" />
-                  <span>Kewenangan &amp; Dasar Regulasi Resmi</span>
+                  <Scale className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
+                  <span>Kewenangan &amp; Dasar Regulasi</span>
                 </div>
-                <span className="text-[10px] font-bold text-slate-600 bg-white px-2 py-0.5 rounded-[4px] border border-slate-200/80">
+                <span className="text-[10.5px] font-mono font-semibold text-slate-600">
                   UU No. 2 Tahun 2022
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                <div className="p-2.5 rounded-[6px] bg-white border border-slate-200/70">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">
-                    Dasar Penetapan Status Jalan:
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2 border-t border-[#E6DFD5]/80">
+                <div>
+                  <span className="text-[10.5px] text-slate-500 uppercase font-semibold tracking-wider block mb-0.5">
+                    Dasar Penetapan Status Jalan
                   </span>
-                  <p className="text-xs font-bold text-slate-900 leading-snug">
+                  <p className="text-xs font-semibold text-slate-900 leading-snug">
                     {road.legalBasis}
                   </p>
                 </div>
-                <div className="p-2.5 rounded-[6px] bg-white border border-slate-200/70">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">
-                    Instansi Penyelenggara Teknis:
+                <div className="md:border-l md:border-[#E6DFD5]/80 md:pl-3.5">
+                  <span className="text-[10.5px] text-slate-500 uppercase font-semibold tracking-wider block mb-0.5">
+                    Instansi Penyelenggara Teknis
                   </span>
-                  <p className="text-xs font-bold text-slate-900 leading-snug">
+                  <p className="text-xs font-semibold text-slate-900 leading-snug">
                     {road.authorityLabel}
                   </p>
                 </div>
@@ -409,145 +459,157 @@ export default function RoadDetailModal({
               </div>
             )}
 
-            {/* B. Informasi Paket Pengadaan & Kroscek Anggaran LPSE */}
+            {/* B. Informasi Paket Pengadaan & Kroscek Anggaran */}
             <div className="space-y-2.5">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
-                  <Receipt className="w-4 h-4 text-[#c2410c]" />
-                  <span>Paket Pengadaan LPSE Teridentifikasi</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                  <Receipt className="w-3.5 h-3.5 text-[#c2410c]" />
+                  <span>Paket Pengadaan &amp; Audit Anggaran</span>
                 </span>
-                <span className="text-[10.5px] text-slate-500 font-mono">
-                  Pembaruan: {budget?.lastVerifiedAt || "2026-10-22"}
+                <span className="text-[10.5px] text-slate-500 font-mono tabular-nums">
+                  Kurasi: {budget?.lastVerifiedAt || "2026-10-22"}
                 </span>
               </div>
 
               {budget ? (
-                <div className="p-4 sm:p-5 rounded-[8px] bg-white border border-slate-200/80 shadow-xs space-y-4">
+                <div className="rounded-[10px] bg-white border border-slate-200/90 overflow-hidden shadow-2xs">
                   {/* Package Header */}
-                  <div>
-                    <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-                      <span className="font-mono text-xs font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-[4px] border border-slate-200/80">
-                        ID Paket: {budget.packageId} (TA {budget.fiscalYear || "2026"})
+                  <div className="px-4 sm:px-5 pt-4 pb-3.5 space-y-1.5">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <span className="font-mono text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-[4px]">
+                        {resolvedPackageId} · TA {budget.fiscalYear || "2026"}
                       </span>
-                      <span className="text-[11px] font-bold text-[#c2410c] bg-orange-50 px-2.5 py-0.5 rounded-full border border-orange-200/70">
-                        Sumber: {budget.source}
+                      <span className="text-[11px] font-semibold text-[#9a3412] bg-orange-50/90 px-2.5 py-0.5 rounded-[4px]">
+                        {budget.source}
                       </span>
                     </div>
-                    <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug mt-1.5">
+                    <h3 className="font-bold text-slate-950 text-sm sm:text-[15px] leading-snug pt-0.5">
                       {budget.name}
                     </h3>
                     {budget.scope && (
-                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                      <p className="text-xs text-slate-600 leading-relaxed">
                         {budget.scope}
                       </p>
                     )}
                   </div>
 
-                  {/* Financial Comparison Ledger: Pagu HPS vs Nilai Kontrak vs Efisiensi */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {/* 1. Pagu HPS */}
-                    <div className="p-3.5 rounded-[6px] bg-slate-50/80 border border-slate-200/80">
-                      <span className="text-[10px] text-slate-500 uppercase font-bold block">
+                  {/* Unified 3-Column Connected Financial Strip (Zero Nested Boxes) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/80 bg-slate-50/65 border-y border-slate-200/80">
+                    <div className="px-4 py-3">
+                      <span className="text-[10.5px] text-slate-500 uppercase font-semibold tracking-wider block">
                         Pagu Anggaran (HPS)
                       </span>
-                      <strong className="text-base sm:text-lg font-bold text-slate-900 font-mono block mt-0.5">
+                      <strong className="text-base sm:text-[17px] font-extrabold text-slate-950 font-mono tabular-nums block mt-0.5">
                         {formatRupiahShort(paguRp)}
                       </strong>
-                      <span className="text-[10px] text-slate-500 block mt-1">
-                        Batas pagu lelang SiRUP
+                      <span className="text-[11px] text-slate-500 block mt-0.5">
+                        Batas pagu rencana SiRUP
                       </span>
                     </div>
 
-                    {/* 2. Kontrak Pemenang */}
-                    <div className="p-3.5 rounded-[6px] bg-orange-50/50 border border-orange-200/70">
-                      <span className="text-[10px] text-[#9a3412] uppercase font-bold block">
+                    <div className="px-4 py-3">
+                      <span className="text-[10.5px] text-slate-500 uppercase font-semibold tracking-wider block">
                         Nilai Kontrak (SPK)
                       </span>
-                      <strong className="text-base sm:text-lg font-bold text-[#c2410c] font-mono block mt-0.5">
+                      <strong className="text-base sm:text-[17px] font-extrabold text-[#c2410c] font-mono tabular-nums block mt-0.5">
                         {formatRupiahShort(contractValueRp)}
                       </strong>
-                      <span className="text-[10px] text-slate-600 font-medium truncate block mt-1" title={budget.contractor}>
+                      <span className="text-[11px] text-slate-600 font-medium truncate block mt-0.5" title={budget.contractor}>
                         Rekanan: {budget.contractor || "Belum Ditetapkan"}
                       </span>
                     </div>
 
-                    {/* 3. Efisiensi Pengadaan */}
-                    <div className="p-3.5 rounded-[6px] bg-emerald-50/60 border border-emerald-200/80">
-                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">
+                    <div className="px-4 py-3">
+                      <span className="text-[10.5px] text-slate-500 uppercase font-semibold tracking-wider block">
                         Efisiensi Tender
                       </span>
-                      <strong className="text-base sm:text-lg font-bold text-emerald-700 font-mono block mt-0.5">
+                      <strong className="text-base sm:text-[17px] font-extrabold text-emerald-700 font-mono tabular-nums block mt-0.5">
                         {efficiencyRp > 0 ? formatRupiahShort(efficiencyRp) : "Rp 0"}
                       </strong>
-                      <span className="text-[10px] font-bold text-emerald-800 block mt-1">
-                        Penghematan: {efficiencyPct}% Pagu
+                      <span className="text-[11px] font-semibold text-emerald-700 block mt-0.5">
+                        Hemat {efficiencyPct}% dari pagu
                       </span>
                     </div>
                   </div>
 
-                  {/* Structured Audit Metadata Spec Sheet */}
-                  <div className="p-3.5 rounded-[6px] bg-slate-50/70 border border-slate-200/70 space-y-2 text-xs">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-slate-700">
+                  {/* Clean Metadata & Physical Progress directly in card */}
+                  <div className="px-4 sm:px-5 py-3.5 space-y-3 bg-white">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                       <div>
-                        <span className="text-[10.5px] text-slate-400 font-bold uppercase block">Dokumen Sumber:</span>
-                        <span className="font-medium text-slate-900">{budget.sourceDocument || "DIPA Resmi TA 2026"}</span>
+                        <span className="text-[10.5px] text-slate-500 font-semibold uppercase tracking-wider block mb-0.5">
+                          Dokumen Rujukan
+                        </span>
+                        <span className="font-medium text-slate-900 leading-snug block">
+                          {resolvedSourceDocument}
+                        </span>
                       </div>
                       <div>
-                        <span className="text-[10.5px] text-slate-400 font-bold uppercase block">Alasan Kroscek:</span>
-                        <span className="font-medium text-slate-900">{budget.matchReason}</span>
+                        <span className="text-[10.5px] text-slate-500 font-semibold uppercase tracking-wider block mb-0.5">
+                          Dasar Pencocokan
+                        </span>
+                        <span className="font-medium text-slate-900 leading-snug block">
+                          {resolvedMatchReason}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Physical Progress Bar */}
                     {progressPct !== null && (
-                      <div className="pt-2 border-t border-slate-200/60 space-y-1">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-slate-700">Progres Realisasi Fisik Lapangan:</span>
-                          <span className="font-bold font-mono text-[#c2410c]">{progressPct}%</span>
+                      <div className="pt-2.5 border-t border-slate-100 space-y-1.5">
+                        <div className="flex items-center justify-between text-[11.5px]">
+                          <span className="font-semibold text-slate-700">Progres Realisasi Fisik Lapangan</span>
+                          <span className="font-bold font-mono tabular-nums text-[#c2410c]">{progressPct}%</span>
                         </div>
-                        <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                        <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${
                               progressPct >= 100
                                 ? "bg-emerald-600"
                                 : progressPct >= 50
-                                ? "bg-orange-500"
+                                ? "bg-[#c2410c]"
                                 : "bg-amber-500"
                             }`}
                             style={{ width: `${progressPct}%` }}
                           />
                         </div>
                         {budget.statusNote && (
-                          <p className="text-[11px] text-slate-600 pt-0.5 italic">
-                            Catatan Pengawas: {budget.statusNote}
+                          <p className="text-[11px] text-slate-500 pt-0.5">
+                            Catatan pengawas: {budget.statusNote}
                           </p>
                         )}
                       </div>
                     )}
                   </div>
 
-                  {/* External Link to Verifiable Procurement Portal */}
-                  {budget.sourceUrl && (
-                    <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <span className="text-[11px] text-slate-500">
-                        Dokumen lelang dan Berita Acara Pemenang dapat diaudit publik pada portal LPSE resmi:
-                      </span>
-                      <a
-                        href={budget.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[6px] bg-slate-900 hover:bg-[#c2410c] text-white text-xs font-bold transition-all cursor-pointer shadow-xs shrink-0"
-                      >
-                        <span>Buka Berkas LPSE Resmi</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
+                  {/* Guaranteed Official Portal Source Bar (Always Present for All 128 Roads) */}
+                  <div className="px-4 sm:px-5 py-3 bg-[#FAF7F2] border-t border-[#E6DFD5]/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                    <div className="min-w-0 space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-900">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                        <span className="truncate">{resolvedPortalLabel}</span>
+                        <span className="text-slate-300 hidden sm:inline">·</span>
+                        <span className="font-mono text-[10.5px] font-normal text-slate-500 truncate hidden sm:inline">
+                          {resolvedSourceHost}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 leading-snug">
+                        Rincian paket merupakan kurasi pilot; verifikasi langsung pengadaan tersedia di portal resmi.
+                      </p>
                     </div>
-                  )}
+                    <a
+                      href={resolvedSourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-[6px] bg-slate-900 hover:bg-[#c2410c] text-white text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0 active:scale-[0.98]"
+                    >
+                      <span>Buka Portal Resmi</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               ) : (
-                <div className="p-6 rounded-[8px] bg-slate-50 border border-slate-200/70 text-center space-y-1 text-slate-500">
-                  <Building2 className="w-8 h-8 text-slate-300 mx-auto mb-1" />
-                  <p className="font-bold text-slate-700 text-xs">Belum Terhubung Paket Pengadaan LPSE</p>
+                <div className="p-5 rounded-[8px] bg-slate-50 text-center space-y-1 text-slate-500">
+                  <Building2 className="w-7 h-7 text-slate-400 mx-auto mb-1" />
+                  <p className="font-semibold text-slate-800 text-xs">Belum Terhubung Paket Pengadaan</p>
                   <p className="text-[11px]">Ruas ini belum memiliki data kontrak preservasi aktif pada SiRUP / SPSE tahun berjalan.</p>
                 </div>
               )}
@@ -603,24 +665,29 @@ export default function RoadDetailModal({
                             </span>
                           </div>
                           {isOverdue ? (
-                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                              Melewati Tenggat (+{report.daysOverdue} Hari)
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                              <AlertTriangle className="w-3 h-3 shrink-0" />
+                              <span>Melewati Tenggat (+{report.daysOverdue} Hari)</span>
                             </span>
                           ) : isCompleted ? (
-                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                              ✓ Penanganan Selesai Diperbaiki
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              <CheckCircle2 className="w-3 h-3 shrink-0" />
+                              <span>Penanganan Selesai Diperbaiki</span>
                             </span>
                           ) : isInProgress ? (
-                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
-                              ⚒ Dalam Perbaikan Fisik Dinas
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
+                              <Clock className="w-3 h-3 shrink-0" />
+                              <span>Dalam Perbaikan Fisik Dinas</span>
                             </span>
                           ) : isVerified ? (
-                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
-                              ✓ Verifikasi Diterima Dinas
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                              <CheckCircle2 className="w-3 h-3 shrink-0" />
+                              <span>Verifikasi Diterima Dinas</span>
                             </span>
                           ) : (
-                            <span className="px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
-                              Menunggu Verifikasi Dinas
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                              <Clock className="w-3 h-3 shrink-0" />
+                              <span>Menunggu Verifikasi Dinas</span>
                             </span>
                           )}
                         </div>
@@ -702,10 +769,10 @@ export default function RoadDetailModal({
                   })}
                 </div>
               ) : (
-                <div className="p-4 rounded-[8px] bg-slate-50 border border-slate-200/70 text-slate-600 flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div className="px-4 py-3.5 rounded-[8px] bg-slate-50/90 text-slate-600 flex items-center gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <div className="flex-1">
-                    <p className="font-bold text-slate-900 text-xs">Kondisi Terpantau Mantap</p>
+                    <p className="font-semibold text-slate-900 text-xs">Kondisi Terpantau Mantap</p>
                     <p className="text-[11px] text-slate-500">Belum ada aduan publik aktif yang melampaui tenggat respons pada ruas ini.</p>
                   </div>
                 </div>
@@ -713,9 +780,9 @@ export default function RoadDetailModal({
             </div>
 
             {/* Legal Notice Footer */}
-            <div className="p-3.5 rounded-[8px] bg-amber-50/70 border border-amber-200/70 text-[10.5px] text-amber-950 space-y-1">
-              <strong className="block text-amber-900">Catatan Keterbukaan Publik &amp; Kepatuhan Regulasi:</strong>
-              <p className="leading-relaxed">
+            <div className="px-4 py-3 rounded-r-[6px] bg-[#FAF7F2] border-l-2 border-amber-500/80 text-[11px] text-slate-700 space-y-1">
+              <strong className="block text-slate-900 font-semibold">Catatan Keterbukaan Publik &amp; Kepatuhan Regulasi</strong>
+              <p className="leading-relaxed text-slate-600">
                 Penetapan status tenggat respons mengacu pada standar pemantauan respons pelayanan publik (UU No. 25/2009). Status ini mencatat keaktifan tindak lanjut tanggapan resmi instansi, bukan keputusan final maladministrasi. Eskalasi ke Ombudsman Republik Indonesia tetap melalui verifikasi bukti dan prosedur resmi.
               </p>
             </div>

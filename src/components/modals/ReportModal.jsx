@@ -165,6 +165,7 @@ export default function ReportModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiResult, setAiResult] = useState(null);
   const [spamError, setSpamError] = useState(null);
+  const [formError, setFormError] = useState(null);
 
   // Live Camera Viewfinder State
   const [isLiveCameraActive, setIsLiveCameraActive] = useState(false);
@@ -286,6 +287,26 @@ export default function ReportModal({
       });
     }
   }, [isLiveCameraActive]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (streamRef.current) {
+          try {
+            streamRef.current.getTracks().forEach((track) => track.stop());
+          } catch {}
+          streamRef.current = null;
+        }
+        setIsLiveCameraActive(false);
+        setIsStartingCamera(false);
+        setFormError(null);
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen || !mounted) return null;
 
@@ -573,12 +594,13 @@ export default function ReportModal({
 
   const handleProcessFile = async (file) => {
     if (!file) return;
+    setFormError(null);
     if (!file.type.startsWith("image/")) {
-      alert("Format berkas tidak didukung. Harap unggah berkas gambar (JPG, PNG, WebP, HEIC).");
+      setFormError("Format berkas tidak didukung. Harap unggah berkas gambar (JPG, PNG, atau WebP).");
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      alert("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 10 MB.");
+      setFormError("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 10 MB.");
       return;
     }
 
@@ -597,50 +619,6 @@ export default function ReportModal({
         handleAnalyzePhoto(base64Data);
       };
       reader.readAsDataURL(file);
-    }
-  };
-
-  const handleLoadSamplePhoto = async (url) => {
-    try {
-      setIsAnalyzing(true);
-      setSpamError(null);
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const base64 = await compressAndResizeImage(blob, 1200, 0.82);
-      setPhotoPreview(base64);
-      await handleAnalyzePhoto(base64);
-    } catch (e) {
-      console.error("Failed to load sample photo:", e);
-      setIsAnalyzing(false);
-    }
-  };
-
-  const handleLoadSampleNonRoad = async () => {
-    try {
-      setIsAnalyzing(true);
-      setSpamError(null);
-      const canvas = document.createElement("canvas");
-      canvas.width = 600;
-      canvas.height = 400;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.fillStyle = "#f8fafc";
-        ctx.fillRect(0, 0, 600, 400);
-        ctx.fillStyle = "#1e293b";
-        ctx.font = "bold 22px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("UJI VALIDASI SISTEM JATAJALAN", 300, 150);
-        ctx.fillStyle = "#64748b";
-        ctx.font = "15px sans-serif";
-        ctx.fillText("Contoh Gambar Bukan Kondisi Jalan Raya", 300, 190);
-        ctx.fillText("(Menguji filter kecerdasan buatan anti-spam)", 300, 220);
-      }
-      const testBase64 = canvas.toDataURL("image/jpeg", 0.82);
-      setPhotoPreview(testBase64);
-      await handleAnalyzePhoto(testBase64);
-    } catch (e) {
-      console.error("Failed to load non-road test:", e);
-      setIsAnalyzing(false);
     }
   };
 
@@ -782,19 +760,19 @@ export default function ReportModal({
     if (galleryInputRef.current) galleryInputRef.current.value = "";
   };
 
-  // Step 1 Validation & Proceed to Step 2
   const handleProceedToStep2 = (e) => {
     if (e) e.preventDefault();
+    setFormError(null);
     if (!reporterName.trim()) {
-      alert("Harap masukkan nama atau inisial Anda sebagai pelapor.");
+      setFormError("Harap masukkan nama atau inisial Anda sebagai pelapor terlebih dahulu.");
       return;
     }
     if (!addressDetail.trim()) {
-      alert("Harap masukkan patokan atau detail lokasi kerusakan jalan.");
+      setFormError("Harap masukkan patokan atau detail lokasi kerusakan jalan.");
       return;
     }
     if (isCustomRoad && !customRoadName.trim()) {
-      alert("Harap masukkan nama ruas jalan lokasi kerusakan.");
+      setFormError("Harap masukkan nama ruas jalan lokasi kerusakan.");
       return;
     }
     setCurrentStep(2);
@@ -802,14 +780,15 @@ export default function ReportModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError(null);
 
     if (!photoPreview) {
-      alert("Harap ambil foto langsung atau unggah foto bukti kerusakan jalan terlebih dahulu.");
+      setFormError("Harap ambil foto langsung atau unggah foto bukti kerusakan jalan terlebih dahulu.");
       return;
     }
 
     if (spamError) {
-      alert("Foto belum sesuai kriteria. Harap gunakan foto kerusakan jalan yang sah.");
+      setFormError("Foto belum sesuai kriteria jalan publik. Harap gunakan foto kerusakan jalan yang sah.");
       return;
     }
 
@@ -953,6 +932,7 @@ export default function ReportModal({
     setPhotoPreview(null);
     setAiResult(null);
     setSpamError(null);
+    setFormError(null);
     setIsCopied(false);
     setGpsStatusMsg("");
     setShowManualCoords(false);
@@ -970,7 +950,15 @@ export default function ReportModal({
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-fade-in font-sans">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulir Lapor Kerusakan Jalan"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleResetAndClose();
+      }}
+      className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-fade-in font-sans"
+    >
       <div className="rounded-[10px] bg-slate-100/95 p-2 sm:p-3 ring-1 ring-orange-200/60 w-full max-w-4xl md:max-w-5xl lg:max-w-5xl max-h-[94vh] flex flex-col overflow-hidden text-slate-800 shadow-2xl">
         <div className="relative w-full flex-1 flex flex-col rounded-[8px] bg-white shadow-xl overflow-hidden">
           
@@ -995,13 +983,34 @@ export default function ReportModal({
               </div>
             </div>
             <button
+              type="button"
               onClick={handleResetAndClose}
-              className="p-1.5 rounded-[6px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-              aria-label="Tutup"
+              className="p-2 rounded-[6px] text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Tutup formulir laporan"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
+
+          {formError && (
+            <div
+              role="alert"
+              className="mx-5 mt-3 px-3.5 py-2.5 rounded-[6px] bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-center justify-between gap-3 shrink-0 animate-fade-in"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span className="font-medium leading-snug">{formError}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFormError(null)}
+                aria-label="Tutup pesan kesalahan"
+                className="p-1 rounded-[4px] text-rose-600 hover:bg-rose-100 transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
 
           {/* Stepper Progress Bar (Only shown before submission) */}
           {!submitted && (
@@ -1789,62 +1798,9 @@ export default function ReportModal({
                         </button>
                       </div>
 
-                      <span className="text-[10.5px] text-slate-400 mt-3">
+                      <span className="text-[10.5px] text-slate-500 mt-3">
                         Format: JPG, PNG, HEIC (Maks 10MB) • Mendukung seret &amp; lepas (drag &amp; drop)
                       </span>
-                    </div>
-
-                    {/* Quick Sample Photos for Testing Gemini AI */}
-                    <div className="p-3 rounded-[8px] bg-slate-50/90 border border-slate-200/90 text-xs text-slate-800 space-y-2">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-semibold text-[11px] text-slate-700 flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5 text-[#c2410c]" />
-                          <span>Uji Coba Cepat Inspeksi Gemini AI:</span>
-                        </span>
-                        <span className="text-[10px] text-orange-700 bg-orange-100/80 px-2 py-0.5 rounded font-medium">
-                          1-Klik Evaluasi
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleLoadSamplePhoto("/images/roads/jalan-lubang-medan.jpg")}
-                          className="p-2 rounded-[6px] bg-white hover:bg-orange-50/60 border border-slate-200 text-left transition-all hover:border-[#c2410c] shadow-2xs group cursor-pointer"
-                        >
-                          <div className="font-bold text-[11px] text-slate-800 group-hover:text-[#c2410c] flex items-center gap-1">
-                            <span>📸 Lubang Kritis</span>
-                          </div>
-                          <div className="text-[9.5px] text-slate-500 mt-0.5 truncate">
-                            Medan (Pothole dalam)
-                          </div>
-                        </button>
-                        
-                        <button
-                          type="button"
-                          onClick={() => handleLoadSamplePhoto("/images/roads/jalan-longsor-berastagi.jpg")}
-                          className="p-2 rounded-[6px] bg-white hover:bg-orange-50/60 border border-slate-200 text-left transition-all hover:border-[#c2410c] shadow-2xs group cursor-pointer"
-                        >
-                          <div className="font-bold text-[11px] text-slate-800 group-hover:text-[#c2410c] flex items-center gap-1">
-                            <span>📸 Longsor Struktur</span>
-                          </div>
-                          <div className="text-[9.5px] text-slate-500 mt-0.5 truncate">
-                            Berastagi (Deformasi jalan)
-                          </div>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={handleLoadSampleNonRoad}
-                          className="p-2 rounded-[6px] bg-white hover:bg-rose-50/60 border border-slate-200 text-left transition-all hover:border-rose-400 shadow-2xs group cursor-pointer"
-                        >
-                          <div className="font-bold text-[11px] text-slate-800 group-hover:text-rose-700 flex items-center gap-1">
-                            <span>🚫 Uji Anti-Spam</span>
-                          </div>
-                          <div className="text-[9.5px] text-slate-500 mt-0.5 truncate">
-                            Bukan jalan (deteksi tolak)
-                          </div>
-                        </button>
-                      </div>
                     </div>
 
                     {/* Camera Permission / Device Error Notification */}
@@ -1959,32 +1915,48 @@ export default function ReportModal({
                     {/* Inspector Results Card */}
                     <div className="space-y-2.5">
                       {spamError && (
-                        <div className="p-4 rounded-[8px] bg-rose-50/90 ring-1 ring-rose-200 text-rose-900 space-y-3 animate-fade-in shadow-2xs">
-                          <div className="flex items-center justify-between gap-2 border-b border-rose-200/70 pb-2">
-                            <div className="flex items-center gap-2 font-bold text-xs sm:text-[13px] text-rose-900">
-                              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
-                              <span>Foto Belum Sesuai Kriteria</span>
-                            </div>
-                            <span className="px-2 py-0.5 rounded-[4px] bg-rose-100 text-rose-800 text-[10px] font-bold uppercase tracking-wider shrink-0">
-                              Verifikasi Ditolak
-                            </span>
-                          </div>
+                        <div
+                          role="alert"
+                          className="rounded-[10px] bg-white border border-rose-200/90 shadow-xs overflow-hidden animate-fade-in"
+                        >
+                          <div className="h-[3px] w-full bg-rose-600" aria-hidden="true" />
 
-                          <div className="space-y-1.5 text-xs">
-                            <p className="text-[11.5px] text-rose-900 leading-relaxed font-medium">
+                          <div className="px-4 py-3.5 space-y-3">
+                            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <div className="w-7 h-7 rounded-[6px] bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                                  <AlertTriangle className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0">
+                                  <h4 className="font-bold text-[13px] text-slate-900 leading-tight">
+                                    Foto Belum Sesuai Kriteria
+                                  </h4>
+                                  <p className="text-[11px] text-slate-500 mt-0.5">
+                                    Filter Anti-Spam Gemini Vision AI
+                                  </p>
+                                </div>
+                              </div>
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] bg-rose-50 text-rose-700 text-[10px] font-mono font-bold uppercase tracking-wider shrink-0">
+                                <span className="w-1.5 h-1.5 rounded-full bg-rose-600" aria-hidden="true" />
+                                Verifikasi Ditolak
+                              </span>
+                            </div>
+
+                            <p className="text-[12.5px] text-slate-800 leading-relaxed">
                               {spamError}
                             </p>
-                            <p className="text-[10.5px] text-rose-700/90 leading-normal">
-                              💡 <strong>Saran:</strong> Mohon lampirkan foto yang memperlihatkan kondisi fisik permukaan jalan raya (aspal berlubang, retak buaya, jalan amblas, atau tebing labil).
-                            </p>
+
+                            <div className="rounded-[7px] bg-[#FAF7F2] px-3.5 py-2.5 text-[11.5px] text-slate-700 leading-relaxed">
+                              <span className="font-semibold text-slate-900">Panduan foto yang diterima:</span>{" "}
+                              Lampirkan foto kondisi fisik permukaan jalan raya secara langsung, seperti aspal berlubang, retak buaya, badan jalan amblas, atau bahu jalan longsor.
+                            </div>
                           </div>
 
-                          {/* Action Buttons for Rejection */}
-                          <div className="pt-1 flex flex-wrap items-center gap-2">
+                          <div className="px-4 py-2.5 bg-slate-50/75 border-t border-slate-100 flex flex-wrap items-center gap-2">
                             <button
                               type="button"
                               onClick={() => handleStartLiveCamera()}
-                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[5px] bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[6px] bg-[#c2410c] hover:bg-[#9a3412] text-white text-xs font-semibold transition-all shadow-2xs cursor-pointer active:scale-[0.98]"
                             >
                               <Camera className="w-3.5 h-3.5" />
                               <span>Buka Kamera Lagi</span>
@@ -1993,16 +1965,16 @@ export default function ReportModal({
                             <button
                               type="button"
                               onClick={() => galleryInputRef.current?.click()}
-                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[5px] bg-white hover:bg-rose-50 text-rose-900 ring-1 ring-rose-300 text-xs font-semibold transition-all shadow-2xs cursor-pointer active:scale-95"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[6px] bg-white hover:bg-slate-100 text-slate-700 ring-1 ring-slate-200/90 text-xs font-semibold transition-all cursor-pointer active:scale-[0.98]"
                             >
-                              <Upload className="w-3.5 h-3.5 text-rose-700" />
+                              <Upload className="w-3.5 h-3.5 text-slate-500" />
                               <span>Pilih dari Galeri</span>
                             </button>
 
                             <button
                               type="button"
                               onClick={handleClearPhoto}
-                              className="inline-flex items-center gap-1 px-3 py-2 rounded-[5px] text-rose-700 hover:bg-rose-100/80 text-xs font-semibold transition-colors cursor-pointer ml-auto"
+                              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-[6px] text-slate-500 hover:text-rose-700 hover:bg-rose-50 text-xs font-semibold transition-colors cursor-pointer sm:ml-auto"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                               <span>Hapus</span>
