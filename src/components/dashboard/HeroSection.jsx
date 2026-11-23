@@ -20,6 +20,7 @@ import {
   TrendingUp,
   BarChart3,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
@@ -43,6 +44,7 @@ export default function HeroSection({
   roads = ROAD_SEGMENTS,
   reports = INITIAL_REPORTS,
   onExploreData,
+  onExploreMap,
   onOpenReport,
   onExploreNational,
   onOpenOfficerPortal,
@@ -51,8 +53,6 @@ export default function HeroSection({
   const [selectedIndex, setSelectedIndex] = useState("kemantapan"); // 'kemantapan' | 'ombudsman' | 'pagu' | 'inpres'
   const [chartViewMode, setChartViewMode] = useState("line"); // 'line' | 'bar'
   const [selectedYear, setSelectedYear] = useState(2025);
-  const [budgetTimeScale, setBudgetTimeScale] = useState("instansi"); // 'instansi' | 'bulanan'
-  const [summaryTab, setSummaryTab] = useState("wewenang"); // 'wewenang' | 'aduan'
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRoadForDetail, setSelectedRoadForDetail] = useState(null);
 
@@ -89,31 +89,55 @@ export default function HeroSection({
       resolved: 10650,
     };
 
-  // Pilot budget statistics by authority (Sumatera Utara Pilot TA 2026)
-  const pilotBudgetStats = useMemo(() => [
-    { key: "bbpjn", label: "BBPJN Sumut", fullName: "KemenPU (BBPJN Sumut)", timeline: "Jan – Okt 2026", pagu: 76.90, kontrak: 73.15, ruas: 3, efficiency: 4.9, savings: "3,75 M" },
-    { key: "pupr_sumut", label: "PUPR Sumut", fullName: "Dinas PUPR Prov. Sumut", timeline: "Feb – Sep 2026", pagu: 18.70, kontrak: 17.80, ruas: 1, efficiency: 4.8, savings: "0,90 M" },
-    { key: "sdabmbk", label: "SDABMBK Medan", fullName: "Dinas SDABMBK Kota Medan", timeline: "Mar – Jul 2026", pagu: 11.30, kontrak: 10.45, ruas: 2, efficiency: 7.5, savings: "0,85 M" },
+  // Pagu APBN Resmi Ditjen Bina Marga Kementerian PU (2020–2025) dalam Triliun Rupiah
+  const binaMargaApbnTrends = useMemo(() => [
+    { year: 2020, pagu: 42.95, note: "Nota Keuangan RAPBN 2020" },
+    { year: 2021, pagu: 53.96, note: "Pagu Penyesuaian Bina Marga 2021" },
+    { year: 2022, pagu: 39.70, note: "Alokasi Awal Bina Marga 2022" },
+    { year: 2023, pagu: 78.96, note: "Pagu Akhir (Termasuk IJD & IKN)" },
+    { year: 2024, pagu: 55.39, note: "Alokasi Awal Bina Marga 2024" },
+    { year: 2025, pagu: 37.41, note: "Pagu Definitif Bina Marga 2025" },
   ], []);
 
-  // Monthly progress for Pilot Budget (TA 2026: Jan - Okt)
-  const monthlyPilotBudgetTrend = useMemo(() => [
-    { month: "Jan", pagu: 14.20, kontrak: 0.00, phase: "Tayang SiRUP LKPP" },
-    { month: "Feb", pagu: 28.50, kontrak: 13.45, phase: "Kontrak Sisingamangaraja" },
-    { month: "Mar", pagu: 47.20, kontrak: 40.35, phase: "Kontrak Medan-Berastagi" },
-    { month: "Apr", pagu: 65.90, kontrak: 58.15, phase: "Kontrak Siantar-Tanah Jawa" },
-    { month: "Mei", pagu: 77.20, kontrak: 68.60, phase: "Kontrak Katamso & Diponegoro" },
-    { month: "Jun", pagu: 106.90, kontrak: 95.40, phase: "Paket Inpres Lintas Asahan" },
-    { month: "Jul", pagu: 106.90, kontrak: 101.40, phase: "Tuntas Lelang 100%" },
-    { month: "Ags", pagu: 106.90, kontrak: 101.40, phase: "Pelaksanaan Konstruksi Fisik" },
-    { month: "Sep", pagu: 106.90, kontrak: 101.40, phase: "PHO Diponegoro & Sisingamangaraja" },
-    { month: "Okt", pagu: 106.90, kontrak: 101.40, phase: "Audit Realisasi & SLA Terbuka" },
-  ], []);
+  const currentBinaMarga =
+    binaMargaApbnTrends.find((d) => d.year === selectedYear) ||
+    binaMargaApbnTrends[binaMargaApbnTrends.length - 1];
 
-  // Inpres stages
+  // Inpres stages (Tahap I 2023 Realisasi Definitif vs Tahap II 2024 Pagu Rencana Awal)
   const inpresStats = useMemo(() => [
-    { stage: "Tahap I (2023)", year: 2023, budgetTrillion: 14.60, realizedKm: 2872, provinces: 34 },
-    { stage: "Tahap II (2024)", year: 2024, budgetTrillion: 15.30, realizedKm: 3120, provinces: 38 },
+    { stage: "Tahap I (2023)", year: 2023, budgetTrillion: 14.60, realizedKm: 3194, provinces: 34, statusLabel: "Realisasi" },
+    { stage: "Tahap II (2024)", year: 2024, budgetTrillion: 15.00, realizedKm: 3200, provinces: 38, statusLabel: "Rencana Awal" },
+  ], []);
+
+  // Pembagian resmi jaringan jalan non-tol Indonesia (BPS 2026 & Renstra KemenPU 2025–2029)
+  const nationalAuthorityBreakdown = useMemo(() => [
+    {
+      key: "nasional",
+      owner: "Pemerintah Pusat",
+      sub: "Kementerian PU · Jalan Nasional",
+      km: "47.605 km",
+      share: "8,85%",
+      goodPct: "94,18% Layak",
+      badgeClass: "text-emerald-700 bg-emerald-50",
+    },
+    {
+      key: "provinsi",
+      owner: "Pemerintah Provinsi",
+      sub: "Dinas PU Provinsi · Jalan Provinsi",
+      km: "59.462 km",
+      share: "11,05%",
+      goodPct: "71,33% Layak",
+      badgeClass: "text-purple-700 bg-purple-50",
+    },
+    {
+      key: "kab_kota",
+      owner: "Pemerintah Kab / Kota",
+      sub: "Dinas PU Daerah · Jalan Kab/Kota",
+      km: "431.035 km",
+      share: "80,10%",
+      goodPct: "57,91% Layak",
+      badgeClass: "text-[#c2410c] bg-orange-50",
+    },
   ], []);
 
   // Multi-entity search filtering
@@ -259,7 +283,7 @@ export default function HeroSection({
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span className="font-medium text-slate-700">BPS • LPSE • Kemen PU • Ombudsman</span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-500 font-medium">Data 2020–2025 &amp; Pengadaan TA 2026</span>
+            <span className="text-slate-500 font-medium">Data Resmi 2020–2025</span>
           </div>
 
           {/* Segment 3: Spacious Global Search Input with Active Submit */}
@@ -288,7 +312,7 @@ export default function HeroSection({
                 setTablePage(1);
               }}
               placeholder="Cari nama ruas jalan, kode laporan, paket pengadaan, kontraktor..."
-              className="w-full h-full pl-9 pr-20 py-2 text-xs text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none transition-all font-sans"
+              className="w-full h-full pl-9 pr-20 py-2 text-xs text-slate-900 placeholder:text-slate-500 bg-transparent focus-visible:outline-none transition-all font-sans"
             />
             <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
               {searchQuery && (
@@ -298,10 +322,11 @@ export default function HeroSection({
                     setSearchQuery("");
                     setTablePage(1);
                   }}
-                  className="w-4 h-4 rounded-full bg-slate-100 hover:bg-orange-100 text-slate-500 hover:text-[#c2410c] flex items-center justify-center text-[10px] font-bold cursor-pointer transition-colors"
+                  aria-label="Hapus pencarian"
+                  className="p-1.5 rounded-[4px] bg-slate-100 hover:bg-orange-100 text-slate-600 hover:text-[#c2410c] flex items-center justify-center cursor-pointer transition-colors"
                   title="Hapus pencarian"
                 >
-                  ✕
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
               <button
@@ -354,39 +379,39 @@ export default function HeroSection({
           </div>
         )}
 
-        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (ORANGE BRAND STRIP) */}
+        {/* 2. OPERATIONAL NATIONAL SUMMARY STRIP (ORANGE BRAND STRIP — 100% OFFICIAL NATIONAL STATS) */}
         <div className="bg-[#c2410c] text-white px-4 sm:px-5 py-2.5 rounded-[6px] flex flex-col sm:flex-row sm:items-center justify-between text-xs shadow-xs gap-3 font-semibold">
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <span className="text-white font-bold text-xs font-sans">
-              Ringkasan Nasional:
+              Data Nasional:
             </span>
-            <div className="flex items-center gap-1.5" title="Cakupan statistik kemantapan jalan nasional menurut publikasi resmi BPS">
+            <div className="flex items-center gap-1.5" title="Cakupan statistik kondisi jalan seluruh Indonesia menurut BPS">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">38</strong>
-              <span className="text-white/90 font-medium text-xs">Provinsi (Statistik BPS)</span>
+              <span className="text-white/90 font-medium text-xs">Provinsi (BPS)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
-            <div className="flex items-center gap-1.5" title="Data percontohan komparasi transparansi pagu lelang vs nilai kontrak penyedia">
-              <strong className="text-white font-sans font-bold text-sm tabular-nums">6</strong>
-              <span className="text-white/90 font-medium text-xs">Paket Pengadaan Pilot (Rp 106,90 M)</span>
+            <div className="flex items-center gap-1.5" title="Total panjang jalan non-tol nasional, provinsi, dan kabupaten/kota (BPS 2026)">
+              <strong className="text-white font-sans font-bold text-sm tabular-nums">538.102 km</strong>
+              <span className="text-white/90 font-medium text-xs">Jalan Non-Tol</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
-            <div className="flex items-center gap-1.5" title="Tiket aduan terdata yang melampaui batas waktu pemantauan respons 14 hari kerja (sinkron real-time)">
+            <div className="flex items-center gap-1.5" title="Jumlah koridor ruas jalan yang sudah dipetakan di peta interaktif JagaJalan">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">
-                {(reports || []).filter((r) => r?.status === "OVERDUE" || r?.isResponseOverdue).length}
+                {(roads || []).length}
               </strong>
-              <span className="text-white/90 font-medium text-xs">Laporan Lewat Batas Pantau SLA</span>
+              <span className="text-white/90 font-medium text-xs">Koridor di Peta GIS</span>
             </div>
           </div>
 
-          <span className="text-[11px] font-sans text-white/90 font-medium self-end sm:self-auto" title="Koleksi data pemetaan koordinat ruas jalan dan arsip paket pengadaan LPSE tersedia di platform">
-            Data Pemetaan &amp; LPSE Tersedia
+          <span className="text-[11px] font-sans text-white/90 font-medium self-end sm:self-auto" title="Rujukan data makro resmi pemerintah Indonesia">
+            Sumber Resmi: BPS · KemenPU · Ombudsman RI
           </span>
         </div>
 
         {/* 3. DUAL-PANEL DATA MONITOR */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
-          {/* LEFT 7 COLS: IKHTISAR DATA & GRAFIK KEMANTAPAN JALAN (DOUBLE-BEZEL ARCHITECTURE) */}
+          {/* LEFT 7 COLS: KONDISI JALAN INDONESIA & DATA KUNCI (100% OFFICIAL DATA) */}
           <div className="lg:col-span-7 bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
             <div className="bg-white rounded-[6px] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3.5 h-full">
             
@@ -394,15 +419,15 @@ export default function HeroSection({
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight">
-                  Ikhtisar Kemantapan &amp; Konteks Kebijakan
+                  Kondisi Jalan Indonesia &amp; Data Kunci
                 </h2>
               </div>
               <button
                 onClick={onExploreNational}
                 className="inline-flex items-center gap-1 text-xs font-bold text-[#c2410c] hover:text-[#9a3412] hover:underline transition-colors cursor-pointer font-sans group"
-                title="Buka data komparasi kemantapan jalan 38 provinsi di menu Statistik"
+                title="Buka perbandingan kondisi jalan 38 provinsi di menu Statistik"
               >
-                <span>Lihat Statistik 38 Provinsi</span>
+                <span>Lihat 38 Provinsi</span>
                 <ChevronRight className="w-3.5 h-3.5 text-[#c2410c] group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
@@ -410,9 +435,9 @@ export default function HeroSection({
             {/* Split: Index List (Left) + Interactive Visual Chart (Right) */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
               
-              {/* Index Column (5 cols, clean uncluttered metric tabs) */}
+              {/* Index Column (5 cols, citizen-friendly labels) */}
               <div className="sm:col-span-5 space-y-2">
-                {/* Index 1: Kemantapan Jalan (BPS) */}
+                {/* Index 1: Jalan Layak Kab/Kota */}
                 <button
                   onClick={() => setSelectedIndex("kemantapan")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
@@ -430,7 +455,7 @@ export default function HeroSection({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/icon/jalan.png"
-                        alt="Kemantapan Jalan"
+                        alt="Jalan Layak Kab/Kota"
                         width={28}
                         height={28}
                         style={{ width: "28px", height: "28px" }}
@@ -442,7 +467,7 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "kemantapan" ? "text-white" : "text-slate-600"
                         }`}>
-                          Kemantapan Jalan (Renstra)
+                          Jalan Layak Kab/Kota
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "kemantapan" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
@@ -453,14 +478,14 @@ export default function HeroSection({
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "kemantapan" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Mantap Kab/Kota
+                          Baik &amp; Sedang
                         </span>
                       </div>
                     </div>
                   </div>
                 </button>
 
-                {/* Index 2: Konteks Ombudsman */}
+                {/* Index 2: Aduan ke Pemda (Ombudsman RI) */}
                 <button
                   onClick={() => setSelectedIndex("ombudsman")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
@@ -478,7 +503,7 @@ export default function HeroSection({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/icon/warning_icon.png"
-                        alt="Penundaan Berlarut"
+                        alt="Aduan ke Pemda"
                         width={28}
                         height={28}
                         style={{ width: "28px", height: "28px" }}
@@ -490,7 +515,7 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "ombudsman" ? "text-white" : "text-slate-600"
                         }`}>
-                          Laporan Ombudsman RI
+                          Aduan ke Pemda (Ombudsman)
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "ombudsman" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
@@ -501,14 +526,14 @@ export default function HeroSection({
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "ombudsman" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Aduan Terbanyak: Pemda
+                          Terbanyak 2025
                         </span>
                       </div>
                     </div>
                   </div>
                 </button>
 
-                {/* Index 3: Pagu Paket Pilot LPSE */}
+                {/* Index 3: Anggaran Jalan Pusat (APBN Ditjen Bina Marga) */}
                 <button
                   onClick={() => setSelectedIndex("pagu")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
@@ -526,7 +551,7 @@ export default function HeroSection({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/icon/financial.png"
-                        alt="Pagu LPSE"
+                        alt="Anggaran Jalan Pusat"
                         width={28}
                         height={28}
                         style={{ width: "28px", height: "28px" }}
@@ -538,25 +563,25 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "pagu" ? "text-white" : "text-slate-600"
                         }`}>
-                          Pagu &amp; Kontrak LPSE
+                          Anggaran Jalan Pusat (APBN)
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "pagu" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "pagu" ? "text-white" : "text-slate-900"}>Rp 106,90</span>
+                        <span className={selectedIndex === "pagu" ? "text-white" : "text-slate-900"}>Rp 37,41</span>
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "pagu" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Miliar Pagu
+                          Triliun (2025)
                         </span>
                       </div>
                     </div>
                   </div>
                 </button>
 
-                {/* Index 4: Alokasi Inpres Nasional */}
+                {/* Index 4: Inpres Jalan Daerah (IJD) */}
                 <button
                   onClick={() => setSelectedIndex("inpres")}
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
@@ -593,11 +618,11 @@ export default function HeroSection({
                         }`} />
                       </div>
                       <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "inpres" ? "text-white" : "text-slate-900"}>Rp 29,90</span>
+                        <span className={selectedIndex === "inpres" ? "text-white" : "text-slate-900"}>Rp 14,60</span>
                         <span className={`text-xs font-medium font-sans ${
                           selectedIndex === "inpres" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Triliun Total
+                          Triliun Tahap I
                         </span>
                       </div>
                     </div>
@@ -607,37 +632,33 @@ export default function HeroSection({
 
               {/* Chart Column: Dynamic Visual Monitor based on selectedIndex */}
               <div className="sm:col-span-7 bg-slate-50/80 rounded-[6px] p-3 sm:p-3.5 flex flex-col justify-between overflow-hidden">
-                {/* Chart Header: Structured 2-Tier Header (Never Wraps Awkwardly) */}
+                {/* Chart Header: Structured 2-Tier Header */}
                 <div className="space-y-1.5 border-b border-slate-200/60 pb-2">
                   {/* Row 1: Title & Main Type Switcher (Garis / Batang) */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
-                      <span className="text-[9.5px] font-semibold text-slate-400 uppercase font-sans tracking-wide truncate block">
+                      <span className="text-[9.5px] font-semibold text-slate-500 uppercase font-sans tracking-wide truncate block">
                         {selectedIndex === "kemantapan" && "BPS & RENSTRA KEMENPU (2020–2025)"}
-                        {selectedIndex === "ombudsman" && "OMBUDSMAN RI (2020–2025 · LAPORAN 2026b)"}
-                        {selectedIndex === "pagu" && "SIRUP & LPSE LKPP (TAHUN ANGGARAN 2026)"}
-                        {selectedIndex === "inpres" && "KEMEN PU (INPRES NO. 3/2023 TAHAP I & II)"}
+                        {selectedIndex === "ombudsman" && "OMBUDSMAN RI (2020–2025 · LAPTAH 2026)"}
+                        {selectedIndex === "pagu" && "DITJEN BINA MARGA KEMENPU (APBN 2020–2025)"}
+                        {selectedIndex === "inpres" && "KEMENPU · INPRES NO. 3/2023 (IJD)"}
                       </span>
                       <strong
                         className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight truncate block"
                         title={
                           selectedIndex === "kemantapan"
-                            ? "Tingkat Kemantapan Jalan (Nasional, Provinsi, Kab/Kota)"
+                            ? "Persentase Jalan Kondisi Layak (Nasional, Provinsi, Kab/Kota)"
                             : selectedIndex === "ombudsman"
-                            ? "Tren Penundaan Penanganan (Undue Delay)"
+                            ? "Proporsi Dugaan Penundaan Penanganan (%)"
                             : selectedIndex === "pagu"
-                            ? "Pagu Pengadaan vs Nilai Kontrak LPSE"
-                            : "Alokasi Inpres Jalan Daerah (IJD Tahap I & II)"
+                            ? "Pagu APBN Ditjen Bina Marga Kementerian PU (Rp Triliun)"
+                            : "Dana Bantuan Inpres Jalan Daerah (IJD)"
                         }
                       >
-                        {selectedIndex === "kemantapan" && "Tingkat Kemantapan Jalan"}
-                        {selectedIndex === "ombudsman" && "Tren Penundaan Penanganan"}
-                        {selectedIndex === "pagu" && (
-                          budgetTimeScale === "bulanan"
-                            ? "Realisasi Pagu vs Kontrak Bulanan"
-                            : "Pagu vs Nilai Kontrak Pilot"
-                        )}
-                        {selectedIndex === "inpres" && "Alokasi Inpres Jalan Daerah"}
+                        {selectedIndex === "kemantapan" && "Persentase Jalan Kondisi Layak"}
+                        {selectedIndex === "ombudsman" && "Dugaan Penundaan Penanganan"}
+                        {selectedIndex === "pagu" && "Anggaran Jalan Nasional (APBN)"}
+                        {selectedIndex === "inpres" && "Dana Bantuan Jalan Daerah (IJD)"}
                       </strong>
                     </div>
 
@@ -670,7 +691,7 @@ export default function HeroSection({
                     </div>
                   </div>
 
-                  {/* Row 2: Sub-toolbar / Legend & Filter Bar (Responsive & Clean) */}
+                  {/* Row 2: Sub-toolbar / Legend & Year Filter Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-y-1.5 gap-x-2 pt-0.5 text-[9px] sm:text-[9.5px] font-sans">
                     {/* Left: Dynamic Color Legend */}
                     {selectedIndex === "kemantapan" && (
@@ -687,18 +708,17 @@ export default function HeroSection({
                     )}
                     {selectedIndex === "pagu" && (
                       <div className="flex items-center gap-2 font-medium shrink-0">
-                        <span className="flex items-center gap-1 text-[9px] text-slate-600"><span className="w-2 h-1 rounded-xs bg-slate-700" />Pagu</span>
-                        <span className="flex items-center gap-1 text-[9px] text-[#c2410c]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Kontrak</span>
+                        <span className="flex items-center gap-1 text-[9px] text-[#c2410c] font-bold"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Pagu APBN (Triliun Rp)</span>
                       </div>
                     )}
                     {selectedIndex === "inpres" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600 shrink-0">
-                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Alokasi APBN</span>
+                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Dana APBN IJD</span>
                       </div>
                     )}
 
-                    {/* Right: Year Selector / Time Scale Toggle */}
-                    {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman") && (
+                    {/* Right: Year Selector Pills */}
+                    {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman" || selectedIndex === "pagu") && (
                       <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
                         {[2020, 2021, 2022, 2023, 2024, 2025].map((yr) => (
                           <button
@@ -713,31 +733,6 @@ export default function HeroSection({
                             {yr}
                           </button>
                         ))}
-                      </div>
-                    )}
-
-                    {selectedIndex === "pagu" && (
-                      <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs shrink-0">
-                        <button
-                          onClick={() => setBudgetTimeScale("instansi")}
-                          className={`px-1.5 py-0.5 transition-colors cursor-pointer ${
-                            budgetTimeScale === "instansi"
-                              ? "bg-[#c2410c] text-white"
-                              : "bg-white text-slate-600 hover:bg-orange-50/60"
-                          }`}
-                        >
-                          Per Instansi
-                        </button>
-                        <button
-                          onClick={() => setBudgetTimeScale("bulanan")}
-                          className={`px-1.5 py-0.5 transition-colors cursor-pointer ${
-                            budgetTimeScale === "bulanan"
-                              ? "bg-[#c2410c] text-white"
-                              : "bg-white text-slate-600 hover:bg-orange-50/60"
-                          }`}
-                        >
-                          Bulanan (2026)
-                        </button>
                       </div>
                     )}
 
@@ -788,34 +783,34 @@ export default function HeroSection({
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${roadConditionTrends.map((d, i) => `${58 + i * (355 / (roadConditionTrends.length - 1))},${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
-                            ${[...roadConditionTrends].reverse().map((d, i) => `${413 - i * (355 / (roadConditionTrends.length - 1))},${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
+                            ${roadConditionTrends.map((d, i) => `${56 + i * (348 / (roadConditionTrends.length - 1))},${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
+                            ${[...roadConditionTrends].reverse().map((d, i) => `${404 - i * (348 / (roadConditionTrends.length - 1))},${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           `}
                           fill="url(#kemantapanAreaGrad)"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${56 + i * (348 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.nasional) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#2563eb"
                           strokeWidth="2.5"
                           strokeLinecap="round"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${56 + i * (348 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.provinsi) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#9333ea"
                           strokeWidth="2.2"
                           strokeLinecap="round"
                         />
                         <path
-                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
+                          d={roadConditionTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${56 + i * (348 / (roadConditionTrends.length - 1))} ${18 + ((100 - d.kabupatenKota) / 60) * 94}`).join(" ")}
                           fill="none"
                           stroke="#ea580c"
                           strokeWidth="3.2"
                           strokeLinecap="round"
                         />
                         {roadConditionTrends.map((d, i) => {
-                          const x = 58 + i * (355 / (roadConditionTrends.length - 1));
+                          const x = 56 + i * (348 / (roadConditionTrends.length - 1));
                           const yNas = 18 + ((100 - d.nasional) / 60) * 94;
                           const yProv = 18 + ((100 - d.provinsi) / 60) * 94;
                           const yKab = 18 + ((100 - d.kabupatenKota) / 60) * 94;
@@ -937,8 +932,8 @@ export default function HeroSection({
                             <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
                           </linearGradient>
                         </defs>
-                        {[35, 33, 31, 29].map((val) => {
-                          const y = 18 + ((36 - val) / 8) * 94;
+                        {[40, 30, 20, 10].map((val) => {
+                          const y = 18 + ((40 - val) / 40) * 94;
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
@@ -951,13 +946,13 @@ export default function HeroSection({
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${complaintTrends.map((d, i) => `${58 + i * (355 / (complaintTrends.length - 1))},${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
+                            ${complaintTrends.map((d, i) => `${58 + i * (355 / (complaintTrends.length - 1))},${18 + ((40 - d.overduePct) / 40) * 94}`).join(" ")}
                             413,112 58,112
                           `}
                           fill="url(#ombudsmanAreaGrad)"
                         />
                         <path
-                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (complaintTrends.length - 1))} ${18 + ((36 - d.overduePct) / 8) * 94}`).join(" ")}
+                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (complaintTrends.length - 1))} ${18 + ((40 - d.overduePct) / 40) * 94}`).join(" ")}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="2.8"
@@ -965,7 +960,7 @@ export default function HeroSection({
                         />
                         {complaintTrends.map((d, i) => {
                           const x = 58 + i * (355 / (complaintTrends.length - 1));
-                          const y = 18 + ((36 - d.overduePct) / 8) * 94;
+                          const y = 18 + ((40 - d.overduePct) / 40) * 94;
                           const isSelected = d.year === selectedYear;
 
                           return (
@@ -1003,8 +998,8 @@ export default function HeroSection({
                             <stop offset="100%" stopColor="#c2410c" />
                           </linearGradient>
                         </defs>
-                        {[35, 33, 31, 29].map((val) => {
-                          const y = 18 + ((36 - val) / 8) * 94;
+                        {[40, 30, 20, 10].map((val) => {
+                          const y = 18 + ((40 - val) / 40) * 94;
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
@@ -1018,7 +1013,7 @@ export default function HeroSection({
                         {complaintTrends.map((d, i) => {
                           const xCenter = 58 + i * (355 / (complaintTrends.length - 1));
                           const isSelected = d.year === selectedYear;
-                          const h = ((d.overduePct - 28) / 8) * 94;
+                          const h = (d.overduePct / 40) * 94;
                           const yBar = 112 - h;
 
                           return (
@@ -1058,341 +1053,135 @@ export default function HeroSection({
                 )}
 
                 {/* ======================================================== */}
-                {/* 3. CHART BODY: PAGU VS KONTRAK LELANG PILOT (LPSE TA 2026) */}
+                {/* 3. CHART BODY: ANGGARAN APBN BINA MARGA (2020 - 2025)    */}
                 {/* ======================================================== */}
                 {selectedIndex === "pagu" && (
-                  budgetTimeScale === "bulanan" ? (
-                    // VIEW A: REALISASI BULANAN TA 2026 (JANUARI - OKTOBER 2026)
-                    chartViewMode === "line" ? (
-                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
-                          <defs>
-                            <linearGradient id="paguMonthGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#334155" stopOpacity="0.18" />
-                              <stop offset="100%" stopColor="#334155" stopOpacity="0.0" />
-                            </linearGradient>
-                            <linearGradient id="kontrakMonthGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#c2410c" stopOpacity="0.25" />
-                              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
-                            </linearGradient>
-                          </defs>
-                          {[40, 30, 20, 10].map((val) => {
-                            const y = 18 + ((40 - val) / 40) * 94;
-                            return (
-                              <g key={val}>
-                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                                <text x="26" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
-                                  {val}M
-                                </text>
-                              </g>
-                            );
-                          })}
-                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                  chartViewMode === "line" ? (
+                    <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
+                        <defs>
+                          <linearGradient id="binaMargaAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#c2410c" stopOpacity="0.22" />
+                            <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
+                          </linearGradient>
+                        </defs>
+                        {[100, 75, 50, 25].map((val) => {
+                          const y = 18 + ((100 - val) / 100) * 94;
+                          return (
+                            <g key={val}>
+                              <line x1="34" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <text x="30" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
+                                {val}T
+                              </text>
+                            </g>
+                          );
+                        })}
+                        <line x1="34" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        <polygon
+                          points={`
+                            ${binaMargaApbnTrends.map((d, i) => `${58 + i * (348 / (binaMargaApbnTrends.length - 1))},${18 + ((100 - d.pagu) / 100) * 94}`).join(" ")}
+                            406,112 58,112
+                          `}
+                          fill="url(#binaMargaAreaGrad)"
+                        />
+                        <path
+                          d={binaMargaApbnTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (348 / (binaMargaApbnTrends.length - 1))} ${18 + ((100 - d.pagu) / 100) * 94}`).join(" ")}
+                          fill="none"
+                          stroke="#c2410c"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                        />
+                        {binaMargaApbnTrends.map((d, i) => {
+                          const x = 58 + i * (348 / (binaMargaApbnTrends.length - 1));
+                          const y = 18 + ((100 - d.pagu) / 100) * 94;
+                          const isSelected = d.year === selectedYear;
 
-                          {/* Pagu Area & Line */}
-                          <polygon
-                            points={`
-                              ${monthlyPilotBudgetTrend.map((d, i) => `${45 + i * 42},${18 + ((40 - d.pagu) / 40) * 94}`).join(" ")}
-                              423,112 45,112
-                            `}
-                            fill="url(#paguMonthGrad)"
-                          />
-                          <path
-                            d={monthlyPilotBudgetTrend.map((d, i) => `${i === 0 ? "M" : "L"} ${45 + i * 42} ${18 + ((40 - d.pagu) / 40) * 94}`).join(" ")}
-                            fill="none"
-                            stroke="#334155"
-                            strokeWidth="2.2"
-                            strokeLinecap="round"
-                          />
-
-                          {/* Kontrak Area & Line */}
-                          <polygon
-                            points={`
-                              ${monthlyPilotBudgetTrend.map((d, i) => `${45 + i * 42},${18 + ((40 - d.kontrak) / 40) * 94}`).join(" ")}
-                              423,112 45,112
-                            `}
-                            fill="url(#kontrakMonthGrad)"
-                          />
-                          <path
-                            d={monthlyPilotBudgetTrend.map((d, i) => `${i === 0 ? "M" : "L"} ${45 + i * 42} ${18 + ((40 - d.kontrak) / 40) * 94}`).join(" ")}
-                            fill="none"
-                            stroke="#c2410c"
-                            strokeWidth="2.8"
-                            strokeLinecap="round"
-                          />
-
-                          {monthlyPilotBudgetTrend.map((d, i) => {
-                            const x = 45 + i * 42;
-                            const yPagu = 18 + ((40 - d.pagu) / 40) * 94;
-                            const yKontrak = 18 + ((40 - d.kontrak) / 40) * 94;
-                            const isLast = i === monthlyPilotBudgetTrend.length - 1;
-
-                            return (
-                              <g key={d.month} className="group">
-                                <circle cx={x} cy={yPagu} r={isLast ? 4 : 2.5} fill="#334155" stroke="#fff" strokeWidth="1.5" />
-                                <circle cx={x} cy={yKontrak} r={isLast ? 5 : 3} fill="#c2410c" stroke="#fff" strokeWidth="1.8" />
-                                
-                                {isLast && (
-                                  <g>
-                                    <text x={x} y={yPagu - 8} textAnchor="end" fontSize="8" fontWeight="bold" fill="#334155">
-                                      Pagu: Rp {d.pagu}M
-                                    </text>
-                                    <text x={x} y={yKontrak + 13} textAnchor="end" fontSize="8.5" fontWeight="bold" fill="#c2410c">
-                                      Kontrak: Rp {d.kontrak}M
-                                    </text>
-                                  </g>
-                                )}
-
-                                <text x={x} y="126" textAnchor="middle" fontSize="9" fontWeight={isLast ? "bold" : "600"} fill={isLast ? "#c2410c" : "#475569"}>
-                                  {d.month}
-                                </text>
-                                <text x={x} y="138" textAnchor="middle" fontSize="6.5" fill="#94a3b8">
-                                  {i < 3 ? "Q1" : i < 6 ? "Q2" : i < 9 ? "Q3" : "Q4"}
-                                </text>
-                              </g>
-                            );
-                          })}
-                          <text x="235" y="154" textAnchor="middle" fontSize="8" fill="#64748b">
-                            Skala Waktu: Realisasi Kumulatif Pengadaan Jan – Okt TA 2026
-                          </text>
-                        </svg>
-                      </div>
-                    ) : (
-                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
-                          {[40, 30, 20, 10].map((val) => {
-                            const y = 18 + ((40 - val) / 40) * 94;
-                            return (
-                              <g key={val}>
-                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                                <text x="26" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
-                                  {val}M
-                                </text>
-                              </g>
-                            );
-                          })}
-                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
-                          {monthlyPilotBudgetTrend.map((d, i) => {
-                            const xCenter = 45 + i * 42;
-                            const hPagu = (d.pagu / 40) * 94;
-                            const hKontrak = (d.kontrak / 40) * 94;
-                            const yPagu = 112 - hPagu;
-                            const yKontrak = 112 - hKontrak;
-                            const isLast = i === monthlyPilotBudgetTrend.length - 1;
-
-                            return (
-                              <g key={d.month} className="group">
-                                <rect x={xCenter - 10} y={yPagu} width="9" height={hPagu} rx="2" fill="#334155" />
-                                <rect x={xCenter + 1} y={yKontrak} width="9" height={hKontrak} rx="2" fill="#ea580c" />
-                                {isLast && (
-                                  <text x={xCenter + 5} y={yKontrak - 4} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#c2410c">
-                                    33.6M
-                                  </text>
-                                )}
-                                <text x={xCenter} y="126" textAnchor="middle" fontSize="9" fontWeight={isLast ? "bold" : "600"} fill={isLast ? "#c2410c" : "#475569"}>
-                                  {d.month}
-                                </text>
-                                <text x={xCenter} y="138" textAnchor="middle" fontSize="6.5" fill="#94a3b8">
-                                  {d.phase.substring(0, 7)}
-                                </text>
-                              </g>
-                            );
-                          })}
-                          <text x="235" y="154" textAnchor="middle" fontSize="8" fill="#64748b">
-                            Skala Waktu: Realisasi Kumulatif Pengadaan Jan – Okt TA 2026
-                          </text>
-                        </svg>
-                      </div>
-                    )
+                          return (
+                            <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
+                              <rect x={x - 20} y="10" width="40" height="130" fill="transparent" />
+                              {isSelected && (
+                                <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
+                              )}
+                              <circle cx={x} cy={y} r={isSelected ? 5.5 : 3.8} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                                {d.pagu.toFixed(1).replace(".", ",")}T
+                              </text>
+                              {isSelected ? (
+                                <g>
+                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                </g>
+                              ) : (
+                                <g>
+                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
+                                </g>
+                              )}
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
                   ) : (
-                    // VIEW B: PER INSTANSI (TA 2026 DENGAN TIMELINE LELANG)
-                    chartViewMode === "line" ? (
-                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
-                          <defs>
-                            <linearGradient id="paguLineGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#334155" stopOpacity="0.18" />
-                              <stop offset="100%" stopColor="#334155" stopOpacity="0.0" />
-                            </linearGradient>
-                            <linearGradient id="kontrakLineGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#c2410c" stopOpacity="0.22" />
-                              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
-                            </linearGradient>
-                          </defs>
-                          {[20, 15, 10, 5].map((val) => {
-                            const y = 20 + ((20 - val) / 20) * 92;
-                            return (
-                              <g key={val}>
-                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                                <text x="26" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
-                                  {val}M
-                                </text>
-                              </g>
-                            );
-                          })}
-                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                    <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
+                      <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
+                        <defs>
+                          <linearGradient id="binaMargaBarGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#ea580c" />
+                            <stop offset="100%" stopColor="#c2410c" />
+                          </linearGradient>
+                        </defs>
+                        {[100, 75, 50, 25].map((val) => {
+                          const y = 18 + ((100 - val) / 100) * 94;
+                          return (
+                            <g key={val}>
+                              <line x1="34" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
+                              <text x="30" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
+                                {val}T
+                              </text>
+                            </g>
+                          );
+                        })}
+                        <line x1="34" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
+                        {binaMargaApbnTrends.map((d, i) => {
+                          const xCenter = 58 + i * (348 / (binaMargaApbnTrends.length - 1));
+                          const isSelected = d.year === selectedYear;
+                          const h = (d.pagu / 100) * 94;
+                          const yBar = 112 - h;
 
-                          {/* Pagu Area & Line */}
-                          <polygon
-                            points={`
-                              ${pilotBudgetStats.map((d, i) => `${100 + i * 137},${20 + ((20 - d.pagu) / 20) * 92}`).join(" ")}
-                              374,112 100,112
-                            `}
-                            fill="url(#paguLineGrad)"
-                          />
-                          <path
-                            d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${100 + i * 137} ${20 + ((20 - d.pagu) / 20) * 92}`).join(" ")}
-                            fill="none"
-                            stroke="#334155"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                          />
-
-                          {/* Kontrak Area & Line */}
-                          <polygon
-                            points={`
-                              ${pilotBudgetStats.map((d, i) => `${100 + i * 137},${20 + ((20 - d.kontrak) / 20) * 92}`).join(" ")}
-                              374,112 100,112
-                            `}
-                            fill="url(#kontrakLineGrad)"
-                          />
-                          <path
-                            d={pilotBudgetStats.map((d, i) => `${i === 0 ? "M" : "L"} ${100 + i * 137} ${20 + ((20 - d.kontrak) / 20) * 92}`).join(" ")}
-                            fill="none"
-                            stroke="#c2410c"
-                            strokeWidth="2.8"
-                            strokeLinecap="round"
-                          />
-
-                          {pilotBudgetStats.map((d, i) => {
-                            const x = 100 + i * 137;
-                            const yPagu = 20 + ((20 - d.pagu) / 20) * 92;
-                            const yKontrak = 20 + ((20 - d.kontrak) / 20) * 92;
-
-                            return (
-                              <g key={d.key}>
-                                <line x1={x} y1="20" x2={x} y2="112" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="2 2" />
-                                <circle cx={x} cy={yPagu} r={4.5} fill="#334155" stroke="#fff" strokeWidth="1.8" />
-                                <circle cx={x} cy={yKontrak} r={5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                                
-                                <text x={x} y={yPagu - 7} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#334155">
-                                  Rp {d.pagu}M
-                                </text>
-                                <text x={x} y={yKontrak + 14} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
-                                  Rp {d.kontrak}M
-                                </text>
-                                
-                                <text x={x} y="126" textAnchor="middle" fontSize="10.5" fontWeight="bold" fill="#0f172a">
-                                  {d.fullName}
-                                </text>
-                                
-                                <rect x={x - 48} y="132" width="96" height="13" rx="3.5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="0.8" />
-                                <text x={x} y="141.5" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#475569">
-                                  Hemat {d.efficiency}% ({d.timeline})
-                                </text>
-                                
-                                <text x={x} y="155" textAnchor="middle" fontSize="8" fill="#64748b">
-                                  {d.ruas} Paket Pilot • TA 2026
-                                </text>
-                              </g>
-                            );
-                          })}
-                        </svg>
-                      </div>
-                    ) : (
-                      <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
-                        <svg viewBox="0 0 460 162" className="w-full h-full select-none font-sans">
-                          <defs>
-                            <linearGradient id="paguBarGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#475569" />
-                              <stop offset="100%" stopColor="#1e293b" />
-                            </linearGradient>
-                            <linearGradient id="kontrakBarGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#f97316" />
-                              <stop offset="100%" stopColor="#c2410c" />
-                            </linearGradient>
-                            <filter id="barShadow" x="-10%" y="-10%" width="120%" height="120%">
-                              <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#0f172a" floodOpacity="0.08" />
-                            </filter>
-                          </defs>
-
-                          {/* Grid Lines */}
-                          {[20, 15, 10, 5].map((val) => {
-                            const y = 20 + ((20 - val) / 20) * 92;
-                            return (
-                              <g key={val}>
-                                <line x1="30" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                                <text x="26" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
-                                  {val}M
-                                </text>
-                              </g>
-                            );
-                          })}
-                          <line x1="30" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
-
-                          {/* Grouped Bars */}
-                          {pilotBudgetStats.map((d, i) => {
-                            const xCenter = 100 + i * 137;
-                            const hPagu = (d.pagu / 20) * 92;
-                            const hKontrak = (d.kontrak / 20) * 92;
-                            const yPagu = 112 - hPagu;
-                            const yKontrak = 112 - hKontrak;
-
-                            return (
-                              <g key={d.key} className="group">
-                                <rect x={xCenter - 54} y="12" width="108" height="100" rx="6" fill="transparent" className="hover:fill-slate-50 transition-colors" />
-
-                                {/* Pagu Bar */}
-                                <rect
-                                  x={xCenter - 30}
-                                  y={yPagu}
-                                  width="28"
-                                  height={hPagu}
-                                  rx="3.5"
-                                  fill="url(#paguBarGrad)"
-                                  filter="url(#barShadow)"
-                                  className="transition-all hover:opacity-95"
-                                />
-                                <text x={xCenter - 16} y={yPagu - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#334155">
-                                  {d.pagu}M
-                                </text>
-
-                                {/* Kontrak Bar */}
-                                <rect
-                                  x={xCenter + 2}
-                                  y={yKontrak}
-                                  width="28"
-                                  height={hKontrak}
-                                  rx="3.5"
-                                  fill="url(#kontrakBarGrad)"
-                                  filter="url(#barShadow)"
-                                  className="transition-all hover:opacity-95"
-                                />
-                                <text x={xCenter + 16} y={yKontrak - 4} textAnchor="middle" fontSize="8.5" fontWeight="bold" fill="#c2410c">
-                                  {d.kontrak}M
-                                </text>
-
-                                {/* Institution Label */}
-                                <text x={xCenter} y="126" textAnchor="middle" fontSize="10.5" fontWeight="bold" fill="#0f172a">
-                                  {d.fullName}
-                                </text>
-
-                                {/* Savings Badge with Timeline Months */}
-                                <rect x={xCenter - 52} y="132" width="104" height="13" rx="3.5" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="0.8" />
-                                <text x={xCenter} y="141.5" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#475569">
-                                  Hemat {d.efficiency}% ({d.timeline})
-                                </text>
-
-                                {/* Subtitle */}
-                                <text x={xCenter} y="155" textAnchor="middle" fontSize="8" fill="#64748b">
-                                  {d.ruas} Paket Pilot Lelang TA 2026
-                                </text>
-                              </g>
-                            );
-                          })}
-                        </svg>
-                      </div>
-                    )
+                          return (
+                            <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
+                              {isSelected && (
+                                <rect x={xCenter - 18} y="12" width="36" height="100" rx="4" fill="#c2410c" fillOpacity="0.06" />
+                              )}
+                              <rect
+                                x={xCenter - 13}
+                                y={yBar}
+                                width="26"
+                                height={h}
+                                rx="3"
+                                fill={isSelected ? "url(#binaMargaBarGrad)" : "#ea580c"}
+                                opacity={isSelected ? 1 : 0.82}
+                              />
+                              <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
+                                {d.pagu.toFixed(1).replace(".", ",")}T
+                              </text>
+                              {isSelected ? (
+                                <g>
+                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
+                                </g>
+                              ) : (
+                                <g>
+                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
+                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
+                                </g>
+                              )}
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
                   )
                 )}
 
@@ -1424,13 +1213,13 @@ export default function HeroSection({
                         <polygon
                           points={`
                             120,${18 + ((16 - 14.60) / 14) * 94}
-                            340,${18 + ((16 - 15.30) / 14) * 94}
+                            340,${18 + ((16 - 15.00) / 14) * 94}
                             340,112 120,112
                           `}
                           fill="url(#inpresLineGrad)"
                         />
                         <path
-                          d={`M 120 ${18 + ((16 - 14.60) / 14) * 94} L 340 ${18 + ((16 - 15.30) / 14) * 94}`}
+                          d={`M 120 ${18 + ((16 - 14.60) / 14) * 94} L 340 ${18 + ((16 - 15.00) / 14) * 94}`}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="3"
@@ -1613,7 +1402,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["ombudsman"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Definisi &amp; Catatan:</strong> Ombudsman RI mencatat 23.596 penerimaan masyarakat sepanjang 2025, dengan pemerintah daerah sebagai instansi yang paling banyak dilaporkan (4.766 laporan). Di platform JagaJalan, warga dapat mengadvokasikan penundaan penanganan (<em>undue delay</em>) melampaui standar kepatutan UU 25/2009.
+                              <strong className="text-slate-700">Definisi &amp; Catatan:</strong> Ombudsman RI mencatat 23.596 penerimaan masyarakat sepanjang 2025, dengan Pemda sebagai terlapor terbanyak (4.766 laporan) dan dugaan <em>penundaan berlarut</em> mencapai 21,25% (peringkat ke-2 bentuk maladministrasi terbanyak).
                             </div>
                           )}
                         </div>
@@ -1626,32 +1415,27 @@ export default function HeroSection({
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Total Anggaran
+                            Pagu {currentBinaMarga.year}
                           </span>
-                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                            Rp 106,90 M
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
+                            Rp {currentBinaMarga.pagu.toFixed(2).replace(".", ",")} T
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Kontrak
+                            Puncak (2023)
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                            Rp 101,40 M
+                            Rp 78,96 T
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Efisiensi
+                            Pagu 2025
                           </span>
-                          <div className="flex items-center gap-1">
-                            <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                              Rp 5,50 M
-                            </strong>
-                            <span className="text-[9px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded">
-                              5,1%
-                            </span>
-                          </div>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
+                            Rp 37,41 T
+                          </strong>
                         </div>
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
@@ -1659,7 +1443,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Sumber:</strong> SiRUP LKPP &amp; SPSE Pilot (TA 2026)
+                              <strong className="text-slate-800">Sumber:</strong> Ditjen Bina Marga Kementerian PU (APBN 2020–2025)
                             </span>
                             <button
                               type="button"
@@ -1672,7 +1456,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["pagu"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Ruang Lingkup:</strong> Komparasi 6 paket pengadaan percontohan (bukan audit resmi BPK). Pagu bersumber dari rencana umum pengadaan SiRUP LKPP dan nilai kontrak riil dari pengumuman pemenang lelang SPSE daerah percontohan.
+                              <strong className="text-slate-700">Catatan APBN:</strong> {currentBinaMarga.note}. Alokasi APBN Ditjen Bina Marga membiayai preservasi jalan nasional, jembatan, serta dukungan konektivitas daerah (lonjakan 2023 dipengaruhi penugasan IJD &amp; IKN).
                             </div>
                           )}
                         </div>
@@ -1684,16 +1468,16 @@ export default function HeroSection({
                     <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">Tahap I (2023)</span>
+                          <span className="text-[10px] text-slate-500 font-medium">Tahap I (Realisasi 2023)</span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">Rp 14,60 T</strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">Tahap II (2024)</span>
-                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">Rp 15,30 T</strong>
+                          <span className="text-[10px] text-slate-500 font-medium">Tahap II (Rencana 2024)</span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">Rp 15,00 T</strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-emerald-700 font-medium">Total Fisik</span>
-                          <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">5.992 KM</strong>
+                          <span className="text-[10px] text-emerald-700 font-medium">Realisasi Fisik I</span>
+                          <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">3.194 KM</strong>
                         </div>
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
@@ -1714,7 +1498,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["inpres"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Alokasi:</strong> Intervensi fiskal APBN percepatan konektivitas jalan daerah Tahap I (2023: Rp 14,60 T) dan Tahap II (2024: Rp 15,30 T) yang diadministrasikan Kementerian PU dan Kemenkeu RI.
+                              <strong className="text-slate-700">Alokasi:</strong> Intervensi fiskal APBN Inpres Jalan Daerah (Inpres No. 3/2023) dengan realisasi definitif Tahap I 2023 sebesar Rp 14,60 T (±3.194 km di 34 provinsi) dan rencana pagu awal Tahap II 2024 sebesar Rp 15,00 T yang mengalami penyesuaian efisiensi APBN.
                             </div>
                           )}
                         </div>
@@ -1727,151 +1511,117 @@ export default function HeroSection({
             </div>
           </div>
 
-          {/* RIGHT 5 COLS: REKAPITULASI KORIDOR PILOT (DOUBLE-BEZEL AGENCY TIER) */}
+          {/* RIGHT 5 COLS: SIAPA PENANGGUNG JAWAB JALAN? (100% OFFICIAL BPS & RENSTRA PU) */}
           <div className="lg:col-span-5 bg-slate-100/60 p-2 sm:p-2.5 rounded-[8px] ring-1 ring-orange-200/50">
             <div className="bg-white rounded-[6px] p-4 sm:p-5 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.03)] flex flex-col justify-between space-y-3 h-full">
             
-            {/* Header: Title & View Links */}
+            {/* Header: Title & Map Link */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div>
                 <h2 className="text-lg sm:text-xl font-bold font-heading text-slate-900 tracking-tight block">
-                  Ringkasan Ruas Percontohan
+                  Siapa Penanggung Jawab Jalan?
                 </h2>
-                <span className="text-[10px] text-slate-500 font-sans">
-                  Klasifikasi kewenangan ruas terdata (Bukan peringkat kinerja)
+                <span className="text-[10.5px] text-slate-500 font-sans">
+                  Pembagian resmi menurut UU No. 2/2022 &amp; data BPS (2026)
                 </span>
               </div>
               <button
-                onClick={onExploreData}
-                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer font-sans"
+                type="button"
+                onClick={() => (onExploreMap ? onExploreMap() : onExploreData && onExploreData())}
+                className="text-[#c2410c] hover:text-[#9a3412] text-xs font-bold flex items-center gap-0.5 transition-colors cursor-pointer font-sans shrink-0"
               >
-                <span>Anggaran Proyek</span>
+                <span>Cek di Peta</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* Executive KPI Micro Strip (Borderless Soft Tonal Surface) */}
+            {/* 3 Official Macro KPI Tiles (Zero Simulated Numbers) */}
             <div className="grid grid-cols-3 gap-2.5">
               <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
-                  Ruas Pilot
+                  Total Jalan
                 </span>
                 <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
-                  6 Ruas
+                  538.102 km
                 </strong>
-                <span className="text-[9px] text-slate-400 font-sans block">3 Nas • 1 Prov • 2 Kota</span>
+                <span className="text-[9.5px] text-slate-500 font-sans block">Non-Tol · BPS 2026</span>
               </div>
               <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
-                  Total Anggaran
+                  Jalan Daerah
                 </span>
                 <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
-                  Rp 106,90 M
+                  91,15%
                 </strong>
-                <span className="text-[9px] text-slate-400 font-sans block">Kontrak: Rp 101,40 M</span>
+                <span className="text-[9.5px] text-slate-500 font-sans block">Provinsi &amp; Kab/Kota</span>
               </div>
-              <div className="bg-rose-50/75 rounded-[6px] p-2.5 text-center">
-                <span className="text-[10px] text-rose-700 font-semibold font-sans block">
-                  Lewat Batas Waktu
+              <div className="bg-orange-50/80 rounded-[6px] p-2.5 text-center">
+                <span className="text-[10px] text-[#9a3412] font-semibold font-sans block">
+                  Selisih Kualitas
                 </span>
-                <strong className="text-base sm:text-lg font-bold text-rose-600 tabular-nums font-sans block mt-0.5">
-                  2 Tiket
+                <strong className="text-base sm:text-lg font-bold text-[#c2410c] tabular-nums font-sans block mt-0.5">
+                  36,27%
                 </strong>
-                <span className="text-[9px] text-rose-600/80 font-sans block">Melewati Batas Respons</span>
+                <span className="text-[9.5px] text-[#9a3412]/80 font-sans block">Pusat vs Kab/Kota</span>
               </div>
             </div>
 
-            {/* Clean Structured Table (No Outer Box Border, Clean Horizontal Dividers) */}
+            {/* Clean Structured Table: 3 Official Road Authority Levels */}
             <div className="overflow-hidden">
               <table className="w-full text-left border-collapse text-xs">
                 <thead className="border-y border-slate-100 bg-slate-50/60 text-[9.5px] text-slate-500 font-sans font-bold uppercase tracking-wider">
                   <tr>
-                    <th className="py-2 px-2.5">Klasifikasi Wewenang</th>
-                    <th className="py-2 px-2 text-center">Ruas</th>
-                    <th className="py-2 px-2.5 text-right">Pagu Pengadaan</th>
-                    <th className="py-2 px-2.5 text-right">Status Batas Waktu Respons</th>
+                    <th className="py-2 px-2.5">Penanggung Jawab</th>
+                    <th className="py-2 px-2 text-right">Panjang</th>
+                    <th className="py-2 px-2 text-right">Porsi</th>
+                    <th className="py-2 px-2.5 text-right">Kondisi Layak</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-sans text-xs">
-                  <tr className="hover:bg-slate-50/50 transition-colors">
-                    <td className="py-2 px-2.5">
-                      <div className="font-bold text-slate-900 text-xs">KemenPU (BBPJN Sumut)</div>
-                      <div className="text-[9.5px] text-slate-500 font-medium">Jalan Nasional</div>
-                    </td>
-                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">3</td>
-                    <td className="py-2 px-2.5 text-right">
-                      <div className="font-bold tabular-nums text-slate-900">Rp 76,90 M</div>
-                      <div className="text-[9px] text-slate-400 tabular-nums">71,9% Pagu</div>
-                    </td>
-                    <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-[5px] tabular-nums">
-                        Aman (0)
-                      </span>
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-slate-50/50 transition-colors">
-                    <td className="py-2 px-2.5">
-                      <div className="font-bold text-slate-900 text-xs">Dinas PUPR Prov. Sumut</div>
-                      <div className="text-[9.5px] text-slate-500 font-medium">Jalan Provinsi</div>
-                    </td>
-                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">1</td>
-                    <td className="py-2 px-2.5 text-right">
-                      <div className="font-bold tabular-nums text-slate-900">Rp 18,70 M</div>
-                      <div className="text-[9px] text-slate-400 tabular-nums">17,5% Pagu</div>
-                    </td>
-                    <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-[5px] tabular-nums">
-                        1 Tiket Eskalasi
-                      </span>
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-slate-50/50 transition-colors">
-                    <td className="py-2 px-2.5">
-                      <div className="font-bold text-slate-900 text-xs">Dinas SDABMBK Kota Medan</div>
-                      <div className="text-[9.5px] text-slate-500 font-medium">Jalan Kab / Kota</div>
-                    </td>
-                    <td className="py-2 px-2 text-center font-bold tabular-nums text-slate-700">2</td>
-                    <td className="py-2 px-2.5 text-right">
-                      <div className="font-bold tabular-nums text-slate-900">Rp 11,30 M</div>
-                      <div className="text-[9px] text-slate-400 tabular-nums">10,6% Pagu</div>
-                    </td>
-                    <td className="py-2 px-2.5 text-right">
-                      <span className="inline-flex items-center text-[9.5px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-[5px] tabular-nums">
-                        1 Tiket Eskalasi
-                      </span>
-                    </td>
-                  </tr>
+                  {nationalAuthorityBreakdown.map((item) => (
+                    <tr key={item.key} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="py-2.5 px-2.5">
+                        <div className="font-bold text-slate-900 text-xs">{item.owner}</div>
+                        <div className="text-[10px] text-slate-500 font-medium">{item.sub}</div>
+                      </td>
+                      <td className="py-2.5 px-2 text-right font-semibold tabular-nums text-slate-800">
+                        {item.km}
+                      </td>
+                      <td className="py-2.5 px-2 text-right tabular-nums text-slate-600 font-medium">
+                        {item.share}
+                      </td>
+                      <td className="py-2.5 px-2.5 text-right">
+                        <span className={`inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-[5px] tabular-nums ${item.badgeClass}`}>
+                          {item.goodPct}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
                 <tfoot className="bg-slate-50/70 font-bold border-t border-slate-200/70 text-xs">
                   <tr>
-                    <td className="py-2 px-2.5 text-slate-900">Total Koridor Pilot</td>
-                    <td className="py-2 px-2 text-center tabular-nums text-slate-900">6 Ruas</td>
-                    <td className="py-2 px-2.5 text-right tabular-nums text-slate-900">Rp 106,90 M</td>
+                    <td className="py-2 px-2.5 text-slate-900">Total Nasional (Non-Tol)</td>
+                    <td className="py-2 px-2 text-right tabular-nums text-slate-900">538.102 km</td>
+                    <td className="py-2 px-2 text-right tabular-nums text-slate-700">100%</td>
                     <td className="py-2 px-2.5 text-right">
-                      <span className="text-[9.5px] font-bold text-rose-700 tabular-nums">2 Lewat SLA</span>
+                      <span className="text-[9.5px] font-bold text-slate-600 tabular-nums">Batas Tanggap ≤ 14 Hari</span>
                     </td>
                   </tr>
                 </tfoot>
               </table>
             </div>
 
-            {/* SLA Alert Strip with Responsible Legal Context */}
+            {/* Citizen-Friendly Action Strip */}
             <div className="pt-2 text-[11px] text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 border-t border-slate-100 font-sans">
               <div>
-                <span>2 laporan melewati batas waktu SLA (+6 hari).</span>
+                <span>Menemukan jalan rusak? Cek dinas penanggung jawabnya atau laporkan langsung.</span>
               </div>
               <button
-                onClick={() => {
-                  if (onOpenOmbudsmanDraft) {
-                    const firstOverdue = reports.find((r) => r.status === "OVERDUE");
-                    if (firstOverdue) onOpenOmbudsmanDraft(firstOverdue);
-                  }
-                }}
+                type="button"
+                onClick={() => (onOpenReport ? onOpenReport() : onExploreMap && onExploreMap())}
                 className="font-bold text-[#c2410c] hover:underline shrink-0 cursor-pointer text-[11px] flex items-center gap-0.5"
               >
-                <span>Periksa Opsi Eskalasi</span>
+                <span>Laporkan Jalan</span>
                 <ChevronRight className="w-3 h-3" />
               </button>
             </div>
@@ -1950,7 +1700,7 @@ export default function HeroSection({
                   value={tableSearch}
                   onChange={handleTableSearchChange}
                   placeholder="Cari ruas, kota, rekanan..."
-                  className="w-full pl-9 pr-7 py-2 text-xs rounded-[6px] bg-slate-50/90 focus:bg-white ring-1 ring-orange-200/50 focus:ring-2 focus:ring-orange-500/20 placeholder-slate-400 text-slate-900 focus:outline-none font-sans transition-all"
+                  className="w-full pl-9 pr-7 py-2 text-xs rounded-[6px] bg-slate-50/90 focus:bg-white ring-1 ring-orange-200/50 focus:ring-2 focus:ring-orange-500/20 placeholder-slate-500 text-slate-900 focus:outline-none font-sans transition-all"
                 />
                 {tableSearch && (
                   <button
@@ -1979,9 +1729,9 @@ export default function HeroSection({
                 <tbody className="divide-y divide-slate-100 font-sans">
                   {paginatedRoads.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-slate-400 font-sans">
+                      <td colSpan={6} className="py-12 text-center text-slate-500 font-sans">
                         <p className="font-semibold text-slate-700 text-sm">Tidak ada ruas jalan yang cocok</p>
-                        <p className="text-xs text-slate-400 mt-1">Coba gunakan kata kunci pencarian atau ubah filter kategori di atas.</p>
+                        <p className="text-xs text-slate-500 mt-1">Coba gunakan kata kunci pencarian atau ubah filter kategori di atas.</p>
                       </td>
                     </tr>
                   ) : (
@@ -2000,7 +1750,7 @@ export default function HeroSection({
                             >
                               {road.name}
                             </button>
-                            <div className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1.5 font-sans">
+                            <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1.5 font-sans">
                               <span className="text-slate-600 font-medium">{road.district}</span>
                               <span className="text-slate-300">/</span>
                               <span className="font-mono text-slate-500 tabular-nums">{road.lengthKm} km</span>
@@ -2025,7 +1775,7 @@ export default function HeroSection({
                             <div className="font-bold tabular-nums text-slate-900 text-[13px]">
                               Rp {(road.budget?.paguRp / 1000000000).toFixed(2)} M
                             </div>
-                            <div className="text-[10.5px] font-mono text-slate-400 tabular-nums mt-0.5">
+                            <div className="text-[10.5px] font-mono text-slate-500 tabular-nums mt-0.5">
                               Kontrak: Rp {(road.budget?.contractValueRp / 1000000000).toFixed(2)} M
                             </div>
                           </td>
@@ -2039,10 +1789,10 @@ export default function HeroSection({
                               {road.budget?.matchConfidence === "TERKONFIRMASI" ? (
                                 <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
                                   <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                                  <span>LPSE Terkonfirmasi</span>
+                                  <span>Terkurasi (Pilot)</span>
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1 text-slate-400 font-medium">
+                                <span className="inline-flex items-center gap-1 text-slate-500 font-medium">
                                   <Clock className="w-3 h-3 text-slate-400 shrink-0" />
                                   <span>Data Parsial</span>
                                 </span>
@@ -2103,7 +1853,7 @@ export default function HeroSection({
               {/* Pagination Buttons & Page Size Selector */}
               <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap justify-between sm:justify-end">
                 {/* Page size toggle */}
-                <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
                   <span>Per hal:</span>
                   {[6, 12, "ALL"].map((size) => (
                     <button
@@ -2143,7 +1893,7 @@ export default function HeroSection({
                     {/* Page numbers with ellipsis */}
                     {getPaginationItems(tablePage, totalTablePages).map((item, idx) =>
                       item === "..." ? (
-                        <span key={`dots-${idx}`} className="w-6 text-center text-slate-400 font-bold select-none text-xs">
+                        <span key={`dots-${idx}`} className="w-6 text-center text-slate-500 font-bold select-none text-xs">
                           ...
                         </span>
                       ) : (
