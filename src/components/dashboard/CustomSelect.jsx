@@ -73,12 +73,12 @@ export default function CustomSelect({
         } ${className}`}
       >
         <div className="flex items-center gap-1.5 truncate">
-          {icon && <span className="text-slate-400 shrink-0">{icon}</span>}
-          {prefix && <span className="text-slate-400 font-medium text-[11px] shrink-0">{prefix}</span>}
+          {icon && <span className="text-slate-500 shrink-0">{icon}</span>}
+          {prefix && <span className="text-slate-500 font-medium text-[11px] shrink-0">{prefix}</span>}
           <span className="truncate">{selectedOption ? selectedOption.label : placeholder}</span>
         </div>
         <ChevronDown
-          className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${
+          className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${
             isOpen ? "rotate-180 text-[#c2410c]" : ""
           }`}
         />
@@ -88,7 +88,7 @@ export default function CustomSelect({
       {isOpen && (
         <div
           role="listbox"
-          className={`absolute z-50 mt-1.5 min-w-[200px] max-w-[calc(100vw-32px)] sm:max-w-[340px] w-max bg-white rounded-xl border border-slate-200/90 shadow-[0_10px_25px_-5px_rgba(15,23,42,0.1),0_8px_10px_-6px_rgba(15,23,42,0.06)] py-1.5 overflow-hidden focus:outline-none animate-in fade-in zoom-in-95 duration-100 ${
+          className={`absolute z-50 mt-1.5 min-w-[200px] max-w-[calc(100vw-32px)] sm:max-w-[340px] w-max bg-white rounded-xl border border-slate-200/90 shadow-[0_10px_25px_-5px_rgba(15,23,42,0.1),0_8px_10px_-6px_rgba(15,23,42,0.06)] py-1.5 overflow-hidden animate-in fade-in zoom-in-95 duration-100 ${
             align === "right" ? "right-0" : "left-0"
           } ${dropdownClassName}`}
         >

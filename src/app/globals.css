@@ -194,6 +194,20 @@ table, .tabular-nums, [data-metric] {
   animation: softPulseGlow 3s ease-in-out infinite;
 }
 
+/* Respect user reduced-motion preferences without stripping state feedback */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-scan-line,
+  .animate-soft-glow,
+  .animate-ping,
+  .animate-pulse {
+    animation: none !important;
+  }
+}
+
 /* Infinite Marquee for Open Data Partners / Resources */
 @keyframes infiniteMarquee {
   0% {

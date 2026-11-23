@@ -1017,7 +1017,7 @@ export default function MapExplorer({
                           value={provinceSearchQuery}
                           onChange={(e) => setProvinceSearchQuery(e.target.value)}
                           placeholder="Cari provinsi (cth: Jawa Barat, Bali)..."
-                          className="w-full pl-8 pr-3 py-1.5 rounded-[4px] bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:border-orange-500"
+                          className="w-full pl-8 pr-3 py-1.5 rounded-[4px] bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500"
                         />
                       </div>
                     </div>
@@ -1096,21 +1096,23 @@ export default function MapExplorer({
           <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
 
           {/* Search Bar */}
-          <div className="relative flex-1 min-w-[130px] sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
-            <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <div className="relative flex-1 min-w-[130px] sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
+            <Search className="w-3.5 h-3.5 text-slate-500 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama jalan / wilayah..."
-              className="w-full text-xs text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none font-sans"
+              className="w-full text-xs text-slate-900 placeholder:text-slate-500 bg-transparent focus-visible:outline-none font-sans"
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => setSearchQuery("")}
-                className="p-0.5 rounded-[4px] text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 cursor-pointer"
+                aria-label="Hapus pencarian jalan"
+                className="p-1 rounded-[4px] text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 cursor-pointer"
               >
-                <X className="w-3 h-3" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>

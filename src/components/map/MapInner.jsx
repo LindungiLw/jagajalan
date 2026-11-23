@@ -531,8 +531,9 @@ export default function MapInner({
 
                   {/* Problem snippet */}
                   <div className="bg-orange-50/80 rounded-[5px] p-2 border border-orange-100 space-y-1">
-                    <div className="text-[10px] font-bold text-orange-900 flex items-center gap-1">
-                      <span>⚠️ Masalah:</span>
+                    <div className="text-[10px] font-bold text-orange-900 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#c2410c] shrink-0" />
+                      <span>Masalah:</span>
                       <span className="font-semibold text-orange-800">{road.problemDetails?.headline || road.condition}</span>
                     </div>
                     <div className="text-[9px] text-slate-600 line-clamp-2">
@@ -544,7 +545,10 @@ export default function MapInner({
                   {road.budget && (
                     <div className="bg-slate-50 rounded-[5px] p-2 border border-slate-200/80 space-y-0.5">
                       <div className="text-[10px] font-bold text-slate-800 flex items-center justify-between">
-                        <span>🏗️ Proyek:</span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" />
+                          <span>Proyek:</span>
+                        </span>
                         <span className="text-orange-700 font-mono tabular-nums font-black">
                           Rp {((road.budget.paguRp || 0) / 1000000000).toFixed(1)} M
                         </span>
@@ -552,7 +556,7 @@ export default function MapInner({
                       <div className="text-[9px] text-slate-600 line-clamp-1 font-medium">
                         {road.budget.name}
                       </div>
-                      <div className="text-[8px] text-slate-400">
+                      <div className="text-[8.5px] text-slate-500">
                         Kontraktor: {road.budget.contractor || "Dalam Pengadaan"}
                       </div>
                     </div>
@@ -561,7 +565,7 @@ export default function MapInner({
                   {/* Official Sources cited */}
                   <div className="text-[8.5px] text-slate-500 border-t border-slate-100 pt-1 flex items-center justify-between">
                     <span>Sumber: {road.officialSources?.budgetSource ? "SiRUP / LPSE" : "SK KemenPU"}</span>
-                    <span className="text-emerald-700 font-bold">✓ Terverifikasi</span>
+                    <span className="text-emerald-700 font-bold">Terverifikasi</span>
                   </div>
 
                   <div className="space-y-1">
@@ -618,14 +622,14 @@ export default function MapInner({
           );
 
           const statusPillText = isCompleted
-            ? "✓ Selesai Diperbaiki"
+            ? "Selesai Diperbaiki"
             : isInProgress
-            ? "⚒ Dalam Perbaikan Dinas"
+            ? "Dalam Perbaikan Dinas"
             : isVerified
-            ? "✓ Verifikasi Diterima Dinas"
+            ? "Verifikasi Diterima Dinas"
             : isOverdue
-            ? "⚠ Melewati Tenggat Respons"
-            : "⏳ Menunggu Verifikasi";
+            ? "Melewati Tenggat Respons"
+            : "Menunggu Verifikasi";
 
           const statusPillClass = isCompleted
             ? "bg-emerald-100 text-emerald-800"
@@ -819,8 +823,9 @@ export default function MapInner({
           zIndexOffset={2000}
         >
           <Tooltip permanent direction="top" offset={[0, -18]}>
-            <div className="font-sans text-xs bg-[#c2410c] text-white px-2.5 py-1 rounded-[6px] shadow-lg font-bold">
-              🎯 {detectedPoint.streetName || `Titik Terdeteksi: ${detectedPoint.provinceName}`}
+            <div className="font-sans text-xs bg-[#c2410c] text-white px-2.5 py-1 rounded-[6px] shadow-lg font-bold inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+              <span>{detectedPoint.streetName || `Titik Terdeteksi: ${detectedPoint.provinceName}`}</span>
             </div>
           </Tooltip>
           <Popup className="jagajalan-leaflet-popup" autoPan>

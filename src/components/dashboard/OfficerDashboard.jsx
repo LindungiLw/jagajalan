@@ -93,7 +93,20 @@ export default function OfficerDashboard({
       : "Satgas Bina Marga / UPTD Wilayah"
   );
   const [proofPhotoUrl, setProofPhotoUrl] = useState(PRESET_PROOF_PHOTOS[0].url);
+  const [uploadError, setUploadError] = useState(null);
   const [isSuccessToast, setIsSuccessToast] = useState(false);
+
+  useEffect(() => {
+    if (!activeReportToEdit) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setUploadError(null);
+        setActiveReportToEdit(null);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activeReportToEdit]);
 
   useEffect(() => {
     if (currentOfficer) {
@@ -200,8 +213,13 @@ export default function OfficerDashboard({
   const handleCustomProofUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploadError(null);
+    if (!file.type.startsWith("image/")) {
+      setUploadError("Format berkas tidak didukung. Unggah foto JPG, PNG, atau WebP.");
+      return;
+    }
     if (file.size > 10 * 1024 * 1024) {
-      alert("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 10 MB.");
+      setUploadError("Ukuran gambar terlalu besar. Maksimal ukuran berkas adalah 10 MB.");
       return;
     }
 
@@ -398,93 +416,98 @@ export default function OfficerDashboard({
         </div>
       )}
 
-      {/* 4 Status KPI Counters */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-        {/* Counter 1: Butuh Verifikasi */}
-        <div
-          onClick={() =>
-            setSelectedStatusFilter(
-              selectedStatusFilter === "NEED_VERIFY" ? "ALL" : "NEED_VERIFY"
-            )
-          }
-          className={`cursor-pointer p-4 rounded-[6px] transition-all ${
-            selectedStatusFilter === "NEED_VERIFY"
-              ? "bg-amber-50 ring-2 ring-amber-400"
-              : "bg-white ring-1 ring-orange-200/50 hover:ring-orange-300 shadow-2xs"
-          }`}
-        >
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-amber-700 font-sans">Butuh Verifikasi</span>
-            <AlertTriangle className="w-4 h-4 text-amber-600" />
-          </div>
-          <div className="mt-2.5">
-            <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.needVerify}</span>
-          </div>
-        </div>
-
-        {/* Counter 2: Terverifikasi & Dalam Penanganan */}
-        <div
-          onClick={() =>
-            setSelectedStatusFilter(
-              selectedStatusFilter === "IN_PROGRESS" ? "ALL" : "IN_PROGRESS"
-            )
-          }
-          className={`cursor-pointer p-4 rounded-[6px] transition-all ${
-            selectedStatusFilter === "IN_PROGRESS"
-              ? "bg-orange-50 ring-2 ring-orange-400 text-orange-900"
-              : "bg-white ring-1 ring-orange-200/50 hover:ring-orange-300 shadow-2xs"
-          }`}
-        >
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-orange-800 font-sans">Terverifikasi / Dikerjakan</span>
-            <HardHat className="w-4 h-4 text-[#c2410c]" />
-          </div>
-          <div className="mt-2.5">
-            <span className="text-3xl font-bold font-sans tabular-nums text-slate-900">{stats.inProgress}</span>
-          </div>
-        </div>
-
-        {/* Counter 3: Selesai */}
-        <div
-          onClick={() =>
-            setSelectedStatusFilter(
-              selectedStatusFilter === "COMPLETED" ? "ALL" : "COMPLETED"
-            )
-          }
-          className={`cursor-pointer p-4 rounded-[6px] transition-all ${
-            selectedStatusFilter === "COMPLETED"
-              ? "bg-emerald-50 ring-2 ring-emerald-400"
-              : "bg-white ring-1 ring-orange-200/50 hover:ring-orange-300 shadow-2xs"
-          }`}
-        >
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-emerald-700 font-sans">Selesai Diperbaiki</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          </div>
-          <div className="mt-2.5">
-            <span className="text-3xl font-bold font-sans tabular-nums text-emerald-800">{stats.completed}</span>
-          </div>
-        </div>
-
-        {/* Counter 4: Lewat Batas Respons */}
-        <div
-          onClick={() =>
-            setSelectedStatusFilter(
-              selectedStatusFilter === "OVERDUE" ? "ALL" : "OVERDUE"
-            )
-          }
-          className={`cursor-pointer p-4 rounded-[6px] transition-all ${
-            selectedStatusFilter === "OVERDUE"
-              ? "bg-rose-50 ring-2 ring-rose-400"
-              : "bg-white ring-1 ring-orange-200/50 hover:ring-orange-300 shadow-2xs"
-          }`}
-        >
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-[11px] font-bold uppercase text-rose-700 font-sans">Lewat Batas Respons</span>
-            <Clock className="w-4 h-4 text-rose-600" />
-          </div>
-          <div className="mt-2.5">
-            <span className="text-3xl font-bold font-sans tabular-nums text-rose-700">{stats.overdue}</span>
+      {/* 4 Status KPI Scoreboard (Unified Connected Institutional Strip) */}
+      <div className="rounded-[10px] bg-[#F2ECE4]/80 p-2 sm:p-2.5 ring-1 ring-[#E6DFD5]">
+        <div className="bg-white rounded-[8px] ring-1 ring-slate-200/60 shadow-[0_2px_12px_-4px_rgba(28,25,23,0.05)] overflow-hidden">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+            {[
+              {
+                id: "NEED_VERIFY",
+                label: "Butuh Verifikasi",
+                count: stats.needVerify,
+                caption: "Menunggu verifikasi awal",
+                dotClass: "bg-amber-500",
+                pulse: false,
+                topBarClass: "bg-amber-500",
+                numClass: "text-amber-800",
+                activeBg: "bg-amber-50/50",
+              },
+              {
+                id: "IN_PROGRESS",
+                label: "Terverifikasi / Dikerjakan",
+                count: stats.inProgress,
+                caption: "Sedang ditangani di lapangan",
+                dotClass: "bg-[#c2410c]",
+                pulse: false,
+                topBarClass: "bg-[#c2410c]",
+                numClass: "text-[#9a3412]",
+                activeBg: "bg-orange-50/50",
+              },
+              {
+                id: "COMPLETED",
+                label: "Selesai Diperbaiki",
+                count: stats.completed,
+                caption: "Bukti fisik terverifikasi",
+                dotClass: "bg-emerald-600",
+                pulse: false,
+                topBarClass: "bg-emerald-600",
+                numClass: "text-emerald-700",
+                activeBg: "bg-emerald-50/50",
+              },
+              {
+                id: "OVERDUE",
+                label: "Lewat Batas Respons",
+                count: stats.overdue,
+                caption: "Prioritas tanggap segera",
+                dotClass: "bg-rose-600",
+                pulse: stats.overdue > 0,
+                topBarClass: "bg-rose-600",
+                numClass: "text-rose-600",
+                activeBg: "bg-rose-50/50",
+              },
+            ].map((item) => {
+              const isActive = selectedStatusFilter === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() =>
+                    setSelectedStatusFilter(isActive ? "ALL" : item.id)
+                  }
+                  className={`group relative px-4 py-4 flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer active:scale-[0.985] ${
+                    isActive ? item.activeBg : "bg-white hover:bg-[#FAF8F5]"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0 inset-x-0 h-[3px] transition-all duration-300 origin-center ${item.topBarClass} ${
+                      isActive
+                        ? "opacity-100 scale-x-100"
+                        : "opacity-0 scale-x-50 group-hover:opacity-40 group-hover:scale-x-75"
+                    }`}
+                  />
+                  <div className="inline-flex items-center gap-1.5">
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      {item.pulse && (
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                      )}
+                      <span className={`relative inline-flex rounded-full h-2 w-2 ${item.dotClass}`} />
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-700 group-hover:text-slate-950 transition-colors">
+                      {item.label}
+                    </span>
+                  </div>
+                  <span
+                    className={`mt-2 text-3xl sm:text-4xl font-extrabold font-heading tabular-nums tracking-[-0.03em] leading-none transition-transform duration-200 group-hover:-translate-y-0.5 ${item.numClass}`}
+                  >
+                    {item.count}
+                  </span>
+                  <span className="mt-1.5 text-[10.5px] text-slate-500 font-medium">
+                    {isActive ? "Filter aktif · Klik untuk reset" : item.caption}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -597,7 +620,7 @@ export default function OfficerDashboard({
 
           {/* View Mode Toggle: Grid 5 Kolom vs Baris Rinci */}
           <div className="flex items-center gap-2 self-start sm:self-auto font-sans">
-            <span className="text-[11px] text-slate-400 hidden sm:inline">Tampilan Admin:</span>
+            <span className="text-[11px] text-slate-500 hidden sm:inline">Tampilan Admin:</span>
             <div className="inline-flex items-center border border-slate-200 bg-white rounded-[6px] overflow-hidden p-0.5 shadow-2xs">
               <button
                 type="button"
@@ -927,7 +950,7 @@ export default function OfficerDashboard({
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           Dokumentasi Bukti Fisik Lapangan (Before vs After Selesai Diperbaiki)
                         </span>
-                        <span className="text-[10px] text-slate-400 font-sans">Tiket Terverifikasi Selesai</span>
+                        <span className="text-[10px] text-slate-500 font-sans">Tiket Terverifikasi Selesai</span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3 max-w-md">
@@ -970,7 +993,7 @@ export default function OfficerDashboard({
                   )}
 
                   {/* Audit Trail Count */}
-                  <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                  <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
                     <span>
                       Riwayat Audit: <strong>{report.updates?.length || 1} aktivitas tercatat</strong>
                     </span>
@@ -990,16 +1013,46 @@ export default function OfficerDashboard({
           <span className="text-slate-300">•</span>
           <span>Portal Administrasi &amp; Disposisi Operasional Penyelenggara Jalan</span>
         </div>
-        <div className="flex items-center gap-2 text-[10px] text-slate-400">
+        <div className="flex items-center gap-2 text-[10px] text-slate-500">
           <span className="font-mono">Sistem Terintegrasi v2.4</span>
         </div>
       </footer>
 
       {/* Action Modal / Drawer for Officer (PORTALED TO ROOT BODY Z-[2000]) */}
       {mounted && activeReportToEdit && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Tindak Lanjut dan Verifikasi Dinas"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setUploadError(null);
+              setActiveReportToEdit(null);
+            }
+          }}
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in font-sans"
+        >
           <div className="w-full max-w-2xl rounded-[8px] bg-slate-100/80 p-2 sm:p-2.5 ring-1 ring-orange-200/60 shadow-2xl">
             <div className="relative w-full max-h-[88vh] flex flex-col rounded-[6px] bg-white ring-1 ring-orange-200/50 overflow-hidden">
+              {uploadError && (
+                <div
+                  role="alert"
+                  className="px-4 py-2.5 bg-rose-50 border-b border-rose-200 text-rose-900 text-xs flex items-center justify-between gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                    <span className="font-medium">{uploadError}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setUploadError(null)}
+                    aria-label="Tutup pesan kesalahan"
+                    className="p-1 rounded hover:bg-rose-100 text-rose-700 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
               {/* Modal Header (Orange with White Text) */}
               <div className="p-4 sm:p-5 bg-[#c2410c] text-white flex items-center justify-between">
                 <div className="flex items-center gap-3">

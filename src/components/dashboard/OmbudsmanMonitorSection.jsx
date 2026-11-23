@@ -26,6 +26,7 @@ import {
   Building2,
   AlertOctagon,
   ThumbsUp,
+  X,
 } from "lucide-react";
 import { exportToExcel, exportToPDF } from "@/utils/exportTransparencyData";
 import CustomSelect from "./CustomSelect";
@@ -503,7 +504,7 @@ function StatusDistributionDonut({ counts, activeFilter, onSelectFilter }) {
             Jaring Radar Koordinat • Klik irisan untuk memfilter
           </span>
         ) : (
-          <span className="text-[9.5px] text-slate-400 font-sans">
+          <span className="text-[9.5px] text-slate-500 font-sans">
             Arahkan kursor untuk jaring radar interaktif
           </span>
         )}
@@ -981,7 +982,7 @@ export default function OmbudsmanMonitorSection({
                           type="button"
                           onClick={() => setStatusFilter(card.id)}
                           aria-pressed={isActive}
-                          className={`group relative px-4 sm:px-5 py-4 sm:py-5 flex flex-col items-center justify-between text-center transition-all duration-200 ease-out cursor-pointer focus:outline-none active:scale-[0.985] ${
+                          className={`group relative px-4 sm:px-5 py-4 sm:py-5 flex flex-col items-center justify-between text-center transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#c2410c]/50 active:scale-[0.985] ${
                             isActive
                               ? card.activeBgClass
                               : "bg-white hover:bg-[#FAF8F5]"
@@ -1085,7 +1086,7 @@ export default function OmbudsmanMonitorSection({
                         Tampilkan Semua ({counts.all})
                       </button>
                     ) : (
-                      <span className="text-[10.5px] text-slate-400">
+                      <span className="text-[10.5px] text-slate-500">
                         Klik salah satu metrik untuk menyaring tiket
                       </span>
                     )}
@@ -1128,14 +1129,16 @@ export default function OmbudsmanMonitorSection({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari kode tiket, nama jalan, atau dinas penanggung jawab..."
-                className="w-full pl-10 pr-8 py-2 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all font-sans ring-1 ring-slate-200/70 focus:ring-orange-500/30"
+                className="w-full pl-10 pr-9 py-2 rounded-[6px] bg-slate-50/80 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:bg-white transition-all font-sans ring-1 ring-slate-200/70"
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 cursor-pointer"
+                  aria-label="Hapus pencarian tiket"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-[5px] text-slate-500 hover:text-slate-800 hover:bg-slate-200/70 transition-colors cursor-pointer"
                 >
-                  ✕
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
@@ -1233,7 +1236,7 @@ export default function OmbudsmanMonitorSection({
               </button>
             </div>
 
-            <div className="text-xs text-slate-400 font-sans">
+            <div className="text-xs text-slate-500 font-sans">
               Menampilkan <strong>{filteredReports.length}</strong> aduan
             </div>
           </div>
@@ -1616,7 +1619,7 @@ export default function OmbudsmanMonitorSection({
                     <tr key={report.id} className="hover:bg-slate-50/60 transition-colors">
                       <td className="py-3 px-4">
                         <div className="font-bold text-slate-900 truncate">{report.roadName}</div>
-                        <div className="text-[11px] text-slate-400 truncate flex items-center gap-1.5 mt-0.5">
+                        <div className="text-[11px] text-slate-500 truncate flex items-center gap-1.5 mt-0.5">
                           <span className="font-mono text-slate-700 font-semibold">#{report.ticketCode}</span>
                           <span>•</span>
                           <span>{report.district}</span>
@@ -1736,7 +1739,7 @@ export default function OmbudsmanMonitorSection({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-sans">
             <div className="p-4 rounded-[6px] bg-slate-50/70 space-y-1.5">
-              <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase block">
+              <span className="text-[10px] font-bold text-slate-500 tracking-wider uppercase block">
                 LANGKAH 01
               </span>
               <strong className="text-slate-900 block text-xs font-bold">Laporan Geotagged &amp; Validasi AI</strong>
