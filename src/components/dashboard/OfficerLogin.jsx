@@ -24,7 +24,10 @@ import {
 import {
   OFFICIAL_OFFICERS,
   authenticateOfficer,
-  saveOfficerSession,
+  authenticateOfficerDemo,
+  authenticateOfficerGoogle,
+  requestOfficerOtp,
+  verifyOfficerOtp,
 } from "@/data/officersData";
 import { auth, isFirebaseConfigured } from "@/lib/firebase";
 
@@ -56,11 +59,11 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
   // Login Modes: "email-otp" | "nip-password"
   const [activeMode, setActiveMode] = useState("email-otp");
 
-  // Email + OTP State
   const [emailInput, setEmailInput] = useState("");
-  const [otpStep, setOtpStep] = useState("input-email"); // "input-email" | "enter-otp"
+  const [otpStep, setOtpStep] = useState("input-email");
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
-  const [generatedOtp, setGeneratedOtp] = useState("829104");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [otpChallengeToken, setOtpChallengeToken] = useState("");
   const [resendTimer, setResendTimer] = useState(60);
   const canResend = resendTimer === 0;
   const otpInputRefs = useRef([]);
@@ -102,8 +105,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }
   }, [otpStep]);
 
-  // Handle Send OTP
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessNotice("");
@@ -115,17 +117,20 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }
 
     setIsLoading(true);
+    const result = await requestOfficerOtp(trimmed);
+    setIsLoading(false);
 
-    const newCode = String(Math.floor(100000 + Math.random() * 900000));
-    setGeneratedOtp(newCode);
+    if (!result.success) {
+      setErrorMessage(result.message);
+      return;
+    }
 
-    setTimeout(() => {
-      setIsLoading(false);
-      setOtpStep("enter-otp");
-      setOtpDigits(["", "", "", "", "", ""]);
-      setResendTimer(60);
-      setSuccessNotice(`Kode OTP 6-digit verifikasi dikirim ke ${trimmed}`);
-    }, 550);
+    setOtpChallengeToken(result.challengeToken || "");
+    setGeneratedOtp(result.demoOtpPreview || "");
+    setOtpStep("enter-otp");
+    setOtpDigits(["", "", "", "", "", ""]);
+    setResendTimer(60);
+    setSuccessNotice(`Kode OTP 6-digit verifikasi dikirim ke ${trimmed}`);
   };
 
   // Handle OTP Digit Input
@@ -174,8 +179,7 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     otpInputRefs.current[5]?.focus();
   };
 
-  // Handle Verify OTP and Login
-  const handleVerifyOtp = (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -188,59 +192,31 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }
 
     const enteredCode = otpDigits.join("");
-
     if (enteredCode.length !== 6) {
       setErrorMessage("Silakan lengkapi 6 digit kode OTP verifikasi.");
       return;
     }
 
     setIsLoading(true);
+    const result = await verifyOfficerOtp(emailInput.trim().toLowerCase(), enteredCode, otpChallengeToken);
+    setIsLoading(false);
 
-    setTimeout(() => {
-      setIsLoading(false);
-
-      if (enteredCode !== generatedOtp && enteredCode !== "829104") {
-        const nextFailed = failedAttempts + 1;
-        setFailedAttempts(nextFailed);
-        if (nextFailed >= 5) {
-          setLockoutUntil(Date.now() + 30000);
-        }
-        setErrorMessage(
-          "Kode OTP yang Anda masukkan salah atau telah kedaluwarsa. Silakan periksa kembali."
-        );
-        return;
+    if (!result.success || !result.officer) {
+      const nextFailed = failedAttempts + 1;
+      setFailedAttempts(nextFailed);
+      if (nextFailed >= 5) {
+        setLockoutUntil(Date.now() + 30000);
       }
+      setErrorMessage(
+        result.message || "Kode OTP yang Anda masukkan salah atau telah kedaluwarsa. Silakan periksa kembali."
+      );
+      return;
+    }
 
-      setFailedAttempts(0);
-      const cleanEmail = emailInput.trim().toLowerCase();
-      const matched = OFFICIAL_OFFICERS.find((o) => o.email.toLowerCase() === cleanEmail);
-
-      let officerPayload = matched;
-
-      if (!officerPayload) {
-        officerPayload = {
-          id: "DEMO-001",
-          nip: "DEMO-001",
-          email: cleanEmail,
-          name: "Petugas Demo",
-          title: "Inspektur Pelaporan & Preservasi Jalan (Mode Demonstrasi)",
-          institution: "Simulasi Satuan Tugas Penyelenggara Jalan",
-          authorityLevel: "NASIONAL",
-          authorityLabel: "Jalan Nasional (Mode Demo)",
-          jurisdiction: "Wilayah Penyelenggaraan Terverifikasi (Simulasi)",
-          badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
-          avatar: "DM",
-          status: "Mode Demonstrasi Aktif",
-          activeSince: "Simulasi 2026",
-        };
-      }
-
-      const sessionOfficer = saveOfficerSession(officerPayload, "EMAIL_OTP");
-      onLoginSuccess(sessionOfficer || officerPayload);
-    }, 550);
+    setFailedAttempts(0);
+    onLoginSuccess(result.officer);
   };
 
-  // Handle Google SSO
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     setErrorMessage("");
@@ -250,28 +226,13 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
         const { GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
         const provider = new GoogleAuthProvider();
         const userCredential = await signInWithPopup(auth, provider);
-        const user = userCredential.user;
-
-        const officerPayload = {
-          id: "DEMO-001",
-          nip: "DEMO-001",
-          email: user.email || "petugas.demo@jagajalan.id",
-          name: user.displayName ? `${user.displayName} (Petugas)` : "Petugas Demo",
-          title: "Inspektur Lapangan Penyelenggara Jalan (SSO Google)",
-          institution: "Dinas Pekerjaan Umum & Penataan Ruang",
-          authorityLevel: "NASIONAL",
-          authorityLabel: "Jalan Nasional (Mode Demo)",
-          jurisdiction: "Koridor Pengawasan Lintas Wilayah (Simulasi)",
-          badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
-          avatar: "GG",
-          status: "Terverifikasi Google SSO",
-          activeSince: "Simulasi 2026",
-        };
-
-        const sessionOfficer = saveOfficerSession(officerPayload, "GOOGLE_SSO");
+        const idToken = await userCredential.user.getIdToken();
+        const result = await authenticateOfficerGoogle({ idToken });
         setIsLoading(false);
-        onLoginSuccess(sessionOfficer || officerPayload);
-        return;
+        if (result.success && result.officer) {
+          onLoginSuccess(result.officer);
+          return;
+        }
       }
     } catch {
       // Fallback mulus ke modal pemilih akun instansi/demo
@@ -281,36 +242,21 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     setShowGoogleModal(true);
   };
 
-  // Google Modal Account Pick
-  const handleSelectGoogleAccount = (presetAccount) => {
+  const handleSelectGoogleAccount = async (presetAccount) => {
     setShowGoogleModal(false);
     setIsLoading(true);
+    setErrorMessage("");
 
-    setTimeout(() => {
-      setIsLoading(false);
-      const officerPayload = {
-        id: presetAccount.id,
-        nip: presetAccount.nip,
-        email: presetAccount.email,
-        name: presetAccount.name,
-        title: presetAccount.title,
-        institution: presetAccount.institution,
-        authorityLevel: presetAccount.authorityLevel,
-        authorityLabel: presetAccount.authorityLabel,
-        jurisdiction: presetAccount.jurisdiction,
-        badgeColor: presetAccount.badgeColor,
-        avatar: presetAccount.avatar,
-        status: presetAccount.status || "Mode Demonstrasi Aktif",
-        activeSince: presetAccount.activeSince || "Simulasi 2026",
-      };
-
-      const sessionOfficer = saveOfficerSession(officerPayload, "GOOGLE_SSO");
-      onLoginSuccess(sessionOfficer || officerPayload);
-    }, 450);
+    const result = await authenticateOfficerGoogle({ officerId: presetAccount.id });
+    setIsLoading(false);
+    if (result.success && result.officer) {
+      onLoginSuccess(result.officer);
+    } else {
+      setErrorMessage(result.message || "Gagal masuk dengan akun Google demo.");
+    }
   };
 
-  // Handle NIP & Password Submit
-  const handleNipSubmit = (e) => {
+  const handleNipSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -323,35 +269,33 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
     }
 
     setIsLoading(true);
-
-    setTimeout(() => {
-      const result = authenticateOfficer(identifier, password);
-      setIsLoading(false);
-      if (result.success) {
-        setFailedAttempts(0);
-        onLoginSuccess(result.officer);
-      } else {
-        const nextFailed = failedAttempts + 1;
-        setFailedAttempts(nextFailed);
-        if (nextFailed >= 5) {
-          setLockoutUntil(Date.now() + 30000);
-        }
-        setErrorMessage(result.message);
+    const result = await authenticateOfficer(identifier, password);
+    setIsLoading(false);
+    if (result.success && result.officer) {
+      setFailedAttempts(0);
+      onLoginSuccess(result.officer);
+    } else {
+      const nextFailed = failedAttempts + 1;
+      setFailedAttempts(nextFailed);
+      if (nextFailed >= 5) {
+        setLockoutUntil(Date.now() + 30000);
       }
-    }, 400);
+      setErrorMessage(result.message);
+    }
   };
 
-  // 1-Click Instant Demo Login
-  const handleInstantDemoLogin = (officer) => {
+  const handleInstantDemoLogin = async (officer) => {
     setIsLoading(true);
     setErrorMessage("");
 
-    setTimeout(() => {
-      setIsLoading(false);
+    const result = await authenticateOfficerDemo(officer.id);
+    setIsLoading(false);
+    if (result.success && result.officer) {
       setFailedAttempts(0);
-      const sessionOfficer = saveOfficerSession(officer, "DEMO_INSTANT");
-      onLoginSuccess(sessionOfficer || officer);
-    }, 300);
+      onLoginSuccess(result.officer);
+    } else {
+      setErrorMessage(result.message || "Gagal masuk menggunakan akun demo.");
+    }
   };
 
   const handleAutofillDemoEmail = () => {
@@ -565,22 +509,23 @@ export default function OfficerLogin({ onLoginSuccess, onBackToPublic }) {
                     ))}
                   </div>
 
-                  {/* Simulation Helper Pill */}
-                  <div className="p-2.5 rounded-xl bg-orange-50/80 border border-orange-200/70 flex items-center justify-between gap-2 text-xs">
-                    <div className="flex items-center gap-2">
-                      <KeyRound className="w-4 h-4 text-[#c2410c] shrink-0" />
-                      <span className="text-[11.5px] text-slate-700">
-                        Kode OTP Demo: <strong className="font-mono text-slate-900 font-bold">{generatedOtp}</strong>
-                      </span>
+                  {generatedOtp && (
+                    <div className="p-2.5 rounded-xl bg-orange-50/80 border border-orange-200/70 flex items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <KeyRound className="w-4 h-4 text-[#c2410c] shrink-0" />
+                        <span className="text-[11.5px] text-slate-700">
+                          Kode OTP Demo: <strong className="font-mono text-slate-900 font-bold">{generatedOtp}</strong>
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleFillDemoOtp}
+                        className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-[#c2410c] text-white hover:bg-[#9a3412] transition-colors cursor-pointer shrink-0"
+                      >
+                        Isi Cepat
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleFillDemoOtp}
-                      className="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-[#c2410c] text-white hover:bg-[#9a3412] transition-colors cursor-pointer shrink-0"
-                    >
-                      Isi Cepat
-                    </button>
-                  </div>
+                  )}
 
                   {/* Resend Timer */}
                   <div className="flex items-center justify-between text-xs text-slate-500 font-sans">

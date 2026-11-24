@@ -1,7 +1,3 @@
-// Data Akun Petugas Portal Dinas JagaJalan
-// Digunakan untuk Autentikasi Pengujian & Akses Portal Dinas (Officer Portal) JagaJalan
-// Memenuhi Standar Pemerintahan & Menghindari Kesan Akun Pribadi Pejabat Riil
-
 export const OFFICIAL_OFFICERS = [
   {
     id: "DEMO-001",
@@ -16,7 +12,6 @@ export const OFFICIAL_OFFICERS = [
     jurisdiction: "Ruas Arteri Primer Nasional Koridor Medan - Berastagi & Lintas Timur",
     badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
     avatar: "PD",
-    password: "jagajalan2026",
     status: "Aktif",
     activeSince: "2026",
   },
@@ -33,7 +28,6 @@ export const OFFICIAL_OFFICERS = [
     jurisdiction: "Ruas Strategis Provinsi Sumatera Utara (Siantar - Tanah Jawa)",
     badgeColor: "bg-purple-100 text-purple-900 border-purple-200",
     avatar: "DP",
-    password: "jagajalan2026",
     status: "Aktif",
     activeSince: "2026",
   },
@@ -50,7 +44,6 @@ export const OFFICIAL_OFFICERS = [
     jurisdiction: "Ruas Lokal & Jaringan Drainase Perkotaan",
     badgeColor: "bg-teal-100 text-teal-900 border-teal-200",
     avatar: "DK",
-    password: "jagajalan2026",
     status: "Aktif",
     activeSince: "2026",
   },
@@ -67,7 +60,6 @@ export const OFFICIAL_OFFICERS = [
     jurisdiction: "Ruas Penghubung Antar-Kecamatan",
     badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-200",
     avatar: "DB",
-    password: "jagajalan2026",
     status: "Aktif",
     activeSince: "2026",
   },
@@ -75,19 +67,8 @@ export const OFFICIAL_OFFICERS = [
 
 const SESSION_STORAGE_KEY = "jagajalan_officer_session_v2";
 const LEGACY_SESSION_KEY = "jagajalan_officer_session";
-const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 jam masa aktif sesi
+const SESSION_TTL_MS = 4 * 60 * 60 * 1000;
 
-function generateSessionToken() {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-  return `jgj_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
-}
-
-/**
- * Menyimpan sesi login petugas yang telah terautentikasi (Demo / Google SSO / OTP / NIP)
- * dengan token sesi dan batas waktu kedaluwarsa (TTL) tanpa menyimpan password.
- */
 export function saveOfficerSession(officerPayload, authMethod = "DEMO") {
   if (!officerPayload || typeof officerPayload !== "object") return null;
 
@@ -99,10 +80,10 @@ export function saveOfficerSession(officerPayload, authMethod = "DEMO") {
     nip: safeOfficer.nip || safeOfficer.id || "DEMO-001",
     name: safeOfficer.name || "Petugas Demo",
     isAuthenticated: true,
-    authMethod,
-    sessionToken: safeOfficer.sessionToken || generateSessionToken(),
-    issuedAt: new Date(now).toISOString(),
-    expiresAt: now + SESSION_TTL_MS,
+    authMethod: safeOfficer.authMethod || authMethod,
+    sessionToken: safeOfficer.sessionToken || "",
+    issuedAt: safeOfficer.issuedAt || new Date(now).toISOString(),
+    expiresAt: safeOfficer.expiresAt || now + SESSION_TTL_MS,
   };
 
   if (typeof window !== "undefined") {
@@ -118,17 +99,24 @@ export function saveOfficerSession(officerPayload, authMethod = "DEMO") {
   return sessionRecord;
 }
 
-/**
- * Autentikasi petugas dengan ID Demo / NIP atau Email dan Kata Sandi
- */
-export function authenticateOfficer(identifier, password) {
+async function postOfficerAuth(payload) {
+  const res = await fetch("/api/officer-auth", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, data };
+}
+
+export async function authenticateOfficer(identifier, password) {
   if (!identifier || typeof identifier !== "string" || !identifier.trim()) {
     return {
       success: false,
       message: "ID Akun (misal: DEMO-001) atau Email wajib diisi.",
     };
   }
-
   if (!password || typeof password !== "string" || !password.trim()) {
     return {
       success: false,
@@ -136,37 +124,127 @@ export function authenticateOfficer(identifier, password) {
     };
   }
 
-  const cleanId = identifier.trim().toLowerCase();
-  const cleanPassword = password.trim();
-
-  // Cari akun petugas yang cocok berdasarkan id, nip, email, atau legacyEmail
-  const found = OFFICIAL_OFFICERS.find(
-    (o) =>
-      o.id.toLowerCase() === cleanId ||
-      o.nip.toLowerCase() === cleanId ||
-      o.email.toLowerCase() === cleanId ||
-      o.legacyEmail?.toLowerCase() === cleanId
-  );
-
-  if (!found || found.password !== cleanPassword) {
+  try {
+    const { ok, data } = await postOfficerAuth({
+      action: "NIP_PASSWORD",
+      identifier: identifier.trim(),
+      password: password.trim(),
+    });
+    if (!ok || !data?.success || !data?.officer) {
+      return {
+        success: false,
+        message:
+          data?.message ||
+          "ID Akun atau Kata Sandi tidak sesuai. Gunakan tombol Masuk Cepat Demo atau periksa kredensial Anda.",
+      };
+    }
+    const saved = saveOfficerSession(data.officer, "NIP_PASSWORD");
+    return { success: true, officer: saved };
+  } catch {
     return {
       success: false,
-      message:
-        "ID Akun atau Kata Sandi tidak sesuai. Gunakan akun demo resmi (misal: DEMO-001 / jagajalan2026).",
+      message: "Gagal menghubungi layanan autentikasi server. Periksa koneksi Anda.",
     };
   }
-
-  const sessionOfficer = saveOfficerSession(found, "NIP_PASSWORD");
-  return { success: true, officer: sessionOfficer };
 }
 
-/**
- * Mengambil data sesi petugas yang sedang aktif dan valid (belum kedaluwarsa)
- */
+export async function requestOfficerOtp(email) {
+  try {
+    const { ok, data } = await postOfficerAuth({
+      action: "SEND_OTP",
+      email: String(email || "").trim(),
+    });
+    if (!ok || !data?.success) {
+      return {
+        success: false,
+        message: data?.message || "Gagal mengirim kode OTP verifikasi.",
+      };
+    }
+    return {
+      success: true,
+      challengeToken: data.challengeToken,
+      demoOtpPreview: data.demoOtpPreview || "",
+    };
+  } catch {
+    return {
+      success: false,
+      message: "Layanan OTP sedang tidak terjangkau. Coba beberapa saat lagi.",
+    };
+  }
+}
+
+export async function verifyOfficerOtp(email, code, challengeToken) {
+  try {
+    const { ok, data } = await postOfficerAuth({
+      action: "VERIFY_OTP",
+      email: String(email || "").trim(),
+      code: String(code || "").trim(),
+      challengeToken,
+    });
+    if (!ok || !data?.success || !data?.officer) {
+      return {
+        success: false,
+        message: data?.message || "Kode OTP salah atau telah kedaluwarsa.",
+      };
+    }
+    const saved = saveOfficerSession(data.officer, "EMAIL_OTP");
+    return { success: true, officer: saved };
+  } catch {
+    return {
+      success: false,
+      message: "Gagal memverifikasi kode OTP ke server.",
+    };
+  }
+}
+
+export async function authenticateOfficerGoogle({ idToken = "", officerId = "DEMO-001" }) {
+  try {
+    const { ok, data } = await postOfficerAuth({
+      action: "GOOGLE_SSO",
+      idToken,
+      officerId,
+    });
+    if (!ok || !data?.success || !data?.officer) {
+      return {
+        success: false,
+        message: data?.message || "Autentikasi Google SSO gagal diverifikasi.",
+      };
+    }
+    const saved = saveOfficerSession(data.officer, "GOOGLE_SSO");
+    return { success: true, officer: saved };
+  } catch {
+    return {
+      success: false,
+      message: "Gagal menghubungi server autentikasi Google SSO.",
+    };
+  }
+}
+
+export async function authenticateOfficerDemo(officerId = "DEMO-001") {
+  try {
+    const { ok, data } = await postOfficerAuth({
+      action: "DEMO_INSTANT",
+      officerId,
+    });
+    if (!ok || !data?.success || !data?.officer) {
+      return {
+        success: false,
+        message: data?.message || "Login akun demo tidak tersedia.",
+      };
+    }
+    const saved = saveOfficerSession(data.officer, "DEMO_INSTANT");
+    return { success: true, officer: saved };
+  } catch {
+    return {
+      success: false,
+      message: "Gagal memulai sesi petugas demo.",
+    };
+  }
+}
+
 export function getActiveOfficerSession() {
   if (typeof window === "undefined") return null;
   try {
-    // Bersihkan kunci sesi versi lama yang belum memiliki validasi autentikasi/TTL
     window.localStorage.removeItem(LEGACY_SESSION_KEY);
 
     const raw =
@@ -180,13 +258,13 @@ export function getActiveOfficerSession() {
       typeof parsed !== "object" ||
       parsed.isAuthenticated !== true ||
       !parsed.sessionToken ||
+      !String(parsed.sessionToken).includes(".") ||
       !parsed.id
     ) {
       clearOfficerSession();
       return null;
     }
 
-    // Periksa masa berlaku sesi (TTL)
     if (parsed.expiresAt && Number(parsed.expiresAt) < Date.now()) {
       clearOfficerSession();
       return null;
@@ -199,15 +277,13 @@ export function getActiveOfficerSession() {
   }
 }
 
-/**
- * Menghapus sesi login petugas (Logout)
- */
 export function clearOfficerSession() {
   if (typeof window === "undefined") return;
   try {
     window.sessionStorage.removeItem(SESSION_STORAGE_KEY);
     window.localStorage.removeItem(SESSION_STORAGE_KEY);
     window.localStorage.removeItem(LEGACY_SESSION_KEY);
+    fetch("/api/officer-auth", { method: "DELETE", credentials: "same-origin" }).catch(() => {});
   } catch (e) {
     console.warn("Gagal menghapus sesi petugas:", e);
   }
