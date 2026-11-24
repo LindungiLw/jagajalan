@@ -1,7 +1,5 @@
 "use client";
 
-import * as XLSX from "xlsx";
-
 function escapeHtml(value) {
   if (value === null || value === undefined) return "";
   return String(value)
@@ -10,6 +8,17 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function escapeXml(value) {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function formatTimestampId() {
@@ -30,11 +39,239 @@ function formatReadableDate() {
   });
 }
 
-/**
- * Mengunduh dataset transparansi dalam format native Microsoft Excel (.xlsx)
- * Kompatibel penuh dengan Microsoft Excel, Google Sheets, dan LibreOffice Calc
- * untuk analisis mandiri oleh masyarakat, jurnalis, akademisi, dan pemangku kepentingan.
- */
+function colIndexToLetters(index) {
+  let n = index + 1;
+  let letters = "";
+  while (n > 0) {
+    const rem = (n - 1) % 26;
+    letters = String.fromCharCode(65 + rem) + letters;
+    n = Math.floor((n - 1) / 26);
+  }
+  return letters;
+}
+
+// Standard IEEE 802.3 CRC32 table for valid PKZIP (.xlsx) archive generation without third-party CVEs
+const CRC32_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let i = 0; i < 256; i++) {
+    let c = i;
+    for (let k = 0; k < 8; k++) {
+      c = (c & 1) !== 0 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    }
+    table[i] = c >>> 0;
+  }
+  return table;
+})();
+
+function computeCrc32(bytes) {
+  let crc = 0xffffffff;
+  for (let i = 0; i < bytes.length; i++) {
+    crc = CRC32_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+function createZipArchive(entries) {
+  const encoder = new TextEncoder();
+  const localParts = [];
+  const centralParts = [];
+  let offset = 0;
+
+  for (const entry of entries) {
+    const nameBytes = encoder.encode(entry.name);
+    const dataBytes =
+      entry.content instanceof Uint8Array ? entry.content : encoder.encode(String(entry.content));
+    const crc = computeCrc32(dataBytes);
+    const size = dataBytes.length;
+
+    const localHeader = new Uint8Array(30 + nameBytes.length);
+    const lv = new DataView(localHeader.buffer);
+    lv.setUint32(0, 0x04034b50, true);
+    lv.setUint16(4, 20, true);
+    lv.setUint16(6, 0x0800, true);
+    lv.setUint16(8, 0, true);
+    lv.setUint16(10, 0, true);
+    lv.setUint16(12, 0x21, true);
+    lv.setUint32(14, crc, true);
+    lv.setUint32(18, size, true);
+    lv.setUint32(22, size, true);
+    lv.setUint16(26, nameBytes.length, true);
+    lv.setUint16(28, 0, true);
+    localHeader.set(nameBytes, 30);
+
+    localParts.push(localHeader, dataBytes);
+
+    const centralHeader = new Uint8Array(46 + nameBytes.length);
+    const cv = new DataView(centralHeader.buffer);
+    cv.setUint32(0, 0x02014b50, true);
+    cv.setUint16(4, 20, true);
+    cv.setUint16(6, 20, true);
+    cv.setUint16(8, 0x0800, true);
+    cv.setUint16(10, 0, true);
+    cv.setUint16(12, 0, true);
+    cv.setUint16(14, 0x21, true);
+    cv.setUint32(16, crc, true);
+    cv.setUint32(20, size, true);
+    cv.setUint32(24, size, true);
+    cv.setUint16(28, nameBytes.length, true);
+    cv.setUint16(30, 0, true);
+    cv.setUint16(32, 0, true);
+    cv.setUint16(34, 0, true);
+    cv.setUint16(36, 0, true);
+    cv.setUint32(38, 0, true);
+    cv.setUint32(42, offset, true);
+    centralHeader.set(nameBytes, 46);
+
+    centralParts.push(centralHeader);
+    offset += localHeader.length + size;
+  }
+
+  let centralSize = 0;
+  for (const part of centralParts) centralSize += part.length;
+
+  const eocd = new Uint8Array(22);
+  const ev = new DataView(eocd.buffer);
+  ev.setUint32(0, 0x06054b50, true);
+  ev.setUint16(4, 0, true);
+  ev.setUint16(6, 0, true);
+  ev.setUint16(8, entries.length, true);
+  ev.setUint16(10, entries.length, true);
+  ev.setUint32(12, centralSize, true);
+  ev.setUint32(16, offset, true);
+  ev.setUint16(20, 0, true);
+
+  const totalLength = offset + centralSize + eocd.length;
+  const output = new Uint8Array(totalLength);
+  let cursor = 0;
+  for (const part of localParts) {
+    output.set(part, cursor);
+    cursor += part.length;
+  }
+  for (const part of centralParts) {
+    output.set(part, cursor);
+    cursor += part.length;
+  }
+  output.set(eocd, cursor);
+  return output;
+}
+
+function buildWorksheetXml({ aoa, merges, colWidths, headerRowIdx }) {
+  const colsXml = colWidths
+    .map(
+      (w, idx) =>
+        `<col min="${idx + 1}" max="${idx + 1}" width="${w.wch}" customWidth="1"/>`
+    )
+    .join("");
+
+  const rowsXml = aoa
+    .map((row, rIdx) => {
+      const rowNum = rIdx + 1;
+      const cellsXml = row
+        .map((val, cIdx) => {
+          const ref = `${colIndexToLetters(cIdx)}${rowNum}`;
+          let styleAttr = "";
+          if (rIdx === 0) styleAttr = ' s="1"';
+          else if (rIdx === headerRowIdx) styleAttr = ' s="2"';
+
+          if (typeof val === "number" && Number.isFinite(val)) {
+            return `<c r="${ref}"${styleAttr}><v>${val}</v></c>`;
+          }
+          const strVal = val === null || val === undefined ? "" : String(val);
+          if (!strVal) {
+            return styleAttr ? `<c r="${ref}"${styleAttr}/>` : "";
+          }
+          return `<c r="${ref}" t="inlineStr"${styleAttr}><is><t xml:space="preserve">${escapeXml(strVal)}</t></is></c>`;
+        })
+        .filter(Boolean)
+        .join("");
+
+      return `<row r="${rowNum}">${cellsXml}</row>`;
+    })
+    .join("");
+
+  const mergesXml =
+    merges.length > 0
+      ? `<mergeCells count="${merges.length}">${merges
+          .map(
+            (m) =>
+              `<mergeCell ref="${colIndexToLetters(m.s.c)}${m.s.r + 1}:${colIndexToLetters(m.e.c)}${m.e.r + 1}"/>`
+          )
+          .join("")}</mergeCells>`
+      : "";
+
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<cols>${colsXml}</cols>
+<sheetData>${rowsXml}</sheetData>
+${mergesXml}
+</worksheet>`;
+}
+
+function buildXlsxBytes({ sheetName, aoa, merges, colWidths, headerRowIdx }) {
+  const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+  <Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
+  <Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
+</Types>`;
+
+  const rootRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+</Relationships>`;
+
+  const workbookXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <sheets>
+    <sheet name="${escapeXml(sheetName)}" sheetId="1" r:id="rId1"/>
+  </sheets>
+</workbook>`;
+
+  const workbookRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`;
+
+  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <fonts count="3">
+    <font><sz val="10"/><name val="Calibri"/></font>
+    <font><b/><sz val="13"/><color rgb="FF0F172A"/><name val="Calibri"/></font>
+    <font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
+  </fonts>
+  <fills count="3">
+    <fill><patternFill patternType="none"/></fill>
+    <fill><patternFill patternType="gray125"/></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FF0F172A"/><bgColor indexed="64"/></patternFill></fill>
+  </fills>
+  <borders count="1">
+    <border><left/><right/><top/><bottom/><diagonal/></border>
+  </borders>
+  <cellStyleXfs count="1">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0"/>
+  </cellStyleXfs>
+  <cellXfs count="3">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+    <xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>
+  </cellXfs>
+</styleSheet>`;
+
+  const sheetXml = buildWorksheetXml({ aoa, merges, colWidths, headerRowIdx });
+
+  return createZipArchive([
+    { name: "[Content_Types].xml", content: contentTypesXml },
+    { name: "_rels/.rels", content: rootRelsXml },
+    { name: "xl/workbook.xml", content: workbookXml },
+    { name: "xl/_rels/workbook.xml.rels", content: workbookRelsXml },
+    { name: "xl/styles.xml", content: stylesXml },
+    { name: "xl/worksheets/sheet1.xml", content: sheetXml },
+  ]);
+}
+
 export function exportToExcel({
   filename = "Laporan_Transparansi_JagaJalan",
   sheetName = "Data Transparansi",
@@ -48,29 +285,24 @@ export function exportToExcel({
 
   const colCount = Math.max(columns.length, 4);
   const generatedAt = formatReadableDate();
-  const safeSheetName = (sheetName || "Data Transparansi").slice(0, 31).replace(/[\\/?*[\]]/g, "");
+  const safeSheetName =
+    (sheetName || "Data Transparansi").slice(0, 31).replace(/[\\/?*[\]:]/g, "") || "Data";
 
-  // Build 2D Array of Rows (AOA)
   const aoa = [];
   const merges = [];
 
-  // Row 0: Document Title (Centered Header)
   const titleRow = [title];
   for (let i = 1; i < colCount; i++) titleRow.push("");
   aoa.push(titleRow);
   merges.push({ s: { r: 0, c: 0 }, e: { r: 0, c: colCount - 1 } });
 
-  // Row 1: Subtitle & Download Timestamp
-  const subTitleText = `${subtitle} • Waktu Unduh: ${generatedAt} WIB`;
-  const subTitleRow = [subTitleText];
+  const subTitleRow = [`${subtitle} • Waktu Unduh: ${generatedAt} WIB`];
   for (let i = 1; i < colCount; i++) subTitleRow.push("");
   aoa.push(subTitleRow);
   merges.push({ s: { r: 1, c: 0 }, e: { r: 1, c: colCount - 1 } });
 
-  // Row 2: Spacer
   aoa.push(new Array(colCount).fill(""));
 
-  // Summary Metrics Section (if present)
   if (summaryMetrics.length > 0) {
     const numMetrics = summaryMetrics.length;
     const baseSpan = Math.floor(colCount / numMetrics);
@@ -84,7 +316,6 @@ export function exportToExcel({
       return Math.max(1, span);
     });
 
-    // Metric Labels Row
     const labelRow = [];
     const valRow = [];
     let currentC = 0;
@@ -105,18 +336,17 @@ export function exportToExcel({
 
     aoa.push(labelRow);
     aoa.push(valRow);
-    aoa.push(new Array(colCount).fill("")); // spacer
+    aoa.push(new Array(colCount).fill(""));
   }
 
-  // Table Headers Row
+  const headerRowIdx = aoa.length;
   const headerRow = columns.map((col) => col.header || "");
   while (headerRow.length < colCount) headerRow.push("");
   aoa.push(headerRow);
 
-  // Table Data Rows
   rows.forEach((row, rowIdx) => {
     const dataRow = columns.map((col) => {
-      let val = typeof col.accessor === "function" ? col.accessor(row, rowIdx) : row[col.key];
+      const val = typeof col.accessor === "function" ? col.accessor(row, rowIdx) : row[col.key];
       if (val === null || val === undefined) return "";
       return val;
     });
@@ -124,8 +354,7 @@ export function exportToExcel({
     aoa.push(dataRow);
   });
 
-  // Footer Row
-  aoa.push(new Array(colCount).fill("")); // spacer
+  aoa.push(new Array(colCount).fill(""));
   const footerRowIndex = aoa.length;
   const footerText =
     "JagaJalan — Ekosistem Partisipatif Transparansi Infrastruktur Jalan & Anggaran Publik (UU No. 14/2008 KIP & UU No. 2/2022 Jalan) • https://jagajalan.vercel.app";
@@ -134,13 +363,6 @@ export function exportToExcel({
   aoa.push(footerRow);
   merges.push({ s: { r: footerRowIndex, c: 0 }, e: { r: footerRowIndex, c: colCount - 1 } });
 
-  // Create Sheet
-  const ws = XLSX.utils.aoa_to_sheet(aoa);
-
-  // Set merges
-  ws["!merges"] = merges;
-
-  // Calculate Column Widths
   const colWidths = columns.map((col) => {
     if (col.width && typeof col.width === "number") {
       return { wch: Math.max(10, Math.round(col.width / 6.5)) };
@@ -155,15 +377,16 @@ export function exportToExcel({
     return { wch: Math.min(50, Math.max(12, maxLen + 3)) };
   });
   while (colWidths.length < colCount) colWidths.push({ wch: 15 });
-  ws["!cols"] = colWidths;
 
-  // Create Workbook
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
+  const excelBytes = buildXlsxBytes({
+    sheetName: safeSheetName,
+    aoa,
+    merges,
+    colWidths,
+    headerRowIdx,
+  });
 
-  // Generate .xlsx Binary & Download
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], {
+  const blob = new Blob([excelBytes], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
 
@@ -177,10 +400,6 @@ export function exportToExcel({
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
-/**
- * Membuka dan mencetak/menyimpan Laporan Transparansi Publik dalam format PDF (A4 Landscape/Portrait)
- * Siap disimpan sebagai berkas PDF resmi untuk audit mandiri masyarakat dan pemangku kepentingan.
- */
 export function exportToPDF({
   title = "Laporan Transparansi Data Publik — JagaJalan",
   subtitle = "Audit Terbuka Kewenangan Jalan, Anggaran Proyek LPSE, dan Tindak Lanjut Pengaduan",
@@ -452,4 +671,3 @@ export function exportToPDF({
     printWin.document.close();
   }
 }
-
