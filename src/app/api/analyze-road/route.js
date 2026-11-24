@@ -3,18 +3,17 @@ import { NextResponse } from "next/server";
 export const maxDuration = 60; // Allow full 60s timeout for Gemini Vision on Vercel
 export const dynamic = "force-dynamic";
 
-// In-memory sliding-window rate limiter
 const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 60; // 60 calls per min per IP
-const MAX_BASE64_LENGTH = 10 * 1024 * 1024; // 10 MB payload cap
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 60;
+// Stay safely below Vercel's 4.5 MB serverless request body cap
+const MAX_BASE64_LENGTH = 4 * 1024 * 1024;
+const GEMINI_REQUEST_TIMEOUT_MS = 12000;
 
-// Multi-Key Rotation Pool & Automatic Failover Index
 let globalKeyIndex = 0;
 
 function resolveGeminiApiKeys() {
   const keys = [];
-  // 1. Support multi-keys comma-separated (e.g. GEMINI_API_KEYS=key1,key2,key3...)
   const envMulti = process.env.GEMINI_API_KEYS;
   if (envMulti && typeof envMulti === "string") {
     const parsed = envMulti
@@ -23,8 +22,7 @@ function resolveGeminiApiKeys() {
       .filter((k) => k && k !== "your_gemini_api_key_here");
     keys.push(...parsed);
   }
-  // 2. Support single key for backward compatibility
-  const envSingle = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  const envSingle = process.env.GEMINI_API_KEY;
   if (envSingle && typeof envSingle === "string") {
     const single = envSingle.trim();
     if (single && single !== "your_gemini_api_key_here" && !keys.includes(single)) {
@@ -34,8 +32,23 @@ function resolveGeminiApiKeys() {
   return keys;
 }
 
+function sanitizeRoadContext(raw) {
+  if (typeof raw !== "string") return "Jalan Publik Daerah";
+  const cleaned = raw
+    .replace(/[\r\n\t]+/g, " ")
+    .replace(/[`<>{}]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return cleaned ? cleaned.slice(0, 160) : "Jalan Publik Daerah";
+}
+
 function isRateLimited(ip) {
   const now = Date.now();
+  if (rateLimitMap.size > 500) {
+    for (const [k, v] of rateLimitMap.entries()) {
+      if (now > v.resetTime) rateLimitMap.delete(k);
+    }
+  }
   const clientData = rateLimitMap.get(ip) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW_MS };
 
   if (now > clientData.resetTime) {
@@ -84,9 +97,9 @@ function parseGeminiJson(rawText) {
 
 export async function POST(request) {
   try {
-    // 1. IP extraction & Rate limiting
+    const realIp = request.headers.get("x-real-ip");
     const forwardedFor = request.headers.get("x-forwarded-for");
-    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "127.0.0.1";
+    const ip = (realIp || (forwardedFor ? forwardedFor.split(",")[0] : "") || "127.0.0.1").trim();
 
     if (isRateLimited(ip)) {
       return NextResponse.json(
@@ -100,25 +113,25 @@ export async function POST(request) {
 
     const body = await request.json();
     const imageBase64 = body.imageBase64 || body.image;
-    const roadContext =
+    const roadContext = sanitizeRoadContext(
       body.roadContext ||
-      body.metadata?.roadContext ||
-      body.metadata?.roadName ||
-      (typeof body.metadata === "string" ? body.metadata : "Jalan Publik Daerah");
+        body.metadata?.roadContext ||
+        body.metadata?.roadName ||
+        (typeof body.metadata === "string" ? body.metadata : "Jalan Publik Daerah")
+    );
 
-    if (!imageBase64) {
+    if (!imageBase64 || typeof imageBase64 !== "string") {
       return NextResponse.json(
         { error: "Foto kerusakan jalan diperlukan." },
         { status: 400 }
       );
     }
 
-    // 2. Payload size security validation (Max 10MB)
     if (imageBase64.length > MAX_BASE64_LENGTH) {
       return NextResponse.json(
         {
           error: "Ukuran berkas foto terlalu besar.",
-          message: "Maksimal ukuran foto adalah 10 MB untuk menjaga stabilitas sistem.",
+          message: "Maksimal ukuran payload foto adalah 4 MB untuk menjaga stabilitas sistem.",
         },
         { status: 413 }
       );
@@ -203,11 +216,14 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks:
           const currentKey = keyCandidates[kIdx];
 
           for (const model of models) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), GEMINI_REQUEST_TIMEOUT_MS);
             try {
               const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${currentKey}`;
               const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                signal: controller.signal,
                 body: JSON.stringify({
                   contents: [
                     {
@@ -246,13 +262,15 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks:
               } else if (response.status === 429) {
                 lastError = `Key #${kIdx + 1} hit 429 on ${model}. Trying next key...`;
                 console.warn(lastError);
-                break; // Try next key
+                break;
               } else {
                 const errBody = await response.text();
                 lastError = `Model ${model} failed (${response.status}): ${errBody.slice(0, 100)}`;
               }
             } catch (e) {
               lastError = e.message;
+            } finally {
+              clearTimeout(timer);
             }
           }
         }
@@ -316,7 +334,7 @@ Balas HANYA dengan objek JSON murni tanpa markdown triple backticks:
   } catch (error) {
     console.error("Route /api/analyze-road error:", error);
     return NextResponse.json(
-      { error: "Gagal memproses analisis foto jalan.", detail: error.message },
+      { error: "Gagal memproses analisis foto jalan." },
       { status: 500 }
     );
   }

@@ -152,9 +152,8 @@ export async function GET(request) {
     const anomalyOnly = searchParams.get("anomalyOnly") === "true";
     const forceLiveSync = searchParams.get("sync") === "true";
 
-    // 1. Coba koneksi upstream jika token/gateway disediakan di environment Vercel
     let liveGatewayStatus = "SIMULATED_VERIFIED";
-    let liveSyncMessage = "Menampilkan dataset kurasi pilot (128 koridor). Siap sinkronisasi langsung saat token API INAPROC LKPP aktif.";
+    let liveSyncMessage = `Menampilkan dataset kurasi terverifikasi (${ALL_ROADS.length} koridor). Siap sinkronisasi langsung saat token API INAPROC LKPP aktif.`;
 
     const inaprocToken = process.env.INAPROC_API_TOKEN;
     const inaprocUrl = process.env.INAPROC_API_URL || "https://data.inaproc.id/portal";
@@ -293,12 +292,11 @@ export async function GET(request) {
         },
       }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         success: false,
         error: "Gagal memproses data kalkulasi audit pengadaan jalan.",
-        message: error.message,
       },
       { status: 500 }
     );
@@ -310,11 +308,16 @@ export async function POST(request) {
     const body = await request.json().catch(() => ({}));
     const { packageId, customPaguRp, customContractRp, roadLengthKm } = body;
 
-    // Simulasi audit instan untuk proposal paket baru warga / auditor
     if (customPaguRp && customContractRp) {
       const pagu = Number(customPaguRp);
       const kontrak = Number(customContractRp);
-      const km = Number(roadLengthKm) || 1;
+      const km = Math.max(0.1, Number(roadLengthKm) || 1);
+      if (!Number.isFinite(pagu) || !Number.isFinite(kontrak) || pagu <= 0 || kontrak <= 0) {
+        return NextResponse.json(
+          { success: false, error: "Nilai pagu dan kontrak harus berupa angka positif." },
+          { status: 400 }
+        );
+      }
 
       const efficiency = pagu > kontrak ? pagu - kontrak : 0;
       const efficiencyPct = pagu > 0 ? Number(((efficiency / pagu) * 100).toFixed(2)) : 0;
@@ -324,7 +327,7 @@ export async function POST(request) {
       return NextResponse.json({
         success: true,
         simulation: {
-          packageId: packageId || "SIMULASI-AUDIT-WARGA",
+          packageId: String(packageId || "SIMULASI-AUDIT-WARGA").slice(0, 64),
           paguRp: pagu,
           contractRp: kontrak,
           efficiencyRp: efficiency,
@@ -343,9 +346,9 @@ export async function POST(request) {
       { success: false, error: "Parameter simulasi customPaguRp dan customContractRp diperlukan." },
       { status: 400 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { success: false, error: "Gagal menjalankan simulasi audit.", message: error.message },
+      { success: false, error: "Gagal menjalankan simulasi audit." },
       { status: 500 }
     );
   }

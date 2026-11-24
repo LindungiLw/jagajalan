@@ -5,6 +5,9 @@ import os from "os";
 import { INITIAL_REPORTS } from "@/data/reportsData";
 import { ROAD_SEGMENTS, detectJurisdictionByCoordinates } from "@/data/roadsData";
 import { computeSpatialCellId, getDatabaseScalabilityMetrics } from "@/lib/firebase";
+import { extractVerifiedOfficerFromRequest } from "@/lib/officerAuth";
+
+export const dynamic = "force-dynamic";
 
 const STORAGE_FILE = path.join(os.tmpdir(), "jagajalan-live-reports-v1.json");
 
@@ -20,9 +23,15 @@ const ALLOWED_STATUSES = new Set([
 ]);
 
 function isWriteRateLimited(request) {
+  const realIp = request.headers.get("x-real-ip");
   const forwardedFor = request.headers.get("x-forwarded-for");
-  const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "127.0.0.1";
+  const ip = (realIp || (forwardedFor ? forwardedFor.split(",")[0] : "") || "127.0.0.1").trim();
   const now = Date.now();
+  if (WRITE_RATE_LIMIT_MAP.size > 500) {
+    for (const [k, v] of WRITE_RATE_LIMIT_MAP.entries()) {
+      if (now > v.resetTime) WRITE_RATE_LIMIT_MAP.delete(k);
+    }
+  }
   const entry = WRITE_RATE_LIMIT_MAP.get(ip) || {
     count: 0,
     resetTime: now + WRITE_RATE_WINDOW_MS,
@@ -569,12 +578,11 @@ export async function GET(request) {
         },
       }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         success: false,
         error: "Gagal memuat daftar laporan warga.",
-        message: error.message,
       },
       { status: 500 }
     );
@@ -755,7 +763,7 @@ export async function POST(request) {
     state.customReports = [
       newReport,
       ...state.customReports.filter((r) => r.id !== newReport.id),
-    ];
+    ].slice(0, 500);
     state.notifications = normalizeAndDedupeNotifications([
       createdNotification,
       ...(state.notifications || []),
@@ -773,12 +781,11 @@ export async function POST(request) {
       },
       { status: 201 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         success: false,
         error: "Gagal menyimpan laporan kerusakan jalan.",
-        message: error.message,
       },
       { status: 500 }
     );
@@ -794,6 +801,17 @@ export async function PATCH(request) {
           error: "Terlalu banyak permintaan pembaruan. Silakan tunggu 1 menit.",
         },
         { status: 429 }
+      );
+    }
+
+    const verifiedOfficer = extractVerifiedOfficerFromRequest(request);
+    if (!verifiedOfficer) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Otorisasi sesi Petugas Dinas yang valid diperlukan untuk mengubah status laporan.",
+        },
+        { status: 401 }
       );
     }
 
@@ -813,8 +831,7 @@ export async function PATCH(request) {
       );
     }
 
-    // Validasi otorisasi petugas untuk perubahan status dinas
-    const officerHeaderId = sanitizePlainText(request.headers.get("x-officer-id") || "", 64, "");
+    const officerHeaderId = verifiedOfficer.name || verifiedOfficer.id;
     const nextStatusCandidate = body.status || body.progressStatus;
     if (
       nextStatusCandidate &&
@@ -823,22 +840,6 @@ export async function PATCH(request) {
       return NextResponse.json(
         { success: false, error: "Status tindak lanjut tidak valid." },
         { status: 400 }
-      );
-    }
-
-    if (
-      (nextStatusCandidate === "TERVERIFIKASI" ||
-        nextStatusCandidate === "DALAM_PENGERJAAN" ||
-        nextStatusCandidate === "SELESAI") &&
-      !officerHeaderId &&
-      !Array.isArray(body.updates)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Otorisasi sesi Petugas Dinas diperlukan untuk mengubah status penanganan.",
-        },
-        { status: 403 }
       );
     }
 
@@ -971,12 +972,11 @@ export async function PATCH(request) {
       notification: generatedNotification,
       lastUpdatedAt: state.lastUpdatedAt,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         success: false,
         error: "Gagal memperbarui status laporan.",
-        message: error.message,
       },
       { status: 500 }
     );

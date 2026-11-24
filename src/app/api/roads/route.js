@@ -51,6 +51,7 @@ export async function GET(request) {
     const bboxParam = searchParams.get("bbox") || "";
     const search = searchParams.get("search") || "";
     const format = searchParams.get("format") || "json";
+    const summaryOnly = searchParams.get("summary") === "true";
     const pageParam = Number.parseInt(searchParams.get("page") || "1", 10);
     const limitParam = Number.parseInt(searchParams.get("limit") || "0", 10);
 
@@ -237,7 +238,9 @@ export async function GET(request) {
           layerTypes: ["jalan_nasional", "jalan_daerah", "drainase"],
           geometryPrecision: "Vektor Kurva Fisik Jalan Nyata (Real Polyline Overpass/OSRM)",
         },
-        data: paginatedRoads,
+        data: summaryOnly
+          ? paginatedRoads.map(({ coordinates: _omit, ...rest }) => rest)
+          : paginatedRoads,
       },
       {
         headers: {
@@ -245,12 +248,11 @@ export async function GET(request) {
         },
       }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         success: false,
         error: "Gagal memproses data geospasial ruas jalan.",
-        message: error.message,
       },
       { status: 500 }
     );
