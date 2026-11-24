@@ -157,14 +157,37 @@ export default function BudgetDataExplorer({
     }
   }, [selectedAuthority]);
 
-  // Initial load
   useEffect(() => {
-    fetchProcurementData(false);
-  }, [fetchProcurementData]);
+    let cancelled = false;
+    const loadInitial = async () => {
+      try {
+        const url = `/api/procurement?authority=${selectedAuthority}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        const data = await res.json();
+        if (!cancelled && data && data.success && Array.isArray(data.packages)) {
+          setApiPackages(data.packages);
+          const now = new Date();
+          setLastSyncedAt(now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }));
+        }
+      } catch (err) {
+        console.warn("Gagal fetch /api/procurement, menggunakan data lokal:", err);
+      }
+    };
+    loadInitial();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedAuthority]);
 
-  // Reset page on filter change
   useEffect(() => {
-    setCurrentPage(1);
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) setCurrentPage(1);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [selectedAuthority, searchQuery, anomalyFilterOnly, sortBy]);
 
   // Extract all budget packages linked to road segments

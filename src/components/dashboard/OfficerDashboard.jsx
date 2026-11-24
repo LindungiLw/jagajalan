@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo, useRef, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import CustomSelect from "./CustomSelect";
 import {
@@ -56,6 +56,8 @@ function resolveSafeProofPhoto(url) {
   return url;
 }
 
+const emptySubscribe = () => () => {};
+
 export default function OfficerDashboard({
   reports,
   onUpdateReport,
@@ -64,7 +66,7 @@ export default function OfficerDashboard({
   currentOfficer,
   onLogout,
 }) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const isDemoSession =
     !currentOfficer ||
     currentOfficer.id === "DEMO-001" ||
@@ -75,16 +77,11 @@ export default function OfficerDashboard({
     isDemoSession ? "ALL" : currentOfficer?.authorityLevel || "ALL"
   );
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("ALL");
-  const [sortBy, setSortBy] = useState("HAZARD"); // HAZARD | SLA | UPVOTES | DATE
+  const [sortBy, setSortBy] = useState("HAZARD");
   const [activeReportToEdit, setActiveReportToEdit] = useState(null);
-  const [viewMode, setViewMode] = useState("grid"); // "grid" (5 kolom) | "list" (baris rinci)
+  const [viewMode, setViewMode] = useState("grid");
   const [lastUpdatedReport, setLastUpdatedReport] = useState(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Form states in action modal
   const [targetStatus, setTargetStatus] = useState("TERVERIFIKASI");
   const [officerNote, setOfficerNote] = useState("");
   const [officerName, setOfficerName] = useState(
@@ -107,14 +104,6 @@ export default function OfficerDashboard({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeReportToEdit]);
-
-  useEffect(() => {
-    if (currentOfficer) {
-      setOfficerName(
-        `${currentOfficer.name} (NIP: ${currentOfficer.nip || currentOfficer.id || "DEMO-001"})`
-      );
-    }
-  }, [currentOfficer]);
 
   const fileInputRef = useRef(null);
 

@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import {
   Globe,
   Database,
   Scale,
   ShieldCheck,
-  ArrowRight,
-  ExternalLink,
 } from "lucide-react";
 
 const DATA_RESOURCES = [
@@ -64,27 +62,7 @@ const MARQUEE_SET = [
 ];
 const ALL_MARQUEE_ITEMS = [...MARQUEE_SET, ...MARQUEE_SET];
 
-export default function Footer({ onSelectTab, activeTab = "beranda" }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const footerRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (footerRef.current) {
-      observer.observe(footerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
+export default function Footer({ onSelectTab }) {
   const handleNav = (tabId) => {
     if (onSelectTab) {
       onSelectTab(tabId);
@@ -119,10 +97,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
   ];
 
   return (
-    <footer
-      ref={footerRef}
-      className="relative bg-transparent text-slate-600 font-sans pt-4 overflow-hidden select-none"
-    >
+    <footer className="relative bg-transparent text-slate-600 font-sans pt-4 overflow-hidden select-none">
       {/* OPEN DATA SOURCES MARQUEE STRIP */}
       <div className="relative border-y border-[#E6DFD5]/90 bg-white/95 py-3.5 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
@@ -149,7 +124,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
                 key={`${item.name}-${idx}`}
                 href={item.href}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 title={`${item.name} - ${item.role}`}
                 className="group shrink-0 mx-2 px-3 py-2 rounded-[7px] bg-white hover:bg-orange-50/70 border border-[#E6DFD5] hover:border-orange-300 ring-1 ring-slate-100 hover:ring-orange-200/70 shadow-2xs transition-all duration-200 flex items-center gap-2.5 cursor-pointer select-none"
               >
@@ -225,7 +200,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
               <a
                 href="https://data.pu.go.id"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 title="Satu Data Kementerian PU"
                 className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
@@ -234,7 +209,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
               <a
                 href="https://inaproc.id"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 title="Portal Pengadaan LKPP Inaproc"
                 className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
@@ -243,27 +218,24 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
               <a
                 href="https://ombudsman.go.id"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 title="Ombudsman Republik Indonesia"
                 className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
                 <Scale className="w-4 h-4" />
               </a>
-              <a
-                href="/?tab=dinas"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNav("dinas");
-                }}
+              <button
+                type="button"
+                onClick={() => handleNav("dinas")}
                 title="Portal Kerja Dinas (Aparatur)"
                 className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4" />
-              </a>
+              </button>
               <a
                 href="https://github.com/LindungiLw/jagajalan"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 title="Repositori Sumber Terbuka JagaJalan (GitHub)"
                 className="w-8 h-8 rounded-full bg-[#EAE4D9]/70 hover:bg-orange-100 hover:text-orange-700 text-slate-700 flex items-center justify-center transition-colors shadow-2xs"
               >
@@ -296,19 +268,16 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
                 </li>
               ))}
               <li className="pt-1.5 border-t border-[#E6DFD5]/60">
-                <a
-                  href="/?tab=dinas"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNav("dinas");
-                  }}
+                <button
+                  type="button"
+                  onClick={() => handleNav("dinas")}
                   className="group inline-flex items-center gap-1.5 text-slate-500 hover:text-orange-700 transition-colors text-xs font-semibold py-0.5 cursor-pointer"
                 >
                   <span>Portal Kerja Dinas (Aparatur)</span>
                   <span className="text-slate-400 group-hover:text-orange-600 transition-transform duration-200 group-hover:translate-x-1">
                     &rarr;
                   </span>
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -326,7 +295,7 @@ export default function Footer({ onSelectTab, activeTab = "beranda" }) {
                   <a
                     href={item.href}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="group inline-flex items-center gap-1.5 text-slate-600 hover:text-orange-700 transition-colors py-0.5"
                   >
                     <span>{item.label}</span>

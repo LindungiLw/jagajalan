@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import {
   TrendingUp,
@@ -55,17 +55,15 @@ const NATIONAL_ROAD_COMPOSITION = [
   },
 ];
 
+const emptySubscribe = () => () => {};
+
 export default function AnnualProgressChart() {
-  const [mounted, setMounted] = useState(false);
-  const [activeMetric, setActiveMetric] = useState("road-condition"); // 'road-condition' | 'complaints' | 'inpres'
-  const [chartViewMode, setChartViewMode] = useState("line"); // 'line' (clean disparity lines, default) | 'combo'
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [activeMetric, setActiveMetric] = useState("road-condition");
+  const [chartViewMode, setChartViewMode] = useState("line");
   const [selectedYear, setSelectedYear] = useState(2025);
   const [hoveredSlice, setHoveredSlice] = useState(null);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!showExplanationModal) return undefined;
@@ -170,20 +168,22 @@ export default function AnnualProgressChart() {
     return d;
   }, [linePoints]);
 
-  // Donut Chart Circumference Calculations (r = 50, C = 2 * PI * 50 = 314.159)
   const donutRadius = 50;
   const donutCircumference = 2 * Math.PI * donutRadius;
-  let accumulatedOffset = 0;
-  const donutSlices = NATIONAL_ROAD_COMPOSITION.map((item) => {
-    const strokeDash = (item.pct / 100) * donutCircumference;
-    const offset = accumulatedOffset;
-    accumulatedOffset += strokeDash;
-    return {
-      ...item,
-      strokeDash,
-      strokeOffset: -offset,
-    };
-  });
+  const donutSlices = useMemo(() => {
+    return NATIONAL_ROAD_COMPOSITION.reduce((acc, item) => {
+      const strokeDash = (item.pct / 100) * donutCircumference;
+      const prevOffset =
+        acc.length > 0 ? acc[acc.length - 1].nextOffset : 0;
+      acc.push({
+        ...item,
+        strokeDash,
+        strokeOffset: -prevOffset,
+        nextOffset: prevOffset + strokeDash,
+      });
+      return acc;
+    }, []);
+  }, [donutCircumference]);
 
   const availableYears = [2020, 2021, 2022, 2023, 2024, 2025];
 

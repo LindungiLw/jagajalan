@@ -21,7 +21,6 @@ export const aiService = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           imageBase64,
-          image: imageBase64,
           roadContext,
           metadata,
         }),

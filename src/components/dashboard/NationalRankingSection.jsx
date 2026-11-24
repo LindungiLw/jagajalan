@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { PROVINCES_DATA, NATIONAL_STATS } from "@/data/provincesData";
 import {
@@ -88,18 +88,16 @@ function ProvinceKemantapanDonut({ mantapPct = 50 }) {
   );
 }
 
+const emptySubscribe = () => () => {};
+
 export default function NationalRankingSection({ onSelectPilot }) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [selectedIsland, setSelectedIsland] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("complaints"); // "complaints" | "damaged" | "inpres"
-  const [viewMode, setViewMode] = useState("grid"); // "grid" | "table"
+  const [sortBy, setSortBy] = useState("complaints");
+  const [viewMode, setViewMode] = useState("grid");
   const [showAllGridCards, setShowAllGridCards] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!selectedProvince) return undefined;

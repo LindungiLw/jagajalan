@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -41,6 +41,8 @@ function resolveSafeProofPhoto(url) {
   return url;
 }
 
+const emptySubscribe = () => () => {};
+
 export default function RoadDetailModal({
   isOpen,
   onClose,
@@ -49,11 +51,7 @@ export default function RoadDetailModal({
   onOpenOmbudsmanDraft,
   onOpenReportModal,
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   useEffect(() => {
     if (isOpen) {

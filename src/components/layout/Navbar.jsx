@@ -682,7 +682,7 @@ export default function Navbar({
                   <div className="flex items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/icon/user.png"
+                      src="/icon/profile.png"
                       alt=""
                       width={18}
                       height={18}

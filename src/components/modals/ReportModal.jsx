@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 import {
@@ -117,6 +117,75 @@ function compressAndResizeImage(fileOrBase64, maxDimension = 1200, quality = 0.8
   });
 }
 
+const emptySubscribe = () => () => {};
+
+function createCitizenReportPayload({
+  currentRoad,
+  reporterName,
+  validLat,
+  validLng,
+  coordinateSource,
+  addressDetail,
+  aiResult,
+  photoPreview,
+  notificationContact,
+  notifyOnUpdate,
+}) {
+  const nowMs = Date.now();
+  const authCode = (currentRoad.authority || "NAS").substring(0, 3).toUpperCase();
+  const newTicketCode = `JGJ-${authCode}-${Math.floor(100 + Math.random() * 900)}`;
+  const maskedName = reporterName.trim()
+    ? `${reporterName.trim().charAt(0)}*** (Warga Terverifikasi)`
+    : "W*** (Warga Pelapor)";
+  const exactCoords = [Number(validLat.toFixed(6)), Number(validLng.toFixed(6))];
+  const nowIso = new Date(nowMs).toISOString();
+
+  return {
+    id: `REP-${nowMs}`,
+    ticketCode: newTicketCode,
+    roadSegmentId: currentRoad.id,
+    roadName: currentRoad.name,
+    district: currentRoad.district,
+    authority: currentRoad.authority,
+    authorityLabel: currentRoad.authorityLabel,
+    legalBasis: currentRoad.legalBasis,
+    coordinates: exactCoords,
+    coordinateSource,
+    address:
+      addressDetail.trim() ||
+      `Titik GIS [${exactCoords[0].toFixed(4)}, ${exactCoords[1].toFixed(4)}] — ${currentRoad.name}`,
+    damageCategory: aiResult ? aiResult.category : "POTHOLE_CRITICAL",
+    categoryLabel: aiResult ? aiResult.categoryLabel : "Lubang Jalan Kritis (Pothole)",
+    hazardScore: aiResult ? aiResult.hazardScore : 88,
+    hazardLevel: aiResult ? aiResult.hazardLevel : "TINGGI",
+    aiAnalysis: aiResult
+      ? aiResult.analysisText
+      : "Pemeriksaan awal foto: Kerusakan perkerasan aspal terindikasi membahayakan keselamatan pengguna jalan.",
+    photoUrl: photoPreview,
+    reporterName: maskedName,
+    notificationContact: notificationContact.trim(),
+    notifyOnUpdate,
+    reportDate: nowIso,
+    targetResponseDeadline: new Date(nowMs + 14 * 24 * 60 * 60 * 1000).toISOString(),
+    status: "MENUNGGU_VERIFIKASI",
+    progressStatus: "MENUNGGU_VERIFIKASI",
+    isResponseOverdue: false,
+    daysOverdue: 0,
+    upvotes: 1,
+    userConfirmed: true,
+    isLiveCitizenReport: true,
+    leadership: currentRoad.leadership,
+    matchingBudget: currentRoad.budget,
+    updates: [
+      {
+        date: nowIso,
+        officer: "Sistem Geospasial JagaJalan",
+        note: `Titik laporan [${exactCoords[0].toFixed(5)}, ${exactCoords[1].toFixed(5)}] terpetakan secara real-time di layer GIS. Pemeriksaan awal visual terverifikasi. Disposisi: ${currentRoad.authorityLabel}.`,
+      },
+    ],
+  };
+}
+
 export default function ReportModal({
   isOpen,
   onClose,
@@ -125,11 +194,7 @@ export default function ReportModal({
   initialLocation = null,
   onViewReportOnMap,
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   // Wizard Stepper State: 1 = Lokasi & Pelapor, 2 = Foto & Cek AI
   const [currentStep, setCurrentStep] = useState(1);
@@ -225,34 +290,40 @@ export default function ReportModal({
   }, [roads, roadSearchQuery, roadFilterGroup]);
 
   useEffect(() => {
-    if (!isOpen) return;
-    if (initialLocation && Array.isArray(initialLocation.coordinates)) {
-      const [lat, lng] = initialLocation.coordinates;
-      setLatInput(Number(lat).toFixed(5));
-      setLngInput(Number(lng).toFixed(5));
-      setUsePinnedLocation(true);
-      setCoordinateSource(initialLocation.source || "GIS_MAP_PIN");
-      if (initialLocation.roadSegmentId && roads.some((r) => r.id === initialLocation.roadSegmentId)) {
-        setSelectedRoadId(initialLocation.roadSegmentId);
+    if (!isOpen) return undefined;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      if (initialLocation && Array.isArray(initialLocation.coordinates)) {
+        const [lat, lng] = initialLocation.coordinates;
+        setLatInput(Number(lat).toFixed(5));
+        setLngInput(Number(lng).toFixed(5));
+        setUsePinnedLocation(true);
+        setCoordinateSource(initialLocation.source || "GIS_MAP_PIN");
+        if (initialLocation.roadSegmentId && roads.some((r) => r.id === initialLocation.roadSegmentId)) {
+          setSelectedRoadId(initialLocation.roadSegmentId);
+        }
+        if (initialLocation.address) {
+          setAddressDetail(initialLocation.address);
+        } else if (initialLocation.roadName) {
+          setAddressDetail(`Titik pada ${initialLocation.roadName}, ${initialLocation.district || ""}`);
+        }
+      } else {
+        setUsePinnedLocation(false);
+        setCoordinateSource("ROAD_CORRIDOR");
+        const targetRoad = roads.find((r) => r.id === selectedRoadId) || roads[0];
+        if (targetRoad) {
+          const [lat, lng] = getRoadMidpoint(targetRoad);
+          setLatInput(String(lat));
+          setLngInput(String(lng));
+        }
       }
-      if (initialLocation.address) {
-        setAddressDetail(initialLocation.address);
-      } else if (initialLocation.roadName) {
-        setAddressDetail(`Titik pada ${initialLocation.roadName}, ${initialLocation.district || ""}`);
-      }
-    } else {
-      setUsePinnedLocation(false);
-      setCoordinateSource("ROAD_CORRIDOR");
-      const targetRoad = roads.find((r) => r.id === selectedRoadId) || roads[0];
-      if (targetRoad) {
-        const [lat, lng] = getRoadMidpoint(targetRoad);
-        setLatInput(String(lat));
-        setLngInput(String(lng));
-      }
-    }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [isOpen, initialLocation, roads, selectedRoadId]);
 
-  // Clean up camera stream on unmount
   useEffect(() => {
     return () => {
       if (streamRef.current) {
@@ -264,7 +335,6 @@ export default function ReportModal({
     };
   }, []);
 
-  // Stop camera stream whenever modal closes
   useEffect(() => {
     if (!isOpen) {
       if (streamRef.current) {
@@ -273,8 +343,10 @@ export default function ReportModal({
         } catch {}
         streamRef.current = null;
       }
-      setIsLiveCameraActive(false);
-      setIsStartingCamera(false);
+      queueMicrotask(() => {
+        setIsLiveCameraActive(false);
+        setIsStartingCamera(false);
+      });
     }
   }, [isOpen]);
 
@@ -537,8 +609,7 @@ export default function ReportModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          imageBase64: imageBase64,
-          image: imageBase64,
+          imageBase64,
           roadContext: `${currentRoad.name || "Jalan Publik"}, ${currentRoad.district || ""} [${validLat.toFixed(4)}, ${validLng.toFixed(4)}]`,
         }),
       });
@@ -794,59 +865,18 @@ export default function ReportModal({
 
     setIsSubmitting(true);
 
-    const authCode = (currentRoad.authority || "NAS").substring(0, 3).toUpperCase();
-    const newTicketCode = `JGJ-${authCode}-${Math.floor(100 + Math.random() * 900)}`;
-
-    const maskedName = reporterName.trim()
-      ? `${reporterName.trim().charAt(0)}*** (Warga Terverifikasi)`
-      : "W*** (Warga Pelapor)";
-
-    const exactCoords = [Number(validLat.toFixed(6)), Number(validLng.toFixed(6))];
-
-    const newReport = {
-      id: `REP-${Date.now()}`,
-      ticketCode: newTicketCode,
-      roadSegmentId: currentRoad.id,
-      roadName: currentRoad.name,
-      district: currentRoad.district,
-      authority: currentRoad.authority,
-      authorityLabel: currentRoad.authorityLabel,
-      legalBasis: currentRoad.legalBasis,
-      coordinates: exactCoords,
+    const newReport = createCitizenReportPayload({
+      currentRoad,
+      reporterName,
+      validLat,
+      validLng,
       coordinateSource,
-      address:
-        addressDetail.trim() ||
-        `Titik GIS [${exactCoords[0].toFixed(4)}, ${exactCoords[1].toFixed(4)}] — ${currentRoad.name}`,
-      damageCategory: aiResult ? aiResult.category : "POTHOLE_CRITICAL",
-      categoryLabel: aiResult ? aiResult.categoryLabel : "Lubang Jalan Kritis (Pothole)",
-      hazardScore: aiResult ? aiResult.hazardScore : 88,
-      hazardLevel: aiResult ? aiResult.hazardLevel : "TINGGI",
-      aiAnalysis: aiResult
-        ? aiResult.analysisText
-        : "Pemeriksaan awal foto: Kerusakan perkerasan aspal terindikasi membahayakan keselamatan pengguna jalan.",
-      photoUrl: photoPreview,
-      reporterName: maskedName,
-      notificationContact: notificationContact.trim(),
+      addressDetail,
+      aiResult,
+      photoPreview,
+      notificationContact,
       notifyOnUpdate,
-      reportDate: new Date().toISOString(),
-      targetResponseDeadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-      status: "MENUNGGU_VERIFIKASI",
-      progressStatus: "MENUNGGU_VERIFIKASI",
-      isResponseOverdue: false,
-      daysOverdue: 0,
-      upvotes: 1,
-      userConfirmed: true,
-      isLiveCitizenReport: true,
-      leadership: currentRoad.leadership,
-      matchingBudget: currentRoad.budget,
-      updates: [
-        {
-          date: new Date().toISOString(),
-          officer: "Sistem Geospasial JagaJalan",
-          note: `Titik laporan [${exactCoords[0].toFixed(5)}, ${exactCoords[1].toFixed(5)}] terpetakan secara real-time di layer GIS. Pemeriksaan awal visual terverifikasi. Disposisi: ${currentRoad.authorityLabel}.`,
-        },
-      ],
-    };
+    });
 
     let persistedReport = newReport;
     try {
