@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import {
   MapPin,
@@ -107,6 +107,11 @@ export default function MapExplorer({
   const [pinReportMode, setPinReportMode] = useState(false);
   const [liveViewportRoads, setLiveViewportRoads] = useState([]);
   const [isScanningViewport, setIsScanningViewport] = useState(false);
+  const [isGeocodingSearch, setIsGeocodingSearch] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const scannedCellsRef = useRef(new Set());
+  const viewportScanTimerRef = useRef(null);
+  const viewportAbortRef = useRef(null);
   const [selectedRegionId, setSelectedRegionId] = useState("all");
   const [selectedProvinceId, setSelectedProvinceId] = useState(null);
   const [regionTab, setRegionTab] = useState("provinces"); // "provinces" | "regions"
@@ -251,6 +256,7 @@ export default function MapExplorer({
   }, [roads, reports, authorityFilter, searchQuery, highlightFilter]);
 
   const filteredLiveViewportRoads = useMemo(() => {
+    if (highlightFilter === "OVERDUE" || highlightFilter === "CRITICAL") return [];
     return liveViewportRoads.filter((road) => {
       const matchAuth = authorityFilter === "ALL" || road.authority === authorityFilter;
       const matchSearch =
@@ -260,7 +266,28 @@ export default function MapExplorer({
         (road.district && road.district.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchAuth && matchSearch;
     });
-  }, [liveViewportRoads, authorityFilter, searchQuery]);
+  }, [liveViewportRoads, authorityFilter, searchQuery, highlightFilter]);
+
+  const searchSuggestions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (q.length < 2) return { roads: [], provinces: [] };
+    const combinedRoads = [...roads, ...liveViewportRoads];
+    const matchedRoads = combinedRoads
+      .filter(
+        (r) =>
+          r.name?.toLowerCase().includes(q) ||
+          r.district?.toLowerCase().includes(q) ||
+          r.code?.toLowerCase().includes(q) ||
+          r.provinceName?.toLowerCase().includes(q)
+      )
+      .slice(0, 6);
+    const matchedProvinces = INDONESIA_PROVINCES.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.capital.toLowerCase().includes(q)
+    ).slice(0, 3);
+    return { roads: matchedRoads, provinces: matchedProvinces };
+  }, [searchQuery, roads, liveViewportRoads]);
 
   const filteredReports = useMemo(() => {
     return reports.filter((rep) => {
@@ -283,6 +310,37 @@ export default function MapExplorer({
     });
   }, [reports, authorityFilter, searchQuery, highlightFilter]);
 
+  const moveMapSafely = (coords, targetZoom = null, { panOnly = false } = {}) => {
+    if (!Array.isArray(coords) || coords.length < 2) return;
+    const [lat, lng] = coords;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    const isReady =
+      mapInstance &&
+      mapInstance._loaded &&
+      mapInstance._mapPane &&
+      mapInstance.getContainer?.()?.isConnected;
+
+    if (isReady) {
+      try {
+        mapInstance.stop();
+        if (panOnly || targetZoom === null) {
+          mapInstance.panTo([lat, lng], { animate: true, duration: 0.45 });
+        } else {
+          mapInstance.flyTo([lat, lng], targetZoom, { duration: 1.0 });
+        }
+        return;
+      } catch {
+        // Fallback to state sync if Leaflet rejects animation mid-transition
+      }
+    }
+
+    setMapCenter([lat, lng]);
+    if (typeof targetZoom === "number") {
+      setMapZoom(targetZoom);
+    }
+  };
+
   const handleSelectRoad = (road) => {
     setSelectedRoad(road);
     const relatedReport = reports.find((r) => r.roadSegmentId === road.id);
@@ -291,7 +349,10 @@ export default function MapExplorer({
     } else {
       setSelectedReport(null);
     }
-    setMapCenter(road.center);
+    // Pan gently to clicked road without hijacking the user's current zoom level
+    if (Array.isArray(road?.center) && road.center.length >= 2) {
+      moveMapSafely(road.center, null, { panOnly: true });
+    }
   };
 
   const handleSelectReport = (report) => {
@@ -316,8 +377,8 @@ export default function MapExplorer({
       });
     }
     if (Array.isArray(report.coordinates) && report.coordinates.length >= 2) {
-      setMapCenter(report.coordinates);
-      mapInstance?.flyTo(report.coordinates, Math.max(mapInstance.getZoom(), 14), { duration: 1.0 });
+      const currentZ = mapInstance?.getZoom?.() || mapZoom;
+      moveMapSafely(report.coordinates, Math.max(currentZ, 14));
     }
   };
 
@@ -367,23 +428,28 @@ export default function MapExplorer({
     setSelectedRegionId(region.id);
     setSelectedProvinceId(null);
     setRegionDropdownOpen(false);
-    setMapCenter(region.center);
-    setMapZoom(region.zoom);
-    mapInstance?.flyTo(region.center, region.zoom, { duration: 1.2 });
+    moveMapSafely(region.center, region.zoom);
 
+    let chosenRoad = null;
     if (region.id === "sumut") {
-      const sumutRoad = roads.find((r) => r.id === "ruas-su-03" || r.provinceId === "sumut");
-      if (sumutRoad) handleSelectRoad(sumutRoad);
+      chosenRoad = roads.find(
+        (r) =>
+          r.id === "ruas-su-03" ||
+          r.provinceId === "sumatera_utara" ||
+          r.provinceId === "sumut"
+      );
     } else if (region.id === "all") {
-      const nasRoad = roads.find((r) => r.id === "ruas-nas-smt-01" || r.authority === "NASIONAL");
-      if (nasRoad) handleSelectRoad(nasRoad);
+      chosenRoad = roads.find((r) => r.id === "ruas-nas-smt-01" || r.authority === "NASIONAL");
     } else {
-      const targetRoad = roads.find(
+      chosenRoad = roads.find(
         (r) =>
           r.provinceId === region.id ||
           (r.region && r.region.toLowerCase().includes(region.island.toLowerCase()))
       );
-      if (targetRoad) handleSelectRoad(targetRoad);
+    }
+    if (chosenRoad) {
+      setSelectedRoad(chosenRoad);
+      setSelectedReport(reports.find((r) => r.roadSegmentId === chosenRoad.id) || null);
     }
   };
 
@@ -391,27 +457,37 @@ export default function MapExplorer({
     setSelectedProvinceId(province.id);
     setSelectedRegionId(province.region);
     setRegionDropdownOpen(false);
-    setMapCenter(province.center);
-    setMapZoom(province.zoom);
-    mapInstance?.flyTo(province.center, province.zoom, { duration: 1.2 });
 
     const matchingRoads = roads.filter(
       (r) =>
         r.provinceId === province.id ||
+        (province.id === "sumatera_utara" && r.provinceId === "sumut") ||
         (r.district && r.district.toLowerCase().includes(province.name.toLowerCase()))
     );
 
-    if (matchingRoads.length > 0) {
-      handleSelectRoad(matchingRoads[0]);
+    const preferredRoad =
+      matchingRoads.find((r) => r.authority === "PROVINSI") ||
+      matchingRoads.find((r) => r.authority === "KOTA" || r.authority === "KABUPATEN") ||
+      matchingRoads[0];
+
+    const targetCenter = preferredRoad?.center || province.center;
+    const targetZoom = Math.max(province.zoom || 11, 11);
+
+    moveMapSafely(targetCenter, targetZoom);
+
+    if (matchingRoads.length > 0 && preferredRoad) {
+      setSelectedRoad(preferredRoad);
+      const relatedReport = reports.find((r) => r.roadSegmentId === preferredRoad.id);
+      setSelectedReport(relatedReport || null);
       setFloatingNotice({
         title: `Provinsi ${province.name}`,
-        desc: `Menampilkan ${matchingRoads.length} koridor terverifikasi • Total Jaringan Resmi: ${province.totalProvincialKm.toLocaleString('id-ID')} KM (${province.skNumber})`,
+        desc: `Menampilkan ${matchingRoads.length} koridor terverifikasi (Nasional, Provinsi, Kab/Kota, & Desa) • Total Jaringan Resmi: ${province.totalProvincialKm.toLocaleString("id-ID")} KM (${province.skNumber})`,
         type: "success",
       });
     } else {
       setFloatingNotice({
         title: `Provinsi ${province.name}`,
-        desc: `Total Jaringan Resmi: ${province.totalProvincialKm.toLocaleString('id-ID')} KM (${province.skNumber}). Dipimpin: ${province.governor}. Menampilkan koridor arteri nasional yang melintasi wilayah ini.`,
+        desc: `Total Jaringan Resmi: ${province.totalProvincialKm.toLocaleString("id-ID")} KM (${province.skNumber}). Dipimpin: ${province.governor}. Menampilkan koridor arteri nasional yang melintasi wilayah ini.`,
         type: "info",
       });
     }
@@ -427,7 +503,7 @@ export default function MapExplorer({
     const result = detectJurisdictionByCoordinates(lat, lng, roads);
     if (!result) return;
 
-    const clickId = `detected-${Date.now()}`;
+    const clickId = `detected-${lat.toFixed(5)}-${lng.toFixed(5)}`;
     setDetectedPoint(result);
     setSelectedReport(null);
 
@@ -652,207 +728,210 @@ export default function MapExplorer({
     }
   };
 
-  // Pemindai Jaringan Jalan Area Aktif (Live OSM Overpass Scanner untuk Kota/Kabupaten/Desa mana saja)
-  const handleScanViewportRoads = async () => {
-    if (isScanningViewport) return;
+  const scanViewportStreets = async ({
+    customBounds = null,
+    customZoom = null,
+    force = false,
+    showNotice = false,
+  } = {}) => {
+    const activeZoom = customZoom ?? mapInstance?.getZoom?.() ?? mapZoom;
+    // Below zoom 12.2, curated offline corridors already render instantaneously without hitting Overpass
+    if (!force && activeZoom < 12.2) return;
+
+    let south;
+    let west;
+    let north;
+    let east;
+
+    if (customBounds) {
+      [south, west, north, east] = customBounds;
+    } else if (mapInstance?.getBounds) {
+      const b = mapInstance.getBounds();
+      south = b.getSouth();
+      west = b.getWest();
+      north = b.getNorth();
+      east = b.getEast();
+    } else {
+      const span = activeZoom >= 13.5 ? 0.035 : 0.065;
+      south = mapCenter[0] - span;
+      north = mapCenter[0] + span;
+      west = mapCenter[1] - span;
+      east = mapCenter[1] + span;
+    }
+
+    const cLat = (south + north) / 2;
+    const cLng = (west + east) / 2;
+    const tierLabel = activeZoom >= 13.5 ? "n" : "c";
+    const gridScale = activeZoom >= 13.5 ? 30 : 16;
+    const cellKey = `${Math.round(cLat * gridScale)}_${Math.round(cLng * gridScale)}_${tierLabel}`;
+    if (!force && scannedCellsRef.current.has(cellKey)) return;
+    scannedCellsRef.current.add(cellKey);
+
+    if (viewportAbortRef.current) {
+      viewportAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    viewportAbortRef.current = controller;
+
     setIsScanningViewport(true);
-
     try {
-      const centerObj = mapInstance?.getCenter?.();
-      const lat = centerObj ? centerObj.lat : mapCenter[0];
-      const lng = centerObj ? centerObj.lng : mapCenter[1];
-      const currentZoom = mapInstance?.getZoom?.() || mapZoom;
+      const res = await fetch(
+        `/api/osm-roads?bbox=${south.toFixed(4)},${west.toFixed(4)},${north.toFixed(4)},${east.toFixed(4)}&zoom=${activeZoom.toFixed(1)}`,
+        { signal: controller.signal }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const payload = await res.json();
+      const incoming = Array.isArray(payload?.roads) ? payload.roads : [];
 
-      // Jika masih terlalu jauh (level pulau/negara), perbesar sedikit ke area target
-      if (currentZoom < 12 && mapInstance) {
-        mapInstance.flyTo([lat, lng], 13.5, { duration: 0.9 });
-      }
-
-      const jurisdiction = detectJurisdictionByCoordinates(lat, lng, roads);
-      const radiusMeters = 3200;
-      const overpassQuery = `[out:json][timeout:10];way(around:${radiusMeters},${lat},${lng})["highway"~"trunk|primary|secondary|tertiary|residential|unclassified"]["name"];out body geom 45;`;
-
-      const [nomRes, ovpRes] = await Promise.allSettled([
-        fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=14&accept-language=id`,
-          { headers: { "Accept-Language": "id" } }
-        ).then((r) => (r.ok ? r.json() : null)),
-        fetch(
-          `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`
-        ).then((r) => (r.ok ? r.json() : null)),
-      ]);
-
-      const nomData = nomRes.status === "fulfilled" ? nomRes.value : null;
-      const ovpData = ovpRes.status === "fulfilled" ? ovpRes.value : null;
-      const addr = nomData?.address || {};
-      const villageOrSuburb = addr.village || addr.suburb || addr.hamlet || "";
-      const cityOrRegency = addr.city || addr.county || addr.regency || jurisdiction?.provinceName || "Wilayah Setempat";
-      const stateName = addr.state || jurisdiction?.provinceName || "Indonesia";
-      const isKotamadya = Boolean(addr.city && !addr.county) || cityOrRegency.toLowerCase().startsWith("kota ");
-
-      const scannedRoads = [];
-      const seenNames = new Set(roads.map((r) => r.name.toLowerCase()));
-
-      if (ovpData?.elements?.length > 0) {
-        for (const el of ovpData.elements) {
-          const roadName = el.tags?.name?.trim();
-          const hw = el.tags?.highway || "residential";
-          if (!roadName || !Array.isArray(el.geometry) || el.geometry.length < 2) continue;
-
-          const nameKey = `${roadName.toLowerCase()}-${hw}`;
-          if (seenNames.has(nameKey)) continue;
-          seenNames.add(nameKey);
-
-          const coords = el.geometry.map((pt) => [
-            Number(pt.lat.toFixed(5)),
-            Number(pt.lon.toFixed(5)),
-          ]);
-          const midPt = coords[Math.floor(coords.length / 2)];
-
-          let distKm = 0;
-          for (let i = 1; i < coords.length; i++) {
-            distKm += Math.hypot(
-              (coords[i][0] - coords[i - 1][0]) * 111,
-              (coords[i][1] - coords[i - 1][1]) * 111
-            );
+      if (incoming.length > 0) {
+        setLiveViewportRoads((prev) => {
+          const byId = new Map(prev.map((item) => [item.id, item]));
+          for (const sr of incoming) {
+            byId.set(sr.id, sr);
           }
-          const lengthKm = Math.max(0.6, Number(distKm.toFixed(1)));
+          const allMerged = Array.from(byId.values());
+          return allMerged.length > 2400 ? allMerged.slice(allMerged.length - 2400) : allMerged;
+        });
 
-          let authority = isKotamadya ? "KOTA" : "KABUPATEN";
-          let authorityLabel = isKotamadya
-            ? `Pemerintah ${cityOrRegency} (Dinas PU Kota)`
-            : `Pemerintah ${cityOrRegency} (Dinas PUPR Kabupaten)`;
-          let legalBasis = `UU No. 2 Tahun 2022 Pasal 9 & SK ${isKotamadya ? "Walikota" : "Bupati"} ${cityOrRegency}`;
-          let regionalHead = `${isKotamadya ? "Walikota" : "Bupati"} ${cityOrRegency}`;
-          let agency = `Dinas Pekerjaan Umum dan Penataan Ruang (PUPR) ${cityOrRegency}`;
-          let budgetSource = `APBD ${cityOrRegency} TA 2026`;
-
-          if (hw === "trunk" || hw === "motorway") {
-            authority = "NASIONAL";
-            authorityLabel = `Kementerian Pekerjaan Umum (BPJN ${stateName})`;
-            legalBasis = "Kepmen PUPR No. 1688/KPTS/M/2022 tentang Penetapan Ruas Jalan Nasional";
-            regionalHead = "Menteri Pekerjaan Umum RI";
-            agency = `Balai Pelaksanaan Jalan Nasional (BPJN) ${stateName}`;
-            budgetSource = "APBN Kementerian PU TA 2026";
-          } else if (hw === "primary") {
-            authority = "PROVINSI";
-            authorityLabel = `Pemerintah Provinsi ${stateName} (Dinas Bina Marga)`;
-            legalBasis = `SK Gubernur ${stateName} tentang Status Ruas Jalan Provinsi`;
-            regionalHead = jurisdiction?.leadership?.regionalHead || `Gubernur ${stateName}`;
-            agency = jurisdiction?.leadership?.agency || `Dinas Bina Marga Provinsi ${stateName}`;
-            budgetSource = `APBD Provinsi ${stateName} TA 2026`;
-          } else if (hw === "residential" || hw === "unclassified" || hw === "living_street") {
-            if (!isKotamadya) {
-              authority = "DESA";
-              const desaName = villageOrSuburb ? `Desa ${villageOrSuburb}` : `Desa di ${cityOrRegency}`;
-              authorityLabel = `Pemerintah ${desaName} (${cityOrRegency} — Dana Desa)`;
-              legalBasis = `UU No. 2 Tahun 2022 Pasal 9 & UU No. 6 Tahun 2014 tentang Desa (APBDes ${desaName})`;
-              regionalHead = `Kepala ${desaName} & Bupati ${cityOrRegency}`;
-              agency = `Tim Pelaksana Kegiatan (TPK) ${desaName} & Dinas PMD ${cityOrRegency}`;
-              budgetSource = `APBDes & Dana Desa (DD) TA 2026`;
-            }
-          }
-
-          const estimatedPagu =
-            authority === "DESA"
-              ? Math.round(lengthKm * 280000000)
-              : authority === "NASIONAL"
-              ? Math.round(lengthKm * 2400000000)
-              : Math.round(lengthKm * 850000000);
-
-          scannedRoads.push({
-            id: `live-osm-${el.id}`,
-            code: `OSM-${authority.slice(0, 3)}-${el.id.toString().slice(-4)}`,
-            name: `${roadName} (${cityOrRegency})`,
-            authority,
-            authorityLabel,
-            legalBasis,
-            district: [villageOrSuburb, cityOrRegency, stateName].filter(Boolean).join(", "),
-            provinceId: jurisdiction?.provinceId || "all",
-            provinceName: stateName,
-            region: jurisdiction?.provinceId || "all",
-            lengthKm,
-            pavementType:
-              authority === "DESA"
-                ? "Rabat Beton / Lapen Jalan Poros Desa (OSM Live)"
-                : "Aspal Hotmix AC-WC (OSM Live)",
-            condition: "MANTAP",
-            hazardScore: 42,
-            hazardLevel: "SEDANG",
-            activeReportsCount: 1,
-            overdueReportsCount: 0,
-            center: midPt,
-            coordinates: coords,
-            leadership: {
-              regionalHead,
-              headTitle: authority === "DESA" ? "Kepala Desa & Bupati" : "Kepala Daerah",
-              agency,
-              officeAddress: `${cityOrRegency}, ${stateName}`,
-            },
-            problemDetails: {
-              headline: `Pemindaian Spasial Live: ${roadName} (${authority})`,
-              description: `Ruas ${roadName} di ${cityOrRegency}, ${stateName} dipetakan langsung dari jaringan jalan OpenStreetMap (highway=${hw}). Sesuai UU No. 2 Tahun 2022 Pasal 9, ruas ini berstatus Jalan ${authority}.`,
-              rootCause: `Klasifikasi fungsi jalan OSM (${hw}) dan batas administrasi ${cityOrRegency}.`,
-              safetyImpact: "Klik ruas ini untuk menginspeksi kewenangan atau mengirim laporan warga secara real-time.",
-            },
-            budget: {
-              packageId: `PKG-LIVE-${el.id}`,
-              name: `Pemeliharaan Berkala ${roadName} (${cityOrRegency})`,
-              paguRp: estimatedPagu,
-              contractValueRp: Math.round(estimatedPagu * 0.945),
-              contractor: authority === "DESA" ? "Swakelola Padat Karya Tunai Desa (PKTD)" : `Rekanan LPSE ${cityOrRegency}`,
-              fiscalYear: "2026",
-              source: budgetSource,
-              progressStatus: "DALAM_PENGERJAAN",
-              progressPct: 78,
-              matchConfidence: "TERKONFIRMASI",
-            },
-            officialSources: {
-              authoritySource: legalBasis,
-              budgetSource: budgetSource,
-              fieldDataSource: "OpenStreetMap Overpass Live Vector & JagaJalan GIS",
-              transparencyUrl: "https://sigi.pu.go.id",
-            },
+        if (showNotice) {
+          setFloatingNotice({
+            title: `Pemetaan Jalan Aktif: ${payload.areaName || "Area Peta"}`,
+            desc: `Memetakan ${incoming.length} ruas jalan utuh (Nasional, Provinsi, Kab/Kota, & Desa) di ${payload.areaName || "area ini"} secara otomatis.`,
+            type: "success",
           });
         }
-      }
-
-      if (scannedRoads.length > 0) {
-        setLiveViewportRoads((prev) => {
-          const existingIds = new Set(prev.map((r) => r.id));
-          const merged = [...prev];
-          for (const sr of scannedRoads) {
-            if (!existingIds.has(sr.id)) merged.push(sr);
-          }
-          return merged;
-        });
+      } else if (showNotice) {
         setFloatingNotice({
-          title: `Pemindaian GIS: ${cityOrRegency}`,
-          desc: `Berhasil memetakan ${scannedRoads.length} ruas jalan lokal (Kota, Kabupaten, & Desa) secara real-time di sekitar area tampilan peta.`,
-          type: "success",
-        });
-      } else {
-        setFloatingNotice({
-          title: `Area ${cityOrRegency}`,
-          desc: "Geser atau perbesar peta ke area perkotaan/pedesaan lalu klik Pindai Area untuk memuat jaringan jalan lokal.",
+          title: `Area ${payload?.areaName || "Tampilan Peta"}`,
+          desc: "Perbesar peta ke area perkotaan atau permukiman untuk memuat detail jaringan jalan lokal.",
           type: "info",
         });
       }
+    } catch (err) {
+      scannedCellsRef.current.delete(cellKey);
+      if (err?.name === "AbortError") return;
+      if (showNotice) {
+        setFloatingNotice({
+          title: "Koridor Terindeks Aktif",
+          desc: `Menampilkan ${roads.length} koridor Jalan Nasional, Provinsi, Kabupaten, Kota, dan Desa yang terdata di basis data.`,
+          type: "info",
+        });
+      }
+    } finally {
+      if (viewportAbortRef.current === controller) {
+        viewportAbortRef.current = null;
+        setIsScanningViewport(false);
+      }
+    }
+  };
+
+  const handleViewportChange = ({ zoom }) => {
+    if (viewportScanTimerRef.current) {
+      clearTimeout(viewportScanTimerRef.current);
+    }
+    if (zoom < 12.2) return;
+    viewportScanTimerRef.current = setTimeout(() => {
+      scanViewportStreets({ customZoom: zoom, force: false, showNotice: false });
+    }, 850);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (viewportScanTimerRef.current) {
+        clearTimeout(viewportScanTimerRef.current);
+      }
+      if (viewportAbortRef.current) {
+        viewportAbortRef.current.abort();
+      }
+    };
+  }, []);
+
+  const handleScanViewportRoads = async () => {
+    if (isScanningViewport) return;
+    const centerObj = mapInstance?.getCenter?.();
+    const lat = centerObj ? centerObj.lat : mapCenter[0];
+    const lng = centerObj ? centerObj.lng : mapCenter[1];
+    const currentZoom = mapInstance?.getZoom?.() || mapZoom;
+    const targetZoom = currentZoom < 12.5 ? 13 : currentZoom;
+
+    if (currentZoom < 12.5) {
+      moveMapSafely([lat, lng], targetZoom);
+    }
+    const span = 0.055;
+    await scanViewportStreets({
+      customBounds: [lat - span, lng - span, lat + span, lng + span],
+      customZoom: targetZoom,
+      force: true,
+      showNotice: true,
+    });
+  };
+
+  const handleJumpToLocationSearch = async (rawQuery) => {
+    const q = (rawQuery ?? searchQuery).trim();
+    if (!q || isGeocodingSearch) return;
+
+    if (searchSuggestions.roads.length > 0) {
+      const topRoad = searchSuggestions.roads[0];
+      setSearchQuery("");
+      setSearchFocused(false);
+      setSelectedRoad(topRoad);
+      setSelectedReport(reports.find((r) => r.roadSegmentId === topRoad.id) || null);
+      moveMapSafely(topRoad.center, 13.5);
+      const [rLat, rLng] = topRoad.center;
+      scanViewportStreets({
+        customBounds: [rLat - 0.05, rLng - 0.05, rLat + 0.05, rLng + 0.05],
+        customZoom: 13.5,
+        force: false,
+        showNotice: false,
+      });
+      return;
+    }
+
+    if (searchSuggestions.provinces.length > 0) {
+      const topProv = searchSuggestions.provinces[0];
+      setSearchQuery("");
+      setSearchFocused(false);
+      handleSelectProvince(topProv);
+      return;
+    }
+
+    setIsGeocodingSearch(true);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=jsonv2&countrycodes=id&limit=1&accept-language=id&q=${encodeURIComponent(q)}`
+      );
+      if (res.ok) {
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+          const hit = items[0];
+          const lat = Number.parseFloat(hit.lat);
+          const lng = Number.parseFloat(hit.lon);
+          if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+            setSearchQuery("");
+            setSearchFocused(false);
+            moveMapSafely([lat, lng], 13);
+            await scanViewportStreets({
+              customBounds: [lat - 0.055, lng - 0.055, lat + 0.055, lng + 0.055],
+              customZoom: 13,
+              force: true,
+              showNotice: true,
+            });
+          }
+        }
+      }
     } catch {
       setFloatingNotice({
-        title: "Menggunakan Data Koridor Terindeks",
-        desc: "Menampilkan 133 koridor Jalan Nasional, Provinsi, Kabupaten, Kota, dan Desa yang telah terverifikasi di basis data lokal.",
+        title: "Pencarian Lokasi",
+        desc: `Tidak dapat menemukan koordinat "${q}". Coba ketik nama kota, kabupaten, atau provinsi.`,
         type: "info",
       });
     } finally {
-      setIsScanningViewport(false);
+      setIsGeocodingSearch(false);
     }
   };
 
   const handleResetLocation = () => {
-    setMapCenter([-2.5489, 118.0149]);
-    setMapZoom(5);
-    mapInstance?.setView([-2.5489, 118.0149], 5, { animate: true });
+    moveMapSafely([-2.5489, 118.0149], 5);
     setSelectedRegionId("all");
     setSelectedProvinceId(null);
     setFloatingNotice(null);
@@ -873,7 +952,7 @@ export default function MapExplorer({
   // Human-readable highlight filter label
   const highlightFilterLabel = useMemo(() => {
     if (highlightFilter === "OVERDUE") return "Melewati Tenggat Respons";
-    if (highlightFilter === "CRITICAL") return "Rusak Berat (AI >80)";
+    if (highlightFilter === "CRITICAL") return "Rusak Berat (Skor >80)";
     if (highlightFilter === "BUDGET") return "Ada Tender LPSE";
     return "Sorotan Kondisi";
   }, [highlightFilter]);
@@ -930,6 +1009,7 @@ export default function MapExplorer({
           onSelectReport={handleSelectReport}
           onMapClick={handleMapClick}
           onReportAtPoint={handleOpenReportFromPoint}
+          onViewportChange={handleViewportChange}
           showReportsLayer={showReportsLayer}
           showSigiNationalWms={showSigiNationalWms}
           showSigiRegionalWms={showSigiRegionalWms}
@@ -940,7 +1020,7 @@ export default function MapExplorer({
       </div>
 
       {/* Click-away backdrop for floating dropdowns */}
-      {(regionDropdownOpen || statusDropdownOpen || highlightDropdownOpen || reportsFeedOpen) && (
+      {(regionDropdownOpen || statusDropdownOpen || highlightDropdownOpen || reportsFeedOpen || searchFocused) && (
         <div
           className="fixed inset-0 z-[490]"
           onClick={() => {
@@ -948,6 +1028,7 @@ export default function MapExplorer({
             setStatusDropdownOpen(false);
             setHighlightDropdownOpen(false);
             setReportsFeedOpen(false);
+            setSearchFocused(false);
           }}
         />
       )}
@@ -1095,25 +1176,127 @@ export default function MapExplorer({
 
           <div className="w-px h-4 bg-slate-200/90 hidden sm:block shrink-0" />
 
-          {/* Search Bar */}
-          <div className="relative flex-1 min-w-[130px] sm:w-44 md:w-52 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
-            <Search className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+          {/* Search Bar with City / Island / Road Jump */}
+          <div className="relative flex-1 min-w-[140px] sm:w-52 md:w-64 h-9 flex items-center gap-2 px-2.5 bg-slate-50 hover:bg-slate-100/70 focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-500/40 rounded-[6px] ring-1 ring-orange-200/50 font-sans transition-all shrink-0">
+            <Search
+              className={`w-3.5 h-3.5 text-slate-500 shrink-0 ${
+                isGeocodingSearch ? "animate-pulse text-[#c2410c]" : ""
+              }`}
+            />
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari nama jalan / wilayah..."
+              onFocus={() => setSearchFocused(true)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setSearchFocused(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleJumpToLocationSearch();
+                } else if (e.key === "Escape") {
+                  setSearchFocused(false);
+                }
+              }}
+              placeholder="Cari jalan / kota (cth: Gunungsitoli)..."
               className="w-full text-xs text-slate-900 placeholder:text-slate-500 bg-transparent focus-visible:outline-none font-sans"
             />
             {searchQuery && (
               <button
                 type="button"
-                onClick={() => setSearchQuery("")}
+                onClick={() => {
+                  setSearchQuery("");
+                  setSearchFocused(false);
+                }}
                 aria-label="Hapus pencarian jalan"
                 className="p-1 rounded-[4px] text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
+            )}
+
+            {searchFocused && searchQuery.trim().length >= 2 && (
+              <div
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute top-full left-0 mt-1.5 w-76 sm:w-88 rounded-[6px] bg-white shadow-2xl ring-1 ring-orange-200/60 py-1.5 text-xs text-slate-700 z-[650] max-h-80 overflow-y-auto divide-y divide-slate-100"
+              >
+                {searchSuggestions.roads.length > 0 && (
+                  <div className="py-1">
+                    <div className="px-3 py-1 text-[9.5px] font-bold uppercase tracking-wider text-slate-400">
+                      Ruas Jalan Terdata
+                    </div>
+                    {searchSuggestions.roads.map((rd) => (
+                      <button
+                        key={rd.id}
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSearchFocused(false);
+                          handleSelectRoad(rd);
+                          mapInstance?.flyTo(rd.center, 13.5, { duration: 1.1 });
+                          const [rLat, rLng] = rd.center;
+                          scanViewportStreets({
+                            customBounds: [rLat - 0.06, rLng - 0.06, rLat + 0.06, rLng + 0.06],
+                            customZoom: 13.5,
+                            force: false,
+                            showNotice: false,
+                          });
+                        }}
+                        className="w-full text-left px-3 py-1.5 hover:bg-orange-50/70 flex items-start justify-between gap-2 cursor-pointer"
+                      >
+                        <div className="min-w-0">
+                          <div className="font-semibold text-slate-900 truncate">{rd.name}</div>
+                          <div className="text-[10px] text-slate-500 truncate">{rd.district}</div>
+                        </div>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 shrink-0">
+                          {rd.authority}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {searchSuggestions.provinces.length > 0 && (
+                  <div className="py-1">
+                    <div className="px-3 py-1 text-[9.5px] font-bold uppercase tracking-wider text-slate-400">
+                      Provinsi
+                    </div>
+                    {searchSuggestions.provinces.map((pv) => (
+                      <button
+                        key={pv.id}
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSearchFocused(false);
+                          handleSelectProvince(pv);
+                        }}
+                        className="w-full text-left px-3 py-1.5 hover:bg-orange-50/70 flex items-center justify-between gap-2 cursor-pointer"
+                      >
+                        <span className="font-semibold text-slate-900">{pv.name}</span>
+                        <span className="text-[10px] text-slate-500">{pv.capital}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className="p-1.5 bg-slate-50/70">
+                  <button
+                    type="button"
+                    onClick={() => handleJumpToLocationSearch(searchQuery)}
+                    disabled={isGeocodingSearch}
+                    className="w-full text-left px-2.5 py-1.5 rounded-[5px] bg-[#c2410c] hover:bg-[#9a3412] text-white font-bold text-[11px] flex items-center justify-between gap-2 cursor-pointer disabled:opacity-60"
+                  >
+                    <span className="truncate">
+                      {isGeocodingSearch
+                        ? `Mencari & memetakan "${searchQuery.trim()}"...`
+                        : `Lompat & Petakan Jalan di "${searchQuery.trim()}"`}
+                    </span>
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 
@@ -1333,7 +1516,7 @@ export default function MapExplorer({
                 >
                   <div>
                     <div className="font-medium text-slate-800">Rusak Berat</div>
-                    <div className="text-[10px] text-slate-400">AI Skor Kerusakan &gt;80</div>
+                    <div className="text-[10px] text-slate-400">Skor Kerusakan &gt;80</div>
                   </div>
                   <span className="text-[10px] bg-amber-50 text-amber-800 font-bold px-1.5 py-0.5 rounded-[4px] border border-amber-100 font-sans tabular-nums">
                     {criticalRoadCount}
@@ -1387,7 +1570,7 @@ export default function MapExplorer({
                 setStatusDropdownOpen(false);
                 setHighlightDropdownOpen(false);
               }}
-              title="Daftar & Layer Laporan Warga Real-Time (GIS)"
+              title="Daftar & Layer Aduan Warga Real-Time"
               className={`h-8 px-2.5 rounded-[5px] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer font-sans ${
                 reportsFeedOpen
                   ? "bg-orange-50 text-[#c2410c] ring-1 ring-orange-200/80"
@@ -1395,7 +1578,7 @@ export default function MapExplorer({
               }`}
             >
               <MapPin className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
-              <span className="hidden sm:inline">Aduan GIS</span>
+              <span className="hidden sm:inline">Aduan Warga</span>
               <span className="px-1.5 py-0.2 rounded-[4px] bg-orange-100 text-[#9a3412] font-mono tabular-nums text-[10px] font-bold">
                 {filteredReports.length}
               </span>
@@ -1491,7 +1674,7 @@ export default function MapExplorer({
                               : "bg-amber-50 text-amber-800 border border-amber-200"
                           }`}
                         >
-                          AI {rep.hazardScore}/100
+                          Skor {rep.hazardScore}/100
                         </span>
                         <div className="text-[9px] font-mono tabular-nums text-slate-400">
                           {Number(rep.coordinates?.[0] || 0).toFixed(3)}, {Number(rep.coordinates?.[1] || 0).toFixed(3)}
@@ -1887,10 +2070,20 @@ export default function MapExplorer({
           <span className="tabular-nums text-[11px]">{roadCounts.ALL} ruas terdata</span>
         </span>
         <span className="w-px h-3 bg-slate-300" />
-        <span className="flex items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => {
+            setReportsFeedOpen((prev) => !prev);
+            setRegionDropdownOpen(false);
+            setStatusDropdownOpen(false);
+            setHighlightDropdownOpen(false);
+          }}
+          title="Lihat daftar semua aduan warga"
+          className="flex items-center gap-1.5 hover:text-[#c2410c] transition-colors cursor-pointer"
+        >
           <MapPin className="w-3 h-3 text-[#c2410c]" />
-          <span className="tabular-nums text-[11px]">{reports.length} aduan AI</span>
-        </span>
+          <span className="tabular-nums text-[11px]">{reports.length} aduan warga</span>
+        </button>
         <span className="w-px h-3 bg-slate-300" />
         <span className="text-[10.5px] text-emerald-700 font-bold flex items-center gap-1">
           <CheckCircle2 className="w-3 h-3" />
@@ -2481,7 +2674,7 @@ export default function MapExplorer({
                     1. Kondisi Awal (Laporan Warga)
                   </span>
                   <span className="text-[10px] font-mono font-bold text-rose-700">
-                    AI Hazard {currentReport.hazardScore}/100
+                    Skor Bahaya {currentReport.hazardScore}/100
                   </span>
                 </div>
                 <div className="h-60 sm:h-72 bg-slate-900">

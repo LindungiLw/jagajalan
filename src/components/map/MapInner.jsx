@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, WMSTileLayer, Marker, Polyline, Popup, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
@@ -249,16 +249,54 @@ const createReportIcon = (
 
 function MapController({ center, zoom = 11.5, onMapReady }) {
   const map = useMap();
+  const isFirstMountRef = useRef(true);
+  const lastViewRef = useRef({
+    lat: center?.[0],
+    lng: center?.[1],
+    zoom,
+  });
 
   useEffect(() => {
-    if (map && onMapReady) {
+    if (!map) return undefined;
+    if (onMapReady) {
       onMapReady(map);
     }
+    return () => {
+      if (onMapReady) {
+        onMapReady(null);
+      }
+    };
   }, [map, onMapReady]);
 
   useEffect(() => {
-    if (center && map) {
-      map.setView(center, zoom, { animate: true });
+    if (!center || !Array.isArray(center) || center.length < 2 || !map) return;
+    const [lat, lng] = center;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    if (isFirstMountRef.current) {
+      isFirstMountRef.current = false;
+      lastViewRef.current = { lat, lng, zoom };
+      return;
+    }
+
+    const prev = lastViewRef.current;
+    const unchanged =
+      Math.abs((prev.lat ?? 0) - lat) < 1e-6 &&
+      Math.abs((prev.lng ?? 0) - lng) < 1e-6 &&
+      prev.zoom === zoom;
+    if (unchanged) return;
+
+    lastViewRef.current = { lat, lng, zoom };
+
+    // Guard against calling setView when Leaflet is unmounting or map pane is not mounted yet
+    const container = map.getContainer?.();
+    if (!map._loaded || !map._mapPane || !container || !container.isConnected) return;
+
+    try {
+      map.stop();
+      map.setView([lat, lng], zoom, { animate: true });
+    } catch {
+      // Ignore transient Leaflet animation errors during rapid remount/navigation
     }
   }, [center, zoom, map]);
 
@@ -314,8 +352,8 @@ export default function MapInner({
 }) {
   const [currentZoom, setCurrentZoom] = useState(mapZoom);
 
-  // Urutkan layer agar Jalan Provinsi, Kabupaten, Kota, dan Desa selalu di-render di atas Jalan Nasional
-  const sortedRoads = useMemo(() => {
+  // Pre-compute split polyline positions once per road dataset change instead of every render
+  const roadRenderEntries = useMemo(() => {
     const rank = { NASIONAL: 1, PROVINSI: 2, KABUPATEN: 3, KOTA_KAB: 3, KOTA: 4, DESA: 5 };
     const seen = new Set();
     const combined = [];
@@ -325,11 +363,15 @@ export default function MapInner({
         combined.push(r);
       }
     }
-    return combined.sort((a, b) => {
+    combined.sort((a, b) => {
       if (selectedRoad?.id === a.id) return 1;
       if (selectedRoad?.id === b.id) return -1;
       return (rank[a.authority] || 1) - (rank[b.authority] || 1);
     });
+    return combined.map((road) => ({
+      road,
+      positions: getPolylinePositions(road.coordinates),
+    }));
   }, [roads, liveViewportRoads, selectedRoad?.id]);
 
   return (
@@ -338,6 +380,7 @@ export default function MapInner({
       zoom={mapZoom}
       zoomControl={false}
       scrollWheelZoom={true}
+      preferCanvas={true}
       className="w-full h-full"
       style={{ width: "100%", height: "100%" }}
     >
@@ -378,60 +421,34 @@ export default function MapInner({
         />
       )}
 
-      {/* Road Segment Polylines */}
-      {sortedRoads.map((road) => {
-        // Distinct, high-contrast, user-friendly palette matching the platform design (5-Tier UU 2/2022)
-        let color = "#0d9488"; // Kota: Ocean Teal
-        let hoverColor = "#0f766e";
+      {/* Road Segment Polylines (Canvas-accelerated with native 12px click tolerance) */}
+      {roadRenderEntries.map(({ road, positions: polylinePositions }) => {
+        let color = "#0d9488";
         let badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
-        let popupBtnBg = "bg-teal-600 hover:bg-teal-700";
 
         if (road.authority === "NASIONAL") {
-          color = "#2563eb"; // Nasional: Royal Blue (KemenPU)
-          hoverColor = "#1d4ed8";
+          color = "#2563eb";
           badgeBg = "bg-blue-50 text-blue-800 border-blue-200";
-          popupBtnBg = "bg-blue-600 hover:bg-blue-700";
         } else if (road.authority === "PROVINSI") {
-          color = "#9333ea"; // Provinsi: Royal Purple (Bina Marga Pemprov)
-          hoverColor = "#7e22ce";
+          color = "#9333ea";
           badgeBg = "bg-purple-50 text-purple-800 border-purple-200";
-          popupBtnBg = "bg-purple-600 hover:bg-purple-700";
         } else if (road.authority === "KABUPATEN") {
-          color = "#059669"; // Kabupaten: Deep Emerald (Dinas PUPR Pemkab)
-          hoverColor = "#047857";
+          color = "#059669";
           badgeBg = "bg-emerald-50 text-emerald-800 border-emerald-200";
-          popupBtnBg = "bg-emerald-600 hover:bg-emerald-700";
         } else if (road.authority === "KOTA") {
-          color = "#0d9488"; // Kota: Ocean Teal (Dinas PU Pemkot)
-          hoverColor = "#0f766e";
+          color = "#0d9488";
           badgeBg = "bg-teal-50 text-teal-800 border-teal-200";
-          popupBtnBg = "bg-teal-600 hover:bg-teal-700";
         } else if (road.authority === "DESA") {
-          color = "#d97706"; // Desa: Warm Amber-Gold (Dana Desa / Pemdes UU 6/2014)
-          hoverColor = "#b45309";
+          color = "#d97706";
           badgeBg = "bg-amber-50 text-amber-800 border-amber-200";
-          popupBtnBg = "bg-amber-600 hover:bg-amber-700";
         }
 
         const isSelected = selectedRoad?.id === road.id;
         const isRegionalOrLocal = road.authority !== "NASIONAL";
-        const polylinePositions = getPolylinePositions(road.coordinates);
+        if (!polylinePositions || polylinePositions.length === 0) return null;
 
         return (
           <React.Fragment key={road.id}>
-            {/* Click hit area expander */}
-            <Polyline
-              positions={polylinePositions}
-              pathOptions={{
-                color: "transparent",
-                weight: 20,
-                opacity: 0,
-              }}
-              eventHandlers={{
-                click: () => onSelectRoad(road),
-              }}
-            />
-
             {/* Subtle white contrast casing for Provincial, Kabupaten & Kota roads so they pop against National lines */}
             {!isSelected && isRegionalOrLocal && (
               <Polyline
