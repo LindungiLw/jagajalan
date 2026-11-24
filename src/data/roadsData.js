@@ -42,7 +42,7 @@ export const INDONESIA_REGIONS = [
     island: "Nasional",
     center: [-2.5489, 118.0149],
     zoom: 5,
-    description: "Jaringan 20 koridor arteri primer Jalan Nasional melintasi 38 provinsi di bawah SK Menteri PUPR No. 1688/KPTS/M/2022."
+    description: "Jaringan 40 koridor arteri primer Jalan Nasional melintasi 38 provinsi di bawah SK Menteri PUPR No. 1688/KPTS/M/2022."
   },
   {
     id: "sumatera",
@@ -110,10 +110,10 @@ export const PROVINCIAL_NETWORK_STATS = {
   totalKabupatenKotaKmIndonesia: 431035,
   totalVillageKmIndonesia: 316000.0,
   totalProvinces: 38,
-  activeCuratedProvincialCorridors: 26,
-  activeCuratedNationalCorridors: 29,
-  activeCuratedCityRegencyCorridors: 58,
-  activeCuratedVillageCorridors: 15,
+  activeCuratedProvincialCorridors: 72,
+  activeCuratedNationalCorridors: 40,
+  activeCuratedCityRegencyCorridors: 177,
+  activeCuratedVillageCorridors: 46,
   activeCuratedPilotRoads: 6,
   dataSource: "BPS (2026) Data Panjang Jalan 2025 x PUSDATIN SIGI Kementerian PU x Kemendesa PDTT (Dana Desa) x SK Kepala Daerah 38 Provinsi",
 };
@@ -125,13 +125,13 @@ export const INDONESIA_PROVINCES = [
     name: "Aceh",
     region: "sumatera",
     capital: "Banda Aceh",
-    center: [4.695, 96.749],
-    zoom: 8,
-    governor: "Gubernur Seluruh Indonesia (Jalan Nasional)",
+    center: [5.5483, 95.3238],
+    zoom: 10,
+    governor: "Gubernur Aceh",
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Pemerintah Aceh",
     totalProvincialKm: 2086.11,
     skNumber: "SK Gubernur Aceh No. 620/124/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "sumatera_utara",
@@ -170,7 +170,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas PUPR, Perumahan, Kawasan Permukiman dan Pertanahan Provinsi Riau",
     totalProvincialKm: 3280.92,
     skNumber: "SK Gubernur Riau No. Kpts.882/XI/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "kepulauan_riau",
@@ -183,7 +183,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum, Penataan Ruang dan Pertanahan Provinsi Kepri",
     totalProvincialKm: 507.64,
     skNumber: "SK Gubernur Kepri No. 1205/2022",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "jambi",
@@ -196,7 +196,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Perumahan Rakyat Provinsi Jambi",
     totalProvincialKm: 1209.93,
     skNumber: "SK Gubernur Jambi No. 248/KEP.GUB/D-PUPR/2022",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "sumatera_selatan",
@@ -209,7 +209,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pengelolaan Sumber Daya Air dan Bina Marga Provinsi Sumsel",
     totalProvincialKm: 1773.70,
     skNumber: "SK Gubernur Sumsel No. 675/KPTS/PUBM-TR/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "bengkulu",
@@ -222,7 +222,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Bengkulu",
     totalProvincialKm: 1828.07,
     skNumber: "SK Gubernur Bengkulu No. G.385.DPU-TR/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "lampung",
@@ -235,7 +235,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Bina Marga dan Bina Konstruksi Provinsi Lampung",
     totalProvincialKm: 1984.28,
     skNumber: "SK Gubernur Lampung No. G/244/B.IV/HK/2023",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "bangka_belitung",
@@ -248,7 +248,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Kepulauan Babel",
     totalProvincialKm: 996.53,
     skNumber: "SK Gubernur Babel No. 188.44/621/PUPR/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "dki_jakarta",
@@ -359,8 +359,8 @@ export const INDONESIA_PROVINCES = [
     name: "Nusa Tenggara Timur",
     region: "bali_nusra",
     capital: "Kupang",
-    center: [-8.6574, 121.0794],
-    zoom: 8,
+    center: [-10.1772, 123.6070],
+    zoom: 10,
     governor: "Gubernur Nusa Tenggara Timur",
     agency: "Dinas Pekerjaan Umum dan Perumahan Rakyat Provinsi NTT",
     totalProvincialKm: 3105.38,
@@ -391,7 +391,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Kalteng",
     totalProvincialKm: 1490.58,
     skNumber: "SK Gubernur Kalteng No. 188.44/420/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "kalimantan_selatan",
@@ -404,7 +404,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Kalsel",
     totalProvincialKm: 1024.78,
     skNumber: "SK Gubernur Kalsel No. 188.44/0488/KUM/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "kalimantan_timur",
@@ -430,7 +430,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum, Penataan Ruang, Perumahan dan Kawasan Permukiman Kaltara",
     totalProvincialKm: 1014.82,
     skNumber: "SK Gubernur Kaltara No. 188.44/K.578/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "sulawesi_utara",
@@ -456,7 +456,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Gorontalo",
     totalProvincialKm: 404.29,
     skNumber: "SK Gubernur Gorontalo No. 240/18/VIII/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "sulawesi_tengah",
@@ -469,7 +469,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Bina Marga dan Penataan Ruang Provinsi Sulawesi Tengah",
     totalProvincialKm: 1912.45,
     skNumber: "SK Gubernur Sulteng No. 620/338/DIS.BMPR-G.ST/2022",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "sulawesi_barat",
@@ -482,7 +482,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Sulawesi Barat",
     totalProvincialKm: 597.64,
     skNumber: "SK Gubernur Sulbar No. 188.4/426/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "sulawesi_selatan",
@@ -508,7 +508,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Sumber Daya Air dan Bina Marga Provinsi Sulawesi Tenggara",
     totalProvincialKm: 1185.90,
     skNumber: "SK Gubernur Sultra No. 420 Tahun 2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "maluku",
@@ -521,7 +521,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Maluku",
     totalProvincialKm: 1312.46,
     skNumber: "SK Gubernur Maluku No. 382 Tahun 2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "maluku_utara",
@@ -534,7 +534,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Maluku Utara",
     totalProvincialKm: 1546.83,
     skNumber: "SK Gubernur Malut No. 290/KPTS/MU/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "papua",
@@ -560,7 +560,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Papua Barat",
     totalProvincialKm: 1218.72,
     skNumber: "SK Gubernur Papua Barat No. 188.45/140/2021",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "papua_selatan",
@@ -573,7 +573,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Papua Selatan",
     totalProvincialKm: 1078.09,
     skNumber: "SK Gubernur Papua Selatan No. 620/012/2023",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "papua_tengah",
@@ -586,7 +586,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Provinsi Papua Tengah",
     totalProvincialKm: 1042.94,
     skNumber: "SK Gubernur Papua Tengah No. 620/024/2023",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "papua_pegunungan",
@@ -599,7 +599,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Perumahan Rakyat Papua Pegunungan",
     totalProvincialKm: 914.04,
     skNumber: "SK Gubernur Papua Pegunungan No. 620/018/2023",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
   {
     id: "papua_barat_daya",
@@ -612,7 +612,7 @@ export const INDONESIA_PROVINCES = [
     agency: "Dinas Pekerjaan Umum dan Penataan Ruang Papua Barat Daya",
     totalProvincialKm: 808.57,
     skNumber: "SK Gubernur Papua Barat Daya No. 620/009/2023",
-    hasPilotCorridor: false,
+    hasPilotCorridor: true,
   },
 ];
 
@@ -629,7 +629,10 @@ export function detectJurisdictionByCoordinates(lat, lng, roads = []) {
 
   for (const road of roads) {
     if (!road.coordinates || road.coordinates.length === 0) continue;
-    for (const [rLat, rLng] of road.coordinates) {
+    const flatPts = Array.isArray(road.coordinates[0]?.[0])
+      ? road.coordinates.flat()
+      : road.coordinates;
+    for (const [rLat, rLng] of flatPts) {
       const dLat = (lat - rLat) * 111;
       const dLng = (lng - rLng) * 111 * Math.cos((lat * Math.PI) / 180);
       const dist = Math.sqrt(dLat * dLat + dLng * dLng);
