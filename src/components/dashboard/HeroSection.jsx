@@ -22,7 +22,6 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
-import { ROAD_SEGMENTS } from "@/data/roadsData";
 import { INITIAL_REPORTS } from "@/data/reportsData";
 import { ANNUAL_HISTORICAL_DATA, NATIONAL_STATS } from "@/data/provincesData";
 import RoadDetailModal from "@/components/modals/RoadDetailModal";
@@ -41,7 +40,7 @@ function getPaginationItems(current, total) {
 }
 
 export default function HeroSection({
-  roads = ROAD_SEGMENTS,
+  roads = [],
   reports = INITIAL_REPORTS,
   onExploreData,
   onExploreMap,

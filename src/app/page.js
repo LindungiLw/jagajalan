@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import dynamic from "next/dynamic";
 import {
   BellRing,
   CheckCircle2,
@@ -8,30 +9,60 @@ import {
   MapPin,
   X,
   ArrowRight,
+  Loader2,
 } from "lucide-react";
-import {
-  Navbar,
-  Footer,
-  SerpentineRoadBackground,
-  HeroSection,
-  NationalRankingSection,
-  MapExplorer,
-  ReportModal,
-  OmbudsmanModal,
-  OfficerDashboard,
-  OfficerLogin,
-  BudgetDataExplorer,
-  AnnualProgressChart,
-  CivicWorkflowSection,
-  LegalBasisSection,
-  OmbudsmanMonitorSection,
-} from "@/components";
-import {
-  ROAD_SEGMENTS,
-  INITIAL_REPORTS,
-  getActiveOfficerSession,
-  clearOfficerSession,
-} from "@/data";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import SerpentineRoadBackground from "@/components/layout/SerpentineRoadBackground";
+import HeroSection from "@/components/dashboard/HeroSection";
+import CivicWorkflowSection from "@/components/dashboard/CivicWorkflowSection";
+import LegalBasisSection from "@/components/dashboard/LegalBasisSection";
+import roadsMetaData from "@/data/roadsMetaData.json";
+import { INITIAL_REPORTS } from "@/data/reportsData";
+import { getActiveOfficerSession, clearOfficerSession } from "@/data/officersData";
+import { db } from "@/lib/firebase";
+
+const TabLoader = ({ label = "Memuat modul..." }) => (
+  <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-slate-500 font-sans">
+    <Loader2 className="w-6 h-6 animate-spin text-[#c2410c]" />
+    <span className="text-xs font-medium">{label}</span>
+  </div>
+);
+
+const MapExplorer = dynamic(() => import("@/components/map/MapExplorer"), {
+  ssr: false,
+  loading: () => <TabLoader label="Memuat peta transparansi jalan..." />,
+});
+const BudgetDataExplorer = dynamic(
+  () => import("@/components/dashboard/BudgetDataExplorer"),
+  { loading: () => <TabLoader label="Memuat data anggaran & tender LPSE..." /> }
+);
+const AnnualProgressChart = dynamic(
+  () => import("@/components/dashboard/AnnualProgressChart"),
+  { loading: () => <TabLoader label="Memuat grafik perkembangan nasional..." /> }
+);
+const NationalRankingSection = dynamic(
+  () => import("@/components/dashboard/NationalRankingSection"),
+  { loading: () => <TabLoader label="Memuat peringkat 38 provinsi..." /> }
+);
+const OmbudsmanMonitorSection = dynamic(
+  () => import("@/components/dashboard/OmbudsmanMonitorSection"),
+  { loading: () => <TabLoader label="Memuat pelacak laporan & SLA..." /> }
+);
+const OfficerDashboard = dynamic(
+  () => import("@/components/dashboard/OfficerDashboard"),
+  { loading: () => <TabLoader label="Memuat dasbor Portal Dinas..." /> }
+);
+const OfficerLogin = dynamic(
+  () => import("@/components/dashboard/OfficerLogin"),
+  { loading: () => <TabLoader label="Memuat halaman masuk Portal Dinas..." /> }
+);
+const ReportModal = dynamic(() => import("@/components/modals/ReportModal"), {
+  ssr: false,
+});
+const OmbudsmanModal = dynamic(() => import("@/components/modals/OmbudsmanModal"), {
+  ssr: false,
+});
 
 function mergeReportsById(...reportLists) {
   const seen = new Set();
@@ -196,7 +227,8 @@ function buildInitialSeedNotifications(reports) {
 
 export default function Home() {
   const [activeTab, setActiveTabState] = useState("beranda");
-  const [roads, setRoads] = useState(ROAD_SEGMENTS);
+  const [roads, setRoads] = useState(roadsMetaData);
+  const fullGeometryLoadedRef = useRef(false);
   const [reports, setReports] = useState(INITIAL_REPORTS);
   const [notifications, setNotifications] = useState(() =>
     buildInitialSeedNotifications(INITIAL_REPORTS)
@@ -290,6 +322,30 @@ export default function Home() {
       }
     }
 
+    let firestoreReports = [];
+    if (db) {
+      try {
+        const { collection, getDocs } = await import("firebase/firestore");
+        const snap = await getDocs(collection(db, "reports"));
+        firestoreReports = snap.docs
+          .map((docSnap) => {
+            const d = docSnap.data();
+            if (!d || typeof d !== "object") return null;
+            return {
+              ...d,
+              id: d.id || `FS-${docSnap.id}`,
+              photoUrl:
+                d.photoUrl && d.photoUrl !== "[LOCAL_COMPRESSED_IMAGE]"
+                  ? d.photoUrl
+                  : "/images/roads/jalan-lubang-medan.jpg",
+            };
+          })
+          .filter(Boolean);
+      } catch {
+        // Silent fallback if Firestore read rules or offline mode apply
+      }
+    }
+
     try {
       const res = await fetch("/api/reports", { cache: "no-store" });
       if (res.ok) {
@@ -297,7 +353,7 @@ export default function Home() {
         if (Array.isArray(payload?.data)) {
           setReports((prev) =>
             applyReportOverrides(
-              mergeReportsById(localCustom, payload.data, prev, INITIAL_REPORTS),
+              mergeReportsById(localCustom, firestoreReports, payload.data, prev, INITIAL_REPORTS),
               localOverrides
             )
           );
@@ -310,12 +366,12 @@ export default function Home() {
         return;
       }
     } catch {
-      // Fallback to local + initial reports if API unreachable
+      // Fallback to local + Firestore + initial reports if API unreachable
     }
 
     setReports((prev) =>
       applyReportOverrides(
-        mergeReportsById(localCustom, prev, INITIAL_REPORTS),
+        mergeReportsById(localCustom, firestoreReports, prev, INITIAL_REPORTS),
         localOverrides
       )
     );
@@ -324,53 +380,88 @@ export default function Home() {
     }
   }, []);
 
+  const ensureFullRoadGeometryLoaded = useCallback(async () => {
+    if (fullGeometryLoadedRef.current) return;
+    fullGeometryLoadedRef.current = true;
+    try {
+      const mod = await import("@/data/roadsData");
+      if (Array.isArray(mod?.ROAD_SEGMENTS)) {
+        const geomById = new Map(mod.ROAD_SEGMENTS.map((r) => [r.id, r.coordinates]));
+        setRoads((prev) =>
+          prev.map((road) =>
+            road.coordinates && road.coordinates.length >= 2
+              ? road
+              : { ...road, coordinates: geomById.get(road.id) || [] }
+          )
+        );
+      }
+    } catch {
+      fullGeometryLoadedRef.current = false;
+    }
+  }, []);
+
   useEffect(() => {
-    const session = getActiveOfficerSession();
-    if (session) {
-      setOfficerSession(session);
-    }
+    if (activeTab !== "peta") return undefined;
+    const timer = setTimeout(() => {
+      ensureFullRoadGeometryLoaded();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [activeTab, ensureFullRoadGeometryLoaded]);
 
-    if (typeof window !== "undefined") {
-      try {
-        const rawRead = window.localStorage.getItem("jagajalan_read_notifs_v1");
-        if (rawRead) {
-          const parsedRead = JSON.parse(rawRead);
-          if (Array.isArray(parsedRead)) setReadNotificationIds(parsedRead);
-        }
-        const rawSubs = window.localStorage.getItem("jagajalan_subscribed_tickets_v1");
-        if (rawSubs) {
-          const parsedSubs = JSON.parse(rawSubs);
-          if (Array.isArray(parsedSubs)) setSubscribedTickets(parsedSubs);
-        }
-        const rawUpvotes = window.localStorage.getItem("jagajalan_upvoted_reports_v1");
-        if (rawUpvotes) {
-          const parsedUpvotes = JSON.parse(rawUpvotes);
-          if (Array.isArray(parsedUpvotes)) setUpvotedReportIds(parsedUpvotes);
-        }
-      } catch {
-        // Ignore parse error
+  useEffect(() => {
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      const session = getActiveOfficerSession();
+      if (session) {
+        setOfficerSession(session);
       }
 
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get("tab");
-      const hash = window.location.hash.replace("#", "");
-      const validTabs = ["beranda", "peta", "data-anggaran", "ombudsman", "nasional", "dinas"];
-      if (
-        tabParam === "admin" ||
-        hash === "admin" ||
-        tabParam === "portaldinas" ||
-        hash === "portaldinas"
-      ) {
-        setActiveTabState("dinas");
-      } else if (tabParam && validTabs.includes(tabParam)) {
-        setActiveTabState(tabParam);
-      } else if (hash && validTabs.includes(hash)) {
-        setActiveTabState(hash);
-      }
-    }
+      if (typeof window !== "undefined") {
+        try {
+          const rawRead = window.localStorage.getItem("jagajalan_read_notifs_v1");
+          if (rawRead) {
+            const parsedRead = JSON.parse(rawRead);
+            if (Array.isArray(parsedRead)) setReadNotificationIds(parsedRead);
+          }
+          const rawSubs = window.localStorage.getItem("jagajalan_subscribed_tickets_v1");
+          if (rawSubs) {
+            const parsedSubs = JSON.parse(rawSubs);
+            if (Array.isArray(parsedSubs)) setSubscribedTickets(parsedSubs);
+          }
+          const rawUpvotes = window.localStorage.getItem("jagajalan_upvoted_reports_v1");
+          if (rawUpvotes) {
+            const parsedUpvotes = JSON.parse(rawUpvotes);
+            if (Array.isArray(parsedUpvotes)) setUpvotedReportIds(parsedUpvotes);
+          }
+        } catch {
+          // Ignore parse error
+        }
 
-    syncReportsFromBackend();
-    const intervalId = setInterval(syncReportsFromBackend, 10000);
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get("tab");
+        const hash = window.location.hash.replace("#", "");
+        const validTabs = ["beranda", "peta", "data-anggaran", "ombudsman", "nasional", "dinas"];
+        if (
+          tabParam === "admin" ||
+          hash === "admin" ||
+          tabParam === "portaldinas" ||
+          hash === "portaldinas"
+        ) {
+          setActiveTabState("dinas");
+        } else if (tabParam && validTabs.includes(tabParam)) {
+          setActiveTabState(tabParam);
+        } else if (hash && validTabs.includes(hash)) {
+          setActiveTabState(hash);
+        }
+      }
+      syncReportsFromBackend();
+    });
+
+    const intervalId = setInterval(syncReportsFromBackend, 15000);
+    const prefetchTimer = setTimeout(() => {
+      ensureFullRoadGeometryLoaded();
+    }, 2200);
 
     let bc = null;
     if (typeof window !== "undefined" && "BroadcastChannel" in window) {
@@ -394,10 +485,12 @@ export default function Home() {
     }
 
     return () => {
+      cancelled = true;
       clearInterval(intervalId);
+      clearTimeout(prefetchTimer);
       if (bc) bc.close();
     };
-  }, [syncReportsFromBackend, pushLiveNotification]);
+  }, [syncReportsFromBackend, pushLiveNotification, ensureFullRoadGeometryLoaded]);
 
   const unreadCount = useMemo(() => {
     return notifications.filter((n) => !readNotificationIds.includes(n.id)).length;
@@ -683,10 +776,16 @@ export default function Home() {
     try {
       await fetch("/api/reports", {
         method: "PATCH",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
+          ...(officerSession?.sessionToken
+            ? {
+                Authorization: `Bearer ${officerSession.sessionToken}`,
+                "X-Officer-Token": officerSession.sessionToken,
+              }
+            : {}),
           "X-Officer-Id": officerSession?.id || "DEMO-001",
-          "X-Officer-Token": officerSession?.sessionToken || "",
         },
         body: JSON.stringify({ id: reportId, ...updatedFields }),
       });
@@ -1008,27 +1107,30 @@ export default function Home() {
 
       {activeTab !== "peta" && activeTab !== "dinas" && <Footer onSelectTab={setActiveTab} activeTab={activeTab} />}
 
-      {/* Global Modals (Rendered at Root with Z-[2000]) */}
-      <ReportModal
-        isOpen={reportModalOpen}
-        onClose={() => {
-          setReportModalOpen(false);
-          setReportInitialLocation(null);
-        }}
-        roads={roads}
-        initialLocation={reportInitialLocation}
-        onNewReportAdded={handleAddNewReport}
-        onViewReportOnMap={handleViewReportOnMap}
-      />
+      {reportModalOpen && (
+        <ReportModal
+          isOpen={reportModalOpen}
+          onClose={() => {
+            setReportModalOpen(false);
+            setReportInitialLocation(null);
+          }}
+          roads={roads}
+          initialLocation={reportInitialLocation}
+          onNewReportAdded={handleAddNewReport}
+          onViewReportOnMap={handleViewReportOnMap}
+        />
+      )}
 
-      <OmbudsmanModal
-        isOpen={ombudsmanModalOpen}
-        onClose={() => {
-          setOmbudsmanModalOpen(false);
-          setSelectedOmbudsmanReport(null);
-        }}
-        report={selectedOmbudsmanReport}
-      />
+      {ombudsmanModalOpen && (
+        <OmbudsmanModal
+          isOpen={ombudsmanModalOpen}
+          onClose={() => {
+            setOmbudsmanModalOpen(false);
+            setSelectedOmbudsmanReport(null);
+          }}
+          report={selectedOmbudsmanReport}
+        />
+      )}
     </div>
   );
 }
