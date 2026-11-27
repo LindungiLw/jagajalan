@@ -41,16 +41,78 @@ function formatRupiahShort(amount) {
   return `Rp ${Number(amount).toLocaleString("id-ID")}`;
 }
 
-// Dataset historis alokasi APBN Ditjen Bina Marga Kementerian PU (2020 – 2025) dalam Triliun Rupiah
-// Rujukan: Nota Keuangan RAPBN & rilis pagu Ditjen Bina Marga Kementerian PUPR/PU (2023 mencakup tambahan IJD & IKN)
-const HISTORICAL_BAR_DATA = [
-  { year: "2020", pagu: 42.95, kontrak: 39.1, paguRp: "Rp 42,95 T", kontrakRp: "±Rp 39,1 T" },
-  { year: "2021", pagu: 53.96, kontrak: 50.2, paguRp: "Rp 53,96 T", kontrakRp: "±Rp 50,2 T" },
-  { year: "2022", pagu: 39.70, kontrak: 37.4, paguRp: "Rp 39,70 T", kontrakRp: "±Rp 37,4 T" },
-  { year: "2023", pagu: 78.96, kontrak: 73.4, paguRp: "Rp 78,96 T", kontrakRp: "±Rp 73,4 T" },
-  { year: "2024", pagu: 55.39, kontrak: 51.5, paguRp: "Rp 55,39 T", kontrakRp: "±Rp 51,5 T" },
-  { year: "2025", pagu: 37.41, kontrak: 34.8, paguRp: "Rp 37,41 T", kontrakRp: "±Rp 34,8 T" },
+// Data resmi Pagu APBN Awal vs Pagu DIPA Akhir/Efektif Ditjen Bina Marga Kementerian PU (2020–2025) dalam Rp Triliun.
+// Sumber: RDP Komisi V DPR RI, LAKIP Ditjen Bina Marga, & rilis resmi pu.go.id.
+const BINA_MARGA_APBN_DATA = [
+  {
+    year: "2020",
+    paguAwal: 42.95,
+    paguRevisi: 48.45,
+    paguAwalRp: "Rp 42,95 T",
+    paguRevisiRp: "Rp 48,45 T",
+    note: "Realisasi Rp 47,25 T (97,52%) — RDP Komisi V Jan 2021",
+  },
+  {
+    year: "2021",
+    paguAwal: 53.96,
+    paguRevisi: 66.37,
+    paguAwalRp: "Rp 53,96 T",
+    paguRevisiRp: "Rp 66,37 T",
+    note: "Realisasi Rp 63,63 T (95,87%) — LAKIP Bina Marga",
+  },
+  {
+    year: "2022",
+    paguAwal: 39.70,
+    paguRevisi: 58.14,
+    paguAwalRp: "Rp 39,70 T",
+    paguRevisiRp: "Rp 58,14 T",
+    note: "Realisasi Rp 54,49 T (93,71%) — LAKIP Bina Marga",
+  },
+  {
+    year: "2023*",
+    paguAwal: 49.31,
+    paguRevisi: 78.96,
+    paguAwalRp: "Rp 49,31 T",
+    paguRevisiRp: "Rp 78,96 T",
+    note: "Termasuk tambahan IJD Rp 14,64 T, IKN, JTTS & LMAN",
+  },
+  {
+    year: "2024",
+    paguAwal: 55.39,
+    paguRevisi: 55.39,
+    paguAwalRp: "Rp 55,39 T",
+    paguRevisiRp: "Rp 55,39 T",
+    note: "Pagu definitif awal; dukungan IKN Rp 18,32 T — pu.go.id",
+  },
+  {
+    year: "2025*",
+    paguAwal: 37.41,
+    paguRevisi: 28.78,
+    paguAwalRp: "Rp 37,41 T",
+    paguRevisiRp: "Rp 28,78 T",
+    note: "Pagu efektif pasca rekonstruksi efisiensi Inpres 1/2025",
+  },
 ];
+
+// Data resmi Pagu DIPA Efektif vs Realisasi Keuangan APBN Kementerian PUPR / PU (2020–2025) dalam Rp Triliun.
+// Sumber: Laporan Kinerja (LAKIP) KemenPUPR 2020–2024 & Evaluasi Pelaksanaan APBN KemenPU TA 2025 (pu.go.id).
+const KEMENPU_REALISASI_DATA = [
+  { year: "2020", pagu: 107.15, realisasi: 100.72, serapanPct: 93.99 },
+  { year: "2021", pagu: 152.09, realisasi: 143.29, serapanPct: 94.21 },
+  { year: "2022", pagu: 125.99, realisasi: 118.03, serapanPct: 93.70 },
+  { year: "2023", pagu: 182.02, realisasi: 174.57, serapanPct: 95.90 },
+  { year: "2024", pagu: 174.13, realisasi: 162.85, serapanPct: 93.52 },
+  { year: "2025", pagu: 112.13, realisasi: 106.78, serapanPct: 95.23 },
+];
+
+const BINA_MARGA_TOTAL_AWAL_T = BINA_MARGA_APBN_DATA.reduce((sum, d) => sum + d.paguAwal, 0);
+const BINA_MARGA_AVG_AWAL_T = BINA_MARGA_TOTAL_AWAL_T / BINA_MARGA_APBN_DATA.length;
+const KEMENPU_TOTAL_PAGU_T = KEMENPU_REALISASI_DATA.reduce((sum, d) => sum + d.pagu, 0);
+const KEMENPU_TOTAL_REALISASI_T = KEMENPU_REALISASI_DATA.reduce((sum, d) => sum + d.realisasi, 0);
+const KEMENPU_AVG_SERAPAN_PCT = (KEMENPU_TOTAL_REALISASI_T / KEMENPU_TOTAL_PAGU_T) * 100;
+const IJD_TAHAP_1_2023_T = 14.6;
+const IJD_INPRES_2025_T = 10.21;
+const IJD_TOTAL_T = IJD_TAHAP_1_2023_T + IJD_INPRES_2025_T;
 
 // Helper kurva bezier halus (Cubic Bezier Spline) untuk Area Chart
 function getSmoothCurvePath(points) {
@@ -435,22 +497,20 @@ export default function BudgetDataExplorer({
     return filteredPackages.slice(start, start + pageSize);
   }, [filteredPackages, currentPage, pageSize]);
 
-  // Precomputed SVG coordinate points for Area Chart (Alokasi vs Estimasi Serapan Bina Marga dalam Triliun Rp, skala 0 - 80 T)
+  // Koordinat SVG Area Chart Pagu DIPA Efektif vs Realisasi Keuangan KemenPU (skala 0 – 200 T)
   const areaPoints = useMemo(() => {
-    const years = HISTORICAL_BAR_DATA.map((d) => d.year);
-    const upperVals = HISTORICAL_BAR_DATA.map((d) => d.pagu);
-    const lowerVals = HISTORICAL_BAR_DATA.map((d) => d.kontrak);
+    const years = KEMENPU_REALISASI_DATA.map((d) => d.year);
 
-    const upperPts = years.map((yr, i) => {
+    const upperPts = KEMENPU_REALISASI_DATA.map((d, i) => {
       const x = 50 + i * 86;
-      const y = 180 - (upperVals[i] / 80) * 150;
-      return { x, y, year: yr, val: upperVals[i] };
+      const y = 180 - (d.pagu / 200) * 150;
+      return { x, y, year: d.year, val: d.pagu, serapanPct: d.serapanPct };
     });
 
-    const lowerPts = years.map((yr, i) => {
+    const lowerPts = KEMENPU_REALISASI_DATA.map((d, i) => {
       const x = 50 + i * 86;
-      const y = 180 - (lowerVals[i] / 80) * 150;
-      return { x, y, year: yr, val: lowerVals[i] };
+      const y = 180 - (d.realisasi / 200) * 150;
+      return { x, y, year: d.year, val: d.realisasi, serapanPct: d.serapanPct };
     });
 
     const upperLine = getSmoothCurvePath(upperPts);
@@ -519,11 +579,11 @@ export default function BudgetDataExplorer({
       filename: "Laporan_Audit_Anggaran_LPSE_JagaJalan",
       sheetName: "Audit Anggaran LPSE",
       title: "LAPORAN TRANSPARANSI ANGGARAN & AUDIT KONTRAK LPSE — JAGAJALAN",
-      subtitle: `Filter Kewenangan: ${selectedAuthority} • Total ${filteredPackages.length} Paket Pengadaan Terverifikasi`,
+      subtitle: `Filter Kewenangan: ${selectedAuthority} • Total ${filteredPackages.length} Paket Kurasi Pilot (Model LPSE)`,
       summaryMetrics: [
-        { label: "Total Anggaran (Pagu HPS)", value: formatRupiahShort(totalPagu) },
+        { label: "Total Pagu HPS Pilot", value: formatRupiahShort(totalPagu) },
         { label: "Realisasi Kontrak (SPK)", value: formatRupiahShort(totalContract) },
-        { label: "Efisiensi Lelang LPSE", value: `${formatRupiahShort(totalEfficiency)} (${efficiencyPercent}%)` },
+        { label: "Efisiensi Lelang Pilot", value: `${formatRupiahShort(totalEfficiency)} (${efficiencyPercent}%)` },
         { label: "Atensi Audit & Fisik", value: `${anomalyCount} Paket` },
       ],
       columns: budgetExportColumns,
@@ -534,14 +594,14 @@ export default function BudgetDataExplorer({
   const handleExportBudgetPDF = () => {
     exportToPDF({
       title: "Laporan Transparansi Anggaran & Audit Kontrak LPSE",
-      subtitle: `Rekapitulasi Paket Pengadaan Jalan (${selectedAuthority}) — SiRUP LKPP & Kementerian PU`,
+      subtitle: `Rekapitulasi Paket Kurasi Pilot (${selectedAuthority}) — Model Integrasi SiRUP LKPP & Kementerian PU`,
       documentCode: "JGJ-LPSE-AUDIT",
       orientation: "landscape",
       summaryMetrics: [
         {
-          label: "Total Anggaran (Pagu HPS)",
+          label: "Total Pagu HPS Pilot",
           value: formatRupiahShort(totalPagu),
-          sub: `${filteredPackages.length} Paket Terverifikasi`,
+          sub: `${filteredPackages.length} Paket Kurasi Pilot`,
         },
         {
           label: "Realisasi Kontrak (SPK)",
@@ -567,20 +627,19 @@ export default function BudgetDataExplorer({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4 animate-fade-in text-slate-800">
       {/* ========================================================================= */}
-      {/* TIER 1: 4 TOP STAT CARDS                                                  */}
+      {/* TIER 1: 4 TOP STAT CARDS (DATA MAKRO RESMI APBN KEMENTERIAN PU)           */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        {/* Card 1: Total Pagu Anggaran (Orange theme) */}
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
-              Total Anggaran (Pagu HPS)
+              Pagu Awal Bina Marga (2020–2025)
             </span>
             <div className="text-2xl sm:text-[27px] font-bold text-slate-900 tracking-tight font-sans tabular-nums mt-1">
-              {formatRupiahShort(totalPagu)}
+              Rp {BINA_MARGA_TOTAL_AWAL_T.toFixed(2).replace(".", ",")} Triliun
             </div>
             <p className="text-[11.5px] text-slate-500 font-sans mt-1">
-              {filteredPackages.length} Paket Kurasi Pilot (Model LPSE)
+              Rata-rata Rp {BINA_MARGA_AVG_AWAL_T.toFixed(2).replace(".", ",")} T/tahun (APBN 6 Tahun)
             </p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
@@ -588,122 +647,108 @@ export default function BudgetDataExplorer({
           </div>
         </div>
 
-        {/* Card 2: Realisasi Kontrak SPK (Blue theme) */}
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
-              Realisasi Kontrak (SPK)
+              Pagu Efektif Bina Marga TA 2025
             </span>
             <div className="text-2xl sm:text-[27px] font-bold text-slate-900 tracking-tight font-sans tabular-nums mt-1">
-              {formatRupiahShort(totalContract)}
+              Rp 28,78 Triliun
             </div>
             <p className="text-[11.5px] text-blue-700 font-sans mt-1 font-medium">
-              {((totalContract / (totalPagu || 1)) * 100).toFixed(1)}% Penyerapan Terikat SPK
+              36,83% Pagu Efektif KemenPU (Pasca Efisiensi)
             </p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div
-              className="h-full bg-blue-600 rounded-full"
-              style={{ width: `${Math.min(100, (totalContract / (totalPagu || 1)) * 100)}%` }}
-            />
+            <div className="h-full bg-blue-600 rounded-full" style={{ width: "36.83%" }} />
           </div>
         </div>
 
-        {/* Card 3: Efisiensi Lelang LPSE (Emerald theme) */}
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
-              Efisiensi Lelang LPSE
+              Realisasi APBN KemenPU TA 2025
             </span>
             <div className="text-2xl sm:text-[27px] font-bold text-emerald-700 tracking-tight font-sans tabular-nums mt-1">
-              {formatRupiahShort(totalEfficiency)}
+              Rp 106,78 Triliun
             </div>
             <p className="text-[11.5px] text-emerald-700 font-sans mt-1 font-medium">
-              Hemat {efficiencyPercent}% Dari Nilai Pagu
+              95,23% dari Pagu Rp 112,13 T (Fisik 95,17%)
             </p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-            <div
-              className="h-full bg-emerald-600 rounded-full"
-              style={{ width: `${Math.min(100, Math.max(12, Number(efficiencyPercent) * 10))}%` }}
-            />
+            <div className="h-full bg-emerald-600 rounded-full" style={{ width: "95.23%" }} />
           </div>
         </div>
 
-        {/* Card 4: Atensi Audit Proyek (Amber theme) */}
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-3 hover:ring-orange-300 transition-all shadow-2xs">
           <div>
             <span className="text-xs font-semibold text-slate-500 tracking-wide block">
-              Atensi Audit &amp; Fisik
+              Inpres Jalan Daerah (2023–2025)
             </span>
             <div className="text-2xl sm:text-[27px] font-bold text-slate-900 tracking-tight font-sans tabular-nums mt-1">
-              {anomalyCount} Paket
+              Rp {IJD_TOTAL_T.toFixed(2).replace(".", ",")} Triliun
             </div>
             <p className="text-[11.5px] text-amber-800 font-sans mt-1 font-medium">
-              Deviasi Fisik atau Tender Minim (&lt;1%)
+              Inpres 3/2023 (Rp 14,6 T) + Inpres 11/2025 (Rp 10,21 T)
             </p>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
             <div
               className="h-full bg-amber-500 rounded-full"
-              style={{ width: `${Math.min(100, Math.max(15, (anomalyCount / (allPackages.length || 1)) * 100 * 4))}%` }}
+              style={{ width: `${((IJD_TAHAP_1_2023_T / IJD_TOTAL_T) * 100).toFixed(1)}%` }}
             />
           </div>
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* TIER 2: 2 ANALYTICAL CHARTS (Data Proporsional Triliun Rupiah)            */}
+      {/* TIER 2: 2 ANALYTICAL CHARTS (DATA RESMI BINA MARGA & REALISASI KEMENPU)   */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Left Card: Perbandingan Pagu HPS vs Nilai Kontrak (Double Bar Chart) */}
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-4 hover:ring-orange-300 transition-all shadow-2xs">
-          {/* Card Header & 3 Top Metric Badges (100% Real Sesuai Data Aktif) */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                Pagu APBN Ditjen Bina Marga vs Estimasi Serapan (2020–2025)
+                Pagu APBN Ditjen Bina Marga: Awal vs Revisi DIPA (2020–2025)
               </h3>
             </div>
 
-            {/* 3 Metric Pills on Top (Sinkron dengan Data Riil) */}
             <div className="grid grid-cols-3 gap-2 py-2 border-y border-slate-100 text-center">
               <div>
                 <div className="inline-flex items-center justify-center">
                   <span className="text-sm sm:text-base font-bold text-slate-900 font-sans tabular-nums">
-                    {formatRupiahShort(totalPagu)}
+                    Rp {BINA_MARGA_TOTAL_AWAL_T.toFixed(2).replace(".", ",")} T
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Pagu Terdata</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Total Pagu Awal (6 Thn)</div>
               </div>
 
               <div>
                 <div className="inline-flex items-center justify-center">
                   <span className="text-sm sm:text-base font-bold text-[#c2410c] font-sans tabular-nums">
-                    {formatRupiahShort(totalContract)}
+                    Rp 78,96 T
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Kontrak SPK</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Puncak DIPA 2023*</div>
               </div>
 
               <div>
                 <div className="inline-flex items-center justify-center">
-                  <span className="text-sm sm:text-base font-bold text-emerald-700 font-sans tabular-nums">
-                    {formatRupiahShort(totalEfficiency)}
+                  <span className="text-sm sm:text-base font-bold text-blue-700 font-sans tabular-nums">
+                    Rp 28,78 T
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Efisiensi Lelang</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Pagu Efektif 2025*</div>
               </div>
             </div>
           </div>
 
-          {/* SVG Double Bar Chart (2020 – 2026) - Proportional 0–50 Triliun Scale */}
           <div className="w-full relative">
             <svg
               viewBox="0 0 520 220"
               className="w-full h-auto overflow-visible select-none"
             >
-              {/* Horizontal Gridlines & Y-Axis Labels (0T, 20T, 40T, 60T, 80T) */}
               {[
                 { val: "80T", y: 30 },
                 { val: "60T", y: 67.5 },
@@ -731,13 +776,12 @@ export default function BudgetDataExplorer({
                 </g>
               ))}
 
-              {/* Double Bars per Year */}
-              {HISTORICAL_BAR_DATA.map((item, idx) => {
+              {BINA_MARGA_APBN_DATA.map((item, idx) => {
                 const centerX = 50 + idx * 86;
-                const paguH = (item.pagu / 80) * 150;
-                const kontrakH = (item.kontrak / 80) * 150;
-                const paguY = 180 - paguH;
-                const kontrakY = 180 - kontrakH;
+                const awalH = (item.paguAwal / 80) * 150;
+                const revisiH = (item.paguRevisi / 80) * 150;
+                const awalY = 180 - awalH;
+                const revisiY = 180 - revisiH;
                 const isHovered = hoveredBarIndex === idx;
 
                 return (
@@ -747,7 +791,6 @@ export default function BudgetDataExplorer({
                     onMouseLeave={() => setHoveredBarIndex(null)}
                     className="cursor-pointer transition-all duration-200"
                   >
-                    {/* Background hover column */}
                     {isHovered && (
                       <rect
                         x={centerX - 22}
@@ -759,29 +802,26 @@ export default function BudgetDataExplorer({
                       />
                     )}
 
-                    {/* Bar 1: Pagu (Slate-500) */}
                     <rect
                       x={centerX - 13}
-                      y={paguY}
+                      y={awalY}
                       width="11"
-                      height={paguH}
+                      height={awalH}
                       fill={isHovered ? "#475569" : "#64748b"}
                       rx="2"
                       className="transition-colors duration-200"
                     />
 
-                    {/* Bar 2: Kontrak (Safety Orange) */}
                     <rect
                       x={centerX + 2}
-                      y={kontrakY}
+                      y={revisiY}
                       width="11"
-                      height={kontrakH}
+                      height={revisiH}
                       fill={isHovered ? "#9a3412" : "#c2410c"}
                       rx="2"
                       className="transition-colors duration-200"
                     />
 
-                    {/* X-Axis Label */}
                     <text
                       x={centerX}
                       y="202"
@@ -797,110 +837,109 @@ export default function BudgetDataExplorer({
               })}
             </svg>
 
-            {/* Tooltip on Hover (Orange Card with Pure White Text) */}
             {hoveredBarIndex !== null && (
               <div
-                className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
-                style={{ left: `${(50 + hoveredBarIndex * 86) / 5.2}%` }}
+                className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all w-max max-w-[230px]"
+                style={{ left: `${Math.min(82, Math.max(18, (50 + hoveredBarIndex * 86) / 5.2))}%` }}
               >
                 <div className="font-bold text-white mb-0.5">
-                  Tahun {HISTORICAL_BAR_DATA[hoveredBarIndex].year}
+                  TA {BINA_MARGA_APBN_DATA[hoveredBarIndex].year}
                 </div>
                 <div className="text-white">
-                  <span>Pagu Bina Marga: {HISTORICAL_BAR_DATA[hoveredBarIndex].paguRp}</span>
+                  Pagu Awal APBN: {BINA_MARGA_APBN_DATA[hoveredBarIndex].paguAwalRp}
                 </div>
                 <div className="text-white font-semibold">
-                  <span>Estimasi Serapan: {HISTORICAL_BAR_DATA[hoveredBarIndex].kontrakRp}</span>
+                  Pagu Akhir/Efektif: {BINA_MARGA_APBN_DATA[hoveredBarIndex].paguRevisiRp}
+                </div>
+                <div className="text-orange-100 text-[10px] mt-1 leading-snug">
+                  {BINA_MARGA_APBN_DATA[hoveredBarIndex].note}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Chart Legend */}
-          <div className="flex items-center justify-center gap-6 pt-1 text-xs text-slate-500">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-1.5 rounded-xs bg-[#64748b]" />
-              <span className="font-medium">Pagu APBN Bina Marga (Rp Triliun)</span>
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-center flex-wrap gap-x-5 gap-y-1 text-xs text-slate-500">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-1.5 rounded-xs bg-[#64748b]" />
+                <span className="font-medium">Pagu Awal APBN (Rp Triliun)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-1.5 rounded-xs bg-[#c2410c]" />
+                <span className="font-medium">Pagu DIPA Akhir / Efektif (Rp Triliun)</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-1.5 rounded-xs bg-[#c2410c]" />
-              <span className="font-medium">Estimasi Serapan (Rp Triliun)</span>
-            </div>
+            <p className="text-[10.5px] text-slate-500 text-center font-sans">
+              Sumber: RDP Komisi V DPR RI &amp; LAKIP Ditjen Bina Marga. 2023* mencakup tambahan IJD Rp 14,64 T &amp; IKN; 2025* pasca rekonstruksi efisiensi.
+            </p>
           </div>
         </div>
 
-        {/* Right Card: Tren Alokasi Anggaran Preservasi Jalan (Smooth Multi-Layer Area Chart) */}
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 p-5 flex flex-col justify-between space-y-4 hover:ring-orange-300 transition-all shadow-2xs">
-          {/* Card Header & 3 Top Metric Badges (100% Real Sesuai authorityBreakdown) */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                Tren Alokasi &amp; Realisasi Anggaran Preservasi Jalan
+                Pagu vs Realisasi Keuangan APBN Kementerian PU (2020–2025)
               </h3>
             </div>
 
-            {/* 3 Metric Pills on Top (Sinkron dengan Pembagian Kewenangan Riil) */}
             <div className="grid grid-cols-3 gap-2 py-2 border-y border-slate-100 text-center">
               <div>
                 <div className="inline-flex items-center justify-center">
-                  <span className="text-sm sm:text-base font-bold text-blue-900 font-sans tabular-nums">
-                    {authorityBreakdown.national.pct}%
+                  <span className="text-sm sm:text-base font-bold text-slate-900 font-sans tabular-nums">
+                    Rp {KEMENPU_TOTAL_REALISASI_T.toFixed(2).replace(".", ",")} T
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">APBN Nasional</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Total Realisasi (6 Thn)</div>
               </div>
 
               <div>
                 <div className="inline-flex items-center justify-center">
-                  <span className="text-sm sm:text-base font-bold text-purple-900 font-sans tabular-nums">
-                    {authorityBreakdown.provincial.pct}%
+                  <span className="text-sm sm:text-base font-bold text-[#c2410c] font-sans tabular-nums">
+                    {KEMENPU_AVG_SERAPAN_PCT.toFixed(1).replace(".", ",")}%
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">APBD Provinsi</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Rata-rata Serapan</div>
               </div>
 
               <div>
                 <div className="inline-flex items-center justify-center">
-                  <span className="text-sm sm:text-base font-bold text-teal-900 font-sans tabular-nums">
-                    {authorityBreakdown.cityRegency.pct}%
+                  <span className="text-sm sm:text-base font-bold text-emerald-700 font-sans tabular-nums">
+                    95,23%
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">APBD Kab/Kota</div>
+                <div className="text-[10.5px] text-slate-500 font-sans mt-0.5">Serapan TA 2025</div>
               </div>
             </div>
           </div>
 
-          {/* SVG Smooth Multi-Layer Area Chart (2020 – 2026) */}
           <div className="w-full relative">
             <svg
               viewBox="0 0 520 220"
               className="w-full h-auto overflow-visible select-none"
             >
               <defs>
-                {/* Upper Area Gradient (Smooth Gray/Slate) */}
                 <linearGradient id="upperAreaGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#cbd5e1" stopOpacity="0.65" />
                   <stop offset="100%" stopColor="#f8fafc" stopOpacity="0.1" />
                 </linearGradient>
 
-                {/* Lower Area Gradient (Institutional Orange) */}
                 <linearGradient id="lowerAreaGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#ea580c" stopOpacity="0.35" />
                   <stop offset="100%" stopColor="#c2410c" stopOpacity="0.05" />
                 </linearGradient>
               </defs>
 
-              {/* Horizontal Gridlines & Y-Axis Labels (0, 20T, 40T, 60T, 80T) */}
               {[
-                { val: "80T", y: 30 },
-                { val: "60T", y: 67.5 },
-                { val: "40T", y: 105 },
-                { val: "20T", y: 142.5 },
+                { val: "200T", y: 30 },
+                { val: "150T", y: 67.5 },
+                { val: "100T", y: 105 },
+                { val: "50T", y: 142.5 },
                 { val: "0", y: 180 },
               ].map((grid) => (
                 <g key={grid.val}>
                   <text
-                    x="28"
+                    x="32"
                     y={grid.y + 4}
                     textAnchor="end"
                     className="text-[10.5px] fill-slate-400 font-sans font-medium"
@@ -908,7 +947,7 @@ export default function BudgetDataExplorer({
                     {grid.val}
                   </text>
                   <line
-                    x1="36"
+                    x1="38"
                     y1={grid.y}
                     x2="504"
                     y2={grid.y}
@@ -918,11 +957,7 @@ export default function BudgetDataExplorer({
                 </g>
               ))}
 
-              {/* Upper Smooth Area Layer (Total Alokasi Rencana) */}
-              <path
-                d={areaPoints.upperArea}
-                fill="url(#upperAreaGrad)"
-              />
+              <path d={areaPoints.upperArea} fill="url(#upperAreaGrad)" />
               <path
                 d={areaPoints.upperLine}
                 fill="none"
@@ -931,11 +966,7 @@ export default function BudgetDataExplorer({
                 strokeDasharray="4 3"
               />
 
-              {/* Lower Smooth Area Layer (Realisasi Efektif Fisik) */}
-              <path
-                d={areaPoints.lowerArea}
-                fill="url(#lowerAreaGrad)"
-              />
+              <path d={areaPoints.lowerArea} fill="url(#lowerAreaGrad)" />
               <path
                 d={areaPoints.lowerLine}
                 fill="none"
@@ -943,7 +974,6 @@ export default function BudgetDataExplorer({
                 strokeWidth="2.5"
               />
 
-              {/* Interactive Dots on the Lower Curve */}
               {areaPoints.lowerPts.map((pt, idx) => {
                 const isHovered = hoveredAreaIndex === idx;
                 return (
@@ -953,7 +983,6 @@ export default function BudgetDataExplorer({
                     onMouseLeave={() => setHoveredAreaIndex(null)}
                     className="cursor-pointer"
                   >
-                    {/* Active vertical guide line */}
                     {isHovered && (
                       <line
                         x1={pt.x}
@@ -967,7 +996,6 @@ export default function BudgetDataExplorer({
                       />
                     )}
 
-                    {/* Data Point Dot */}
                     <circle
                       cx={pt.x}
                       cy={pt.y}
@@ -978,7 +1006,6 @@ export default function BudgetDataExplorer({
                       className="transition-all duration-200"
                     />
 
-                    {/* X-Axis Label */}
                     <text
                       x={pt.x}
                       y="202"
@@ -994,35 +1021,38 @@ export default function BudgetDataExplorer({
               })}
             </svg>
 
-            {/* Tooltip on Hover (Orange Card with Pure White Text) */}
             {hoveredAreaIndex !== null && (
               <div
-                className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all"
-                style={{ left: `${(50 + hoveredAreaIndex * 86) / 5.2}%` }}
+                className="absolute z-20 pointer-events-none bg-[#c2410c] text-white text-[11px] p-2.5 rounded-[6px] shadow-lg ring-1 ring-orange-700/50 -top-2 transform -translate-x-1/2 -translate-y-full transition-all w-max max-w-[220px]"
+                style={{ left: `${Math.min(82, Math.max(18, (50 + hoveredAreaIndex * 86) / 5.2))}%` }}
               >
                 <div className="font-bold text-white mb-0.5">
-                  Tahun {areaPoints.years[hoveredAreaIndex]}
+                  TA {KEMENPU_REALISASI_DATA[hoveredAreaIndex].year} (KemenPU)
                 </div>
                 <div className="text-white">
-                  <span>Pagu Bina Marga: Rp {areaPoints.upperPts[hoveredAreaIndex].val} T</span>
+                  Pagu DIPA Efektif: Rp {KEMENPU_REALISASI_DATA[hoveredAreaIndex].pagu.toFixed(2).replace(".", ",")} T
                 </div>
                 <div className="text-white font-semibold">
-                  <span>Estimasi Serapan: ±Rp {areaPoints.lowerPts[hoveredAreaIndex].val} T</span>
+                  Realisasi: Rp {KEMENPU_REALISASI_DATA[hoveredAreaIndex].realisasi.toFixed(2).replace(".", ",")} T ({KEMENPU_REALISASI_DATA[hoveredAreaIndex].serapanPct.toFixed(2).replace(".", ",")}%)
                 </div>
               </div>
             )}
           </div>
 
-          {/* Chart Legend */}
-          <div className="flex items-center justify-center gap-6 pt-1 text-xs text-slate-500">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-1.5 rounded-xs bg-[#64748b]" />
-              <span className="font-medium">Total Rencana Anggaran (Rp Triliun)</span>
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-center flex-wrap gap-x-5 gap-y-1 text-xs text-slate-500">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-1.5 rounded-xs bg-[#64748b]" />
+                <span className="font-medium">Pagu DIPA Efektif KemenPU (Rp Triliun)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-1.5 rounded-xs bg-[#c2410c]" />
+                <span className="font-medium">Realisasi Keuangan Resmi (Rp Triliun)</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-[#c2410c]" />
-              <span className="font-medium">Realisasi Efektif Lapangan (Rp Triliun)</span>
-            </div>
+            <p className="text-[10.5px] text-slate-500 text-center font-sans">
+              Sumber: Laporan Kinerja (LAKIP) KemenPUPR 2020–2024 &amp; Evaluasi APBN Kementerian PU TA 2025 (pu.go.id).
+            </p>
           </div>
         </div>
       </div>
@@ -1049,7 +1079,7 @@ export default function BudgetDataExplorer({
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 font-sans mt-0.5">
-                  Indikator Kinerja Pelaksanaan Anggaran (IKPA) Kementerian &amp; Pemerintah Daerah
+                  Simulasi Indikator Kinerja Pelaksanaan Anggaran (IKPA) pada {allPackages.length} Paket Kurasi Pilot
                 </p>
               </div>
             </div>
@@ -1119,12 +1149,12 @@ export default function BudgetDataExplorer({
             <div className="space-y-3 pb-3 border-b border-slate-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-[#c2410c]">
-                    Sinkronisasi LPSE &amp; SiRUP
-                  </p>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-950 font-heading tracking-tight mt-1">
-                    Daftar Paket Pengadaan &amp; Audit Kontrak
+                  <h3 className="text-base sm:text-lg font-bold text-slate-950 font-heading tracking-tight">
+                    Daftar Paket Pengadaan &amp; Audit Kontrak ({filteredPackages.length} Koridor Pilot)
                   </h3>
+                  <p className="text-[11.5px] text-slate-500 font-sans mt-0.5">
+                    Simulasi integrasi LPSE &amp; SiRUP terpisah dari total APBN nasional di atas — Komposisi pilot: APBN Nasional {authorityBreakdown.national.pct}% · APBD Provinsi {authorityBreakdown.provincial.pct}% · APBD Kab/Kota &amp; Desa {authorityBreakdown.cityRegency.pct}%
+                  </p>
                 </div>
 
                 {/* Export (Excel / PDF) & Sort Controls */}
@@ -1160,6 +1190,32 @@ export default function BudgetDataExplorer({
                       { value: "progress-desc", label: "Progres Fisik Tertinggi" },
                     ]}
                   />
+                </div>
+              </div>
+
+              {/* Ringkasan Agregasi Khusus Dataset Pilot yang Sedang Difilter */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
+                <div className="rounded-[6px] bg-slate-50/80 px-3.5 py-2.5 ring-1 ring-slate-200/70">
+                  <div className="text-[10.5px] font-medium text-slate-500">Pagu HPS Pilot ({filteredPackages.length} Paket)</div>
+                  <div className="text-sm font-bold text-slate-900 tabular-nums mt-0.5">{formatRupiahShort(totalPagu)}</div>
+                </div>
+                <div className="rounded-[6px] bg-slate-50/80 px-3.5 py-2.5 ring-1 ring-slate-200/70">
+                  <div className="text-[10.5px] font-medium text-slate-500">Nilai Kontrak SPK Pilot</div>
+                  <div className="text-sm font-bold text-blue-700 tabular-nums mt-0.5">
+                    {formatRupiahShort(totalContract)} ({((totalContract / (totalPagu || 1)) * 100).toFixed(1)}%)
+                  </div>
+                </div>
+                <div className="rounded-[6px] bg-slate-50/80 px-3.5 py-2.5 ring-1 ring-slate-200/70">
+                  <div className="text-[10.5px] font-medium text-slate-500">Efisiensi Lelang Pilot</div>
+                  <div className="text-sm font-bold text-emerald-700 tabular-nums mt-0.5">
+                    {formatRupiahShort(totalEfficiency)} ({efficiencyPercent}%)
+                  </div>
+                </div>
+                <div className="rounded-[6px] bg-slate-50/80 px-3.5 py-2.5 ring-1 ring-slate-200/70">
+                  <div className="text-[10.5px] font-medium text-slate-500">Atensi Audit Pilot</div>
+                  <div className="text-sm font-bold text-amber-800 tabular-nums mt-0.5">
+                    {anomalyCount} Paket (Deviasi / Tender &lt;1%)
+                  </div>
                 </div>
               </div>
 
@@ -1421,10 +1477,10 @@ export default function BudgetDataExplorer({
         </div>
       </div>
 
-      {/* Catatan Sumber Data Resmi (Italic, Clean, Tanpa Border) */}
+      {/* Catatan Sumber Data Resmi */}
       <div className="pt-2 pb-1 text-center">
         <p className="text-[11px] text-slate-500 italic font-sans tracking-wide">
-          *Data makro APBN merujuk pada Ditjen Bina Marga Kementerian PU (2020–2025). Rincian {allPackages.length} paket pengadaan di atas merupakan dataset kurasi pilot yang siap dihubungkan ke API resmi INAPROC LKPP &amp; LPSE.
+          *Ringkasan dan dua grafik makro di atas merujuk pada data resmi APBN Ditjen Bina Marga, LAKIP KemenPUPR 2020–2024, Evaluasi APBN KemenPU TA 2025, serta Inpres Jalan Daerah (Inpres No. 3/2023 &amp; Inpres No. 11/2025). Tabel {allPackages.length} paket pengadaan di bawah merupakan dataset kurasi pilot terpisah yang siap dihubungkan ke API resmi INAPROC LKPP &amp; LPSE.
         </p>
       </div>
 
