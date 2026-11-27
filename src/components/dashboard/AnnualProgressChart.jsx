@@ -23,8 +23,7 @@ import {
 } from "lucide-react";
 import { ANNUAL_HISTORICAL_DATA } from "@/data/provincesData";
 
-// Data Resmi Panjang Jalan Indonesia Berdasarkan 3 Tingkat Kewenangan (BPS 2026, Data Tahun 2025 non-tol)
-// Sebagaimana diatur dalam Undang-Undang Nomor 2 Tahun 2022 (Republik Indonesia, 2022)
+// Data Resmi Panjang Jalan Indonesia Berdasarkan 3 Tingkat Kewenangan (BPS Statistik Indonesia 2026, data tahun 2025 non-tol)
 const NATIONAL_ROAD_COMPOSITION = [
   {
     key: "kabupaten_kota",
@@ -32,16 +31,16 @@ const NATIONAL_ROAD_COMPOSITION = [
     owner: "Pemerintah Kabupaten & Kota",
     km: 431035,
     pct: 80.1,
-    color: "#ea580c", // Orange-600
-    note: "Angka sementara BPS 2026 (non-tol)",
+    color: "#ea580c",
+    note: "Angka sementara data 2025 (BPS, 2026 · non-tol)",
   },
   {
     key: "provinsi",
     label: "Jalan Provinsi",
-    owner: "Pemerintah Provinsi (Dinas Bina Marga / PUPR)",
+    owner: "Pemerintah Provinsi (Dinas Bina Marga / PU)",
     km: 59462,
-    pct: 11.0,
-    color: "#9333ea", // Purple-600
+    pct: 11.1,
+    color: "#9333ea",
     note: "SK Gubernur",
   },
   {
@@ -49,8 +48,8 @@ const NATIONAL_ROAD_COMPOSITION = [
     label: "Jalan Negara (Nasional)",
     owner: "Kementerian Pekerjaan Umum (BBPJN / BPJN)",
     km: 47605,
-    pct: 8.9,
-    color: "#2563eb", // Blue-600
+    pct: 8.8,
+    color: "#2563eb",
     note: "SK Menteri PU No. 430/KPTS/M/2022",
   },
 ];
@@ -74,15 +73,11 @@ export default function AnnualProgressChart() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [showExplanationModal]);
 
-  const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
+  const { roadConditionTrends, ombudsmanMaladmin2025, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
-  // Selected year data for active metric
   const selectedRoadData =
     roadConditionTrends.find((d) => d.year === selectedYear) ||
     roadConditionTrends[roadConditionTrends.length - 1];
-  const selectedComplaintData =
-    complaintTrends.find((d) => d.year === selectedYear) ||
-    complaintTrends[complaintTrends.length - 1];
 
   // Dynamic progress delta calculation vs baseline 2020 (consistent across all cards)
   const baseRoadData = roadConditionTrends[0]; // 2020
@@ -274,7 +269,7 @@ export default function AnnualProgressChart() {
                   {selectedRoadData.nasional}%
                 </div>
                 <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10.5px] text-slate-500 font-medium truncate">
-                  <span className="truncate">KemenPUPR (APBN)</span>
+                  <span className="truncate">Kementerian PU (APBN)</span>
                   <span className="font-semibold text-blue-700 shrink-0">Mantap</span>
                 </div>
               </div>
@@ -663,9 +658,8 @@ export default function AnnualProgressChart() {
                 </button>
               </div>
 
-              {/* Clean italic source text without border or dot */}
               <p className="text-[11px] text-slate-500 italic">
-                * Sumber: BPS (2026), Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029, dan Ombudsman RI (2026b)
+                * Sumber: BPS (Statistik Indonesia 2026, data 2025 non-tol) &amp; Baseline Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029.
               </p>
             </div>
           </div>
@@ -683,7 +677,7 @@ export default function AnnualProgressChart() {
                 Proporsi Panjang Jalan Indonesia
               </h3>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Distribusi total 538.102 Km non-tol menurut 3 kewenangan (BPS, 2026).
+                Distribusi total 538.102 km non-tol menurut 3 kewenangan (BPS Statistik Indonesia 2026, data 2025).
               </p>
             </div>
 
@@ -733,16 +727,15 @@ export default function AnnualProgressChart() {
               </div>
             </div>
 
-            {/* Proportional Stacked Segment Track */}
             <div className="space-y-1.5 pt-1">
               <div className="flex h-2.5 w-full rounded-full overflow-hidden bg-slate-100 ring-1 ring-slate-200/50">
-                <div style={{ width: "80.1%" }} className="bg-[#ea580c] h-full" title="Jalan Kabupaten/Kota: 80.1% (431.035 Km)" />
-                <div style={{ width: "11.0%" }} className="bg-[#9333ea] h-full" title="Jalan Provinsi: 11.0% (59.462 Km)" />
-                <div style={{ width: "8.9%" }} className="bg-[#2563eb] h-full" title="Jalan Negara: 8.9% (47.605 Km)" />
+                <div style={{ width: "80.1%" }} className="bg-[#ea580c] h-full" title="Jalan Kabupaten/Kota: 80,1% (431.035 km)" />
+                <div style={{ width: "11.1%" }} className="bg-[#9333ea] h-full" title="Jalan Provinsi: 11,1% (59.462 km)" />
+                <div style={{ width: "8.8%" }} className="bg-[#2563eb] h-full" title="Jalan Negara: 8,8% (47.605 km)" />
               </div>
               <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5">
-                <span>Daerah (Kab/Kota): <strong>80.1% (431.035 Km)</strong></span>
-                <span>Pusat: <strong>8.9% (47.605 Km)</strong></span>
+                <span>Daerah (Kab/Kota): <strong>80,1% (431.035 km)</strong></span>
+                <span>Pusat: <strong>8,8% (47.605 km)</strong></span>
               </div>
             </div>
 
@@ -790,118 +783,144 @@ export default function AnnualProgressChart() {
               <Scale className="w-4 h-4 text-[#c2410c] shrink-0 mt-0.5" />
               <div>
                 <strong className="text-slate-900 font-semibold">Kewenangan &amp; Kesenjangan Fiskal:</strong>{" "}
-                BPS (2026) mencatat <strong className="text-slate-900">80,10% (431.035 Km)</strong> jalan non-tol merupakan wewenang Pemkab/Pemkot dan <strong className="text-slate-900">11,05% (59.462 Km)</strong> wewenang Pemprov. Besarnya cakupan jalan daerah di tengah PAD terbatas inilah urgensi utama penelusuran status ruas (<strong>UU No. 2 Tahun 2022</strong>) dan intervensi <strong>Inpres No. 3/2023 (IJD)</strong>.
+                BPS (Statistik Indonesia 2026, data 2025) mencatat <strong className="text-slate-900">80,10% (431.035 km)</strong> jalan non-tol merupakan wewenang Pemkab/Pemkot dan <strong className="text-slate-900">11,05% (59.462 km)</strong> wewenang Pemprov. Besarnya cakupan jalan daerah di tengah PAD terbatas inilah urgensi utama penelusuran status ruas (<strong>UU No. 2 Tahun 2022</strong>) dan intervensi <strong>Inpres Jalan Daerah (Inpres 3/2023 &amp; Inpres 11/2025)</strong>.
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* METRIC VIEW 2: ADUAN & MALADMINISTRASI (OMBUDSMAN RI) */}
+      {/* METRIC VIEW 2: ADUAN & MALADMINISTRASI (OMBUDSMAN RI RESMI 2025/2026) */}
       {activeMetric === "complaints" && (
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-sm p-5 sm:p-6 space-y-5 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                Evolusi Keluhan Pelayanan Publik Jalan Rusak (2020 – 2025)
+                Pengaduan Pelayanan Publik &amp; Dugaan Maladministrasi (Ombudsman RI 2025)
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Sumber: Laporan Ombudsman RI (2026b) &amp; Konsolidasi SP4N-LAPOR!.
+                Sumber: Laporan Kinerja 2025 &amp; Siaran Pers Ombudsman RI (2026) — ombudsman.go.id.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-semibold text-slate-500 mr-1">Tahun:</span>
-              {availableYears.map((yr) => (
-                <button
-                  key={yr}
-                  onClick={() => setSelectedYear(yr)}
-                  className={`px-2.5 py-1 rounded-[6px] text-xs font-bold transition-all cursor-pointer ${
-                    selectedYear === yr
-                      ? "bg-[#c2410c] text-white shadow-xs"
-                      : "bg-white text-slate-600 ring-1 ring-orange-200/50 hover:text-slate-900"
-                  }`}
-                >
-                  {yr}
-                </button>
-              ))}
-            </div>
+            <span className="text-xs font-bold text-white bg-[#c2410c] px-3 py-1 rounded-[6px] self-start sm:self-auto">
+              Pasal 1 UU No. 37/2008 &amp; Pasal 44 ayat (2) UU No. 25/2009
+            </span>
           </div>
 
-          {/* 4 Complaint Stat Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-4 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50">
-              <span className="text-[11px] font-semibold text-slate-500 block">Total Penerimaan ({selectedComplaintData.year})</span>
+              <span className="text-[11px] font-semibold text-slate-500 block">Total Penerimaan 2025</span>
               <div className="text-2xl font-extrabold text-slate-900 font-sans tabular-nums mt-1">
-                {selectedComplaintData.totalComplaints.toLocaleString("id-ID")}
+                23.596
               </div>
               <span className="text-[10px] text-slate-500 block mt-0.5">
-                {selectedComplaintData.year === 2025 ? "23.596 Laporan (Ombudsman RI, 2026b)" : "Kompilasi Laporan Tahunan"}
+                Laporan reguler, konsultasi, tembusan, RCO &amp; IAPS
               </span>
             </div>
 
-            <div className="p-4 rounded-[6px] bg-emerald-50/70 border border-emerald-200">
-              <span className="text-[11px] font-semibold text-emerald-700 block">
-                {selectedComplaintData.year === 2025 ? "Terlapor Terbanyak (Pemda)" : "Tuntas Ditindaklanjuti"}
-              </span>
-              <div className="text-2xl font-extrabold text-emerald-800 font-sans tabular-nums mt-1">
-                {selectedComplaintData.year === 2025
-                  ? "4.766"
-                  : selectedComplaintData.resolved.toLocaleString("id-ID")}
+            <div className="p-4 rounded-[6px] bg-orange-50/70 border border-orange-200">
+              <span className="text-[11px] font-semibold text-[#9a3412] block">Terlapor #1 (Pemda)</span>
+              <div className="text-2xl font-extrabold text-[#c2410c] font-sans tabular-nums mt-1">
+                4.766
               </div>
-              <span className="text-[10px] text-emerald-700 block mt-0.5">
-                {selectedComplaintData.year === 2025
-                  ? "4.766 laporan kepada Pemda (Ombudsman, 2026b)"
-                  : `${((selectedComplaintData.resolved / selectedComplaintData.totalComplaints) * 100).toFixed(1)}% Penyelesaian`}
+              <span className="text-[10px] text-[#9a3412] block mt-0.5">
+                Total laporan ke Pemda lintas seluruh sektor pelayanan publik (terlapor #1 tahun 2025)
+              </span>
+            </div>
+
+            <div className="p-4 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/50">
+              <span className="text-[11px] font-semibold text-slate-500 block">Perhubungan &amp; Infrastruktur</span>
+              <div className="text-2xl font-extrabold text-slate-900 font-sans tabular-nums mt-1">
+                622
+              </div>
+              <span className="text-[10px] text-slate-500 block mt-0.5">
+                287 subkategori infrastruktur jalan, tol &amp; jalan rusak
               </span>
             </div>
 
             <div className="p-4 rounded-[6px] bg-rose-50/70 border border-rose-200">
-              <span className="text-[11px] font-semibold text-rose-700 block">
-                {selectedComplaintData.year === 2025 ? "Dugaan Penundaan Berlarut" : "Melewati Tenggat Respons"}
-              </span>
+              <span className="text-[11px] font-semibold text-rose-700 block">Penundaan Berlarut</span>
               <div className="text-2xl font-extrabold text-rose-800 font-sans tabular-nums mt-1">
-                {selectedComplaintData.year === 2025
-                  ? `${selectedComplaintData.overduePct}%`
-                  : selectedComplaintData.overdue.toLocaleString("id-ID")}
+                21,25%
               </div>
               <span className="text-[10px] text-rose-700 block mt-0.5">
-                {selectedComplaintData.year === 2025
-                  ? `Peringkat ke-2 Maladministrasi (±${selectedComplaintData.overdue.toLocaleString("id-ID")} aduan)`
-                  : `${selectedComplaintData.overduePct}% Penundaan Berlarut`}
+                Peringkat ke-2 setelah Tidak Memberikan Pelayanan (40,68%)
               </span>
             </div>
+          </div>
 
-            <div className="p-4 rounded-[6px] bg-[#c2410c] text-white shadow-xs flex flex-col justify-between">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
+            <div className="lg:col-span-7 p-4 rounded-[6px] bg-slate-50/80 border border-slate-200/70 space-y-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="text-xs font-bold text-slate-900">
+                  5 Besar Dugaan Maladministrasi Ombudsman RI (2025)
+                </h4>
+                <span className="text-[10px] font-medium text-slate-500">ombudsman.go.id</span>
+              </div>
+              <div className="space-y-2">
+                {ombudsmanMaladmin2025.map((item) => (
+                  <div key={item.key} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className={item.highlight ? "font-bold text-[#c2410c]" : "font-medium text-slate-700"}>
+                        {item.label}
+                      </span>
+                      <span className={`font-bold tabular-nums ${item.highlight ? "text-[#c2410c]" : "text-slate-900"}`}>
+                        {item.pct.toFixed(2).replace(".", ",")}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${item.highlight ? "bg-[#c2410c]" : "bg-slate-500"}`}
+                        style={{ width: `${Math.min(100, (item.pct / 45) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 p-4 rounded-[6px] bg-slate-50/80 border border-slate-200/70 flex flex-col justify-between space-y-3">
               <div>
-                <span className="text-[11px] font-semibold text-orange-100 block">Potensi Maladministrasi</span>
-                <div className="text-sm font-bold text-white flex items-center gap-1.5 mt-1">
-                  <ShieldAlert className="w-4 h-4 text-orange-200 shrink-0" />
-                  <span>Pasal 1 UU 37/2008</span>
-                </div>
-                <p className="text-[10px] text-orange-100 mt-1">
-                  Dapat diekskalasi warga via JagaJalan.
+                <h4 className="text-xs font-bold text-slate-900">
+                  Catatan Historis Laporan Tahunan Ombudsman RI (2020–2025)
+                </h4>
+                <p className="text-[10.5px] text-slate-500 mt-0.5">
+                  Perbandingan volume pengaduan resmi sesuai cakupan pelaporan masing-masing tahun:
                 </p>
+              </div>
+              <div className="divide-y divide-slate-200/70 text-xs">
+                {complaintTrends.map((row) => (
+                  <div key={row.year} className="py-1.5 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-bold text-slate-900 tabular-nums mr-1.5">{row.year}</span>
+                      <span className="text-[10.5px] text-slate-500">{row.scopeLabel}</span>
+                    </div>
+                    <span className="font-bold text-slate-900 tabular-nums shrink-0">
+                      {row.totalComplaints.toLocaleString("id-ID")}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* METRIC VIEW 3: INTERVENSI ANGGARAN INPRES (IJD) */}
+      {/* METRIC VIEW 3: INTERVENSI ANGGARAN INPRES (IJD 2023 & 2025) */}
       {activeMetric === "inpres" && (
         <div className="bg-white rounded-[6px] ring-1 ring-orange-200/50 shadow-sm p-5 sm:p-6 space-y-4 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                Alokasi APBN Inpres Jalan Daerah (Inpres No. 3 Tahun 2023)
+                Alokasi APBN Inpres Jalan Daerah (Inpres No. 3/2023 &amp; Inpres No. 11/2025)
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Intervensi darurat pemerintah pusat untuk merehabilitasi jalan daerah rusak.
+                Intervensi pemerintah pusat melalui Kementerian PU untuk menangani jalan daerah rusak di seluruh Indonesia.
               </p>
             </div>
-            <span className="text-xs font-bold text-white bg-[#c2410c] px-3 py-1 rounded-[6px]">
-              Realisasi Tahap I: Rp 14,6 T · Rencana Awal II: Rp 15,0 T
+            <span className="text-xs font-bold text-white bg-[#c2410c] px-3 py-1 rounded-[6px] shrink-0">
+              Total IJD: Rp 24,81 Triliun (2023 &amp; 2025)
             </span>
           </div>
 
@@ -921,7 +940,7 @@ export default function AnnualProgressChart() {
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
                           item.year === 2023
                             ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                            : "bg-amber-50 text-amber-800 border border-amber-200"
+                            : "bg-orange-50 text-[#9a3412] border border-orange-200"
                         }`}>
                           {item.statusLabel}
                         </span>
@@ -931,7 +950,7 @@ export default function AnnualProgressChart() {
                   </div>
                   <div className="text-right shrink-0">
                     <span className="text-2xl font-extrabold text-[#c2410c] font-sans tabular-nums">
-                      Rp {item.budgetTrillion.toFixed(1).replace(".", ",")}
+                      Rp {item.budgetTrillion.toFixed(2).replace(".", ",")}
                     </span>
                     <span className="text-xs font-bold text-slate-500 ml-1">Triliun</span>
                   </div>
@@ -939,7 +958,7 @@ export default function AnnualProgressChart() {
 
                 <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden p-0.5">
                   <div
-                    style={{ width: `${(item.budgetTrillion / 20) * 100}%` }}
+                    style={{ width: `${(item.budgetTrillion / 16) * 100}%` }}
                     className="h-full bg-[#c2410c] rounded-full"
                   />
                 </div>
@@ -947,12 +966,10 @@ export default function AnnualProgressChart() {
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/60 text-xs">
                   <div>
                     <span className="text-[10px] text-slate-500 block">
-                      {item.year === 2023 ? "Realisasi Fisik (KemenPUPR):" : "Target Awal Perencanaan:"}
+                      {item.year === 2023 ? "Realisasi Fisik (Kementerian PU):" : "Tahap Awal Diresmikan (Juni 2026):"}
                     </span>
                     <strong className="text-slate-800 font-sans tabular-nums">
-                      {item.year === 2023
-                        ? `${item.realizedKm.toLocaleString("id-ID")} Km`
-                        : `±${item.realizedKm.toLocaleString("id-ID")} Km (Penyesuaian APBN)`}
+                      {item.realizedKm.toLocaleString("id-ID")} km
                     </strong>
                   </div>
                   <div>
@@ -965,6 +982,9 @@ export default function AnnualProgressChart() {
               </div>
             ))}
           </div>
+          <p className="text-[11px] text-slate-500 italic">
+            * Sumber: Kementerian Pekerjaan Umum (pu.go.id), Sekretariat Kabinet RI, Inpres No. 3 Tahun 2023, &amp; Inpres No. 11 Tahun 2025.
+          </p>
         </div>
       )}
 
@@ -1024,17 +1044,17 @@ export default function AnnualProgressChart() {
 
                 <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
                   <h4 className="font-bold text-slate-900 text-sm mb-1">
-                    2. Rujukan Resmi Panjang Jalan &amp; Kemantapan (BPS 2026 &amp; Renstra PU 2025–2029)
+                    2. Rujukan Resmi Panjang Jalan &amp; Kemantapan (BPS &amp; Renstra PU 2025–2029)
                   </h4>
                   <p>
                     Data makro komparasi pada platform JagaJalan merujuk secara konsisten pada dokumen negara resmi:
                   </p>
                   <ul className="list-disc pl-5 mt-1.5 space-y-1">
                     <li>
-                      <strong>Panjang Jalan Berdasarkan 3 Kewenangan (BPS, 2026):</strong> Total <strong>538.102 km</strong> jalan non-tol nasional, terdiri atas <strong>47.605 km</strong> jalan negara (8,85%), <strong>59.462 km</strong> jalan provinsi (11,05%), dan <strong>431.035 km</strong> jalan kabupaten/kota (80,10% - angka sementara, tidak mencakup jalan tol).
+                      <strong>Panjang Jalan Berdasarkan 3 Kewenangan (BPS, Statistik Indonesia 2026 — data 2025):</strong> Total <strong>538.102 km</strong> jalan non-tol nasional, terdiri atas <strong>47.605 km</strong> jalan negara (8,85%), <strong>59.462 km</strong> jalan provinsi (11,05%), dan <strong>431.035 km</strong> jalan kabupaten/kota (80,10% — angka sementara, tidak mencakup jalan tol).
                     </li>
                     <li>
-                      <strong>Tingkat Kemantapan Jalan (Rancangan Akhir Renstra PU 2025–2029):</strong> Menetapkan capaian kemantapan sebesar <strong>94,18%</strong> untuk jalan nasional, <strong>71,33%</strong> untuk jalan provinsi, dan <strong>57,91%</strong> untuk jalan kabupaten/kota (Kementerian Pekerjaan Umum, 2025).
+                      <strong>Tingkat Kemantapan Jalan (Baseline Rancangan Akhir Renstra Kementerian PU 2025–2029):</strong> Menetapkan capaian kemantapan sebesar <strong>94,18%</strong> untuk jalan nasional, <strong>71,33%</strong> untuk jalan provinsi, dan <strong>57,91%</strong> untuk jalan kabupaten/kota (Kementerian Pekerjaan Umum, 2025).
                     </li>
                     <li>
                       <strong>Jurang Ketimpangan (36,27%):</strong> Selisih poin persentase kemantapan jalan nasional (94,18%) dikurangi kemantapan jalan kabupaten/kota (57,91%), merefleksikan disparitas fiskal pemeliharaan jalan daerah.
@@ -1043,17 +1063,17 @@ export default function AnnualProgressChart() {
                       <strong>Dasar Regulasi Penelusuran Ruas (UU No. 2 Tahun 2022):</strong> Mewajibkan transparansi status ruas dan kepastian instansi penyelenggara teknis yang dapat ditelusuri masyarakat luas (Republik Indonesia, 2022).
                     </li>
                     <li>
-                      <strong>Data Penerimaan Ombudsman RI (2026b):</strong> Mencatat <strong>23.596 penerimaan masyarakat</strong> sepanjang 2025, dengan pemerintah daerah sebagai instansi yang paling banyak dilaporkan (<strong>4.766 laporan</strong>).
+                      <strong>Laporan Kinerja &amp; Siaran Pers Ombudsman RI 2025/2026:</strong> Mencatat <strong>23.596 penerimaan masyarakat</strong> sepanjang 2025, dengan pemerintah daerah sebagai instansi terlapor terbanyak (<strong>4.766 laporan</strong>) serta <strong>622 laporan</strong> substansi perhubungan &amp; infrastruktur (<strong>287</strong> subkategori infrastruktur jalan).
                     </li>
                   </ul>
                 </div>
 
                 <div className="p-3.5 rounded-[6px] bg-slate-50 ring-1 ring-orange-200/40">
                   <h4 className="font-bold text-slate-900 text-sm mb-1">
-                    3. Dasar Intervensi Inpres No. 3 Tahun 2023
+                    3. Dasar Intervensi Inpres Jalan Daerah (Inpres No. 3/2023 &amp; Inpres No. 11/2025)
                   </h4>
                   <p>
-                    Pemerintah pusat menerbitkan <strong>Instruksi Presiden No. 3 Tahun 2023</strong> agar Kementerian PUPR dapat langsung menggunakan dana APBN untuk memperbaiki ruas jalan milik pemerintah provinsi dan kabupaten/kota yang rusak berat.
+                    Pemerintah pusat menerbitkan <strong>Instruksi Presiden No. 3 Tahun 2023</strong> (realisasi Tahap I Rp 14,60 triliun untuk 3.194 km di 34 provinsi) dan melanjutkannya melalui <strong>Inpres No. 11 Tahun 2025</strong> (Rp 10,21 triliun) agar Kementerian PU dapat langsung menggunakan dana APBN untuk menangani jalan daerah rusak berat.
                   </p>
                 </div>
               </div>

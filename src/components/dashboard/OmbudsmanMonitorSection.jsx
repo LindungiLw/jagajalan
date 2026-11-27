@@ -826,7 +826,7 @@ export default function OmbudsmanMonitorSection({
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-1">
         <div className="space-y-1">
           <p className="text-[11px] font-mono uppercase tracking-[0.18em] font-semibold text-rose-800">
-            Pengawasan Pelayanan Publik · Rujukan Ombudsman RI (2026b)
+            Pengawasan Pelayanan Publik · Laporan Ombudsman RI 2025/2026
           </p>
           <h1 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 tracking-tight">
             Lacak Laporan &amp; Batas Waktu Tanggapan

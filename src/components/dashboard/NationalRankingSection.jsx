@@ -213,7 +213,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
             : "538.102 km (Non-Tol)",
         },
         { label: "Alokasi Inpres IJD", value: "Rp 14,6 Triliun (Realisasi Tahap I 2023)" },
-        { label: "Sumber & Metodologi", value: "Kalibrasi Makro BPS (2026), Renstra PU, & Ombudsman RI (2026b)" },
+        { label: "Sumber & Metodologi", value: "Kalibrasi Makro BPS (Statistik Indonesia 2026, data 2025), Renstra PU, & Laporan Ombudsman RI 2025/2026" },
       ],
       columns: provinceExportColumns,
       rows: filteredAndSortedProvinces,
@@ -512,7 +512,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 {/* 4. Footer: Verification Note & Action CTA */}
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs font-sans">
                   <span className="text-[11px] text-slate-500 font-medium">
-                    Data Terverifikasi BPS &amp; KemenPU
+                    Kalibrasi Makro BPS &amp; KemenPU
                   </span>
 
                   {isPilot ? (
@@ -557,7 +557,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
                 <strong className="text-slate-900 font-mono tabular-nums">
                   {filteredAndSortedProvinces.length}
                 </strong>{" "}
-                Provinsi di Indonesia (BPS 2026 &amp; Renstra KemenPU 2025–2029)
+                Provinsi di Indonesia (BPS Statistik Indonesia 2026 data 2025 &amp; Baseline Renstra PU 2025–2029)
               </span>
               <button
                 type="button"
@@ -700,7 +700,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
           {/* Table Summary Footer */}
           <div className="p-3 bg-slate-50/70 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
             <span>Menampilkan <strong>{filteredAndSortedProvinces.length}</strong> dari {PROVINCES_DATA.length} Provinsi se-Indonesia</span>
-            <span className="text-[11px] text-slate-500">Distribusi per provinsi dikalibrasi proporsional terhadap total makro BPS (2026: 538.102 km), Ombudsman RI (2026b: 4.766 laporan Pemda), &amp; IJD Tahap I (Rp 14,6 T)</span>
+            <span className="text-[11px] text-slate-500">Distribusi per provinsi dikalibrasi proporsional terhadap total makro resmi BPS (Statistik Indonesia 2026, data 2025: 538.102 km), Laporan Ombudsman RI 2025/2026 (4.766 laporan Pemda), &amp; IJD Tahap I (Rp 14,6 T)</span>
           </div>
         </div>
       )}
@@ -872,7 +872,7 @@ export default function NationalRankingSection({ onSelectPilot }) {
               {/* Modal Footer Actions */}
               <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
                 <span className="text-[11px] text-slate-500 font-sans hidden sm:inline">
-                  Kalibrasi Makro: BPS (2026), Ombudsman RI (2026b), &amp; Inpres No. 3/2023
+                  Kalibrasi Makro: BPS (data 2025), Laporan Ombudsman RI 2025/2026, &amp; Inpres No. 3/2023
                 </span>
 
                 <div className="flex items-center gap-2 justify-end w-full sm:w-auto">

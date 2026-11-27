@@ -23,7 +23,7 @@ import {
   X,
 } from "lucide-react";
 import { INITIAL_REPORTS } from "@/data/reportsData";
-import { ANNUAL_HISTORICAL_DATA, NATIONAL_STATS } from "@/data/provincesData";
+import { ANNUAL_HISTORICAL_DATA, BINA_MARGA_APBN_TRENDS, NATIONAL_STATS } from "@/data/provincesData";
 import RoadDetailModal from "@/components/modals/RoadDetailModal";
 
 function getPaginationItems(current, total) {
@@ -70,43 +70,19 @@ export default function HeroSection({
     }));
   };
 
-  const { roadConditionTrends, complaintTrends, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
+  const { roadConditionTrends, ombudsmanMaladmin2025, inpresBudgets } = ANNUAL_HISTORICAL_DATA;
 
-  // Selected year data point for road condition
   const currentRoadTrend =
     roadConditionTrends.find((d) => d.year === selectedYear) ||
     roadConditionTrends[roadConditionTrends.length - 1];
 
-  // Selected year data point for ombudsman complaints
-  const currentComplaintTrend =
-    complaintTrends?.find((d) => d.year === selectedYear) ||
-    complaintTrends?.[complaintTrends.length - 1] || {
-      year: 2024,
-      overduePct: 33.86,
-      overdue: 5450,
-      totalComplaints: 16100,
-      resolved: 10650,
-    };
-
-  // Pagu APBN Resmi Ditjen Bina Marga Kementerian PU (2020–2025) dalam Triliun Rupiah
-  const binaMargaApbnTrends = useMemo(() => [
-    { year: 2020, pagu: 42.95, note: "Nota Keuangan RAPBN 2020" },
-    { year: 2021, pagu: 53.96, note: "Pagu Penyesuaian Bina Marga 2021" },
-    { year: 2022, pagu: 39.70, note: "Alokasi Awal Bina Marga 2022" },
-    { year: 2023, pagu: 78.96, note: "Pagu Akhir (Termasuk IJD & IKN)" },
-    { year: 2024, pagu: 55.39, note: "Alokasi Awal Bina Marga 2024" },
-    { year: 2025, pagu: 37.41, note: "Pagu Definitif Bina Marga 2025" },
-  ], []);
+  const binaMargaApbnTrends = BINA_MARGA_APBN_TRENDS;
 
   const currentBinaMarga =
     binaMargaApbnTrends.find((d) => d.year === selectedYear) ||
     binaMargaApbnTrends[binaMargaApbnTrends.length - 1];
 
-  // Inpres stages (Tahap I 2023 Realisasi Definitif vs Tahap II 2024 Pagu Rencana Awal)
-  const inpresStats = useMemo(() => [
-    { stage: "Tahap I (2023)", year: 2023, budgetTrillion: 14.60, realizedKm: 3194, provinces: 34, statusLabel: "Realisasi" },
-    { stage: "Tahap II (2024)", year: 2024, budgetTrillion: 15.00, realizedKm: 3200, provinces: 38, statusLabel: "Rencana Awal" },
-  ], []);
+  const inpresStats = inpresBudgets;
 
   // Pembagian resmi jaringan jalan non-tol Indonesia (BPS 2026 & Renstra KemenPU 2025–2029)
   const nationalAuthorityBreakdown = useMemo(() => [
@@ -389,7 +365,7 @@ export default function HeroSection({
               <span className="text-white/90 font-medium text-xs">Provinsi (BPS)</span>
             </div>
             <span className="hidden sm:inline-block w-px h-3.5 bg-white/30 self-center" aria-hidden="true" />
-            <div className="flex items-center gap-1.5" title="Total panjang jalan non-tol nasional, provinsi, dan kabupaten/kota (BPS 2026)">
+            <div className="flex items-center gap-1.5" title="Total panjang jalan non-tol nasional, provinsi, dan kabupaten/kota (BPS Statistik Indonesia 2026, data 2025)">
               <strong className="text-white font-sans font-bold text-sm tabular-nums">538.102 km</strong>
               <span className="text-white/90 font-medium text-xs">Jalan Non-Tol</span>
             </div>
@@ -487,6 +463,7 @@ export default function HeroSection({
                 {/* Index 2: Aduan ke Pemda (Ombudsman RI) */}
                 <button
                   onClick={() => setSelectedIndex("ombudsman")}
+                  title="Total 4.766 laporan terhadap Pemerintah Daerah di seluruh sektor pelayanan publik sepanjang 2025 (622 substansi perhubungan & infrastruktur, 287 subkategori jalan)"
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "ombudsman"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
@@ -514,27 +491,27 @@ export default function HeroSection({
                         <span className={`text-[11.5px] sm:text-xs font-semibold font-sans truncate ${
                           selectedIndex === "ombudsman" ? "text-white" : "text-slate-600"
                         }`}>
-                          Aduan ke Pemda (Ombudsman)
+                          Aduan Pemda · Ombudsman
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${
                           selectedIndex === "ombudsman" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
-                      <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "ombudsman" ? "text-white" : "text-slate-900"}>4.766</span>
-                        <span className={`text-xs font-medium font-sans ${
+                      <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5 flex-nowrap">
+                        <span className={`whitespace-nowrap ${selectedIndex === "ombudsman" ? "text-white" : "text-slate-900"}`}>4.766</span>
+                        <span className={`text-[11px] font-medium font-sans whitespace-nowrap truncate ${
                           selectedIndex === "ombudsman" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Terbanyak 2025
+                          Lintas Sektor (2025)
                         </span>
                       </div>
                     </div>
                   </div>
                 </button>
 
-                {/* Index 3: Anggaran Jalan Pusat (APBN Ditjen Bina Marga) */}
                 <button
                   onClick={() => setSelectedIndex("pagu")}
+                  title="Pagu efektif Ditjen Bina Marga Kementerian PU TA 2025 pasca rekonstruksi efisiensi (dari pagu alokasi awal Rp 37,41 T)"
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "pagu"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
@@ -568,21 +545,21 @@ export default function HeroSection({
                           selectedIndex === "pagu" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
-                      <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "pagu" ? "text-white" : "text-slate-900"}>Rp 37,41</span>
-                        <span className={`text-xs font-medium font-sans ${
+                      <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5 flex-nowrap">
+                        <span className={`whitespace-nowrap ${selectedIndex === "pagu" ? "text-white" : "text-slate-900"}`}>Rp 28,78 T</span>
+                        <span className={`text-[11px] font-medium font-sans whitespace-nowrap truncate ${
                           selectedIndex === "pagu" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Triliun (2025)
+                          Efektif 2025
                         </span>
                       </div>
                     </div>
                   </div>
                 </button>
 
-                {/* Index 4: Inpres Jalan Daerah (IJD) */}
                 <button
                   onClick={() => setSelectedIndex("inpres")}
+                  title="Akumulasi Inpres Jalan Daerah: Inpres No. 3/2023 (Rp 14,60 T) + Inpres No. 11/2025 (Rp 10,21 T)"
                   className={`w-full text-left p-2.5 sm:p-3 rounded-[6px] transition-all cursor-pointer group ${
                     selectedIndex === "inpres"
                       ? "bg-[#c2410c] text-white shadow-md ring-1 ring-orange-600"
@@ -616,12 +593,12 @@ export default function HeroSection({
                           selectedIndex === "inpres" ? "text-white translate-x-0.5" : "text-slate-400 group-hover:text-slate-600"
                         }`} />
                       </div>
-                      <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5">
-                        <span className={selectedIndex === "inpres" ? "text-white" : "text-slate-900"}>Rp 14,60</span>
-                        <span className={`text-xs font-medium font-sans ${
+                      <div className="text-lg sm:text-xl font-bold font-sans tabular-nums mt-0.5 leading-tight tracking-tight flex items-baseline gap-1.5 flex-nowrap">
+                        <span className={`whitespace-nowrap ${selectedIndex === "inpres" ? "text-white" : "text-slate-900"}`}>Rp 24,81 T</span>
+                        <span className={`text-[11px] font-medium font-sans whitespace-nowrap truncate ${
                           selectedIndex === "inpres" ? "text-orange-100 font-semibold" : "text-slate-500"
                         }`}>
-                          Triliun Tahap I
+                          2023–2025
                         </span>
                       </div>
                     </div>
@@ -637,10 +614,10 @@ export default function HeroSection({
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <span className="text-[9.5px] font-semibold text-slate-500 uppercase font-sans tracking-wide truncate block">
-                        {selectedIndex === "kemantapan" && "BPS & RENSTRA KEMENPU (2020–2025)"}
-                        {selectedIndex === "ombudsman" && "OMBUDSMAN RI (2020–2025 · LAPTAH 2026)"}
+                        {selectedIndex === "kemantapan" && "BPS & BASELINE RENSTRA PU (2020–2025)"}
+                        {selectedIndex === "ombudsman" && "LAPORAN OMBUDSMAN RI 2025/2026"}
                         {selectedIndex === "pagu" && "DITJEN BINA MARGA KEMENPU (APBN 2020–2025)"}
-                        {selectedIndex === "inpres" && "KEMENPU · INPRES NO. 3/2023 (IJD)"}
+                        {selectedIndex === "inpres" && "KEMENPU · INPRES 3/2023 & INPRES 11/2025"}
                       </span>
                       <strong
                         className="text-xs sm:text-sm font-bold font-heading text-slate-900 tracking-tight truncate block"
@@ -648,15 +625,15 @@ export default function HeroSection({
                           selectedIndex === "kemantapan"
                             ? "Persentase Jalan Kondisi Layak (Nasional, Provinsi, Kab/Kota)"
                             : selectedIndex === "ombudsman"
-                            ? "Proporsi Dugaan Penundaan Penanganan (%)"
+                            ? "5 Besar Dugaan Maladministrasi Ombudsman RI 2025 (%)"
                             : selectedIndex === "pagu"
-                            ? "Pagu APBN Ditjen Bina Marga Kementerian PU (Rp Triliun)"
-                            : "Dana Bantuan Inpres Jalan Daerah (IJD)"
+                            ? "Pagu Awal vs DIPA Akhir/Efektif Ditjen Bina Marga (Rp Triliun)"
+                            : "Alokasi APBN Inpres Jalan Daerah (2023 & 2025)"
                         }
                       >
                         {selectedIndex === "kemantapan" && "Persentase Jalan Kondisi Layak"}
-                        {selectedIndex === "ombudsman" && "Dugaan Penundaan Penanganan"}
-                        {selectedIndex === "pagu" && "Anggaran Jalan Nasional (APBN)"}
+                        {selectedIndex === "ombudsman" && "5 Dugaan Maladministrasi 2025"}
+                        {selectedIndex === "pagu" && "Pagu APBN Bina Marga (Awal vs Efektif)"}
                         {selectedIndex === "inpres" && "Dana Bantuan Jalan Daerah (IJD)"}
                       </strong>
                     </div>
@@ -702,22 +679,23 @@ export default function HeroSection({
                     )}
                     {selectedIndex === "ombudsman" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600 shrink-0">
-                        <span className="flex items-center gap-1 text-[#c2410c] font-bold text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Penundaan Penanganan (%)</span>
+                        <span className="flex items-center gap-1 text-[#c2410c] font-bold text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Penundaan Berlarut (21,25%)</span>
+                        <span className="flex items-center gap-1 text-[9px] text-slate-500"><span className="w-2 h-1 rounded-xs bg-slate-500" />Dugaan Lain (%)</span>
                       </div>
                     )}
                     {selectedIndex === "pagu" && (
-                      <div className="flex items-center gap-2 font-medium shrink-0">
-                        <span className="flex items-center gap-1 text-[9px] text-[#c2410c] font-bold"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Pagu APBN (Triliun Rp)</span>
+                      <div className="flex items-center gap-2.5 font-medium shrink-0">
+                        <span className="flex items-center gap-1 text-[9px] text-slate-600"><span className="w-2 h-1 rounded-xs bg-slate-500" />Pagu Awal</span>
+                        <span className="flex items-center gap-1 text-[9px] text-[#c2410c] font-bold"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />DIPA Akhir / Efektif</span>
                       </div>
                     )}
                     {selectedIndex === "inpres" && (
                       <div className="flex items-center gap-2 font-medium text-slate-600 shrink-0">
-                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Dana APBN IJD</span>
+                        <span className="flex items-center gap-1 text-[9px]"><span className="w-2 h-1 rounded-xs bg-[#c2410c]" />Alokasi APBN IJD (Rp Triliun)</span>
                       </div>
                     )}
 
-                    {/* Right: Year Selector Pills */}
-                    {(selectedIndex === "kemantapan" || selectedIndex === "ombudsman" || selectedIndex === "pagu") && (
+                    {(selectedIndex === "kemantapan" || selectedIndex === "pagu") && (
                       <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
                         {[2020, 2021, 2022, 2023, 2024, 2025].map((yr) => (
                           <button
@@ -737,7 +715,7 @@ export default function HeroSection({
 
                     {selectedIndex === "inpres" && (
                       <div className="inline-flex items-center border border-orange-200/70 bg-white rounded-[5px] overflow-hidden divide-x divide-orange-200/60 text-[9px] font-bold font-sans shadow-2xs tabular-nums shrink-0">
-                        {[2023, 2024].map((yr) => (
+                        {[2023, 2025].map((yr) => (
                           <button
                             key={yr}
                             onClick={() => setSelectedYear(yr)}
@@ -747,7 +725,7 @@ export default function HeroSection({
                                 : "bg-white text-slate-600 hover:bg-orange-50/60 hover:text-[#c2410c]"
                             }`}
                           >
-                            {yr === 2023 ? "Tahap I (2023)" : "Tahap II (2024)"}
+                            {yr === 2023 ? "Inpres 3/2023" : "Inpres 11/2025"}
                           </button>
                         ))}
                       </div>
@@ -918,9 +896,7 @@ export default function HeroSection({
                   )
                 )}
 
-                {/* ======================================================== */}
-                {/* 2. CHART BODY: OMBUDSMAN UNDUE DELAY TREND (2020 - 2024) */}
-                {/* ======================================================== */}
+                {/* 2. CHART BODY: 5 BESAR DUGAAN MALADMINISTRASI OMBUDSMAN RI 2025 */}
                 {selectedIndex === "ombudsman" && (
                   chartViewMode === "line" ? (
                     <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
@@ -931,12 +907,12 @@ export default function HeroSection({
                             <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
                           </linearGradient>
                         </defs>
-                        {[40, 30, 20, 10].map((val) => {
-                          const y = 18 + ((40 - val) / 40) * 94;
+                        {[50, 40, 30, 20, 10].map((val) => {
+                          const y = 18 + ((50 - val) / 50) * 94;
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                              <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
+                              <text x="28" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
                                 {val}%
                               </text>
                             </g>
@@ -945,44 +921,37 @@ export default function HeroSection({
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${complaintTrends.map((d, i) => `${58 + i * (355 / (complaintTrends.length - 1))},${18 + ((40 - d.overduePct) / 40) * 94}`).join(" ")}
-                            413,112 58,112
+                            ${ombudsmanMaladmin2025.map((d, i) => `${64 + i * 86},${18 + ((50 - d.pct) / 50) * 94}`).join(" ")}
+                            408,112 64,112
                           `}
                           fill="url(#ombudsmanAreaGrad)"
                         />
                         <path
-                          d={complaintTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (355 / (complaintTrends.length - 1))} ${18 + ((40 - d.overduePct) / 40) * 94}`).join(" ")}
+                          d={ombudsmanMaladmin2025.map((d, i) => `${i === 0 ? "M" : "L"} ${64 + i * 86} ${18 + ((50 - d.pct) / 50) * 94}`).join(" ")}
                           fill="none"
                           stroke="#c2410c"
-                          strokeWidth="2.8"
+                          strokeWidth="2.5"
                           strokeLinecap="round"
                         />
-                        {complaintTrends.map((d, i) => {
-                          const x = 58 + i * (355 / (complaintTrends.length - 1));
-                          const y = 18 + ((40 - d.overduePct) / 40) * 94;
-                          const isSelected = d.year === selectedYear;
-
+                        {ombudsmanMaladmin2025.map((d, i) => {
+                          const x = 64 + i * 86;
+                          const y = 18 + ((50 - d.pct) / 50) * 94;
                           return (
-                            <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
-                              <rect x={x - 20} y="10" width="40" height="135" fill="transparent" />
-                              {isSelected && (
-                                <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
-                              )}
-                              <circle cx={x} cy={y} r={isSelected ? 6 : 4} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
-                                {d.overduePct}%
+                            <g key={d.key}>
+                              <circle
+                                cx={x}
+                                cy={y}
+                                r={d.highlight ? 6 : 4}
+                                fill={d.highlight ? "#c2410c" : "#64748b"}
+                                stroke="#fff"
+                                strokeWidth="2"
+                              />
+                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={d.highlight ? "#c2410c" : "#334155"}>
+                                {d.pct.toFixed(2).replace(".", ",")}%
                               </text>
-                              {isSelected ? (
-                                <g>
-                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
-                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
-                                </g>
-                              ) : (
-                                <g>
-                                  <rect x={x - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
-                                  <text x={x} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
-                                </g>
-                              )}
+                              <text x={x} y="128" textAnchor="middle" fontSize="7.5" fontWeight={d.highlight ? "bold" : "600"} fill={d.highlight ? "#9a3412" : "#475569"}>
+                                {d.shortLabel}
+                              </text>
                             </g>
                           );
                         })}
@@ -991,58 +960,39 @@ export default function HeroSection({
                   ) : (
                     <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
                       <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
-                        <defs>
-                          <linearGradient id="ombudsmanBarGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#ea580c" />
-                            <stop offset="100%" stopColor="#c2410c" />
-                          </linearGradient>
-                        </defs>
-                        {[40, 30, 20, 10].map((val) => {
-                          const y = 18 + ((40 - val) / 40) * 94;
+                        {[50, 40, 30, 20, 10].map((val) => {
+                          const y = 18 + ((50 - val) / 50) * 94;
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
-                              <text x="28" y={y + 3} textAnchor="end" fontSize="8.5" fill="#94a3b8" fontWeight="600">
+                              <text x="28" y={y + 3} textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">
                                 {val}%
                               </text>
                             </g>
                           );
                         })}
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
-                        {complaintTrends.map((d, i) => {
-                          const xCenter = 58 + i * (355 / (complaintTrends.length - 1));
-                          const isSelected = d.year === selectedYear;
-                          const h = (d.overduePct / 40) * 94;
+                        {ombudsmanMaladmin2025.map((d, i) => {
+                          const xCenter = 64 + i * 86;
+                          const h = (d.pct / 50) * 94;
                           const yBar = 112 - h;
-
                           return (
-                            <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
-                              {isSelected && (
-                                <rect x={xCenter - 18} y="12" width="36" height="100" rx="4" fill="#c2410c" fillOpacity="0.06" />
-                              )}
+                            <g key={d.key}>
                               <rect
-                                x={xCenter - 13}
+                                x={xCenter - 16}
                                 y={yBar}
-                                width="26"
+                                width="32"
                                 height={h}
                                 rx="3"
-                                fill={isSelected ? "url(#ombudsmanBarGrad)" : "#ea580c"}
-                                opacity={isSelected ? 1 : 0.85}
+                                fill={d.highlight ? "#c2410c" : "#64748b"}
+                                opacity={d.highlight ? 1 : 0.8}
                               />
-                              <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
-                                {d.overduePct}%
+                              <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8" fontWeight="bold" fill={d.highlight ? "#c2410c" : "#334155"}>
+                                {d.pct.toFixed(2).replace(".", ",")}%
                               </text>
-                              {isSelected ? (
-                                <g>
-                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#c2410c" />
-                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ffffff">{d.year}</text>
-                                </g>
-                              ) : (
-                                <g>
-                                  <rect x={xCenter - 16} y="118" width="32" height="18" rx="4" fill="#f1f5f9" className="hover:fill-orange-50 transition-colors" />
-                                  <text x={xCenter} y="131" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569">{d.year}</text>
-                                </g>
-                              )}
+                              <text x={xCenter} y="128" textAnchor="middle" fontSize="7.5" fontWeight={d.highlight ? "bold" : "600"} fill={d.highlight ? "#9a3412" : "#475569"}>
+                                {d.shortLabel}
+                              </text>
                             </g>
                           );
                         })}
@@ -1051,9 +1001,7 @@ export default function HeroSection({
                   )
                 )}
 
-                {/* ======================================================== */}
-                {/* 3. CHART BODY: ANGGARAN APBN BINA MARGA (2020 - 2025)    */}
-                {/* ======================================================== */}
+                {/* 3. CHART BODY: PAGU APBN BINA MARGA AWAL VS DIPA AKHIR/EFEKTIF (2020 - 2025) */}
                 {selectedIndex === "pagu" && (
                   chartViewMode === "line" ? (
                     <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
@@ -1064,8 +1012,8 @@ export default function HeroSection({
                             <stop offset="100%" stopColor="#c2410c" stopOpacity="0.0" />
                           </linearGradient>
                         </defs>
-                        {[100, 75, 50, 25].map((val) => {
-                          const y = 18 + ((100 - val) / 100) * 94;
+                        {[80, 60, 40, 20].map((val) => {
+                          const y = 18 + ((80 - val) / 80) * 94;
                           return (
                             <g key={val}>
                               <line x1="34" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
@@ -1078,13 +1026,21 @@ export default function HeroSection({
                         <line x1="34" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            ${binaMargaApbnTrends.map((d, i) => `${58 + i * (348 / (binaMargaApbnTrends.length - 1))},${18 + ((100 - d.pagu) / 100) * 94}`).join(" ")}
+                            ${binaMargaApbnTrends.map((d, i) => `${58 + i * (348 / (binaMargaApbnTrends.length - 1))},${18 + ((80 - d.paguRevisi) / 80) * 94}`).join(" ")}
                             406,112 58,112
                           `}
                           fill="url(#binaMargaAreaGrad)"
                         />
                         <path
-                          d={binaMargaApbnTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (348 / (binaMargaApbnTrends.length - 1))} ${18 + ((100 - d.pagu) / 100) * 94}`).join(" ")}
+                          d={binaMargaApbnTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (348 / (binaMargaApbnTrends.length - 1))} ${18 + ((80 - d.paguAwal) / 80) * 94}`).join(" ")}
+                          fill="none"
+                          stroke="#64748b"
+                          strokeWidth="1.8"
+                          strokeDasharray="3 3"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d={binaMargaApbnTrends.map((d, i) => `${i === 0 ? "M" : "L"} ${58 + i * (348 / (binaMargaApbnTrends.length - 1))} ${18 + ((80 - d.paguRevisi) / 80) * 94}`).join(" ")}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="2.8"
@@ -1092,7 +1048,8 @@ export default function HeroSection({
                         />
                         {binaMargaApbnTrends.map((d, i) => {
                           const x = 58 + i * (348 / (binaMargaApbnTrends.length - 1));
-                          const y = 18 + ((100 - d.pagu) / 100) * 94;
+                          const yAwal = 18 + ((80 - d.paguAwal) / 80) * 94;
+                          const yRev = 18 + ((80 - d.paguRevisi) / 80) * 94;
                           const isSelected = d.year === selectedYear;
 
                           return (
@@ -1101,9 +1058,10 @@ export default function HeroSection({
                               {isSelected && (
                                 <line x1={x} y1="18" x2={x} y2="112" stroke="#c2410c" strokeWidth="1.2" strokeDasharray="2 2" />
                               )}
-                              <circle cx={x} cy={y} r={isSelected ? 5.5 : 3.8} fill="#c2410c" stroke="#fff" strokeWidth="2" />
-                              <text x={x} y={y - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
-                                {d.pagu.toFixed(1).replace(".", ",")}T
+                              <circle cx={x} cy={yAwal} r={isSelected ? 4 : 2.8} fill="#64748b" stroke="#fff" strokeWidth="1.2" />
+                              <circle cx={x} cy={yRev} r={isSelected ? 5.5 : 3.8} fill="#c2410c" stroke="#fff" strokeWidth="2" />
+                              <text x={x} y={yRev - 7} textAnchor="middle" fontSize="8" fontWeight="bold" fill={isSelected ? "#9a3412" : "#c2410c"}>
+                                {d.paguRevisi.toFixed(1).replace(".", ",")}T
                               </text>
                               {isSelected ? (
                                 <g>
@@ -1124,14 +1082,8 @@ export default function HeroSection({
                   ) : (
                     <div className="h-40 sm:h-44 pt-1 px-1 flex flex-col justify-end">
                       <svg viewBox="0 0 460 144" className="w-full h-full select-none font-sans">
-                        <defs>
-                          <linearGradient id="binaMargaBarGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#ea580c" />
-                            <stop offset="100%" stopColor="#c2410c" />
-                          </linearGradient>
-                        </defs>
-                        {[100, 75, 50, 25].map((val) => {
-                          const y = 18 + ((100 - val) / 100) * 94;
+                        {[80, 60, 40, 20].map((val) => {
+                          const y = 18 + ((80 - val) / 80) * 94;
                           return (
                             <g key={val}>
                               <line x1="34" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
@@ -1145,25 +1097,20 @@ export default function HeroSection({
                         {binaMargaApbnTrends.map((d, i) => {
                           const xCenter = 58 + i * (348 / (binaMargaApbnTrends.length - 1));
                           const isSelected = d.year === selectedYear;
-                          const h = (d.pagu / 100) * 94;
-                          const yBar = 112 - h;
+                          const hAwal = (d.paguAwal / 80) * 94;
+                          const hRev = (d.paguRevisi / 80) * 94;
+                          const yAwal = 112 - hAwal;
+                          const yRev = 112 - hRev;
 
                           return (
                             <g key={d.year} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
                               {isSelected && (
                                 <rect x={xCenter - 18} y="12" width="36" height="100" rx="4" fill="#c2410c" fillOpacity="0.06" />
                               )}
-                              <rect
-                                x={xCenter - 13}
-                                y={yBar}
-                                width="26"
-                                height={h}
-                                rx="3"
-                                fill={isSelected ? "url(#binaMargaBarGrad)" : "#ea580c"}
-                                opacity={isSelected ? 1 : 0.82}
-                              />
-                              <text x={xCenter} y={yBar - 4} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#c2410c">
-                                {d.pagu.toFixed(1).replace(".", ",")}T
+                              <rect x={xCenter - 12} y={yAwal} width="10" height={hAwal} rx="2" fill="#64748b" opacity={isSelected ? 1 : 0.78} />
+                              <rect x={xCenter + 1} y={yRev} width="10" height={hRev} rx="2" fill="#c2410c" opacity={isSelected ? 1 : 0.85} />
+                              <text x={xCenter} y={Math.min(yAwal, yRev) - 4} textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#c2410c">
+                                {d.paguRevisi.toFixed(1).replace(".", ",")}T
                               </text>
                               {isSelected ? (
                                 <g>
@@ -1184,9 +1131,7 @@ export default function HeroSection({
                   )
                 )}
 
-                {/* ======================================================== */}
-                {/* 4. CHART BODY: INPRES JALAN DAERAH (IJD 2023 - 2024)     */}
-                {/* ======================================================== */}
+                {/* 4. CHART BODY: INPRES JALAN DAERAH (INPRES 3/2023 & INPRES 11/2025) */}
                 {selectedIndex === "inpres" && (
                   chartViewMode === "line" ? (
                     <div className="h-44 sm:h-48 pt-1 px-1 flex flex-col justify-end">
@@ -1198,7 +1143,7 @@ export default function HeroSection({
                           </linearGradient>
                         </defs>
                         {[16, 12, 8, 4].map((val) => {
-                          const y = 18 + ((16 - val) / 14) * 94;
+                          const y = 18 + ((16 - val) / 16) * 94;
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
@@ -1211,14 +1156,14 @@ export default function HeroSection({
                         <line x1="32" y1="112" x2="445" y2="112" stroke="#cbd5e1" strokeWidth="1" />
                         <polygon
                           points={`
-                            120,${18 + ((16 - 14.60) / 14) * 94}
-                            340,${18 + ((16 - 15.00) / 14) * 94}
+                            120,${18 + ((16 - inpresStats[0].budgetTrillion) / 16) * 94}
+                            340,${18 + ((16 - inpresStats[1].budgetTrillion) / 16) * 94}
                             340,112 120,112
                           `}
                           fill="url(#inpresLineGrad)"
                         />
                         <path
-                          d={`M 120 ${18 + ((16 - 14.60) / 14) * 94} L 340 ${18 + ((16 - 15.00) / 14) * 94}`}
+                          d={`M 120 ${18 + ((16 - inpresStats[0].budgetTrillion) / 16) * 94} L 340 ${18 + ((16 - inpresStats[1].budgetTrillion) / 16) * 94}`}
                           fill="none"
                           stroke="#c2410c"
                           strokeWidth="3"
@@ -1226,23 +1171,23 @@ export default function HeroSection({
                         />
                         {inpresStats.map((d, i) => {
                           const x = 120 + i * 220;
-                          const y = 18 + ((16 - d.budgetTrillion) / 14) * 94;
+                          const y = 18 + ((16 - d.budgetTrillion) / 16) * 94;
                           const isSelected = d.year === selectedYear;
 
                           return (
                             <g key={d.stage} className="cursor-pointer" onClick={() => setSelectedYear(d.year)}>
                               <circle cx={x} cy={y} r={isSelected ? 6 : 4.5} fill="#c2410c" stroke="#fff" strokeWidth="2" />
                               <text x={x} y={y - 8} textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#c2410c">
-                                Rp {d.budgetTrillion} Triliun
+                                Rp {d.budgetTrillion.toFixed(2).replace(".", ",")} Triliun
                               </text>
                               <text x={x} y={y + 16} textAnchor="middle" fontSize="8.5" fill="#64748b">
-                                ({d.realizedKm.toLocaleString("id-ID")} KM)
+                                ({d.realizedKm.toLocaleString("id-ID")} km)
                               </text>
                               <text x={x} y="130" textAnchor="middle" fontSize="10" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#475569"}>
                                 {d.stage}
                               </text>
                               <text x={x} y="146" textAnchor="middle" fontSize="8" fill="#94a3b8">
-                                {d.provinces} Provinsi Penerima
+                                {d.targetProvinces} Provinsi Penerima
                               </text>
                             </g>
                           );
@@ -1259,7 +1204,7 @@ export default function HeroSection({
                           </linearGradient>
                         </defs>
                         {[16, 12, 8, 4].map((val) => {
-                          const y = 18 + ((16 - val) / 14) * 94;
+                          const y = 18 + ((16 - val) / 16) * 94;
                           return (
                             <g key={val}>
                               <line x1="32" y1={y} x2="445" y2={y} stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="0.8" />
@@ -1291,13 +1236,13 @@ export default function HeroSection({
                                 opacity={isSelected ? 1 : 0.85}
                               />
                               <text x={xCenter} y={yBar - 5} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#c2410c">
-                                Rp {d.budgetTrillion} T
+                                Rp {d.budgetTrillion.toFixed(2).replace(".", ",")} T
                               </text>
                               <text x={xCenter} y="128" textAnchor="middle" fontSize="10" fontWeight={isSelected ? "bold" : "600"} fill={isSelected ? "#c2410c" : "#475569"}>
                                 {d.stage}
                               </text>
                               <text x={xCenter} y="143" textAnchor="middle" fontSize="8" fill="#64748b">
-                                {d.realizedKm.toLocaleString("id-ID")} KM • {d.provinces} Prov
+                                {d.realizedKm.toLocaleString("id-ID")} km • {d.targetProvinces} Prov
                               </text>
                             </g>
                           );
@@ -1342,7 +1287,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Sumber:</strong> BPS &amp; Renstra PU 2025–2029 · Statistik Kemantapan Jalan (BPS 2026)
+                              <strong className="text-slate-800">Sumber:</strong> BPS (Statistik Indonesia 2026, data 2025) &amp; Baseline Renstra PU 2025–2029
                             </span>
                             <button
                               type="button"
@@ -1355,7 +1300,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["kemantapan"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Metodologi &amp; Rujukan:</strong> Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, bersumber dari BPS (2026) dan Rancangan Akhir Renstra Kementerian Pekerjaan Umum 2025–2029 (Nasional: 94,18%, Provinsi: 71,33%, Kab/Kota: 57,91%).
+                              <strong className="text-slate-700">Metodologi &amp; Rujukan:</strong> Tingkat kemantapan mengacu pada persentase panjang jalan berstatus Mantap (Kondisi Baik + Sedang) terhadap total panjang jalan per jenjang kewenangan, merujuk BPS (Statistik Indonesia 2026, data 2025 non-tol) dan Baseline Rancangan Akhir Renstra Kementerian PU 2025–2029 (Nasional: 94,18%, Provinsi: 71,33%, Kab/Kota: 57,91%).
                             </div>
                           )}
                         </div>
@@ -1365,22 +1310,18 @@ export default function HeroSection({
 
                   {selectedIndex === "ombudsman" && (
                     <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
-                      <div className="grid grid-cols-2 gap-2 text-center divide-x divide-slate-100">
+                      <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">
-                            {selectedYear === 2025 ? "Instansi Terlapor Terbanyak" : `Penundaan Penanganan (${selectedYear})`}
-                          </span>
-                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
-                            {selectedYear === 2025 ? "4.766 Laporan Pemda" : `${currentComplaintTrend.overduePct}% (${currentComplaintTrend.overdue.toLocaleString("id-ID")} Aduan)`}
-                          </strong>
+                          <span className="text-[10px] text-slate-500 font-medium">Terlapor #1 (Pemda)</span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">4.766</strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">
-                            {selectedYear === 2025 ? "Total Penerimaan Ombudsman" : "Total Aduan Selesai"}
-                          </span>
-                          <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">
-                            {selectedYear === 2025 ? "23.596 Laporan" : `${currentComplaintTrend.resolved.toLocaleString("id-ID")} Aduan`}
-                          </strong>
+                          <span className="text-[10px] text-slate-500 font-medium">Penerimaan 2025</span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">23.596</strong>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium">Subkategori Jalan</span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-800 tabular-nums">287 / 622</strong>
                         </div>
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
@@ -1388,7 +1329,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Sumber:</strong> Ombudsman RI (2026b) · 23.596 Penerimaan Masyarakat
+                              <strong className="text-slate-800">Sumber:</strong> Laporan Kinerja &amp; Siaran Pers Ombudsman RI 2025/2026
                             </span>
                             <button
                               type="button"
@@ -1401,7 +1342,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["ombudsman"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Definisi &amp; Catatan:</strong> Ombudsman RI mencatat 23.596 penerimaan masyarakat sepanjang 2025, dengan Pemda sebagai terlapor terbanyak (4.766 laporan) dan dugaan <em>penundaan berlarut</em> mencapai 21,25% (peringkat ke-2 bentuk maladministrasi terbanyak).
+                              <strong className="text-slate-700">Rincian Resmi 2025:</strong> Ombudsman RI mencatat 23.596 penerimaan masyarakat; 4.766 laporan ke Pemda merupakan total lintas seluruh sektor pelayanan publik (bukan hanya jalan), sementara substansi perhubungan &amp; infrastruktur tercatat 622 laporan (287 di antaranya subkategori infrastruktur jalan). Dugaan maladministrasi tertinggi: tidak memberikan pelayanan (40,68%) dan penundaan berlarut (21,25%).
                             </div>
                           )}
                         </div>
@@ -1414,26 +1355,26 @@ export default function HeroSection({
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Pagu {currentBinaMarga.year}
+                            Pagu Awal {currentBinaMarga.year}
+                          </span>
+                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
+                            Rp {currentBinaMarga.paguAwal.toFixed(2).replace(".", ",")} T
+                          </strong>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] text-slate-500 font-medium">
+                            DIPA Akhir/Efektif
                           </span>
                           <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">
-                            Rp {currentBinaMarga.pagu.toFixed(2).replace(".", ",")} T
+                            Rp {currentBinaMarga.paguRevisi.toFixed(2).replace(".", ",")} T
                           </strong>
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-slate-500 font-medium">
-                            Puncak (2023)
+                            Efektif TA 2025
                           </span>
-                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                            Rp 78,96 T
-                          </strong>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">
-                            Pagu 2025
-                          </span>
-                          <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">
-                            Rp 37,41 T
+                          <strong className="text-xs sm:text-sm font-bold text-blue-700 tabular-nums">
+                            Rp 28,78 T
                           </strong>
                         </div>
                       </div>
@@ -1442,7 +1383,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Sumber:</strong> Ditjen Bina Marga Kementerian PU (APBN 2020–2025)
+                              <strong className="text-slate-800">Sumber:</strong> RDP Komisi V DPR RI &amp; LAKIP Ditjen Bina Marga (2020–2025)
                             </span>
                             <button
                               type="button"
@@ -1455,7 +1396,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["pagu"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Catatan APBN:</strong> {currentBinaMarga.note}. Alokasi APBN Ditjen Bina Marga membiayai preservasi jalan nasional, jembatan, serta dukungan konektivitas daerah (lonjakan 2023 dipengaruhi penugasan IJD &amp; IKN).
+                              <strong className="text-slate-700">Catatan TA {currentBinaMarga.year}:</strong> {currentBinaMarga.note}. Selaras penuh dengan grafik APBN pada menu Anggaran Proyek.
                             </div>
                           )}
                         </div>
@@ -1467,16 +1408,16 @@ export default function HeroSection({
                     <div className="bg-white rounded-[6px] px-3.5 py-2.5 shadow-2xs">
                       <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-100">
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">Tahap I (Realisasi 2023)</span>
+                          <span className="text-[10px] text-slate-500 font-medium">Inpres 3/2023</span>
                           <strong className="text-xs sm:text-sm font-bold text-slate-900 tabular-nums">Rp 14,60 T</strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-slate-500 font-medium">Tahap II (Rencana 2024)</span>
-                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">Rp 15,00 T</strong>
+                          <span className="text-[10px] text-slate-500 font-medium">Inpres 11/2025</span>
+                          <strong className="text-xs sm:text-sm font-bold text-[#c2410c] tabular-nums">Rp 10,21 T</strong>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] text-emerald-700 font-medium">Realisasi Fisik I</span>
-                          <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">3.194 KM</strong>
+                          <span className="text-[10px] text-emerald-700 font-medium">Total IJD</span>
+                          <strong className="text-xs sm:text-sm font-bold text-emerald-800 tabular-nums">Rp 24,81 T</strong>
                         </div>
                       </div>
                       <div className="mt-2 text-[10px] text-slate-500 bg-slate-50 border border-slate-200/60 rounded-[4px] px-2.5 py-1.5 flex items-start gap-1.5 font-sans leading-relaxed">
@@ -1484,7 +1425,7 @@ export default function HeroSection({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
                             <span className="truncate">
-                              <strong className="text-slate-800">Dasar Regulasi:</strong> Inpres No. 3/2023 (IJD)
+                              <strong className="text-slate-800">Dasar Regulasi:</strong> Inpres No. 3/2023 &amp; Inpres No. 11/2025 (IJD)
                             </span>
                             <button
                               type="button"
@@ -1497,7 +1438,7 @@ export default function HeroSection({
                           </div>
                           {expandedSources["inpres"] && (
                             <div className="mt-1.5 pt-1.5 border-t border-slate-200/70 text-slate-600">
-                              <strong className="text-slate-700">Alokasi:</strong> Intervensi fiskal APBN Inpres Jalan Daerah (Inpres No. 3/2023) dengan realisasi definitif Tahap I 2023 sebesar Rp 14,60 T (±3.194 km di 34 provinsi) dan rencana pagu awal Tahap II 2024 sebesar Rp 15,00 T yang mengalami penyesuaian efisiensi APBN.
+                              <strong className="text-slate-700">Alokasi Resmi:</strong> Tahap I berdasarkan Inpres No. 3/2023 terealisasi Rp 14,60 T (3.194 km jalan &amp; 2.971 m jembatan di 34 provinsi), dilanjutkan Inpres No. 11/2025 sebesar Rp 10,21 T untuk TA 2025 (tahap awal 1.151 km di 37 provinsi diresmikan Juni 2026).
                             </div>
                           )}
                         </div>
@@ -1521,7 +1462,7 @@ export default function HeroSection({
                   Siapa Penanggung Jawab Jalan?
                 </h2>
                 <span className="text-[10.5px] text-slate-500 font-sans">
-                  Pembagian resmi menurut UU No. 2/2022 &amp; data BPS (2026)
+                  Pembagian resmi UU No. 2/2022 · BPS (Statistik Indonesia 2026, data 2025)
                 </span>
               </div>
               <button
@@ -1543,7 +1484,7 @@ export default function HeroSection({
                 <strong className="text-base sm:text-lg font-bold text-slate-900 tabular-nums font-sans block mt-0.5">
                   538.102 km
                 </strong>
-                <span className="text-[9.5px] text-slate-500 font-sans block">Non-Tol · BPS 2026</span>
+                <span className="text-[9.5px] text-slate-500 font-sans block">Non-Tol · Data 2025 (BPS)</span>
               </div>
               <div className="bg-slate-50/90 rounded-[6px] p-2.5 text-center">
                 <span className="text-[10px] text-slate-500 font-semibold font-sans block">
