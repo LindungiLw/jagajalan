@@ -89,7 +89,7 @@ const LEGAL_INSTRUMENTS = [
     citizenMeaning:
       "Saat kapasitas anggaran daerah terbatas, pemerintah pusat melalui Kementerian PU dapat membantu memperbaiki jalan provinsi dan kabupaten/kota rusak berat lewat APBN.",
     platformFeature:
-      "Panel statistik 38 provinsi memetakan kesenjangan kondisi jalan daerah dan realisasi dukungan Inpres Jalan Daerah (Rp 14,6 T Tahap I).",
+      "Panel statistik 38 provinsi dan anggaran memetakan kesenjangan kondisi jalan daerah serta dukungan Inpres Jalan Daerah (Inpres 3/2023 Rp 14,60 T & Inpres 11/2025 Rp 10,21 T).",
     actionLabel: "Lihat Statistik 38 Provinsi",
     targetTab: "nasional",
     legalUrl: "https://peraturan.bpk.go.id/Details/245516/inpres-no-3-tahun-2023",
